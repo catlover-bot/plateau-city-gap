@@ -16,6 +16,8 @@ data/processed/**
 # Generated analysis outputs (keep only documentation placeholders)
 analysis/outputs/**
 !analysis/outputs/.gitkeep
+!analysis/outputs/real/
+!analysis/outputs/real/**
 
 # Frontend/build artifacts
 node_modules/

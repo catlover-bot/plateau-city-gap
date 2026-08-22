@@ -3,4 +3,6 @@
 Downloaded data are excluded from Git. Provenance is in [`docs/data-sources.md`](../docs/data-sources.md).
 `raw/` holds immutable downloads, `interim/` normalized layers, and `processed/` analysis-ready data.
 
-As of 2026-08-22, the only downloaded real dataset is the 158,376-byte PLATEAU Maizuru 2025 related-data ZIP. It is not a complete CITY GAP input.
+Verified real inputs as of 2026-08-22 are e-Stat `T001192`, National Land Numerical
+Information `P11-2022` and `P04-2020`, and the PLATEAU Maizuru 2025 related-data ZIP.
+Run `python -m analysis.scripts.download_real_data` to reproduce the ignored raw files.

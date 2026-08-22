@@ -9,6 +9,7 @@ description = "Reproducible spatial gap analysis for Maizuru City"
 requires-python = ">=3.10"
 dependencies = [
   "geopandas>=0.14,<2",
+  "matplotlib>=3.8,<4",
   "numpy>=1.26,<3",
   "pandas>=2.1,<3",
   "pyogrio>=0.7,<1",
@@ -28,4 +29,3 @@ testpaths = ["analysis/tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-

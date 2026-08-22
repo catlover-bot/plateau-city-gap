@@ -31,23 +31,21 @@ python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -e '.[dev]'
 pytest
-
-# 実データ3レイヤーが揃った後
-python -m analysis.src.prepare_accessibility areas.geojson --stations stations.geojson --bus-stops bus_stops.geojson --medical medical.geojson
-python -m analysis.src.compute_city_gap data/processed/maizuru_areas.geojson
+python -m analysis.scripts.download_real_data
+python -m analysis.src.run_real_analysis
 ```
 
 ## Current Status / Findings
 
-分析モジュール、CLI、テストを実装し、PLATEAU公式の駅データを確認済みです。人口、バス停、医療施設は未取得で、実CITY GAP出力はまだ生成していません。**Analysis in progress.** 架空結果は掲載しません。
+e-Stat人口、P11バス停、P04医療、PLATEAU駅を結合し、舞鶴市495人口meshから実データTop 10を生成済みです。秘匿・合算影響のない286meshだけをPrimary比較に使い、結果は [findings](docs/findings.md) と `analysis/outputs/real/` に保存しています。
 
 ## Roadmap
 
-1. e-Stat人口・65歳以上人口の取得と空間単位確定
-2. 公式バス停・医療機関点の取得
-3. 初回rankと構成指標のレビュー
-4. PLATEAU CityGML属性を必要範囲だけ検証
-5. React + TypeScript + Vite + CesiumJSで可視化
+1. Top 5 meshに必要なPLATEAU CityGML tileだけを特定
+2. 建物用途・高さ・階数の実装率を検証
+3. 居住建物起点・道路/勾配を使った距離へ詳細化
+4. mesh-centroid結果とのranking差を検証
+5. 根拠が成立した後にCesiumJSで説明可能に可視化
 
 ## Disclaimer
 

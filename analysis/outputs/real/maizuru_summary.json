@@ -1,0 +1,194 @@
+{
+  "analysis_status": "real data",
+  "generated_from_synthetic_data": false,
+  "distance_method": "centroid-to-point straight-line (Euclidean) distance",
+  "analysis_crs": {
+    "code": "EPSG:6674",
+    "name": "JGD2011 / Japan Plane Rectangular CS VI",
+    "area_of_use": "Japan - onshore - Honshu between approximately 135°10'E and 136°45'E - Kyoto-fu; Osaka-fu; Fukui-ken; Shiga-ken; Mie-ken; Nara-ken; Wakayama-ken.",
+    "bounds": [
+      134.86,
+      33.4,
+      136.99,
+      36.33
+    ]
+  },
+  "record_counts": {
+    "population_kyoto": 6326,
+    "population_meshes_intersecting_maizuru": 495,
+    "population_unaffected": 286,
+    "population_suppressed_source": 119,
+    "population_aggregation_destination": 90,
+    "stations_raw": 9,
+    "stations_within_maizuru": 9,
+    "station_unique_locations": 7,
+    "station_unique_names": 7,
+    "station_deduplicated": 7,
+    "bus_stops_kyoto": 4685,
+    "bus_stops_maizuru": 151,
+    "medical_kyoto": 3960,
+    "medical_maizuru": 105,
+    "hospitals_maizuru": 8,
+    "clinics_maizuru": 63,
+    "dental_clinics_maizuru": 34,
+    "medical_primary_maizuru": 71,
+    "primary_rank_eligible_meshes": 218
+  },
+  "crs_transform_log": {
+    "maizuru_boundary": {
+      "original": "EPSG:4326",
+      "analysis": "EPSG:6674",
+      "transformed_records": 1
+    },
+    "population": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6674",
+      "transformed_records": 495
+    },
+    "stations": {
+      "original": "EPSG:4326",
+      "analysis": "EPSG:6674",
+      "transformed_records": 7
+    },
+    "bus_stops": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6674",
+      "transformed_records": 151
+    },
+    "medical_primary": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6674",
+      "transformed_records": 71
+    }
+  },
+  "primary_ranking": {
+    "score": "elderly_population_percentile * transport_distance_percentile * medical_distance_percentile",
+    "minimum_population": 20,
+    "minimum_elderly_population": 10,
+    "top1": {
+      "mesh_code": "533512753",
+      "centroid_lat": 35.48125,
+      "centroid_lon": 135.315625,
+      "maizuru_area_fraction": 0.9252786886166328,
+      "centroid_within_maizuru": true,
+      "population": 91,
+      "elderly_population": 56.0,
+      "reported_elderly_population": 56.0,
+      "elderly_ratio": 0.6153846153846154,
+      "HTKSYORI": "0",
+      "HTKSAKI": null,
+      "GASSAN": null,
+      "disclosure_status": "unaffected",
+      "suppression_flag": false,
+      "aggregation_target_flag": false,
+      "aggregation_flag": false,
+      "primary_eligible_disclosure": true,
+      "nearest_station_name": "東雲駅",
+      "nearest_station_distance_m": 2868.182441818349,
+      "nearest_bus_stop_name": "二尾",
+      "nearest_bus_stop_distance_m": 2321.6556089062638,
+      "nearest_public_transport_type": "bus_stop",
+      "nearest_public_transport_name": "二尾",
+      "nearest_public_transport_distance_m": 2321.6556089062638,
+      "nearest_medical_name": "隅山医院",
+      "nearest_medical_distance_m": 3316.8502371714594,
+      "nearest_hospital_name": "舞鶴赤十字病院",
+      "nearest_hospital_distance_m": 4493.440047277211,
+      "nearest_clinic_name": "隅山医院",
+      "nearest_clinic_distance_m": 3316.8502371714594,
+      "elderly_population_percentile": 0.6293706293706294,
+      "elderly_ratio_percentile": 0.8863636363636364,
+      "transport_distance_percentile": 0.9090909090909091,
+      "medical_distance_percentile": 0.8706293706293706,
+      "exploratory_score_a": 0.5721551176096631,
+      "exploratory_score_b": 0.5479485549415619,
+      "exploratory_score_c": 0.4981350499468745,
+      "rank_a_unfiltered": 3,
+      "rank_b_unfiltered": 5,
+      "rank_c_unfiltered": 1,
+      "pareto_frontier": true,
+      "eligibility_population_threshold": true,
+      "eligibility_elderly_threshold": true,
+      "primary_eligible": true,
+      "rank": 1
+    }
+  },
+  "threshold_stability": {
+    "none": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_10_elderly_5": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_20_elderly_10": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_50_elderly_20": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533512001"
+      ],
+      "overlap_with_primary_top10": 9
+    }
+  },
+  "validation_checks": {
+    "mesh_codes_unique": true,
+    "geometries_valid": true,
+    "top10_count": 10,
+    "top10_ranks_1_to_10": true,
+    "top10_disclosure_unaffected": true,
+    "top10_population_thresholds": true,
+    "top10_centroids_within_maizuru": true,
+    "distances_nonnegative": true
+  },
+  "limitations": [
+    "Distances are straight-line Euclidean distances, not walking or route distances.",
+    "P11 2022 excludes demand, highway and facility shuttle buses.",
+    "P04 represents facilities collected for July 2020, not current availability.",
+    "Suppressed sources and aggregation destinations are retained but excluded from primary ranks."
+  ]
+}
