@@ -6,6 +6,7 @@ import { chromium } from "playwright-core";
 const frontendRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const repositoryRoot = dirname(frontendRoot);
 const outputDirectory = join(repositoryRoot, "docs", "assets");
+const fallbackDirectory = join(outputDirectory, "demo-fallback");
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   ?? "/home/catlover/.cache/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell";
 const baseUrl = process.env.CITY_GAP_PREVIEW_URL
@@ -13,6 +14,7 @@ const baseUrl = process.env.CITY_GAP_PREVIEW_URL
 const captureAll = process.env.CITY_GAP_CAPTURE_ALL === "1";
 
 mkdirSync(outputDirectory, { recursive: true });
+mkdirSync(fallbackDirectory, { recursive: true });
 
 const browser = await chromium.launch({
   executablePath,
@@ -82,17 +84,23 @@ try {
   if (!modalFocusVerified) localFailures.push("Methodology dialog focus trap/restore failed");
 
   await page.locator(".story-start-button").dispatchEvent("click");
-  await page.getByText("STEP 1 / 4", { exact: false }).waitFor();
+  await page.getByText("STEP 1 / 5", { exact: false }).waitFor();
+  await page.waitForTimeout(4_200);
+  await page.screenshot({ path: join(fallbackDirectory, "Step1.png"), timeout: 60_000 });
   await page.locator(".story-card .primary-button").dispatchEvent("click");
-  await page.getByText("STEP 2 / 4", { exact: false }).waitFor();
+  await page.getByText("STEP 2 / 5", { exact: false }).waitFor();
+  await page.waitForTimeout(1_300);
+  await page.screenshot({ path: join(fallbackDirectory, "Step2.png"), timeout: 60_000 });
   await page.locator(".story-card .primary-button").dispatchEvent("click");
-  await page.getByText("STEP 3 / 4", { exact: false }).waitFor();
+  await page.getByText("STEP 3 / 5", { exact: false }).waitFor();
   await page.waitForTimeout(2_000);
   const mapBox = await page.locator(".cesium-map canvas").boundingBox();
   if (mapBox) {
     const candidates = [
-      [0.5, 0.5], [0.45, 0.52], [0.55, 0.52], [0.5, 0.58],
-      [0.4, 0.48], [0.6, 0.48], [0.45, 0.62], [0.55, 0.62]
+      [0.78, 0.28], [0.72, 0.34], [0.65, 0.31], [0.58, 0.35],
+      [0.48, 0.31], [0.82, 0.42], [0.7, 0.46], [0.58, 0.45],
+      [0.46, 0.43], [0.4, 0.38], [0.5, 0.5], [0.62, 0.52],
+      [0.42, 0.5], [0.76, 0.52], [0.86, 0.33], [0.9, 0.45]
     ];
     for (const [x, y] of candidates) {
       await page.mouse.click(mapBox.x + mapBox.width * x, mapBox.y + mapBox.height * y);
@@ -103,27 +111,33 @@ try {
       }
     }
   }
+  await page.screenshot({ path: join(fallbackDirectory, "Step3.png"), timeout: 60_000 });
   if (captureAll) {
     await page.screenshot({ path: join(outputDirectory, "city-gap-plateau.png"), timeout: 60_000 });
   }
-  process.stdout.write("Story steps 1–3 and PLATEAU view verified.\n");
+  process.stdout.write("Story steps 1–3 and PLATEAU Deep Dive verified.\n");
 
   await page.locator(".story-card .primary-button").dispatchEvent("click");
-  await page.getByText("STEP 4 / 4", { exact: false }).waitFor();
+  await page.getByText("STEP 4 / 5", { exact: false }).waitFor();
   await page.locator(".scenario-summary-grid").waitFor();
+  await page.waitForTimeout(1_300);
+  await page.screenshot({ path: join(fallbackDirectory, "Step4.png"), timeout: 60_000 });
+  await page.screenshot({ path: join(fallbackDirectory, "WhatIf.png"), timeout: 60_000 });
   if (captureAll) {
     await page.screenshot({ path: join(outputDirectory, "city-gap-what-if.png"), timeout: 60_000 });
   }
-  process.stdout.write("Story step 4 and deterministic scenario verified.\n");
+  process.stdout.write("Story step 4 and road-anchored deterministic scenario verified.\n");
 
   const scenarioText = await page.locator(".scenario-panel").innerText();
   const loadedB3dm = plateauResponses.filter((response) => response.url.endsWith(".b3dm") && response.status === 200);
   if (loadedB3dm.length === 0) localFailures.push("No official PLATEAU b3dm response completed with HTTP 200");
   if (!buildingSelectionVerified) localFailures.push("No official PLATEAU building could be selected on the reference view");
-  if (!scenarioText.includes("2") || !scenarioText.includes("64人")) {
-    localFailures.push("Rank 1 scenario did not render the verified 2 mesh / 64 elderly-person result");
+  if (!scenarioText.includes("5") || !scenarioText.includes("241人")) {
+    localFailures.push("Primary candidate did not render the verified 5 mesh / 241 elderly-person result");
   }
 
+  await page.locator(".story-card .primary-button").dispatchEvent("click");
+  await page.getByText("STEP 5 / 5", { exact: false }).waitFor();
   await page.locator(".story-card .text-button").dispatchEvent("click");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(500);
@@ -184,8 +198,8 @@ try {
   process.stdout.write(`${JSON.stringify({
     baseUrl,
     screenshots: captureAll
-      ? ["city-gap-demo.png", "city-gap-plateau.png", "city-gap-what-if.png", "city-gap-mobile.png"]
-      : ["city-gap-demo.png"],
+      ? ["city-gap-demo.png", "city-gap-plateau.png", "city-gap-what-if.png", "city-gap-mobile.png", "demo-fallback/Step1.png", "demo-fallback/Step2.png", "demo-fallback/Step3.png", "demo-fallback/Step4.png", "demo-fallback/WhatIf.png"]
+      : ["city-gap-demo.png", "demo-fallback/Step1.png", "demo-fallback/Step2.png", "demo-fallback/Step3.png", "demo-fallback/Step4.png", "demo-fallback/WhatIf.png"],
     plateauResponses: plateauResponses.length,
     loadedB3dm: loadedB3dm.length,
     buildingSelectionVerified,

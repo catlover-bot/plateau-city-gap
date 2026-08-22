@@ -1,9 +1,9 @@
-import { comparisonMeshScope } from "../lib/format";
+import { comparisonMeshScope, formatDistance, formatInteger, formatRatio } from "../lib/format";
 import {
   summarizePlateauCoverage,
   top10CoverageSentence,
 } from "../lib/plateau";
-import type { PlateauMetadata } from "../types";
+import type { FinalDemoData, MeshMetrics, PlateauMetadata } from "../types";
 
 interface StoryModeProps {
   step: number | null;
@@ -12,6 +12,8 @@ interface StoryModeProps {
   plateauMetadata: PlateauMetadata | null;
   comparisonMeshCount?: number;
   ready: boolean;
+  finalDemo: FinalDemoData;
+  rankOne: MeshMetrics | null;
 }
 
 export function StoryMode({
@@ -21,16 +23,21 @@ export function StoryMode({
   plateauMetadata,
   comparisonMeshCount,
   ready,
+  finalDemo,
+  rankOne,
 }: StoryModeProps) {
   const plateauCoverage = summarizePlateauCoverage(plateauMetadata);
+  const deepDive = finalDemo.deep_dive;
+  const bestCandidate = finalDemo.placement_optimization.candidates[0];
   const plateauStepBody = plateauCoverage.referenceIncluded
-    ? `公式PLATEAU 2025の実在建物へ移動します。${top10CoverageSentence(plateauCoverage)}整備済み市街地との違いもデータ品質として示します。`
-    : `${top10CoverageSentence(plateauCoverage)}駅周辺リファレンスの収録状況もメタデータから確認できません。`;
+    ? `${top10CoverageSentence(plateauCoverage)}そこで全市${deepDive.overall_rank}位・${deepDive.area_label}へ移動し、公式建物${deepDive.plateau_building_count.toLocaleString("ja-JP")}棟と実属性を確認します。`
+    : `${top10CoverageSentence(plateauCoverage)}3D Deep Dive subsetの収録状況もメタデータから確認できません。`;
   const steps = [
-    { label: "課題を発見", title: "候補を見つける", body: "495メッシュから、ニーズとサービス到達のズレが大きい追加調査候補を確認します。" },
-    { label: "なぜ？", title: "数字を分解する", body: `人口・交通・医療の実データと、${comparisonMeshScope(comparisonMeshCount)}で計算したpercentileから、Rank 1が浮かぶ理由を読み解きます。` },
-    { label: "PLATEAUで現地を見る", title: "3D都市の整備範囲を見る", body: plateauStepBody },
-    { label: "施策を試す", title: "Before / Afterを計算", body: `Rank 1中心に仮想交通支援拠点を置き、${comparisonMeshScope(comparisonMeshCount)}の距離と探索スコアを再計算します。` }
+    { label: "重ねて発見", title: "1枚の地図だけでは見えない", body: "高齢者数 → 交通の遠さ → 医療の遠さ → CITY GAPを同じ500mメッシュで切り替えます。必要と届きにくさの重なりが、追加調査候補をつくります。" },
+    { label: "Rank 1", title: rankOne?.area_label ?? "全市 Rank 1", body: rankOne ? `人口${formatInteger(rankOne.population)}、65歳以上${formatInteger(rankOne.elderly_population)}・高齢化率${formatRatio(rankOne.elderly_ratio)}。交通まで${formatDistance(rankOne.nearest_public_transport_distance_m)}、医療まで${formatDistance(rankOne.nearest_medical_distance_m)}です。` : `実データと${comparisonMeshScope(comparisonMeshCount)}のpercentileから理由を分解します。` },
+    { label: "3D Deep Dive", title: `${deepDive.area_label}へ`, body: plateauStepBody },
+    { label: "配置候補を探索", title: "道路面上の候補で Before / After", body: bestCandidate ? `${bestCandidate.area_label}の公式PLATEAU道路面上に探索アンカーを置き、${bestCandidate.improved_mesh_count}メッシュ・65歳以上人口${bestCandidate.affected_elderly_population.toLocaleString("ja-JP")}人が属する範囲の距離変化を再計算します。` : "道路面上の候補で再計算します。" },
+    { label: "意思決定へ", title: "これは答えではなく、調査の入口", body: "次は現地の道路・坂・横断、住民ヒアリング、交通事業者との運行条件、医療施設の現況、用地と費用を確認します。" }
   ];
   if (step === null) {
     return (

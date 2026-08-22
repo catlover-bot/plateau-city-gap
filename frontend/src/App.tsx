@@ -13,7 +13,7 @@ import { loadAppData } from "./lib/data";
 import { finiteNumber } from "./lib/format";
 import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
-import type { AppData, BuildingInfo, LayerVisibility, MeshMetrics, MetricMode } from "./types";
+import type { AppData, BuildingInfo, LayerVisibility, MeshMetrics, MetricMode, PlacementCandidate } from "./types";
 
 const INITIAL_LAYERS: LayerVisibility = {
   meshes: true,
@@ -110,6 +110,16 @@ export default function App() {
     runScenario({ longitude, latitude });
   }, [data, runScenario]);
 
+  const tryCandidate = useCallback((candidate: PlacementCandidate) => {
+    const mesh = allMeshes.find((item) => item.mesh_code === candidate.top_improvement_mesh);
+    if (mesh) {
+      setSelectedMesh(mesh);
+      setSelectedBuilding(null);
+      mapRef.current?.flyToMesh(mesh);
+    }
+    runScenario({ longitude: candidate.longitude, latitude: candidate.latitude });
+  }, [allMeshes, runScenario]);
+
   const selectScenarioMesh = useCallback((meshCode: string) => {
     if (!data) return;
     const mesh = allMeshes.find((item) => item.mesh_code === meshCode);
@@ -130,41 +140,52 @@ export default function App() {
 
   const changeStoryStep = useCallback((step: number | null) => {
     setStoryStep(step);
-    if (step === null) setLayers((current) => ({ ...current, meshes: true }));
+    if (step === null) {
+      setLayers((current) => ({ ...current, meshes: true }));
+      setMetricMode("gap");
+    }
   }, []);
 
   useEffect(() => {
     if (storyStep === null || !data) return;
     const rankOne = data.top10[0];
     if (!rankOne) return;
-    let plateauFlyTimer: number | undefined;
+    const timers: number[] = [];
     if (storyStep === 0) {
       setLayers((current) => ({ ...current, meshes: true, plateau: false }));
-      setSelectedMesh(rankOne);
+      setMetricMode("elderly");
+      timers.push(window.setTimeout(() => setMetricMode("transport"), 1_300));
+      timers.push(window.setTimeout(() => setMetricMode("medical"), 2_600));
+      timers.push(window.setTimeout(() => setMetricMode("gap"), 3_900));
+      setSelectedMesh(null);
       setSelectedBuilding(null);
       setSideTab("ranking");
-      mapRef.current?.flyToMesh(rankOne);
+      mapRef.current?.resetView();
     } else if (storyStep === 1) {
       setLayers((current) => ({ ...current, meshes: true, plateau: false }));
+      setMetricMode("gap");
       setSelectedMesh(rankOne);
       setSelectedBuilding(null);
       setSideTab("detail");
       mapRef.current?.flyToMesh(rankOne);
     } else if (storyStep === 2) {
-      setLayers((current) => ({ ...current, plateau: true, meshes: false }));
-      setSelectedMesh(null);
+      const deepMesh = allMeshes.find((mesh) => mesh.mesh_code === data.finalDemo.deep_dive.mesh_code) ?? null;
+      setLayers((current) => ({ ...current, plateau: true, meshes: false, stations: true, busStops: true, medical: true }));
+      setMetricMode("gap");
+      setSelectedMesh(deepMesh);
       setSelectedBuilding(null);
-      setSideTab("ranking");
-      plateauFlyTimer = window.setTimeout(() => mapRef.current?.flyToPlateau(), 120);
+      setSideTab("detail");
+      timers.push(window.setTimeout(() => mapRef.current?.flyToPlateau(), 120));
     } else if (storyStep === 3) {
-      setLayers((current) => ({ ...current, meshes: true, plateau: false }));
+      setLayers((current) => ({ ...current, meshes: true, plateau: true, stations: true, busStops: true, medical: true }));
       setSelectedBuilding(null);
-      tryRankOne();
+      const best = data.finalDemo.placement_optimization.candidates[0];
+      if (best) tryCandidate(best);
+    } else if (storyStep === 4) {
+      setSideTab("scenario");
     }
-    return () => {
-      if (plateauFlyTimer !== undefined) window.clearTimeout(plateauFlyTimer);
-    };
-  }, [data, storyStep, tryRankOne]);
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [allMeshes, data, storyStep, tryCandidate]);
 
   if (error) return <ErrorState message={error} onRetry={() => setRetryKey((key) => key + 1)} />;
   if (!data) return <LoadingState />;
@@ -265,6 +286,8 @@ export default function App() {
           plateauMetadata={data.plateauMetadata}
           comparisonMeshCount={comparisonMeshCount}
           ready={mapReady && !mapError}
+          finalDemo={data.finalDemo}
+          rankOne={data.top10[0] ?? null}
         />
 
         {selectedBuilding && <BuildingInfoCard building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />}
@@ -284,17 +307,18 @@ export default function App() {
 
         <div className="source-chip">
           {plateauCoverage.referenceIncluded
-            ? `PLATEAU 舞鶴市 ${plateauYear ?? "年次不明"} · 公式3D Tiles`
-            : "PLATEAU駅周辺3D Tiles: 収録状況を確認できません"}
+            ? `PLATEAU 舞鶴市 ${plateauYear ?? "年次不明"} · 3D建物 + 道路面`
+            : "PLATEAU 3D Tiles: 収録状況を確認できません"}
         </div>
-        <div className="coverage-chip">Top 10内のPLATEAU建物: {top10CoverageLabel(plateauCoverage)}</div>
+        <div className="coverage-chip">都市データの空白も発見: Top 10内の公式建物 {top10CoverageLabel(plateauCoverage)}</div>
       </main>
 
       <aside className="side-panel" aria-label="CITY GAP分析パネル">
         <div className="panel-summary">
           <div>
             <p>舞鶴市・500mメッシュ</p>
-            <h2>追加調査候補</h2>
+            <h2>必要 × 届きにくさ</h2>
+            <small>高齢者数・交通距離・医療距離を重ねて、次に確かめる地域を探す</small>
           </div>
           <div className="summary-count">
             <strong>{data.meshes.features.length}</strong>
@@ -347,7 +371,7 @@ export default function App() {
           ) : sideTab === "detail" ? (
             <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} />
           ) : (
-            <ScenarioPanel
+              <ScenarioPanel
               result={scenario}
               selectedMesh={selectedMesh}
               placementMode={placementMode}
@@ -355,7 +379,9 @@ export default function App() {
                 setPlacementMode(true);
                 setSelectedBuilding(null);
               }}
-              onTryRankOne={tryRankOne}
+                onTryRankOne={tryRankOne}
+                candidates={data.finalDemo.placement_optimization.candidates}
+                onTryCandidate={tryCandidate}
               onSelectMesh={selectScenarioMesh}
               onReset={resetScenario}
               comparisonMeshCount={comparisonMeshCount}

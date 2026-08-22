@@ -147,7 +147,23 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
             </strong>
             <p>
               {top10CoverageSentence(plateauCoverage)}画面では架空建物を作りません。
+              これはPLATEAUへの評価ではなく、年度・整備範囲・LOD方針を含む都市データの空白を、意思決定上の発見として扱います。
               {referenceCoverageSentence(plateauCoverage)}
+            </p>
+          </div>
+
+          <h3>Why PLATEAU — 30秒で答える</h3>
+          <div className="formula-card why-plateau-card">
+            <strong>今できたこと</strong>
+            <p>
+              公式市境界・駅と500m分析を重ね、建物収録範囲を全44,640棟で検証しました。
+              全市{data.finalDemo.deep_dive.overall_rank}位の{data.finalDemo.deep_dive.area_label}では、
+              公式建物{data.finalDemo.deep_dive.plateau_building_count.toLocaleString("ja-JP")}棟、道路面、建物用途・高さ・階数・面積・LODを実物で確認し、道路面上から配置探索アンカーを生成しています。
+            </p>
+            <strong>まだしていないこと</strong>
+            <p>
+              建物起点の歩行経路、道路接続・横断・坂を含む到達圏、用地や運行条件の最適化です。
+              道路LOD1は面形状で接続トポロジーを持たないため、直線距離を経路距離と偽って置き換えていません。
             </p>
           </div>
 
@@ -165,7 +181,7 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
           <div className="provenance-row">
             <span>Analysis {data.manifest.analysis_version ?? "—"}</span>
             <span>生成: {generatedAt}</span>
-            <span>PLATEAU: Top 10内 {top10CoverageLabel(plateauCoverage)} / 駅周辺リファレンス {plateauCoverage.referenceIncluded ? formatBuildingCount(plateauCoverage.referenceCount) : "収録状況を確認できません"}</span>
+            <span>PLATEAU: Top 10内 {top10CoverageLabel(plateauCoverage)} / 3D Deep Dive subset {plateauCoverage.referenceIncluded ? formatBuildingCount(plateauCoverage.referenceCount) : "収録状況を確認できません"}</span>
           </div>
           {data.warnings.length > 0 && (
             <details className="data-warnings">

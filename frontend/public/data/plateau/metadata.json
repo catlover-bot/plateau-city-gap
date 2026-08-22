@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "status": "reference_subset_available",
-  "purpose": "Official PLATEAU reference view around East and West Maizuru stations. It is not a building layer for CITY GAP Top 10.",
+  "status": "deep_dive_subset_available",
+  "purpose": "Official PLATEAU 3D Deep Dive for CITY GAP overall rank 23. It is not a building layer for CITY GAP Top 10.",
   "official_dataset": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
   "official_dataset_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
   "source": {
@@ -21,142 +21,165 @@
     "official_distribution_unique_buildings": 44640
   },
   "selection": {
-    "method": "LOD2 tileset leaf region within 100 m of either station",
-    "radius_m": 100.0,
-    "stations": {
-      "東舞鶴駅": {
-        "lon": 135.3948115487,
-        "lat": 35.4685882035
-      },
-      "西舞鶴駅": {
-        "lon": 135.3305425686,
-        "lat": 35.4417242947
-      }
+    "method": "LOD2 tileset leaf regions intersecting the verified 500 m mesh",
+    "deep_dive": {
+      "mesh_code": "533513314",
+      "area_label": "常団地前バス停周辺",
+      "overall_rank": 23,
+      "west": 135.39375,
+      "south": 35.44583333333334,
+      "east": 135.4,
+      "north": 35.45,
+      "longitude": 135.396875,
+      "latitude": 35.44791666666667,
+      "expected_buildings": 296
     },
-    "tiles": 5,
-    "b3dm_bytes": 12723708,
+    "tiles": 3,
+    "b3dm_bytes": 4313608,
     "bounding_region_degrees": [
-      135.32758730354266,
-      35.43949980259554,
-      135.40012704355627,
-      35.47291476313251,
-      37.75699534768998,
-      87.66800628306653
+      135.3961855325953,
+      35.446608133161675,
+      135.4048864687903,
+      35.450692021572486,
+      62.641215031412806,
+      93.60520142816824
     ]
   },
   "buildings": {
-    "records": 2152,
+    "records": 856,
     "usage": {
-      "known_excluding_unknown": 1903,
-      "known_percent": 88.429,
+      "known_excluding_unknown": 746,
+      "known_percent": 87.15,
       "values": {
-        "住宅": 1198,
-        "不明": 249,
-        "店舗等併用住宅": 164,
-        "商業施設": 120,
-        "共同住宅": 109,
-        "文教厚生施設": 93,
-        "運輸倉庫施設": 67,
-        "業務施設": 55,
-        "商業系複合施設": 28,
-        "店舗等併用共同住宅": 25,
-        "工場": 14,
-        "宿泊施設": 14,
-        "作業所併用住宅": 10,
-        "官公庁施設": 5,
-        "供給処理施設": 1
+        "住宅": 675,
+        "不明": 110,
+        "共同住宅": 32,
+        "店舗等併用住宅": 21,
+        "文教厚生施設": 8,
+        "農林漁業用施設": 4,
+        "運輸倉庫施設": 4,
+        "供給処理施設": 1,
+        "業務施設": 1
       }
     },
     "measured_height_m": {
-      "known": 1738,
-      "missing_or_sentinel": 414,
-      "completeness_percent": 80.762,
-      "min": 3.2,
-      "median": 8.36,
-      "max": 57.94
+      "known": 615,
+      "missing_or_sentinel": 241,
+      "completeness_percent": 71.846,
+      "min": 3.34,
+      "median": 8.18,
+      "max": 64.27
     },
     "storeys_above_ground": {
-      "known": 1903,
-      "missing_or_sentinel": 249,
-      "completeness_percent": 88.429,
+      "known": 746,
+      "missing_or_sentinel": 110,
+      "completeness_percent": 87.15,
       "min": 1,
-      "median": 2,
-      "max": 15
+      "median": 2.0,
+      "max": 5
     },
     "storeys_below_ground": {
-      "known": 1903,
-      "missing_or_sentinel": 249,
-      "completeness_percent": 88.429,
+      "known": 746,
+      "missing_or_sentinel": 110,
+      "completeness_percent": 87.15,
       "min": 0,
-      "median": 0,
-      "max": 1
+      "median": 0.0,
+      "max": 0
     },
     "building_footprint_area_m2": {
-      "known": 1903,
-      "missing_or_sentinel": 249,
-      "completeness_percent": 88.429,
-      "min": 3.5,
-      "median": 69.8,
-      "max": 12955.33
+      "known": 746,
+      "missing_or_sentinel": 110,
+      "completeness_percent": 87.15,
+      "min": 1.26,
+      "median": 62.105000000000004,
+      "max": 1045.7
     },
     "building_total_floor_area_m2": {
-      "known": 1903,
-      "missing_or_sentinel": 249,
-      "completeness_percent": 88.429,
-      "min": 4.8100000000000005,
-      "median": 113.26,
-      "max": 42598.34
+      "known": 746,
+      "missing_or_sentinel": 110,
+      "completeness_percent": 87.15,
+      "min": 1.26,
+      "median": 95.495,
+      "max": 5228.5
     },
     "geometry_lod": {
-      "1": 1215,
-      "2": 937
+      "1": 856
+    }
+  },
+  "deep_dive_buildings": {
+    "records": 296,
+    "usage": {
+      "known_excluding_unknown": 253,
+      "known_percent": 85.473,
+      "values": {
+        "住宅": 236,
+        "不明": 43,
+        "店舗等併用住宅": 8,
+        "文教厚生施設": 4,
+        "共同住宅": 3,
+        "業務施設": 1,
+        "農林漁業用施設": 1
+      }
+    },
+    "measured_height_m": {
+      "known": 230,
+      "missing_or_sentinel": 66,
+      "completeness_percent": 77.703,
+      "min": 3.34,
+      "median": 8.11,
+      "max": 64.27
+    },
+    "storeys_above_ground": {
+      "known": 253,
+      "missing_or_sentinel": 43,
+      "completeness_percent": 85.473,
+      "min": 1,
+      "median": 2,
+      "max": 3
+    },
+    "storeys_below_ground": {
+      "known": 253,
+      "missing_or_sentinel": 43,
+      "completeness_percent": 85.473,
+      "min": 0,
+      "median": 0,
+      "max": 0
+    },
+    "building_footprint_area_m2": {
+      "known": 253,
+      "missing_or_sentinel": 43,
+      "completeness_percent": 85.473,
+      "min": 4.68,
+      "median": 60.45,
+      "max": 537.02
+    },
+    "building_total_floor_area_m2": {
+      "known": 253,
+      "missing_or_sentinel": 43,
+      "completeness_percent": 85.473,
+      "min": 4.68,
+      "median": 90.24,
+      "max": 656.17
+    },
+    "geometry_lod": {
+      "1": 296
     }
   },
   "files": [
     {
-      "uri": "data/data174.b3dm",
-      "bytes": 2385936,
-      "sha256": "e5a7e97764af52a975c842301a3e79e33bd8ca92e22798afb2f2bf0ac93acc53",
-      "station_distances_m": {
-        "東舞鶴駅": 55.292,
-        "西舞鶴駅": 6539.528
-      }
+      "uri": "data/data284.b3dm",
+      "bytes": 2353372,
+      "sha256": "26ea138973198cf5c3700176216bf5f1a1fde075257f93dcadd7badbf5bff6dc"
     },
     {
-      "uri": "data/data176.b3dm",
-      "bytes": 2592376,
-      "sha256": "e140575717816c6568b88c0a780f3f7e70591f9b8ec31dad81011836fd7325bc",
-      "station_distances_m": {
-        "東舞鶴駅": 0.0,
-        "西舞鶴駅": 6337.853
-      }
+      "uri": "data/data285.b3dm",
+      "bytes": 1883408,
+      "sha256": "08b86677bba781008edce3a771d78c59974a5663772222c2399412a81165bdf6"
     },
     {
-      "uri": "data/data178.b3dm",
-      "bytes": 2087712,
-      "sha256": "1f23437353d96d3d0452905f00a6a3839a661f712b00c64c9e97888a8e3b9a76",
-      "station_distances_m": {
-        "東舞鶴駅": 56.732,
-        "西舞鶴駅": 6145.137
-      }
-    },
-    {
-      "uri": "data/data180.b3dm",
-      "bytes": 2551336,
-      "sha256": "ebbc4ab5a781dbc20593a76e7fecfaaea28bc66ab19c2417a75b1214259af709",
-      "station_distances_m": {
-        "東舞鶴駅": 0.0,
-        "西舞鶴駅": 5951.819
-      }
-    },
-    {
-      "uri": "data/data345.b3dm",
-      "bytes": 3106348,
-      "sha256": "1b8b47b1d6b56a91ac29c8f9137e32d53c60099b2bd635a0c7a8e3aee9053314",
-      "station_distances_m": {
-        "東舞鶴駅": 6274.543,
-        "西舞鶴駅": 0.0
-      }
+      "uri": "data/data287.b3dm",
+      "bytes": 76828,
+      "sha256": "28ed16f8165a9475c098c0bf275df721fa283bc95ba6e2dadab4305eaa7ec3a7"
     }
   ]
 }

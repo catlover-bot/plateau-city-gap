@@ -4,6 +4,8 @@
   "items": [
     {
       "mesh_code": "533512753",
+      "area_label": "二尾バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 1,
       "population": 91,
       "elderly_population": 56.0,
@@ -33,6 +35,8 @@
     },
     {
       "mesh_code": "533522274",
+      "area_label": "赤野バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 2,
       "population": 58,
       "elderly_population": 27.0,
@@ -62,6 +66,8 @@
     },
     {
       "mesh_code": "533512132",
+      "area_label": "上福井バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 3,
       "population": 91,
       "elderly_population": 43.0,
@@ -91,6 +97,8 @@
     },
     {
       "mesh_code": "533502982",
+      "area_label": "京田バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 4,
       "population": 134,
       "elderly_population": 101.0,
@@ -120,6 +128,8 @@
     },
     {
       "mesh_code": "533512144",
+      "area_label": "中筋小学校口バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 5,
       "population": 238,
       "elderly_population": 105.0,
@@ -149,6 +159,8 @@
     },
     {
       "mesh_code": "533512134",
+      "area_label": "上福井バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 6,
       "population": 87,
       "elderly_population": 49.0,
@@ -178,6 +190,8 @@
     },
     {
       "mesh_code": "533513551",
+      "area_label": "堂の奥バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 7,
       "population": 75,
       "elderly_population": 32.0,
@@ -207,6 +221,8 @@
     },
     {
       "mesh_code": "533522094",
+      "area_label": "平バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 8,
       "population": 62,
       "elderly_population": 34.0,
@@ -236,6 +252,8 @@
     },
     {
       "mesh_code": "533512931",
+      "area_label": "丹後神崎駅周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 9,
       "population": 50,
       "elderly_population": 26.0,
@@ -265,6 +283,8 @@
     },
     {
       "mesh_code": "533502943",
+      "area_label": "真倉駅前バス停周辺",
+      "area_label_basis": "最寄りの実在公共交通名称（行政地名ではない）",
       "rank": 10,
       "population": 39,
       "elderly_population": 29.0,

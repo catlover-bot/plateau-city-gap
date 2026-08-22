@@ -54,6 +54,8 @@ DEFAULTS = {
 
 MESH_PROPERTIES = [
     "mesh_code",
+    "area_label",
+    "area_label_basis",
     "rank",
     "population",
     "elderly_population",
@@ -110,7 +112,8 @@ LIMITATIONS = [
     "The source years differ: Census and medical data are 2020, bus stops are 2022, and PLATEAU related data are 2025.",
     "Suppressed and aggregation-affected population meshes remain visible but are excluded from the primary ranking.",
     "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
-    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated station-area reference subset is shown instead.",
+    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated PLATEAU-covered rank-23 Deep Dive is shown instead.",
+    "PLATEAU road LOD1 surfaces do not provide a connected walking network, crossings, or passability; candidate effects therefore remain Euclidean-distance scenarios.",
 ]
 
 
@@ -430,6 +433,16 @@ def _build_mesh_assets(
     metrics["pareto_frontier"] = metrics["pareto_frontier"].map(
         _nullable_boolean
     ).astype("boolean")
+    names = metrics["nearest_public_transport_name"].astype("string").str.strip()
+    station_mask = metrics["nearest_public_transport_type"].eq("station") | names.str.endswith(
+        "駅", na=False
+    )
+    metrics["area_label"] = np.where(
+        station_mask,
+        names.fillna("名称未確認") + "周辺",
+        names.fillna("名称未確認") + "バス停周辺",
+    )
+    metrics["area_label_basis"] = "最寄りの実在公共交通名称（行政地名ではない）"
     missing = sorted(set(MESH_PROPERTIES).difference(metrics.columns))
     if missing:
         raise ValueError(f"Analysis metrics are missing fields: {missing}")
@@ -544,15 +557,16 @@ def _build_plateau_status(
         reference = json.loads(reference_metadata_path.read_text(encoding="utf-8"))
         selection = reference.get("selection", {})
         buildings = reference.get("buildings", {})
+        deep_buildings = reference.get("deep_dive_buildings", {})
         top10_scope = reference.get("city_gap_top10", {})
         files = reference.get("files", [])
         records = buildings.get("records")
         tiles = selection.get("tiles")
         b3dm_bytes = selection.get("b3dm_bytes")
         geometry_lod = buildings.get("geometry_lod", {})
-        station_view = selection.get("stations", {}).get("東舞鶴駅", {})
+        deep_view = selection.get("deep_dive", {})
         if (
-            reference.get("status") != "reference_subset_available"
+            reference.get("status") != "deep_dive_subset_available"
             or not isinstance(records, int)
             or records <= 0
             or not isinstance(tiles, int)
@@ -563,16 +577,21 @@ def _build_plateau_status(
             or len(files) != tiles
             or top10_scope.get("building_centers") != 0
             or top10_scope.get("building_bbox_intersections") != 0
-            or not _is_finite_number(station_view.get("lon"))
-            or not _is_finite_number(station_view.get("lat"))
+            or deep_buildings.get("records") != deep_view.get("expected_buildings")
+            or not _is_finite_number(deep_view.get("longitude"))
+            or not _is_finite_number(deep_view.get("latitude"))
         ):
             raise ValueError("PLATEAU reference subset metadata is inconsistent")
         if sum(int(item.get("bytes", -1)) for item in files) != b3dm_bytes:
             raise ValueError("PLATEAU reference subset byte totals disagree")
         status["reference_layer"] = {
             "status": "included",
-            "scope": "East and West Maizuru station areas; not the CITY GAP Top 10",
+            "scope": "常団地前バス停周辺・全市23位の3D Deep Dive; Top 10ではない",
             "records": records,
+            "deep_dive_buildings": deep_buildings["records"],
+            "deep_dive_mesh_code": str(deep_view["mesh_code"]),
+            "deep_dive_overall_rank": int(deep_view["overall_rank"]),
+            "area_label": str(deep_view["area_label"]),
             "selected_tiles": tiles,
             "bytes": b3dm_bytes,
             "tileset_url": "data/plateau/tileset.json",
@@ -584,16 +603,19 @@ def _build_plateau_status(
                 "bldg:measuredHeight",
                 "bldg:storeysAboveGround",
                 "bldg:storeysBelowGround",
+                "uro:buildingFootprintArea",
+                "uro:totalFloorArea",
                 "_lod",
             ],
             "reason": (
                 "A deterministic lightweight subset of official 3D Tiles is included "
-                "to show verified PLATEAU urban context without fabricating Top 10 buildings."
+                "to inspect a verified PLATEAU-covered CITY GAP candidate without "
+                "fabricating Top 10 buildings."
             ),
             "viewpoint": {
-                "longitude": station_view["lon"],
-                "latitude": station_view["lat"],
-                "height": 520,
+                "longitude": deep_view["longitude"],
+                "latitude": deep_view["latitude"],
+                "height": 620,
             },
             "metadata": {
                 "path": _relative_path(reference_metadata_path),
@@ -810,6 +832,20 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
     }
     validate_geojson_geometry(plateau_buildings, allow_empty=True)
 
+    final_demo_path = args.output_dir / "final_demo.json"
+    plateau_roads_path = args.output_dir / "plateau_roads.geojson"
+    _require_file(final_demo_path)
+    _require_file(plateau_roads_path)
+    final_demo = json.loads(final_demo_path.read_text(encoding="utf-8"))
+    plateau_roads = json.loads(plateau_roads_path.read_text(encoding="utf-8"))
+    if final_demo.get("comparison_mesh_count") != expected.get("population_unaffected"):
+        raise ValueError("Final demo comparison-mesh count disagrees with analysis")
+    if len(final_demo.get("plateau_covered_candidates", [])) != 5:
+        raise ValueError("Final demo must contain five PLATEAU-covered candidates")
+    validate_geojson_geometry(
+        plateau_roads, expected_types={"Polygon", "MultiPolygon"}
+    )
+
     args.output_dir.mkdir(parents=True, exist_ok=True)
     output_values: dict[str, Mapping[str, Any]] = {
         "mesh_metrics.geojson": mesh_collection,
@@ -852,6 +888,14 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
         )
         for filename in output_values
     ]
+    outputs.extend(
+        [
+            _file_record(final_demo_path, 1),
+            _file_record(
+                plateau_roads_path, len(plateau_roads["features"])
+            ),
+        ]
+    )
     plateau_reference_outputs = [
         {
             "file": path.relative_to(args.output_dir).as_posix(),
@@ -938,6 +982,7 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
             "plateau_reference_buildings": plateau_status.get(
                 "reference_layer", {}
             ).get("records", 0),
+            "plateau_deep_dive_roads": len(plateau_roads["features"]),
         },
         "outputs": outputs,
         "plateau_reference_outputs": plateau_reference_outputs,
@@ -965,6 +1010,8 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
                 "deduplicate PLATEAU station records by name and location",
                 "convert all geometries to EPSG:4326",
                 "validate analysis and geographic invariants before publication",
+                "join all official PLATEAU building representative points to analysis meshes",
+                "extract official PLATEAU road surfaces and precompute placement candidates",
             ],
         },
         "limitations": LIMITATIONS,

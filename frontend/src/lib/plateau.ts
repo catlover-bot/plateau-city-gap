@@ -65,7 +65,7 @@ export function top10CoverageSentence(coverage: PlateauCoverageSummary): string 
 
 export function referenceCoverageSentence(coverage: PlateauCoverageSummary): string {
   if (!coverage.referenceIncluded) {
-    return "駅周辺リファレンスの収録状況はメタデータから確認できません。";
+    return "3D Deep Dive subsetの収録状況はメタデータから確認できません。";
   }
-  return `東・西舞鶴駅周辺から抽出した公式3D Tiles（${formatBuildingCount(coverage.referenceCount)}）をリファレンス表示します。`;
+  return `PLATEAU-covered候補から抽出した公式3D Tiles subset（${formatBuildingCount(coverage.referenceCount)}）を表示します。`;
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-22T10:00:00Z",
+  "generated_at": "2026-08-22T12:00:00Z",
   "analysis_version": "0.1.0",
   "builder": "analysis/scripts/build_web_assets.py",
   "crs": {
@@ -69,29 +69,30 @@
     "medical_facilities": 105,
     "administrative_boundary": 1,
     "plateau_top10_buildings": 0,
-    "plateau_reference_buildings": 2152
+    "plateau_reference_buildings": 856,
+    "plateau_deep_dive_roads": 135
   },
   "outputs": [
     {
       "file": "mesh_metrics.geojson",
       "status": "available",
       "records": 495,
-      "bytes": 602266,
-      "sha256": "a4de2e084256d73b4232a54cc6cd7a142072da5c4c604c5f6258e229269580ec"
+      "bytes": 666190,
+      "sha256": "14d3c17f3a9e524a922847a55cb6f9345e55dce4d759fc8a9595496cb2eaa788"
     },
     {
       "file": "top10.json",
       "status": "available",
       "records": 10,
-      "bytes": 14284,
-      "sha256": "f3f88f8a69784500d8fe92efd81d35f986e36e02678ae683764ec0bfe21007de"
+      "bytes": 15718,
+      "sha256": "9dd4ddedc757bcb658ddd194b340b6d90d65975212f4c1788abee0c8e3d99d1e"
     },
     {
       "file": "summary.json",
       "status": "available",
       "records": 1,
-      "bytes": 3659,
-      "sha256": "237363c379dbcd742411be2fde0811776104cffcfd348bdfb1e1de86200a40a6"
+      "bytes": 3833,
+      "sha256": "c0cb6543da944a0f00b8beca79094dbc23a782e76fb51f5e13c654df63c78e60"
     },
     {
       "file": "stations.geojson",
@@ -132,45 +133,49 @@
       "file": "plateau_metadata.json",
       "status": "available",
       "records": 1,
-      "bytes": 3529,
-      "sha256": "2c28b21c550240bd4475a246baac3cbdebe7d12e405b0fdc4a1f462a06ef3ce1"
+      "bytes": 3776,
+      "sha256": "e8f7cb3d7167b30330dc6c887aae6e09f3029acb962471173203d6d61db86225"
+    },
+    {
+      "file": "final_demo.json",
+      "status": "available",
+      "records": 1,
+      "bytes": 8070,
+      "sha256": "8426222ff2e72a5bbcb4b5ff94bb8b8fa05d068f8aa56dc4898de6abfd2e4429"
+    },
+    {
+      "file": "plateau_roads.geojson",
+      "status": "available",
+      "records": 135,
+      "bytes": 95447,
+      "sha256": "9c533dc709933ef793624067f6571ee16049f5f3ac21da142eab794e846515e8"
     }
   ],
   "plateau_reference_outputs": [
     {
-      "file": "plateau/data/data174.b3dm",
-      "bytes": 2385936,
-      "sha256": "e5a7e97764af52a975c842301a3e79e33bd8ca92e22798afb2f2bf0ac93acc53"
+      "file": "plateau/data/data284.b3dm",
+      "bytes": 2353372,
+      "sha256": "26ea138973198cf5c3700176216bf5f1a1fde075257f93dcadd7badbf5bff6dc"
     },
     {
-      "file": "plateau/data/data176.b3dm",
-      "bytes": 2592376,
-      "sha256": "e140575717816c6568b88c0a780f3f7e70591f9b8ec31dad81011836fd7325bc"
+      "file": "plateau/data/data285.b3dm",
+      "bytes": 1883408,
+      "sha256": "08b86677bba781008edce3a771d78c59974a5663772222c2399412a81165bdf6"
     },
     {
-      "file": "plateau/data/data178.b3dm",
-      "bytes": 2087712,
-      "sha256": "1f23437353d96d3d0452905f00a6a3839a661f712b00c64c9e97888a8e3b9a76"
-    },
-    {
-      "file": "plateau/data/data180.b3dm",
-      "bytes": 2551336,
-      "sha256": "ebbc4ab5a781dbc20593a76e7fecfaaea28bc66ab19c2417a75b1214259af709"
-    },
-    {
-      "file": "plateau/data/data345.b3dm",
-      "bytes": 3106348,
-      "sha256": "1b8b47b1d6b56a91ac29c8f9137e32d53c60099b2bd635a0c7a8e3aee9053314"
+      "file": "plateau/data/data287.b3dm",
+      "bytes": 76828,
+      "sha256": "28ed16f8165a9475c098c0bf275df721fa283bc95ba6e2dadab4305eaa7ec3a7"
     },
     {
       "file": "plateau/metadata.json",
-      "bytes": 4558,
-      "sha256": "312c2f21fbc829c6920426360585894ad7ffcd1d564b4ad460ac0434cd4c6ab0"
+      "bytes": 4958,
+      "sha256": "772a060166fc0347f421d744a432cd1e14d867e07a9a3d503769d0499db64a4e"
     },
     {
       "file": "plateau/tileset.json",
-      "bytes": 1421,
-      "sha256": "53ec8154c493892de0415f7863f016d56f3b12e6d9e257ffe6764a2aba16eb82"
+      "bytes": 965,
+      "sha256": "7b6c38a07146ee563576ccbf97321562994000d5027c6476eb2babac473d6598"
     }
   ],
   "lineage": {
@@ -226,7 +231,9 @@
       "filter point layers by the PLATEAU administrative boundary using intersects",
       "deduplicate PLATEAU station records by name and location",
       "convert all geometries to EPSG:4326",
-      "validate analysis and geographic invariants before publication"
+      "validate analysis and geographic invariants before publication",
+      "join all official PLATEAU building representative points to analysis meshes",
+      "extract official PLATEAU road surfaces and precompute placement candidates"
     ]
   },
   "limitations": [
@@ -236,6 +243,7 @@
     "The source years differ: Census and medical data are 2020, bus stops are 2022, and PLATEAU related data are 2025.",
     "Suppressed and aggregation-affected population meshes remain visible but are excluded from the primary ranking.",
     "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
-    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated station-area reference subset is shown instead."
+    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated PLATEAU-covered rank-23 Deep Dive is shown instead.",
+    "PLATEAU road LOD1 surfaces do not provide a connected walking network, crossings, or passability; candidate effects therefore remain Euclidean-distance scenarios."
   ]
 }

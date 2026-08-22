@@ -29,7 +29,7 @@ export function LayerPanel({ data, value, open, onOpenChange, onChange, onResetV
     { key: "medical", label: "医療施設", swatch: "medical", available: Boolean(data.medicalFacilities?.features.length) },
     {
       key: "plateau",
-      label: "PLATEAU建物（駅周辺）",
+      label: "PLATEAU 3D・道路（Deep Dive）",
       swatch: "plateau",
       available: plateauCoverage.referenceIncluded || Boolean(data.plateauBuildings?.features.length)
     }

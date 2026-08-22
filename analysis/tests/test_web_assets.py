@@ -137,7 +137,8 @@ def test_published_web_assets_are_valid_and_traceable() -> None:
         "medical_facilities": 105,
         "administrative_boundary": 1,
         "plateau_top10_buildings": 0,
-        "plateau_reference_buildings": 2_152,
+        "plateau_reference_buildings": 856,
+        "plateau_deep_dive_roads": 135,
     }
     assert manifest["limitations"]
     assert all(item["sha256"] for item in manifest["lineage"]["inputs"])
@@ -174,7 +175,7 @@ def test_published_web_assets_are_valid_and_traceable() -> None:
     assert {"plateau/metadata.json", "plateau/tileset.json"} <= set(
         reference_outputs
     )
-    assert len([name for name in reference_outputs if name.endswith(".b3dm")]) == 5
+    assert len([name for name in reference_outputs if name.endswith(".b3dm")]) == 3
     for filename, output in reference_outputs.items():
         path = WEB_DATA / filename
         assert path.stat().st_size == output["bytes"]
@@ -195,7 +196,7 @@ def test_published_plateau_reference_tiles_are_official_and_consistent() -> None
         ).read_text(encoding="utf-8")
     )
 
-    assert metadata["status"] == "reference_subset_available"
+    assert metadata["status"] == "deep_dive_subset_available"
     assert metadata["source"]["url"].startswith(
         "https://assets.cms.plateau.reearth.io/"
     )
@@ -205,9 +206,11 @@ def test_published_plateau_reference_tiles_are_official_and_consistent() -> None
         "building_bbox_intersections": 0,
         "official_distribution_unique_buildings": 44_640,
     }
-    assert metadata["selection"]["tiles"] == 5
-    assert metadata["buildings"]["records"] == 2_152
-    assert metadata["buildings"]["geometry_lod"] == {"1": 1_215, "2": 937}
+    assert metadata["selection"]["tiles"] == 3
+    assert metadata["selection"]["deep_dive"]["mesh_code"] == "533513314"
+    assert metadata["buildings"]["records"] == 856
+    assert metadata["buildings"]["geometry_lod"] == {"1": 856}
+    assert metadata["deep_dive_buildings"]["records"] == 296
     assert inspection["whole_city_lod1_attributes"]["lod2_source_populated"] == 1_504
     assert inspection["whole_city_lod2_attributes"]["lod2_source_populated"] == 1_504
 

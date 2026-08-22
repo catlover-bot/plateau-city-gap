@@ -59,6 +59,7 @@ interface DataSourceRefs {
   medical?: GeoJsonDataSource;
   boundary?: GeoJsonDataSource;
   plateauGeoJson?: GeoJsonDataSource;
+  plateauRoads?: GeoJsonDataSource;
   plateauTileset?: Cesium3DTileset;
 }
 
@@ -90,15 +91,26 @@ function isTileFeature(value: unknown): value is TileFeatureLike {
 
 function buildingFromFeature(feature: TileFeatureLike): BuildingInfo {
   const read = (name: string) => feature.getProperty(name);
-  const rawId = read("gml_id") ?? read("uro:BuildingIDAttribute_uro:buildingID");
-  const rawUsage = read("bldg:usage");
+  const rawAttributes = read("attributes");
+  const attributes = typeof rawAttributes === "object" && rawAttributes !== null
+    ? rawAttributes as Record<string, unknown>
+    : {};
+  const readAttribute = (name: string) => read(name) ?? attributes[name];
+  const rawDetails = attributes["uro:BuildingDetailAttribute"];
+  const details = Array.isArray(rawDetails) && typeof rawDetails[0] === "object" && rawDetails[0] !== null
+    ? rawDetails[0] as Record<string, unknown>
+    : {};
+  const rawId = read("gml_id") ?? readAttribute("uro:BuildingIDAttribute_uro:buildingID");
+  const rawUsage = readAttribute("bldg:usage");
   const rawLod = read("_lod");
   return {
     id: typeof rawId === "string" ? rawId : String(rawId ?? "IDなし"),
     usage: typeof rawUsage === "string" && rawUsage.trim() ? rawUsage : null,
-    measuredHeight: finiteNumber(read("bldg:measuredHeight")),
-    storeysAboveGround: finiteNumber(read("bldg:storeysAboveGround")),
-    storeysBelowGround: finiteNumber(read("bldg:storeysBelowGround")),
+    measuredHeight: finiteNumber(readAttribute("bldg:measuredHeight")),
+    storeysAboveGround: finiteNumber(readAttribute("bldg:storeysAboveGround")),
+    storeysBelowGround: finiteNumber(readAttribute("bldg:storeysBelowGround")),
+    footprintArea: finiteNumber(read("uro:buildingFootprintArea")) ?? finiteNumber(details["uro:buildingFootprintArea"]),
+    totalFloorArea: finiteNumber(read("uro:totalFloorArea")) ?? finiteNumber(details["uro:totalFloorArea"]),
     lod: rawLod === null || rawLod === undefined ? null : `LOD${String(rawLod)}`
   };
 }
@@ -220,6 +232,16 @@ function styleBuildings(source: GeoJsonDataSource | undefined) {
     entity.polygon.outline = new ConstantProperty(true);
     entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString("#ffffff").withAlpha(0.6));
     if (height !== null && height > 0) entity.polygon.extrudedHeight = new ConstantProperty(height);
+  }
+}
+
+function styleRoads(source: GeoJsonDataSource | undefined) {
+  if (!source) return;
+  for (const entity of source.entities.values) {
+    if (!entity.polygon) continue;
+    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString("#f4b860").withAlpha(0.34));
+    entity.polygon.outline = new ConstantProperty(true);
+    entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString("#ffd28a").withAlpha(0.8));
   }
 }
 
@@ -366,6 +388,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         viewer.imageryLayers.addImageryProvider(localImagery);
         const boundary = await addGeoJson(viewer, data.boundary);
         const plateauGeoJson = await addGeoJson(viewer, data.plateauBuildings);
+        const plateauRoads = await addGeoJson(viewer, data.plateauRoads);
         const meshes = await addGeoJson(viewer, data.meshes);
         const stations = await addGeoJson(viewer, data.stations);
         const busStops = await addGeoJson(viewer, data.busStops);
@@ -393,9 +416,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         }
         if (cancelled || viewer.isDestroyed()) return;
 
-        sourcesRef.current = { boundary, plateauGeoJson, plateauTileset, meshes, stations, busStops, medical };
+        sourcesRef.current = { boundary, plateauGeoJson, plateauRoads, plateauTileset, meshes, stations, busStops, medical };
         styleBoundary(boundary);
         styleBuildings(plateauGeoJson);
+        styleRoads(plateauRoads);
         if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current);
         stylePoints(stations, Color.fromCssColorString("#ffd166"), 11);
         stylePoints(busStops, Color.fromCssColorString("#4fd1c5"), 7);
@@ -404,6 +428,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         const currentVisibility = visibilityRef.current;
         if (boundary) boundary.show = currentVisibility.boundary;
         if (plateauGeoJson) plateauGeoJson.show = currentVisibility.plateau;
+        if (plateauRoads) plateauRoads.show = currentVisibility.plateau;
         if (plateauTileset) plateauTileset.show = currentVisibility.plateau;
         if (meshes) meshes.show = currentVisibility.meshes;
         if (stations) stations.show = currentVisibility.stations;
@@ -433,11 +458,13 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         });
         return;
       }
-      const picked = viewer.scene.pick(movement.position) as ({ id?: Entity } & Partial<TileFeatureLike>) | undefined;
-      if (isTileFeature(picked)) {
-        onBuildingSelectRef.current(buildingFromFeature(picked));
+      const drilled = viewer.scene.drillPick(movement.position, 20) as Array<({ id?: Entity } & Partial<TileFeatureLike>)>;
+      const building = drilled.find(isTileFeature);
+      if (building) {
+        onBuildingSelectRef.current(buildingFromFeature(building));
         return;
       }
+      const picked = drilled[0] ?? viewer.scene.pick(movement.position) as ({ id?: Entity } & Partial<TileFeatureLike>) | undefined;
       if (!picked?.id) return;
       const mesh = entityMesh(picked.id);
       if (mesh) onMeshSelectRef.current(mesh);
@@ -504,6 +531,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     if (sources.medical) sources.medical.show = visibility.medical;
     if (sources.boundary) sources.boundary.show = visibility.boundary;
     if (sources.plateauGeoJson) sources.plateauGeoJson.show = visibility.plateau;
+    if (sources.plateauRoads) sources.plateauRoads.show = visibility.plateau;
     if (sources.plateauTileset) sources.plateauTileset.show = visibility.plateau;
     viewerRef.current?.scene.requestRender();
   }, [visibility]);

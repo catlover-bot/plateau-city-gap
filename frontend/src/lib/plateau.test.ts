@@ -16,19 +16,19 @@ describe("PLATEAU coverage copy", () => {
         records: 0,
         source_distribution_unique_buildings: 44_640,
       },
-      reference_layer: { status: "included", records: 2_152 },
+      reference_layer: { status: "included", records: 856 },
     });
 
     expect(coverage).toEqual({
       distributionCount: 44_640,
       top10Count: 0,
-      referenceCount: 2_152,
+      referenceCount: 856,
       top10Status: "verified-empty",
       referenceIncluded: true,
     });
     expect(top10CoverageLabel(coverage)).toBe("0棟（公式データ検証済み）");
     expect(top10CoverageSentence(coverage)).toContain("公式データ検証で0棟");
-    expect(referenceCoverageSentence(coverage)).toContain("2,152棟");
+    expect(referenceCoverageSentence(coverage)).toContain("856棟");
   });
 
   it("uses honest unavailable wording instead of fallback counts", () => {

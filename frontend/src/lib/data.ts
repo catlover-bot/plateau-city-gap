@@ -1,5 +1,6 @@
 import type {
   AppData,
+  FinalDemoData,
   GeoJsonFeatureCollection,
   Manifest,
   MeshMetrics,
@@ -103,23 +104,26 @@ export async function loadAppData(
   fetcher: typeof fetch = fetch,
   baseUrl = import.meta.env.BASE_URL
 ): Promise<AppData> {
-  const [manifestRaw, meshesRaw, top10Raw, summaryRaw] = await Promise.all([
+  const [manifestRaw, meshesRaw, top10Raw, summaryRaw, finalDemoRaw] = await Promise.all([
     fetchJson(fetcher, dataUrl(baseUrl, "manifest.json")),
     fetchJson(fetcher, dataUrl(baseUrl, "mesh_metrics.geojson")),
     fetchJson(fetcher, dataUrl(baseUrl, "top10.json")),
-    fetchJson(fetcher, dataUrl(baseUrl, "summary.json"))
+    fetchJson(fetcher, dataUrl(baseUrl, "summary.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "final_demo.json"))
   ]);
   if (!isRecord(manifestRaw)) throw new Error("manifest.json の形式が正しくありません");
   if (!isRecord(summaryRaw)) throw new Error("summary.json の形式が正しくありません");
+  if (!isRecord(finalDemoRaw)) throw new Error("final_demo.json の形式が正しくありません");
 
   const warnings: string[] = [];
-  const [stations, busStops, medicalFacilities, boundary, plateauBuildings, plateauMetadata] =
+  const [stations, busStops, medicalFacilities, boundary, plateauBuildings, plateauRoads, plateauMetadata] =
     await Promise.all([
       optionalGeoJson(fetcher, dataUrl(baseUrl, "stations.geojson"), "駅", warnings),
       optionalGeoJson(fetcher, dataUrl(baseUrl, "bus_stops.geojson"), "バス停", warnings),
       optionalGeoJson(fetcher, dataUrl(baseUrl, "medical_facilities.geojson"), "医療施設", warnings),
       optionalGeoJson(fetcher, dataUrl(baseUrl, "maizuru_boundary.geojson"), "舞鶴市境界", warnings),
       optionalGeoJson(fetcher, dataUrl(baseUrl, "plateau_buildings.geojson"), "PLATEAU建物", warnings),
+      optionalGeoJson(fetcher, dataUrl(baseUrl, "plateau_roads.geojson"), "PLATEAU道路", warnings),
       optionalMetadata(fetcher, dataUrl(baseUrl, "plateau_metadata.json"), warnings)
     ]);
 
@@ -133,7 +137,9 @@ export async function loadAppData(
     medicalFacilities,
     boundary,
     plateauBuildings,
+    plateauRoads,
     plateauMetadata,
+    finalDemo: finalDemoRaw as FinalDemoData,
     warnings
   };
 }

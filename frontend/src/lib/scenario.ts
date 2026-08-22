@@ -13,6 +13,7 @@ export interface VirtualPoint {
 
 export interface ScenarioMeshResult {
   meshCode: string;
+  areaLabel: string;
   beforeDistanceM: number;
   afterDistanceM: number;
   beforeTransportPercentile: number;
@@ -31,6 +32,8 @@ export interface ScenarioResult {
   comparisonMeshCount: number;
   improvedMeshCount: number;
   affectedElderlyPopulation: number;
+  averageTransportDistanceImprovementM: number;
+  totalScoreReduction: number;
   mostImproved: ScenarioMeshResult[];
 }
 
@@ -122,6 +125,7 @@ export const calculateScenario = (
     const scoreReduction = candidate.score - afterScore;
     return {
       meshCode: candidate.meshCode,
+      areaLabel: typeof candidate.mesh.area_label === "string" ? candidate.mesh.area_label : `Mesh ${candidate.meshCode}`,
       beforeDistanceM: candidate.distance,
       afterDistanceM: candidate.newDistance,
       beforeTransportPercentile: candidate.transportPercentile,
@@ -144,6 +148,10 @@ export const calculateScenario = (
       (total, result) => total + result.elderlyPopulation,
       0,
     ),
+    averageTransportDistanceImprovementM: improved.length > 0
+      ? improved.reduce((total, result) => total + result.beforeDistanceM - result.afterDistanceM, 0) / improved.length
+      : 0,
+    totalScoreReduction: results.reduce((total, result) => total + result.scoreReduction, 0),
     mostImproved: [...results]
       .filter((result) => result.scoreReduction > 1e-12)
       .sort((left, right) => right.scoreReduction - left.scoreReduction)

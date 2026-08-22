@@ -25,6 +25,7 @@ build_web_assets.py
           ▼
 frontend/public/data/
   軽量GeoJSON / JSON + PLATEAU 3D Tiles subset
+  + PLATEAU道路subset + final demo candidates
           │
           ▼
 React + TypeScript + CesiumJS
@@ -74,12 +75,13 @@ Vite static build → GitHub Pages
 3. `gml_id` でtile間の重複を除き、公式配布3D Tiles内44,640棟とLOD1/LOD2 ID一致を確認する。
 4. Top 10の各500m polygonと建物代表点・bounding boxを照合する。
 5. Top 10内0棟をcoverage結果として記録し、geometryを推定しない。
-6. `build_plateau_web_subset.py` が、公式建物の存在する東舞鶴駅・西舞鶴駅周辺について、LOD2配布コンテナのleaf content regionが駅から100m以内となる5 tileを選ぶ。
-7. 選択したtilesetと5 b3dmをchecksum検証済み公式ZIP内の同一memberへ直接hash照合し、12,723,708 bytesのpayloadとpruned `tileset.json` をステージング後に公開する。
+6. `build_final_demo_assets.py` が44,640建物代表点を500mメッシュへ結合し、PLATEAU-covered Top 5を生成する。
+7. 同scriptがCityGML道路16,778面を読み、既存交通から150m超の道路面代表点でWhat-ifを評価し、1.5km以上離したTop 3を生成する。Deep Diveでは道路135面とDEM TINを抽出する。
+8. `build_plateau_web_subset.py` が全市23位 `533513314` と交差する3 leaf tileを選び、公式ZIP内memberへhash照合して公開する。
 
-現在のsubset全体は12,729,687 bytes、重複排除後2,152棟です。配布コンテナ名はLOD2ですが、各featureの実際の `_lod` はLOD2が937棟、LOD1が1,215棟です。用途・計測高さ・地上/地下階数等はbatch tableに存在する値だけを表示します。
+現在のsubset payloadは4,313,608 bytes、856棟です。対象500mメッシュ内の代表点は296棟で、実際のgeometryは全856棟がLOD1です。用途・計測高さ・階数・建築面積・延べ面積・LODはbatch tableに存在する値だけを表示します。
 
-このsubsetはCITY GAP Top 10の周辺ではありません。Story Mode Step 3は公式3D建物の整備済み範囲へ移動し、候補地が建物モデル範囲外であることも画面上で説明します。
+このsubsetはCITY GAP Top 10の周辺ではありません。Story Mode Step 3はPLATEAU-coveredの全市23位へ移動し、Top 10の0棟coverageと区別します。
 
 ## Frontend
 
@@ -91,7 +93,7 @@ Vite static build → GitHub Pages
 | `CesiumMap` | 500m polygon、point、行政界、3D Tiles、camera、pick |
 | `RankingPanel` / `DetailPanel` | Top 10、実測値、最寄り施設、percentile、説明 |
 | `MetricSelector` / `LayerPanel` | 指標色分けとlayer表示状態 |
-| `StoryMode` | 4分デモ向けの決定論的な4ステップ |
+| `StoryMode` | 指標比較 → Rank 1 → 3D Deep Dive → 配置候補 → 意思決定の5ステップ |
 | `ScenarioPanel` / `lib/scenario.ts` | 仮想交通支援拠点とBefore / After |
 | `MethodologyModal` | source、計算式、coverage、限界 |
 
@@ -100,7 +102,7 @@ Cesiumは500m polygonと施設pointをローカルGeoJSONから、PLATEAU建物�
 ## What-if data flow
 
 ```text
-map click（EPSG:4326）
+PLATEAU道路面Top 3 または map click（EPSG:4326）
   → proj4でEPSG:6674
   → 秘匿・合算影響のない286比較meshの中心までのEuclidean距離
   → min(既存交通距離, 仮想地点距離)
@@ -109,6 +111,7 @@ map click（EPSG:4326）
   → selected mesh Before/After
      + 改善mesh数
      + 対象meshの65歳以上人口合計
+     + 平均距離短縮 / Score C合計純減少
      + 改善幅Top 5
 ```
 
@@ -118,7 +121,7 @@ map click（EPSG:4326）
 
 Viteのbase pathは `/plateau-city-gap/`。GitHub ActionsはmainへのpushでNode install、typecheck、test、production buildを実行し、GitHub Pages artifactを配信します。
 
-公式配布全体の約161MB ZIPや240MB超の展開済み建物containerは配信しません。3Dは12.7MBの参照subsetに限定し、分析GeoJSONもブラウザ用属性へ絞ります。raw packageは再現・inspection用であり、repositoryにはcommitしません。
+公式配布全体の約161MB 3D Tiles ZIP、約914MB CityGML ZIPや展開済みcontainerは配信しません。3D payloadは4.31MBのDeep Dive subsetに限定します。Cesium runtime、Natural Earth II、分析JSON、3D Tiles、道路GeoJSONは全てstatic assetで、外部地図・分析APIへ実行時依存しません。
 
 ## Current implementation and future work
 
@@ -126,9 +129,9 @@ Viteのbase pathは `/plateau-city-gap/`。GitHub ActionsはmainへのpushでNod
 |---|---|
 | mesh中心からの直線距離 | 道路・徒歩network距離 |
 | 地域人口に基づく探索 | 建物への人口配分 |
-| 公式3D建物subsetの表示・属性確認 | 建物単位の居住起点 |
+| 公式3D建物Deep Diveと面積を含む属性確認 | 建物単位の居住起点 |
 | PLATEAU coverageをQAとして表示 | 公式配布全体の3D配信 |
-| 仮想1地点の決定論的再計算 | 運行、需要、費用の最適化 |
-| 楕円体terrain上の3D表示 | DEM、勾配、上下移動負荷 |
+| 道路面上Top 3と仮想1地点の決定論的再計算 | 道路network、運行、需要、費用の最適化 |
+| DEM TINの標高・局所勾配要約 | 歩行経路の勾配、上下移動負荷 |
 
 将来拡張を現行機能としては扱いません。特に建物形状・用途・階数は現時点のCITY GAPスコアへ入っていません。

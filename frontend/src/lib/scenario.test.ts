@@ -37,6 +37,8 @@ describe("scenario calculation", () => {
     expect(result.meshes.find((item) => item.meshCode === "far")?.afterDistanceM).toBe(100);
     expect(result.improvedMeshCount).toBe(1);
     expect(result.affectedElderlyPopulation).toBe(20);
+    expect(result.averageTransportDistanceImprovementM).toBeGreaterThan(1_900);
+    expect(result.meshes[0].areaLabel).toBe("Mesh near");
   });
 
   it("recalculates average-rank transport percentiles and scores deterministically", () => {

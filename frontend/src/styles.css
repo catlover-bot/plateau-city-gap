@@ -610,6 +610,15 @@ input:focus-visible,
   letter-spacing: .06em;
 }
 
+.panel-summary > div > small {
+  display: block;
+  max-width: 280px;
+  margin-top: 3px;
+  color: #6f898d;
+  font-size: 7px;
+  line-height: 1.35;
+}
+
 .summary-count {
   display: flex;
   align-items: baseline;
@@ -632,7 +641,7 @@ input:focus-visible,
   height: 52px;
   flex: 0 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   border-bottom: 1px solid var(--line);
 }
 
@@ -785,12 +794,23 @@ input:focus-visible,
   gap: 8px;
 }
 
-.rank-mesh {
+.rank-area {
+  display: block;
   overflow: hidden;
-  color: #dfeceb;
-  font-family: "SFMono-Regular", Consolas, monospace;
+  color: #edf7f5;
   font-size: 10px;
-  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-mesh {
+  display: block;
+  overflow: hidden;
+  margin-top: 2px;
+  color: #69868a;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 7px;
+  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -889,8 +909,14 @@ input:focus-visible,
 
 .detail-heading h2 {
   margin: 0;
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 15px;
+  font-size: 17px;
+}
+
+.detail-heading > div > small {
+  display: block;
+  margin-top: 3px;
+  color: #68858a;
+  font-size: 7px;
 }
 
 .detail-hero-metrics {
@@ -1515,6 +1541,41 @@ input:focus-visible,
 .scenario-empty p { margin: 0 0 3px; color: #7f9a9e; font-size: 9px; line-height: 1.6; }
 .scenario-pin { display: grid; place-items: center; width: 40px; height: 40px; margin: 0 auto; border-radius: 50% 50% 50% 8px; transform: rotate(-45deg); background: rgba(255,196,106,.16); border: 1px solid rgba(255,196,106,.45); color: var(--amber); font-size: 21px; }
 .scenario-pin::first-letter { transform: rotate(45deg); }
+
+.candidate-list {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+}
+
+.candidate-list button {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 2px 8px;
+  padding: 10px;
+  border: 1px solid rgba(83,212,198,.2);
+  border-radius: 8px;
+  background: rgba(8,32,39,.9);
+  color: #e4f1f0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.candidate-list button:hover { border-color: rgba(83,212,198,.55); background: rgba(83,212,198,.08); }
+.candidate-list button > span { grid-row: 1 / 3; align-self: center; color: var(--amber); font-size: 8px; font-weight: 800; }
+.candidate-list button strong { font-size: 10px; }
+.candidate-list button small { color: #769296; font-size: 7px; }
+
+.diagnostic-option {
+  width: 100%;
+  padding-top: 4px;
+  color: #728b8f;
+  font-size: 8px;
+  text-align: left;
+}
+
+.diagnostic-option summary { cursor: pointer; }
+.diagnostic-option p { margin: 7px 0; }
 
 .scenario-location {
   display: flex;

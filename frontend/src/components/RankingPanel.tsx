@@ -35,7 +35,7 @@ export function RankingPanel({ items, selectedMeshCode, onSelect }: RankingPanel
             </span>
             <span className="rank-content">
               <span className="rank-title-row">
-                <span className="rank-mesh">Mesh {mesh.mesh_code}</span>
+                <span><strong className="rank-area">{mesh.area_label ?? "名称未確認の地域"}</strong><small className="rank-mesh">Mesh {mesh.mesh_code}</small></span>
                 {mesh.pareto_frontier && <span className="pareto-badge">PARETO</span>}
               </span>
               <span className="rank-metrics">

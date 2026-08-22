@@ -74,7 +74,8 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
       <div className="detail-heading">
         <div>
           <p>{rank ? `CITY GAP #${rank}` : "メッシュ詳細"}</p>
-          <h2>Mesh {mesh.mesh_code}</h2>
+          <h2>{mesh.area_label ?? "名称未確認の地域"}</h2>
+          <small>500m Mesh {mesh.mesh_code} · 最寄り交通名称を使った周辺ラベル</small>
         </div>
         {mesh.pareto_frontier && <span className="pareto-badge large">PARETO FRONTIER</span>}
       </div>

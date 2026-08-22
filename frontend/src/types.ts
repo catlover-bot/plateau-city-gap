@@ -17,6 +17,8 @@ export interface GeoJsonFeatureCollection {
 
 export interface MeshMetrics extends JsonProperties {
   mesh_code: string;
+  area_label?: string | null;
+  area_label_basis?: string | null;
   rank?: number | null;
   centroid_lat?: number | null;
   centroid_lon?: number | null;
@@ -85,6 +87,10 @@ export interface PlateauMetadata extends JsonProperties {
   reference_layer?: {
     status?: string;
     records?: number;
+    deep_dive_buildings?: number;
+    deep_dive_mesh_code?: string;
+    deep_dive_overall_rank?: number;
+    area_label?: string;
     selected_tiles?: number;
     bytes?: number;
     tileset_url?: string;
@@ -107,7 +113,64 @@ export interface BuildingInfo {
   measuredHeight: number | null;
   storeysAboveGround: number | null;
   storeysBelowGround: number | null;
+  footprintArea: number | null;
+  totalFloorArea: number | null;
   lod: string | null;
+}
+
+export interface PlacementCandidate extends JsonProperties {
+  candidate_rank: number;
+  candidate_id: string;
+  area_label: string;
+  longitude: number;
+  latitude: number;
+  road_name?: string | null;
+  nearest_existing_transport_name: string;
+  existing_transport_distance_m: number;
+  objective_total_score_c_reduction: number;
+  improved_mesh_count: number;
+  affected_elderly_population: number;
+  average_transport_distance_improvement_m: number;
+  top_improvement_mesh: string;
+  top_improvement: {
+    mesh_code: string;
+    before_distance_m: number;
+    after_distance_m: number;
+    before_score_c: number;
+    after_score_c: number;
+    score_c_reduction: number;
+  };
+}
+
+export interface FinalDemoData extends JsonProperties {
+  comparison_mesh_count: number;
+  rank_one: {
+    mesh_code: string;
+    area_label: string;
+    plateau_building_count: number;
+  };
+  plateau_covered_candidates: Array<{
+    mesh_code: string;
+    overall_rank: number;
+    area_label: string;
+    plateau_building_count: number;
+  }>;
+  deep_dive: {
+    mesh_code: string;
+    overall_rank: number;
+    area_label: string;
+    plateau_building_count: number;
+    plateau_road_surfaces_intersecting_mesh: number;
+    plateau_buildings: { records: number; displayed_on_click: string[] };
+    terrain?: JsonProperties;
+  };
+  placement_optimization: {
+    objective: string;
+    screening_rule: string;
+    candidates: PlacementCandidate[];
+  };
+  plateau_context: JsonProperties;
+  offline: JsonProperties;
 }
 
 export interface AppData {
@@ -120,7 +183,9 @@ export interface AppData {
   medicalFacilities: GeoJsonFeatureCollection | null;
   boundary: GeoJsonFeatureCollection | null;
   plateauBuildings: GeoJsonFeatureCollection | null;
+  plateauRoads: GeoJsonFeatureCollection | null;
   plateauMetadata: PlateauMetadata | null;
+  finalDemo: FinalDemoData;
   warnings: string[];
 }
 

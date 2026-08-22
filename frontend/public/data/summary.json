@@ -112,6 +112,7 @@
     "The source years differ: Census and medical data are 2020, bus stops are 2022, and PLATEAU related data are 2025.",
     "Suppressed and aggregation-affected population meshes remain visible but are excluded from the primary ranking.",
     "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
-    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated station-area reference subset is shown instead."
+    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated PLATEAU-covered rank-23 Deep Dive is shown instead.",
+    "PLATEAU road LOD1 surfaces do not provide a connected walking network, crossings, or passability; candidate effects therefore remain Euclidean-distance scenarios."
   ]
 }

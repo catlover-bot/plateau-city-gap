@@ -1,6 +1,10 @@
 import type { BuildingInfo } from "../types";
 import { formatDistance, formatInteger } from "../lib/format";
 
+function formatArea(value: number | null): string {
+  return value === null ? "属性なし" : `${value.toLocaleString("ja-JP", { maximumFractionDigits: 1 })} m²`;
+}
+
 export function BuildingInfoCard({ building, onClose }: { building: BuildingInfo; onClose: () => void }) {
   return (
     <section className="building-card" aria-live="polite">
@@ -13,9 +17,11 @@ export function BuildingInfoCard({ building, onClose }: { building: BuildingInfo
         <div><dt>計測高さ</dt><dd>{formatDistance(building.measuredHeight)}</dd></div>
         <div><dt>地上階数</dt><dd>{formatInteger(building.storeysAboveGround, "階")}</dd></div>
         <div><dt>地下階数</dt><dd>{formatInteger(building.storeysBelowGround, "階")}</dd></div>
+        <div><dt>建築面積</dt><dd>{formatArea(building.footprintArea)}</dd></div>
+        <div><dt>延べ面積</dt><dd>{formatArea(building.totalFloorArea)}</dd></div>
         <div><dt>表示LOD</dt><dd>{building.lod ?? "—"}</dd></div>
       </dl>
-      <small>公式3D Tilesに実際に存在する属性だけを表示しています。</small>
+      <small>公式3D Tilesに実在する属性だけを表示。CITY GAPは500mメッシュ単位で、建物単位の評価ではありません。</small>
     </section>
   );
 }

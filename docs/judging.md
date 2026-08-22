@@ -9,26 +9,30 @@ CITY GAPは、Project PLATEAU CityHack Challenge 2026の3つの観点を「実�
 1. **分析範囲と駅accessibility**
    PLATEAU舞鶴市2025関連データの行政界をpolygon化し、人口mesh・バス停・医療施設を実際の市境で抽出しました。駅9 recordは名称＋位置で7地点へdeduplicateし、最寄り駅距離に使っています。
 
-2. **公式3D Tilesの実表示**
-   舞鶴市2025の公式3D Tiles/MVT ZIPを取得し、CesiumJSで東舞鶴駅・西舞鶴駅周辺の公式建物を表示します。配信するのはLOD2配布コンテナのleaf b3dm 5件、12.7MB、2,152 unique buildingsです。公式配布container全体を無制限配信しません。
+2. **PLATEAU-covered候補と公式3D Tilesの実表示**
+   44,640棟を同じ500mメッシュへ結合し、建物が1棟以上ある154比較メッシュからTop 5を抽出しました。全市23位「常団地前バス停周辺」を3D Deep Diveとし、leaf b3dm 3件、4.31MB、856棟（対象mesh内296棟）を表示します。
 
-3. **建物の実属性**
-   clickした建物について、公式batch tableに存在する `gml_id`、用途、計測高さ、地上/地下階数、LODを表示します。欠損を推定せず「属性なし」とします。subset内で用途（「不明」を除く）は88.429%、計測高さは80.762%、階数は88.429%の建物に実値があります。
+3. **建物・道路・地形の実データ**
+   clickした建物について、公式batch tableに存在する `gml_id`、用途、計測高さ、地上/地下階数、建築面積、延べ面積、LODを表示します。道路LOD1面135件を重ね、公式DEM TIN 20,965三角形から標高・局所勾配を要約します。欠損は推定しません。
 
 4. **coverage QA**
    公式配布全427 b3dm、配布内44,640 unique buildingsをinspectionし、CITY GAP Top 10との空間照合が0棟であることを確認しました。候補地へ架空3D建物を置かず、「公式2025建物モデル整備範囲外」としてUIとmethodologyに出します。これは3Dデータを信頼できる範囲で使うための品質管理です。
 
+5. **道路面上の配置探索**
+   PLATEAU道路16,778面から、既存交通から150m超の12,062代表点を評価し、Score C合計純減少を最大化するTop 3を1.5km以上離して提示します。Primary候補は舞鶴和知線面上で、5mesh・65歳以上人口241人が属する範囲の距離が短縮します。
+
 ### 現在の限界
 
 - 公式PLATEAU建物モデルはTop 10を覆っていないため、Rank 1の建物形状・用途は表示も分析もできません。
-- 3D参照subsetは東・西舞鶴駅周辺であり、Top 10周辺や舞鶴市全域のWeb配信ではありません。
+- 3D Deep Dive subsetは全市23位であり、Top 10周辺や舞鶴市全域のWeb配信ではありません。
 - 建物属性は現行Score Cへ入力していません。
-- Cesiumはellipsoid terrainで、DEM・勾配は未実装です。
+- 道路・DEMは文脈と候補制約に使いますが、Score C効果計算は直線距離です。
+- 道路LOD1には歩行network topologyがなく、DEM局所勾配は歩行経路の坂ではありません。
 
 ### 今後の検証
 
 - 追加の公式整備範囲や自治体保有データが得られた場合の建物単位居住起点
-- `tran`道路network、横断可能性、DEM勾配を使う移動負荷
+- 接続済み歩行network、横断可能性、経路上DEM勾配を使う移動負荷
 - 人口を建物へ配分する根拠と不確実性
 - 建物用途・階数・床面積を使う需要scenario
 
@@ -44,8 +48,9 @@ CITY GAPは、Project PLATEAU CityHack Challenge 2026の3つの観点を「実�
 指標を切り替える
   → 複数条件のズレからTop 10を発見
   → 実測値とpercentileで「なぜ？」を説明
-  → PLATEAUで実在3Dとcoverageを確認
-  → 仮想交通支援拠点でBefore / Afterを再計算
+  → PLATEAU-covered候補で実在3D・道路・coverageを確認
+  → 公式道路面Top 3でBefore / Afterを再計算
+  → 現地確認・ヒアリング・事業者協議へ
 ```
 
 - 「高齢人口」「交通アクセス」「医療アクセス」「CITY GAP」の切替で、複数データを重ねる意味を体験できる
@@ -98,6 +103,9 @@ CITY GAPは施策を自動決定しません。「どこを、なぜ、次に調
 4. **次の分析単位を用意**
    現行mesh中心モデルの限界を、将来の建物単位居住起点、道路接続、階数・床面積へ進める具体的なschemaとgeometryがあります。
 
+5. **候補点を海上・任意中心から道路面へ制約**
+   3D都市モデルの道路面を候補生成に使い、0mになるmesh中心デモをPrimaryから外しました。道路面は用地適性を保証しないため、その限界も同時に表示します。
+
 つまり、現行の数値ランキングには2D GISが必要十分ですが、**結果を実在都市objectへ接続し、3Dデータの適用可能範囲を検証し、次の詳細化を可能にする部分がPLATEAU固有の価値**です。
 
 ## Evidence checklist
@@ -107,7 +115,9 @@ CITY GAPは施策を自動決定しません。「どこを、なぜ、次に調
 | 分析値は実データ | `analysis/outputs/real/`、`frontend/public/data/manifest.json` |
 | 500m mesh 495 / comparison 286 / ranking 218 | `maizuru_summary.json`、`docs/findings.md` |
 | PLATEAU公式配布内44,640 / Top 10内0 | PLATEAU inspection metadata、`plateau_metadata.json` |
-| Web subset 5 tile / 2,152棟 / 12.7MB | subset selection metadata、Web `tileset.json` |
+| PLATEAU-covered Top 5 / Deep Dive 296棟 | `plateau_covered_candidates.csv`、`maizuru_final_demo.json` |
+| Web subset 3 tile / 856棟 / 4.31MB | subset selection metadata、Web `tileset.json` |
+| 道路面135 / DEM 20,965三角形 / 配置Top 3 | `final_demo.json`、`plateau_roads.geojson` |
 | 実属性だけを表示 | 3D Tiles batch table inspection、building detail UI |
 | What-ifは同じ距離定義 | `frontend/src/lib/scenario.ts`、scenario tests |
 | 手法と限界を開示 | `docs/methodology.md`、アプリの `データと計算方法` |

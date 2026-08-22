@@ -79,7 +79,7 @@ elderly_population >= 10
 
 仮想交通支援拠点はブラウザ内で1点だけ扱います。
 
-1. Cesium上のclick、またはRank 1中心からWGS84座標を得る。
+1. 公式PLATEAU道路面上の事前計算候補、Cesium上のclick、または診断用Rank 1中心からWGS84座標を得る。
 2. proj4でWGS84（EPSG:4326）からEPSG:6674へ変換する。
 3. 286meshのcentroidから仮想pointまでのEuclidean距離を計算する。
 4. 各meshについて既存交通距離と仮想point距離の小さい方を採用する。
@@ -98,17 +98,22 @@ score_after(i)
 
 UIの「距離が改善するmesh」は `d_after < d_before` の件数です。「対象meshの65歳以上人口」はそのmeshに記録された65歳以上人口の合計であり、利用者数、需要、受益人口の推定ではありません。「改善幅Top 5」は `score_before - score_after` の降順です。
 
-### Reproducible example
+### Primary placement search and reproducible example
 
-`Rank 1中心で試す` はmesh `533512753` のcentroid（135.315625, 35.481250）を使います。
+Primary候補は、公式PLATEAU道路LOD1面の内部代表点16,778件から舞鶴市内を抽出し、既存駅・バス停から150m超の12,062点を評価します。目的関数は「286比較メッシュのScore C合計の純減少量最大化」です。上位地点が同じ街区へ集中しないよう候補間を1,500m以上離してTop 3を選びます。道路面上という条件は海上や任意のメッシュ中心を避けるscreeningであり、利用可能な用地・停留所位置を意味しません。
+
+Primary候補1は公式道路「舞鶴和知線」面の内部代表点（135.396649917, 35.447720315）、人間向けラベルは「常団地前バス停周辺」です。
 
 | Measure | Before | After |
 |---|---:|---:|
-| Rank 1 transport distance | 2,321.655609m | 0m |
-| Rank 1 transport percentile | 0.909091 | 0.003497 |
-| Rank 1 Score C | 0.498135 | 0.001916 |
+| 最大改善mesh `533513314` transport distance | 562.597m | 29.867m |
+| 最大改善mesh Score C | 0.279685 | 0.003609 |
+| 改善mesh数 | 5 | — |
+| 対象meshの65歳以上人口合計 | 241人 | — |
+| 改善meshの平均距離短縮 | 532.856m | — |
+| 286mesh Score C合計の純減少 | 0.171527 | — |
 
-距離が短くなるのは2mesh、該当meshの65歳以上人口合計は64人です。仮想pointをmesh中心へ置くため当該meshの距離が0mになる、計算の再現確認用scenarioです。土地利用上の適地や実際の停留所計画を示しません。
+241人は利用者・需要・受益人口の予測ではありません。`Rank 1中心で試す` は0mを生じる計算診断として折りたたみ内に残しますが、Primary発表には使いません。
 
 ## PLATEAU inspection
 
@@ -118,22 +123,28 @@ UIの「距離が改善するmesh」は `d_after < d_before` の件数です。�
 
 LOD2配布コンテナの427 b3dmを読み、batch tableの `gml_id` でtile間重複を除いた一意建物は44,640棟です。Top 10の各polygonに対して建物中心の包含とbuilding bounding boxの交差を確認し、全10meshで0棟でした。建物を推定・補完せず、Webでは「Top 10は公式建物モデル整備範囲外」と表示します。
 
-### Static reference subset
+### PLATEAU-covered candidates and 3D Deep Dive
 
-Top 10を3D建物があるように見せることはできないため、公式建物が実在する東舞鶴駅・西舞鶴駅周辺を参照subsetにしました。選択規則は「LOD2配布コンテナのleaf content regionがいずれかの駅から100m以内」です。
+44,640棟の代表点を同じ500mメッシュへ結合すると、286比較対象のうち154メッシュに公式建物が1棟以上ありました。Score C順の上位5件は `analysis/outputs/real/plateau_covered_candidates.csv` に固定schemaで保存します。全市Rank 1と「PLATEAU 3Dで確認できる候補」を混同しません。
+
+3D Deep Diveには、PLATEAU-covered上位5件でありPrimary配置候補の最大改善meshでもある、全市23位 `533513314`「常団地前バス停周辺」を選びました。leaf regionがこの500mメッシュと交差する3 tileを選択します。
 
 | Item | Verified value |
 |---|---:|
-| leaf b3dm | 5 |
-| b3dm bytes | 12,723,708 |
-| current subset total bytes | 12,729,687 |
-| unique buildings | 2,152 |
-| actual `_lod=2` | 937 |
-| actual `_lod=1` | 1,215 |
+| leaf b3dm | 3 |
+| b3dm bytes | 4,313,608 |
+| subset buildings | 856 |
+| Deep Dive mesh内building representatives | 296 |
+| actual `_lod=1` | 856 |
+| Deep Dive meshと交差する道路LOD1面 | 135 |
 
-属性を推定しません。subsetの属性実装率は、用途（「不明」を除く）が1,903/2,152 = 88.429%、計測高さが1,738/2,152 = 80.762%、地上・地下階数が1,903/2,152 = 88.429%です。欠損・sentinelは「属性なし」として扱います。
+クリックでは `gml_id`、用途、計測高さ、地上/地下階数、建築面積、延べ面積、実LODを表示します。属性を推定せず、欠損・sentinelは「属性なし」とします。CITY GAPは500m単位であり、個々の建物にスコアを付けません。
 
-このsubsetは代表sampleでもTop 10周辺でもなく、静的hostでPLATEAUの実在建物と属性を確認するための限定範囲です。
+### Road and terrain context
+
+公式CityGML packageには建築物80、道路82、DEM 23、土地利用7、都市計画20、地形名称5、洪水143のGMLが含まれます。Deep Diveでは道路面を表示し、公式DEM TINの20,965三角形を集計しました。標高は26.134〜127.923m（中央値36.968m）、三角形局所勾配は中央値6.961°、p90 37.406°です。これは対象メッシュに急な地形が含まれる注意情報で、歩行経路の勾配や通行可能性ではありません。
+
+道路LOD1は面形状で、接続トポロジー、歩道、横断条件、通行可否を持ちません。そのため、Deep Dive meshの公共交通直線距離562.597mに対する「urban-context-aware経路距離」は計算不能と明記します。見かけの道路polygonをcenterline networkへ変換して経路距離を捏造しません。
 
 ## Web publication validation
 
@@ -161,5 +172,5 @@ Web asset生成前に少なくとも次を検証します。
 - percentileは今回の舞鶴市内相対値で、他都市・時点や政策閾値と直接比較できません。
 - 駅の路線別重複は名称・位置で7地点へ除きますが、サービス頻度は評価しません。
 - Top 10に公式PLATEAU建物モデルがなく、候補地の建物形状・用途は評価できません。
-- 3D参照subsetの建物属性は現行スコアへ入力していません。
-- What-ifは土地利用、道路、運行可能性、需要、費用、施設capacityを評価しません。
+- Deep Dive subsetの建物属性、道路、DEMは現行スコアへ入力していません。
+- 配置候補は道路面上ですが、What-if効果は直線距離で、接続・横断・坂・用地・運行可能性・需要・費用・施設capacityを評価しません。

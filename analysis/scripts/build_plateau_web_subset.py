@@ -1,8 +1,8 @@
-"""Build the static PLATEAU reference tileset used by the web demo.
+"""Build the static PLATEAU tileset for the final 3D Deep Dive.
 
-The CITY GAP Top 10 is outside the official Maizuru building-model coverage.
-This deterministic subset therefore shows verified PLATEAU buildings around
-East and West Maizuru stations as a clearly labelled reference view.
+The CITY GAP Top 10 is outside the official building-model coverage.  The
+subset therefore targets the verified PLATEAU-covered comparison mesh used by
+Story Mode, while retaining the zero-coverage statement for the Top 10.
 """
 
 from __future__ import annotations
@@ -51,18 +51,23 @@ OFFICIAL_ZIP_BYTES = 160_582_905
 OFFICIAL_ZIP_SHA256 = (
     "15cf5e12b507b89e2b86fe0c2968a22e8d770ea36cb8c64cc7e8db578109f2d9"
 )
-SELECTION_RADIUS_M = 100.0
 MAX_OUTPUT_BYTES = 15_000_000
-STATIONS = {
-    "東舞鶴駅": {"lon": 135.3948115487, "lat": 35.4685882035},
-    "西舞鶴駅": {"lon": 135.3305425686, "lat": 35.4417242947},
+DEEP_DIVE = {
+    "mesh_code": "533513314",
+    "area_label": "常団地前バス停周辺",
+    "overall_rank": 23,
+    "west": 135.39375,
+    "south": 35.44583333333334,
+    "east": 135.4,
+    "north": 35.45,
+    "longitude": 135.396875,
+    "latitude": 35.44791666666667,
+    "expected_buildings": 296,
 }
 EXPECTED_URIS = {
-    "data/data174.b3dm",
-    "data/data176.b3dm",
-    "data/data178.b3dm",
-    "data/data180.b3dm",
-    "data/data345.b3dm",
+    "data/data284.b3dm",
+    "data/data285.b3dm",
+    "data/data287.b3dm",
 }
 COMPONENT_FORMAT = {
     "BYTE": "b",
@@ -160,11 +165,21 @@ def _read_buildings(path: Path) -> list[dict[str, Any]]:
     count = int(feature_table["BATCH_LENGTH"])
     identifiers = batch_table["gml_id"]
     attributes = batch_table["attributes"]
+    xs = _decode_property(batch_table, batch_binary, "_x", count)
+    ys = _decode_property(batch_table, batch_binary, "_y", count)
     lods = _decode_property(batch_table, batch_binary, "_lod", count)
-    if not (len(identifiers) == len(attributes) == len(lods) == count):
+    if not (
+        len(identifiers) == len(attributes) == len(xs) == len(ys) == len(lods) == count
+    ):
         raise ValueError(f"Inconsistent b3dm batch table: {path}")
     return [
-        {"gml_id": identifiers[index], "attributes": attributes[index], "lod": lods[index]}
+        {
+            "gml_id": identifiers[index],
+            "attributes": attributes[index],
+            "x": xs[index],
+            "y": ys[index],
+            "lod": lods[index],
+        }
         for index in range(count)
     ]
 
@@ -429,12 +444,15 @@ def build_subset(
     selected: list[dict[str, Any]] = []
     for tile in _leaf_tiles(source_tileset):
         region = tile["boundingVolume"]["region"]
-        distances = {
-            name: _distance_to_region_m(station["lon"], station["lat"], region)
-            for name, station in STATIONS.items()
-        }
-        if min(distances.values()) <= SELECTION_RADIUS_M:
-            selected.append({**tile, "station_distances_m": distances})
+        west, south, east, north = map(math.degrees, region[:4])
+        intersects = not (
+            east < DEEP_DIVE["west"]
+            or west > DEEP_DIVE["east"]
+            or north < DEEP_DIVE["south"]
+            or south > DEEP_DIVE["north"]
+        )
+        if intersects:
+            selected.append(tile)
     if {tile["uri"] for tile in selected} != EXPECTED_URIS:
         raise ValueError("PLATEAU leaf-tile selection differs from the verified subset")
 
@@ -472,11 +490,19 @@ def build_subset(
         for tile in selected
         for building in _read_buildings(source_dir / tile["uri"])
     ]
+    deep_dive_buildings = [
+        building
+        for building in buildings
+        if DEEP_DIVE["west"] <= building["x"] < DEEP_DIVE["east"]
+        and DEEP_DIVE["south"] <= building["y"] < DEEP_DIVE["north"]
+    ]
+    if len(deep_dive_buildings) != DEEP_DIVE["expected_buildings"]:
+        raise ValueError("PLATEAU Deep Dive building count differs from verified coverage")
     metadata = {
         "schema_version": "1.0.0",
-        "status": "reference_subset_available",
+        "status": "deep_dive_subset_available",
         "purpose": (
-            "Official PLATEAU reference view around East and West Maizuru stations. "
+            "Official PLATEAU 3D Deep Dive for CITY GAP overall rank 23. "
             "It is not a building layer for CITY GAP Top 10."
         ),
         "official_dataset": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
@@ -500,9 +526,8 @@ def build_subset(
             ],
         },
         "selection": {
-            "method": "LOD2 tileset leaf region within 100 m of either station",
-            "radius_m": SELECTION_RADIUS_M,
-            "stations": STATIONS,
+            "method": "LOD2 tileset leaf regions intersecting the verified 500 m mesh",
+            "deep_dive": DEEP_DIVE,
             "tiles": len(selected),
             "b3dm_bytes": selected_bytes,
             "bounding_region_degrees": [
@@ -515,15 +540,12 @@ def build_subset(
             ],
         },
         "buildings": _building_summary(buildings),
+        "deep_dive_buildings": _building_summary(deep_dive_buildings),
         "files": [
             {
                 "uri": tile["uri"],
                 "bytes": (source_dir / tile["uri"]).stat().st_size,
                 "sha256": _sha256(source_dir / tile["uri"]),
-                "station_distances_m": {
-                    name: round(distance, 3)
-                    for name, distance in tile["station_distances_m"].items()
-                },
             }
             for tile in selected
         ],

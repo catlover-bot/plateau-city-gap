@@ -51,11 +51,13 @@ describe("data loading", () => {
       "mesh_metrics.geojson": meshCollection,
       "top10.json": { items: [{ mesh_code: "533512753", rank: 1 }] },
       "summary.json": { record_counts: { primary_rank_eligible_meshes: 218 } },
+      "final_demo.json": { comparison_mesh_count: 286 },
       "stations.geojson": EMPTY_COLLECTION,
       "bus_stops.geojson": EMPTY_COLLECTION,
       "medical_facilities.geojson": EMPTY_COLLECTION,
       "maizuru_boundary.geojson": EMPTY_COLLECTION,
       "plateau_buildings.geojson": EMPTY_COLLECTION,
+      "plateau_roads.geojson": EMPTY_COLLECTION,
       "plateau_metadata.json": { status: "not_included" }
     });
 
@@ -72,12 +74,13 @@ describe("data loading", () => {
       "manifest.json": {},
       "mesh_metrics.geojson": EMPTY_COLLECTION,
       "top10.json": { items: [] },
-      "summary.json": {}
+      "summary.json": {},
+      "final_demo.json": {}
     });
     const data = await loadAppData(fetcher, "/");
     expect(data.stations).toBeNull();
     expect(data.plateauBuildings).toBeNull();
-    expect(data.warnings.length).toBe(6);
+    expect(data.warnings.length).toBe(7);
   });
 
   it("fails clearly when a required asset has an invalid format", async () => {
@@ -85,7 +88,8 @@ describe("data loading", () => {
       "manifest.json": {},
       "mesh_metrics.geojson": { type: "not-geojson" },
       "top10.json": { items: [] },
-      "summary.json": {}
+      "summary.json": {},
+      "final_demo.json": {}
     });
     await expect(loadAppData(fetcher, "/")).rejects.toThrow("FeatureCollection");
   });
