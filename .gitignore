@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# Downloaded source data and intermediate artifacts
+data/raw/**
+!data/raw/.gitkeep
+data/interim/**
+!data/interim/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+
+# Generated analysis outputs (keep only documentation placeholders)
+analysis/outputs/**
+!analysis/outputs/.gitkeep
+
+# Frontend/build artifacts
+node_modules/
+frontend/dist/
+.DS_Store
