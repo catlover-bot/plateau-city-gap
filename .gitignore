@@ -22,4 +22,5 @@ analysis/outputs/**
 # Frontend/build artifacts
 node_modules/
 frontend/dist/
+frontend/public/cesium/
 .DS_Store

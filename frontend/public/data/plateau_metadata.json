@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0.0",
+  "dataset": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+  "dataset_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+  "year": 2025,
+  "packages": {
+    "citygml": {
+      "version": 5,
+      "url": "https://assets.cms.plateau.reearth.io/assets/8f/8ad134-6969-4a6c-a7c2-4ac370a73096/26202_maizuru-shi_city_2025_citygml_1_op.zip"
+    },
+    "3d_tiles": {
+      "version": 5,
+      "url": "https://assets.cms.plateau.reearth.io/assets/55/2c1991-f75e-4bf8-9108-531c27952a2b/26202_maizuru-shi_city_2025_3dtiles_mvt_1_op.zip"
+    }
+  },
+  "related_data_usage": {
+    "status": "included",
+    "layers": [
+      "stations",
+      "administrative_boundary"
+    ]
+  },
+  "building_layer": {
+    "status": "verified_empty_for_top10",
+    "scope": "CITY GAP Top 10 500 m meshes",
+    "records": 0,
+    "source_distribution_unique_buildings": 44640,
+    "attributes": [],
+    "inspection_method": "Full official LOD1/LOD2 3D Tiles batch metadata inspection: _x/_y representative-point inclusion and _xmin/_xmax/_ymin/_ymax building bounding-box intersection for every Top 10 mesh",
+    "geometry_relation": "representative point-in-mesh and building bounding-box intersection; not an exact footprint intersection",
+    "reason": "The official PLATEAU package was inspected and contained zero building records in the Top 10 mesh scope. The empty layer is intentional.",
+    "per_mesh": [
+      {
+        "rank": 1,
+        "mesh_code": "533512753",
+        "records": 0
+      },
+      {
+        "rank": 2,
+        "mesh_code": "533522274",
+        "records": 0
+      },
+      {
+        "rank": 3,
+        "mesh_code": "533512132",
+        "records": 0
+      },
+      {
+        "rank": 4,
+        "mesh_code": "533502982",
+        "records": 0
+      },
+      {
+        "rank": 5,
+        "mesh_code": "533512144",
+        "records": 0
+      },
+      {
+        "rank": 6,
+        "mesh_code": "533512134",
+        "records": 0
+      },
+      {
+        "rank": 7,
+        "mesh_code": "533513551",
+        "records": 0
+      },
+      {
+        "rank": 8,
+        "mesh_code": "533522094",
+        "records": 0
+      },
+      {
+        "rank": 9,
+        "mesh_code": "533512931",
+        "records": 0
+      },
+      {
+        "rank": 10,
+        "mesh_code": "533502943",
+        "records": 0
+      }
+    ]
+  },
+  "inspection_report": {
+    "path": "analysis/outputs/real/maizuru_plateau_building_inspection.json",
+    "bytes": 51230,
+    "sha256": "168a2b97e27a209f751671c9e5cbe05ec9608e4267fc83dd6e5fadb612326803"
+  },
+  "reference_layer": {
+    "status": "included",
+    "scope": "East and West Maizuru station areas; not the CITY GAP Top 10",
+    "records": 2152,
+    "selected_tiles": 5,
+    "bytes": 12723708,
+    "tileset_url": "data/plateau/tileset.json",
+    "lod1_buildings": 1215,
+    "lod2_buildings": 937,
+    "attributes": [
+      "gml_id",
+      "bldg:usage",
+      "bldg:measuredHeight",
+      "bldg:storeysAboveGround",
+      "bldg:storeysBelowGround",
+      "_lod"
+    ],
+    "reason": "A deterministic lightweight subset of official 3D Tiles is included to show verified PLATEAU urban context without fabricating Top 10 buildings.",
+    "viewpoint": {
+      "longitude": 135.3948115487,
+      "latitude": 35.4685882035,
+      "height": 520
+    },
+    "metadata": {
+      "path": "frontend/public/data/plateau/metadata.json",
+      "bytes": 4558,
+      "sha256": "312c2f21fbc829c6920426360585894ad7ffcd1d564b4ad460ac0434cd4c6ab0"
+    }
+  }
+}

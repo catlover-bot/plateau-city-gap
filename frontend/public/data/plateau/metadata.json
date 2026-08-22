@@ -1,0 +1,162 @@
+{
+  "schema_version": "1.0.0",
+  "status": "reference_subset_available",
+  "purpose": "Official PLATEAU reference view around East and West Maizuru stations. It is not a building layer for CITY GAP Top 10.",
+  "official_dataset": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+  "official_dataset_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+  "source": {
+    "format": "3D Tiles 1.0 b3dm from the v5 distribution",
+    "url": "https://assets.cms.plateau.reearth.io/assets/55/2c1991-f75e-4bf8-9108-531c27952a2b/26202_maizuru-shi_city_2025_3dtiles_mvt_1_op.zip",
+    "bytes": 160582905,
+    "sha256": "15cf5e12b507b89e2b86fe0c2968a22e8d770ea36cb8c64cc7e8db578109f2d9"
+  },
+  "license": {
+    "attribution_required": true,
+    "site_policy": "https://www.mlit.go.jp/plateau/site-policy/"
+  },
+  "city_gap_top10": {
+    "status": "outside_official_building_coverage",
+    "building_centers": 0,
+    "building_bbox_intersections": 0,
+    "official_distribution_unique_buildings": 44640
+  },
+  "selection": {
+    "method": "LOD2 tileset leaf region within 100 m of either station",
+    "radius_m": 100.0,
+    "stations": {
+      "東舞鶴駅": {
+        "lon": 135.3948115487,
+        "lat": 35.4685882035
+      },
+      "西舞鶴駅": {
+        "lon": 135.3305425686,
+        "lat": 35.4417242947
+      }
+    },
+    "tiles": 5,
+    "b3dm_bytes": 12723708,
+    "bounding_region_degrees": [
+      135.32758730354266,
+      35.43949980259554,
+      135.40012704355627,
+      35.47291476313251,
+      37.75699534768998,
+      87.66800628306653
+    ]
+  },
+  "buildings": {
+    "records": 2152,
+    "usage": {
+      "known_excluding_unknown": 1903,
+      "known_percent": 88.429,
+      "values": {
+        "住宅": 1198,
+        "不明": 249,
+        "店舗等併用住宅": 164,
+        "商業施設": 120,
+        "共同住宅": 109,
+        "文教厚生施設": 93,
+        "運輸倉庫施設": 67,
+        "業務施設": 55,
+        "商業系複合施設": 28,
+        "店舗等併用共同住宅": 25,
+        "工場": 14,
+        "宿泊施設": 14,
+        "作業所併用住宅": 10,
+        "官公庁施設": 5,
+        "供給処理施設": 1
+      }
+    },
+    "measured_height_m": {
+      "known": 1738,
+      "missing_or_sentinel": 414,
+      "completeness_percent": 80.762,
+      "min": 3.2,
+      "median": 8.36,
+      "max": 57.94
+    },
+    "storeys_above_ground": {
+      "known": 1903,
+      "missing_or_sentinel": 249,
+      "completeness_percent": 88.429,
+      "min": 1,
+      "median": 2,
+      "max": 15
+    },
+    "storeys_below_ground": {
+      "known": 1903,
+      "missing_or_sentinel": 249,
+      "completeness_percent": 88.429,
+      "min": 0,
+      "median": 0,
+      "max": 1
+    },
+    "building_footprint_area_m2": {
+      "known": 1903,
+      "missing_or_sentinel": 249,
+      "completeness_percent": 88.429,
+      "min": 3.5,
+      "median": 69.8,
+      "max": 12955.33
+    },
+    "building_total_floor_area_m2": {
+      "known": 1903,
+      "missing_or_sentinel": 249,
+      "completeness_percent": 88.429,
+      "min": 4.8100000000000005,
+      "median": 113.26,
+      "max": 42598.34
+    },
+    "geometry_lod": {
+      "1": 1215,
+      "2": 937
+    }
+  },
+  "files": [
+    {
+      "uri": "data/data174.b3dm",
+      "bytes": 2385936,
+      "sha256": "e5a7e97764af52a975c842301a3e79e33bd8ca92e22798afb2f2bf0ac93acc53",
+      "station_distances_m": {
+        "東舞鶴駅": 55.292,
+        "西舞鶴駅": 6539.528
+      }
+    },
+    {
+      "uri": "data/data176.b3dm",
+      "bytes": 2592376,
+      "sha256": "e140575717816c6568b88c0a780f3f7e70591f9b8ec31dad81011836fd7325bc",
+      "station_distances_m": {
+        "東舞鶴駅": 0.0,
+        "西舞鶴駅": 6337.853
+      }
+    },
+    {
+      "uri": "data/data178.b3dm",
+      "bytes": 2087712,
+      "sha256": "1f23437353d96d3d0452905f00a6a3839a661f712b00c64c9e97888a8e3b9a76",
+      "station_distances_m": {
+        "東舞鶴駅": 56.732,
+        "西舞鶴駅": 6145.137
+      }
+    },
+    {
+      "uri": "data/data180.b3dm",
+      "bytes": 2551336,
+      "sha256": "ebbc4ab5a781dbc20593a76e7fecfaaea28bc66ab19c2417a75b1214259af709",
+      "station_distances_m": {
+        "東舞鶴駅": 0.0,
+        "西舞鶴駅": 5951.819
+      }
+    },
+    {
+      "uri": "data/data345.b3dm",
+      "bytes": 3106348,
+      "sha256": "1b8b47b1d6b56a91ac29c8f9137e32d53c60099b2bd635a0c7a8e3aee9053314",
+      "station_distances_m": {
+        "東舞鶴駅": 6274.543,
+        "西舞鶴駅": 0.0
+      }
+    }
+  ]
+}

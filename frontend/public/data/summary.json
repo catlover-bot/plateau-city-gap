@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "analysis_status": "real_data",
+  "generated_from_synthetic_data": false,
+  "distance_method": "centroid-to-point straight-line (Euclidean) distance",
+  "analysis_crs": {
+    "code": "EPSG:6674",
+    "name": "JGD2011 / Japan Plane Rectangular CS VI",
+    "area_of_use": "Japan - onshore - Honshu between approximately 135°10'E and 136°45'E - Kyoto-fu; Osaka-fu; Fukui-ken; Shiga-ken; Mie-ken; Nara-ken; Wakayama-ken.",
+    "bounds": [
+      134.86,
+      33.4,
+      136.99,
+      36.33
+    ]
+  },
+  "web_crs": "EPSG:4326",
+  "record_counts": {
+    "population_kyoto": 6326,
+    "population_meshes_intersecting_maizuru": 495,
+    "population_unaffected": 286,
+    "population_suppressed_source": 119,
+    "population_aggregation_destination": 90,
+    "stations_raw": 9,
+    "stations_within_maizuru": 9,
+    "station_unique_locations": 7,
+    "station_unique_names": 7,
+    "station_deduplicated": 7,
+    "bus_stops_kyoto": 4685,
+    "bus_stops_maizuru": 151,
+    "medical_kyoto": 3960,
+    "medical_maizuru": 105,
+    "hospitals_maizuru": 8,
+    "clinics_maizuru": 63,
+    "dental_clinics_maizuru": 34,
+    "medical_primary_maizuru": 71,
+    "primary_rank_eligible_meshes": 218
+  },
+  "primary_ranking": {
+    "metric": "exploratory_score_c",
+    "label_ja": "CITY GAP探索スコア",
+    "formula": "elderly_population_percentile * transport_distance_percentile * medical_distance_percentile",
+    "minimum_population": 20,
+    "minimum_elderly_population": 10
+  },
+  "threshold_stability": {
+    "none": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_10_elderly_5": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_20_elderly_10": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533502943"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_50_elderly_20": {
+      "top10_mesh_codes": [
+        "533512753",
+        "533522274",
+        "533512132",
+        "533502982",
+        "533512144",
+        "533512134",
+        "533513551",
+        "533522094",
+        "533512931",
+        "533512001"
+      ],
+      "overlap_with_primary_top10": 9
+    }
+  },
+  "limitations": [
+    "Distances are centroid-to-point straight-line Euclidean distances, not walking or route distances.",
+    "P11 2022 does not include service frequency, demand buses, highway buses, or facility shuttles.",
+    "P04 describes facilities collected in July 2020 and does not guarantee current availability.",
+    "The source years differ: Census and medical data are 2020, bus stops are 2022, and PLATEAU related data are 2025.",
+    "Suppressed and aggregation-affected population meshes remain visible but are excluded from the primary ranking.",
+    "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
+    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated station-area reference subset is shown instead."
+  ]
+}

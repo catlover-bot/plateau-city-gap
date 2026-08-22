@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22T10:00:00Z",
+  "analysis_version": "0.1.0",
+  "builder": "analysis/scripts/build_web_assets.py",
+  "crs": {
+    "analysis": "EPSG:6674",
+    "web": "EPSG:4326"
+  },
+  "data_years": {
+    "population": 2020,
+    "medical": 2020,
+    "bus_stops": 2022,
+    "plateau_related": 2025
+  },
+  "source_datasets": [
+    {
+      "id": "estat-t001192",
+      "provider": "e-Stat",
+      "title": "2020 Census JGD2011 500 m mesh population by five-year age group",
+      "year": 2020,
+      "source_records": 6326,
+      "web_records": 495,
+      "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2"
+    },
+    {
+      "id": "ksj-p11-2022",
+      "provider": "National Land Numerical Information",
+      "title": "Bus stops P11",
+      "year": 2022,
+      "source_records": 4685,
+      "web_records": 151,
+      "url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html"
+    },
+    {
+      "id": "ksj-p04-2020",
+      "provider": "National Land Numerical Information",
+      "title": "Medical facilities P04",
+      "year": 2020,
+      "source_records": 3960,
+      "web_records": 105,
+      "analysis_records": 71,
+      "url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html"
+    },
+    {
+      "id": "plateau-maizuru-2025-related",
+      "provider": "Project PLATEAU",
+      "title": "3D都市モデル（舞鶴市）2025年度 関連データ",
+      "year": 2025,
+      "source_records": {
+        "stations": 9,
+        "boundary": 1
+      },
+      "web_records": {
+        "stations": 7,
+        "boundary": 1,
+        "buildings": 0
+      },
+      "buildings_in_3d_source_distribution": 44640,
+      "building_status": "verified_empty_for_top10",
+      "url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025"
+    }
+  ],
+  "record_counts": {
+    "mesh_metrics": 495,
+    "top10": 10,
+    "stations": 7,
+    "bus_stops": 151,
+    "medical_facilities": 105,
+    "administrative_boundary": 1,
+    "plateau_top10_buildings": 0,
+    "plateau_reference_buildings": 2152
+  },
+  "outputs": [
+    {
+      "file": "mesh_metrics.geojson",
+      "status": "available",
+      "records": 495,
+      "bytes": 602266,
+      "sha256": "a4de2e084256d73b4232a54cc6cd7a142072da5c4c604c5f6258e229269580ec"
+    },
+    {
+      "file": "top10.json",
+      "status": "available",
+      "records": 10,
+      "bytes": 14284,
+      "sha256": "f3f88f8a69784500d8fe92efd81d35f986e36e02678ae683764ec0bfe21007de"
+    },
+    {
+      "file": "summary.json",
+      "status": "available",
+      "records": 1,
+      "bytes": 3659,
+      "sha256": "237363c379dbcd742411be2fde0811776104cffcfd348bdfb1e1de86200a40a6"
+    },
+    {
+      "file": "stations.geojson",
+      "status": "available",
+      "records": 7,
+      "bytes": 1847,
+      "sha256": "a3c2abfcda83a1b71a3f74de9d2c5a5eefeb45999e5bbe5d9741d8bfbb6ba17b"
+    },
+    {
+      "file": "bus_stops.geojson",
+      "status": "available",
+      "records": 151,
+      "bytes": 43180,
+      "sha256": "07d530b9792428b9dcd8659f1d0e89df4dea7cd003442e261e64da1ef0e525ee"
+    },
+    {
+      "file": "medical_facilities.geojson",
+      "status": "available",
+      "records": 105,
+      "bytes": 34627,
+      "sha256": "719ec8ff28bc87bcf23844403f45e0a74fa76934a0415a137df565d6dc16813e"
+    },
+    {
+      "file": "maizuru_boundary.geojson",
+      "status": "available",
+      "records": 1,
+      "bytes": 393285,
+      "sha256": "1090a6292377c9e4880403cf4fd090f971aca22f1e2cad371a549c3b084f30ac"
+    },
+    {
+      "file": "plateau_buildings.geojson",
+      "status": "verified_empty_for_top10",
+      "records": 0,
+      "bytes": 1167,
+      "sha256": "fa004879bbb8bcdb2f10f7965324c27fb466bba1155d0eeec2178c748e25af95"
+    },
+    {
+      "file": "plateau_metadata.json",
+      "status": "available",
+      "records": 1,
+      "bytes": 3529,
+      "sha256": "2c28b21c550240bd4475a246baac3cbdebe7d12e405b0fdc4a1f462a06ef3ce1"
+    }
+  ],
+  "plateau_reference_outputs": [
+    {
+      "file": "plateau/data/data174.b3dm",
+      "bytes": 2385936,
+      "sha256": "e5a7e97764af52a975c842301a3e79e33bd8ca92e22798afb2f2bf0ac93acc53"
+    },
+    {
+      "file": "plateau/data/data176.b3dm",
+      "bytes": 2592376,
+      "sha256": "e140575717816c6568b88c0a780f3f7e70591f9b8ec31dad81011836fd7325bc"
+    },
+    {
+      "file": "plateau/data/data178.b3dm",
+      "bytes": 2087712,
+      "sha256": "1f23437353d96d3d0452905f00a6a3839a661f712b00c64c9e97888a8e3b9a76"
+    },
+    {
+      "file": "plateau/data/data180.b3dm",
+      "bytes": 2551336,
+      "sha256": "ebbc4ab5a781dbc20593a76e7fecfaaea28bc66ab19c2417a75b1214259af709"
+    },
+    {
+      "file": "plateau/data/data345.b3dm",
+      "bytes": 3106348,
+      "sha256": "1b8b47b1d6b56a91ac29c8f9137e32d53c60099b2bd635a0c7a8e3aee9053314"
+    },
+    {
+      "file": "plateau/metadata.json",
+      "bytes": 4558,
+      "sha256": "312c2f21fbc829c6920426360585894ad7ffcd1d564b4ad460ac0434cd4c6ab0"
+    },
+    {
+      "file": "plateau/tileset.json",
+      "bytes": 1421,
+      "sha256": "53ec8154c493892de0415f7863f016d56f3b12e6d9e257ffe6764a2aba16eb82"
+    }
+  ],
+  "lineage": {
+    "analysis_sources_of_truth": [
+      "analysis/outputs/real/maizuru_city_gap.geojson",
+      "analysis/outputs/real/maizuru_city_gap_top10.csv",
+      "analysis/outputs/real/maizuru_summary.json"
+    ],
+    "inputs": [
+      {
+        "path": "analysis/outputs/real/maizuru_city_gap.geojson",
+        "bytes": 971839,
+        "sha256": "a321d7483b5f0f16545b9816f588db73f977ade66faa142ff3f205d195aca227"
+      },
+      {
+        "path": "analysis/outputs/real/maizuru_city_gap_top10.csv",
+        "bytes": 6521,
+        "sha256": "9baa850880a6088479e3d8fe0dc5180a59b1f0daef3bdd95cf681471277a0096"
+      },
+      {
+        "path": "analysis/outputs/real/maizuru_summary.json",
+        "bytes": 5919,
+        "sha256": "ed612565aa61db464529baf505d2eb300db9629bfd54ba527c06654fbfc0d5f5"
+      },
+      {
+        "path": "data/raw/plateau_related/26202_maizuru-shi_city_2025_station.geojson",
+        "bytes": 2529,
+        "sha256": "e010e932dcf8a174f5dfc5f38ea65027c6939cf93e21e72cf4195f89bcff4437"
+      },
+      {
+        "path": "data/raw/transport/P11-22_26_SHP/P11-22_26_SHP/P11-22_26.geojson",
+        "bytes": 7838530,
+        "sha256": "d0a32c14ec1386b69a14b29e50997de5600ac7e2fd2298fe8dc5849952584fa1"
+      },
+      {
+        "path": "data/raw/medical/P04-20_26_GML/P04-20_26_GML/P04-20_26.geojson",
+        "bytes": 1512905,
+        "sha256": "9374a9af7cf869ec0623bbe834f7839b4abe2247fdc0ed1367a6fedae2d48d4c"
+      },
+      {
+        "path": "data/raw/plateau_related/26202_maizuru-shi_city_2025_border.geojson",
+        "bytes": 393153,
+        "sha256": "abcf49d0e30709dc150c745f98852a337ee175b36b48af4ca82af2d411b5fc9d"
+      },
+      {
+        "path": "analysis/outputs/real/maizuru_plateau_building_inspection.json",
+        "bytes": 51230,
+        "sha256": "168a2b97e27a209f751671c9e5cbe05ec9608e4267fc83dd6e5fadb612326803"
+      }
+    ],
+    "transformations": [
+      "select browser-facing attributes without recalculating analysis metrics",
+      "filter point layers by the PLATEAU administrative boundary using intersects",
+      "deduplicate PLATEAU station records by name and location",
+      "convert all geometries to EPSG:4326",
+      "validate analysis and geographic invariants before publication"
+    ]
+  },
+  "limitations": [
+    "Distances are centroid-to-point straight-line Euclidean distances, not walking or route distances.",
+    "P11 2022 does not include service frequency, demand buses, highway buses, or facility shuttles.",
+    "P04 describes facilities collected in July 2020 and does not guarantee current availability.",
+    "The source years differ: Census and medical data are 2020, bus stops are 2022, and PLATEAU related data are 2025.",
+    "Suppressed and aggregation-affected population meshes remain visible but are excluded from the primary ranking.",
+    "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
+    "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated station-area reference subset is shown instead."
+  ]
+}

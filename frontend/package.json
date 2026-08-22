@@ -1,0 +1,43 @@
+{
+  "name": "city-gap-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/sync-cesium-assets.mjs",
+    "predev": "node scripts/sync-cesium-assets.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/sync-cesium-assets.mjs",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "verify:browser": "node scripts/capture-demo.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "dependencies": {
+    "cesium": "1.121.0",
+    "proj4": "^2.12.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "playwright-core": "^1.61.1",
+    "typescript": "~5.6.3",
+    "typescript-eslint": "^8.48.1",
+    "vite": "^6.4.3",
+    "vitest": "^3.2.6"
+  },
+  "overrides": {
+    "@zip.js/zip.js": "2.7.34"
+  }
+}

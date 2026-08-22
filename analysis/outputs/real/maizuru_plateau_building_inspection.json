@@ -1,0 +1,1515 @@
+{
+  "input": {
+    "top10_csv": "analysis/outputs/real/maizuru_city_gap_top10.csv",
+    "top10_meshes": [
+      {
+        "rank": 1,
+        "mesh_code": "533512753",
+        "population": 91,
+        "elderly_population": 56,
+        "west": 135.3125,
+        "east": 135.31875000000002,
+        "south": 35.47916666666667,
+        "north": 35.483333333333334
+      },
+      {
+        "rank": 2,
+        "mesh_code": "533522274",
+        "population": 58,
+        "elderly_population": 27,
+        "west": 135.34375,
+        "east": 135.35000000000002,
+        "south": 35.52083333333334,
+        "north": 35.525000000000006
+      },
+      {
+        "rank": 3,
+        "mesh_code": "533512132",
+        "population": 91,
+        "elderly_population": 43,
+        "west": 135.29375,
+        "east": 135.3,
+        "south": 35.42500000000001,
+        "north": 35.429166666666674
+      },
+      {
+        "rank": 4,
+        "mesh_code": "533502982",
+        "population": 134,
+        "elderly_population": 101,
+        "west": 135.35625,
+        "east": 135.3625,
+        "south": 35.408333333333346,
+        "north": 35.41250000000001
+      },
+      {
+        "rank": 5,
+        "mesh_code": "533512144",
+        "population": 238,
+        "elderly_population": 105,
+        "west": 135.30624999999998,
+        "east": 135.3125,
+        "south": 35.429166666666674,
+        "north": 35.43333333333334
+      },
+      {
+        "rank": 6,
+        "mesh_code": "533512134",
+        "population": 87,
+        "elderly_population": 49,
+        "west": 135.29375,
+        "east": 135.3,
+        "south": 35.429166666666674,
+        "north": 35.43333333333334
+      },
+      {
+        "rank": 7,
+        "mesh_code": "533513551",
+        "population": 75,
+        "elderly_population": 32,
+        "west": 135.4375,
+        "east": 135.44375000000002,
+        "south": 35.45833333333334,
+        "north": 35.462500000000006
+      },
+      {
+        "rank": 8,
+        "mesh_code": "533522094",
+        "population": 62,
+        "elderly_population": 34,
+        "west": 135.36874999999998,
+        "east": 135.375,
+        "south": 35.50416666666668,
+        "north": 35.50833333333334
+      },
+      {
+        "rank": 9,
+        "mesh_code": "533512931",
+        "population": 50,
+        "elderly_population": 26,
+        "west": 135.28749999999997,
+        "east": 135.29375,
+        "south": 35.491666666666674,
+        "north": 35.49583333333334
+      },
+      {
+        "rank": 10,
+        "mesh_code": "533502943",
+        "population": 39,
+        "elderly_population": 29,
+        "west": 135.3,
+        "east": 135.30625000000003,
+        "south": 35.41250000000001,
+        "north": 35.41666666666667
+      }
+    ]
+  },
+  "lod1_container": {
+    "directory": "data/raw/plateau_3d/extracted/26202_maizuru-shi_city_2025_citygml_1_op_bldg_3dtiles_lod1",
+    "tileset_bytes": 257808,
+    "b3dm_files": 427,
+    "b3dm_bytes": 239305192,
+    "batch_instances": 46986,
+    "unique_buildings": 44640,
+    "duplicate_instances": 2346,
+    "occurrence_histogram": {
+      "1": 43162,
+      "2": 911,
+      "3": 354,
+      "4": 145,
+      "5": 48,
+      "6": 20
+    },
+    "max_occurrences_per_building": 6,
+    "attribute_mismatch_across_duplicates": 0,
+    "coordinate_mismatch_across_duplicates": 0,
+    "batch_table_keys": [
+      "_lod",
+      "_lod_type",
+      "_x",
+      "_xmax",
+      "_xmin",
+      "_y",
+      "_ymax",
+      "_ymin",
+      "_zmax",
+      "_zmin",
+      "attributes",
+      "bldg:class",
+      "bldg:measuredHeight",
+      "bldg:storeysAboveGround",
+      "bldg:storeysBelowGround",
+      "bldg:usage",
+      "bldg:yearOfConstruction",
+      "city_code",
+      "city_name",
+      "core:creationDate",
+      "feature_type",
+      "gml:name",
+      "gml_id",
+      "meshcode",
+      "uro:BuildingDetailAttribute_uro:areaClassificationType",
+      "uro:BuildingDetailAttribute_uro:buildingFootprintArea",
+      "uro:BuildingDetailAttribute_uro:buildingStructureType",
+      "uro:BuildingDetailAttribute_uro:districtsAndZonesType",
+      "uro:BuildingDetailAttribute_uro:fireproofStructureType",
+      "uro:BuildingDetailAttribute_uro:landUseType",
+      "uro:BuildingDetailAttribute_uro:specifiedBuildingCoverageRate",
+      "uro:BuildingDetailAttribute_uro:specifiedFloorAreaRate",
+      "uro:BuildingDetailAttribute_uro:surveyYear",
+      "uro:BuildingDetailAttribute_uro:totalFloorArea",
+      "uro:BuildingDetailAttribute_uro:urbanPlanType",
+      "uro:BuildingIDAttribute_uro:buildingID",
+      "uro:BuildingIDAttribute_uro:city",
+      "uro:BuildingIDAttribute_uro:prefecture",
+      "uro:geometrySrcDescLod1",
+      "uro:lod1HeightType",
+      "uro:lodType",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水継続時間",
+      "土砂災害リスク_土石流_区域区分",
+      "土砂災害リスク_土石流_区域区分コード",
+      "土砂災害リスク_地すべり_区域区分",
+      "土砂災害リスク_地すべり_区域区分コード",
+      "土砂災害リスク_急傾斜地の崩落_区域区分",
+      "土砂災害リスク_急傾斜地の崩落_区域区分コード",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水継続時間",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "津波浸水想定_京都府津波浸水想定図_浸水ランク",
+      "津波浸水想定_京都府津波浸水想定図_浸水ランクコード",
+      "津波浸水想定_京都府津波浸水想定図_浸水深",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深"
+    ]
+  },
+  "lod2_container": {
+    "directory": "data/raw/plateau_3d/extracted/26202_maizuru-shi_city_2025_citygml_1_op_bldg_3dtiles_lod2",
+    "tileset_bytes": 257806,
+    "b3dm_files": 427,
+    "b3dm_bytes": 241460040,
+    "batch_instances": 46986,
+    "unique_buildings": 44640,
+    "duplicate_instances": 2346,
+    "occurrence_histogram": {
+      "1": 43160,
+      "2": 914,
+      "3": 354,
+      "4": 144,
+      "5": 48,
+      "6": 20
+    },
+    "max_occurrences_per_building": 6,
+    "attribute_mismatch_across_duplicates": 0,
+    "coordinate_mismatch_across_duplicates": 0,
+    "batch_table_keys": [
+      "_lod",
+      "_lod_type",
+      "_x",
+      "_xmax",
+      "_xmin",
+      "_y",
+      "_ymax",
+      "_ymin",
+      "_zmax",
+      "_zmin",
+      "attributes",
+      "bldg:class",
+      "bldg:measuredHeight",
+      "bldg:storeysAboveGround",
+      "bldg:storeysBelowGround",
+      "bldg:usage",
+      "bldg:yearOfConstruction",
+      "city_code",
+      "city_name",
+      "core:creationDate",
+      "feature_type",
+      "gml:name",
+      "gml_id",
+      "meshcode",
+      "uro:BuildingDetailAttribute_uro:areaClassificationType",
+      "uro:BuildingDetailAttribute_uro:buildingFootprintArea",
+      "uro:BuildingDetailAttribute_uro:buildingStructureType",
+      "uro:BuildingDetailAttribute_uro:districtsAndZonesType",
+      "uro:BuildingDetailAttribute_uro:fireproofStructureType",
+      "uro:BuildingDetailAttribute_uro:landUseType",
+      "uro:BuildingDetailAttribute_uro:specifiedBuildingCoverageRate",
+      "uro:BuildingDetailAttribute_uro:specifiedFloorAreaRate",
+      "uro:BuildingDetailAttribute_uro:surveyYear",
+      "uro:BuildingDetailAttribute_uro:totalFloorArea",
+      "uro:BuildingDetailAttribute_uro:urbanPlanType",
+      "uro:BuildingIDAttribute_uro:buildingID",
+      "uro:BuildingIDAttribute_uro:city",
+      "uro:BuildingIDAttribute_uro:prefecture",
+      "uro:geometrySrcDescLod1",
+      "uro:lod1HeightType",
+      "uro:lodType",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水継続時間",
+      "土砂災害リスク_土石流_区域区分",
+      "土砂災害リスク_土石流_区域区分コード",
+      "土砂災害リスク_地すべり_区域区分",
+      "土砂災害リスク_地すべり_区域区分コード",
+      "土砂災害リスク_急傾斜地の崩落_区域区分",
+      "土砂災害リスク_急傾斜地の崩落_区域区分コード",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "志楽川水系志楽川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水継続時間",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "津波浸水想定_京都府津波浸水想定図_浸水ランク",
+      "津波浸水想定_京都府津波浸水想定図_浸水ランクコード",
+      "津波浸水想定_京都府津波浸水想定図_浸水深",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "福井川水系福井川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランク",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水ランクコード",
+      "高野川水系高野川、女布川洪水浸水想定区域図（都道府県管理区間）_L2（想定最大規模）_浸水深"
+    ]
+  },
+  "lod1_unique_ids_equal_lod2": true,
+  "whole_city_lod1_attributes": {
+    "buildings": 44640,
+    "usage": {
+      "populated_including_unknown": 44640,
+      "known_excluding_unknown": 37594,
+      "known_percent": 84.216,
+      "values": {
+        "住宅": 27891,
+        "不明": 7046,
+        "共同住宅": 1783,
+        "店舗等併用住宅": 1461,
+        "文教厚生施設": 1283,
+        "商業施設": 1177,
+        "運輸倉庫施設": 1067,
+        "工場": 1001,
+        "業務施設": 969,
+        "農林漁業用施設": 344,
+        "官公庁施設": 142,
+        "商業系複合施設": 110,
+        "作業所併用住宅": 104,
+        "店舗等併用共同住宅": 99,
+        "供給処理施設": 86,
+        "宿泊施設": 77
+      }
+    },
+    "measured_height_m": {
+      "known": 33336,
+      "missing_or_sentinel": 11304,
+      "completeness_percent": 74.677,
+      "min": 3.06,
+      "median": 8.19,
+      "max": 78.96
+    },
+    "storeys_above_ground": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 1,
+      "median": 2,
+      "max": 15
+    },
+    "storeys_below_ground": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0,
+      "median": 0,
+      "max": 1
+    },
+    "building_footprint_area_m2": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0.96,
+      "median": 64.47,
+      "max": 35999.42
+    },
+    "total_floor_area_m2": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0.96,
+      "median": 105.36,
+      "max": 71998.84
+    },
+    "lod1_height_type": {
+      "点群から取得_中央値": 33336,
+      "取得不可のため一律値（3m）": 11304
+    },
+    "lod2_source_populated": 1504,
+    "lod2_source_percent": 3.369,
+    "geometry_lod_in_3dtiles": {
+      "1": 44640
+    },
+    "building_class": {
+      "普通建物": 37623,
+      "普通無壁舎": 6157,
+      "堅ろう建物": 855,
+      "堅ろう無壁舎": 3,
+      "分類しない建物": 2
+    }
+  },
+  "whole_city_lod2_attributes": {
+    "buildings": 44640,
+    "usage": {
+      "populated_including_unknown": 44640,
+      "known_excluding_unknown": 37594,
+      "known_percent": 84.216,
+      "values": {
+        "住宅": 27891,
+        "不明": 7046,
+        "共同住宅": 1783,
+        "店舗等併用住宅": 1461,
+        "文教厚生施設": 1283,
+        "商業施設": 1177,
+        "運輸倉庫施設": 1067,
+        "工場": 1001,
+        "業務施設": 969,
+        "農林漁業用施設": 344,
+        "官公庁施設": 142,
+        "商業系複合施設": 110,
+        "作業所併用住宅": 104,
+        "店舗等併用共同住宅": 99,
+        "供給処理施設": 86,
+        "宿泊施設": 77
+      }
+    },
+    "measured_height_m": {
+      "known": 33336,
+      "missing_or_sentinel": 11304,
+      "completeness_percent": 74.677,
+      "min": 3.06,
+      "median": 8.19,
+      "max": 78.96
+    },
+    "storeys_above_ground": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 1,
+      "median": 2,
+      "max": 15
+    },
+    "storeys_below_ground": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0,
+      "median": 0,
+      "max": 1
+    },
+    "building_footprint_area_m2": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0.96,
+      "median": 64.47,
+      "max": 35999.42
+    },
+    "total_floor_area_m2": {
+      "known": 37623,
+      "missing_or_sentinel": 7017,
+      "completeness_percent": 84.281,
+      "min": 0.96,
+      "median": 105.36,
+      "max": 71998.84
+    },
+    "lod1_height_type": {
+      "点群から取得_中央値": 33336,
+      "取得不可のため一律値（3m）": 11304
+    },
+    "lod2_source_populated": 1504,
+    "lod2_source_percent": 3.369,
+    "geometry_lod_in_3dtiles": {
+      "1": 43136,
+      "2": 1504
+    },
+    "building_class": {
+      "普通建物": 37623,
+      "普通無壁舎": 6157,
+      "堅ろう建物": 855,
+      "堅ろう無壁舎": 3,
+      "分類しない建物": 2
+    }
+  },
+  "top10_lod1_attributes": {
+    "buildings": 0,
+    "usage": {
+      "populated_including_unknown": 0,
+      "known_excluding_unknown": 0,
+      "known_percent": null,
+      "values": {}
+    },
+    "measured_height_m": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "storeys_above_ground": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "storeys_below_ground": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "building_footprint_area_m2": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "total_floor_area_m2": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "lod1_height_type": {},
+    "lod2_source_populated": 0,
+    "lod2_source_percent": null,
+    "geometry_lod_in_3dtiles": {},
+    "building_class": {}
+  },
+  "top10_lod2_attributes": {
+    "buildings": 0,
+    "usage": {
+      "populated_including_unknown": 0,
+      "known_excluding_unknown": 0,
+      "known_percent": null,
+      "values": {}
+    },
+    "measured_height_m": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "storeys_above_ground": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "storeys_below_ground": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "building_footprint_area_m2": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "total_floor_area_m2": {
+      "known": 0,
+      "missing_or_sentinel": 0,
+      "completeness_percent": null,
+      "min": null,
+      "median": null,
+      "max": null
+    },
+    "lod1_height_type": {},
+    "lod2_source_populated": 0,
+    "lod2_source_percent": null,
+    "geometry_lod_in_3dtiles": {},
+    "building_class": {}
+  },
+  "top10_by_mesh": [
+    {
+      "rank": 1,
+      "mesh_code": "533512753",
+      "population": 91,
+      "elderly_population": 56,
+      "west": 135.3125,
+      "east": 135.31875000000002,
+      "south": 35.47916666666667,
+      "north": 35.483333333333334,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 1460.522,
+        "nearest_building_center": {
+          "gml_id": "bldg_88772a1e-e741-474f-85b9-d7fcb927c4fe",
+          "lon": 135.33312965176648,
+          "lat": 35.47321735385488,
+          "source_third_mesh": "53351266",
+          "usage": "運輸倉庫施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 1410.655,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_88772a1e-e741-474f-85b9-d7fcb927c4fe",
+          "lon": 135.33312965176648,
+          "lat": 35.47321735385488,
+          "source_third_mesh": "53351266",
+          "usage": "運輸倉庫施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 1819.405,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_88772a1e-e741-474f-85b9-d7fcb927c4fe",
+          "lon": 135.33312965176648,
+          "lat": 35.47321735385488,
+          "source_third_mesh": "53351266",
+          "usage": "運輸倉庫施設"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 2,
+      "mesh_code": "533522274",
+      "population": 58,
+      "elderly_population": 27,
+      "west": 135.34375,
+      "east": 135.35000000000002,
+      "south": 35.52083333333334,
+      "north": 35.525000000000006,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 3233.953,
+        "nearest_building_center": {
+          "gml_id": "bldg_3e374e2a-1145-49b1-b3fd-ba5afdd4f955",
+          "lon": 135.3529475746972,
+          "lat": 35.491848887373365,
+          "source_third_mesh": "53351298",
+          "usage": "不明"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 3212.688,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_721c37e5-aacd-4c5d-a499-67eb2003195e",
+          "lon": 135.35416870644997,
+          "lat": 35.491927458766156,
+          "source_third_mesh": "53351298",
+          "usage": "官公庁施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 3498.041,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_3e374e2a-1145-49b1-b3fd-ba5afdd4f955",
+          "lon": 135.3529475746972,
+          "lat": 35.491848887373365,
+          "source_third_mesh": "53351298",
+          "usage": "不明"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 3,
+      "mesh_code": "533512132",
+      "population": 91,
+      "elderly_population": 43,
+      "west": 135.29375,
+      "east": 135.3,
+      "south": 35.42500000000001,
+      "north": 35.429166666666674,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 1491.486,
+        "nearest_building_center": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 1487.558,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 1723.803,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 4,
+      "mesh_code": "533502982",
+      "population": 134,
+      "elderly_population": 101,
+      "west": 135.35625,
+      "east": 135.3625,
+      "south": 35.408333333333346,
+      "north": 35.41250000000001,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 2158.963,
+        "nearest_building_center": {
+          "gml_id": "bldg_b634ce30-f14f-46bb-8c40-3c5289e58d58",
+          "lon": 135.33263187112755,
+          "lat": 35.415044779517345,
+          "source_third_mesh": "53350296",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 2155.814,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_b634ce30-f14f-46bb-8c40-3c5289e58d58",
+          "lon": 135.33263187112755,
+          "lat": 35.415044779517345,
+          "source_third_mesh": "53350296",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 2477.602,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_b634ce30-f14f-46bb-8c40-3c5289e58d58",
+          "lon": 135.33263187112755,
+          "lat": 35.415044779517345,
+          "source_third_mesh": "53350296",
+          "usage": "農林漁業用施設"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 5,
+      "mesh_code": "533512144",
+      "population": 238,
+      "elderly_population": 105,
+      "west": 135.30624999999998,
+      "east": 135.3125,
+      "south": 35.429166666666674,
+      "north": 35.43333333333334,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 690.284,
+        "nearest_building_center": {
+          "gml_id": "bldg_0b33c2d8-65f6-4bf2-ad29-8f74d6a26f05",
+          "lon": 135.32011876178797,
+          "lat": 35.43112240529793,
+          "source_third_mesh": "53351215",
+          "usage": "住宅"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 681.159,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_0b33c2d8-65f6-4bf2-ad29-8f74d6a26f05",
+          "lon": 135.32011876178797,
+          "lat": 35.43112240529793,
+          "source_third_mesh": "53351215",
+          "usage": "住宅"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 973.522,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_0b33c2d8-65f6-4bf2-ad29-8f74d6a26f05",
+          "lon": 135.32011876178797,
+          "lat": 35.43112240529793,
+          "source_third_mesh": "53351215",
+          "usage": "住宅"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 6,
+      "mesh_code": "533512134",
+      "population": 87,
+      "elderly_population": 49,
+      "west": 135.29375,
+      "east": 135.3,
+      "south": 35.429166666666674,
+      "north": 35.43333333333334,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 1028.174,
+        "nearest_building_center": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 1024.245,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 1260.733,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_45bf1476-2ccc-4186-9b1c-9b29864a1675",
+          "lon": 135.29740148992173,
+          "lat": 35.44257990731446,
+          "source_third_mesh": "53351233",
+          "usage": "農林漁業用施設"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 7,
+      "mesh_code": "533513551",
+      "population": 75,
+      "elderly_population": 32,
+      "west": 135.4375,
+      "east": 135.44375000000002,
+      "south": 35.45833333333334,
+      "north": 35.462500000000006,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 970.463,
+        "nearest_building_center": {
+          "gml_id": "bldg_65f2b3f7-8886-48a6-8c61-7125175f288e",
+          "lon": 135.426905828994,
+          "lat": 35.46380907724135,
+          "source_third_mesh": "53351354",
+          "usage": "文教厚生施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 966.683,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_65f2b3f7-8886-48a6-8c61-7125175f288e",
+          "lon": 135.426905828994,
+          "lat": 35.46380907724135,
+          "source_third_mesh": "53351354",
+          "usage": "文教厚生施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 1298.093,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_6f7df75d-a8eb-418a-a097-1dcb42726e0e",
+          "lon": 135.42644997333636,
+          "lat": 35.46214298289976,
+          "source_third_mesh": "53351354",
+          "usage": "農林漁業用施設"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 8,
+      "mesh_code": "533522094",
+      "population": 62,
+      "elderly_population": 34,
+      "west": 135.36874999999998,
+      "east": 135.375,
+      "south": 35.50416666666668,
+      "north": 35.50833333333334,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 1484.27,
+        "nearest_building_center": {
+          "gml_id": "bldg_fb5350d8-8fd1-4279-833e-8cbdee383b28",
+          "lon": 135.39139749541033,
+          "lat": 35.50669948242717,
+          "source_third_mesh": "53352301",
+          "usage": "不明"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 1482.229,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_fb5350d8-8fd1-4279-833e-8cbdee383b28",
+          "lon": 135.39139749541033,
+          "lat": 35.50669948242717,
+          "source_third_mesh": "53352301",
+          "usage": "不明"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 1767.851,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_fb5350d8-8fd1-4279-833e-8cbdee383b28",
+          "lon": 135.39139749541033,
+          "lat": 35.50669948242717,
+          "source_third_mesh": "53352301",
+          "usage": "不明"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 9,
+      "mesh_code": "533512931",
+      "population": 50,
+      "elderly_population": 26,
+      "west": 135.28749999999997,
+      "east": 135.29375,
+      "south": 35.491666666666674,
+      "north": 35.49583333333334,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 3743.381,
+        "nearest_building_center": {
+          "gml_id": "bldg_7f568554-387e-436d-b54b-d2f72cf85fe5",
+          "lon": 135.31507020301325,
+          "lat": 35.46282413135618,
+          "source_third_mesh": "53351255",
+          "usage": "住宅"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 3733.823,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_0964be34-8b5f-42ab-92a3-b855538ba258",
+          "lon": 135.31527315638132,
+          "lat": 35.46292207797872,
+          "source_third_mesh": "53351255",
+          "usage": "住宅"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 4089.624,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_7f568554-387e-436d-b54b-d2f72cf85fe5",
+          "lon": 135.31507020301325,
+          "lat": 35.46282413135618,
+          "source_third_mesh": "53351255",
+          "usage": "住宅"
+        }
+      },
+      "third_mesh_codes": []
+    },
+    {
+      "rank": 10,
+      "mesh_code": "533502943",
+      "population": 39,
+      "elderly_population": 29,
+      "west": 135.3,
+      "east": 135.30625000000003,
+      "south": 35.41250000000001,
+      "north": 35.41666666666667,
+      "attribute_summary": {
+        "buildings": 0,
+        "usage": {
+          "populated_including_unknown": 0,
+          "known_excluding_unknown": 0,
+          "known_percent": null,
+          "values": {}
+        },
+        "measured_height_m": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_above_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "storeys_below_ground": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "building_footprint_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "total_floor_area_m2": {
+          "known": 0,
+          "missing_or_sentinel": 0,
+          "completeness_percent": null,
+          "min": null,
+          "median": null,
+          "max": null
+        },
+        "lod1_height_type": {},
+        "lod2_source_populated": 0,
+        "lod2_source_percent": null,
+        "geometry_lod_in_3dtiles": {},
+        "building_class": {}
+      },
+      "coverage_distance": {
+        "building_centers_inside": 0,
+        "building_bboxes_intersecting": 0,
+        "nearest_from_mesh_boundary_to_building_center_m": 1741.898,
+        "nearest_building_center": {
+          "gml_id": "bldg_7e871a26-0c77-4caf-bfd5-dbb20d749313",
+          "lon": 135.32105907315508,
+          "lat": 35.4266547624695,
+          "source_third_mesh": "53351215",
+          "usage": "商業施設"
+        },
+        "nearest_from_mesh_boundary_to_building_bbox_m": 1732.918,
+        "nearest_building_bbox": {
+          "gml_id": "bldg_7e871a26-0c77-4caf-bfd5-dbb20d749313",
+          "lon": 135.32105907315508,
+          "lat": 35.4266547624695,
+          "source_third_mesh": "53351215",
+          "usage": "商業施設"
+        },
+        "nearest_from_mesh_centroid_to_building_center_m": 2107.763,
+        "nearest_to_centroid_building": {
+          "gml_id": "bldg_7e871a26-0c77-4caf-bfd5-dbb20d749313",
+          "lon": 135.32105907315508,
+          "lat": 35.4266547624695,
+          "source_third_mesh": "53351215",
+          "usage": "商業施設"
+        }
+      },
+      "third_mesh_codes": []
+    }
+  ],
+  "top10_deepest_b3dm_files": {
+    "count": 0,
+    "bytes": 0,
+    "paths": [],
+    "depths": {}
+  }
+}
