@@ -13,6 +13,7 @@ import pandas as pd
 from pyproj import CRS
 from shapely.geometry import Point
 
+from .audit import classify_medical_access
 from .city_config import CityConfig, DatasetConfig, load_city_config
 from .distances import nearest_named
 from .mesh import GEOGRAPHIC_CRS, population_to_geodataframe
@@ -39,6 +40,7 @@ OUTPUT_COLUMNS = [
     "nearest_bus_stop_distance_m", "nearest_public_transport_type",
     "nearest_public_transport_name", "nearest_public_transport_distance_m",
     "nearest_medical_name", "nearest_medical_distance_m", "nearest_hospital_name",
+    "nearest_medical_access_class",
     "nearest_hospital_distance_m", "nearest_clinic_name", "nearest_clinic_distance_m",
     "elderly_population_percentile", "elderly_ratio_percentile",
     "transport_distance_percentile", "medical_distance_percentile",
@@ -189,6 +191,8 @@ def run_city_analysis(config: CityConfig) -> dict[str, object]:
     clinics = medical_city.loc[category.eq(2)].copy()
     dental = medical_city.loc[category.eq(3)].copy()
     medical_primary = filter_medical_primary(medical_city)
+    medical_access = classify_medical_access(medical_primary["P04_002"])
+    medical_primary = medical_primary.join(medical_access)
 
     nearest_inputs = (
         (stations, "station_name", "station"),
@@ -202,6 +206,15 @@ def run_city_analysis(config: CityConfig) -> dict[str, object]:
             meshes, targets, name_column=name_column, prefix=prefix,
             analysis_crs=config.analysis_crs,
         )
+
+    access_by_name = (
+        medical_primary[["P04_002", "medical_access_class"]]
+        .drop_duplicates("P04_002")
+        .set_index("P04_002")["medical_access_class"]
+    )
+    meshes["nearest_medical_access_class"] = meshes["nearest_medical_name"].map(
+        access_by_name
+    )
 
     station_is_nearest = meshes["nearest_station_distance_m"] <= meshes["nearest_bus_stop_distance_m"]
     meshes["nearest_public_transport_type"] = np.where(station_is_nearest, "station", "bus_stop")
@@ -299,6 +312,9 @@ def run_city_analysis(config: CityConfig) -> dict[str, object]:
         "clinics_city": len(clinics),
         "dental_clinics_city": len(dental),
         "medical_primary_city": len(medical_primary),
+        "medical_uncertain_access_city": int(
+            medical_primary["medical_access_class"].eq("uncertain_access").sum()
+        ),
         "primary_rank_eligible_meshes": int(meshes["primary_eligible"].sum()),
     }
     summary: dict[str, object] = {
@@ -349,6 +365,7 @@ def run_city_analysis(config: CityConfig) -> dict[str, object]:
             "Distances are straight-line Euclidean distances, not walking or route distances.",
             "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
             "P04 represents facilities collected for July 2020, not current availability.",
+            "P04 hospital/clinic records with institutional names are flagged as uncertain access but retained in the primary baseline; see final_audit.json for exclusion sensitivity.",
             "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
             "Percentile scores are city-relative; absolute scores must not be compared between cities.",
             "A high score is an exploratory prompt for field investigation, not proof of a local problem.",

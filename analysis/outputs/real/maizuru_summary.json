@@ -46,6 +46,7 @@
     "clinics_city": 63,
     "dental_clinics_city": 34,
     "medical_primary_city": 71,
+    "medical_uncertain_access_city": 6,
     "primary_rank_eligible_meshes": 218
   },
   "datasets": {
@@ -166,6 +167,7 @@
       "nearest_medical_name": "隅山医院",
       "nearest_medical_distance_m": 3316.8502371714594,
       "nearest_hospital_name": "舞鶴赤十字病院",
+      "nearest_medical_access_class": "likely_public",
       "nearest_hospital_distance_m": 4493.440047277211,
       "nearest_clinic_name": "隅山医院",
       "nearest_clinic_distance_m": 3316.8502371714594,
@@ -268,6 +270,7 @@
     "Distances are straight-line Euclidean distances, not walking or route distances.",
     "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
     "P04 represents facilities collected for July 2020, not current availability.",
+    "P04 hospital/clinic records with institutional names are flagged as uncertain access but retained in the primary baseline; see final_audit.json for exclusion sensitivity.",
     "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
     "Percentile scores are city-relative; absolute scores must not be compared between cities.",
     "A high score is an exploratory prompt for field investigation, not proof of a local problem."

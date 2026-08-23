@@ -19,7 +19,7 @@ import {
   TileMapServiceImageryProvider,
   Viewer
 } from "cesium";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import type {
   AppData,
   BuildingInfo,
@@ -275,6 +275,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
   const sourcesRef = useRef<DataSourceRefs>({});
+  const plateauLoadRef = useRef<Promise<void> | null>(null);
   const onMeshSelectRef = useRef(onMeshSelect);
   const onVirtualPointSelectRef = useRef(onVirtualPointSelect);
   const onBuildingSelectRef = useRef(onBuildingSelect);
@@ -295,6 +296,39 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   metricModeRef.current = metricMode;
   selectedMeshCodeRef.current = selectedMeshCode;
   visibilityRef.current = visibility;
+
+  const loadPlateauTileset = useCallback(() => {
+    if (sourcesRef.current.plateauTileset || plateauLoadRef.current) {
+      return plateauLoadRef.current ?? Promise.resolve();
+    }
+    const viewer = viewerRef.current;
+    const officialTilesetUrl = tilesetUrl(data);
+    if (!viewer || viewer.isDestroyed() || !officialTilesetUrl) return Promise.resolve();
+    plateauLoadRef.current = (async () => {
+      try {
+        const tileset = await Cesium3DTileset.fromUrl(officialTilesetUrl, {
+          maximumScreenSpaceError: 12,
+          skipLevelOfDetail: false
+        });
+        if (viewer.isDestroyed()) return;
+        tileset.style = new Cesium3DTileStyle({
+          color: "color('#eef4f2', 0.98)"
+        });
+        viewer.scene.primitives.add(tileset);
+        tileset.show = visibilityRef.current.plateau;
+        sourcesRef.current.plateauTileset = tileset;
+        viewer.scene.requestRender();
+      } catch (error) {
+        console.warn("Optional PLATEAU 3D Tiles loading failed; continuing with core map layers", error);
+        onWarningRef.current(
+          "PLATEAU 3D建物だけを読み込めませんでした。500mメッシュと施設レイヤーは引き続き操作できます。"
+        );
+      } finally {
+        plateauLoadRef.current = null;
+      }
+    })();
+    return plateauLoadRef.current;
+  }, [data]);
 
   useImperativeHandle(ref, () => ({
     flyToMesh(mesh) {
@@ -394,28 +428,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         const medical = await addGeoJson(viewer, data.medicalFacilities);
         if (cancelled || viewer.isDestroyed()) return;
 
-        let plateauTileset: Cesium3DTileset | undefined;
-        const officialTilesetUrl = tilesetUrl(data);
-        if (officialTilesetUrl) {
-          try {
-            plateauTileset = await Cesium3DTileset.fromUrl(officialTilesetUrl, {
-              maximumScreenSpaceError: 12,
-              skipLevelOfDetail: false
-            });
-            plateauTileset.style = new Cesium3DTileStyle({
-              color: "color('#eef4f2', 0.98)"
-            });
-            viewer.scene.primitives.add(plateauTileset);
-          } catch (error) {
-            console.warn("Optional PLATEAU 3D Tiles loading failed; continuing with core map layers", error);
-            onWarningRef.current(
-              "PLATEAU 3D建物だけを読み込めませんでした。500mメッシュと施設レイヤーは引き続き操作できます。"
-            );
-          }
-        }
         if (cancelled || viewer.isDestroyed()) return;
 
-        sourcesRef.current = { boundary, plateauGeoJson, plateauRoads, plateauTileset, meshes, stations, busStops, medical };
+        sourcesRef.current = { boundary, plateauGeoJson, plateauRoads, meshes, stations, busStops, medical };
         styleBoundary(boundary);
         styleBuildings(plateauGeoJson);
         styleRoads(plateauRoads);
@@ -428,7 +443,6 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         if (boundary) boundary.show = currentVisibility.boundary;
         if (plateauGeoJson) plateauGeoJson.show = currentVisibility.plateau;
         if (plateauRoads) plateauRoads.show = currentVisibility.plateau;
-        if (plateauTileset) plateauTileset.show = currentVisibility.plateau;
         if (meshes) meshes.show = currentVisibility.meshes;
         if (stations) stations.show = currentVisibility.stations;
         if (busStops) busStops.show = currentVisibility.busStops;
@@ -532,8 +546,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     if (sources.plateauGeoJson) sources.plateauGeoJson.show = visibility.plateau;
     if (sources.plateauRoads) sources.plateauRoads.show = visibility.plateau;
     if (sources.plateauTileset) sources.plateauTileset.show = visibility.plateau;
+    if (visibility.plateau && !sources.plateauTileset) void loadPlateauTileset();
     viewerRef.current?.scene.requestRender();
-  }, [visibility]);
+  }, [loadPlateauTileset, visibility]);
 
   return <div ref={containerRef} className="cesium-map" aria-label="舞鶴市の3D地図" />;
 });

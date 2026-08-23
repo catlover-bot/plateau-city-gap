@@ -35,6 +35,7 @@ export interface MeshMetrics extends JsonProperties {
   nearest_public_transport_distance_m?: number | null;
   nearest_medical_name?: string | null;
   nearest_medical_distance_m?: number | null;
+  nearest_medical_access_class?: "confirmed_public" | "likely_public" | "uncertain_access" | null;
   nearest_hospital_name?: string | null;
   nearest_hospital_distance_m?: number | null;
   elderly_population_percentile?: number | null;
@@ -59,6 +60,20 @@ export interface Summary extends JsonProperties {
   limitations?: string[];
   distance_method?: string;
   analysis_crs?: { code?: string; name?: string };
+  audit?: {
+    audit_date?: string;
+    baseline_facility_scope?: string;
+    medical_uncertain_access_records?: number;
+    buffer_top10_overlap?: number;
+    score_comparison_denominator?: number;
+    interpretation?: string;
+    rank_one_two_km_buffer?: {
+      public_transport_distance_m?: number;
+      medical_distance_excluding_uncertain_m?: number;
+      public_transport_name?: string;
+      medical_name?: string;
+    };
+  };
 }
 
 export interface CityProfile extends JsonProperties {

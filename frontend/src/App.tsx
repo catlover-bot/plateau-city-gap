@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BuildingInfoCard } from "./components/BuildingInfoCard";
-import { CesiumMap, type CesiumMapHandle } from "./components/CesiumMap";
+import type { CesiumMapHandle } from "./components/CesiumMap";
 import { DetailPanel } from "./components/DetailPanel";
 import { EmptyState, ErrorState, LoadingState } from "./components/AppStates";
 import { LayerPanel } from "./components/LayerPanel";
@@ -15,13 +15,18 @@ import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
 import type { AppData, BuildingInfo, LayerVisibility, MeshMetrics, MetricMode, PlacementCandidate } from "./types";
 
+const CesiumMap = lazy(async () => {
+  const module = await import("./components/CesiumMap");
+  return { default: module.CesiumMap };
+});
+
 const INITIAL_LAYERS: LayerVisibility = {
   meshes: true,
   stations: true,
   busStops: false,
   medical: true,
   boundary: true,
-  plateau: true
+  plateau: false
 };
 
 const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> = {
@@ -85,7 +90,7 @@ export default function App() {
     setSelectedBuilding(null);
     setSideTab("detail");
     setMetricMode("gap");
-    setLayers({ ...INITIAL_LAYERS, plateau: nextCity === "maizuru" });
+    setLayers({ ...INITIAL_LAYERS, plateau: false });
     setStoryStep(null);
     setScenario(null);
     setVirtualPoint(null);
@@ -262,22 +267,24 @@ export default function App() {
       </header>
 
       <main className="map-stage">
-        <CesiumMap
-          key={cityId}
-          ref={mapRef}
-          data={data}
-          metricMode={metricMode}
-          selectedMeshCode={selectedMesh?.mesh_code ?? null}
-          visibility={layers}
-          placementMode={placementMode}
-          virtualPoint={virtualPoint}
-          onMeshSelect={selectMesh}
-          onVirtualPointSelect={runScenario}
-          onBuildingSelect={setSelectedBuilding}
-          onReady={() => setMapReady(true)}
-          onError={setMapError}
-          onWarning={setMapWarning}
-        />
+        <Suspense fallback={<div className="map-loading" role="status"><span /> 地図エンジンを準備中</div>}>
+          <CesiumMap
+            key={cityId}
+            ref={mapRef}
+            data={data}
+            metricMode={metricMode}
+            selectedMeshCode={selectedMesh?.mesh_code ?? null}
+            visibility={layers}
+            placementMode={placementMode}
+            virtualPoint={virtualPoint}
+            onMeshSelect={selectMesh}
+            onVirtualPointSelect={runScenario}
+            onBuildingSelect={setSelectedBuilding}
+            onReady={() => setMapReady(true)}
+            onError={setMapError}
+            onWarning={setMapWarning}
+          />
+        </Suspense>
 
         {!mapReady && (
           <div className="map-loading" role="status"><span /> 3D地図を描画中</div>
@@ -383,6 +390,9 @@ export default function App() {
             <span>mesh</span>
           </div>
         </div>
+        <div className="data-years" aria-label="使用データの年次">
+          <span>人口 2020</span><span>医療 2020</span><span>バス停 2022</span><span>PLATEAU 2025</span>
+        </div>
         <div className={`panel-tabs ${isPrimary ? "" : "validation"}`} role="tablist" aria-label="ランキング、詳細、施策シミュレーション">
           <button
             type="button"
@@ -416,7 +426,7 @@ export default function App() {
           {sideTab === "ranking" ? (
             <>
               <div className="ranking-intro">
-                <div><span aria-hidden="true">⌖</span><strong>優先度の高い候補</strong></div>
+                <div><span aria-hidden="true">⌖</span><strong>追加調査候補</strong></div>
                 <p>{eligibleCount ? `${eligibleCount}件のPrimary対象から` : "Primary対象から"}探索スコア順に表示。カードを押すと現地へ移動します。</p>
               </div>
               <RankingPanel
@@ -427,7 +437,7 @@ export default function App() {
               <p className="ranking-disclaimer">探索スコアは政策的な公式指標や危険度ではありません。</p>
             </>
           ) : sideTab === "detail" ? (
-            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} />
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} />
           ) : sideTab === "scenario" && isPrimary && data.finalDemo ? (
               <ScenarioPanel
               result={scenario}
@@ -445,7 +455,7 @@ export default function App() {
               comparisonMeshCount={comparisonMeshCount}
             />
           ) : (
-            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} />
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} />
           )}
         </div>
       </aside>

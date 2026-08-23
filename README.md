@@ -5,7 +5,7 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [2都市の実データ検証](docs/cross-city-validation.md) · [審査観点との対応](docs/judging.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Score監査](docs/score-audit.md) · [想定Q&A](docs/qa.md) · [審査観点との対応](docs/judging.md)
 
 ![CITY GAPの舞鶴市デモ画面](docs/assets/final/city-gap-overview.png)
 
@@ -28,6 +28,8 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 - 藤沢市327メッシュ、Top 10、WHYを横展開検証モードで表示（3D・What-ifは舞鶴市のみ）
 
 スコアは政策判断の正解や危険度ではなく、現地確認・ヒアリング・施策検討を始めるための探索用指標です。
+
+人口「人」と距離「m」は絶対値です。percentileとScore Cは各都市の比較母集団内だけで意味を持つ相対値です。画面は絶対値を先に示し、都市内相対位置を補助表示します。舞鶴と藤沢のScore値を直接比較しません。
 
 ## Demo
 
@@ -72,9 +74,9 @@ Rank 1はmesh `533512753`です。
 | CITY GAP探索スコア C | 0.498 |
 | Pareto frontier | yes |
 
-これはサービス不足や施策優先順位の確定ではありません。直線距離では捉えられない運行頻度、道路、坂、送迎、施設能力、現地の生活実態を追加調査する入口です。Top 10全件は [findings](docs/findings.md) に掲載しています。
+これはサービス不足や施策優先順位の確定ではありません。直線距離では捉えられない運行頻度、道路、坂、送迎、施設能力、現地の生活実態を追加調査する入口です。Top 10全件は [findings](docs/findings.md)、定義・分母・variant・Pareto・市境感度は [Score監査](docs/score-audit.md) に掲載しています。
 
-藤沢市では、市境と交差する327メッシュ、都市内比較263メッシュ、Primary順位対象261メッシュを処理しました。Top 1は `533913073`「県営サンハイツ渋谷前バス停周辺」で、人口3,590人、65歳以上921人、交通593m、医療734mです。4つの人口閾値条件でTop 10は全件一致しました。絶対距離と都市内percentileの読み分け、企業健康管理室等のfalse positive確認は [2都市の実データ検証](docs/cross-city-validation.md) に記録しています。
+藤沢市では、市境と交差する327メッシュ、都市内比較263メッシュ、Primary順位対象261メッシュを処理しました。Top 1は `533913073`「県営サンハイツ渋谷前バス停周辺」で、人口3,590人、65歳以上921人、交通593m、医療734mです。市外2km・一般利用不明の医療を除く感度では交通346m・医療506mとなり、Rank 1は維持、Top 10は7/10一致でした。絶対距離と都市内percentileの読み分け、企業健康管理室等のfalse positive確認は [2都市の実データ検証](docs/cross-city-validation.md) と [Score監査](docs/score-audit.md) に記録しています。
 
 ## Why PLATEAU
 
@@ -161,14 +163,15 @@ python -m pip install -e '.[dev]'
 python -m analysis.scripts.download_real_data --city all
 python -m analysis.src.run_city_analysis --config analysis/config/maizuru.yaml
 python -m analysis.src.run_city_analysis --config analysis/config/fujisawa.yaml
-python -m analysis.scripts.build_city_validation_assets \
-  --config analysis/config/fujisawa.yaml \
-  --output-dir frontend/public/data/cities/fujisawa
 python -m analysis.scripts.download_plateau_3d
 python -m analysis.scripts.inspect_plateau_buildings
 python -m analysis.scripts.build_final_demo_assets
 python -m analysis.scripts.build_plateau_web_subset
+python -m analysis.scripts.run_final_audit
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_web_assets
+SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \
+  --config analysis/config/fujisawa.yaml \
+  --output-dir frontend/public/data/cities/fujisawa
 ```
 
 `download_plateau_3d` は160,582,905 bytesの公式ZIPを固定SHA-256で検証し、LOD1/LOD2建物containerだけを安全に展開します。`inspect_plateau_buildings` は全854 b3dmを走査します。final demo builderは取得済みCityGMLから建物・道路・DEMを実データのまま集計し、subset builderは公開する3 b3dmを公式ZIP内memberへhash照合します。
@@ -197,6 +200,7 @@ Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、�
 - 距離は500mメッシュ中心から施設までの直線距離で、徒歩・道路・所要時間ではありません。
 - 公共交通の頻度、デマンド交通、高速・長距離バス、施設送迎を評価しません。
 - 医療施設の診療能力、一般利用可否、現在の開設状況を保証しません。
+- 施設検索baselineは市内収録点に限定します。市外2km感度を併記しますが、都道府県境を越える全施設・隣接都市の全駅を含む完全な生活圏ではありません。
 - 人口・医療は2020年、バス停は2022年、PLATEAUは2025年で時点が一致しません。
 - percentileは各都市内の相対比較であり、舞鶴市と藤沢市のScoreを直接比較できません。
 - 秘匿・合算影響のある209メッシュは表示しますが、percentileとランキングから除外します。

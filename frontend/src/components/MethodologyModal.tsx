@@ -149,6 +149,7 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
               percentileの比較母集団は{comparisonScope}です。Primaryは、そのうち人口20人以上・65歳以上10人以上を満たす
               {eligibleCount ? `${eligibleCount.toLocaleString("ja-JP")}メッシュ` : "メッシュ"}をランキング対象にする条件です。
             </p>
+            <p>画面では実距離を主表示し、percentileは「この都市の比較対象内でどの位置か」を添えます。97 percentileは危険度97%でも、交通困難地域の認定でもありません。</p>
           </div>
 
           {data.finalDemo ? (
@@ -184,7 +185,7 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
                 </p>
                 <strong>まだしていないこと</strong>
                 <p>
-                  建物起点の歩行経路、道路接続・横断・坂を含む到達圏、用地や運行条件の最適化です。
+                  建物起点の歩行経路、道路接続・横断・坂を含む到達圏、用地や運行条件を含む評価です。
                   道路LOD1は面形状で接続トポロジーを持たないため、直線距離を経路距離と偽って置き換えていません。
                 </p>
               </div>
@@ -195,6 +196,11 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
               <p>同じ人口・交通・医療の計算処理とPLATEAU行政界・駅を使用しています。3D Deep Diveと施策シミュレーションは、この検証範囲には含めません。</p>
             </div>
           )}
+
+          <h3>2D分析とPLATEAUの役割</h3>
+          <div className="formula-card">
+            <p>2D統計で追加調査候補を発見し、PLATEAUで都市空間の文脈確認と施策候補の空間制約へ進みます。CITY GAP探索スコア自体は、PLATEAU建物がなければ計算できない指標ではありません。</p>
+          </div>
 
           <h3>大切な限界</h3>
           <ul className="limitation-list">

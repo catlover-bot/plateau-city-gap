@@ -2,9 +2,10 @@ export function LoadingState() {
   return (
     <main className="state-screen" aria-live="polite" aria-busy="true">
       <div className="brand-mark large" aria-hidden="true"><i /><i /><i /></div>
-      <p>舞鶴市の実データを準備しています</p>
+      <h1>CITY GAP</h1>
+      <p>舞鶴市の都市データを読み込んでいます</p>
       <div className="loading-bar"><span /></div>
-      <small>500mメッシュと都市サービスを読み込み中</small>
+      <small>500mメッシュと収録施設を確認中</small>
     </main>
   );
 }

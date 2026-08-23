@@ -39,6 +39,7 @@ let buildingSelectionVerified = false;
 let modalFocusVerified = false;
 let optionalPlateauFallbackVerified = false;
 let webglFallbackVerified = false;
+let initialPlateauAssetResponses = 0;
 
 page.on("console", (message) => {
   if (message.type() === "error") consoleErrors.push(message.text());
@@ -65,6 +66,10 @@ try {
   await page.locator(".map-loading").waitFor({ state: "hidden", timeout: 60_000 });
   await page.waitForTimeout(4_000);
   await page.screenshot({ path: join(finalDirectory, "city-gap-overview.png"), timeout: 60_000 });
+  initialPlateauAssetResponses = plateauResponses.length;
+  if (initialPlateauAssetResponses !== 0) {
+    localFailures.push(`PLATEAU Deep Dive assets loaded before they were requested: ${initialPlateauAssetResponses}`);
+  }
   process.stdout.write("Initial map and screenshot verified.\n");
 
   const methodologyButton = page.locator(".methodology-button");
@@ -185,6 +190,12 @@ try {
   await degradedPage.route("**/data/plateau/tileset.json", (route) => route.abort("failed"));
   await degradedPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await degradedPage.locator(".map-loading").waitFor({ state: "hidden", timeout: 60_000 });
+  await degradedPage.locator(".product-intro .primary-button").dispatchEvent("click");
+  await degradedPage.getByText("STEP 1 / 5", { exact: false }).waitFor();
+  await degradedPage.getByRole("button", { name: "次へ", exact: true }).click();
+  await degradedPage.getByText("STEP 2 / 5", { exact: false }).waitFor();
+  await degradedPage.getByRole("button", { name: "次へ", exact: true }).click();
+  await degradedPage.getByText("STEP 3 / 5", { exact: false }).waitFor();
   await degradedPage.locator(".map-warning").waitFor({ timeout: 60_000 });
   optionalPlateauFallbackVerified = await degradedPage.locator(".side-panel").isVisible()
     && !await degradedPage.locator(".map-error-fallback").isVisible()
@@ -227,6 +238,7 @@ try {
       "final/city-gap-mobile.png"
     ],
     plateauResponses: plateauResponses.length,
+    initialPlateauAssetResponses,
     loadedB3dm: loadedB3dm.length,
     buildingSelectionVerified,
     modalFocusVerified,

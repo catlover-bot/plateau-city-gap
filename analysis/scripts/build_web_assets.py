@@ -51,6 +51,7 @@ DEFAULTS = {
     / "analysis/outputs/real/maizuru_plateau_building_inspection.json",
     "output_dir": REPOSITORY_ROOT / "frontend/public/data",
 }
+FINAL_AUDIT_PATH = REPOSITORY_ROOT / "analysis/outputs/real/final_audit.json"
 
 MESH_PROPERTIES = [
     "mesh_code",
@@ -74,6 +75,7 @@ MESH_PROPERTIES = [
     "nearest_public_transport_distance_m",
     "nearest_medical_name",
     "nearest_medical_distance_m",
+    "nearest_medical_access_class",
     "nearest_hospital_name",
     "nearest_hospital_distance_m",
     "elderly_population_percentile",
@@ -533,6 +535,49 @@ def _generated_at(explicit: str | None) -> str:
     return timestamp.isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
+def _audit_web_summary(city_id: str) -> dict[str, Any] | None:
+    """Expose a small validated audit excerpt without shipping the full report."""
+    if not FINAL_AUDIT_PATH.is_file():
+        return None
+    report = json.loads(FINAL_AUDIT_PATH.read_text(encoding="utf-8"))
+    city = report.get("cities", {}).get(city_id)
+    if not isinstance(city, dict):
+        raise TypeError(f"Final audit does not contain {city_id}")
+    facility = city.get("facility_audit", {})
+    rank_one = city.get("rank_one_audit", {})
+    score = city.get("score_audit", {})
+    buffer_rank_one = rank_one.get("two_km_buffer_sensitivity", {})
+    boundary = facility.get("boundary_sensitivity_excluding_uncertain_medical", {})
+    counts = facility.get("access_class_counts", {})
+    required_numbers = (
+        buffer_rank_one.get("public_transport_distance_m"),
+        buffer_rank_one.get("medical_excluding_uncertain_distance_m"),
+        boundary.get("top10_overlap_with_primary"),
+        counts.get("uncertain_access"),
+    )
+    if any(not _is_finite_number(value) for value in required_numbers):
+        raise ValueError(f"Final audit excerpt for {city_id} is incomplete")
+    return {
+        "audit_date": report.get("audit_date"),
+        "baseline_facility_scope": "official facilities within the municipality",
+        "medical_uncertain_access_records": int(counts["uncertain_access"]),
+        "rank_one_two_km_buffer": {
+            "public_transport_distance_m": buffer_rank_one["public_transport_distance_m"],
+            "medical_distance_excluding_uncertain_m": buffer_rank_one[
+                "medical_excluding_uncertain_distance_m"
+            ],
+            "public_transport_name": buffer_rank_one.get("bus_stop_name"),
+            "medical_name": buffer_rank_one.get("medical_excluding_uncertain_name"),
+        },
+        "buffer_top10_overlap": int(boundary["top10_overlap_with_primary"]),
+        "score_comparison_denominator": int(score["comparison_denominator"]),
+        "interpretation": (
+            "Displayed distances are observed baselines under the stated facility scope. "
+            "Buffer results are sensitivity checks, not replacement current-condition claims."
+        ),
+    }
+
+
 def _build_plateau_status(
     inspection_path: Path,
     top10: Mapping[str, Any],
@@ -833,6 +878,9 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
         "threshold_stability": analysis_summary.get("threshold_stability", {}),
         "limitations": LIMITATIONS,
     }
+    audit_summary = _audit_web_summary("maizuru")
+    if audit_summary is not None:
+        web_summary["audit"] = audit_summary
     plateau_status, inspection_input = _build_plateau_status(
         args.plateau_inspection,
         top10,

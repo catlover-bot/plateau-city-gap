@@ -8,6 +8,7 @@ from pathlib import Path
 
 from analysis.scripts.build_web_assets import (
     SCHEMA_VERSION,
+    _audit_web_summary,
     _build_boundary,
     _build_mesh_assets,
     _build_point_layers,
@@ -57,6 +58,9 @@ def build(config_path: Path, output_dir: Path, generated_at: str | None = None) 
         "datasets": analysis_summary["datasets"],
         "limitations": analysis_summary["limitations"],
     }
+    audit_summary = _audit_web_summary(config.city_id)
+    if audit_summary is not None:
+        summary["audit"] = audit_summary
     output_dir.mkdir(parents=True, exist_ok=True)
     outputs = {
         "mesh_metrics.geojson": meshes,

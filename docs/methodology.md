@@ -14,8 +14,12 @@ Webアプリの分析値は次の実データ成果物から生成します。
 - `analysis/outputs/real/maizuru_city_gap.geojson`
 - `analysis/outputs/real/maizuru_city_gap_top10.csv`
 - `analysis/outputs/real/maizuru_summary.json`
+- `analysis/outputs/real/fujisawa_mesh_metrics.csv`
+- `analysis/outputs/real/fujisawa_city_gap_top10.csv`
+- `analysis/outputs/real/fujisawa_summary.json`
+- `analysis/outputs/real/final_audit.json`
 
-`analysis/scripts/build_web_assets.py` は値を再計算せず、公開用属性を選択・検証・変換します。フロントエンドへRankや距離を手入力しません。
+`analysis/scripts/run_final_audit.py` はスコアvariant、医療施設分類、市境buffer、Rank 1、What-ifを独立再計算します。その後 `build_web_assets.py` と `build_city_validation_assets.py` が公開用属性を選択・検証・変換します。フロントエンドへRankや距離を手入力しません。
 
 ## Population and 500m geometry
 
@@ -39,11 +43,13 @@ elderly_ratio = elderly_population / population
 
 ## CRS and distances
 
-全layerをJGD2011 / Japan Plane Rectangular CS VI（EPSG:6674）へ変換して距離を計算します。このCRSのarea of useは京都府を含み、舞鶴市は範囲内です。緯度経度degreeのまま距離を測りません。
+全layerを都市設定のJGD2011平面直角座標系（舞鶴EPSG:6674、藤沢EPSG:6677）へ変換して距離を計算します。どちらも対象地域をarea of useに含み、緯度経度degreeのまま距離を測りません。
 
-500m mesh centroidから各pointまでのユークリッド直線距離を計算します。`nearest_public_transport_distance_m` は最寄り駅と最寄りバス停の短い方です。医療PrimaryはP04分類1（病院）と2（一般診療所）の71件で、歯科34件を除外します。
+500m mesh centroidから各pointまでのユークリッド直線距離を計算します。`nearest_public_transport_distance_m` は最寄り駅と最寄りバス停の短い方です。医療PrimaryはP04分類1（病院）と2（診療所）で、舞鶴71件・藤沢436件です。歯科はPrimary距離から除外します。
 
-これは徒歩距離、道路距離、所要時間、公共交通での移動時間ではありません。行政界と交差する全meshについて `maizuru_area_fraction` と `centroid_within_maizuru` もQA用に保持します。
+P04は一般外来の利用可否を直接示しません。名称に`医務室`、`健康管理室`、`事業所診療所`等を含む舞鶴6件・藤沢13件は削除せず `uncertain_access` としてflagし、除外感度を別計算します。Rank 1の隅山医院・山口クリニックは自治体資料との照合を `medical_access_review.yaml` に記録しますが、現在の診療条件を保証するものではありません。
+
+これは徒歩距離、道路距離、所要時間、公共交通での移動時間ではありません。行政界と交差する全meshについて `city_area_fraction` と `centroid_within_city` もQA用に保持します。
 
 ## Percentiles and exploratory scores
 
@@ -58,7 +64,23 @@ C = elderly_population_percentile × transport_distance_percentile
 
 距離percentileが高いほど、市内比較で施設から遠い側です。Score Cは「高齢者数」「交通距離」「医療距離」の3componentを等しい積として重ねた探索用指数で、高齢化率そのものは積へ入れません。高齢化率とそのpercentileは説明用componentとして保持します。
 
+距離mと人口人は都市をまたいでも同じ単位の絶対値です。percentileとScoreは各都市の比較母集団から作り直す相対値です。このためUIと発表は必ず「絶対値 → 都市内相対位置 → 追加調査候補」の順で説明し、Scoreを危険度・確率・政策閾値として解釈しません。
+
 積の形式だけに依存しない確認として、3componentを同時に最大化するPareto frontierも計算します。
+
+### Final score and boundary audit
+
+`run_final_audit.py` は次を決定論的に出力します。全結果と解釈は [score audit](score-audit.md) を参照してください。
+
+- A: 高齢者数×交通×医療、B: 高齢化率×交通×医療、C: 高齢者数×交通、D: 高齢者数×医療のTop 10/Top 5一致とSpearman順位相関
+- comparison/eligible分母、欠損、average-rank tie、Score保存値の再現誤差
+- 3component Pareto frontierとScore上位との一致
+- P04 uncertain除外、病院のみの医療定義感度
+- 市境外2kmまで同一都道府県P11/P04を加える境界感度
+- Rank 1のmesh bounds、centroid、市境距離、人口7列、秘匿flag、最寄り施設
+- 公開What-if候補1の独立再計算
+
+現行baselineの施設検索は市内に限定されます。市境外2km・`uncertain_access`除外感度では、舞鶴Top 10は9/10、藤沢は7/10が一致し、両Rank 1を維持しました。藤沢Rank 1は交通593m→346m、医療734m→506mへ変わります。`uncertain_access`を残すraw感度では近隣の施設内医務室が藤沢順位を大きく動かすため、一般利用可否の確認が不可欠です。bufferは同一都道府県のP11/P04だけで、都道府県境を越える施設と隣接都市のPLATEAU駅を完全には含みません。
 
 ### Ranking condition
 
@@ -168,6 +190,7 @@ Web asset生成前に少なくとも次を検証します。
 - 直線距離は道路接続、坂、横断障害、徒歩可能性を表しません。
 - P11は運行頻度、デマンド交通、高速・長距離バス、施設送迎を含みません。
 - P04は2020年時点で、施設能力、一般利用可否、現在の開設を保証しません。
+- baseline施設検索は市内限定です。2km感度は実施しましたが、隣接都道府県と全駅を含む完全な生活圏分析ではありません。
 - 人口/P04は2020年、P11は2022年、PLATEAUは2025年で時点が一致しません。
 - percentileは今回の舞鶴市内相対値で、他都市・時点や政策閾値と直接比較できません。
 - 駅の路線別重複は名称・位置で7地点へ除きますが、サービス頻度は評価しません。

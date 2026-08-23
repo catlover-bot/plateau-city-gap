@@ -1,4 +1,4 @@
-import type { MeshMetrics } from "../types";
+import type { MeshMetrics, Summary } from "../types";
 import {
   formatDistance,
   formatInteger,
@@ -14,6 +14,8 @@ import {
 interface DetailPanelProps {
   mesh: MeshMetrics | null;
   comparisonMeshCount?: number;
+  cityName?: string;
+  audit?: Summary["audit"];
 }
 
 interface PercentileBarProps {
@@ -56,13 +58,13 @@ function NearestRow({ label, name, distance }: { label: string; name: unknown; d
   );
 }
 
-function relativeDistance(value: unknown): string {
+function relativeDistance(value: unknown, cityName = "市内"): string {
   const percentile = percentileValue(value);
-  if (percentile === null) return "市内相対位置 —";
-  return `市内で遠い側 上位約${Math.max(1, Math.round((1 - percentile) * 100))}%`;
+  if (percentile === null) return `${cityName}の相対位置 —`;
+  return `${cityName}では遠い側 上位約${Math.max(1, Math.round((1 - percentile) * 100))}%`;
 }
 
-export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
+export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit }: DetailPanelProps) {
   if (!mesh) {
     return (
       <div className="panel-empty" role="status">
@@ -88,7 +90,7 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
 
       <div className="detail-hero-metrics">
         <div className="elderly-composition">
-          <small>65歳以上</small>
+          <small>この500mメッシュの65歳以上</small>
           <strong>{formatInteger(mesh.elderly_population)} <span>/ {formatInteger(mesh.population)}</span></strong>
           <em>{formatRatio(mesh.elderly_ratio)}</em>
         </div>
@@ -96,14 +98,14 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
 
       <div className="distance-cards">
         <div className="distance-card transport">
-          <small>公共交通</small>
+          <small>最寄りの収録駅・バス停</small>
           <strong>{formatDistance(mesh.nearest_public_transport_distance_m)}</strong>
-          <span>{relativeDistance(mesh.transport_distance_percentile)}</span>
+          <span>{relativeDistance(mesh.transport_distance_percentile, cityName)}</span>
         </div>
         <div className="distance-card medical">
-          <small>医療機関</small>
+          <small>最寄りの収録医療機関</small>
           <strong>{formatDistance(mesh.nearest_medical_distance_m)}</strong>
-          <span>{relativeDistance(mesh.medical_distance_percentile)}</span>
+          <span>{relativeDistance(mesh.medical_distance_percentile, cityName)}</span>
         </div>
       </div>
 
@@ -113,18 +115,29 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
         <div className="percentiles">
           <small className="percentile-scope">比較母集団: {comparisonMeshScope(comparisonMeshCount)}</small>
           <PercentileBar label="65歳以上人口" value={mesh.elderly_population_percentile} tone="elderly" />
-          <PercentileBar label="交通アクセス不足" value={mesh.transport_distance_percentile} tone="transport" />
-          <PercentileBar label="医療アクセス不足" value={mesh.medical_distance_percentile} tone="medical" />
+          <PercentileBar label="収録交通までの距離" value={mesh.transport_distance_percentile} tone="transport" />
+          <PercentileBar label="収録医療までの距離" value={mesh.medical_distance_percentile} tone="medical" />
         </div>
       </section>
 
       <section className="nearest-section">
-        <h3>最寄りのサービス</h3>
+        <h3>最寄りの収録サービス</h3>
         <NearestRow label="駅" name={mesh.nearest_station_name} distance={mesh.nearest_station_distance_m} />
         <NearestRow label="バス停" name={mesh.nearest_bus_stop_name} distance={mesh.nearest_bus_stop_distance_m} />
         <NearestRow label="医療機関" name={mesh.nearest_medical_name} distance={mesh.nearest_medical_distance_m} />
+        {mesh.nearest_medical_access_class === "uncertain_access" && (
+          <p className="medical-access-warning">施設名から一般利用可否が確認できないため、現地確認が必要です。</p>
+        )}
         <NearestRow label="病院" name={mesh.nearest_hospital_name} distance={mesh.nearest_hospital_distance_m} />
       </section>
+
+      {rank === 1 && audit?.rank_one_two_km_buffer && (
+        <details className="boundary-audit-note">
+          <summary>市境を越える施設の感度確認</summary>
+          <p>上の実測値は市内収録施設だけを検索したbaselineです。市境外2kmまで含め、利用可否が不確かな医療を除くと、収録交通まで{formatDistance(audit.rank_one_two_km_buffer.public_transport_distance_m)}、医療まで{formatDistance(audit.rank_one_two_km_buffer.medical_distance_excluding_uncertain_m)}でした。</p>
+          <small>Primary Top 10との一致 {audit.buffer_top10_overlap ?? "—"}/10。行政界は住民移動の障壁ではないため、確定評価では両方を確認します。</small>
+        </details>
+      )}
 
       <details className="score-note">
         <summary>計算値とメッシュ情報</summary>

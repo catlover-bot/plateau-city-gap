@@ -46,6 +46,7 @@
     "clinics_city": 420,
     "dental_clinics_city": 282,
     "medical_primary_city": 436,
+    "medical_uncertain_access_city": 13,
     "primary_rank_eligible_meshes": 261
   },
   "datasets": {
@@ -144,6 +145,7 @@
     "score": "elderly_population_percentile * transport_distance_percentile * medical_distance_percentile",
     "minimum_population": 20,
     "minimum_elderly_population": 10,
+    "require_centroid_within_city": true,
     "top1": {
       "mesh_code": "533913073",
       "centroid_lat": 35.42291666666668,
@@ -172,6 +174,7 @@
       "nearest_medical_name": "山口クリニック",
       "nearest_medical_distance_m": 734.0378484741622,
       "nearest_hospital_name": "一般財団法人同友会　藤沢湘南台病院",
+      "nearest_medical_access_class": "likely_public",
       "nearest_hospital_distance_m": 810.4396525616417,
       "nearest_clinic_name": "山口クリニック",
       "nearest_clinic_distance_m": 734.0378484741622,
@@ -274,6 +277,7 @@
     "Distances are straight-line Euclidean distances, not walking or route distances.",
     "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
     "P04 represents facilities collected for July 2020, not current availability.",
+    "P04 hospital/clinic records with institutional names are flagged as uncertain access but retained in the primary baseline; see final_audit.json for exclusion sensitivity.",
     "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
     "Percentile scores are city-relative; absolute scores must not be compared between cities.",
     "A high score is an exploratory prompt for field investigation, not proof of a local problem."

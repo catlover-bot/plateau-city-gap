@@ -27,6 +27,8 @@
 - `analysis/outputs/real/maizuru_city_gap_top10.csv`
 - `analysis/outputs/real/maizuru_summary.json`
 - `analysis/outputs/real/maizuru_plateau_building_inspection.json`
+- `analysis/outputs/real/fujisawa_summary.json`
+- `analysis/outputs/real/final_audit.json`
 
 約914MBのCityGML全体はWeb配信せず、道路135面のGeoJSONと集計JSONだけを配信します。公式3D Tiles ZIPと展開物もraw領域に保ち、Gitへcommitしません。
 
@@ -58,6 +60,8 @@ CSVはCP932、69列、9桁の `KEY_CODE` が500m mesh codeで全件一意です�
 PLATEAU `border` は1 MultiLineString（74閉ring）のためpolygon化し、全mesh/pointを実際の行政界との `intersects` で抽出しました。bboxやmesh接頭辞では判定していません。P04の舞鶴市105件は所在地文字列による抽出結果とも一致しました。
 
 PLATEAU駅のraw 9件は路線単位で東舞鶴駅・西舞鶴駅が重複します。距離への重複影響はありませんが、名称＋座標で7地点へdeduplicateして表示・集計します。
+
+P04の分類1/2は一般利用可否を保証しません。`医務室`、`健康管理室`、`事業所診療所`等の名称規則で舞鶴6件・藤沢13件を`uncertain_access`としてflagし、Primary sourceからは削除せず除外感度を別計算します。舞鶴Rank 1の隅山医院は[舞鶴市の在宅医療機関資料](https://www.city.maizuru.kyoto.jp/kenkou/cmsfiles/contents/0000000/775/zaitakuryouyou.pdf)、藤沢Rank 1の山口クリニックは[藤沢市の在宅療養支援診療所資料](https://www.city.fujisawa.kanagawa.jp/iryou/documents/202406-iryoukikan-ichiran.pdf)との名称照合を記録しました。いずれも現在の外来条件は受診時確認が必要です。
 
 ## PLATEAU building inspection
 

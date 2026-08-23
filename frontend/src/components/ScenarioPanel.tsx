@@ -54,13 +54,17 @@ export function ScenarioPanel({
       {!result && (
         <div className="scenario-empty">
           <strong>実在する道路面から探索した Top 3</strong>
-          <p>既存交通から150m超、候補間1.5km以上。Score C合計の純減少量を最大化しました。</p>
+          <p>既存駅・バス停から離れたPLATEAU道路上の候補を比較し、複数地域で収録交通までの距離が短くなる地点を探索しました。</p>
+          <details className="candidate-method">
+            <summary>候補比較の条件</summary>
+            <p>既存交通から150m超、候補間1.5km以上とし、286比較メッシュのScore C合計純減少が大きい順です。</p>
+          </details>
           <div className="candidate-list">
             {candidates.map((candidate) => (
               <button type="button" key={candidate.candidate_id} onClick={() => onTryCandidate(candidate)}>
                 <span>候補 {candidate.candidate_rank}</span>
                 <strong>{candidate.road_name ? `${candidate.road_name}付近` : candidate.area_label}</strong>
-                <small>{candidate.area_label} · {candidate.improved_mesh_count} mesh改善見込み</small>
+                <small>{candidate.area_label} · {candidate.improved_mesh_count} meshで距離短縮</small>
               </button>
             ))}
           </div>
@@ -68,7 +72,7 @@ export function ScenarioPanel({
             {placementMode ? "配置地点を選択中…" : "別の地点を地図で試す"}
           </button>
           <details className="diagnostic-option">
-            <summary>診断用シナリオ</summary>
+            <summary>計算確認用シナリオ</summary>
             <p>Rank 1中心への0m配置は計算確認用で、発表のPrimary案ではありません。</p>
             <button type="button" className="text-button" onClick={onTryRankOne}>Rank 1中心で試す</button>
           </details>
@@ -118,7 +122,7 @@ export function ScenarioPanel({
       )}
 
       <p className="scenario-disclaimer">
-        候補生成には公式道路面を使いますが、効果計算は直線距離です。用地、道路ネットワーク、横断、運行可能性、需要、費用は未評価で、設置判断ではありません。「影響高齢者人口」は利用者予測ではありません。
+        候補生成には公式道路面を使いますが、効果計算は直線距離です。用地、道路ネットワーク、横断、運行可能性、需要、費用は未評価で、設置判断ではありません。表示する65歳以上人口は対象メッシュの記録値合計で、利用者数・受益者数・需要・乗客の予測ではありません。
       </p>
     </article>
   );

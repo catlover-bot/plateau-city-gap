@@ -1880,6 +1880,77 @@ input:focus-visible,
   }
 }
 
+/* Final audit: provenance, boundary sensitivity, and access-quality states. */
+.data-years {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border-bottom: 1px solid #d4d6cf;
+  background: #d4d6cf;
+}
+
+.data-years span {
+  padding: 6px 4px;
+  background: #f2f2ed;
+  color: #646b64;
+  font-size: 7px;
+  letter-spacing: .03em;
+  text-align: center;
+}
+
+.medical-access-warning {
+  margin: 7px 0 0;
+  padding: 8px 10px;
+  border-left: 3px solid #b37a18;
+  background: #f4efe3;
+  color: #5f4a26;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.boundary-audit-note,
+.candidate-method {
+  margin-top: 14px;
+  border-top: 1px solid #d4d6cf;
+  border-bottom: 1px solid #d4d6cf;
+}
+
+.boundary-audit-note summary,
+.candidate-method summary {
+  padding: 9px 0;
+  color: #2c625d;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.boundary-audit-note p,
+.candidate-method p {
+  margin: 0 0 8px;
+  color: #3f4741;
+  font-size: 9px;
+  line-height: 1.75;
+}
+
+.boundary-audit-note small {
+  display: block;
+  padding-bottom: 10px;
+  color: #6b716b;
+  font-size: 8px;
+  line-height: 1.6;
+}
+
+.state-screen h1 {
+  margin: 0 0 4px;
+  color: #202521;
+  font-size: 24px;
+  letter-spacing: .15em;
+}
+
+@media (max-width: 700px) {
+  .data-years span { font-size: 6.5px; }
+}
+
 /* 2026 civic design system: map-first, editorial, restrained. */
 :root {
   font-family: "Yu Gothic UI", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", Meiryo, system-ui, sans-serif;

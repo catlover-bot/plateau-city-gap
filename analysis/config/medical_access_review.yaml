@@ -1,0 +1,11 @@
+schema_version: 1.0.0
+reviewed_at: 2026-08-23
+confirmed_public:
+  maizuru:
+    - name: 隅山医院
+      evidence: https://www.city.maizuru.kyoto.jp/kenkou/cmsfiles/contents/0000000/775/zaitakuryouyou.pdf
+      note: 舞鶴市の在宅医療機関一覧に掲載。外来可否は受診時に要確認。
+  fujisawa:
+    - name: 山口クリニック
+      evidence: https://www.city.fujisawa.kanagawa.jp/iryou/documents/202406-iryoukikan-ichiran.pdf
+      note: 藤沢市の在宅療養支援診療所一覧に掲載。外来可否は受診時に要確認。

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-22T17:14:01Z",
+  "generated_at": "2026-08-22T10:00:00Z",
   "analysis_version": "0.2.0",
   "city": {
     "id": "fujisawa",
@@ -95,22 +95,22 @@
       "file": "mesh_metrics.geojson",
       "status": "available",
       "records": 327,
-      "bytes": 443168,
-      "sha256": "58b952ff7c485989e777bf6df53ff6db7fef2f17ee20a7355b41f42ea50310dd"
+      "bytes": 458687,
+      "sha256": "bfbeb6d86cbb6bf00a3c08ce8ee0fb31d9ea84ae40771d8d17b9a9c6bc80c6b3"
     },
     {
       "file": "top10.json",
       "status": "available",
       "records": 10,
-      "bytes": 15944,
-      "sha256": "1e31d80502a25caabf8df663c74f399bb92aa4360514b704be1b679f4e1e5794"
+      "bytes": 16500,
+      "sha256": "268335cfe3a7c1cb62dcc6e85a7a3fa3ae93853c5d4124ec23453c36178ed952"
     },
     {
       "file": "summary.json",
       "status": "available",
       "records": 1,
-      "bytes": 8245,
-      "sha256": "4d7343357e8ee799e5261380d5d9cff625134dda916a66362c6a7b9f7e162aa9"
+      "bytes": 9253,
+      "sha256": "4a50ca48a24d75484f3ae4dfebfc61772d9225ef4afcd583c0aa755411e24b8b"
     },
     {
       "file": "stations.geojson",
@@ -145,6 +145,7 @@
     "Distances are straight-line Euclidean distances, not walking or route distances.",
     "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
     "P04 represents facilities collected for July 2020, not current availability.",
+    "P04 hospital/clinic records with institutional names are flagged as uncertain access but retained in the primary baseline; see final_audit.json for exclusion sensitivity.",
     "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
     "Percentile scores are city-relative; absolute scores must not be compared between cities.",
     "A high score is an exploratory prompt for field investigation, not proof of a local problem."
