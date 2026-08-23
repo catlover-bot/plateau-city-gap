@@ -19,13 +19,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8,<9", "ruff>=0.6,<1"]
+platform = [
+  "fastapi>=0.115,<1",
+  "psycopg[binary]>=3.2,<4",
+  "uvicorn[standard]>=0.34,<1",
+]
+dev = ["httpx>=0.27,<1", "pytest>=8,<9", "ruff>=0.6,<1"]
 
 [tool.setuptools.packages.find]
-include = ["analysis*"]
+include = ["analysis*", "backend*"]
 
 [tool.pytest.ini_options]
-testpaths = ["analysis/tests"]
+testpaths = ["analysis/tests", "backend/tests"]
 
 [tool.ruff]
 line-length = 100

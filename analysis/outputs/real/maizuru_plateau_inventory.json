@@ -1,0 +1,3376 @@
+{
+  "archive": {
+    "citygml_file_count": 369,
+    "file_name": "26202_maizuru-shi_city_2025_citygml_1_op.zip",
+    "sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "size_bytes": 914222089,
+    "uncompressed_bytes": 12257307956,
+    "zip_file_count": 691,
+    "zip_member_compressed_bytes": 914098611
+  },
+  "dataset": {
+    "ade_schema_version": "3.2",
+    "ade_schema_versions": [
+      "3.2"
+    ],
+    "city_id": "26202",
+    "dataset_year": 2025,
+    "product_specification_version": "5.0",
+    "readme_member": "README_op.md"
+  },
+  "members": [
+    {
+      "compressed_bytes": 9364,
+      "crc32": "62037cb2",
+      "parse_seconds": 0.007,
+      "path": "udx/bldg/53350275_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 171042
+    },
+    {
+      "compressed_bytes": 39806,
+      "crc32": "c5f3eff4",
+      "parse_seconds": 0.035,
+      "path": "udx/bldg/53350285_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 833976
+    },
+    {
+      "compressed_bytes": 15110,
+      "crc32": "e4b83e54",
+      "parse_seconds": 0.013,
+      "path": "udx/bldg/53350286_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 307084
+    },
+    {
+      "compressed_bytes": 24484,
+      "crc32": "59e166c1",
+      "parse_seconds": 0.022,
+      "path": "udx/bldg/53350296_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 512932
+    },
+    {
+      "compressed_bytes": 219420,
+      "crc32": "06090270",
+      "parse_seconds": 0.204,
+      "path": "udx/bldg/53351206_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4870259
+    },
+    {
+      "compressed_bytes": 315697,
+      "crc32": "040c0b21",
+      "parse_seconds": 0.298,
+      "path": "udx/bldg/53351215_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 7282539
+    },
+    {
+      "compressed_bytes": 947780,
+      "crc32": "3ef9a078",
+      "parse_seconds": 0.941,
+      "path": "udx/bldg/53351216_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 21929451
+    },
+    {
+      "compressed_bytes": 230115,
+      "crc32": "e79f80ef",
+      "parse_seconds": 0.204,
+      "path": "udx/bldg/53351225_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5002080
+    },
+    {
+      "compressed_bytes": 2203660,
+      "crc32": "7b35b8fe",
+      "parse_seconds": 1.575,
+      "path": "udx/bldg/53351226_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 36505246
+    },
+    {
+      "compressed_bytes": 39542,
+      "crc32": "5a121aca",
+      "parse_seconds": 0.038,
+      "path": "udx/bldg/53351227_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 830364
+    },
+    {
+      "compressed_bytes": 41352,
+      "crc32": "b79b93c5",
+      "parse_seconds": 0.04,
+      "path": "udx/bldg/53351232_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 902838
+    },
+    {
+      "compressed_bytes": 165140,
+      "crc32": "ae247894",
+      "parse_seconds": 0.154,
+      "path": "udx/bldg/53351233_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3567983
+    },
+    {
+      "compressed_bytes": 229914,
+      "crc32": "9d222414",
+      "parse_seconds": 0.214,
+      "path": "udx/bldg/53351234_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5184710
+    },
+    {
+      "compressed_bytes": 290563,
+      "crc32": "de3ab17b",
+      "parse_seconds": 0.274,
+      "path": "udx/bldg/53351235_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 6447875
+    },
+    {
+      "compressed_bytes": 3055814,
+      "crc32": "c0d36f0a",
+      "parse_seconds": 2.815,
+      "path": "udx/bldg/53351236_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 47272913
+    },
+    {
+      "compressed_bytes": 851351,
+      "crc32": "8a85794b",
+      "parse_seconds": 0.872,
+      "path": "udx/bldg/53351237_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 18711790
+    },
+    {
+      "compressed_bytes": 189562,
+      "crc32": "ead159a0",
+      "parse_seconds": 0.182,
+      "path": "udx/bldg/53351238_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4226531
+    },
+    {
+      "compressed_bytes": 1866,
+      "crc32": "29359687",
+      "parse_seconds": 0.001,
+      "path": "udx/bldg/53351242_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 10441
+    },
+    {
+      "compressed_bytes": 162282,
+      "crc32": "54159ad1",
+      "parse_seconds": 0.164,
+      "path": "udx/bldg/53351244_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3560969
+    },
+    {
+      "compressed_bytes": 181319,
+      "crc32": "8230e8b0",
+      "parse_seconds": 0.166,
+      "path": "udx/bldg/53351245_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4049227
+    },
+    {
+      "compressed_bytes": 683454,
+      "crc32": "b36253c9",
+      "parse_seconds": 0.646,
+      "path": "udx/bldg/53351246_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 15320743
+    },
+    {
+      "compressed_bytes": 249618,
+      "crc32": "20d17300",
+      "parse_seconds": 0.228,
+      "path": "udx/bldg/53351247_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5451603
+    },
+    {
+      "compressed_bytes": 470702,
+      "crc32": "2f7ab331",
+      "parse_seconds": 0.442,
+      "path": "udx/bldg/53351248_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 10513122
+    },
+    {
+      "compressed_bytes": 11773,
+      "crc32": "2b3a418f",
+      "parse_seconds": 0.01,
+      "path": "udx/bldg/53351249_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 223518
+    },
+    {
+      "compressed_bytes": 59436,
+      "crc32": "e9794977",
+      "parse_seconds": 0.052,
+      "path": "udx/bldg/53351254_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1316623
+    },
+    {
+      "compressed_bytes": 33101,
+      "crc32": "cd2fed81",
+      "parse_seconds": 0.026,
+      "path": "udx/bldg/53351255_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 701654
+    },
+    {
+      "compressed_bytes": 112439,
+      "crc32": "f3e3bfb3",
+      "parse_seconds": 0.092,
+      "path": "udx/bldg/53351256_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 2387212
+    },
+    {
+      "compressed_bytes": 77573,
+      "crc32": "f4241240",
+      "parse_seconds": 0.076,
+      "path": "udx/bldg/53351258_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1750954
+    },
+    {
+      "compressed_bytes": 47876,
+      "crc32": "115e9126",
+      "parse_seconds": 0.052,
+      "path": "udx/bldg/53351259_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1053985
+    },
+    {
+      "compressed_bytes": 12700,
+      "crc32": "182bddc4",
+      "parse_seconds": 0.01,
+      "path": "udx/bldg/53351266_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 248644
+    },
+    {
+      "compressed_bytes": 37412,
+      "crc32": "e127c0e2",
+      "parse_seconds": 0.037,
+      "path": "udx/bldg/53351267_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 832791
+    },
+    {
+      "compressed_bytes": 56186,
+      "crc32": "1ad26d8b",
+      "parse_seconds": 0.057,
+      "path": "udx/bldg/53351268_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1277930
+    },
+    {
+      "compressed_bytes": 451034,
+      "crc32": "297cff97",
+      "parse_seconds": 0.449,
+      "path": "udx/bldg/53351269_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 10112338
+    },
+    {
+      "compressed_bytes": 120033,
+      "crc32": "a91828bc",
+      "parse_seconds": 0.109,
+      "path": "udx/bldg/53351277_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 2614406
+    },
+    {
+      "compressed_bytes": 512850,
+      "crc32": "eff01827",
+      "parse_seconds": 0.449,
+      "path": "udx/bldg/53351278_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 11299465
+    },
+    {
+      "compressed_bytes": 314356,
+      "crc32": "38f56145",
+      "parse_seconds": 0.298,
+      "path": "udx/bldg/53351279_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 6901136
+    },
+    {
+      "compressed_bytes": 55690,
+      "crc32": "cd4b77c2",
+      "parse_seconds": 0.05,
+      "path": "udx/bldg/53351288_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1229096
+    },
+    {
+      "compressed_bytes": 72021,
+      "crc32": "a0f3ebac",
+      "parse_seconds": 0.063,
+      "path": "udx/bldg/53351289_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1579396
+    },
+    {
+      "compressed_bytes": 2659,
+      "crc32": "f701b6b0",
+      "parse_seconds": 0.001,
+      "path": "udx/bldg/53351298_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 26668
+    },
+    {
+      "compressed_bytes": 135474,
+      "crc32": "f2572c68",
+      "parse_seconds": 0.115,
+      "path": "udx/bldg/53351331_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 2844730
+    },
+    {
+      "compressed_bytes": 152301,
+      "crc32": "6c15a8da",
+      "parse_seconds": 0.134,
+      "path": "udx/bldg/53351332_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3344991
+    },
+    {
+      "compressed_bytes": 58570,
+      "crc32": "67389504",
+      "parse_seconds": 0.051,
+      "path": "udx/bldg/53351340_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1315590
+    },
+    {
+      "compressed_bytes": 842048,
+      "crc32": "0760ce7c",
+      "parse_seconds": 0.771,
+      "path": "udx/bldg/53351341_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 18697634
+    },
+    {
+      "compressed_bytes": 206946,
+      "crc32": "b25cc340",
+      "parse_seconds": 0.203,
+      "path": "udx/bldg/53351342_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4531596
+    },
+    {
+      "compressed_bytes": 213333,
+      "crc32": "5ab707fc",
+      "parse_seconds": 0.197,
+      "path": "udx/bldg/53351350_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4760319
+    },
+    {
+      "compressed_bytes": 1738851,
+      "crc32": "34d33aa4",
+      "parse_seconds": 2.077,
+      "path": "udx/bldg/53351351_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 33922131
+    },
+    {
+      "compressed_bytes": 847531,
+      "crc32": "ba79d53b",
+      "parse_seconds": 0.756,
+      "path": "udx/bldg/53351352_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 17842923
+    },
+    {
+      "compressed_bytes": 120675,
+      "crc32": "fd466c17",
+      "parse_seconds": 0.099,
+      "path": "udx/bldg/53351353_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 2608284
+    },
+    {
+      "compressed_bytes": 17015,
+      "crc32": "199beca8",
+      "parse_seconds": 0.013,
+      "path": "udx/bldg/53351354_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 347664
+    },
+    {
+      "compressed_bytes": 275367,
+      "crc32": "1af4d5bb",
+      "parse_seconds": 0.262,
+      "path": "udx/bldg/53351360_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 6112551
+    },
+    {
+      "compressed_bytes": 2406067,
+      "crc32": "abc777ee",
+      "parse_seconds": 1.991,
+      "path": "udx/bldg/53351361_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 37726947
+    },
+    {
+      "compressed_bytes": 738589,
+      "crc32": "a763202d",
+      "parse_seconds": 0.725,
+      "path": "udx/bldg/53351362_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 16067486
+    },
+    {
+      "compressed_bytes": 34813,
+      "crc32": "63a4decd",
+      "parse_seconds": 0.036,
+      "path": "udx/bldg/53351363_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 776391
+    },
+    {
+      "compressed_bytes": 6804,
+      "crc32": "fc9be43b",
+      "parse_seconds": 0.006,
+      "path": "udx/bldg/53351364_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 127754
+    },
+    {
+      "compressed_bytes": 21099,
+      "crc32": "a18e6b89",
+      "parse_seconds": 0.02,
+      "path": "udx/bldg/53351370_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 437687
+    },
+    {
+      "compressed_bytes": 275115,
+      "crc32": "95d9274f",
+      "parse_seconds": 0.266,
+      "path": "udx/bldg/53351371_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5840764
+    },
+    {
+      "compressed_bytes": 688903,
+      "crc32": "64a9cf86",
+      "parse_seconds": 0.967,
+      "path": "udx/bldg/53351372_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 15283988
+    },
+    {
+      "compressed_bytes": 411363,
+      "crc32": "9c48a47d",
+      "parse_seconds": 0.41,
+      "path": "udx/bldg/53351373_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 8982873
+    },
+    {
+      "compressed_bytes": 397466,
+      "crc32": "5e40e21d",
+      "parse_seconds": 0.354,
+      "path": "udx/bldg/53351374_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 8608974
+    },
+    {
+      "compressed_bytes": 171028,
+      "crc32": "6d3c9814",
+      "parse_seconds": 0.155,
+      "path": "udx/bldg/53351375_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3743222
+    },
+    {
+      "compressed_bytes": 29864,
+      "crc32": "901090b3",
+      "parse_seconds": 0.031,
+      "path": "udx/bldg/53351380_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 657803
+    },
+    {
+      "compressed_bytes": 12126,
+      "crc32": "aa1fabbd",
+      "parse_seconds": 0.009,
+      "path": "udx/bldg/53351381_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 230103
+    },
+    {
+      "compressed_bytes": 202645,
+      "crc32": "13b3b62a",
+      "parse_seconds": 0.183,
+      "path": "udx/bldg/53351382_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4491156
+    },
+    {
+      "compressed_bytes": 208631,
+      "crc32": "ac636bf1",
+      "parse_seconds": 0.185,
+      "path": "udx/bldg/53351383_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 4396617
+    },
+    {
+      "compressed_bytes": 260996,
+      "crc32": "29ebacbd",
+      "parse_seconds": 0.266,
+      "path": "udx/bldg/53351384_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5583408
+    },
+    {
+      "compressed_bytes": 56148,
+      "crc32": "79503611",
+      "parse_seconds": 0.052,
+      "path": "udx/bldg/53351385_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1190217
+    },
+    {
+      "compressed_bytes": 15811,
+      "crc32": "c1e21854",
+      "parse_seconds": 0.014,
+      "path": "udx/bldg/53351391_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 322350
+    },
+    {
+      "compressed_bytes": 89341,
+      "crc32": "cf8c04dc",
+      "parse_seconds": 0.082,
+      "path": "udx/bldg/53351392_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1909449
+    },
+    {
+      "compressed_bytes": 12201,
+      "crc32": "d77ec52d",
+      "parse_seconds": 0.009,
+      "path": "udx/bldg/53351393_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 214883
+    },
+    {
+      "compressed_bytes": 270855,
+      "crc32": "ea69187f",
+      "parse_seconds": 0.256,
+      "path": "udx/bldg/53351394_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 6018914
+    },
+    {
+      "compressed_bytes": 48060,
+      "crc32": "4e05b4be",
+      "parse_seconds": 0.048,
+      "path": "udx/bldg/53351395_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1000183
+    },
+    {
+      "compressed_bytes": 54622,
+      "crc32": "0f546db4",
+      "parse_seconds": 0.059,
+      "path": "udx/bldg/53352301_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1118771
+    },
+    {
+      "compressed_bytes": 170092,
+      "crc32": "f3c71f0b",
+      "parse_seconds": 0.167,
+      "path": "udx/bldg/53352302_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3671796
+    },
+    {
+      "compressed_bytes": 232797,
+      "crc32": "fcf64b10",
+      "parse_seconds": 0.212,
+      "path": "udx/bldg/53352303_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 5034135
+    },
+    {
+      "compressed_bytes": 180472,
+      "crc32": "3ca567b6",
+      "parse_seconds": 0.163,
+      "path": "udx/bldg/53352304_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 3935139
+    },
+    {
+      "compressed_bytes": 33589,
+      "crc32": "4c90bb00",
+      "parse_seconds": 0.029,
+      "path": "udx/bldg/53352305_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 740184
+    },
+    {
+      "compressed_bytes": 53306,
+      "crc32": "8170d46f",
+      "parse_seconds": 0.044,
+      "path": "udx/bldg/53352311_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 1146090
+    },
+    {
+      "compressed_bytes": 15788,
+      "crc32": "50ed2866",
+      "parse_seconds": 0.012,
+      "path": "udx/bldg/53352312_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 313785
+    },
+    {
+      "compressed_bytes": 1853,
+      "crc32": "d2b2d14e",
+      "parse_seconds": 0.001,
+      "path": "udx/bldg/53352313_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 10273
+    },
+    {
+      "compressed_bytes": 9161,
+      "crc32": "5113bcc3",
+      "parse_seconds": 0.006,
+      "path": "udx/bldg/53352321_bldg_6697_op.gml",
+      "theme": "bldg",
+      "uncompressed_bytes": 165801
+    },
+    {
+      "compressed_bytes": 16568691,
+      "crc32": "5b7ae13c",
+      "parse_seconds": 12.935,
+      "path": "udx/dem/533501_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 231266895
+    },
+    {
+      "compressed_bytes": 67668517,
+      "crc32": "2278a434",
+      "parse_seconds": 50.199,
+      "path": "udx/dem/533502_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 951318549
+    },
+    {
+      "compressed_bytes": 24040540,
+      "crc32": "41414e6a",
+      "parse_seconds": 15.731,
+      "path": "udx/dem/533503_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 335114258
+    },
+    {
+      "compressed_bytes": 12450886,
+      "crc32": "d90da531",
+      "parse_seconds": 7.489,
+      "path": "udx/dem/533511_dem_6697_00_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 170394072
+    },
+    {
+      "compressed_bytes": 51022000,
+      "crc32": "e76735b3",
+      "parse_seconds": 33.096,
+      "path": "udx/dem/533511_dem_6697_05_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 709226440
+    },
+    {
+      "compressed_bytes": 1396196,
+      "crc32": "a86a21f1",
+      "parse_seconds": 0.751,
+      "path": "udx/dem/533511_dem_6697_50_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 18379819
+    },
+    {
+      "compressed_bytes": 46932269,
+      "crc32": "3935dcd7",
+      "parse_seconds": 31.372,
+      "path": "udx/dem/533511_dem_6697_55_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 636911982
+    },
+    {
+      "compressed_bytes": 54408802,
+      "crc32": "eeca0427",
+      "parse_seconds": 37.001,
+      "path": "udx/dem/533512_dem_6697_00_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 762259248
+    },
+    {
+      "compressed_bytes": 53138949,
+      "crc32": "ce7fa1bc",
+      "parse_seconds": 36.207,
+      "path": "udx/dem/533512_dem_6697_05_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 748842853
+    },
+    {
+      "compressed_bytes": 52616915,
+      "crc32": "f49ff691",
+      "parse_seconds": 33.275,
+      "path": "udx/dem/533512_dem_6697_50_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 730105425
+    },
+    {
+      "compressed_bytes": 35353171,
+      "crc32": "e34e7233",
+      "parse_seconds": 22.518,
+      "path": "udx/dem/533512_dem_6697_55_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 488393851
+    },
+    {
+      "compressed_bytes": 49510200,
+      "crc32": "dd7b9cbd",
+      "parse_seconds": 32.583,
+      "path": "udx/dem/533513_dem_6697_00_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 694282369
+    },
+    {
+      "compressed_bytes": 15486364,
+      "crc32": "d32db8b7",
+      "parse_seconds": 11.218,
+      "path": "udx/dem/533513_dem_6697_05_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 216034933
+    },
+    {
+      "compressed_bytes": 45936775,
+      "crc32": "69a31f47",
+      "parse_seconds": 29.056,
+      "path": "udx/dem/533513_dem_6697_50_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 644243847
+    },
+    {
+      "compressed_bytes": 28703917,
+      "crc32": "463a8379",
+      "parse_seconds": 18.01,
+      "path": "udx/dem/533513_dem_6697_55_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 401770971
+    },
+    {
+      "compressed_bytes": 5057554,
+      "crc32": "2a2a6299",
+      "parse_seconds": 2.965,
+      "path": "udx/dem/533521_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 68327151
+    },
+    {
+      "compressed_bytes": 53320214,
+      "crc32": "bb84783b",
+      "parse_seconds": 36.171,
+      "path": "udx/dem/533522_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 731330100
+    },
+    {
+      "compressed_bytes": 51636989,
+      "crc32": "a639fdc8",
+      "parse_seconds": 31.227,
+      "path": "udx/dem/533523_dem_6697_00_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 720624165
+    },
+    {
+      "compressed_bytes": 21917117,
+      "crc32": "d264a707",
+      "parse_seconds": 14.352,
+      "path": "udx/dem/533523_dem_6697_05_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 306645304
+    },
+    {
+      "compressed_bytes": 34109384,
+      "crc32": "fa97cb4a",
+      "parse_seconds": 24.889,
+      "path": "udx/dem/533523_dem_6697_50_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 468648289
+    },
+    {
+      "compressed_bytes": 22476528,
+      "crc32": "2be37d8f",
+      "parse_seconds": 15.408,
+      "path": "udx/dem/533523_dem_6697_55_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 313925404
+    },
+    {
+      "compressed_bytes": 7325050,
+      "crc32": "9c30591d",
+      "parse_seconds": 4.747,
+      "path": "udx/dem/533533_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 101644760
+    },
+    {
+      "compressed_bytes": 1082095,
+      "crc32": "b5e14137",
+      "parse_seconds": 0.575,
+      "path": "udx/dem/533543_dem_6697_op.gml",
+      "theme": "dem",
+      "uncompressed_bytes": 14985562
+    },
+    {
+      "compressed_bytes": 84990,
+      "crc32": "1963844c",
+      "parse_seconds": 0.036,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53350196_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1143199
+    },
+    {
+      "compressed_bytes": 3041,
+      "crc32": "1f58babd",
+      "parse_seconds": 0.001,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53350197_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 37978
+    },
+    {
+      "compressed_bytes": 668959,
+      "crc32": "3aa5a899",
+      "parse_seconds": 0.355,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351106_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 10672306
+    },
+    {
+      "compressed_bytes": 788415,
+      "crc32": "b7d00e43",
+      "parse_seconds": 0.37,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351107_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11607641
+    },
+    {
+      "compressed_bytes": 117735,
+      "crc32": "38d69896",
+      "parse_seconds": 0.055,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351108_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1768274
+    },
+    {
+      "compressed_bytes": 436169,
+      "crc32": "db0717f9",
+      "parse_seconds": 0.212,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351109_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 6737268
+    },
+    {
+      "compressed_bytes": 186055,
+      "crc32": "dcacce06",
+      "parse_seconds": 0.089,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351116_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2720621
+    },
+    {
+      "compressed_bytes": 745452,
+      "crc32": "7c1dd24d",
+      "parse_seconds": 0.37,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351117_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11043283
+    },
+    {
+      "compressed_bytes": 1012360,
+      "crc32": "bb1fc5b3",
+      "parse_seconds": 0.497,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351118_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 15698976
+    },
+    {
+      "compressed_bytes": 844842,
+      "crc32": "034e969e",
+      "parse_seconds": 0.423,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351119_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 12610089
+    },
+    {
+      "compressed_bytes": 572121,
+      "crc32": "f19797c5",
+      "parse_seconds": 0.282,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351126_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 8735773
+    },
+    {
+      "compressed_bytes": 827135,
+      "crc32": "9c510c69",
+      "parse_seconds": 0.406,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351127_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 12564264
+    },
+    {
+      "compressed_bytes": 371526,
+      "crc32": "248725e0",
+      "parse_seconds": 0.184,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351128_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5631211
+    },
+    {
+      "compressed_bytes": 149062,
+      "crc32": "a2ebe976",
+      "parse_seconds": 0.08,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351129_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2144768
+    },
+    {
+      "compressed_bytes": 7237,
+      "crc32": "9c2cca26",
+      "parse_seconds": 0.008,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351136_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 106675
+    },
+    {
+      "compressed_bytes": 76546,
+      "crc32": "83abe7a5",
+      "parse_seconds": 0.052,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351137_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1155818
+    },
+    {
+      "compressed_bytes": 215278,
+      "crc32": "281d33a7",
+      "parse_seconds": 0.115,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351200_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2977163
+    },
+    {
+      "compressed_bytes": 1398924,
+      "crc32": "28e25226",
+      "parse_seconds": 0.95,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351210_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 22366541
+    },
+    {
+      "compressed_bytes": 209508,
+      "crc32": "284165c2",
+      "parse_seconds": 0.161,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351211_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3210208
+    },
+    {
+      "compressed_bytes": 1250266,
+      "crc32": "2d0a8ce7",
+      "parse_seconds": 0.928,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351220_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 20259728
+    },
+    {
+      "compressed_bytes": 290741,
+      "crc32": "21208cff",
+      "parse_seconds": 0.2,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351221_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4255335
+    },
+    {
+      "compressed_bytes": 499849,
+      "crc32": "70f77fcd",
+      "parse_seconds": 0.367,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351230_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 7697242
+    },
+    {
+      "compressed_bytes": 566125,
+      "crc32": "f82f0b3c",
+      "parse_seconds": 0.398,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351231_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 9130945
+    },
+    {
+      "compressed_bytes": 739413,
+      "crc32": "a3d4c458",
+      "parse_seconds": 0.492,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351240_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11356684
+    },
+    {
+      "compressed_bytes": 1277468,
+      "crc32": "624ccacb",
+      "parse_seconds": 0.863,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351241_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 19157203
+    },
+    {
+      "compressed_bytes": 1034728,
+      "crc32": "e45049be",
+      "parse_seconds": 0.792,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351242_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 16122865
+    },
+    {
+      "compressed_bytes": 10231,
+      "crc32": "e275fcc6",
+      "parse_seconds": 0.007,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351243_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 157628
+    },
+    {
+      "compressed_bytes": 58282,
+      "crc32": "f79be9e8",
+      "parse_seconds": 0.037,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351250_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 860284
+    },
+    {
+      "compressed_bytes": 434306,
+      "crc32": "a2423771",
+      "parse_seconds": 0.266,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351251_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 6281106
+    },
+    {
+      "compressed_bytes": 1472444,
+      "crc32": "b98a240f",
+      "parse_seconds": 1.032,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351252_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 22838648
+    },
+    {
+      "compressed_bytes": 250234,
+      "crc32": "c5719e10",
+      "parse_seconds": 0.159,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351253_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3602620
+    },
+    {
+      "compressed_bytes": 42654,
+      "crc32": "9cc0a409",
+      "parse_seconds": 0.028,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351261_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 621046
+    },
+    {
+      "compressed_bytes": 1437064,
+      "crc32": "8f3407a8",
+      "parse_seconds": 0.995,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351262_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 22163344
+    },
+    {
+      "compressed_bytes": 128631,
+      "crc32": "dc7cbd5b",
+      "parse_seconds": 0.083,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351263_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1946964
+    },
+    {
+      "compressed_bytes": 908480,
+      "crc32": "1087b62b",
+      "parse_seconds": 0.533,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351272_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 13052843
+    },
+    {
+      "compressed_bytes": 777334,
+      "crc32": "6d4b964b",
+      "parse_seconds": 0.633,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351282_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11022318
+    },
+    {
+      "compressed_bytes": 112302,
+      "crc32": "1e8654ef",
+      "parse_seconds": 0.156,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351283_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1607277
+    },
+    {
+      "compressed_bytes": 2801,
+      "crc32": "c807375a",
+      "parse_seconds": 0.003,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351292_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 31916
+    },
+    {
+      "compressed_bytes": 643422,
+      "crc32": "48ac583c",
+      "parse_seconds": 0.67,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53351293_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 9708929
+    },
+    {
+      "compressed_bytes": 749537,
+      "crc32": "c9d5563e",
+      "parse_seconds": 0.526,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53352203_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11653934
+    },
+    {
+      "compressed_bytes": 126752,
+      "crc32": "4fac03d5",
+      "parse_seconds": 0.072,
+      "path": "udx/fld/natl/yuragawa_yuragawa/53352213_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1775821
+    },
+    {
+      "compressed_bytes": 2614,
+      "crc32": "35da86b2",
+      "parse_seconds": 0.001,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53351391_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 26612
+    },
+    {
+      "compressed_bytes": 760405,
+      "crc32": "ba34a926",
+      "parse_seconds": 0.431,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53351392_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 10545946
+    },
+    {
+      "compressed_bytes": 97913,
+      "crc32": "1cd9e20f",
+      "parse_seconds": 0.053,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53351393_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1274874
+    },
+    {
+      "compressed_bytes": 434206,
+      "crc32": "5d698149",
+      "parse_seconds": 0.284,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53351394_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5753167
+    },
+    {
+      "compressed_bytes": 58222,
+      "crc32": "49c3c8aa",
+      "parse_seconds": 0.04,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352301_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 876192
+    },
+    {
+      "compressed_bytes": 418886,
+      "crc32": "58fa50e4",
+      "parse_seconds": 0.274,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352302_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5751612
+    },
+    {
+      "compressed_bytes": 718930,
+      "crc32": "21328d91",
+      "parse_seconds": 0.475,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352303_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 9722637
+    },
+    {
+      "compressed_bytes": 544244,
+      "crc32": "9664dd57",
+      "parse_seconds": 0.324,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352304_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 7363618
+    },
+    {
+      "compressed_bytes": 182925,
+      "crc32": "efd2157e",
+      "parse_seconds": 0.115,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352305_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2650482
+    },
+    {
+      "compressed_bytes": 14171,
+      "crc32": "ce80d1c6",
+      "parse_seconds": 0.008,
+      "path": "udx/fld/pref/asekugawa_asekugawa/53352306_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 190265
+    },
+    {
+      "compressed_bytes": 290878,
+      "crc32": "9b72a587",
+      "parse_seconds": 0.178,
+      "path": "udx/fld/pref/asekugawa_yoshinogawa/53351394_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4186988
+    },
+    {
+      "compressed_bytes": 11635,
+      "crc32": "6e6b5579",
+      "parse_seconds": 0.006,
+      "path": "udx/fld/pref/asekugawa_yoshinogawa/53351395_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 163576
+    },
+    {
+      "compressed_bytes": 298172,
+      "crc32": "753e1223",
+      "parse_seconds": 0.179,
+      "path": "udx/fld/pref/fukuigawa_fukuigawa/53351233_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4413521
+    },
+    {
+      "compressed_bytes": 660648,
+      "crc32": "4246c0b8",
+      "parse_seconds": 0.435,
+      "path": "udx/fld/pref/fukuigawa_fukuigawa/53351234_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 9891484
+    },
+    {
+      "compressed_bytes": 7780,
+      "crc32": "27aeffc0",
+      "parse_seconds": 0.005,
+      "path": "udx/fld/pref/fukuigawa_fukuigawa/53351235_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 108739
+    },
+    {
+      "compressed_bytes": 412810,
+      "crc32": "8bfbcc59",
+      "parse_seconds": 0.298,
+      "path": "udx/fld/pref/fukuigawa_fukuigawa/53351244_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 6488803
+    },
+    {
+      "compressed_bytes": 87638,
+      "crc32": "622d9b9d",
+      "parse_seconds": 0.062,
+      "path": "udx/fld/pref/fukuigawa_fukuigawa/53351245_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1383201
+    },
+    {
+      "compressed_bytes": 13093,
+      "crc32": "6512aa47",
+      "parse_seconds": 0.008,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350236_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 190272
+    },
+    {
+      "compressed_bytes": 308687,
+      "crc32": "6e5dcba6",
+      "parse_seconds": 0.21,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350245_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4119090
+    },
+    {
+      "compressed_bytes": 535823,
+      "crc32": "732af671",
+      "parse_seconds": 0.291,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350246_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 6678856
+    },
+    {
+      "compressed_bytes": 486393,
+      "crc32": "e67983c2",
+      "parse_seconds": 0.267,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350247_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 6459362
+    },
+    {
+      "compressed_bytes": 38830,
+      "crc32": "f1b03628",
+      "parse_seconds": 0.022,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350254_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 531996
+    },
+    {
+      "compressed_bytes": 405288,
+      "crc32": "b67ee8da",
+      "parse_seconds": 0.21,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350255_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5204693
+    },
+    {
+      "compressed_bytes": 165728,
+      "crc32": "6d4efca8",
+      "parse_seconds": 0.089,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350257_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2045126
+    },
+    {
+      "compressed_bytes": 334414,
+      "crc32": "1bdc3f58",
+      "parse_seconds": 0.188,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350258_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4131435
+    },
+    {
+      "compressed_bytes": 99136,
+      "crc32": "8bbaeeca",
+      "parse_seconds": 0.066,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350265_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1378692
+    },
+    {
+      "compressed_bytes": 98508,
+      "crc32": "66366c53",
+      "parse_seconds": 0.063,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350268_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1295657
+    },
+    {
+      "compressed_bytes": 195526,
+      "crc32": "956baded",
+      "parse_seconds": 0.127,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350275_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2803391
+    },
+    {
+      "compressed_bytes": 354596,
+      "crc32": "f9877266",
+      "parse_seconds": 0.243,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350285_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5364684
+    },
+    {
+      "compressed_bytes": 90726,
+      "crc32": "dceeade4",
+      "parse_seconds": 0.062,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350286_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1393779
+    },
+    {
+      "compressed_bytes": 16749,
+      "crc32": "72afc919",
+      "parse_seconds": 0.011,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350287_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 248900
+    },
+    {
+      "compressed_bytes": 121700,
+      "crc32": "bb748cef",
+      "parse_seconds": 0.075,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350288_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1762770
+    },
+    {
+      "compressed_bytes": 353083,
+      "crc32": "cef8eaa9",
+      "parse_seconds": 0.231,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350296_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5430202
+    },
+    {
+      "compressed_bytes": 942200,
+      "crc32": "d6215e22",
+      "parse_seconds": 0.691,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350297_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 14897900
+    },
+    {
+      "compressed_bytes": 385818,
+      "crc32": "a10a2d88",
+      "parse_seconds": 0.251,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350298_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5982977
+    },
+    {
+      "compressed_bytes": 121557,
+      "crc32": "e1549fd8",
+      "parse_seconds": 0.077,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53350299_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1836949
+    },
+    {
+      "compressed_bytes": 1044828,
+      "crc32": "32d0e762",
+      "parse_seconds": 0.726,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351206_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 16260141
+    },
+    {
+      "compressed_bytes": 649196,
+      "crc32": "9016d38c",
+      "parse_seconds": 0.468,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351207_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 10744070
+    },
+    {
+      "compressed_bytes": 4322,
+      "crc32": "da255f41",
+      "parse_seconds": 0.002,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351208_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 54033
+    },
+    {
+      "compressed_bytes": 121188,
+      "crc32": "77588330",
+      "parse_seconds": 0.112,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351215_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2013449
+    },
+    {
+      "compressed_bytes": 1862215,
+      "crc32": "315bdc6f",
+      "parse_seconds": 1.321,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351216_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 30586356
+    },
+    {
+      "compressed_bytes": 10850,
+      "crc32": "c1ab3c01",
+      "parse_seconds": 0.007,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351217_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 160554
+    },
+    {
+      "compressed_bytes": 42760,
+      "crc32": "b756af4f",
+      "parse_seconds": 0.028,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351225_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 658708
+    },
+    {
+      "compressed_bytes": 1906991,
+      "crc32": "82fd3786",
+      "parse_seconds": 1.452,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351226_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 30848971
+    },
+    {
+      "compressed_bytes": 100704,
+      "crc32": "29945a4f",
+      "parse_seconds": 0.084,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351227_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1597573
+    },
+    {
+      "compressed_bytes": 191695,
+      "crc32": "c7c8eae8",
+      "parse_seconds": 0.149,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351235_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3046619
+    },
+    {
+      "compressed_bytes": 2291737,
+      "crc32": "bad8dd07",
+      "parse_seconds": 1.651,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351236_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 37157295
+    },
+    {
+      "compressed_bytes": 1339772,
+      "crc32": "70a0e653",
+      "parse_seconds": 0.953,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351237_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 20802197
+    },
+    {
+      "compressed_bytes": 137450,
+      "crc32": "006fdaad",
+      "parse_seconds": 0.087,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351238_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2055710
+    },
+    {
+      "compressed_bytes": 439358,
+      "crc32": "37447f8a",
+      "parse_seconds": 0.318,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351245_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 7196774
+    },
+    {
+      "compressed_bytes": 1119670,
+      "crc32": "ef87815a",
+      "parse_seconds": 0.823,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351246_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 18029105
+    },
+    {
+      "compressed_bytes": 256582,
+      "crc32": "bce68ba8",
+      "parse_seconds": 0.172,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351247_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3930724
+    },
+    {
+      "compressed_bytes": 35556,
+      "crc32": "2eea1eab",
+      "parse_seconds": 0.023,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351248_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 527302
+    },
+    {
+      "compressed_bytes": 33148,
+      "crc32": "83b85753",
+      "parse_seconds": 0.024,
+      "path": "udx/fld/pref/isadugawa_isadugawa-yonedagawa-tenseigawa-etc/53351256_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 548140
+    },
+    {
+      "compressed_bytes": 41219,
+      "crc32": "d54a6313",
+      "parse_seconds": 0.03,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351362_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 630375
+    },
+    {
+      "compressed_bytes": 10015,
+      "crc32": "b59569dd",
+      "parse_seconds": 0.006,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351371_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 151083
+    },
+    {
+      "compressed_bytes": 1421976,
+      "crc32": "edbfd837",
+      "parse_seconds": 0.965,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351372_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 21818922
+    },
+    {
+      "compressed_bytes": 913368,
+      "crc32": "f68be7df",
+      "parse_seconds": 0.578,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351373_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 13725484
+    },
+    {
+      "compressed_bytes": 932910,
+      "crc32": "aa245d5d",
+      "parse_seconds": 0.658,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351374_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 13555845
+    },
+    {
+      "compressed_bytes": 757867,
+      "crc32": "ad2749d7",
+      "parse_seconds": 0.624,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351375_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11031935
+    },
+    {
+      "compressed_bytes": 8188,
+      "crc32": "9ef41e13",
+      "parse_seconds": 0.008,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351382_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 116820
+    },
+    {
+      "compressed_bytes": 159269,
+      "crc32": "e475c56e",
+      "parse_seconds": 0.142,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351383_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2275862
+    },
+    {
+      "compressed_bytes": 291468,
+      "crc32": "b1dd787a",
+      "parse_seconds": 0.208,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351384_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4207388
+    },
+    {
+      "compressed_bytes": 226840,
+      "crc32": "149322dc",
+      "parse_seconds": 0.163,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351385_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3274018
+    },
+    {
+      "compressed_bytes": 375136,
+      "crc32": "93eacccd",
+      "parse_seconds": 0.235,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351386_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5302100
+    },
+    {
+      "compressed_bytes": 106317,
+      "crc32": "2cd1c619",
+      "parse_seconds": 0.063,
+      "path": "udx/fld/pref/shirakugawa_shirakugawa-horikawa-kaharagawa/53351387_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1458353
+    },
+    {
+      "compressed_bytes": 327363,
+      "crc32": "93e73f91",
+      "parse_seconds": 0.241,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351352_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4533167
+    },
+    {
+      "compressed_bytes": 643435,
+      "crc32": "f55b6523",
+      "parse_seconds": 0.442,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351353_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 8930850
+    },
+    {
+      "compressed_bytes": 390059,
+      "crc32": "a4cf699f",
+      "parse_seconds": 0.253,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351354_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5404217
+    },
+    {
+      "compressed_bytes": 198201,
+      "crc32": "c942bd0c",
+      "parse_seconds": 0.142,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351355_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2604125
+    },
+    {
+      "compressed_bytes": 27533,
+      "crc32": "02cf3212",
+      "parse_seconds": 0.02,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351356_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 359851
+    },
+    {
+      "compressed_bytes": 35073,
+      "crc32": "f503158b",
+      "parse_seconds": 0.029,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351361_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 533036
+    },
+    {
+      "compressed_bytes": 1106755,
+      "crc32": "1dd40bc6",
+      "parse_seconds": 1.268,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351362_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 15921623
+    },
+    {
+      "compressed_bytes": 364677,
+      "crc32": "e7654d18",
+      "parse_seconds": 0.282,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351371_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5629389
+    },
+    {
+      "compressed_bytes": 1371761,
+      "crc32": "c799f885",
+      "parse_seconds": 1.011,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351372_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 20712857
+    },
+    {
+      "compressed_bytes": 92387,
+      "crc32": "ba0ed0e9",
+      "parse_seconds": 0.059,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351373_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1405585
+    },
+    {
+      "compressed_bytes": 1401,
+      "crc32": "4898f402",
+      "parse_seconds": 0.0,
+      "path": "udx/fld/pref/sobotanigawa_sobotanigawa/53351381_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5941
+    },
+    {
+      "compressed_bytes": 160439,
+      "crc32": "7b87f2d5",
+      "parse_seconds": 0.127,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351203_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2329717
+    },
+    {
+      "compressed_bytes": 26756,
+      "crc32": "2dd0961c",
+      "parse_seconds": 0.016,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351204_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 373166
+    },
+    {
+      "compressed_bytes": 166762,
+      "crc32": "03710ae5",
+      "parse_seconds": 0.11,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351205_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2449905
+    },
+    {
+      "compressed_bytes": 285503,
+      "crc32": "9b43e1d9",
+      "parse_seconds": 0.204,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351213_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 4370405
+    },
+    {
+      "compressed_bytes": 862986,
+      "crc32": "01a95684",
+      "parse_seconds": 0.61,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351214_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 12651514
+    },
+    {
+      "compressed_bytes": 1341388,
+      "crc32": "96945b46",
+      "parse_seconds": 0.99,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351215_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 20957389
+    },
+    {
+      "compressed_bytes": 1016041,
+      "crc32": "099ccbdc",
+      "parse_seconds": 0.773,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351216_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 16544288
+    },
+    {
+      "compressed_bytes": 118946,
+      "crc32": "37db4bc7",
+      "parse_seconds": 0.085,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351225_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 1865331
+    },
+    {
+      "compressed_bytes": 1896772,
+      "crc32": "794f3067",
+      "parse_seconds": 1.358,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351226_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 29805611
+    },
+    {
+      "compressed_bytes": 161521,
+      "crc32": "efdec1b7",
+      "parse_seconds": 0.114,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351235_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 2571951
+    },
+    {
+      "compressed_bytes": 2006039,
+      "crc32": "bf9e7e65",
+      "parse_seconds": 1.57,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351236_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 32007520
+    },
+    {
+      "compressed_bytes": 339863,
+      "crc32": "ded40d34",
+      "parse_seconds": 0.246,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351245_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5668195
+    },
+    {
+      "compressed_bytes": 746144,
+      "crc32": "1d59490b",
+      "parse_seconds": 0.531,
+      "path": "udx/fld/pref/takanogawa_takanogawa-nyougawa/53351246_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 11631058
+    },
+    {
+      "compressed_bytes": 73836,
+      "crc32": "86735e01",
+      "parse_seconds": 0.042,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351331_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 983043
+    },
+    {
+      "compressed_bytes": 407275,
+      "crc32": "a7fd10a5",
+      "parse_seconds": 0.278,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351332_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5542416
+    },
+    {
+      "compressed_bytes": 632732,
+      "crc32": "264f9a2b",
+      "parse_seconds": 0.49,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351333_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 9377497
+    },
+    {
+      "compressed_bytes": 203481,
+      "crc32": "8661143c",
+      "parse_seconds": 0.144,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351334_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3142543
+    },
+    {
+      "compressed_bytes": 1256864,
+      "crc32": "941984f9",
+      "parse_seconds": 0.787,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351341_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 16966314
+    },
+    {
+      "compressed_bytes": 431635,
+      "crc32": "7d7edbb0",
+      "parse_seconds": 0.251,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351342_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 5925614
+    },
+    {
+      "compressed_bytes": 10414,
+      "crc32": "92323427",
+      "parse_seconds": 0.007,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351343_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 136482
+    },
+    {
+      "compressed_bytes": 2588995,
+      "crc32": "932866e0",
+      "parse_seconds": 1.581,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351351_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 36362852
+    },
+    {
+      "compressed_bytes": 245615,
+      "crc32": "c78d2980",
+      "parse_seconds": 0.152,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351352_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 3373864
+    },
+    {
+      "compressed_bytes": 2083588,
+      "crc32": "f591c055",
+      "parse_seconds": 1.446,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351361_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 29235876
+    },
+    {
+      "compressed_bytes": 2065,
+      "crc32": "f7e543b1",
+      "parse_seconds": 0.001,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351362_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 16300
+    },
+    {
+      "compressed_bytes": 754451,
+      "crc32": "57055609",
+      "parse_seconds": 0.455,
+      "path": "udx/fld/pref/yohorogawa_yohorogawa-tubakigawa-sugasakagawa/53351371_fld_6697_l2_op.gml",
+      "theme": "fld",
+      "uncompressed_bytes": 10695728
+    },
+    {
+      "compressed_bytes": 54854,
+      "crc32": "d8788478",
+      "parse_seconds": 0.009,
+      "path": "udx/lsld/533501_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 295670
+    },
+    {
+      "compressed_bytes": 94606,
+      "crc32": "2fedc0c1",
+      "parse_seconds": 0.015,
+      "path": "udx/lsld/533502_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 575102
+    },
+    {
+      "compressed_bytes": 19722,
+      "crc32": "80b6c8dd",
+      "parse_seconds": 0.003,
+      "path": "udx/lsld/533503_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 111385
+    },
+    {
+      "compressed_bytes": 478189,
+      "crc32": "2915dd75",
+      "parse_seconds": 0.086,
+      "path": "udx/lsld/533511_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 3036808
+    },
+    {
+      "compressed_bytes": 1016399,
+      "crc32": "aefd14ee",
+      "parse_seconds": 0.161,
+      "path": "udx/lsld/533512_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 6186449
+    },
+    {
+      "compressed_bytes": 544376,
+      "crc32": "745c3eea",
+      "parse_seconds": 0.079,
+      "path": "udx/lsld/533513_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 3167013
+    },
+    {
+      "compressed_bytes": 10342,
+      "crc32": "7f5f7363",
+      "parse_seconds": 0.002,
+      "path": "udx/lsld/533521_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 69024
+    },
+    {
+      "compressed_bytes": 68294,
+      "crc32": "b747fba5",
+      "parse_seconds": 0.008,
+      "path": "udx/lsld/533522_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 365759
+    },
+    {
+      "compressed_bytes": 159163,
+      "crc32": "1e8df7b5",
+      "parse_seconds": 0.025,
+      "path": "udx/lsld/533523_lsld_6697.gml",
+      "theme": "lsld",
+      "uncompressed_bytes": 948890
+    },
+    {
+      "compressed_bytes": 978054,
+      "crc32": "f8f40b63",
+      "parse_seconds": 0.133,
+      "path": "udx/luse/533502_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 4333820
+    },
+    {
+      "compressed_bytes": 320825,
+      "crc32": "4eb7d1e0",
+      "parse_seconds": 0.026,
+      "path": "udx/luse/533503_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 1122794
+    },
+    {
+      "compressed_bytes": 7021021,
+      "crc32": "5d5deb4b",
+      "parse_seconds": 1.468,
+      "path": "udx/luse/533512_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 38926006
+    },
+    {
+      "compressed_bytes": 6653189,
+      "crc32": "d2eb8bea",
+      "parse_seconds": 1.191,
+      "path": "udx/luse/533513_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 34037545
+    },
+    {
+      "compressed_bytes": 1232997,
+      "crc32": "e36df1be",
+      "parse_seconds": 0.166,
+      "path": "udx/luse/533522_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 5612605
+    },
+    {
+      "compressed_bytes": 3858584,
+      "crc32": "8875ab28",
+      "parse_seconds": 0.432,
+      "path": "udx/luse/533523_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 16229095
+    },
+    {
+      "compressed_bytes": 49408,
+      "crc32": "f6944496",
+      "parse_seconds": 0.011,
+      "path": "udx/luse/533533_luse_6697.gml",
+      "theme": "luse",
+      "uncompressed_bytes": 299763
+    },
+    {
+      "compressed_bytes": 506397,
+      "crc32": "a1f6499c",
+      "parse_seconds": 0.335,
+      "path": "udx/tnm/26-1/533512_tnm_6697_op.gml",
+      "theme": "tnm",
+      "uncompressed_bytes": 6699015
+    },
+    {
+      "compressed_bytes": 87363,
+      "crc32": "a799e33f",
+      "parse_seconds": 0.058,
+      "path": "udx/tnm/26-1/533513_tnm_6697_op.gml",
+      "theme": "tnm",
+      "uncompressed_bytes": 1196671
+    },
+    {
+      "compressed_bytes": 453452,
+      "crc32": "d6dfd615",
+      "parse_seconds": 0.258,
+      "path": "udx/tnm/26-1/533522_tnm_6697_op.gml",
+      "theme": "tnm",
+      "uncompressed_bytes": 5710864
+    },
+    {
+      "compressed_bytes": 739274,
+      "crc32": "8848d622",
+      "parse_seconds": 0.383,
+      "path": "udx/tnm/26-1/533523_tnm_6697_op.gml",
+      "theme": "tnm",
+      "uncompressed_bytes": 9304950
+    },
+    {
+      "compressed_bytes": 184936,
+      "crc32": "82234a69",
+      "parse_seconds": 0.092,
+      "path": "udx/tnm/26-1/533533_tnm_6697_op.gml",
+      "theme": "tnm",
+      "uncompressed_bytes": 2226034
+    },
+    {
+      "compressed_bytes": 4169,
+      "crc32": "26224c65",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53350275_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 31874
+    },
+    {
+      "compressed_bytes": 14289,
+      "crc32": "d55c555b",
+      "parse_seconds": 0.006,
+      "path": "udx/tran/53350285_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 179219
+    },
+    {
+      "compressed_bytes": 4696,
+      "crc32": "d57d908a",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53350286_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 34679
+    },
+    {
+      "compressed_bytes": 24750,
+      "crc32": "1247add6",
+      "parse_seconds": 0.006,
+      "path": "udx/tran/53350296_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 202126
+    },
+    {
+      "compressed_bytes": 48022,
+      "crc32": "68b07c92",
+      "parse_seconds": 0.017,
+      "path": "udx/tran/53351206_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 528343
+    },
+    {
+      "compressed_bytes": 49666,
+      "crc32": "14485f30",
+      "parse_seconds": 0.021,
+      "path": "udx/tran/53351215_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 652277
+    },
+    {
+      "compressed_bytes": 134255,
+      "crc32": "cf60ad68",
+      "parse_seconds": 0.063,
+      "path": "udx/tran/53351216_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1812678
+    },
+    {
+      "compressed_bytes": 40475,
+      "crc32": "6e17a60c",
+      "parse_seconds": 0.015,
+      "path": "udx/tran/53351225_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 442431
+    },
+    {
+      "compressed_bytes": 192793,
+      "crc32": "6cd45077",
+      "parse_seconds": 0.077,
+      "path": "udx/tran/53351226_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 2432741
+    },
+    {
+      "compressed_bytes": 9079,
+      "crc32": "1c5388fa",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351227_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 73717
+    },
+    {
+      "compressed_bytes": 11824,
+      "crc32": "46659cfe",
+      "parse_seconds": 0.003,
+      "path": "udx/tran/53351232_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 101901
+    },
+    {
+      "compressed_bytes": 45434,
+      "crc32": "aa6cd47f",
+      "parse_seconds": 0.013,
+      "path": "udx/tran/53351233_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 444713
+    },
+    {
+      "compressed_bytes": 35547,
+      "crc32": "0733e83b",
+      "parse_seconds": 0.012,
+      "path": "udx/tran/53351234_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 389527
+    },
+    {
+      "compressed_bytes": 32956,
+      "crc32": "c4bd17c7",
+      "parse_seconds": 0.013,
+      "path": "udx/tran/53351235_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 378940
+    },
+    {
+      "compressed_bytes": 216951,
+      "crc32": "1afae533",
+      "parse_seconds": 0.097,
+      "path": "udx/tran/53351236_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 2704249
+    },
+    {
+      "compressed_bytes": 152135,
+      "crc32": "66bd698e",
+      "parse_seconds": 0.053,
+      "path": "udx/tran/53351237_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1703292
+    },
+    {
+      "compressed_bytes": 45965,
+      "crc32": "463108bf",
+      "parse_seconds": 0.016,
+      "path": "udx/tran/53351238_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 522127
+    },
+    {
+      "compressed_bytes": 1516,
+      "crc32": "9c90b0ef",
+      "parse_seconds": 0.0,
+      "path": "udx/tran/53351242_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 7426
+    },
+    {
+      "compressed_bytes": 33088,
+      "crc32": "5d87f5e5",
+      "parse_seconds": 0.008,
+      "path": "udx/tran/53351244_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 305539
+    },
+    {
+      "compressed_bytes": 27904,
+      "crc32": "469417ac",
+      "parse_seconds": 0.01,
+      "path": "udx/tran/53351245_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 315238
+    },
+    {
+      "compressed_bytes": 98915,
+      "crc32": "315e81e8",
+      "parse_seconds": 0.038,
+      "path": "udx/tran/53351246_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1180088
+    },
+    {
+      "compressed_bytes": 57052,
+      "crc32": "26ed391c",
+      "parse_seconds": 0.019,
+      "path": "udx/tran/53351247_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 600855
+    },
+    {
+      "compressed_bytes": 94670,
+      "crc32": "a261563a",
+      "parse_seconds": 0.036,
+      "path": "udx/tran/53351248_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1143944
+    },
+    {
+      "compressed_bytes": 31081,
+      "crc32": "ef121e78",
+      "parse_seconds": 0.003,
+      "path": "udx/tran/53351249_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 143927
+    },
+    {
+      "compressed_bytes": 12909,
+      "crc32": "57d4d3a5",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351254_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 141183
+    },
+    {
+      "compressed_bytes": 5499,
+      "crc32": "75922492",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53351255_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 44685
+    },
+    {
+      "compressed_bytes": 21544,
+      "crc32": "95f49974",
+      "parse_seconds": 0.008,
+      "path": "udx/tran/53351256_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 255364
+    },
+    {
+      "compressed_bytes": 1974,
+      "crc32": "269d67b0",
+      "parse_seconds": 0.0,
+      "path": "udx/tran/53351257_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 10452
+    },
+    {
+      "compressed_bytes": 22443,
+      "crc32": "47139d3a",
+      "parse_seconds": 0.007,
+      "path": "udx/tran/53351258_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 234676
+    },
+    {
+      "compressed_bytes": 15727,
+      "crc32": "86b1510e",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351259_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 150359
+    },
+    {
+      "compressed_bytes": 3647,
+      "crc32": "60bc3702",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53351266_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 22468
+    },
+    {
+      "compressed_bytes": 6170,
+      "crc32": "09adb1a0",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351267_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 62115
+    },
+    {
+      "compressed_bytes": 17071,
+      "crc32": "76de8ced",
+      "parse_seconds": 0.005,
+      "path": "udx/tran/53351268_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 167299
+    },
+    {
+      "compressed_bytes": 53469,
+      "crc32": "7130c50a",
+      "parse_seconds": 0.02,
+      "path": "udx/tran/53351269_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 639869
+    },
+    {
+      "compressed_bytes": 14580,
+      "crc32": "dcb54ca6",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351277_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 138331
+    },
+    {
+      "compressed_bytes": 60285,
+      "crc32": "0acd1237",
+      "parse_seconds": 0.021,
+      "path": "udx/tran/53351278_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 690184
+    },
+    {
+      "compressed_bytes": 43707,
+      "crc32": "0458ff92",
+      "parse_seconds": 0.016,
+      "path": "udx/tran/53351279_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 454374
+    },
+    {
+      "compressed_bytes": 6200,
+      "crc32": "7cd436ce",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351288_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 46618
+    },
+    {
+      "compressed_bytes": 23159,
+      "crc32": "6ae0bb3f",
+      "parse_seconds": 0.009,
+      "path": "udx/tran/53351289_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 262050
+    },
+    {
+      "compressed_bytes": 23616,
+      "crc32": "e83b7e06",
+      "parse_seconds": 0.011,
+      "path": "udx/tran/53351331_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 309260
+    },
+    {
+      "compressed_bytes": 17223,
+      "crc32": "c47112fa",
+      "parse_seconds": 0.006,
+      "path": "udx/tran/53351332_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 197664
+    },
+    {
+      "compressed_bytes": 14847,
+      "crc32": "a00a0b60",
+      "parse_seconds": 0.006,
+      "path": "udx/tran/53351340_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 160758
+    },
+    {
+      "compressed_bytes": 117736,
+      "crc32": "9f105fd2",
+      "parse_seconds": 0.051,
+      "path": "udx/tran/53351341_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1515340
+    },
+    {
+      "compressed_bytes": 37496,
+      "crc32": "48a336d8",
+      "parse_seconds": 0.014,
+      "path": "udx/tran/53351342_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 426306
+    },
+    {
+      "compressed_bytes": 2730,
+      "crc32": "5fd5d237",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53351343_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 16038
+    },
+    {
+      "compressed_bytes": 38044,
+      "crc32": "d3ed4023",
+      "parse_seconds": 0.012,
+      "path": "udx/tran/53351350_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 420796
+    },
+    {
+      "compressed_bytes": 187254,
+      "crc32": "93e0dfc5",
+      "parse_seconds": 0.074,
+      "path": "udx/tran/53351351_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 2315408
+    },
+    {
+      "compressed_bytes": 146570,
+      "crc32": "5938a6d5",
+      "parse_seconds": 0.059,
+      "path": "udx/tran/53351352_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1837342
+    },
+    {
+      "compressed_bytes": 73819,
+      "crc32": "16392a32",
+      "parse_seconds": 0.021,
+      "path": "udx/tran/53351353_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 663652
+    },
+    {
+      "compressed_bytes": 9241,
+      "crc32": "19812f41",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351354_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 99416
+    },
+    {
+      "compressed_bytes": 50089,
+      "crc32": "a457b76e",
+      "parse_seconds": 0.018,
+      "path": "udx/tran/53351360_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 592298
+    },
+    {
+      "compressed_bytes": 151550,
+      "crc32": "2933c0d8",
+      "parse_seconds": 0.058,
+      "path": "udx/tran/53351361_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1792612
+    },
+    {
+      "compressed_bytes": 104638,
+      "crc32": "fe872684",
+      "parse_seconds": 0.045,
+      "path": "udx/tran/53351362_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1446487
+    },
+    {
+      "compressed_bytes": 18018,
+      "crc32": "c4e914bc",
+      "parse_seconds": 0.005,
+      "path": "udx/tran/53351363_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 155362
+    },
+    {
+      "compressed_bytes": 12243,
+      "crc32": "68a67888",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351364_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 82386
+    },
+    {
+      "compressed_bytes": 15149,
+      "crc32": "eca2ebd1",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351370_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 98036
+    },
+    {
+      "compressed_bytes": 36629,
+      "crc32": "29dd3521",
+      "parse_seconds": 0.015,
+      "path": "udx/tran/53351371_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 483068
+    },
+    {
+      "compressed_bytes": 92825,
+      "crc32": "99632e96",
+      "parse_seconds": 0.037,
+      "path": "udx/tran/53351372_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 1127777
+    },
+    {
+      "compressed_bytes": 66566,
+      "crc32": "fd4bc31a",
+      "parse_seconds": 0.022,
+      "path": "udx/tran/53351373_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 709165
+    },
+    {
+      "compressed_bytes": 86984,
+      "crc32": "ebf83a47",
+      "parse_seconds": 0.029,
+      "path": "udx/tran/53351374_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 938885
+    },
+    {
+      "compressed_bytes": 58458,
+      "crc32": "5e542deb",
+      "parse_seconds": 0.023,
+      "path": "udx/tran/53351375_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 694565
+    },
+    {
+      "compressed_bytes": 5336,
+      "crc32": "d3be172f",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53351381_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 48328
+    },
+    {
+      "compressed_bytes": 39409,
+      "crc32": "bbc851ae",
+      "parse_seconds": 0.013,
+      "path": "udx/tran/53351382_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 398693
+    },
+    {
+      "compressed_bytes": 29262,
+      "crc32": "8074a90b",
+      "parse_seconds": 0.009,
+      "path": "udx/tran/53351383_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 287879
+    },
+    {
+      "compressed_bytes": 48351,
+      "crc32": "c334fa3c",
+      "parse_seconds": 0.019,
+      "path": "udx/tran/53351384_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 582450
+    },
+    {
+      "compressed_bytes": 22533,
+      "crc32": "c6258be1",
+      "parse_seconds": 0.007,
+      "path": "udx/tran/53351385_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 168935
+    },
+    {
+      "compressed_bytes": 3546,
+      "crc32": "eb629f01",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53351391_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 23942
+    },
+    {
+      "compressed_bytes": 15722,
+      "crc32": "c251f1a6",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351392_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 141049
+    },
+    {
+      "compressed_bytes": 10246,
+      "crc32": "bd346656",
+      "parse_seconds": 0.003,
+      "path": "udx/tran/53351393_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 86568
+    },
+    {
+      "compressed_bytes": 62707,
+      "crc32": "fc94d39e",
+      "parse_seconds": 0.023,
+      "path": "udx/tran/53351394_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 723030
+    },
+    {
+      "compressed_bytes": 14638,
+      "crc32": "37feaba1",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53351395_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 118774
+    },
+    {
+      "compressed_bytes": 18759,
+      "crc32": "3e3a5a65",
+      "parse_seconds": 0.007,
+      "path": "udx/tran/53352301_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 220949
+    },
+    {
+      "compressed_bytes": 35933,
+      "crc32": "7ebe74be",
+      "parse_seconds": 0.013,
+      "path": "udx/tran/53352302_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 379452
+    },
+    {
+      "compressed_bytes": 49929,
+      "crc32": "50c78e81",
+      "parse_seconds": 0.016,
+      "path": "udx/tran/53352303_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 517377
+    },
+    {
+      "compressed_bytes": 45158,
+      "crc32": "bcecbc48",
+      "parse_seconds": 0.015,
+      "path": "udx/tran/53352304_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 474255
+    },
+    {
+      "compressed_bytes": 21230,
+      "crc32": "6922c25f",
+      "parse_seconds": 0.006,
+      "path": "udx/tran/53352305_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 197383
+    },
+    {
+      "compressed_bytes": 8819,
+      "crc32": "fbb1657b",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53352311_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 70598
+    },
+    {
+      "compressed_bytes": 13004,
+      "crc32": "6d687014",
+      "parse_seconds": 0.004,
+      "path": "udx/tran/53352312_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 133626
+    },
+    {
+      "compressed_bytes": 1692,
+      "crc32": "7589abb6",
+      "parse_seconds": 0.0,
+      "path": "udx/tran/53352313_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 7888
+    },
+    {
+      "compressed_bytes": 3646,
+      "crc32": "ea179584",
+      "parse_seconds": 0.001,
+      "path": "udx/tran/53352314_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 18903
+    },
+    {
+      "compressed_bytes": 3356,
+      "crc32": "272a0edc",
+      "parse_seconds": 0.0,
+      "path": "udx/tran/53352315_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 10296
+    },
+    {
+      "compressed_bytes": 4755,
+      "crc32": "9e28b707",
+      "parse_seconds": 0.002,
+      "path": "udx/tran/53352321_tran_6697_op.gml",
+      "theme": "tran",
+      "uncompressed_bytes": 56381
+    },
+    {
+      "compressed_bytes": 7911,
+      "crc32": "3380ffca",
+      "parse_seconds": 0.001,
+      "path": "udx/urf/533502_urf_6697_08_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 22180
+    },
+    {
+      "compressed_bytes": 8667,
+      "crc32": "8d9369b5",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533502_urf_6697_11_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 24696
+    },
+    {
+      "compressed_bytes": 2982,
+      "crc32": "8725a2e4",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533502_urf_6697_12-4_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 8378
+    },
+    {
+      "compressed_bytes": 94051,
+      "crc32": "60914d73",
+      "parse_seconds": 0.003,
+      "path": "udx/urf/533512_urf_6697_05_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 259942
+    },
+    {
+      "compressed_bytes": 154825,
+      "crc32": "b9d50e95",
+      "parse_seconds": 0.005,
+      "path": "udx/urf/533512_urf_6697_07_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 438674
+    },
+    {
+      "compressed_bytes": 234461,
+      "crc32": "235a6b29",
+      "parse_seconds": 0.019,
+      "path": "udx/urf/533512_urf_6697_08_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 856040
+    },
+    {
+      "compressed_bytes": 115158,
+      "crc32": "70d2d4a0",
+      "parse_seconds": 0.01,
+      "path": "udx/urf/533512_urf_6697_11_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 432252
+    },
+    {
+      "compressed_bytes": 9299,
+      "crc32": "a4d06124",
+      "parse_seconds": 0.001,
+      "path": "udx/urf/533512_urf_6697_12-4_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 35558
+    },
+    {
+      "compressed_bytes": 3239,
+      "crc32": "14f8fdab",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533512_urf_6697_lnp_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 13099
+    },
+    {
+      "compressed_bytes": 187937,
+      "crc32": "9774c9ff",
+      "parse_seconds": 0.007,
+      "path": "udx/urf/533513_urf_6697_07_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 538616
+    },
+    {
+      "compressed_bytes": 167989,
+      "crc32": "ba3c511d",
+      "parse_seconds": 0.015,
+      "path": "udx/urf/533513_urf_6697_08_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 638706
+    },
+    {
+      "compressed_bytes": 112438,
+      "crc32": "2987ac92",
+      "parse_seconds": 0.017,
+      "path": "udx/urf/533513_urf_6697_11_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 453533
+    },
+    {
+      "compressed_bytes": 13346,
+      "crc32": "86947a45",
+      "parse_seconds": 0.002,
+      "path": "udx/urf/533513_urf_6697_12-4_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 45110
+    },
+    {
+      "compressed_bytes": 8368,
+      "crc32": "98414082",
+      "parse_seconds": 0.001,
+      "path": "udx/urf/533513_urf_6697_12_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 24072
+    },
+    {
+      "compressed_bytes": 3378,
+      "crc32": "0a98e7d8",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533513_urf_6697_lnp_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 12487
+    },
+    {
+      "compressed_bytes": 1918,
+      "crc32": "20f2055e",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533522_urf_6697_12-4_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 5817
+    },
+    {
+      "compressed_bytes": 294448,
+      "crc32": "7c6aecf3",
+      "parse_seconds": 0.008,
+      "path": "udx/urf/533523_urf_6697_07_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 826699
+    },
+    {
+      "compressed_bytes": 15961,
+      "crc32": "6ae5a7da",
+      "parse_seconds": 0.002,
+      "path": "udx/urf/533523_urf_6697_08_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 57621
+    },
+    {
+      "compressed_bytes": 9796,
+      "crc32": "7acc1df1",
+      "parse_seconds": 0.001,
+      "path": "udx/urf/533523_urf_6697_11_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 34908
+    },
+    {
+      "compressed_bytes": 1909,
+      "crc32": "ec9efffc",
+      "parse_seconds": 0.0,
+      "path": "udx/urf/533523_urf_6697_12-4_op.gml",
+      "theme": "urf",
+      "uncompressed_bytes": 5847
+    }
+  ],
+  "parser": {
+    "feature_boundary": "direct child of core:cityObjectMember",
+    "geometry_materialized": false,
+    "mode": "zip-stream+xml-etree-iterparse"
+  },
+  "runtime": {
+    "note": "Linux ru_maxrss; includes interpreter and parser process",
+    "peak_rss_kib": 281372
+  },
+  "schema_version": 1,
+  "themes": {
+    "bldg": {
+      "attribute_feature_counts": {
+        "adminType": 25794,
+        "areaClassificationType": 44640,
+        "areaType": 13414,
+        "buildingFootprintArea": 44640,
+        "buildingID": 44640,
+        "buildingStructureType": 44640,
+        "city": 44640,
+        "class": 44640,
+        "creationDate": 44640,
+        "depth": 25897,
+        "description": 36498,
+        "districtsAndZonesType": 44640,
+        "duration": 11498,
+        "fireproofStructureType": 44640,
+        "geometrySrcDescLod0": 44640,
+        "geometrySrcDescLod1": 44640,
+        "geometrySrcDescLod2": 44640,
+        "landUseType": 44640,
+        "lod1HeightType": 44640,
+        "lodType": 1504,
+        "measuredHeight": 44640,
+        "name": 64,
+        "prefecture": 44640,
+        "publicSurveySrcDescLod0": 44640,
+        "publicSurveySrcDescLod1": 44640,
+        "publicSurveySrcDescLod2": 1504,
+        "rankOrg": 25897,
+        "scale": 25794,
+        "specifiedBuildingCoverageRate": 44640,
+        "specifiedFloorAreaRate": 44640,
+        "srcScaleLod0": 44640,
+        "srcScaleLod1": 44640,
+        "srcScaleLod2": 1504,
+        "storeysAboveGround": 44640,
+        "storeysBelowGround": 44640,
+        "surveyYear": 44640,
+        "thematicSrcDesc": 44640,
+        "totalFloorArea": 44640,
+        "urbanPlanType": 44640,
+        "usage": 44640,
+        "yearOfConstruction": 44640
+      },
+      "compressed_bytes": 24312770,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 44640
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 44640,
+      "feature_types": {
+        "Building": 44640
+      },
+      "file_count": 80,
+      "geometry_feature_counts": {
+        "CompositeSurface": 44640,
+        "MultiSurface": 44640,
+        "Polygon": 44640,
+        "Solid": 44640
+      },
+      "lod_feature_counts": {
+        "0": 44640,
+        "1": 44640,
+        "2": 1504
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/building/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 22.802,
+      "uncompressed_bytes": 483097090
+    },
+    "dem": {
+      "attribute_feature_counts": {
+        "creationDate": 23,
+        "geometrySrcDescLod1": 23,
+        "lod": 23,
+        "publicSurveySrcDescLod1": 23,
+        "srcScaleLod1": 23,
+        "thematicSrcDesc": 23
+      },
+      "compressed_bytes": 752159123,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 23
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 23,
+      "feature_types": {
+        "ReliefFeature": 23
+      },
+      "file_count": 23,
+      "geometry_feature_counts": {
+        "Triangle": 23,
+        "TriangulatedSurface": 23
+      },
+      "lod_feature_counts": {
+        "1": 23
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/relief/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 501.774,
+      "uncompressed_bytes": 10464676247
+    },
+    "fld": {
+      "attribute_feature_counts": {
+        "adminType": 666,
+        "class": 666,
+        "creationDate": 666,
+        "description": 666,
+        "function": 666,
+        "geometrySrcDescLod1": 666,
+        "name": 666,
+        "rankOrg": 666,
+        "scale": 666,
+        "thematicSrcDesc": 666
+      },
+      "compressed_bytes": 70809702,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 666
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 666,
+      "feature_types": {
+        "WaterBody": 666
+      },
+      "file_count": 143,
+      "geometry_feature_counts": {
+        "MultiSurface": 666,
+        "Polygon": 666
+      },
+      "lod_feature_counts": {
+        "1": 666
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/waterbody/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 48.434,
+      "uncompressed_bytes": 1065576310
+    },
+    "lsld": {
+      "attribute_feature_counts": {
+        "areaType": 4643,
+        "city": 4643,
+        "creationDate": 4643,
+        "disasterType": 4643,
+        "geometrySrcDescLod1": 4643,
+        "location": 4643,
+        "name": 4643,
+        "prefecture": 4643,
+        "status": 4643,
+        "thematicSrcDesc": 4643,
+        "validFrom": 4643,
+        "validFromType": 4643,
+        "zoneName": 4643,
+        "zoneNumber": 4643
+      },
+      "compressed_bytes": 2445945,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 4643
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 4643,
+      "feature_types": {
+        "SedimentDisasterProneArea": 4643
+      },
+      "file_count": 9,
+      "geometry_feature_counts": {
+        "MultiSurface": 4643,
+        "Polygon": 4643
+      },
+      "lod_feature_counts": {
+        "1": 4643
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/urf/3.2",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 0.39,
+      "uncompressed_bytes": 14756100
+    },
+    "luse": {
+      "attribute_feature_counts": {
+        "areaInSquareMeter": 31067,
+        "city": 31067,
+        "class": 31067,
+        "creationDate": 31067,
+        "geometrySrcDescLod1": 31067,
+        "prefecture": 31067,
+        "surveyYear": 31067,
+        "thematicSrcDesc": 31067
+      },
+      "compressed_bytes": 20114078,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 31067
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 31067,
+      "feature_types": {
+        "LandUse": 31067
+      },
+      "file_count": 7,
+      "geometry_feature_counts": {
+        "MultiSurface": 31067,
+        "Polygon": 31067
+      },
+      "lod_feature_counts": {
+        "1": 31067
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/landuse/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 3.427,
+      "uncompressed_bytes": 100561628
+    },
+    "tnm": {
+      "attribute_feature_counts": {
+        "class": 23,
+        "creationDate": 23,
+        "description": 23,
+        "function": 23,
+        "geometrySrcDescLod1": 23,
+        "name": 23,
+        "rankOrg": 23,
+        "thematicSrcDesc": 23
+      },
+      "compressed_bytes": 1971422,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 23
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 23,
+      "feature_types": {
+        "WaterBody": 23
+      },
+      "file_count": 5,
+      "geometry_feature_counts": {
+        "MultiSurface": 23,
+        "Polygon": 23
+      },
+      "lod_feature_counts": {
+        "1": 23
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/waterbody/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 1.127,
+      "uncompressed_bytes": 25137534
+    },
+    "tran": {
+      "attribute_feature_counts": {
+        "class": 15684,
+        "creationDate": 15684,
+        "function": 15684,
+        "geometrySrcDescLod1": 15684,
+        "geometrySrcDescLod2": 15684,
+        "name": 12902,
+        "publicSurveySrcDescLod1": 15684,
+        "publicSurveySrcDescLod2": 620,
+        "sectionType": 15684,
+        "srcScaleLod1": 15684,
+        "srcScaleLod2": 620,
+        "thematicSrcDesc": 15684
+      },
+      "compressed_bytes": 3535372,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 15684
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 15684,
+      "feature_types": {
+        "Road": 15684
+      },
+      "file_count": 82,
+      "geometry_feature_counts": {
+        "MultiSurface": 15684,
+        "Polygon": 15684
+      },
+      "lod_feature_counts": {
+        "1": 15684,
+        "2": 620
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/citygml/appearance/2.0",
+        "http://www.opengis.net/citygml/transportation/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 1.303,
+      "uncompressed_bytes": 40401255
+    },
+    "urf": {
+      "attribute_feature_counts": {
+        "areaClassification": 3,
+        "areaClassificationType": 372,
+        "buildingCoverageRate": 163,
+        "buildingLotDevelopment": 2,
+        "city": 394,
+        "creationDate": 394,
+        "custodian": 394,
+        "endLocation": 1,
+        "finalNotificationDate": 394,
+        "finalNotificationNumber": 394,
+        "floorAreaRate": 163,
+        "function": 390,
+        "geometrySrcDescLod1": 394,
+        "length": 1,
+        "name": 162,
+        "nominalArea": 2,
+        "notificationNumber": 394,
+        "parkSerialNumber": 30,
+        "parkSizeNumber": 30,
+        "parkTypeNumber": 30,
+        "prefecture": 394,
+        "publicFacilityAllocation": 2,
+        "reason": 21,
+        "reasonForAreaClassification": 3,
+        "routeSerialNumber": 85,
+        "routeSizeNumber": 85,
+        "routeTypeNumber": 85,
+        "startLocation": 1,
+        "storeysAboveGround": 1,
+        "storeysBelowGround": 1,
+        "thematicSrcDesc": 394,
+        "urbanPlanType": 391,
+        "validFrom": 394,
+        "validFromType": 394
+      },
+      "compressed_bytes": 1448081,
+      "crs_names": {
+        "http://www.opengis.net/def/crs/EPSG/0/6697": 394
+      },
+      "duplicate_gml_id_count": 0,
+      "feature_count": 394,
+      "feature_types": {
+        "AreaClassification": 19,
+        "DistrictPlan": 16,
+        "FirePreventionDistrict": 28,
+        "LandReadjustmentProject": 2,
+        "MarketsSlaughterhousesCrematoria": 3,
+        "OpenSpaceForPublicUse": 30,
+        "PortZone": 22,
+        "ResidenceAttractionArea": 2,
+        "TrafficFacility": 87,
+        "TreatmentFacility": 17,
+        "UrbanFunctionAttractionArea": 2,
+        "UrbanPlanningArea": 3,
+        "UseDistrict": 163
+      },
+      "file_count": 20,
+      "geometry_feature_counts": {
+        "MultiSurface": 394,
+        "Polygon": 394
+      },
+      "lod_feature_counts": {
+        "1": 394
+      },
+      "namespace_uris": [
+        "http://www.opengis.net/citygml/2.0",
+        "http://www.opengis.net/gml",
+        "https://www.geospatial.jp/iur/urf/3.2",
+        "https://www.geospatial.jp/iur/uro/3.2"
+      ],
+      "parse_seconds": 0.093,
+      "uncompressed_bytes": 4734235
+    }
+  },
+  "totals": {
+    "duplicate_gml_id_count": 0,
+    "feature_count": 97140,
+    "parse_seconds": 586.968,
+    "unique_gml_id_count": 97140
+  }
+}

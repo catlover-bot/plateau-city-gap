@@ -7,6 +7,8 @@
 
 [Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
+このリポジトリには、審査・公開用の静的な **Competition Demo** と、段階的に構築中の **Urban Digital Twin Platform** の2系統があります。静的デモとGitHub Pagesは従来どおりバックエンドなしで動作します。Platformは別経路でPostGISとAPIを追加し、Priority 1としてPLATEAU CityGML全量取込基盤までを実装しています。
+
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
 ## Problem
@@ -145,9 +147,12 @@ after_transport_distance
 - `analysis/scripts/verify_decision_studio.py`: 全9案の距離・Score・Evidenceを独立再計算
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
+- `backend/citygap_platform/`: CityGMLストリーミング取込、PostGIS loader、FastAPI
+- `infra/migrations/`: dataset version・provenance・PLATEAU typed table
+- `docker-compose.yml`: PostGIS / pgRouting、API、静的frontendのローカル構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 
-バックエンド、データベース、API keyは不要です。Viteのbase pathは `/plateau-city-gap/` です。
+Competition Demoにはバックエンド、データベース、API keyは不要です。Viteのbase pathは `/plateau-city-gap/` です。Platform設計は [platform architecture](docs/platform-architecture.md)、全量取込は [PLATEAU ingestion](docs/plateau-ingestion.md) を参照してください。
 
 ## Run locally
 
@@ -161,6 +166,26 @@ npm run dev
 ```
 
 表示されたローカルURLをブラウザで開きます。プロダクション相当は `npm run build && npm run preview` で確認できます。
+
+### Urban Digital Twin Platform
+
+Dockerが利用できる環境では、PostGIS / pgRouting、API、既存frontendをまとめて起動できます。
+
+```bash
+cp .env.example .env
+# 共有環境ではCITYGAP_POSTGRES_PASSWORDを必ず変更
+docker compose up --build
+```
+
+frontendは `http://localhost:8080/plateau-city-gap/`、API仕様は `http://localhost:8000/docs` です。raw CityGMLはGit管理外のまま、別ターミナルから次を実行します。
+
+```bash
+python -m pip install -e '.[platform]'
+python -m analysis.scripts.build_plateau_inventory
+python -m analysis.scripts.ingest_plateau_postgis
+```
+
+APIは大量geometryの無制限配信を行わず、建物取得にbboxと最大1,000件のlimitを要求します。
 
 ## Reproduce analysis
 
@@ -205,7 +230,13 @@ npm run test
 npm run build
 ```
 
-Python 40テストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
+Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
+
+PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、PostGIS migration、bbox必須APIを対象にします。
+
+## Data protection
+
+現段階で個人情報を扱いません。将来のbuilding-level populationも、500m統計を建物属性で按分した**推計値**であり、実在個人・世帯・住民票のデータではありません。推計人口を実人数と呼ばず、原統計、配分法、解像度をprovenanceとして保持します。秘密情報・自治体内部データ・`.env`をリポジトリへ追加しないでください。
 
 ## Limitations
 

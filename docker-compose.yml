@@ -1,0 +1,52 @@
+name: city-gap-platform
+
+services:
+  postgres:
+    image: pgrouting/pgrouting:16-3.5-4.0
+    environment:
+      POSTGRES_DB: ${CITYGAP_POSTGRES_DB:-citygap}
+      POSTGRES_USER: ${CITYGAP_POSTGRES_USER:-citygap}
+      POSTGRES_PASSWORD: ${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}
+    ports:
+      - "${CITYGAP_POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - citygap_postgres:/var/lib/postgresql/data
+      - ./infra/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    environment:
+      CITYGAP_DATABASE_URL: postgresql://${CITYGAP_POSTGRES_USER:-citygap}:${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}@postgres:5432/${CITYGAP_POSTGRES_DB:-citygap}
+    ports:
+      - "${CITYGAP_API_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/docker/frontend.Dockerfile
+    ports:
+      - "${CITYGAP_FRONTEND_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  citygap_postgres:
