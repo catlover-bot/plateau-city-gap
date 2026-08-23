@@ -52,6 +52,9 @@ describe("data loading", () => {
       "top10.json": { items: [{ mesh_code: "533512753", rank: 1 }] },
       "summary.json": { record_counts: { primary_rank_eligible_meshes: 218 } },
       "final_demo.json": { comparison_mesh_count: 286 },
+      "robustness.json": { scenario_count: 9, candidates: [], top_candidates: [] },
+      "intervention_scenarios.json": { plans: {} },
+      "evidence.json": { philosophy: "test" },
       "stations.geojson": EMPTY_COLLECTION,
       "bus_stops.geojson": EMPTY_COLLECTION,
       "medical_facilities.geojson": EMPTY_COLLECTION,
@@ -75,7 +78,10 @@ describe("data loading", () => {
       "mesh_metrics.geojson": EMPTY_COLLECTION,
       "top10.json": { items: [] },
       "summary.json": {},
-      "final_demo.json": {}
+      "final_demo.json": {},
+      "robustness.json": {},
+      "intervention_scenarios.json": {},
+      "evidence.json": {}
     });
     const data = await loadAppData(fetcher, "/");
     expect(data.stations).toBeNull();
@@ -89,7 +95,10 @@ describe("data loading", () => {
       "mesh_metrics.geojson": { type: "not-geojson" },
       "top10.json": { items: [] },
       "summary.json": {},
-      "final_demo.json": {}
+      "final_demo.json": {},
+      "robustness.json": {},
+      "intervention_scenarios.json": {},
+      "evidence.json": {}
     });
     await expect(loadAppData(fetcher, "/")).rejects.toThrow("FeatureCollection");
   });

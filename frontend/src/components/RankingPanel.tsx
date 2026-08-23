@@ -1,12 +1,14 @@
-import type { MeshMetrics } from "../types";
+import type { MeshMetrics, RobustCandidate } from "../types";
 import { formatDistance, formatInteger, formatRatio, formatScore } from "../lib/format";
 
 interface RankingPanelProps {
   items: MeshMetrics[];
   selectedMeshCode: string | null;
   onSelect: (mesh: MeshMetrics) => void;
+  mode?: "score" | "robust";
+  robustness?: Record<string, RobustCandidate>;
 }
-export function RankingPanel({ items, selectedMeshCode, onSelect }: RankingPanelProps) {
+export function RankingPanel({ items, selectedMeshCode, onSelect, mode = "score", robustness = {} }: RankingPanelProps) {
   if (items.length === 0) {
     return (
       <div className="panel-empty" role="status">
@@ -21,6 +23,7 @@ export function RankingPanel({ items, selectedMeshCode, onSelect }: RankingPanel
     <div className="ranking-list" aria-label="CITY GAP Top 10">
       {items.map((mesh, index) => {
         const rank = typeof mesh.rank === "number" ? mesh.rank : index + 1;
+        const robust = robustness[mesh.mesh_code];
         const selected = mesh.mesh_code === selectedMeshCode;
         return (
           <button
@@ -46,7 +49,11 @@ export function RankingPanel({ items, selectedMeshCode, onSelect }: RankingPanel
               <span className="rank-footer">
                 <span>人口 {formatInteger(mesh.population)}</span>
                 <span>高齢化率 {formatRatio(mesh.elderly_ratio)}</span>
-                <span className="rank-score">探索スコア {formatScore(mesh.exploratory_score_c)}</span>
+                {mode === "robust" && robust ? (
+                  <span className="rank-score">Top 10 {robust.top10_frequency}/{robust.scenario_count} · 順位 {robust.rank_min}–{robust.rank_max}</span>
+                ) : (
+                  <span className="rank-score">探索スコア {formatScore(mesh.exploratory_score_c)}</span>
+                )}
               </span>
             </span>
             <span className="rank-chevron" aria-hidden="true">›</span>

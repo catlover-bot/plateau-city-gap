@@ -1,4 +1,4 @@
-import type { MeshMetrics, Summary } from "../types";
+import type { MeshMetrics, RobustCandidate, Summary } from "../types";
 import {
   formatDistance,
   formatInteger,
@@ -16,6 +16,8 @@ interface DetailPanelProps {
   comparisonMeshCount?: number;
   cityName?: string;
   audit?: Summary["audit"];
+  robustness?: RobustCandidate | null;
+  onEvidence?: () => void;
 }
 
 interface PercentileBarProps {
@@ -64,7 +66,7 @@ function relativeDistance(value: unknown, cityName = "市内"): string {
   return `${cityName}では遠い側 上位約${Math.max(1, Math.round((1 - percentile) * 100))}%`;
 }
 
-export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit }: DetailPanelProps) {
+export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit, robustness, onEvidence }: DetailPanelProps) {
   if (!mesh) {
     return (
       <div className="panel-empty" role="status">
@@ -108,6 +110,7 @@ export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit }: Deta
           <span>{relativeDistance(mesh.medical_distance_percentile, cityName)}</span>
         </div>
       </div>
+      {onEvidence && <button type="button" className="evidence-link" onClick={onEvidence}>根拠を見る — 距離・Scoreの計算過程</button>}
 
       <section className="why-section">
         <div className="section-kicker"><span>WHY</span> なぜ候補になったか</div>
@@ -119,6 +122,26 @@ export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit }: Deta
           <PercentileBar label="収録医療までの距離" value={mesh.medical_distance_percentile} tone="medical" />
         </div>
       </section>
+
+      {robustness && (
+        <section className="robustness-section">
+          <div className="section-kicker"><span>ROBUSTNESS</span> 分析条件を変えると？</div>
+          <p>{robustness.scenario_count}つの分析条件のうち、Top 10に<strong>{robustness.top10_frequency}条件</strong>、Top 20に<strong>{robustness.top20_frequency}条件</strong>で残ります。</p>
+          <div className="robustness-facts">
+            <div><small>順位範囲</small><strong>{robustness.rank_min}–{robustness.rank_max}位</strong></div>
+            <div><small>中央値</small><strong>{robustness.median_rank}位</strong></div>
+            <div><small>Pareto候補</small><strong>{robustness.pareto_frequency}/{robustness.scenario_count}</strong></div>
+          </div>
+          <div className="robustness-matrix" aria-label="分析条件別のTop 10残存状況">
+            {Object.entries(robustness.scenarios).map(([id, result]) => (
+              <span key={id} className={result.top10 ? "active" : ""} title={`${id}: ${result.rank ? `${result.rank}位` : "対象外"}`}>
+                <i />{id}<small>{result.rank ?? "—"}</small>
+              </span>
+            ))}
+          </div>
+          <small className="robustness-note">出現回数であり、確率や信頼度ではありません。</small>
+        </section>
+      )}
 
       <section className="nearest-section">
         <h3>最寄りの収録サービス</h3>

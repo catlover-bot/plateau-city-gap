@@ -179,6 +179,131 @@ export interface PlacementCandidate extends JsonProperties {
   };
 }
 
+export interface RobustScenarioResult {
+  rank: number | null;
+  top10: boolean;
+  top20: boolean;
+  pareto: boolean;
+}
+
+export interface RobustCandidate extends JsonProperties {
+  robust_rank: number;
+  mesh_code: string;
+  area_label?: string | null;
+  scenario_count: number;
+  ranked_scenario_count: number;
+  top10_frequency: number;
+  top20_frequency: number;
+  pareto_frequency: number;
+  median_rank: number;
+  rank_min: number;
+  rank_max: number;
+  scenarios: Record<string, RobustScenarioResult>;
+}
+
+export interface RobustnessData extends JsonProperties {
+  scenario_count: number;
+  interpretation: string;
+  ranking_rule: string;
+  scenarios: Array<{ id: string; label: string; definition: string; eligible_count: number }>;
+  candidates: RobustCandidate[];
+  top_candidates: RobustCandidate[];
+}
+
+export type DecisionMode = "overall" | "fairness" | "robust";
+export type DecisionMapPhase = "before" | "after";
+
+export interface InterventionSite {
+  site_order: number;
+  candidate_id: string;
+  longitude: number;
+  latitude: number;
+  road_name: string | null;
+  nearest_existing_transport_name: string;
+  existing_transport_distance_m: number;
+}
+
+export interface InterventionMeshResult {
+  before_distance_m: number;
+  after_distance_m: number;
+  distance_reduction_m: number;
+  before_score_c: number;
+  after_score_c: number;
+  score_c_reduction: number;
+  assigned_site_id: string | null;
+}
+
+export interface InterventionImpact {
+  total_score_c_reduction: number;
+  improved_mesh_count: number;
+  affected_elderly_population: number;
+  mean_improvement_among_improved_m: number;
+  total_transport_distance_reduction_m: number;
+  worst_decile_mean_reduction_m: number;
+  worst_decile_improved_count: number;
+  robust_top20_improved_count: number;
+  robust_top20_median_reduction_m: number;
+}
+
+export interface InterventionPlan extends JsonProperties {
+  plan_id: string;
+  mode: DecisionMode;
+  site_count: number;
+  sites: InterventionSite[];
+  impact: InterventionImpact;
+  top_improvements: Array<InterventionMeshResult & { mesh_code: string; area_label: string }>;
+  mesh_results: Record<string, InterventionMeshResult>;
+}
+
+export interface InterventionData extends JsonProperties {
+  metadata: {
+    algorithm: string;
+    exactness: string;
+    candidate_count: number;
+    runtime_seconds: number;
+    constraints: JsonProperties;
+    objectives: Record<DecisionMode, string>;
+    source_data_hashes: Record<string, string>;
+  };
+  plans: Record<DecisionMode, Record<"1" | "2" | "3", InterventionPlan>>;
+  one_site_objective_comparison: Record<"affected_elderly" | "mean_distance", InterventionPlan>;
+  diminishing_returns: Array<{ site_count: number } & Partial<InterventionImpact>>;
+  limitations: string[];
+}
+
+export interface EvidenceData extends JsonProperties {
+  philosophy: string;
+  rank_one: {
+    mesh_code: string;
+    transport: {
+      origin: string;
+      destination: string;
+      dataset: string;
+      crs: string;
+      calculation: string;
+      value_m: number;
+    };
+    medical: {
+      origin: string;
+      destination: string;
+      dataset: string;
+      crs: string;
+      calculation: string;
+      value_m: number;
+    };
+    score_c: {
+      formula: string;
+      components: Record<string, number>;
+      value: number;
+    };
+  };
+  intervention: {
+    formula: string;
+    percentile: string;
+    source_data_hashes: Record<string, string>;
+  };
+}
+
 export interface FinalDemoData extends JsonProperties {
   comparison_mesh_count: number;
   rank_one: {
@@ -224,6 +349,9 @@ export interface AppData {
   plateauRoads: GeoJsonFeatureCollection | null;
   plateauMetadata: PlateauMetadata | null;
   finalDemo: FinalDemoData | null;
+  robustness: RobustnessData | null;
+  interventions: InterventionData | null;
+  evidence: EvidenceData | null;
   warnings: string[];
 }
 

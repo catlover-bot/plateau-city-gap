@@ -2,10 +2,13 @@ import type {
   AppData,
   CityProfile,
   FinalDemoData,
+  EvidenceData,
   GeoJsonFeatureCollection,
+  InterventionData,
   Manifest,
   MeshMetrics,
   PlateauMetadata,
+  RobustnessData,
   Summary
 } from "../types";
 import { finiteNumber } from "./format";
@@ -114,16 +117,22 @@ export async function loadAppData(
   fetcher: typeof fetch = fetch,
   baseUrl = import.meta.env.BASE_URL
 ): Promise<AppData> {
-  const [manifestRaw, meshesRaw, top10Raw, summaryRaw, finalDemoRaw] = await Promise.all([
+  const [manifestRaw, meshesRaw, top10Raw, summaryRaw, finalDemoRaw, robustnessRaw, interventionsRaw, evidenceRaw] = await Promise.all([
     fetchJson(fetcher, dataUrl(baseUrl, "manifest.json")),
     fetchJson(fetcher, dataUrl(baseUrl, "mesh_metrics.geojson")),
     fetchJson(fetcher, dataUrl(baseUrl, "top10.json")),
     fetchJson(fetcher, dataUrl(baseUrl, "summary.json")),
-    fetchJson(fetcher, dataUrl(baseUrl, "final_demo.json"))
+    fetchJson(fetcher, dataUrl(baseUrl, "final_demo.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "robustness.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "intervention_scenarios.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "evidence.json"))
   ]);
   if (!isRecord(manifestRaw)) throw new Error("manifest.json の形式が正しくありません");
   if (!isRecord(summaryRaw)) throw new Error("summary.json の形式が正しくありません");
   if (!isRecord(finalDemoRaw)) throw new Error("final_demo.json の形式が正しくありません");
+  if (!isRecord(robustnessRaw)) throw new Error("robustness.json の形式が正しくありません");
+  if (!isRecord(interventionsRaw)) throw new Error("intervention_scenarios.json の形式が正しくありません");
+  if (!isRecord(evidenceRaw)) throw new Error("evidence.json の形式が正しくありません");
 
   const warnings: string[] = [];
   const [stations, busStops, medicalFacilities, boundary, plateauBuildings, plateauRoads, plateauMetadata] =
@@ -151,6 +160,9 @@ export async function loadAppData(
     plateauRoads,
     plateauMetadata,
     finalDemo: finalDemoRaw as FinalDemoData,
+    robustness: robustnessRaw as unknown as RobustnessData,
+    interventions: interventionsRaw as unknown as InterventionData,
+    evidence: evidenceRaw as unknown as EvidenceData,
     warnings
   };
 }
@@ -195,6 +207,9 @@ export async function loadValidationCityData(
     plateauRoads: null,
     plateauMetadata: null,
     finalDemo: null,
+    robustness: null,
+    interventions: null,
+    evidence: null,
     warnings
   };
 }

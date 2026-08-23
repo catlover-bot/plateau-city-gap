@@ -26,7 +26,8 @@ import type {
   GeoJsonFeatureCollection,
   LayerVisibility,
   MeshMetrics,
-  MetricMode
+  MetricMode,
+  InterventionSite
 } from "../types";
 import { finiteNumber, isTop10Rank } from "../lib/format";
 import type { VirtualPoint } from "../lib/scenario";
@@ -44,6 +45,9 @@ interface CesiumMapProps {
   visibility: LayerVisibility;
   placementMode: boolean;
   virtualPoint: VirtualPoint | null;
+  decisionSites: InterventionSite[];
+  afterScores: Record<string, number> | null;
+  decisionFlow: { meshLongitude: number; meshLatitude: number; siteLongitude: number; siteLatitude: number } | null;
   onMeshSelect: (mesh: MeshMetrics) => void;
   onVirtualPointSelect: (point: VirtualPoint) => void;
   onBuildingSelect: (building: BuildingInfo | null) => void;
@@ -144,15 +148,30 @@ function colorScale(value: number, mode: MetricMode): Color {
   return Color.lerp(starts[mode], ends[mode], normalized, new Color()).withAlpha(0.54);
 }
 
-function styleMeshes(dataSource: GeoJsonDataSource, mode: MetricMode, selectedMeshCode: string | null) {
-  const values = dataSource.entities.values.map((entity) => modeValue(entityValues(entity), mode));
+function styledValue(
+  properties: Record<string, unknown>,
+  mode: MetricMode,
+  afterScores: Record<string, number> | null
+): number | null {
+  const code = String(properties.mesh_code ?? "");
+  if (mode === "gap" && afterScores && Object.hasOwn(afterScores, code)) return finiteNumber(afterScores[code]);
+  return modeValue(properties, mode);
+}
+
+function styleMeshes(
+  dataSource: GeoJsonDataSource,
+  mode: MetricMode,
+  selectedMeshCode: string | null,
+  afterScores: Record<string, number> | null
+) {
+  const values = dataSource.entities.values.map((entity) => styledValue(entityValues(entity), mode, afterScores));
   const maxGap = mode === "gap" ? Math.max(...values.filter((value): value is number => value !== null), 0.01) : 1;
 
   for (const entity of dataSource.entities.values) {
     if (!entity.polygon) continue;
     const properties = entityValues(entity);
     const code = String(properties.mesh_code ?? "");
-    const value = modeValue(properties, mode);
+    const value = styledValue(properties, mode, afterScores);
     const normalized = value === null ? null : value / maxGap;
     const isSelected = selectedMeshCode === code;
     const isTop10 = isTop10Rank(properties.rank);
@@ -263,6 +282,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     visibility,
     placementMode,
     virtualPoint,
+    decisionSites,
+    afterScores,
+    decisionFlow,
     onMeshSelect,
     onVirtualPointSelect,
     onBuildingSelect,
@@ -285,6 +307,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const onWarningRef = useRef(onWarning);
   const metricModeRef = useRef(metricMode);
   const selectedMeshCodeRef = useRef(selectedMeshCode);
+  const afterScoresRef = useRef(afterScores);
+  const decisionSiteIdsRef = useRef<string[]>([]);
   const visibilityRef = useRef(visibility);
   onMeshSelectRef.current = onMeshSelect;
   onVirtualPointSelectRef.current = onVirtualPointSelect;
@@ -295,6 +319,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   onWarningRef.current = onWarning;
   metricModeRef.current = metricMode;
   selectedMeshCodeRef.current = selectedMeshCode;
+  afterScoresRef.current = afterScores;
   visibilityRef.current = visibility;
 
   const loadPlateauTileset = useCallback(() => {
@@ -434,7 +459,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         styleBoundary(boundary);
         styleBuildings(plateauGeoJson);
         styleRoads(plateauRoads);
-        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current);
+        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current, afterScoresRef.current);
         stylePoints(stations, Color.fromCssColorString("#d5a43c"), 11);
         stylePoints(busStops, Color.fromCssColorString("#28766f"), 7);
         stylePoints(medical, Color.fromCssColorString("#a64f3f"), 9);
@@ -532,9 +557,67 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   }, [virtualPoint]);
 
   useEffect(() => {
-    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode);
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+    for (const id of decisionSiteIdsRef.current) viewer.entities.removeById(id);
+    decisionSiteIdsRef.current = decisionSites.map((site) => {
+      const id = `city-gap-decision-site-${site.candidate_id}`;
+      viewer.entities.add({
+        id,
+        name: `施策候補 ${site.site_order}`,
+        position: Cartesian3.fromDegrees(site.longitude, site.latitude, 10),
+        point: {
+          pixelSize: 17,
+          color: Color.fromCssColorString("#d39b31"),
+          outlineColor: Color.fromCssColorString("#262c2b"),
+          outlineWidth: 4,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY
+        },
+        label: {
+          text: `候補 ${site.site_order}`,
+          font: "700 13px sans-serif",
+          fillColor: Color.fromCssColorString("#fffdf7"),
+          outlineColor: Color.fromCssColorString("#262c2b"),
+          outlineWidth: 4,
+          style: 2,
+          pixelOffset: new Cartesian2(0, -27),
+          disableDepthTestDistance: Number.POSITIVE_INFINITY
+        }
+      });
+      return id;
+    });
+    viewer.scene.requestRender();
+  }, [decisionSites]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+    const id = "city-gap-decision-flow";
+    viewer.entities.removeById(id);
+    if (decisionFlow) {
+      viewer.entities.add({
+        id,
+        name: "選択meshの直線距離計算対応",
+        polyline: {
+          positions: Cartesian3.fromDegreesArray([
+            decisionFlow.meshLongitude,
+            decisionFlow.meshLatitude,
+            decisionFlow.siteLongitude,
+            decisionFlow.siteLatitude
+          ]),
+          width: 2,
+          material: Color.fromCssColorString("#a87723").withAlpha(0.82),
+          clampToGround: false
+        }
+      });
+    }
+    viewer.scene.requestRender();
+  }, [decisionFlow]);
+
+  useEffect(() => {
+    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores);
     viewerRef.current?.scene.requestRender();
-  }, [metricMode, selectedMeshCode]);
+  }, [afterScores, metricMode, selectedMeshCode]);
 
   useEffect(() => {
     const sources = sourcesRef.current;

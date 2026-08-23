@@ -32,6 +32,49 @@ Source: `frontend/public/data/final_demo.json` と独立再計算 `analysis/outp
 
 241人は利用者、受益者、需要、乗客の予測ではありません。道路面代表点は用地や設置可能地点の確認結果ではありません。
 
+## Robust CITY GAP
+
+Source: `maizuru_robustness.json` / `maizuru_robust_candidates.csv`。
+
+- 分析条件: 9
+- Robust Rank 1: `533512753` 二尾バス停周辺（基準Score C Rank 1と同じ）
+- Top 10: 9/9、Top 20: 9/9、Pareto: 7/9
+- median rank: 1、rank range: 1〜5
+- Robust Top 5: 二尾、赤野、京田、中筋小学校口、上福井の各バス停周辺
+
+9/9は設定した条件内の出現回数であり、確率・信頼度ではありません。
+
+## Multi-site Intervention
+
+Source: `maizuru_intervention_1site.json`〜`3site.json`、`maizuru_intervention_fairness.json`、`maizuru_intervention_robust.json`。
+
+| 全体改善案 | 改善mesh | 65歳以上記録人口 | 平均距離短縮 | Score C合計純減少 |
+|---|---:|---:|---:|---:|
+| 0地点 | 0 | 0 | 0m | 0 |
+| 1地点 | 5 | 241 | 532.856m | 0.171526845 |
+| 2地点 | 7 | 377 | 448.902m | 0.323340247 |
+| 3地点 | 9 | 654 | 422.785m | 0.437346069 |
+
+- 1地点: 舞鶴和知線 / 常団地前付近
+- 2地点: 上記 + 青葉山麓線 / 大波上付近
+- 3地点: 上記 + 無名道路 / 東高口付近
+- Score C追加純減少: 1地点目0.171526845、2地点目0.151813402、3地点目0.114005822
+- 2地点・取り残し重視: 15mesh、65歳以上記録人口417人、worst decile平均185.495m短縮、Score C純減少 -0.124091313
+- 2地点・頑健候補: 18mesh、65歳以上記録人口1,025人、Robust Top 20の7候補を改善、Score C純減少0.141063351
+
+1地点は12,062候補内のexact解。2/3地点は各段階ですべての間隔条件適合候補を評価する決定論的forward greedy近似で、大域的最適解ではありません。最終再生成時runtimeは76.068秒。
+
+独立検証は9案すべての地点順、1.5km間隔、全meshのafter距離・Score、Evidence Chainを再計算して `exact_match: true`。最大差は `1.9e-8`、公開丸め許容差 `5e-7` 内です。
+
+## Evidence Chainで示す値
+
+- Rank 1公共交通距離の丸め前値: 2321.655608906m
+- 起点: mesh centroid、到達先: 二尾バス停
+- データ: 国土数値情報P11 2022
+- CRS / 計算: EPSG:6674 / Euclidean distance
+- Score C: 3つのpercentileの積
+- 施策案: 道路候補座標、before/after式、影響値、source hash
+
 ## 藤沢市 Cross-city Validation
 
 | Fact | 発表値 | Source |
@@ -55,4 +98,3 @@ Source: `frontend/public/data/final_demo.json` と独立再計算 `analysis/outp
 - PLATEAU: 舞鶴市・藤沢市2025年度
 
 これは2026年現在の状況そのものではありません。
-

@@ -149,6 +149,27 @@
       "records": 135,
       "bytes": 95447,
       "sha256": "9c533dc709933ef793624067f6571ee16049f5f3ac21da142eab794e846515e8"
+    },
+    {
+      "file": "robustness.json",
+      "status": "available",
+      "records": 286,
+      "bytes": 246712,
+      "sha256": "8710dbaba709d44a518fc403ea7710d8a18a4d5aa200ff63e6be528c5b94cfff"
+    },
+    {
+      "file": "intervention_scenarios.json",
+      "status": "available",
+      "records": 9,
+      "bytes": 893233,
+      "sha256": "488c8ce467679113cd35d237daa63f59fbd299e0a0c4f5df03073de22a737fce"
+    },
+    {
+      "file": "evidence.json",
+      "status": "available",
+      "records": 1,
+      "bytes": 10524,
+      "sha256": "0fa2fe88456a3737f3cf38edeb0daddaead83c2c57741c92a5a67b1144d6bbf2"
     }
   ],
   "plateau_reference_outputs": [
@@ -245,5 +266,11 @@
     "CITY GAP is an exploratory screening indicator, not a policy decision or confirmation of a local problem.",
     "Official PLATEAU 2025 contains no building models inside the CITY GAP Top 10; a separately validated PLATEAU-covered rank-23 Deep Dive is shown instead.",
     "PLATEAU road LOD1 surfaces do not provide a connected walking network, crossings, or passability; candidate effects therefore remain Euclidean-distance scenarios."
-  ]
+  ],
+  "decision_studio": {
+    "scenario_count": 9,
+    "candidate_count": 12062,
+    "algorithm": "1-site: exact evaluation of every screened road anchor. 2/3-site: deterministic forward greedy addition; each stage evaluates every spacing-eligible anchor.",
+    "exactness": "1-site exact within candidate pool; 2/3-site approximate greedy, not global optimum"
+  }
 }

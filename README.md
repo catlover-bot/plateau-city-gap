@@ -5,9 +5,9 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Score監査](docs/score-audit.md) · [想定Q&A](docs/qa.md) · [審査観点との対応](docs/judging.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
-![CITY GAPの舞鶴市デモ画面](docs/assets/final/city-gap-overview.png)
+![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
 ## Problem
 
@@ -17,13 +17,16 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 
 ## Solution
 
-舞鶴市の実データを500mメッシュ単位で統合し、発見から検証までを1つのブラウザ体験にしました。同じ設定駆動エンジンを藤沢市の実データへ適用し、都市横断で動くことも検証しています。
+舞鶴市の実データを500mメッシュ単位で統合し、課題候補の発見から条件感度、複数施策案の比較、根拠確認までを1つのブラウザ体験にしました。同じ設定駆動エンジンを藤沢市の実データへ適用し、都市横断で動くことも検証しています。
 
 - 495メッシュを「CITY GAP」「65歳以上人口」「公共交通距離」「医療距離」で切り替えて比較
 - Primary条件を満たす218メッシュから追加調査候補Top 10を表示
 - 実測値、最寄り施設、percentileを分解した決定論的な「なぜ？」説明
+- 9つの分析条件でTop 10 / Top 20への残り方を示すRobustness View
 - CesiumJS上で公式PLATEAU 2025の3D建物と実属性を確認
-- 仮想交通支援拠点を置き、距離と探索スコアのBefore / Afterをその場で再計算
+- 12,062のPLATEAU道路面候補から仮想交通支援拠点1〜3地点を比較
+- 全体改善・取り残し重視・頑健候補の3目的とBefore / Afterを比較
+- 距離・Score・配置案を公式データ、CRS、式、丸め前値まで辿るEvidence Chain
 - データ年次、計算方法、除外条件、限界をアプリ内で開示
 - 藤沢市327メッシュ、Top 10、WHYを横展開検証モードで表示（3D・What-ifは舞鶴市のみ）
 
@@ -33,26 +36,31 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 
 ## Demo
 
-Webデモを開き、地図上の `デモを見る` を押すと次の5ステップを順に再生できます。
+Webデモを開き、地図上の `デモを見る` を押すと次の8ステップを順に進めます。
 
-1. 高齢者数 → 交通 → 医療 → CITY GAPを切り替え、1枚の地図だけでは見えない重なりを発見
-2. Rank 1「二尾バス停周辺」の実数を分解
-3. PLATEAU-covered候補「常団地前バス停周辺」で3D Deep Dive
-4. 公式道路面上の現実的な配置候補でBefore / After
-5. 現地確認・住民ヒアリング・事業者協議へつなぐ
+1. 単独データでは見えない
+2. CITY GAPで発見
+3. 分析条件を変えても残るか確認
+4. PLATEAUで都市空間を確認
+5. 1地点なら
+6. 2地点なら
+7. 全体改善 vs 取り残し重視
+8. 藤沢市でも同じEngineを再現
 
-3D建物の公式整備範囲とTop 10は重なっていません。Step 3は、同じ286メッシュの比較で全市23位、公式建物296棟を確認できる候補へ移動します。**Top 10内0棟はPLATEAUへの批判ではなく、年度・整備範囲・LOD方針を含む都市データの空白を発見した結果**として扱います。発表時の操作と話す内容は [docs/demo-script.md](docs/demo-script.md) にまとめています。
+3D建物の公式整備範囲とTop 10は重なっていません。Step 4は、同じ286メッシュの比較で全市23位、公式建物296棟を確認できる候補へ移動します。**Top 10内0棟はPLATEAUへの批判ではなく、年度・整備範囲・LOD方針を含む都市データの空白を発見した結果**として扱います。発表時の操作と話す内容は [docs/demo-script.md](docs/demo-script.md) にまとめています。
 
 ## How it works
 
 ```text
 都市別YAML設定 + 公式rawデータ
   └─ 共通Python / GeoPandas分析（舞鶴 EPSG:6674 / 藤沢 EPSG:6677）
+       ├─ Robustness 9条件 + 12,062道路候補の事前最適化
        └─ analysis/outputs/real/  ← 分析値のSingle Source of Truth
             └─ 検証付きWeb asset生成
                  └─ frontend/public/data/
                       └─ React + TypeScript + CesiumJS（静的配信）
-                           └─ ブラウザ内What-if再計算
+                           ├─ 事前計算済み1/2/3地点案の比較
+                           └─ ブラウザ内の任意1地点What-if再計算
 ```
 
 分析値をフロントエンドへ手入力していません。`run_city_analysis.py` は `analysis/config/maizuru.yaml` / `fujisawa.yaml` を読み、同じ処理で成果物を生成します。Web asset builderはTop 10の順位、mesh codeの一意性、人口・距離・座標・geometry、元分析との対応を検証します。詳細は [architecture](docs/architecture.md)、[methodology](docs/methodology.md)、[cross-city validation](docs/cross-city-validation.md) を参照してください。
@@ -93,9 +101,9 @@ PLATEAUは装飾的な背景としてだけ使っていません。
 
 現行スコアへ建物形状・道路・DEMを入力してはいません。PLATEAUは現在、公式範囲の検証、3D実属性による地域文脈、配置候補の道路面制約、地形の注意喚起に使います。建物起点の歩行経路、道路接続・横断・坂を含む到達圏は今後です。
 
-## What-if simulation
+## CITY GAP Decision Studio
 
-`施策を試す` では地図上に仮想交通支援拠点を1点置きます。クリック座標をWGS84からJGD2011 / 平面直角座標系VI（EPSG:6674）へ変換し、分析と同じユークリッド直線距離で次を計算します。
+`施策配置` では、公式PLATEAU道路LOD1面から抽出した12,062候補を事前計算し、1〜3地点、全体改善・取り残し重視・頑健候補を比較します。任意の1地点を地図で試す従来What-ifも維持しています。座標をWGS84からJGD2011 / 平面直角座標系VI（EPSG:6674）へ変換し、分析と同じユークリッド直線距離で次を計算します。
 
 ```text
 after_transport_distance
@@ -104,7 +112,7 @@ after_transport_distance
 
 286件の比較対象で交通距離percentileを再計算し、高齢者数percentileと医療距離percentileを固定したままScore Cを再計算します。計算は決定論的で、固定のBefore / After値は使いません。
 
-発表のPrimary案は、公式PLATEAU道路LOD1面の内部代表点を候補にし、既存駅・バス停から150m超、候補間1.5km以上という条件で、286メッシュのScore C合計純減少を最大化します。候補1は「常団地前バス停周辺」の舞鶴和知線上です。5メッシュで距離が短くなり、そのメッシュに記録された65歳以上人口は241人、平均距離短縮は532.856mです。最大改善メッシュでは562.597m → 29.867m、Score C 0.279685 → 0.003609です。241人は利用者数・便益人口ではありません。道路面も利用可能な用地を意味しません。
+全体改善案は既存駅・バス停から150m超、候補間1.5km以上という条件で、286メッシュのScore C合計純減少を重視します。1地点は候補集合内のexact探索、2/3地点は決定論的forward greedy近似で、全組合せの最適解ではありません。1地点は5メッシュ・65歳以上記録人口241人・平均532.856m短縮、2地点は7メッシュ・377人・448.902m、3地点は9メッシュ・654人・422.785mです。詳細とfairness trade-offは [配置最適化](docs/intervention-optimization.md) を参照してください。
 
 `Rank 1中心で試す` の0mシナリオは診断用の折りたたみ内に残し、Primaryデモには使いません。
 
@@ -133,6 +141,8 @@ after_transport_distance
 - `analysis/scripts/inspect_plateau_buildings.py`: LOD1/LOD2全tileとTop 10 coverageの決定論的検査
 - `analysis/scripts/build_plateau_web_subset.py`: 検証済み公式3D Tilesから参照subsetを再生成
 - `analysis/scripts/build_final_demo_assets.py`: PLATEAU-covered候補、道路面Top 3、DEM・Deep Dive assetを再生成
+- `analysis/scripts/build_decision_studio_assets.py`: Robustnessと1/2/3地点・3目的の配置案を事前計算
+- `analysis/scripts/verify_decision_studio.py`: 全9案の距離・Score・Evidenceを独立再計算
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
@@ -169,6 +179,8 @@ python -m analysis.scripts.build_final_demo_assets
 python -m analysis.scripts.build_plateau_web_subset
 python -m analysis.scripts.run_final_audit
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_web_assets
+SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_decision_studio_assets
+python -m analysis.scripts.verify_decision_studio
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \
   --config analysis/config/fujisawa.yaml \
   --output-dir frontend/public/data/cities/fujisawa
@@ -193,7 +205,7 @@ npm run test
 npm run build
 ```
 
-Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、都市設定、藤沢の人口・境界・順位・安定性、Web asset検証を対象にします。Vitestは2都市のデータ読み込み、表示整形、ランキング、percentile、シナリオ距離・スコア再計算、欠損処理を対象にします。
+Python 40テストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
 
 ## Limitations
 
@@ -208,6 +220,8 @@ Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、�
 - 道路LOD1は面形状で、接続トポロジー、歩道、横断、通行可否を持ちません。What-if効果は引き続き直線距離です。
 - DEM勾配はTIN三角形の局所要約で、歩行経路の坂を表しません。
 - What-ifは用地、運行可能性、需要、費用を評価しません。
+- Robustness頻度は、定義した9条件内で候補が残る回数であり、確率・信頼度ではありません。
+- 2/3地点案は決定論的greedy近似で、大域的最適解ではありません。費用データがないためROIは扱いません。
 
 ## License / attribution
 

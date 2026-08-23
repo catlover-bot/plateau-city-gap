@@ -18,8 +18,8 @@ CITY GAPは、Project PLATEAU CityHack Challenge 2026の3つの観点を「実�
 4. **coverage QA**
    公式配布全427 b3dm、配布内44,640 unique buildingsをinspectionし、CITY GAP Top 10との空間照合が0棟であることを確認しました。候補地へ架空3D建物を置かず、「公式2025建物モデル整備範囲外」としてUIとmethodologyに出します。これは3Dデータを信頼できる範囲で使うための品質管理です。
 
-5. **道路面上の配置探索**
-   PLATEAU道路16,778面から、既存交通から150m超の12,062代表点を評価し、Score C合計純減少を最大化するTop 3を1.5km以上離して提示します。Primary候補は舞鶴和知線面上で、5mesh・65歳以上人口241人が属する範囲の距離が短縮します。
+5. **道路面上の複数地点配置探索**
+   PLATEAU道路16,778面から、既存交通から150m超の12,062代表点を評価し、1〜3地点を1.5km以上離して比較します。全体改善・取り残し重視・頑健候補で配置が変わることを示し、1地点は候補内exact、2/3地点は決定論的greedy近似と明記します。
 
 ### 現在の限界
 
@@ -49,16 +49,20 @@ CITY GAPは、Project PLATEAU CityHack Challenge 2026の3つの観点を「実�
   → 複数条件のズレからTop 10を発見
   → 実測値とpercentileで「なぜ？」を説明
   → PLATEAU-covered候補で実在3D・道路・coverageを確認
-  → 公式道路面Top 3でBefore / Afterを再計算
+  → 9分析条件で候補の頑健性を確認
+  → 公式道路面の1〜3地点・3目的でBefore / Afterを比較
+  → Evidence Chainで公式データ・CRS・式へ遡る
   → 現地確認・ヒアリング・事業者協議へ
 ```
 
 - 「高齢人口」「交通アクセス」「医療アクセス」「CITY GAP」の切替で、複数データを重ねる意味を体験できる
 - Rank、実測距離、percentile、Paretoを分離し、スコアだけを権威化しない
 - 説明文はLLM生成でなく分析値から決定論的に生成する
-- What-ifは地図clickをEPSG:6674へ変換し、baselineと同じ距離定義で全286meshの交通percentileを再計算する
+- 12,062候補の結果は事前計算し、任意の地図click What-ifもEPSG:6674と同じ距離定義で全286meshを再計算する
 - 同じasset・同じ座標なら同じ結果になり、固定のBefore / After演出値を使わない
 - データが存在しないこと自体をcoverage情報として提示する
+- Scoreへの恣意性批判を隠さず9条件の出現回数を表示し、確率とは呼ばない
+- 全体効率とworst-served改善を政策代替案として比較し、1案を推薦しない
 
 独自性は複雑なAIではなく、異種の都市データ、説明可能性、3Dデータ品質、施策感度を途切れない市民向け体験へまとめた点にあります。
 
@@ -117,7 +121,11 @@ CITY GAPは施策を自動決定しません。「どこを、なぜ、次に調
 | PLATEAU公式配布内44,640 / Top 10内0 | PLATEAU inspection metadata、`plateau_metadata.json` |
 | PLATEAU-covered Top 5 / Deep Dive 296棟 | `plateau_covered_candidates.csv`、`maizuru_final_demo.json` |
 | Web subset 3 tile / 856棟 / 4.31MB | subset selection metadata、Web `tileset.json` |
-| 道路面135 / DEM 20,965三角形 / 配置Top 3 | `final_demo.json`、`plateau_roads.geojson` |
+| 道路面135 / DEM 20,965三角形 / 配置候補12,062 | `final_demo.json`、`intervention_scenarios.json` |
+| Robustness 9条件 / Rank 1は9/9 Top 10 | `maizuru_robustness.json`、`docs/robustness.md` |
+| 1/2/3地点・全体/fairness/robust | `maizuru_intervention_*.json`、`docs/intervention-optimization.md` |
+| 全9案の独立再計算 | `maizuru_decision_studio_verification.json` |
+| 根拠追跡 | `evidence.json`、`docs/evidence-chain.md` |
 | 実属性だけを表示 | 3D Tiles batch table inspection、building detail UI |
 | What-ifは同じ距離定義 | `frontend/src/lib/scenario.ts`、scenario tests |
 | 手法と限界を開示 | `docs/methodology.md`、アプリの `データと計算方法` |

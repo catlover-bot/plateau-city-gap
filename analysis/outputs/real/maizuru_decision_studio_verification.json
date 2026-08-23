@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "method": "independent pandas percentile and coordinate-distance recomputation; impacts must match within 5e-7 and every mesh value must match its published rounding",
+  "plans_checked": 9,
+  "checks": [
+    {
+      "plan_id": "overall-1",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 0.0,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "overall-2",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 0.0,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "overall-3",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 2.0004335965495557e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "fairness-1",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 9.999894245993346e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "fairness-2",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 9.999894245993346e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "fairness-3",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 1.899934432003647e-08,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "robust-1",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 1.999978849198669e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "robust-2",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 1.000444171950221e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    },
+    {
+      "plan_id": "robust-3",
+      "impact_match_within_5e-7": true,
+      "maximum_impact_difference": 1.999978849198669e-09,
+      "mesh_values_match_published_rounding": true,
+      "greedy_prefix_is_nested": true,
+      "site_spacing_check": true,
+      "evidence_chain_match": true
+    }
+  ],
+  "exact_match": true
+}

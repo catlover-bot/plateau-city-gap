@@ -29,7 +29,7 @@
 - [x] Candidate source, 150m exclusion, 1.5km separation, and objective disclosed
 - [x] Improved meshes, recorded elderly population, mean distance change, total Score C change shown
 - [x] “Affected elderly population” is not described as users or beneficiaries
-- [x] Story has five steps: mode comparison, Rank 1, 3D Deep Dive, realistic candidate, decision entry
+- [x] Presentation Mode has eight steps: discovery, Rank 1, robustness, 3D, 1-site, 2-site, fairness, Fujisawa
 - [x] Rank 1 centroid scenario remains only as a diagnostic option
 
 ## Delivery and fallback
@@ -84,3 +84,23 @@
 - [ ] GitHub Pages final deployment
 - [ ] Published city switch and data response verification
 - [ ] Final commit and clean worktree
+
+## Decision Studio final phase
+
+- [x] 9 predefined robustness conditions; frequency is not framed as probability
+- [x] Robust candidate ordering is deterministic and documented
+- [x] 12,062 PLATEAU road-surface candidates retain coordinates and source identity
+- [x] 1-site exact within candidate pool
+- [x] 2/3-site deterministic greedy approximation disclosed
+- [x] Overall, fairness, and robust alternatives compare different objectives
+- [x] 0→1→2→3 diminishing returns shown without ROI wording
+- [x] Before / After map uses the same Score C scale
+- [x] Selected mesh shows a restrained straight-line calculation correspondence
+- [x] Evidence Chain exposes source, CRS, equation, raw value, and plan coordinates
+- [x] Independent verifier recomputes all 9 plans and Evidence Chain
+- [x] Python robustness/optimizer/evidence tests
+- [x] Frontend Decision Studio tests including prohibited wording
+- [x] Mobile styles added for Decision controls and Evidence modal
+- [x] Final-v2 screenshots 01–10 regenerated
+- [x] Production browser console errors = 0
+- [ ] GitHub Pages final deployment and asset response verification

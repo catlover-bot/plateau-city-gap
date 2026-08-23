@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { BuildingInfoCard } from "./components/BuildingInfoCard";
 import type { CesiumMapHandle } from "./components/CesiumMap";
 import { DetailPanel } from "./components/DetailPanel";
+import { EvidenceModal } from "./components/EvidenceModal";
 import { EmptyState, ErrorState, LoadingState } from "./components/AppStates";
 import { LayerPanel } from "./components/LayerPanel";
 import { MethodologyModal } from "./components/MethodologyModal";
@@ -13,7 +14,16 @@ import { loadAppData, loadValidationCityData } from "./lib/data";
 import { finiteNumber } from "./lib/format";
 import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
-import type { AppData, BuildingInfo, LayerVisibility, MeshMetrics, MetricMode, PlacementCandidate } from "./types";
+import type {
+  AppData,
+  BuildingInfo,
+  DecisionMapPhase,
+  DecisionMode,
+  LayerVisibility,
+  MeshMetrics,
+  MetricMode,
+  RobustCandidate
+} from "./types";
 
 const CesiumMap = lazy(async () => {
   const module = await import("./components/CesiumMap");
@@ -49,6 +59,7 @@ export default function App() {
   const [layers, setLayers] = useState(INITIAL_LAYERS);
   const [layerPanelOpen, setLayerPanelOpen] = useState(false);
   const [methodologyOpen, setMethodologyOpen] = useState(false);
+  const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [selectedMesh, setSelectedMesh] = useState<MeshMetrics | null>(null);
   const [sideTab, setSideTab] = useState<SideTab>("detail");
   const [mapReady, setMapReady] = useState(false);
@@ -59,6 +70,10 @@ export default function App() {
   const [virtualPoint, setVirtualPoint] = useState<VirtualPoint | null>(null);
   const [storyStep, setStoryStep] = useState<number | null>(null);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingInfo | null>(null);
+  const [rankingView, setRankingView] = useState<"score" | "robust">("score");
+  const [decisionMode, setDecisionMode] = useState<DecisionMode>("overall");
+  const [siteCount, setSiteCount] = useState<1 | 2 | 3>(1);
+  const [mapPhase, setMapPhase] = useState<DecisionMapPhase>("before");
   const mapRef = useRef<CesiumMapHandle>(null);
 
   useEffect(() => {
@@ -95,6 +110,11 @@ export default function App() {
     setScenario(null);
     setVirtualPoint(null);
     setPlacementMode(false);
+    setRankingView("score");
+    setDecisionMode("overall");
+    setSiteCount(1);
+    setMapPhase("before");
+    setEvidenceOpen(false);
     setMapReady(false);
     setMapError(null);
     setMapWarning(null);
@@ -117,6 +137,28 @@ export default function App() {
     return [{ ...properties, mesh_code: String(code) } as MeshMetrics];
   }) ?? [], [data]);
 
+  const robustLookup = useMemo(() => Object.fromEntries(
+    (data?.robustness?.candidates ?? []).map((candidate) => [candidate.mesh_code, candidate])
+  ) as Record<string, RobustCandidate>, [data]);
+  const robustRanking = useMemo(() => (data?.robustness?.top_candidates ?? []).slice(0, 10).flatMap((candidate) => {
+    const mesh = allMeshes.find((item) => item.mesh_code === candidate.mesh_code);
+    return mesh ? [{ ...mesh, rank: candidate.robust_rank }] : [];
+  }), [allMeshes, data]);
+  const decisionPlan = data?.interventions?.plans[decisionMode][String(siteCount) as "1" | "2" | "3"] ?? null;
+  const afterScores = useMemo(() => {
+    if (mapPhase !== "after" || !decisionPlan) return null;
+    return Object.fromEntries(Object.entries(decisionPlan.mesh_results).map(([code, result]) => [code, result.after_score_c]));
+  }, [decisionPlan, mapPhase]);
+  const decisionFlow = useMemo(() => {
+    if (!decisionPlan || !selectedMesh) return null;
+    const result = decisionPlan.mesh_results[selectedMesh.mesh_code];
+    const site = decisionPlan.sites.find((item) => item.candidate_id === result?.assigned_site_id);
+    const meshLongitude = finiteNumber(selectedMesh.centroid_lon);
+    const meshLatitude = finiteNumber(selectedMesh.centroid_lat);
+    if (!site || meshLongitude === null || meshLatitude === null || result.distance_reduction_m <= 0) return null;
+    return { meshLongitude, meshLatitude, siteLongitude: site.longitude, siteLatitude: site.latitude };
+  }, [decisionPlan, selectedMesh]);
+
   const runScenario = useCallback((point: VirtualPoint) => {
     const result = calculateScenario(allMeshes, point);
     setVirtualPoint(point);
@@ -124,27 +166,6 @@ export default function App() {
     setPlacementMode(false);
     setSideTab("scenario");
   }, [allMeshes]);
-
-  const tryRankOne = useCallback(() => {
-    const rankOne = data?.top10[0];
-    const longitude = finiteNumber(rankOne?.centroid_lon);
-    const latitude = finiteNumber(rankOne?.centroid_lat);
-    if (!rankOne || longitude === null || latitude === null) return;
-    setSelectedMesh(rankOne);
-    setSelectedBuilding(null);
-    mapRef.current?.flyToMesh(rankOne);
-    runScenario({ longitude, latitude });
-  }, [data, runScenario]);
-
-  const tryCandidate = useCallback((candidate: PlacementCandidate) => {
-    const mesh = allMeshes.find((item) => item.mesh_code === candidate.top_improvement_mesh);
-    if (mesh) {
-      setSelectedMesh(mesh);
-      setSelectedBuilding(null);
-      mapRef.current?.flyToMesh(mesh);
-    }
-    runScenario({ longitude: candidate.longitude, latitude: candidate.latitude });
-  }, [allMeshes, runScenario]);
 
   const selectScenarioMesh = useCallback((meshCode: string) => {
     if (!data) return;
@@ -169,6 +190,7 @@ export default function App() {
     if (step === null) {
       setLayers((current) => ({ ...current, meshes: true }));
       setMetricMode("gap");
+      setMapPhase("before");
     }
   }, []);
 
@@ -195,6 +217,13 @@ export default function App() {
       setSideTab("detail");
       mapRef.current?.flyToMesh(rankOne);
     } else if (storyStep === 2) {
+      setLayers((current) => ({ ...current, meshes: true, plateau: false }));
+      setMetricMode("gap");
+      setRankingView("robust");
+      setSelectedMesh(rankOne);
+      setSideTab("detail");
+      mapRef.current?.flyToMesh(rankOne);
+    } else if (storyStep === 3) {
       const deepMesh = allMeshes.find((mesh) => mesh.mesh_code === data.finalDemo?.deep_dive.mesh_code) ?? null;
       setLayers((current) => ({ ...current, plateau: true, meshes: false, stations: true, busStops: true, medical: true }));
       setMetricMode("gap");
@@ -212,16 +241,29 @@ export default function App() {
       } : null);
       setSideTab("detail");
       timers.push(window.setTimeout(() => mapRef.current?.flyToPlateau(), 120));
-    } else if (storyStep === 3) {
+    } else if (storyStep === 4) {
       setLayers((current) => ({ ...current, meshes: true, plateau: true, stations: true, busStops: true, medical: true }));
       setSelectedBuilding(null);
-      const best = data.finalDemo?.placement_optimization.candidates[0];
-      if (best) tryCandidate(best);
-    } else if (storyStep === 4) {
       setSideTab("scenario");
+      setDecisionMode("overall");
+      setSiteCount(1);
+      setMapPhase("after");
+    } else if (storyStep === 5) {
+      setSideTab("scenario");
+      setDecisionMode("overall");
+      setSiteCount(2);
+      setMapPhase("after");
+    } else if (storyStep === 6) {
+      setSideTab("scenario");
+      setDecisionMode("fairness");
+      setSiteCount(2);
+      setMapPhase("after");
+    } else if (storyStep === 7) {
+      setLayers((current) => ({ ...current, meshes: true, plateau: false }));
+      setMapPhase("before");
     }
     return () => timers.forEach((timer) => window.clearTimeout(timer));
-  }, [allMeshes, data, storyStep, tryCandidate]);
+  }, [allMeshes, data, storyStep]);
 
   if (error) return <ErrorState message={error} onRetry={() => setRetryKey((key) => key + 1)} />;
   if (!data) return <LoadingState />;
@@ -277,6 +319,9 @@ export default function App() {
             visibility={layers}
             placementMode={placementMode}
             virtualPoint={virtualPoint}
+            decisionSites={sideTab === "scenario" && decisionPlan ? decisionPlan.sites : []}
+            afterScores={sideTab === "scenario" ? afterScores : null}
+            decisionFlow={sideTab === "scenario" ? decisionFlow : null}
             onMeshSelect={selectMesh}
             onVirtualPointSelect={runScenario}
             onBuildingSelect={setSelectedBuilding}
@@ -352,6 +397,9 @@ export default function App() {
             ready={mapReady && !mapError}
             finalDemo={data.finalDemo}
             rankOne={data.top10[0] ?? null}
+            robustness={data.robustness}
+            interventions={data.interventions}
+            onOpenValidation={() => switchCity("fujisawa")}
           />
         )}
 
@@ -419,7 +467,7 @@ export default function App() {
             className={sideTab === "scenario" ? "active" : ""}
             onClick={() => setSideTab("scenario")}
           >
-            WHAT-IF<span>施策を試す</span>
+            DECISION<span>施策配置</span>
           </button>}
         </div>
         <div className="panel-scroll" role="tabpanel">
@@ -427,40 +475,52 @@ export default function App() {
             <>
               <div className="ranking-intro">
                 <div><span aria-hidden="true">⌖</span><strong>追加調査候補</strong></div>
-                <p>{eligibleCount ? `${eligibleCount}件のPrimary対象から` : "Primary対象から"}探索スコア順に表示。カードを押すと現地へ移動します。</p>
+                <p>{rankingView === "robust" ? "9条件でTop 10に残る回数と順位の安定性を表示。" : `${eligibleCount ? `${eligibleCount}件のPrimary対象から` : "Primary対象から"}探索スコア順に表示。`}カードを押すと現地へ移動します。</p>
               </div>
+              {isPrimary && data.robustness && <div className="ranking-view-switch" role="group" aria-label="ランキング表示">
+                <button type="button" className={rankingView === "score" ? "active" : ""} aria-pressed={rankingView === "score"} onClick={() => setRankingView("score")}>基準スコア</button>
+                <button type="button" className={rankingView === "robust" ? "active" : ""} aria-pressed={rankingView === "robust"} onClick={() => setRankingView("robust")}>頑健ランキング</button>
+              </div>}
               <RankingPanel
-                items={data.top10}
+                items={rankingView === "robust" && robustRanking.length ? robustRanking : data.top10}
                 selectedMeshCode={selectedMesh?.mesh_code ?? null}
                 onSelect={selectMesh}
+                mode={rankingView}
+                robustness={robustLookup}
               />
-              <p className="ranking-disclaimer">探索スコアは政策的な公式指標や危険度ではありません。</p>
+              <p className="ranking-disclaimer">{rankingView === "robust" ? "出現回数は確率・信頼度ではありません。" : "探索スコアは政策的な公式指標や危険度ではありません。"}</p>
             </>
           ) : sideTab === "detail" ? (
-            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} />
-          ) : sideTab === "scenario" && isPrimary && data.finalDemo ? (
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} robustness={selectedMesh ? robustLookup[selectedMesh.mesh_code] : undefined} onEvidence={data.evidence ? () => setEvidenceOpen(true) : undefined} />
+          ) : sideTab === "scenario" && isPrimary && data.interventions && decisionPlan ? (
               <ScenarioPanel
-              result={scenario}
+              interventions={data.interventions}
+              plan={decisionPlan}
+              mode={decisionMode}
+              siteCount={siteCount}
+              mapPhase={mapPhase}
               selectedMesh={selectedMesh}
+              freeResult={scenario}
               placementMode={placementMode}
+              onModeChange={(mode) => { setDecisionMode(mode); setMapPhase("before"); }}
+              onSiteCountChange={(count) => { setSiteCount(count); setMapPhase("before"); }}
+              onMapPhaseChange={(phase) => { setMapPhase(phase); setMetricMode("gap"); setLayers((current) => ({ ...current, meshes: true })); }}
+              onSelectMesh={selectScenarioMesh}
               onStartPlacement={() => {
                 setPlacementMode(true);
                 setSelectedBuilding(null);
               }}
-                onTryRankOne={tryRankOne}
-              candidates={data.finalDemo.placement_optimization.candidates}
-                onTryCandidate={tryCandidate}
-              onSelectMesh={selectScenarioMesh}
-              onReset={resetScenario}
-              comparisonMeshCount={comparisonMeshCount}
+              onResetFree={resetScenario}
+              onEvidence={() => setEvidenceOpen(true)}
             />
           ) : (
-            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} />
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} robustness={selectedMesh ? robustLookup[selectedMesh.mesh_code] : undefined} onEvidence={data.evidence ? () => setEvidenceOpen(true) : undefined} />
           )}
         </div>
       </aside>
 
       <MethodologyModal open={methodologyOpen} data={data} onClose={() => setMethodologyOpen(false)} />
+      <EvidenceModal open={evidenceOpen} evidence={data.evidence} plan={decisionPlan} onClose={() => setEvidenceOpen(false)} />
     </div>
   );
 }

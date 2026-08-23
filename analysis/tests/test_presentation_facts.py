@@ -16,6 +16,15 @@ def test_presentation_facts_match_published_outputs() -> None:
     audit = json.loads((REAL / "final_audit.json").read_text(encoding="utf-8"))
     maizuru = _rank_one("maizuru")
     fujisawa = _rank_one("fujisawa")
+    robustness = json.loads(
+        (REAL / "maizuru_robustness.json").read_text(encoding="utf-8")
+    )
+    intervention = json.loads(
+        (REAL / "maizuru_intervention_3site.json").read_text(encoding="utf-8")
+    )
+    verification = json.loads(
+        (REAL / "maizuru_decision_studio_verification.json").read_text(encoding="utf-8")
+    )
 
     assert maizuru["mesh_code"] == "533512753"
     assert int(float(maizuru["population"])) == 91
@@ -31,6 +40,11 @@ def test_presentation_facts_match_published_outputs() -> None:
         ["boundary_sensitivity_excluding_uncertain_medical"]["top10_overlap_with_primary"]
         == 7
     )
+    assert robustness["top_candidates"][0]["mesh_code"] == maizuru["mesh_code"]
+    assert robustness["top_candidates"][0]["top10_frequency"] == 9
+    assert intervention["impact"]["improved_mesh_count"] == 9
+    assert intervention["impact"]["affected_elderly_population"] == 654
+    assert verification["exact_match"] is True
 
     for required_text in (
         "2.32km",
@@ -38,6 +52,9 @@ def test_presentation_facts_match_published_outputs() -> None:
         "3,590人 / 921人",
         "交通346m、医療506m",
         "241人は利用者、受益者、需要、乗客の予測ではありません",
+        "Top 10: 9/9",
+        "| 3地点 | 9 | 654 | 422.785m | 0.437346069 |",
+        "`exact_match: true`",
     ):
         assert required_text in facts
 
