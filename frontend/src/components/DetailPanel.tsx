@@ -1,4 +1,4 @@
-import type { MeshMetrics, RobustCandidate, Summary } from "../types";
+import type { MeshMetrics, PlateauBuildingDemographicsDetail, RobustCandidate, Summary } from "../types";
 import {
   formatDistance,
   formatInteger,
@@ -17,6 +17,7 @@ interface DetailPanelProps {
   cityName?: string;
   audit?: Summary["audit"];
   robustness?: RobustCandidate | null;
+  plateauDetail?: PlateauBuildingDemographicsDetail | null;
   onEvidence?: () => void;
 }
 
@@ -66,7 +67,7 @@ function relativeDistance(value: unknown, cityName = "市内"): string {
   return `${cityName}では遠い側 上位約${Math.max(1, Math.round((1 - percentile) * 100))}%`;
 }
 
-export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit, robustness, onEvidence }: DetailPanelProps) {
+export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit, robustness, plateauDetail, onEvidence }: DetailPanelProps) {
   if (!mesh) {
     return (
       <div className="panel-empty" role="status">
@@ -110,6 +111,19 @@ export function DetailPanel({ mesh, comparisonMeshCount, cityName, audit, robust
           <span>{relativeDistance(mesh.medical_distance_percentile, cityName)}</span>
         </div>
       </div>
+      {plateauDetail && (
+        <section className="plateau-detail-section">
+          <div className="section-kicker"><span>PLATEAU</span> 建物分布で詳しく見る</div>
+          <p>500m統計を、公式PLATEAUの住宅建物の延べ面積で配分した推計です。</p>
+          <div className="plateau-detail-grid">
+            <div><small>500m中心 → 交通</small><strong>{formatDistance(plateauDetail.centroid_transport_distance_m)}</strong></div>
+            <div><small>住宅建物加重 平均</small><strong>{formatDistance(plateauDetail.weighted_mean_transport_distance_m)}</strong></div>
+            <div><small>住宅建物加重 90%点</small><strong>{formatDistance(plateauDetail.weighted_p90_transport_distance_m)}</strong></div>
+            <div><small>配分対象住宅</small><strong>{plateauDetail.residential_building_count.toLocaleString("ja-JP")}棟</strong></div>
+          </div>
+          <small>建物別の人数は公開していません。実居住者・住民票・確認済み入居数ではありません。</small>
+        </section>
+      )}
       {onEvidence && <button type="button" className="evidence-link" onClick={onEvidence}>根拠を見る — 距離・Scoreの計算過程</button>}
 
       <section className="why-section">

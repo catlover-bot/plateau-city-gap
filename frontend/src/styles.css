@@ -2505,3 +2505,39 @@ input:focus-visible,
   .decision-segments.three button { font-size: 7px; }
   .evidence-modal { max-height: 92dvh; }
 }
+.plateau-detail-section {
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid rgba(74, 222, 128, 0.26);
+  border-radius: 12px;
+  background: rgba(13, 43, 38, 0.6);
+}
+
+.plateau-detail-section > p,
+.plateau-detail-section > small {
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.plateau-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.plateau-detail-grid > div {
+  padding: 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.plateau-detail-grid small,
+.plateau-detail-grid strong {
+  display: block;
+}
+
+.plateau-detail-grid strong {
+  margin-top: 3px;
+  color: #d1fae5;
+}

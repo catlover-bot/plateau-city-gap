@@ -1,0 +1,19 @@
+usage_code,official_label,classification,observed_building_count,mapping_source,codelist_member,codelist_member_crc32
+401,業務施設,non_residential,969,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+402,商業施設,non_residential,1177,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+403,宿泊施設,non_residential,77,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+404,商業系複合施設,non_residential,110,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+411,住宅,residential,27891,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+412,共同住宅,residential,1783,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+413,店舗等併用住宅,mixed_residential,1461,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+414,店舗等併用共同住宅,mixed_residential,99,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+415,作業所併用住宅,mixed_residential,104,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+421,官公庁施設,non_residential,142,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+422,文教厚生施設,non_residential,1283,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+431,運輸倉庫施設,non_residential,1067,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+441,工場,non_residential,1001,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+451,農林漁業用施設,non_residential,344,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+452,供給処理施設,non_residential,86,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+453,防衛施設,non_residential,0,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+454,その他,non_residential,0,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25
+461,不明,uncertain,7046,Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label,codelists/Building_usage.xml,85563f25

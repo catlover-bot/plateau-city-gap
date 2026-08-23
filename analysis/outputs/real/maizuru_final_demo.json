@@ -123,7 +123,23 @@
       "limitation": "TIN三角形の局所勾配要約であり、歩行経路の坂や通行可能性ではない。"
     },
     "building_score_linkage": false,
-    "building_score_note": "建物属性は地域文脈の確認用。CITY GAPは500mメッシュ単位であり、個々の建物にスコアを付与していない。"
+    "building_score_note": "建物属性は地域文脈の確認用。CITY GAPは500mメッシュ単位であり、個々の建物にスコアを付与していない。",
+    "building_demographics_detail": {
+      "method": "estimated 500m census allocated by strict residential PLATEAU floor area",
+      "privacy": "mesh aggregate only; no per-building estimated person counts",
+      "residential_building_count": 245,
+      "mixed_residential_building_count": 8,
+      "estimated_population_allocated": 471.00000000000006,
+      "estimated_elderly_allocated": 200.0,
+      "centroid_transport_distance_m": 562.5974946252306,
+      "weighted_mean_transport_distance_m": 446.8814183475994,
+      "weighted_median_transport_distance_m": 439.29567935801924,
+      "weighted_p90_transport_distance_m": 597.5062845079211,
+      "centroid_medical_distance_m": 1450.5478993305774,
+      "weighted_mean_medical_distance_m": 1444.7166428671458,
+      "weighted_median_medical_distance_m": 1457.5863946448653,
+      "weighted_p90_medical_distance_m": 1586.6129681480925
+    }
   },
   "placement_optimization": {
     "candidate_source": "公式PLATEAU道路LOD1面の内部代表点",

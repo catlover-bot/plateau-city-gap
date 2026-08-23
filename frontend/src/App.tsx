@@ -491,7 +491,7 @@ export default function App() {
               <p className="ranking-disclaimer">{rankingView === "robust" ? "出現回数は確率・信頼度ではありません。" : "探索スコアは政策的な公式指標や危険度ではありません。"}</p>
             </>
           ) : sideTab === "detail" ? (
-            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} robustness={selectedMesh ? robustLookup[selectedMesh.mesh_code] : undefined} onEvidence={data.evidence ? () => setEvidenceOpen(true) : undefined} />
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} cityName={data.city.name} audit={data.summary.audit} robustness={selectedMesh ? robustLookup[selectedMesh.mesh_code] : undefined} plateauDetail={selectedMesh?.mesh_code === data.finalDemo?.deep_dive.mesh_code ? data.finalDemo?.deep_dive.building_demographics_detail ?? null : null} onEvidence={data.evidence ? () => setEvidenceOpen(true) : undefined} />
           ) : sideTab === "scenario" && isPrimary && data.interventions && decisionPlan ? (
               <ScenarioPanel
               interventions={data.interventions}

@@ -22,6 +22,28 @@ class FakeRepository:
     ) -> list[dict[str, Any]]:
         return [{"gml_id": "b-1", "city_id": city_id, "bbox": bbox, "limit": limit}]
 
+    def mesh_detail(self, city_id: str, mesh_code: str) -> dict[str, Any] | None:
+        if mesh_code == "missing":
+            return None
+        return {"city_id": city_id, "mesh_code": mesh_code, "estimated_population": 471}
+
+    def building_detail(self, city_id: str, gml_id: str) -> dict[str, Any] | None:
+        if gml_id == "missing":
+            return None
+        return {"city_id": city_id, "gml_id": gml_id, "estimated_demographics": []}
+
+    def building_accessibility(self, city_id: str, gml_id: str) -> dict[str, Any] | None:
+        if gml_id == "missing":
+            return None
+        return {
+            "city_id": city_id,
+            "gml_id": gml_id,
+            "policies": [
+                {"origin_method": "building_origin_representative_point"},
+                {"origin_method": "building_origin_representative_point"},
+            ],
+        }
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -47,3 +69,15 @@ def test_buildings_requires_valid_bbox_and_is_bounded() -> None:
     assert response.status_code == 200
     assert response.json()["features"][0]["gml_id"] == "b-1"
     assert client.get("/cities/26202/buildings?bbox=135,35,136,36&limit=1001").status_code == 422
+
+
+def test_priority2_detail_contracts_are_bounded_to_one_mesh_or_building() -> None:
+    assert client.get("/cities/26202/meshes/533513314/detail").status_code == 200
+    assert client.get("/cities/26202/meshes/missing/detail").status_code == 404
+    assert client.get("/cities/26202/buildings/b-1").json()["gml_id"] == "b-1"
+    accessibility = client.get("/cities/26202/buildings/b-1/accessibility").json()
+    assert len(accessibility["policies"]) == 2
+    assert accessibility["policies"][0]["origin_method"] == (
+        "building_origin_representative_point"
+    )
+    assert client.get("/cities/26202/buildings/missing").status_code == 404

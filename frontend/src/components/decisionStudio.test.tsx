@@ -1,9 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import evidenceJson from "../../public/data/evidence.json";
+import finalDemoJson from "../../public/data/final_demo.json";
 import interventionsJson from "../../public/data/intervention_scenarios.json";
 import robustnessJson from "../../public/data/robustness.json";
-import type { EvidenceData, InterventionData, MeshMetrics, RobustnessData } from "../types";
+import type { EvidenceData, FinalDemoData, InterventionData, MeshMetrics, RobustnessData } from "../types";
 import { DetailPanel } from "./DetailPanel";
 import { EvidenceModal } from "./EvidenceModal";
 import { ScenarioPanel } from "./ScenarioPanel";
@@ -11,6 +12,7 @@ import { ScenarioPanel } from "./ScenarioPanel";
 const interventions = interventionsJson as unknown as InterventionData;
 const robustness = robustnessJson as unknown as RobustnessData;
 const evidence = evidenceJson as unknown as EvidenceData;
+const finalDemo = finalDemoJson as unknown as FinalDemoData;
 const noop = () => undefined;
 
 function renderPlan(mode: "overall" | "fairness" | "robust", count: "1" | "2" | "3", phase: "before" | "after") {
@@ -50,6 +52,21 @@ describe("Decision Studio UI", () => {
     expect(html).toContain(`${candidate.top10_frequency}条件`);
     expect(html).toContain("確率や信頼度ではありません");
     expect(html).not.toContain("95%信頼");
+  });
+
+  it("publishes only the aggregated PLATEAU building-detail comparison", () => {
+    const detail = finalDemo.deep_dive.building_demographics_detail;
+    expect(detail).toBeDefined();
+    const html = renderToStaticMarkup(
+      <DetailPanel
+        mesh={{ mesh_code: finalDemo.deep_dive.mesh_code }}
+        plateauDetail={detail}
+      />
+    );
+    expect(html).toContain("建物分布で詳しく見る");
+    expect(html).toContain(`${detail?.residential_building_count.toLocaleString("ja-JP")}棟`);
+    expect(html).toContain("建物別の人数は公開していません");
+    expect(finalDemo.deep_dive).not.toHaveProperty("building_demographics_records");
   });
 
   it("renders 1/2/3-site plans with their actual number of sites", () => {

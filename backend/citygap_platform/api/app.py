@@ -74,6 +74,39 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             "features": repo.buildings(city_id, parsed_bbox, limit, offset),
         }
 
+    @application.get("/cities/{city_id}/meshes/{mesh_code}/detail")
+    def mesh_detail(
+        city_id: str,
+        mesh_code: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        detail = repo.mesh_detail(city_id, mesh_code)
+        if detail is None:
+            raise HTTPException(status_code=404, detail="PLATEAU mesh detail not found")
+        return detail
+
+    @application.get("/cities/{city_id}/buildings/{gml_id}")
+    def building_detail(
+        city_id: str,
+        gml_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        detail = repo.building_detail(city_id, gml_id)
+        if detail is None:
+            raise HTTPException(status_code=404, detail="Building not found")
+        return detail
+
+    @application.get("/cities/{city_id}/buildings/{gml_id}/accessibility")
+    def building_accessibility(
+        city_id: str,
+        gml_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        detail = repo.building_accessibility(city_id, gml_id)
+        if detail is None:
+            raise HTTPException(status_code=404, detail="Building accessibility not found")
+        return detail
+
     return application
 
 

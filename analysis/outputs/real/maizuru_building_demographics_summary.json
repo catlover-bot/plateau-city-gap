@@ -1,0 +1,290 @@
+{
+  "conservation": {
+    "mixed_elderly_max_abs_error": 5.684341886080802e-14,
+    "mixed_population_max_abs_error": 2.2737367544323206e-13,
+    "strict_elderly_max_abs_error": 5.684341886080802e-14,
+    "strict_population_max_abs_error": 1.1368683772161603e-13
+  },
+  "counts": {
+    "buildings_audited": 44640,
+    "crosswalk_records": 46021,
+    "mixed_residential_buildings_citywide": 1664,
+    "mixed_sensitivity_allocated_meshes": 150,
+    "multi_mesh_buildings": 1846,
+    "strict_allocated_meshes": 149,
+    "strict_demographic_records": 29603,
+    "strict_residential_buildings_citywide": 29674,
+    "uncertain_buildings_citywide": 7046
+  },
+  "coverage_all_meshes": {
+    "building_detail_available": 149,
+    "mesh_fallback_no_plateau": 132,
+    "mesh_fallback_no_residential_building": 5,
+    "mesh_fallback_suppression": 209
+  },
+  "coverage_unaffected_comparison_meshes": {
+    "counts": {
+      "building_detail_available": 149,
+      "mesh_fallback_no_plateau": 132,
+      "mesh_fallback_no_residential_building": 5
+    },
+    "denominator": 286,
+    "percentages": {
+      "building_detail_available": 52.098,
+      "mesh_fallback_no_plateau": 46.154,
+      "mesh_fallback_no_residential_building": 1.748
+    }
+  },
+  "deep_dive_mesh_533513314": {
+    "centroid_medical_distance": 1450.5478993305774,
+    "centroid_transport_distance": 562.5974946252306,
+    "citywide_screening_rank": "23",
+    "estimated_elderly_allocated": 200.0,
+    "estimated_population_allocated": 471.00000000000006,
+    "label": "常団地前周辺",
+    "medical_difference": -5.8312564634316,
+    "mesh_code": "533513314",
+    "mixed_residential_buildings": 8,
+    "population_weighted_mean_medical_distance": 1444.7166428671458,
+    "population_weighted_mean_transport_distance": 446.8814183475994,
+    "population_weighted_median_medical_distance": 1457.5863946448653,
+    "population_weighted_median_transport_distance": 439.29567935801924,
+    "population_weighted_p90_medical_distance": 1586.6129681480925,
+    "population_weighted_p90_transport_distance": 597.5062845079211,
+    "residential_building_count": 245,
+    "transport_difference": -115.71607627763126,
+    "weighted_mean_medical_distance": 1444.7166428671458,
+    "weighted_mean_transport_distance": 446.8814183475994,
+    "weighted_median_medical_distance": 1457.5863946448653,
+    "weighted_median_transport_distance": 439.29567935801924,
+    "weighted_p90_medical_distance": 1586.6129681480925,
+    "weighted_p90_transport_distance": 597.5062845079211
+  },
+  "facility_policy_audit": {
+    "baseline": {
+      "bus_stops": 151,
+      "medical_points": 71,
+      "policy": "city_baseline_including_uncertain_medical",
+      "stations": 7,
+      "transport_points": 158
+    },
+    "conservative": {
+      "medical_points": 66,
+      "policy": "two_km_cross_border_excluding_uncertain_medical",
+      "transport_points": 187
+    }
+  },
+  "informative_examples": {
+    "centroid_overestimates_transport_most": {
+      "centroid_medical_distance": 1946.8430976113152,
+      "centroid_transport_distance": 929.4708676115221,
+      "citywide_screening_rank": "166",
+      "estimated_elderly_allocated": 7.000000000000001,
+      "estimated_population_allocated": 12.0,
+      "label": "堂の奥周辺",
+      "medical_difference": -298.3530988830835,
+      "mesh_code": "533513541",
+      "population_weighted_mean_medical_distance": 1648.4899987282317,
+      "population_weighted_mean_transport_distance": 624.2370554029814,
+      "population_weighted_median_medical_distance": 1638.7123062983862,
+      "population_weighted_median_transport_distance": 629.6306908422138,
+      "population_weighted_p90_medical_distance": 1685.2475515168555,
+      "population_weighted_p90_transport_distance": 649.210539265926,
+      "residential_building_count": 15,
+      "transport_difference": -305.2338122085408,
+      "weighted_mean_medical_distance": 1648.4899987282317,
+      "weighted_mean_transport_distance": 624.2370554029812,
+      "weighted_median_medical_distance": 1638.7123062983862,
+      "weighted_median_transport_distance": 629.6306908422138,
+      "weighted_p90_medical_distance": 1685.2475515168555,
+      "weighted_p90_transport_distance": 649.210539265926
+    },
+    "centroid_underestimates_transport_most": {
+      "centroid_medical_distance": 754.5484830119393,
+      "centroid_transport_distance": 437.822141726399,
+      "citywide_screening_rank": "223",
+      "estimated_elderly_allocated": 8.0,
+      "estimated_population_allocated": 20.0,
+      "label": "下福井周辺",
+      "medical_difference": 243.14547666117812,
+      "mesh_code": "533512442",
+      "population_weighted_mean_medical_distance": 997.6939596731175,
+      "population_weighted_mean_transport_distance": 684.5082298325245,
+      "population_weighted_median_medical_distance": 983.3965235893419,
+      "population_weighted_median_transport_distance": 683.8583236192825,
+      "population_weighted_p90_medical_distance": 1046.2159594925308,
+      "population_weighted_p90_transport_distance": 695.2584387656968,
+      "residential_building_count": 9,
+      "transport_difference": 246.6860881061255,
+      "weighted_mean_medical_distance": 997.6939596731174,
+      "weighted_mean_transport_distance": 684.5082298325245,
+      "weighted_median_medical_distance": 983.3965235893419,
+      "weighted_median_transport_distance": 683.8583236192825,
+      "weighted_p90_medical_distance": 1046.2159594925308,
+      "weighted_p90_transport_distance": 695.2584387656968
+    },
+    "largest_absolute_mean_difference": {
+      "centroid_medical_distance": 1946.8430976113152,
+      "centroid_transport_distance": 929.4708676115221,
+      "citywide_screening_rank": "166",
+      "estimated_elderly_allocated": 7.000000000000001,
+      "estimated_population_allocated": 12.0,
+      "label": "堂の奥周辺",
+      "medical_difference": -298.3530988830835,
+      "mesh_code": "533513541",
+      "population_weighted_mean_medical_distance": 1648.4899987282317,
+      "population_weighted_mean_transport_distance": 624.2370554029814,
+      "population_weighted_median_medical_distance": 1638.7123062983862,
+      "population_weighted_median_transport_distance": 629.6306908422138,
+      "population_weighted_p90_medical_distance": 1685.2475515168555,
+      "population_weighted_p90_transport_distance": 649.210539265926,
+      "residential_building_count": 15,
+      "transport_difference": -305.2338122085408,
+      "weighted_mean_medical_distance": 1648.4899987282317,
+      "weighted_mean_transport_distance": 624.2370554029812,
+      "weighted_median_medical_distance": 1638.7123062983862,
+      "weighted_median_transport_distance": 629.6306908422138,
+      "weighted_p90_medical_distance": 1685.2475515168555,
+      "weighted_p90_transport_distance": 649.210539265926
+    },
+    "largest_within_mesh_transport_inequality": {
+      "centroid_medical_distance": 1133.0317676139662,
+      "centroid_transport_distance": 601.7824126283984,
+      "citywide_screening_rank": "154",
+      "estimated_elderly_allocated": 10.000000000000002,
+      "estimated_population_allocated": 49.00000000000001,
+      "label": "和田周辺",
+      "medical_difference": 131.20676080001408,
+      "mesh_code": "533512683",
+      "population_weighted_mean_medical_distance": 1264.2385284139805,
+      "population_weighted_mean_transport_distance": 358.6548880066506,
+      "population_weighted_median_medical_distance": 1305.4164449884681,
+      "population_weighted_median_transport_distance": 305.0109231558428,
+      "population_weighted_p90_medical_distance": 1351.6631038803475,
+      "population_weighted_p90_transport_distance": 687.0507912348543,
+      "residential_building_count": 21,
+      "transport_difference": -243.1275246217478,
+      "weighted_mean_medical_distance": 1264.2385284139802,
+      "weighted_mean_transport_distance": 358.65488800665065,
+      "weighted_median_medical_distance": 1305.4164449884681,
+      "weighted_median_transport_distance": 305.0109231558428,
+      "weighted_p90_medical_distance": 1351.6631038803475,
+      "weighted_p90_transport_distance": 687.0507912348543
+    }
+  },
+  "performance": {
+    "accessibility_seconds": 4.795,
+    "allocation_seconds": 0.152,
+    "audit_json_bytes": 18244,
+    "building_parse_seconds": 48.288,
+    "crosswalk_seconds": 2.627,
+    "detail_csv_bytes": 52669,
+    "parquet_bytes": 5584626,
+    "peak_rss_kib": 523724,
+    "total_seconds": 72.01
+  },
+  "privacy": {
+    "public_full_building_dataset": false,
+    "statement": "Model-based estimates allocated from 500m census statistics; not residents, registry, households, individuals, or confirmed occupancy.",
+    "suppressed_or_aggregation_affected_disaggregated": false
+  },
+  "provenance": {
+    "ade_schema_version": "3.2",
+    "allocation_policy": "strict_residential",
+    "citygml_specification": "5.0",
+    "crs": "EPSG:6674",
+    "dataset_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "facility_sources": {
+      "bus_stop": "National Land Numerical Information P11 2022",
+      "medical": "National Land Numerical Information P04 2020",
+      "station": "PLATEAU related data 2025"
+    },
+    "generated_at": "2026-08-23T14:26:04.118365+00:00",
+    "population_source": "e-Stat 2020 census 500m mesh T001192",
+    "population_year": 2020,
+    "sensitivity_policy": "residential_plus_mixed_without_assumed_residential_share",
+    "software": {
+      "commit": "799dad89c7b67522bcdaa1287f5dea840a3fb4c6",
+      "worktree_dirty": true
+    },
+    "usage_mapping_version": "codelists/Building_usage.xml:85563f25"
+  },
+  "schema_version": 1,
+  "sensitivity": {
+    "deep_dive_cross_border_conservative": {
+      "facility_policy": "two_km_cross_border_excluding_uncertain_medical",
+      "weighted_medical": {
+        "mean": 1444.7166428671458,
+        "median": 1457.5863946448653,
+        "p90": 1586.6129681480925
+      },
+      "weighted_transport": {
+        "mean": 446.8814183475994,
+        "median": 439.29567935801924,
+        "p90": 597.5062845079211
+      }
+    },
+    "deep_dive_plus_mixed": {
+      "centroid_medical_distance": 1450.5478993305774,
+      "centroid_transport_distance": 562.5974946252306,
+      "citywide_screening_rank": "23",
+      "estimated_elderly_allocated": 200.00000000000003,
+      "estimated_population_allocated": 471.0,
+      "label": "常団地前周辺",
+      "medical_difference": -6.06188399522307,
+      "mesh_code": "533513314",
+      "population_weighted_mean_medical_distance": 1444.486015335355,
+      "population_weighted_mean_transport_distance": 446.24068752130773,
+      "population_weighted_median_medical_distance": 1457.5807174132246,
+      "population_weighted_median_transport_distance": 436.99329377013044,
+      "population_weighted_p90_medical_distance": 1585.1762339502086,
+      "population_weighted_p90_transport_distance": 597.5062845079211,
+      "residential_building_count": 253,
+      "transport_difference": -116.35680710392302,
+      "weighted_mean_medical_distance": 1444.4860153353543,
+      "weighted_mean_transport_distance": 446.2406875213076,
+      "weighted_median_medical_distance": 1457.5807174132246,
+      "weighted_median_transport_distance": 436.99329377013044,
+      "weighted_p90_medical_distance": 1585.1762339502086,
+      "weighted_p90_transport_distance": 597.5062845079211
+    },
+    "deep_dive_strict": {
+      "centroid_medical_distance": 1450.5478993305774,
+      "centroid_transport_distance": 562.5974946252306,
+      "citywide_screening_rank": "23",
+      "estimated_elderly_allocated": 200.0,
+      "estimated_population_allocated": 471.00000000000006,
+      "label": "常団地前周辺",
+      "medical_difference": -5.8312564634316,
+      "mesh_code": "533513314",
+      "mixed_residential_buildings": 8,
+      "population_weighted_mean_medical_distance": 1444.7166428671458,
+      "population_weighted_mean_transport_distance": 446.8814183475994,
+      "population_weighted_median_medical_distance": 1457.5863946448653,
+      "population_weighted_median_transport_distance": 439.29567935801924,
+      "population_weighted_p90_medical_distance": 1586.6129681480925,
+      "population_weighted_p90_transport_distance": 597.5062845079211,
+      "residential_building_count": 245,
+      "transport_difference": -115.71607627763126,
+      "weighted_mean_medical_distance": 1444.7166428671458,
+      "weighted_mean_transport_distance": 446.8814183475994,
+      "weighted_median_medical_distance": 1457.5863946448653,
+      "weighted_median_transport_distance": 439.29567935801924,
+      "weighted_p90_medical_distance": 1586.6129681480925,
+      "weighted_p90_transport_distance": 597.5062845079211
+    },
+    "residential_plus_mixed": {
+      "estimated_elderly": 19734.0,
+      "estimated_population": 67189.0,
+      "meshes": 150,
+      "mixed_use_share_assumption": null,
+      "records": 31321
+    },
+    "strict": {
+      "estimated_elderly": 19728.0,
+      "estimated_population": 66670.0,
+      "meshes": 149,
+      "records": 29603
+    }
+  }
+}

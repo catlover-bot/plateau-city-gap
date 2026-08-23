@@ -7,7 +7,7 @@
 
 [Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
-このリポジトリには、審査・公開用の静的な **Competition Demo** と、段階的に構築中の **Urban Digital Twin Platform** の2系統があります。静的デモとGitHub Pagesは従来どおりバックエンドなしで動作します。Platformは別経路でPostGISとAPIを追加し、Priority 1としてPLATEAU CityGML全量取込基盤までを実装しています。
+このリポジトリには、審査・公開用の静的な **Competition Demo** と、段階的に構築中の **Urban Digital Twin Platform** の2系統があります。静的デモとGitHub Pagesは従来どおりバックエンドなしで動作します。PlatformはPLATEAU CityGML全量取込に加え、Priority 2として実建物への人口配賦と建物起点アクセシビリティを実装しています。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
@@ -98,10 +98,12 @@ PLATEAUは装飾的な背景としてだけ使っていません。
 - 全市23位「常団地前バス停周辺」の公式leaf tile 3件・856棟（対象メッシュ内296棟）を4.31MBの静的subsetとしてCesiumに表示
 - 用途・計測高さ・地上/地下階数・建築面積・延べ面積・実LODを、存在する値だけクリック時に表示
 - 公式CityGMLの道路LOD1面135件をDeep Diveへ重ね、道路面上から配置探索アンカーを生成
+- 44,640棟の実CityGML用途・床面積・footprintを監査し、秘匿影響のない149meshで住宅建物へ人口を配賦
+- 住宅建物代表点から交通・医療への直線距離を計算し、500m中心と建物加重平均・中央値・p90を比較
 - 公式DEM TIN 20,965三角形から対象メッシュの標高と局所勾配を要約（歩行経路勾配とは呼ばない）
 - Top 10との空間照合が0棟だったことを、欠損を補間せず「公式建物モデルの整備範囲外」として提示
 
-現行スコアへ建物形状・道路・DEMを入力してはいません。PLATEAUは現在、公式範囲の検証、3D実属性による地域文脈、配置候補の道路面制約、地形の注意喚起に使います。建物起点の歩行経路、道路接続・横断・坂を含む到達圏は今後です。
+現行の全市Screeningスコアは変更していません。第二段階のPLATEAU Detailでは、建物用途・正確なmesh交差・延べ面積が人口配賦を、建物代表点が交通・医療の加重距離を直接変えます。推計は実居住者ではなく、秘匿影響meshを建物へ分解しません。建物起点の歩行経路、道路接続・横断・坂を含む到達圏はPriority 3です。方法は [建物人口配賦](docs/building-population.md)、[用途監査](docs/building-usage.md)、[建物アクセシビリティ](docs/building-accessibility.md) を参照してください。
 
 ## CITY GAP Decision Studio
 
@@ -183,9 +185,12 @@ frontendは `http://localhost:8080/plateau-city-gap/`、API仕様は `http://loc
 python -m pip install -e '.[platform]'
 python -m analysis.scripts.build_plateau_inventory
 python -m analysis.scripts.ingest_plateau_postgis
+python -m analysis.scripts.load_building_demographics_postgis \
+  --dataset-version-id UUID --database-url "$CITYGAP_DATABASE_URL"
 ```
 
-APIは大量geometryの無制限配信を行わず、建物取得にbboxと最大1,000件のlimitを要求します。
+Priority 2の正規計算はPostGIS不要で、PyArrow Parquetを生成してから同じ値をloaderがupsertします。
+この環境ではDB投入を実行せず、migration/SQL契約をunit testしています。APIは大量geometryの無制限配信を行わず、建物取得にbboxと最大1,000件のlimitを要求し、詳細endpointは単一meshまたは単一建物だけを返します。
 
 ## Reproduce analysis
 
@@ -206,6 +211,8 @@ python -m analysis.scripts.run_final_audit
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_web_assets
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_decision_studio_assets
 python -m analysis.scripts.verify_decision_studio
+python -m analysis.scripts.build_building_demographics
+python -m analysis.scripts.verify_building_demographics
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \
   --config analysis/config/fujisawa.yaml \
   --output-dir frontend/public/data/cities/fujisawa
@@ -232,11 +239,11 @@ npm run build
 
 Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
 
-PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、PostGIS migration、bbox必須APIを対象にします。
+PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、建物用途・面交差・保存・加重分位、PostGIS migration、bbox必須APIと単一建物/mesh詳細契約を対象にします。
 
 ## Data protection
 
-現段階で個人情報を扱いません。将来のbuilding-level populationも、500m統計を建物属性で按分した**推計値**であり、実在個人・世帯・住民票のデータではありません。推計人口を実人数と呼ばず、原統計、配分法、解像度をprovenanceとして保持します。秘密情報・自治体内部データ・`.env`をリポジトリへ追加しないでください。
+現段階で個人情報を扱いません。building-level populationは500m統計を建物属性で按分した**モデル推計値**であり、実在個人・世帯・住民票・確認済み入居のデータではありません。秘匿・合算影響meshは建物へ分解せず、詳細ParquetはGit管理外、公開デモは500m集計だけです。推計人口を実人数と呼ばず、原統計、配分法、解像度をprovenanceとして保持します。秘密情報・自治体内部データ・`.env`をリポジトリへ追加しないでください。
 
 ## Limitations
 

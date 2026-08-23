@@ -324,6 +324,7 @@ export interface FinalDemoData extends JsonProperties {
     plateau_building_count: number;
     plateau_road_surfaces_intersecting_mesh: number;
     plateau_buildings: { records: number; displayed_on_click: string[] };
+    building_demographics_detail?: PlateauBuildingDemographicsDetail;
     terrain?: JsonProperties;
   };
   placement_optimization: {
@@ -333,6 +334,23 @@ export interface FinalDemoData extends JsonProperties {
   };
   plateau_context: JsonProperties;
   offline: JsonProperties;
+}
+
+export interface PlateauBuildingDemographicsDetail extends JsonProperties {
+  method: string;
+  privacy: string;
+  residential_building_count: number;
+  mixed_residential_building_count: number;
+  estimated_population_allocated: number;
+  estimated_elderly_allocated: number;
+  centroid_transport_distance_m: number;
+  weighted_mean_transport_distance_m: number;
+  weighted_median_transport_distance_m: number;
+  weighted_p90_transport_distance_m: number;
+  centroid_medical_distance_m: number;
+  weighted_mean_medical_distance_m: number;
+  weighted_median_medical_distance_m: number;
+  weighted_p90_medical_distance_m: number;
 }
 
 export interface AppData {

@@ -20,6 +20,8 @@ analysis/outputs/**
 !analysis/outputs/.gitkeep
 !analysis/outputs/real/
 !analysis/outputs/real/**
+# Detailed building estimates remain local until municipal/privacy review.
+analysis/outputs/real/*.parquet
 
 # Frontend/build artifacts
 node_modules/

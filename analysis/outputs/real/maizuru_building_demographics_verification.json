@@ -1,0 +1,166 @@
+{
+  "maximum_absolute_difference": 2.2737367544323206e-13,
+  "passed": true,
+  "results": [
+    {
+      "exact_differences": {
+        "allocation_fraction": 0.0,
+        "building_weight_sum": 0.0,
+        "elderly": 0.0,
+        "per_record_allocation_fraction_max": 0.0,
+        "population": 5.684341886080802e-14,
+        "weighted_medical_mean": 0.0,
+        "weighted_medical_median": 2.2737367544323206e-13,
+        "weighted_medical_p90": 0.0,
+        "weighted_transport_mean": 0.0,
+        "weighted_transport_median": 5.684341886080802e-14,
+        "weighted_transport_p90": 0.0
+      },
+      "independently_calculated": {
+        "allocation_fraction_sum": 1.0,
+        "building_weight_sum": 21083.276743174803,
+        "elderly_sum": 200.0,
+        "population_sum": 471.00000000000006,
+        "reconstructed_building_weight_sum": 21083.276743174803,
+        "weighted_medical_mean": 1444.7166428671458,
+        "weighted_medical_median": 1457.5863946448653,
+        "weighted_medical_p90": 1586.6129681480925,
+        "weighted_transport_mean": 446.8814183475994,
+        "weighted_transport_median": 439.29567935801924,
+        "weighted_transport_p90": 597.5062845079211
+      },
+      "mesh_code": "533513314",
+      "records": 245
+    },
+    {
+      "exact_differences": {
+        "allocation_fraction": 0.0,
+        "building_weight_sum": 0.0,
+        "elderly": 0.0,
+        "per_record_allocation_fraction_max": 0.0,
+        "population": 2.842170943040401e-14,
+        "weighted_medical_mean": 0.0,
+        "weighted_medical_median": 0.0,
+        "weighted_medical_p90": -2.2737367544323206e-13,
+        "weighted_transport_mean": -2.2737367544323206e-13,
+        "weighted_transport_median": 0.0,
+        "weighted_transport_p90": 0.0
+      },
+      "independently_calculated": {
+        "allocation_fraction_sum": 1.0,
+        "building_weight_sum": 8079.11133190411,
+        "elderly_sum": 69.0,
+        "population_sum": 173.00000000000003,
+        "reconstructed_building_weight_sum": 8079.11133190411,
+        "weighted_medical_mean": 1171.1440543218498,
+        "weighted_medical_median": 1172.3393333120116,
+        "weighted_medical_p90": 1222.7293923775899,
+        "weighted_transport_mean": 1178.6285678092843,
+        "weighted_transport_median": 1180.5907371550647,
+        "weighted_transport_p90": 1235.5921943018843
+      },
+      "mesh_code": "533512542",
+      "records": 98
+    },
+    {
+      "exact_differences": {
+        "allocation_fraction": 0.0,
+        "building_weight_sum": 0.0,
+        "elderly": 0.0,
+        "per_record_allocation_fraction_max": 2.7755575615628914e-17,
+        "population": 0.0,
+        "weighted_medical_mean": 2.2737367544323206e-13,
+        "weighted_medical_median": 0.0,
+        "weighted_medical_p90": 2.2737367544323206e-13,
+        "weighted_transport_mean": 0.0,
+        "weighted_transport_median": 0.0,
+        "weighted_transport_p90": 0.0
+      },
+      "independently_calculated": {
+        "allocation_fraction_sum": 1.0,
+        "building_weight_sum": 43171.79766815991,
+        "elderly_sum": 110.0,
+        "population_sum": 629.0,
+        "reconstructed_building_weight_sum": 43171.79766815991,
+        "weighted_medical_mean": 1834.6858052296295,
+        "weighted_medical_median": 1875.9225278304737,
+        "weighted_medical_p90": 1949.5391924452786,
+        "weighted_transport_mean": 302.5026280381911,
+        "weighted_transport_median": 305.15185598837013,
+        "weighted_transport_p90": 389.7644896133741
+      },
+      "mesh_code": "533523032",
+      "records": 251
+    },
+    {
+      "exact_differences": {
+        "allocation_fraction": 0.0,
+        "building_weight_sum": 0.0,
+        "elderly": 0.0,
+        "per_record_allocation_fraction_max": 0.0,
+        "population": 0.0,
+        "weighted_medical_mean": 0.0,
+        "weighted_medical_median": 0.0,
+        "weighted_medical_p90": -2.2737367544323206e-13,
+        "weighted_transport_mean": 0.0,
+        "weighted_transport_median": 0.0,
+        "weighted_transport_p90": 0.0
+      },
+      "independently_calculated": {
+        "allocation_fraction_sum": 1.0,
+        "building_weight_sum": 17138.33938406732,
+        "elderly_sum": 130.0,
+        "population_sum": 319.0,
+        "reconstructed_building_weight_sum": 17138.33938406732,
+        "weighted_medical_mean": 977.327737232414,
+        "weighted_medical_median": 982.239431672773,
+        "weighted_medical_p90": 1037.4427094206999,
+        "weighted_transport_mean": 445.04103945628896,
+        "weighted_transport_median": 438.9581438473547,
+        "weighted_transport_p90": 525.3984361855731
+      },
+      "mesh_code": "533513831",
+      "records": 160
+    },
+    {
+      "exact_differences": {
+        "allocation_fraction": 0.0,
+        "building_weight_sum": 0.0,
+        "elderly": 5.684341886080802e-14,
+        "per_record_allocation_fraction_max": 0.0,
+        "population": 0.0,
+        "weighted_medical_mean": -2.2737367544323206e-13,
+        "weighted_medical_median": 0.0,
+        "weighted_medical_p90": 2.2737367544323206e-13,
+        "weighted_transport_mean": 0.0,
+        "weighted_transport_median": 0.0,
+        "weighted_transport_p90": 0.0
+      },
+      "independently_calculated": {
+        "allocation_fraction_sum": 1.0,
+        "building_weight_sum": 36218.689801566405,
+        "elderly_sum": 265.00000000000006,
+        "population_sum": 601.0,
+        "reconstructed_building_weight_sum": 36218.689801566405,
+        "weighted_medical_mean": 1439.9612786603723,
+        "weighted_medical_median": 1413.5315235376468,
+        "weighted_medical_p90": 1615.1143306675185,
+        "weighted_transport_mean": 229.5693960038441,
+        "weighted_transport_median": 200.66246055321616,
+        "weighted_transport_p90": 396.51269500928174
+      },
+      "mesh_code": "533513323",
+      "records": 294
+    }
+  ],
+  "sample_meshes": [
+    "533513314",
+    "533512542",
+    "533523032",
+    "533513831",
+    "533513323"
+  ],
+  "sample_selection": "deep dive plus four highest-ranked covered comparison meshes",
+  "tolerance": 1e-09,
+  "verification_method": "Direct Parquet group sums, numpy weighted means, and an independent inverse-CDF weighted quantile; no production allocation/statistics helper imported"
+}

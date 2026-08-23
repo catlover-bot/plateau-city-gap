@@ -140,8 +140,8 @@
       "file": "final_demo.json",
       "status": "available",
       "records": 1,
-      "bytes": 8070,
-      "sha256": "8426222ff2e72a5bbcb4b5ff94bb8b8fa05d068f8aa56dc4898de6abfd2e4429"
+      "bytes": 8847,
+      "sha256": "85f485d01f13210e35c67b6d0acf013dd1be4ce125e77c31ee083c1c10323f53"
     },
     {
       "file": "plateau_roads.geojson",
