@@ -174,3 +174,13 @@ Web asset生成前に少なくとも次を検証します。
 - Top 10に公式PLATEAU建物モデルがなく、候補地の建物形状・用途は評価できません。
 - Deep Dive subsetの建物属性、道路、DEMは現行スコアへ入力していません。
 - 配置候補は道路面上ですが、What-if効果は直線距離で、接続・横断・坂・用地・運行可能性・需要・費用・施設capacityを評価しません。
+
+## Configuration-driven cross-city engine
+
+都市固有値は `analysis/config/maizuru.yaml` と `analysis/config/fujisawa.yaml` に分離しました。設定は都市コード・名称、都道府県、分析CRS、PLATEAU dataset、人口/境界/駅/P11/P04のpath・provider・year・license・source URL・source CRS、人口閾値、出力先、初期cameraを持ちます。
+
+`analysis.src.run_city_analysis` は都市名で分岐せず、設定を読み同じ処理を実行します。舞鶴はEPSG:6674、藤沢はEPSG:6677です。成果物は都市prefix付きのmesh CSV、Top 10 CSV、GeoJSON、summary、QA mapです。
+
+藤沢市では境界と交差する327meshを保持し、秘匿影響がなく中心点が市内にある263meshでpercentileを計算しました。261meshが20/10閾値を満たします。境界端の隣接市人口が高密度なcellをPrimary比較へ混ぜないための設定です。舞鶴は既存分析との連続性を保ち、交差かつ秘匿影響なしの286meshを従来どおり比較します。このlocal policyはsummaryへ出力します。
+
+都市間で比較できるのは、処理の再現性、入力範囲、mesh・施設件数、絶対人口・距離、空間分布、QA結果です。都市内percentileとScore A/B/Cは各都市の分布から再計算されるため直接比較しません。

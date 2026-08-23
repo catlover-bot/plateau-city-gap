@@ -17,7 +17,7 @@ def test_boundary_filter_uses_polygon_intersection() -> None:
         geometry=[LineString([(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)])],
         crs=GEOGRAPHIC_CRS,
     )
-    boundary = boundary_from_plateau(border)
+    boundary = boundary_from_plateau(border, city_code="00000", city_name="test city")
     features = gpd.GeoDataFrame(
         {"id": ["inside", "outside"]},
         geometry=[box(0.2, 0.2, 0.3, 0.3), box(2, 2, 3, 3)],

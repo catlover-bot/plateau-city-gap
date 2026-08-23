@@ -69,6 +69,7 @@ EXPECTED_URIS = {
     "data/data285.b3dm",
     "data/data287.b3dm",
 }
+FEATURED_BUILDING_ID = "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
 COMPONENT_FORMAT = {
     "BYTE": "b",
     "UNSIGNED_BYTE": "B",
@@ -250,6 +251,43 @@ def _building_summary(buildings: list[dict[str, Any]]) -> dict[str, Any]:
             str(lod): count for lod, count in sorted(Counter(lods).items())
         },
     }
+
+
+def _featured_building(buildings: list[dict[str, Any]]) -> dict[str, Any]:
+    """Return one verified, legible official building for the Deep Dive story."""
+    matches = [
+        building for building in buildings
+        if building["gml_id"] == FEATURED_BUILDING_ID
+    ]
+    if len(matches) != 1:
+        raise ValueError("Verified Deep Dive building is missing or duplicated")
+    building = matches[0]
+    attributes = building["attributes"]
+    detail = _first_dict(attributes.get("uro:BuildingDetailAttribute"))
+    featured = {
+        "id": building["gml_id"],
+        "longitude": building["x"],
+        "latitude": building["y"],
+        "usage": attributes.get("bldg:usage"),
+        "measured_height_m": attributes.get("bldg:measuredHeight"),
+        "storeys_above_ground": attributes.get("bldg:storeysAboveGround"),
+        "storeys_below_ground": attributes.get("bldg:storeysBelowGround"),
+        "building_footprint_area_m2": detail.get("uro:buildingFootprintArea"),
+        "total_floor_area_m2": detail.get("uro:totalFloorArea"),
+        "lod": building["lod"],
+    }
+    expected = {
+        "usage": "住宅",
+        "measured_height_m": 8.5,
+        "storeys_above_ground": 2,
+        "storeys_below_ground": 0,
+        "building_footprint_area_m2": 61.73,
+        "total_floor_area_m2": 125.54,
+        "lod": 1,
+    }
+    if any(featured[key] != value for key, value in expected.items()):
+        raise ValueError("Verified Deep Dive building attributes changed")
+    return featured
 
 
 def _merged_region(selected: list[dict[str, Any]]) -> list[float]:
@@ -541,6 +579,7 @@ def build_subset(
         },
         "buildings": _building_summary(buildings),
         "deep_dive_buildings": _building_summary(deep_dive_buildings),
+        "featured_building": _featured_building(deep_dive_buildings),
         "files": [
             {
                 "uri": tile["uri"],

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import shutil
 import urllib.request
@@ -18,7 +19,7 @@ class Download:
     extract_to: Path | None = None
 
 
-DOWNLOADS = [
+MAIZURU_DOWNLOADS = [
     Download(
         "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2",
         Path("data/raw/population/tblT001192H26.zip"),
@@ -47,6 +48,33 @@ DOWNLOADS = [
         Path("data/raw/26202_maizuru-shi_2025_related.zip"),
         "475ac888be229f59a8020b463390a5ff625a480f43726aebd993fe6369c5ce4c",
         Path("data/raw/plateau_related"),
+    ),
+]
+
+FUJISAWA_DOWNLOADS = [
+    Download(
+        "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=14&downloadType=2",
+        Path("data/raw/population/tblT001192H14.zip"),
+        "855de51ccd520f2df5ee1cb3e2dcbe0152c278181d883e327a16f9b12ee475de",
+        Path("data/raw/population/tblT001192H14"),
+    ),
+    Download(
+        "https://nlftp.mlit.go.jp/ksj/gml/data/P11/P11-22/P11-22_14_SHP.zip",
+        Path("data/raw/transport/P11-22_14_SHP.zip"),
+        "f7dc18055d771db454416b0292a0c32bd0e4fbd475d1b94f41be8a10eba165f6",
+        Path("data/raw/transport/P11-22_14_SHP"),
+    ),
+    Download(
+        "https://nlftp.mlit.go.jp/ksj/gml/data/P04/P04-20/P04-20_14_GML.zip",
+        Path("data/raw/medical/P04-20_14_GML.zip"),
+        "505b630327c919cc4959d923c53d0ff3601dff63c3d76767be9d207c9cd7eb69",
+        Path("data/raw/medical/P04-20_14_GML"),
+    ),
+    Download(
+        "https://assets.cms.plateau.reearth.io/assets/b4/1dc466-782e-47b1-98d1-c7349d400c95/14205_fujisawa-shi_2025_related.zip",
+        Path("data/raw/14205_fujisawa-shi_2025_related.zip"),
+        "992a2310527c672e0ce7317a2c3cfdd97d53dcb5d5241fe3c3b8bd9a1daead19",
+        Path("data/raw/plateau_related_fujisawa"),
     ),
 ]
 
@@ -79,7 +107,15 @@ def download(item: Download) -> None:
 
 
 def main() -> None:
-    for item in DOWNLOADS:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--city", choices=("maizuru", "fujisawa", "all"), default="maizuru")
+    city = parser.parse_args().city
+    downloads = {
+        "maizuru": MAIZURU_DOWNLOADS,
+        "fujisawa": FUJISAWA_DOWNLOADS,
+        "all": MAIZURU_DOWNLOADS + FUJISAWA_DOWNLOADS,
+    }[city]
+    for item in downloads:
         download(item)
 
 

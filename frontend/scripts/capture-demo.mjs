@@ -7,6 +7,7 @@ const frontendRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const repositoryRoot = dirname(frontendRoot);
 const outputDirectory = join(repositoryRoot, "docs", "assets");
 const fallbackDirectory = join(outputDirectory, "demo-fallback");
+const finalDirectory = join(outputDirectory, "final");
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
   ?? "/home/catlover/.cache/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell";
 const baseUrl = process.env.CITY_GAP_PREVIEW_URL
@@ -15,6 +16,7 @@ const captureAll = process.env.CITY_GAP_CAPTURE_ALL === "1";
 
 mkdirSync(outputDirectory, { recursive: true });
 mkdirSync(fallbackDirectory, { recursive: true });
+mkdirSync(finalDirectory, { recursive: true });
 
 const browser = await chromium.launch({
   executablePath,
@@ -62,11 +64,12 @@ try {
   await page.getByRole("heading", { name: "CITY GAP", exact: true }).waitFor({ timeout: 60_000 });
   await page.locator(".map-loading").waitFor({ state: "hidden", timeout: 60_000 });
   await page.waitForTimeout(4_000);
-  await page.screenshot({ path: join(outputDirectory, "city-gap-demo.png"), timeout: 60_000 });
+  await page.screenshot({ path: join(finalDirectory, "city-gap-overview.png"), timeout: 60_000 });
   process.stdout.write("Initial map and screenshot verified.\n");
 
   const methodologyButton = page.locator(".methodology-button");
-  await methodologyButton.click();
+  await methodologyButton.focus();
+  await methodologyButton.dispatchEvent("click");
   await page.locator(".methodology-modal").waitFor();
   const closeInitiallyFocused = await page.evaluate(
     () => document.activeElement?.getAttribute("aria-label") === "閉じる"
@@ -83,19 +86,28 @@ try {
   modalFocusVerified = closeInitiallyFocused && focusStayedInModal && focusRestored;
   if (!modalFocusVerified) localFailures.push("Methodology dialog focus trap/restore failed");
 
-  await page.locator(".story-start-button").dispatchEvent("click");
+  await page.locator(".product-intro .primary-button").dispatchEvent("click");
   await page.getByText("STEP 1 / 5", { exact: false }).waitFor();
   await page.waitForTimeout(4_200);
   await page.screenshot({ path: join(fallbackDirectory, "Step1.png"), timeout: 60_000 });
   await page.locator(".story-card .primary-button").dispatchEvent("click");
   await page.getByText("STEP 2 / 5", { exact: false }).waitFor();
   await page.waitForTimeout(1_300);
-  await page.screenshot({ path: join(fallbackDirectory, "Step2.png"), timeout: 60_000 });
+  await page.screenshot({ path: join(finalDirectory, "city-gap-discovery.png"), timeout: 60_000 });
   await page.locator(".story-card .primary-button").dispatchEvent("click");
   await page.getByText("STEP 3 / 5", { exact: false }).waitFor();
   await page.waitForTimeout(2_000);
+  if (await page.locator(".building-card").isVisible()) {
+    const buildingText = await page.locator(".building-card").innerText();
+    buildingSelectionVerified = buildingText.includes("住宅")
+      && buildingText.includes("9 m")
+      && buildingText.includes("2階")
+      && buildingText.includes("61.7 m²")
+      && !buildingText.includes("9,999")
+      && !buildingText.includes("-9,999");
+  }
   const mapBox = await page.locator(".cesium-map canvas").boundingBox();
-  if (mapBox) {
+  if (mapBox && !buildingSelectionVerified) {
     const candidates = [
       [0.78, 0.28], [0.72, 0.34], [0.65, 0.31], [0.58, 0.35],
       [0.48, 0.31], [0.82, 0.42], [0.7, 0.46], [0.58, 0.45],
@@ -111,7 +123,7 @@ try {
       }
     }
   }
-  await page.screenshot({ path: join(fallbackDirectory, "Step3.png"), timeout: 60_000 });
+  await page.screenshot({ path: join(finalDirectory, "city-gap-deep-dive.png"), timeout: 60_000 });
   if (captureAll) {
     await page.screenshot({ path: join(outputDirectory, "city-gap-plateau.png"), timeout: 60_000 });
   }
@@ -122,7 +134,7 @@ try {
   await page.locator(".scenario-summary-grid").waitFor();
   await page.waitForTimeout(1_300);
   await page.screenshot({ path: join(fallbackDirectory, "Step4.png"), timeout: 60_000 });
-  await page.screenshot({ path: join(fallbackDirectory, "WhatIf.png"), timeout: 60_000 });
+  await page.screenshot({ path: join(finalDirectory, "city-gap-what-if.png"), timeout: 60_000 });
   if (captureAll) {
     await page.screenshot({ path: join(outputDirectory, "city-gap-what-if.png"), timeout: 60_000 });
   }
@@ -139,6 +151,17 @@ try {
   await page.locator(".story-card .primary-button").dispatchEvent("click");
   await page.getByText("STEP 5 / 5", { exact: false }).waitFor();
   await page.locator(".story-card .text-button").dispatchEvent("click");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.getByRole("button", { name: /藤沢市/ }).dispatchEvent("click");
+  await page.locator(".map-loading").waitFor({ state: "hidden", timeout: 60_000 });
+  await page.getByText("同じCITY GAP Engineを実データへ適用", { exact: true }).waitFor();
+  if (await page.getByRole("tab", { name: /施策を試す/ }).count() !== 0) {
+    localFailures.push("Fujisawa validation mode exposed the Maizuru What-if tab");
+  }
+  await page.screenshot({ path: join(finalDirectory, "city-gap-cross-city.png"), timeout: 60_000 });
+
+  await page.getByRole("button", { name: /舞鶴市/ }).dispatchEvent("click");
+  await page.locator(".map-loading").waitFor({ state: "hidden", timeout: 60_000 });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(500);
   const mobileLayout = await page.evaluate(() => ({
@@ -154,9 +177,7 @@ try {
   ) {
     localFailures.push(`Mobile layout overflowed: ${JSON.stringify(mobileLayout)}`);
   }
-  if (captureAll) {
-    await page.screenshot({ path: join(outputDirectory, "city-gap-mobile.png"), timeout: 60_000 });
-  }
+  await page.screenshot({ path: join(finalDirectory, "city-gap-mobile.png"), timeout: 60_000 });
 
   const degradedPage = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   const degradedPageErrors = [];
@@ -185,7 +206,7 @@ try {
     await fallbackPage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
     await fallbackPage.getByRole("heading", { name: "CITY GAP", exact: true }).waitFor({ timeout: 60_000 });
     await fallbackPage.locator(".map-error-fallback").waitFor({ timeout: 60_000 });
-    await fallbackPage.locator(".ranking-list").waitFor({ timeout: 60_000 });
+    await fallbackPage.locator(".detail-panel").waitFor({ timeout: 60_000 });
     webglFallbackVerified = fallbackPageErrors.length === 0
       && await fallbackPage.locator(".side-panel").isVisible();
     if (!webglFallbackVerified) {
@@ -197,9 +218,14 @@ try {
 
   process.stdout.write(`${JSON.stringify({
     baseUrl,
-    screenshots: captureAll
-      ? ["city-gap-demo.png", "city-gap-plateau.png", "city-gap-what-if.png", "city-gap-mobile.png", "demo-fallback/Step1.png", "demo-fallback/Step2.png", "demo-fallback/Step3.png", "demo-fallback/Step4.png", "demo-fallback/WhatIf.png"]
-      : ["city-gap-demo.png", "demo-fallback/Step1.png", "demo-fallback/Step2.png", "demo-fallback/Step3.png", "demo-fallback/Step4.png", "demo-fallback/WhatIf.png"],
+    screenshots: [
+      "final/city-gap-overview.png",
+      "final/city-gap-discovery.png",
+      "final/city-gap-deep-dive.png",
+      "final/city-gap-what-if.png",
+      "final/city-gap-cross-city.png",
+      "final/city-gap-mobile.png"
+    ],
     plateauResponses: plateauResponses.length,
     loadedB3dm: loadedB3dm.length,
     buildingSelectionVerified,

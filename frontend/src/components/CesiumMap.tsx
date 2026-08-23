@@ -63,12 +63,6 @@ interface DataSourceRefs {
   plateauTileset?: Cesium3DTileset;
 }
 
-const MAIZURU_VIEW = {
-  longitude: 135.33,
-  latitude: 35.47,
-  height: 30_000
-};
-
 function entityValues(entity: Entity): Record<string, unknown> {
   return (entity.properties?.getValue() as Record<string, unknown> | undefined) ?? {};
 }
@@ -103,14 +97,18 @@ function buildingFromFeature(feature: TileFeatureLike): BuildingInfo {
   const rawId = read("gml_id") ?? readAttribute("uro:BuildingIDAttribute_uro:buildingID");
   const rawUsage = readAttribute("bldg:usage");
   const rawLod = read("_lod");
+  const boundedNumber = (value: unknown, minimum: number, maximum: number) => {
+    const number = finiteNumber(value);
+    return number !== null && number >= minimum && number <= maximum ? number : null;
+  };
   return {
     id: typeof rawId === "string" ? rawId : String(rawId ?? "IDなし"),
     usage: typeof rawUsage === "string" && rawUsage.trim() ? rawUsage : null,
-    measuredHeight: finiteNumber(readAttribute("bldg:measuredHeight")),
-    storeysAboveGround: finiteNumber(readAttribute("bldg:storeysAboveGround")),
-    storeysBelowGround: finiteNumber(readAttribute("bldg:storeysBelowGround")),
-    footprintArea: finiteNumber(read("uro:buildingFootprintArea")) ?? finiteNumber(details["uro:buildingFootprintArea"]),
-    totalFloorArea: finiteNumber(read("uro:totalFloorArea")) ?? finiteNumber(details["uro:totalFloorArea"]),
+    measuredHeight: boundedNumber(readAttribute("bldg:measuredHeight"), 0, 500),
+    storeysAboveGround: boundedNumber(readAttribute("bldg:storeysAboveGround"), 0, 200),
+    storeysBelowGround: boundedNumber(readAttribute("bldg:storeysBelowGround"), 0, 50),
+    footprintArea: boundedNumber(read("uro:buildingFootprintArea") ?? details["uro:buildingFootprintArea"], 0, 1_000_000),
+    totalFloorArea: boundedNumber(read("uro:totalFloorArea") ?? details["uro:totalFloorArea"], 0, 10_000_000),
     lod: rawLod === null || rawLod === undefined ? null : `LOD${String(rawLod)}`
   };
 }
@@ -133,9 +131,9 @@ function colorScale(value: number, mode: MetricMode): Color {
   const normalized = Math.min(1, Math.max(0, value));
   const starts: Record<MetricMode, Color> = {
     gap: Color.fromCssColorString("#39b9b2"),
-    elderly: Color.fromCssColorString("#58b4d1"),
-    transport: Color.fromCssColorString("#5c9cd7"),
-    medical: Color.fromCssColorString("#8e85d8")
+    elderly: Color.fromCssColorString("#769b8b"),
+    transport: Color.fromCssColorString("#50849a"),
+    medical: Color.fromCssColorString("#9a7760")
   };
   const ends: Record<MetricMode, Color> = {
     gap: Color.fromCssColorString("#ffae57"),
@@ -245,12 +243,13 @@ function styleRoads(source: GeoJsonDataSource | undefined) {
   }
 }
 
-function setInitialView(viewer: Viewer) {
+function setInitialView(viewer: Viewer, data: AppData) {
+  const view = data.city.map_view;
   viewer.camera.setView({
-    destination: Cartesian3.fromDegrees(MAIZURU_VIEW.longitude, MAIZURU_VIEW.latitude, MAIZURU_VIEW.height),
+    destination: Cartesian3.fromDegrees(view.longitude, view.latitude, view.height),
     orientation: {
       heading: CesiumMath.toRadians(0),
-      pitch: CesiumMath.toRadians(-67),
+      pitch: CesiumMath.toRadians(-90),
       roll: 0
     }
   });
@@ -336,7 +335,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       }
     },
     resetView() {
-      if (viewerRef.current) setInitialView(viewerRef.current);
+      if (viewerRef.current) setInitialView(viewerRef.current, data);
     }
   }));
 
@@ -375,10 +374,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     }
     viewerRef.current = viewer;
     viewer.scene.globe.depthTestAgainstTerrain = false;
-    viewer.scene.globe.baseColor = Color.fromCssColorString("#10282d");
-    viewer.scene.backgroundColor = Color.fromCssColorString("#06151b");
+    viewer.scene.globe.baseColor = Color.fromCssColorString("#d8dfda");
+    viewer.scene.backgroundColor = Color.fromCssColorString("#dfe5e1");
     viewer.scene.highDynamicRange = true;
-    setInitialView(viewer);
+    setInitialView(viewer, data);
 
     async function loadLayers() {
       try {
@@ -421,9 +420,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         styleBuildings(plateauGeoJson);
         styleRoads(plateauRoads);
         if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current);
-        stylePoints(stations, Color.fromCssColorString("#ffd166"), 11);
-        stylePoints(busStops, Color.fromCssColorString("#4fd1c5"), 7);
-        stylePoints(medical, Color.fromCssColorString("#ff7f91"), 9);
+        stylePoints(stations, Color.fromCssColorString("#d5a43c"), 11);
+        stylePoints(busStops, Color.fromCssColorString("#28766f"), 7);
+        stylePoints(medical, Color.fromCssColorString("#a64f3f"), 9);
 
         const currentVisibility = visibilityRef.current;
         if (boundary) boundary.show = currentVisibility.boundary;

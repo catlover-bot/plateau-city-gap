@@ -23,7 +23,7 @@ export function LayerPanel({ data, value, open, onOpenChange, onChange, onResetV
     available: boolean;
   }> = [
     { key: "meshes", label: "500mメッシュ", swatch: "gradient", available: data.meshes.features.length > 0 },
-    { key: "boundary", label: "舞鶴市境界", swatch: "boundary", available: Boolean(data.boundary?.features.length) },
+    { key: "boundary", label: `${data.city.name}境界`, swatch: "boundary", available: Boolean(data.boundary?.features.length) },
     { key: "stations", label: "駅", swatch: "station", available: Boolean(data.stations?.features.length) },
     { key: "busStops", label: "バス停", swatch: "bus", available: Boolean(data.busStops?.features.length) },
     { key: "medical", label: "医療施設", swatch: "medical", available: Boolean(data.medicalFacilities?.features.length) },
@@ -48,7 +48,7 @@ export function LayerPanel({ data, value, open, onOpenChange, onChange, onResetV
           <span aria-hidden="true">◫</span>
           レイヤー
         </button>
-        <button type="button" className="map-action-icon" aria-label="舞鶴市全体に戻る" onClick={onResetView}>
+        <button type="button" className="map-action-icon" aria-label={`${data.city.name}全体に戻る`} onClick={onResetView}>
           ⌂
         </button>
       </div>

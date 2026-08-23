@@ -1,4 +1,17 @@
 {
+  "schema_version": "1.0.0",
+  "city": {
+    "id": "maizuru",
+    "code": "26202",
+    "name": "舞鶴市",
+    "prefecture": "京都府",
+    "mode": "primary_demo",
+    "map_view": {
+      "longitude": 135.33,
+      "latitude": 35.47,
+      "height": 30000.0
+    }
+  },
   "analysis_status": "real data",
   "generated_from_synthetic_data": false,
   "distance_method": "centroid-to-point straight-line (Euclidean) distance",
@@ -14,28 +27,87 @@
     ]
   },
   "record_counts": {
-    "population_kyoto": 6326,
-    "population_meshes_intersecting_maizuru": 495,
+    "population_prefecture": 6326,
+    "population_meshes_intersecting_city": 495,
     "population_unaffected": 286,
+    "population_disclosure_unaffected": 286,
     "population_suppressed_source": 119,
     "population_aggregation_destination": 90,
     "stations_raw": 9,
-    "stations_within_maizuru": 9,
+    "stations_within_city": 9,
     "station_unique_locations": 7,
     "station_unique_names": 7,
     "station_deduplicated": 7,
-    "bus_stops_kyoto": 4685,
-    "bus_stops_maizuru": 151,
-    "medical_kyoto": 3960,
-    "medical_maizuru": 105,
-    "hospitals_maizuru": 8,
-    "clinics_maizuru": 63,
-    "dental_clinics_maizuru": 34,
-    "medical_primary_maizuru": 71,
+    "bus_stops_prefecture": 4685,
+    "bus_stops_city": 151,
+    "medical_prefecture": 3960,
+    "medical_city": 105,
+    "hospitals_city": 8,
+    "clinics_city": 63,
+    "dental_clinics_city": 34,
+    "medical_primary_city": 71,
     "primary_rank_eligible_meshes": 218
   },
+  "datasets": {
+    "population": {
+      "provider": "e-Stat",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "year": 2020,
+      "license": "政府統計の総合窓口 利用規約",
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2",
+      "declared_source_crs": "JGD2011",
+      "source_records": 6326,
+      "city_records": 495
+    },
+    "boundary": {
+      "provider": "Project PLATEAU",
+      "title": "舞鶴市 行政界",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 1,
+      "city_records": 1
+    },
+    "stations": {
+      "provider": "Project PLATEAU",
+      "title": "舞鶴市 鉄道駅",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 9,
+      "city_records": 7
+    },
+    "bus_stops": {
+      "provider": "国土数値情報",
+      "title": "バス停留所 P11",
+      "year": 2022,
+      "license": "CC BY 4.0",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 4685,
+      "city_records": 151
+    },
+    "medical": {
+      "provider": "国土数値情報",
+      "title": "医療機関 P04",
+      "year": 2020,
+      "license": "国土数値情報利用約款",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 3960,
+      "city_records": 71
+    },
+    "plateau": {
+      "title": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+      "year": 2025,
+      "version": 5,
+      "url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025"
+    }
+  },
   "crs_transform_log": {
-    "maizuru_boundary": {
+    "boundary": {
       "original": "EPSG:4326",
       "analysis": "EPSG:6674",
       "transformed_records": 1
@@ -65,12 +137,13 @@
     "score": "elderly_population_percentile * transport_distance_percentile * medical_distance_percentile",
     "minimum_population": 20,
     "minimum_elderly_population": 10,
+    "require_centroid_within_city": false,
     "top1": {
       "mesh_code": "533512753",
       "centroid_lat": 35.48125,
       "centroid_lon": 135.315625,
-      "maizuru_area_fraction": 0.9252786886166328,
-      "centroid_within_maizuru": true,
+      "city_area_fraction": 0.9252786886166328,
+      "centroid_within_city": true,
       "population": 91,
       "elderly_population": 56.0,
       "reported_elderly_population": 56.0,
@@ -111,7 +184,13 @@
       "eligibility_elderly_threshold": true,
       "primary_eligible": true,
       "rank": 1
-    }
+    },
+    "comparison_scope": "Percentiles are calculated within this city only and cannot be compared across cities."
+  },
+  "spatial_sanity": {
+    "comparison_median_latitude": 35.460416666666674,
+    "top10_north_of_city_mesh_median": 4,
+    "top10_south_of_or_at_city_mesh_median": 6
   },
   "threshold_stability": {
     "none": {
@@ -182,13 +261,15 @@
     "top10_ranks_1_to_10": true,
     "top10_disclosure_unaffected": true,
     "top10_population_thresholds": true,
-    "top10_centroids_within_maizuru": true,
+    "top10_centroids_within_city": true,
     "distances_nonnegative": true
   },
   "limitations": [
     "Distances are straight-line Euclidean distances, not walking or route distances.",
-    "P11 2022 excludes demand, highway and facility shuttle buses.",
+    "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
     "P04 represents facilities collected for July 2020, not current availability.",
-    "Suppressed sources and aggregation destinations are retained but excluded from primary ranks."
+    "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
+    "Percentile scores are city-relative; absolute scores must not be compared between cities.",
+    "A high score is an exploratory prompt for field investigation, not proof of a local problem."
   ]
 }

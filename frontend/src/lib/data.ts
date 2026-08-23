@@ -1,5 +1,6 @@
 import type {
   AppData,
+  CityProfile,
   FinalDemoData,
   GeoJsonFeatureCollection,
   Manifest,
@@ -65,6 +66,15 @@ function dataUrl(baseUrl: string, filename: string): string {
   return `${base}data/${filename}`;
 }
 
+const MAIZURU: CityProfile = {
+  id: "maizuru",
+  code: "26202",
+  name: "舞鶴市",
+  prefecture: "京都府",
+  mode: "primary_demo",
+  map_view: { longitude: 135.33, latitude: 35.47, height: 30_000 }
+};
+
 async function fetchJson(fetcher: typeof fetch, url: string): Promise<unknown> {
   const response = await fetcher(url);
   if (!response.ok) throw new Error(`${url} を読み込めませんでした（HTTP ${response.status}）`);
@@ -128,6 +138,7 @@ export async function loadAppData(
     ]);
 
   return {
+    city: MAIZURU,
     manifest: manifestRaw as Manifest,
     summary: summaryRaw as Summary,
     meshes: assertFeatureCollection(meshesRaw, "mesh_metrics.geojson"),
@@ -140,6 +151,50 @@ export async function loadAppData(
     plateauRoads,
     plateauMetadata,
     finalDemo: finalDemoRaw as FinalDemoData,
+    warnings
+  };
+}
+
+export async function loadValidationCityData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL
+): Promise<AppData> {
+  const prefix = "cities/fujisawa/";
+  const url = (filename: string) => dataUrl(baseUrl, `${prefix}${filename}`);
+  const [manifestRaw, meshesRaw, top10Raw, summaryRaw] = await Promise.all([
+    fetchJson(fetcher, url("manifest.json")),
+    fetchJson(fetcher, url("mesh_metrics.geojson")),
+    fetchJson(fetcher, url("top10.json")),
+    fetchJson(fetcher, url("summary.json"))
+  ]);
+  if (!isRecord(manifestRaw)) throw new Error("藤沢 manifest.json の形式が正しくありません");
+  if (!isRecord(summaryRaw)) throw new Error("藤沢 summary.json の形式が正しくありません");
+  const cityRaw = summaryRaw.city;
+  if (!isRecord(cityRaw) || cityRaw.id !== "fujisawa" || !isRecord(cityRaw.map_view)) {
+    throw new Error("藤沢の都市メタデータが正しくありません");
+  }
+  const city = cityRaw as unknown as CityProfile;
+  const warnings: string[] = [];
+  const [stations, busStops, medicalFacilities, boundary] = await Promise.all([
+    optionalGeoJson(fetcher, url("stations.geojson"), "藤沢市の駅", warnings),
+    optionalGeoJson(fetcher, url("bus_stops.geojson"), "藤沢市のバス停", warnings),
+    optionalGeoJson(fetcher, url("medical_facilities.geojson"), "藤沢市の医療施設", warnings),
+    optionalGeoJson(fetcher, url("boundary.geojson"), "藤沢市境界", warnings)
+  ]);
+  return {
+    city,
+    manifest: manifestRaw as Manifest,
+    summary: summaryRaw as Summary,
+    meshes: assertFeatureCollection(meshesRaw, "藤沢 mesh_metrics.geojson"),
+    top10: normalizeTop10(top10Raw),
+    stations,
+    busStops,
+    medicalFacilities,
+    boundary,
+    plateauBuildings: null,
+    plateauRoads: null,
+    plateauMetadata: null,
+    finalDemo: null,
     warnings
   };
 }

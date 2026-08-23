@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0.0",
+  "city": {
+    "id": "fujisawa",
+    "code": "14205",
+    "name": "藤沢市",
+    "prefecture": "神奈川県",
+    "mode": "cross_city_validation",
+    "map_view": {
+      "longitude": 139.475,
+      "latitude": 35.365,
+      "height": 23000.0
+    }
+  },
+  "analysis_status": "real data",
+  "generated_from_synthetic_data": false,
+  "distance_method": "centroid-to-point straight-line (Euclidean) distance",
+  "analysis_crs": {
+    "code": "EPSG:6677",
+    "name": "JGD2011 / Japan Plane Rectangular CS IX",
+    "area_of_use": "Japan - onshore - Honshu - Tokyo-to. (Excludes offshore island areas of Tokyo-to covered by Japan Plane Rectangular Coordinate System zones XIV, XVIII and XIX).",
+    "bounds": [
+      138.4,
+      29.31,
+      141.11,
+      37.98
+    ]
+  },
+  "record_counts": {
+    "population_prefecture": 6250,
+    "population_meshes_intersecting_city": 327,
+    "population_unaffected": 263,
+    "population_disclosure_unaffected": 325,
+    "population_suppressed_source": 1,
+    "population_aggregation_destination": 1,
+    "stations_raw": 21,
+    "stations_within_city": 21,
+    "station_unique_locations": 20,
+    "station_unique_names": 17,
+    "station_deduplicated": 20,
+    "bus_stops_prefecture": 10706,
+    "bus_stops_city": 446,
+    "medical_prefecture": 12364,
+    "medical_city": 718,
+    "hospitals_city": 16,
+    "clinics_city": 420,
+    "dental_clinics_city": 282,
+    "medical_primary_city": 436,
+    "primary_rank_eligible_meshes": 261
+  },
+  "datasets": {
+    "population": {
+      "provider": "e-Stat",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "year": 2020,
+      "license": "政府統計の総合窓口 利用規約",
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=14&downloadType=2",
+      "declared_source_crs": "JGD2011",
+      "source_records": 6250,
+      "city_records": 327
+    },
+    "boundary": {
+      "provider": "Project PLATEAU",
+      "title": "藤沢市 行政界",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 1,
+      "city_records": 1
+    },
+    "stations": {
+      "provider": "Project PLATEAU",
+      "title": "藤沢市 鉄道駅",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 21,
+      "city_records": 20
+    },
+    "bus_stops": {
+      "provider": "国土数値情報",
+      "title": "バス停留所 P11",
+      "year": 2022,
+      "license": "CC BY 4.0",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 10706,
+      "city_records": 446
+    },
+    "medical": {
+      "provider": "国土数値情報",
+      "title": "医療機関 P04",
+      "year": 2020,
+      "license": "国土数値情報利用約款",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 12364,
+      "city_records": 436
+    },
+    "plateau": {
+      "title": "3D都市モデル（Project PLATEAU）藤沢市（2025年度）",
+      "year": 2025,
+      "version": 5,
+      "url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "themes": [
+        "建築物 LOD0/1/2.0",
+        "道路 LOD1/3",
+        "都市計画決定情報 LOD1",
+        "土地利用 LOD1",
+        "洪水・高潮・内水・津波・土砂災害リスク"
+      ]
+    }
+  },
+  "crs_transform_log": {
+    "boundary": {
+      "original": "EPSG:4326",
+      "analysis": "EPSG:6677",
+      "transformed_records": 1
+    },
+    "population": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6677",
+      "transformed_records": 327
+    },
+    "stations": {
+      "original": "EPSG:4326",
+      "analysis": "EPSG:6677",
+      "transformed_records": 20
+    },
+    "bus_stops": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6677",
+      "transformed_records": 446
+    },
+    "medical_primary": {
+      "original": "EPSG:6668",
+      "analysis": "EPSG:6677",
+      "transformed_records": 436
+    }
+  },
+  "primary_ranking": {
+    "score": "elderly_population_percentile * transport_distance_percentile * medical_distance_percentile",
+    "minimum_population": 20,
+    "minimum_elderly_population": 10,
+    "top1": {
+      "mesh_code": "533913073",
+      "centroid_lat": 35.42291666666668,
+      "centroid_lon": 139.465625,
+      "city_area_fraction": 0.7686623459423386,
+      "centroid_within_city": true,
+      "population": 3590,
+      "elderly_population": 921.0,
+      "reported_elderly_population": 921.0,
+      "elderly_ratio": 0.25654596100278554,
+      "HTKSYORI": "0",
+      "HTKSAKI": null,
+      "GASSAN": null,
+      "disclosure_status": "unaffected",
+      "suppression_flag": false,
+      "aggregation_target_flag": false,
+      "aggregation_flag": false,
+      "primary_eligible_disclosure": true,
+      "nearest_station_name": "長後",
+      "nearest_station_distance_m": 1183.2895738087248,
+      "nearest_bus_stop_name": "県営サンハイツ渋谷前",
+      "nearest_bus_stop_distance_m": 592.5779838626122,
+      "nearest_public_transport_type": "bus_stop",
+      "nearest_public_transport_name": "県営サンハイツ渋谷前",
+      "nearest_public_transport_distance_m": 592.5779838626122,
+      "nearest_medical_name": "山口クリニック",
+      "nearest_medical_distance_m": 734.0378484741622,
+      "nearest_hospital_name": "一般財団法人同友会　藤沢湘南台病院",
+      "nearest_hospital_distance_m": 810.4396525616417,
+      "nearest_clinic_name": "山口クリニック",
+      "nearest_clinic_distance_m": 734.0378484741622,
+      "elderly_population_percentile": 0.9505703422053232,
+      "elderly_ratio_percentile": 0.5285171102661597,
+      "transport_distance_percentile": 0.9657794676806084,
+      "medical_distance_percentile": 0.9467680608365019,
+      "exploratory_score_a": 0.9180413190880308,
+      "exploratory_score_b": 0.8999696395784239,
+      "exploratory_score_c": 0.8691721994407592,
+      "rank_a_unfiltered": 1,
+      "rank_b_unfiltered": 1,
+      "rank_c_unfiltered": 1,
+      "pareto_frontier": true,
+      "eligibility_population_threshold": true,
+      "eligibility_elderly_threshold": true,
+      "primary_eligible": true,
+      "rank": 1
+    },
+    "comparison_scope": "Percentiles are calculated within this city only and cannot be compared across cities."
+  },
+  "spatial_sanity": {
+    "comparison_median_latitude": 35.368750000000006,
+    "top10_north_of_city_mesh_median": 6,
+    "top10_south_of_or_at_city_mesh_median": 4
+  },
+  "threshold_stability": {
+    "none": {
+      "top10_mesh_codes": [
+        "533913073",
+        "533903351",
+        "533913064",
+        "533903961",
+        "523973994",
+        "533913074",
+        "533903873",
+        "533903682",
+        "523973972",
+        "533903271"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_10_elderly_5": {
+      "top10_mesh_codes": [
+        "533913073",
+        "533903351",
+        "533913064",
+        "533903961",
+        "523973994",
+        "533913074",
+        "533903873",
+        "533903682",
+        "523973972",
+        "533903271"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_20_elderly_10": {
+      "top10_mesh_codes": [
+        "533913073",
+        "533903351",
+        "533913064",
+        "533903961",
+        "523973994",
+        "533913074",
+        "533903873",
+        "533903682",
+        "523973972",
+        "533903271"
+      ],
+      "overlap_with_primary_top10": 10
+    },
+    "population_50_elderly_20": {
+      "top10_mesh_codes": [
+        "533913073",
+        "533903351",
+        "533913064",
+        "533903961",
+        "523973994",
+        "533913074",
+        "533903873",
+        "533903682",
+        "523973972",
+        "533903271"
+      ],
+      "overlap_with_primary_top10": 10
+    }
+  },
+  "validation_checks": {
+    "mesh_codes_unique": true,
+    "geometries_valid": true,
+    "top10_count": 10,
+    "top10_ranks_1_to_10": true,
+    "top10_disclosure_unaffected": true,
+    "top10_population_thresholds": true,
+    "top10_centroids_within_city": true,
+    "distances_nonnegative": true
+  },
+  "limitations": [
+    "Distances are straight-line Euclidean distances, not walking or route distances.",
+    "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
+    "P04 represents facilities collected for July 2020, not current availability.",
+    "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
+    "Percentile scores are city-relative; absolute scores must not be compared between cities.",
+    "A high score is an exploratory prompt for field investigation, not proof of a local problem."
+  ]
+}

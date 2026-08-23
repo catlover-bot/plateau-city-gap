@@ -58,3 +58,29 @@
 - [x] Browser console errors = 0
 - [ ] GitHub Pages deployed
 - [ ] Git worktree clean
+
+## Cross-city and UX final phase
+
+- [x] Shared city configuration loader
+- [x] `maizuru.yaml` / `fujisawa.yaml`
+- [x] Fujisawa official e-Stat / P11 / P04 / PLATEAU related data
+- [x] Fujisawa 327 mesh output and Top 10
+- [x] Fujisawa Top 1 numeric sanity check
+- [x] Fujisawa threshold stability: 10/10 overlap in all four conditions
+- [x] No cross-city percentile score comparison
+- [x] Maizuru remains default Primary demo
+- [x] Fujisawa explicitly labeled Cross-city validation
+- [x] Fujisawa hides Maizuru-only 3D / What-if
+- [x] Light civic map-first visual system
+- [x] Rank 1 initial detail hierarchy
+- [x] What-if distance Before / After emphasis
+- [x] Desktop 1440×900 screenshot review
+- [x] Cross-city 1280×800 screenshot review
+- [x] Mobile 390×844; no horizontal overflow
+- [x] Final screenshots in `docs/assets/final/`
+- [x] Optional PLATEAU fallback and WebGL fallback
+- [x] Browser console errors = 0
+- [x] Final focus-regression rerun
+- [ ] GitHub Pages final deployment
+- [ ] Published city switch and data response verification
+- [ ] Final commit and clean worktree

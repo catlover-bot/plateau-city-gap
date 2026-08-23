@@ -20,6 +20,25 @@ function stringList(value: unknown): string[] {
 }
 
 function sourceRows(value: unknown): Array<{ label: string; title: string; year: string }> {
+  if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    const labels: Record<string, string> = {
+      population: "人口",
+      bus_stops: "バス停",
+      medical: "医療",
+      plateau: "3D都市",
+      stations: "駅",
+      boundary: "行政界"
+    };
+    return Object.entries(value).flatMap(([key, item]) => {
+      if (typeof item !== "object" || item === null) return [];
+      const row = item as Record<string, unknown>;
+      return [{
+        label: labels[key] ?? "データ",
+        title: String(row.provider ?? row.title ?? "—"),
+        year: typeof row.year === "number" ? `${row.year}年` : "年次不明"
+      }];
+    });
+  }
   if (!Array.isArray(value)) return [];
   return value.flatMap((item) => {
     if (typeof item !== "object" || item === null) return [];
@@ -90,6 +109,7 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
   const plateauCoverage = summarizePlateauCoverage(data.plateauMetadata);
   const comparisonScope = comparisonMeshScope(data.summary.record_counts?.population_unaffected);
   const eligibleCount = data.summary.record_counts?.primary_rank_eligible_meshes;
+  const analysisCrs = data.summary.analysis_crs?.code ?? "分析用投影座標系";
 
   return (
     <div className="modal-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
@@ -125,47 +145,56 @@ export function MethodologyModal({ open, data, onClose }: MethodologyModalProps)
           <div className="formula-card">
             <code>高齢者数 percentile × 交通距離 percentile × 医療距離 percentile</code>
             <p>
-              距離はJGD2011 / 平面直角座標系VI（EPSG:6674）上で、500mメッシュ中心から施設までを測ったユークリッド直線距離です。
+              距離は{analysisCrs}上で、500mメッシュ中心から施設までを測ったユークリッド直線距離です。
               percentileの比較母集団は{comparisonScope}です。Primaryは、そのうち人口20人以上・65歳以上10人以上を満たす
               {eligibleCount ? `${eligibleCount.toLocaleString("ja-JP")}メッシュ` : "メッシュ"}をランキング対象にする条件です。
             </p>
           </div>
 
-          <h3>What-ifの再計算</h3>
-          <div className="formula-card scenario-formula">
-            <code>new distance = min(現在の交通距離, 仮想地点への直線距離)</code>
-            <p>
-              クリック座標をWGS84からEPSG:6674へ変換し、{comparisonScope}で交通距離percentileと探索スコアを再計算します。
-              値は入力地点から決定論的に計算し、固定のBefore / Afterは使いません。
-            </p>
-          </div>
+          {data.finalDemo ? (
+            <>
+              <h3>What-ifの再計算</h3>
+              <div className="formula-card scenario-formula">
+                <code>new distance = min(現在の交通距離, 仮想地点への直線距離)</code>
+                <p>
+                  クリック座標をWGS84から{analysisCrs}へ変換し、{comparisonScope}で交通距離percentileと探索スコアを再計算します。
+                  値は入力地点から決定論的に計算し、固定のBefore / Afterは使いません。
+                </p>
+              </div>
 
-          <h3>PLATEAU建物の範囲</h3>
-          <div className="plateau-method-note">
-            <strong>
-              公式配布全体 {formatBuildingCount(plateauCoverage.distributionCount)} / CITY GAP Top 10内 {top10CoverageLabel(plateauCoverage)}
-            </strong>
-            <p>
-              {top10CoverageSentence(plateauCoverage)}画面では架空建物を作りません。
-              これはPLATEAUへの評価ではなく、年度・整備範囲・LOD方針を含む都市データの空白を、意思決定上の発見として扱います。
-              {referenceCoverageSentence(plateauCoverage)}
-            </p>
-          </div>
+              <h3>PLATEAU建物の範囲</h3>
+              <div className="plateau-method-note">
+                <strong>
+                  公式配布全体 {formatBuildingCount(plateauCoverage.distributionCount)} / CITY GAP Top 10内 {top10CoverageLabel(plateauCoverage)}
+                </strong>
+                <p>
+                  {top10CoverageSentence(plateauCoverage)}画面では架空建物を作りません。
+                  これはPLATEAUへの評価ではなく、年度・整備範囲・LOD方針を含む都市データの空白を、意思決定上の発見として扱います。
+                  {referenceCoverageSentence(plateauCoverage)}
+                </p>
+              </div>
 
-          <h3>Why PLATEAU — 30秒で答える</h3>
-          <div className="formula-card why-plateau-card">
-            <strong>今できたこと</strong>
-            <p>
-              公式市境界・駅と500m分析を重ね、建物収録範囲を全44,640棟で検証しました。
-              全市{data.finalDemo.deep_dive.overall_rank}位の{data.finalDemo.deep_dive.area_label}では、
-              公式建物{data.finalDemo.deep_dive.plateau_building_count.toLocaleString("ja-JP")}棟、道路面、建物用途・高さ・階数・面積・LODを実物で確認し、道路面上から配置探索アンカーを生成しています。
-            </p>
-            <strong>まだしていないこと</strong>
-            <p>
-              建物起点の歩行経路、道路接続・横断・坂を含む到達圏、用地や運行条件の最適化です。
-              道路LOD1は面形状で接続トポロジーを持たないため、直線距離を経路距離と偽って置き換えていません。
-            </p>
-          </div>
+              <h3>Why PLATEAU — 30秒で答える</h3>
+              <div className="formula-card why-plateau-card">
+                <strong>今できたこと</strong>
+                <p>
+                  公式市境界・駅と500m分析を重ね、建物収録範囲を全44,640棟で検証しました。
+                  全市{data.finalDemo.deep_dive.overall_rank}位の{data.finalDemo.deep_dive.area_label}では、
+                  公式建物{data.finalDemo.deep_dive.plateau_building_count.toLocaleString("ja-JP")}棟、道路面、建物用途・高さ・階数・面積・LODを実物で確認し、道路面上から配置探索アンカーを生成しています。
+                </p>
+                <strong>まだしていないこと</strong>
+                <p>
+                  建物起点の歩行経路、道路接続・横断・坂を含む到達圏、用地や運行条件の最適化です。
+                  道路LOD1は面形状で接続トポロジーを持たないため、直線距離を経路距離と偽って置き換えていません。
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="plateau-method-note">
+              <strong>藤沢市は横展開検証モード</strong>
+              <p>同じ人口・交通・医療の計算処理とPLATEAU行政界・駅を使用しています。3D Deep Diveと施策シミュレーションは、この検証範囲には含めません。</p>
+            </div>
+          )}
 
           <h3>大切な限界</h3>
           <ul className="limitation-list">

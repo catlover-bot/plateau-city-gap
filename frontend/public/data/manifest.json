@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-22T12:00:00Z",
+  "generated_at": "2026-08-22T10:00:00Z",
   "analysis_version": "0.1.0",
   "builder": "analysis/scripts/build_web_assets.py",
   "crs": {
@@ -77,22 +77,22 @@
       "file": "mesh_metrics.geojson",
       "status": "available",
       "records": 495,
-      "bytes": 666190,
-      "sha256": "14d3c17f3a9e524a922847a55cb6f9345e55dce4d759fc8a9595496cb2eaa788"
+      "bytes": 664705,
+      "sha256": "8974f7563a0eb682fcc14a114f6fd08a8d0d9d066013556fb2752d665d27ed27"
     },
     {
       "file": "top10.json",
       "status": "available",
       "records": 10,
-      "bytes": 15718,
-      "sha256": "9dd4ddedc757bcb658ddd194b340b6d90d65975212f4c1788abee0c8e3d99d1e"
+      "bytes": 15688,
+      "sha256": "8be6352f439bf7141a45c5252ea8d8ef9130daa7db18fea8d72144cb8de883e6"
     },
     {
       "file": "summary.json",
       "status": "available",
       "records": 1,
-      "bytes": 3833,
-      "sha256": "c0cb6543da944a0f00b8beca79094dbc23a782e76fb51f5e13c654df63c78e60"
+      "bytes": 3869,
+      "sha256": "bdab23dfc1b51480e43365c718940c1eeeda01d184ebf1940f18ce2e3187bf95"
     },
     {
       "file": "stations.geojson",
@@ -133,8 +133,8 @@
       "file": "plateau_metadata.json",
       "status": "available",
       "records": 1,
-      "bytes": 3776,
-      "sha256": "e8f7cb3d7167b30330dc6c887aae6e09f3029acb962471173203d6d61db86225"
+      "bytes": 4161,
+      "sha256": "a110ebc9f82819f30fffe68a598ac19de3d45da1eac06f4c51cb37cf5dc71a84"
     },
     {
       "file": "final_demo.json",
@@ -169,8 +169,8 @@
     },
     {
       "file": "plateau/metadata.json",
-      "bytes": 4958,
-      "sha256": "772a060166fc0347f421d744a432cd1e14d867e07a9a3d503769d0499db64a4e"
+      "bytes": 5319,
+      "sha256": "a38858c4d933cd40d55319eb8585697359a67ce6de3cb504748376df4adac82e"
     },
     {
       "file": "plateau/tileset.json",
@@ -187,18 +187,18 @@
     "inputs": [
       {
         "path": "analysis/outputs/real/maizuru_city_gap.geojson",
-        "bytes": 971839,
-        "sha256": "a321d7483b5f0f16545b9816f588db73f977ade66faa142ff3f205d195aca227"
+        "bytes": 968869,
+        "sha256": "c5daf3b3447da670802dad3757244accf0d91403bcd155a0f40b8e30d91958c1"
       },
       {
         "path": "analysis/outputs/real/maizuru_city_gap_top10.csv",
-        "bytes": 6521,
-        "sha256": "9baa850880a6088479e3d8fe0dc5180a59b1f0daef3bdd95cf681471277a0096"
+        "bytes": 6515,
+        "sha256": "2bc072f55913c5535a171a1e9d6733fa3bfb3c9de146cdc9cec7492bf9b930be"
       },
       {
         "path": "analysis/outputs/real/maizuru_summary.json",
-        "bytes": 5919,
-        "sha256": "ed612565aa61db464529baf505d2eb300db9629bfd54ba527c06654fbfc0d5f5"
+        "bytes": 8829,
+        "sha256": "a73f6f99994a8cdc145729a677f7f6744a71081f8b351ac6f1d2e76cd0266d47"
       },
       {
         "path": "data/raw/plateau_related/26202_maizuru-shi_city_2025_station.geojson",

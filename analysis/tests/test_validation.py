@@ -15,7 +15,7 @@ def test_valid_top10_contract() -> None:
             "primary_eligible_disclosure": [True] * 10,
             "population": [20] * 10,
             "elderly_population": [10] * 10,
-            "centroid_within_maizuru": [True] * 10,
+            "centroid_within_city": [True] * 10,
             "nearest_station_distance_m": [1.0] * 10,
             "nearest_bus_stop_distance_m": [1.0] * 10,
             "nearest_public_transport_distance_m": [1.0] * 10,

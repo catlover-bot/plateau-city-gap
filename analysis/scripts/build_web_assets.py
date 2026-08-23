@@ -62,7 +62,7 @@ MESH_PROPERTIES = [
     "elderly_ratio",
     "centroid_lat",
     "centroid_lon",
-    "maizuru_area_fraction",
+    "city_area_fraction",
     "disclosure_status",
     "primary_eligible",
     "nearest_station_name",
@@ -97,7 +97,7 @@ NUMERIC_MESH_PROPERTIES = [
     "elderly_ratio",
     "centroid_lat",
     "centroid_lon",
-    "maizuru_area_fraction",
+    "city_area_fraction",
     *DISTANCE_PROPERTIES,
     "elderly_population_percentile",
     "transport_distance_percentile",
@@ -318,6 +318,11 @@ def _check_count(label: str, actual: int, expected: Any) -> None:
         raise ValueError(f"{label} count is {actual}; analysis summary expects {expected}")
 
 
+def _summary_count(counts: Mapping[str, Any], generic: str, legacy: str) -> Any:
+    """Read the shared schema while accepting pre-refactor Maizuru summaries."""
+    return counts.get(generic, counts.get(legacy))
+
+
 def _point_sort(layer: gpd.GeoDataFrame, name_column: str) -> gpd.GeoDataFrame:
     result = layer.copy()
     result["_longitude"] = result.to_crs(WEB_CRS).geometry.x
@@ -426,6 +431,8 @@ def _build_mesh_assets(
     metrics_path: Path, top10_path: Path
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     metrics = gpd.read_file(metrics_path)
+    if "city_area_fraction" not in metrics and "maizuru_area_fraction" in metrics:
+        metrics["city_area_fraction"] = metrics["maizuru_area_fraction"]
     metrics["mesh_code"] = metrics["mesh_code"].astype(str)
     for column in NUMERIC_MESH_PROPERTIES:
         metrics[column] = pd.to_numeric(metrics[column], errors="coerce")
@@ -558,6 +565,7 @@ def _build_plateau_status(
         selection = reference.get("selection", {})
         buildings = reference.get("buildings", {})
         deep_buildings = reference.get("deep_dive_buildings", {})
+        featured_building = reference.get("featured_building", {})
         top10_scope = reference.get("city_gap_top10", {})
         files = reference.get("files", [])
         records = buildings.get("records")
@@ -580,6 +588,10 @@ def _build_plateau_status(
             or deep_buildings.get("records") != deep_view.get("expected_buildings")
             or not _is_finite_number(deep_view.get("longitude"))
             or not _is_finite_number(deep_view.get("latitude"))
+            or featured_building.get("usage") != "住宅"
+            or featured_building.get("storeys_above_ground") != 2
+            or not _is_finite_number(featured_building.get("measured_height_m"))
+            or not _is_finite_number(featured_building.get("building_footprint_area_m2"))
         ):
             raise ValueError("PLATEAU reference subset metadata is inconsistent")
         if sum(int(item.get("bytes", -1)) for item in files) != b3dm_bytes:
@@ -617,6 +629,7 @@ def _build_plateau_status(
                 "latitude": deep_view["latitude"],
                 "height": 620,
             },
+            "featured_building": featured_building,
             "metadata": {
                 "path": _relative_path(reference_metadata_path),
                 "bytes": reference_metadata_path.stat().st_size,
@@ -778,7 +791,7 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
     _check_count(
         "Maizuru meshes",
         len(mesh_collection["features"]),
-        expected.get("population_meshes_intersecting_maizuru"),
+        _summary_count(expected, "population_meshes_intersecting_city", "population_meshes_intersecting_maizuru"),
     )
     _check_count("raw stations", point_counts["stations_source"], expected.get("stations_raw"))
     _check_count(
@@ -786,14 +799,14 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
         point_counts["stations_web"],
         expected.get("station_deduplicated"),
     )
-    _check_count("raw bus stops", point_counts["bus_stops_source"], expected.get("bus_stops_kyoto"))
-    _check_count("Maizuru bus stops", point_counts["bus_stops_web"], expected.get("bus_stops_maizuru"))
-    _check_count("raw medical facilities", point_counts["medical_source"], expected.get("medical_kyoto"))
-    _check_count("Maizuru medical facilities", point_counts["medical_web"], expected.get("medical_maizuru"))
+    _check_count("raw bus stops", point_counts["bus_stops_source"], _summary_count(expected, "bus_stops_prefecture", "bus_stops_kyoto"))
+    _check_count("Maizuru bus stops", point_counts["bus_stops_web"], _summary_count(expected, "bus_stops_city", "bus_stops_maizuru"))
+    _check_count("raw medical facilities", point_counts["medical_source"], _summary_count(expected, "medical_prefecture", "medical_kyoto"))
+    _check_count("Maizuru medical facilities", point_counts["medical_web"], _summary_count(expected, "medical_city", "medical_maizuru"))
     _check_count(
         "primary medical facilities",
         point_counts["medical_primary_web"],
-        expected.get("medical_primary_maizuru"),
+        _summary_count(expected, "medical_primary_city", "medical_primary_maizuru"),
     )
     if boundary_source_count != 1:
         raise ValueError(f"PLATEAU boundary source contains {boundary_source_count} records")
@@ -911,8 +924,8 @@ def build_web_assets(args: argparse.Namespace) -> dict[str, Any]:
             "provider": "e-Stat",
             "title": "2020 Census JGD2011 500 m mesh population by five-year age group",
             "year": 2020,
-            "source_records": expected["population_kyoto"],
-            "web_records": expected["population_meshes_intersecting_maizuru"],
+            "source_records": _summary_count(expected, "population_prefecture", "population_kyoto"),
+            "web_records": _summary_count(expected, "population_meshes_intersecting_city", "population_meshes_intersecting_maizuru"),
             "url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2",
         },
         {

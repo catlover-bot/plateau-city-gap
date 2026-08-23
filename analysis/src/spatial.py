@@ -10,7 +10,12 @@ from shapely.ops import polygonize, unary_union
 from .mesh import GEOGRAPHIC_CRS
 
 
-def boundary_from_plateau(border: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+def boundary_from_plateau(
+    border: gpd.GeoDataFrame,
+    *,
+    city_code: str | None = None,
+    city_name: str | None = None,
+) -> gpd.GeoDataFrame:
     """Polygonize the official PLATEAU administrative-border line layer."""
     if border.empty:
         raise ValueError("PLATEAU border layer is empty")
@@ -19,8 +24,13 @@ def boundary_from_plateau(border: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
     if not polygons:
         raise ValueError("PLATEAU border linework could not be polygonized")
     geometry = unary_union(polygons)
+    source_row = border.iloc[0]
+    resolved_code = city_code or str(source_row.get("city_code", ""))
+    resolved_name = city_name or str(source_row.get("city_name", ""))
+    if not resolved_code or not resolved_name:
+        raise ValueError("City code and name are required for the PLATEAU boundary")
     return gpd.GeoDataFrame(
-        {"city_code": ["26202"], "city_name": ["舞鶴市"]},
+        {"city_code": [resolved_code], "city_name": [resolved_name]},
         geometry=[geometry],
         crs=GEOGRAPHIC_CRS,
     )

@@ -5,7 +5,12 @@ from __future__ import annotations
 import geopandas as gpd
 
 
-def validate_real_metrics(metrics: gpd.GeoDataFrame) -> dict[str, bool | int]:
+def validate_real_metrics(
+    metrics: gpd.GeoDataFrame,
+    *,
+    minimum_population: int = 20,
+    minimum_elderly: int = 10,
+) -> dict[str, bool | int]:
     distance_columns = [
         "nearest_station_distance_m",
         "nearest_bus_stop_distance_m",
@@ -20,9 +25,10 @@ def validate_real_metrics(metrics: gpd.GeoDataFrame) -> dict[str, bool | int]:
         "top10_ranks_1_to_10": top10["rank"].astype(int).tolist() == list(range(1, 11)),
         "top10_disclosure_unaffected": bool(top10["primary_eligible_disclosure"].all()),
         "top10_population_thresholds": bool(
-            (top10["population"] >= 20).all() & (top10["elderly_population"] >= 10).all()
+            (top10["population"] >= minimum_population).all()
+            & (top10["elderly_population"] >= minimum_elderly).all()
         ),
-        "top10_centroids_within_maizuru": bool(top10["centroid_within_maizuru"].all()),
+        "top10_centroids_within_city": bool(top10["centroid_within_city"].all()),
         "distances_nonnegative": bool((metrics[distance_columns] >= 0).all().all()),
     }
     failed = [name for name, value in checks.items() if value is False]

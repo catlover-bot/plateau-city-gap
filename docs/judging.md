@@ -126,3 +126,11 @@ CITY GAPは施策を自動決定しません。「どこを、なぜ、次に調
 ## One-sentence position
 
 CITY GAPは、PLATEAUを万能な答えとして扱うのではなく、舞鶴市の実データから「必要と届き方のズレ」を説明可能に発見し、3D都市の実在範囲とデータ限界を確認し、仮想施策の感度まで対話できるCivic Techプロダクトです。
+
+## Two-city evidence
+
+舞鶴市は「深さ」のPrimary demoです。500m探索、Rank 1説明、PLATEAU 3D実属性、道路面候補、What-ifまでを一連の意思決定体験として実装しました。
+
+藤沢市は「広がり」のCross-city validationです。設定だけを差し替え、同じ共通runnerで人口・交通・医療・PLATEAU行政界/駅を処理しました。327メッシュ、Top 10、WHY、閾値安定性を実データで公開し、3D/What-ifは未実装としてUIから外しています。
+
+この2都市構成により、デモ向けの舞鶴専用コードではなく、都市固有のCRS・入力・境界条件を設定へ分離したEngineであることを示します。都市間でpercentile scoreは比較せず、絶対件数・距離・データ範囲・抽出特性を比較します。詳細は [cross-city-validation.md](cross-city-validation.md) です。

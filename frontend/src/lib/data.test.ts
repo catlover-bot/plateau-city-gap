@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { GeoJsonFeatureCollection, MeshMetrics } from "../types";
-import { loadAppData, normalizeTop10, sortRanking } from "./data";
+import { loadAppData, loadValidationCityData, normalizeTop10, sortRanking } from "./data";
 
 const EMPTY_COLLECTION: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -92,5 +92,33 @@ describe("data loading", () => {
       "final_demo.json": {}
     });
     await expect(loadAppData(fetcher, "/")).rejects.toThrow("FeatureCollection");
+  });
+
+  it("loads Fujisawa in validation mode without Maizuru-only demo assets", async () => {
+    const fetcher = mockFetch({
+      "manifest.json": { mode: "cross_city_validation" },
+      "mesh_metrics.geojson": EMPTY_COLLECTION,
+      "top10.json": { items: [{ mesh_code: "533913073", rank: 1 }] },
+      "summary.json": {
+        city: {
+          id: "fujisawa",
+          code: "14205",
+          name: "藤沢市",
+          prefecture: "神奈川県",
+          mode: "cross_city_validation",
+          map_view: { longitude: 139.475, latitude: 35.365, height: 23000 }
+        }
+      },
+      "stations.geojson": EMPTY_COLLECTION,
+      "bus_stops.geojson": EMPTY_COLLECTION,
+      "medical_facilities.geojson": EMPTY_COLLECTION,
+      "boundary.geojson": EMPTY_COLLECTION
+    });
+    const data = await loadValidationCityData(fetcher, "/plateau-city-gap/");
+    expect(data.city.name).toBe("藤沢市");
+    expect(data.city.mode).toBe("cross_city_validation");
+    expect(data.top10[0].mesh_code).toBe("533913073");
+    expect(data.finalDemo).toBeNull();
+    expect(fetcher).toHaveBeenCalledWith("/plateau-city-gap/data/cities/fujisawa/manifest.json");
   });
 });

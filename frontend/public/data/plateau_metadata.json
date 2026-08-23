@@ -116,10 +116,22 @@
       "latitude": 35.44791666666667,
       "height": 620
     },
+    "featured_building": {
+      "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+      "longitude": 135.39794216934305,
+      "latitude": 35.44696746239316,
+      "usage": "住宅",
+      "measured_height_m": 8.5,
+      "storeys_above_ground": 2,
+      "storeys_below_ground": 0,
+      "building_footprint_area_m2": 61.73,
+      "total_floor_area_m2": 125.54,
+      "lod": 1
+    },
     "metadata": {
       "path": "frontend/public/data/plateau/metadata.json",
-      "bytes": 4958,
-      "sha256": "772a060166fc0347f421d744a432cd1e14d867e07a9a3d503769d0499db64a4e"
+      "bytes": 5319,
+      "sha256": "a38858c4d933cd40d55319eb8585697359a67ce6de3cb504748376df4adac82e"
     }
   }
 }

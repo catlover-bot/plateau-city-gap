@@ -15,10 +15,6 @@ interface ScenarioPanelProps {
   comparisonMeshCount?: number;
 }
 
-function signedPercent(value: number): string {
-  return `${value >= 0 ? "−" : "+"}${Math.abs(value * 100).toFixed(1)}%`;
-}
-
 export function ScenarioPanel({
   result,
   selectedMesh,
@@ -44,8 +40,8 @@ export function ScenarioPanel({
     <article className="scenario-panel">
       <div className="scenario-heading">
         <div>
-          <p>WHAT-IF SIMULATION</p>
-          <h2>配置候補を探す</h2>
+          <p>施策を試す</p>
+          <h2>交通支援拠点を仮置き</h2>
         </div>
         {result && <button type="button" className="text-button" onClick={onReset}>リセット</button>}
       </div>
@@ -63,8 +59,8 @@ export function ScenarioPanel({
             {candidates.map((candidate) => (
               <button type="button" key={candidate.candidate_id} onClick={() => onTryCandidate(candidate)}>
                 <span>候補 {candidate.candidate_rank}</span>
-                <strong>{candidate.area_label}</strong>
-                <small>{candidate.road_name ? `${candidate.road_name} · ` : ""}{candidate.improved_mesh_count} mesh改善見込み</small>
+                <strong>{candidate.road_name ? `${candidate.road_name}付近` : candidate.area_label}</strong>
+                <small>{candidate.area_label} · {candidate.improved_mesh_count} mesh改善見込み</small>
               </button>
             ))}
           </div>
@@ -101,7 +97,7 @@ export function ScenarioPanel({
                   <span aria-hidden="true">→</span>
                   <div><small>AFTER</small><strong>{formatDistance(selected.afterDistanceM)}</strong><span>Score {formatScore(selected.afterScore)}</span></div>
                 </div>
-                <div className="improvement-chip">探索スコア {signedPercent(selected.improvementRate)}</div>
+                <div className="improvement-chip">距離 −{formatDistance(selected.beforeDistanceM - selected.afterDistanceM)}</div>
               </>
             ) : (
               <p className="scenario-unavailable">このメッシュは秘匿・合算影響のない比較対象外、または再計算に必要な値がありません。</p>

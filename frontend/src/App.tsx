@@ -9,7 +9,7 @@ import { MetricSelector } from "./components/MetricSelector";
 import { RankingPanel } from "./components/RankingPanel";
 import { ScenarioPanel } from "./components/ScenarioPanel";
 import { StoryMode } from "./components/StoryMode";
-import { loadAppData } from "./lib/data";
+import { loadAppData, loadValidationCityData } from "./lib/data";
 import { finiteNumber } from "./lib/format";
 import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
@@ -32,9 +32,12 @@ const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> 
 };
 
 type SideTab = "ranking" | "detail" | "scenario";
+type CityId = "maizuru" | "fujisawa";
 
 export default function App() {
-  const [data, setData] = useState<AppData | null>(null);
+  const [datasets, setDatasets] = useState<Record<CityId, AppData> | null>(null);
+  const [cityId, setCityId] = useState<CityId>("maizuru");
+  const data = datasets?.[cityId] ?? null;
   const [error, setError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
   const [metricMode, setMetricMode] = useState<MetricMode>("gap");
@@ -42,7 +45,7 @@ export default function App() {
   const [layerPanelOpen, setLayerPanelOpen] = useState(false);
   const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [selectedMesh, setSelectedMesh] = useState<MeshMetrics | null>(null);
-  const [sideTab, setSideTab] = useState<SideTab>("ranking");
+  const [sideTab, setSideTab] = useState<SideTab>("detail");
   const [mapReady, setMapReady] = useState(false);
   const [mapError, setMapError] = useState<string | null>(null);
   const [mapWarning, setMapWarning] = useState<string | null>(null);
@@ -56,15 +59,15 @@ export default function App() {
   useEffect(() => {
     let cancelled = false;
     setError(null);
-    setData(null);
+    setDatasets(null);
     setMapReady(false);
     setMapError(null);
     setMapWarning(null);
-    loadAppData()
-      .then((loaded) => {
+    Promise.all([loadAppData(), loadValidationCityData()])
+      .then(([maizuru, fujisawa]) => {
         if (cancelled) return;
-        setData(loaded);
-        setSelectedMesh(loaded.top10[0] ?? null);
+        setDatasets({ maizuru, fujisawa });
+        setSelectedMesh(maizuru.top10[0] ?? null);
       })
       .catch((reason: unknown) => {
         if (!cancelled) setError(reason instanceof Error ? reason.message : "不明な読み込みエラーです");
@@ -73,6 +76,24 @@ export default function App() {
       cancelled = true;
     };
   }, [retryKey]);
+
+  const switchCity = useCallback((nextCity: CityId) => {
+    if (!datasets || nextCity === cityId) return;
+    const next = datasets[nextCity];
+    setCityId(nextCity);
+    setSelectedMesh(next.top10[0] ?? null);
+    setSelectedBuilding(null);
+    setSideTab("detail");
+    setMetricMode("gap");
+    setLayers({ ...INITIAL_LAYERS, plateau: nextCity === "maizuru" });
+    setStoryStep(null);
+    setScenario(null);
+    setVirtualPoint(null);
+    setPlacementMode(false);
+    setMapReady(false);
+    setMapError(null);
+    setMapWarning(null);
+  }, [cityId, datasets]);
 
   const selectMesh = useCallback((mesh: MeshMetrics) => {
     if (!data) return;
@@ -147,7 +168,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (storyStep === null || !data) return;
+    if (storyStep === null || !data?.finalDemo) return;
     const rankOne = data.top10[0];
     if (!rankOne) return;
     const timers: number[] = [];
@@ -169,17 +190,27 @@ export default function App() {
       setSideTab("detail");
       mapRef.current?.flyToMesh(rankOne);
     } else if (storyStep === 2) {
-      const deepMesh = allMeshes.find((mesh) => mesh.mesh_code === data.finalDemo.deep_dive.mesh_code) ?? null;
+      const deepMesh = allMeshes.find((mesh) => mesh.mesh_code === data.finalDemo?.deep_dive.mesh_code) ?? null;
       setLayers((current) => ({ ...current, plateau: true, meshes: false, stations: true, busStops: true, medical: true }));
       setMetricMode("gap");
       setSelectedMesh(deepMesh);
-      setSelectedBuilding(null);
+      const featured = data.plateauMetadata?.reference_layer?.featured_building;
+      setSelectedBuilding(featured?.id ? {
+        id: featured.id,
+        usage: featured.usage ?? null,
+        measuredHeight: finiteNumber(featured.measured_height_m),
+        storeysAboveGround: finiteNumber(featured.storeys_above_ground),
+        storeysBelowGround: finiteNumber(featured.storeys_below_ground),
+        footprintArea: finiteNumber(featured.building_footprint_area_m2),
+        totalFloorArea: finiteNumber(featured.total_floor_area_m2),
+        lod: featured.lod === undefined ? null : `LOD${featured.lod}`
+      } : null);
       setSideTab("detail");
       timers.push(window.setTimeout(() => mapRef.current?.flyToPlateau(), 120));
     } else if (storyStep === 3) {
       setLayers((current) => ({ ...current, meshes: true, plateau: true, stations: true, busStops: true, medical: true }));
       setSelectedBuilding(null);
-      const best = data.finalDemo.placement_optimization.candidates[0];
+      const best = data.finalDemo?.placement_optimization.candidates[0];
       if (best) tryCandidate(best);
     } else if (storyStep === 4) {
       setSideTab("scenario");
@@ -204,30 +235,35 @@ export default function App() {
   const comparisonMeshCount = data.summary.record_counts?.population_unaffected;
   const plateauCoverage = summarizePlateauCoverage(data.plateauMetadata);
   const plateauYear = data.plateauMetadata?.year ?? data.plateauMetadata?.source_year;
+  const isPrimary = data.city.mode === "primary_demo";
 
   return (
     <div className="app-shell">
       <header className="app-header">
         <div className="brand-block">
-          <div className="brand-mark" aria-hidden="true"><i /><i /><i /></div>
-          <div className="team-name">まちスコープ</div>
-          <div className="brand-rule" />
           <div>
             <h1>CITY GAP</h1>
-            <p>まちの「必要」と「サービスの届き方」のズレを見つける</p>
+            <p>まちスコープ · 都市の必要とサービス到達性を読む</p>
           </div>
         </div>
         <div className="header-actions">
-          <span className="real-data-badge"><i /> REAL DATA</span>
+          <div className="city-switch" role="group" aria-label="分析都市を選択">
+            <button type="button" className={cityId === "maizuru" ? "active" : ""} aria-pressed={cityId === "maizuru"} onClick={() => switchCity("maizuru")}>
+              <strong>舞鶴市</strong><span>実証・施策シミュレーション</span>
+            </button>
+            <button type="button" className={cityId === "fujisawa" ? "active" : ""} aria-pressed={cityId === "fujisawa"} onClick={() => switchCity("fujisawa")}>
+              <strong>藤沢市</strong><span>横展開検証</span>
+            </button>
+          </div>
           <button type="button" className="methodology-button" onClick={() => setMethodologyOpen(true)}>
-            <span aria-hidden="true">ⓘ</span>
-            データと計算方法
+            分析方法
           </button>
         </div>
       </header>
 
       <main className="map-stage">
         <CesiumMap
+          key={cityId}
           ref={mapRef}
           data={data}
           metricMode={metricMode}
@@ -279,16 +315,38 @@ export default function App() {
           onResetView={() => mapRef.current?.resetView()}
         />
 
-        <StoryMode
-          step={storyStep}
-          onStart={() => changeStoryStep(0)}
-          onStepChange={changeStoryStep}
-          plateauMetadata={data.plateauMetadata}
-          comparisonMeshCount={comparisonMeshCount}
-          ready={mapReady && !mapError}
-          finalDemo={data.finalDemo}
-          rankOne={data.top10[0] ?? null}
-        />
+        {isPrimary && data.finalDemo && storyStep === null && (
+          <section className="product-intro">
+            <p>舞鶴市 実証・施策シミュレーション</p>
+            <h2>必要と、届きにくさの<br />重なりを見つける。</h2>
+            <span>舞鶴市の人口・交通・医療・PLATEAUを重ね、単独の地図では見えない地域課題候補を発見します。</span>
+            <div>
+              <button type="button" className="primary-button" onClick={() => changeStoryStep(0)}>デモを見る</button>
+              <button type="button" className="text-button" onClick={() => setMethodologyOpen(true)}>分析方法</button>
+            </div>
+          </section>
+        )}
+
+        {!isPrimary && storyStep === null && (
+          <section className="validation-intro">
+            <p>藤沢市 横展開検証</p>
+            <strong>同じCITY GAP Engineを実データへ適用</strong>
+            <span>市内263メッシュの相対比較。都市間でスコア値を直接比較しません。</span>
+          </section>
+        )}
+
+        {isPrimary && data.finalDemo && storyStep !== null && (
+          <StoryMode
+            step={storyStep}
+            onStart={() => changeStoryStep(0)}
+            onStepChange={changeStoryStep}
+            plateauMetadata={data.plateauMetadata}
+            comparisonMeshCount={comparisonMeshCount}
+            ready={mapReady && !mapError}
+            finalDemo={data.finalDemo}
+            rankOne={data.top10[0] ?? null}
+          />
+        )}
 
         {selectedBuilding && <BuildingInfoCard building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />}
 
@@ -306,26 +364,26 @@ export default function App() {
         </div>
 
         <div className="source-chip">
-          {plateauCoverage.referenceIncluded
+          {isPrimary && plateauCoverage.referenceIncluded
             ? `PLATEAU 舞鶴市 ${plateauYear ?? "年次不明"} · 3D建物 + 道路面`
-            : "PLATEAU 3D Tiles: 収録状況を確認できません"}
+            : `PLATEAU ${data.city.name} 2025 · 行政界 + 駅`}
         </div>
-        <div className="coverage-chip">都市データの空白も発見: Top 10内の公式建物 {top10CoverageLabel(plateauCoverage)}</div>
+        {isPrimary && <div className="coverage-chip">Top 10内の公式建物 {top10CoverageLabel(plateauCoverage)} · 3Dは別候補で検証</div>}
       </main>
 
       <aside className="side-panel" aria-label="CITY GAP分析パネル">
         <div className="panel-summary">
           <div>
-            <p>舞鶴市・500mメッシュ</p>
-            <h2>必要 × 届きにくさ</h2>
-            <small>高齢者数・交通距離・医療距離を重ねて、次に確かめる地域を探す</small>
+            <p>{isPrimary ? "PRIMARY DEMO" : "CROSS-CITY VALIDATION"} · {data.city.prefecture}</p>
+            <h2>{data.city.name}・500mメッシュ</h2>
+            <small>{isPrimary ? "実証・施策シミュレーション" : "同じ計算ロジックによる横展開検証"}</small>
           </div>
           <div className="summary-count">
             <strong>{data.meshes.features.length}</strong>
             <span>mesh</span>
           </div>
         </div>
-        <div className="panel-tabs" role="tablist" aria-label="ランキング、詳細、施策シミュレーション">
+        <div className={`panel-tabs ${isPrimary ? "" : "validation"}`} role="tablist" aria-label="ランキング、詳細、施策シミュレーション">
           <button
             type="button"
             role="tab"
@@ -344,7 +402,7 @@ export default function App() {
           >
             DETAIL<span>選択地域</span>
           </button>
-          <button
+          {isPrimary && <button
             type="button"
             role="tab"
             aria-selected={sideTab === "scenario"}
@@ -352,7 +410,7 @@ export default function App() {
             onClick={() => setSideTab("scenario")}
           >
             WHAT-IF<span>施策を試す</span>
-          </button>
+          </button>}
         </div>
         <div className="panel-scroll" role="tabpanel">
           {sideTab === "ranking" ? (
@@ -370,7 +428,7 @@ export default function App() {
             </>
           ) : sideTab === "detail" ? (
             <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} />
-          ) : (
+          ) : sideTab === "scenario" && isPrimary && data.finalDemo ? (
               <ScenarioPanel
               result={scenario}
               selectedMesh={selectedMesh}
@@ -380,12 +438,14 @@ export default function App() {
                 setSelectedBuilding(null);
               }}
                 onTryRankOne={tryRankOne}
-                candidates={data.finalDemo.placement_optimization.candidates}
+              candidates={data.finalDemo.placement_optimization.candidates}
                 onTryCandidate={tryCandidate}
               onSelectMesh={selectScenarioMesh}
               onReset={resetScenario}
               comparisonMeshCount={comparisonMeshCount}
             />
+          ) : (
+            <DetailPanel mesh={selectedMesh} comparisonMeshCount={comparisonMeshCount} />
           )}
         </div>
       </aside>

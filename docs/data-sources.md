@@ -87,3 +87,14 @@ LOD2配布コンテナには427 b3dm、46,986 batch instanceがありました�
 - 背景地図: Cesium同梱のNatural Earth II静的tile（外部地図APIへの実行時依存なし）。
 
 ソフトウェアlicenseとデータlicenseは別です。repositoryのコードはMIT Licenseですが、加工・同梱データには上記各配布元の条件が適用されます。
+
+## Fujisawa validation sources
+
+| Source | Official URL | Year | Source CRS | Source / city records | Use |
+|---|---|---:|---|---:|---|
+| e-Stat `T001192` Kanagawa | <https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=14&downloadType=2> | 2020 | JGD2011 | 6,250 / 327 mesh | population, 65+ |
+| MLIT P11 Kanagawa | <https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html> | 2022 | EPSG:6668 | 10,706 / 446 | bus distance |
+| MLIT P04 Kanagawa | <https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html> | 2020 | EPSG:6668 | 12,364 / 718（primary 436） | medical distance |
+| PLATEAU Fujisawa related v5 | <https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025> | 2025 | EPSG:4326 | boundary 1, station raw 21 / 20 points | city extent, station distance |
+
+取得ZIPのSHA-256は人口 `855de51c…75de`、P11 `f7dc1805…65f6`、P04 `505b6303…eb69`、PLATEAU関連 `992a2310…ad19` です。完全値は `analysis/scripts/download_real_data.py` に固定しています。PLATEAU藤沢2025のCityGMLは736MB、3D Tiles/MVTは556MBと公式目録に記載されています。今回は関連データ150KBだけを分析へ使用し、3D packageを使用済みとは扱いません。

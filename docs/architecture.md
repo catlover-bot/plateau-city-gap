@@ -135,3 +135,33 @@ Viteのbase pathは `/plateau-city-gap/`。GitHub ActionsはmainへのpushでNod
 | DEM TINの標高・局所勾配要約 | 歩行経路の勾配、上下移動負荷 |
 
 将来拡張を現行機能としては扱いません。特に建物形状・用途・階数は現時点のCITY GAPスコアへ入っていません。
+
+## Cross-city architecture
+
+```text
+analysis/config/{maizuru,fujisawa}.yaml
+                  │
+                  ▼
+          city_config.py (validation)
+                  │
+                  ▼
+         run_city_analysis.py
+     mesh ─ population ─ distances
+        ranking ─ Pareto ─ QA
+          │                 │
+          ├─ maizuru_*      └─ fujisawa_*
+          │                       │
+          ▼                       ▼
+ build_web_assets.py     build_city_validation_assets.py
+          │                       │
+          └──────────┬────────────┘
+                     ▼
+        React city-aware data loader
+          │                       │
+   Primary demo             Validation mode
+  Story / 3D / What-if      Top 10 / Detail / WHY
+```
+
+共通engineはPLATEAU 3D subsetやWhat-ifを知りません。それらは舞鶴の深い実証を担うpublication layerに残し、都市横断分析と分離しています。これにより、藤沢へ舞鶴の3D metadataや候補地を誤って表示しません。
+
+Frontendの `AppData.city` が都市名、mode、cameraを保持します。`loadAppData` は舞鶴Primary、`loadValidationCityData` は藤沢の軽量assetを読みます。Cesium viewerは都市切替時に破棄・再生成され、cameraとlayerを都市ごとに初期化します。

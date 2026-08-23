@@ -54,10 +54,20 @@ export interface Manifest extends JsonProperties {
 }
 
 export interface Summary extends JsonProperties {
+  city?: CityProfile;
   record_counts?: Record<string, number>;
   limitations?: string[];
   distance_method?: string;
   analysis_crs?: { code?: string; name?: string };
+}
+
+export interface CityProfile extends JsonProperties {
+  id: "maizuru" | "fujisawa";
+  code: string;
+  name: string;
+  prefecture: string;
+  mode: "primary_demo" | "cross_city_validation";
+  map_view: { longitude: number; latitude: number; height: number };
 }
 
 export interface PlateauMetadata extends JsonProperties {
@@ -103,6 +113,18 @@ export interface PlateauMetadata extends JsonProperties {
       longitude?: number;
       latitude?: number;
       height?: number;
+    };
+    featured_building?: {
+      id?: string;
+      longitude?: number;
+      latitude?: number;
+      usage?: string;
+      measured_height_m?: number;
+      storeys_above_ground?: number;
+      storeys_below_ground?: number;
+      building_footprint_area_m2?: number;
+      total_floor_area_m2?: number;
+      lod?: number;
     };
   };
 }
@@ -174,6 +196,7 @@ export interface FinalDemoData extends JsonProperties {
 }
 
 export interface AppData {
+  city: CityProfile;
   manifest: Manifest;
   summary: Summary;
   meshes: GeoJsonFeatureCollection;
@@ -185,7 +208,7 @@ export interface AppData {
   plateauBuildings: GeoJsonFeatureCollection | null;
   plateauRoads: GeoJsonFeatureCollection | null;
   plateauMetadata: PlateauMetadata | null;
-  finalDemo: FinalDemoData;
+  finalDemo: FinalDemoData | null;
   warnings: string[];
 }
 

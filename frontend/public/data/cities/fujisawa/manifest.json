@@ -1,0 +1,152 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-22T17:14:01Z",
+  "analysis_version": "0.2.0",
+  "city": {
+    "id": "fujisawa",
+    "code": "14205",
+    "name": "藤沢市",
+    "prefecture": "神奈川県",
+    "mode": "cross_city_validation",
+    "map_view": {
+      "longitude": 139.475,
+      "latitude": 35.365,
+      "height": 23000.0
+    }
+  },
+  "mode": "cross_city_validation",
+  "score_comparison": "within_city_only",
+  "source_datasets": {
+    "population": {
+      "provider": "e-Stat",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "year": 2020,
+      "license": "政府統計の総合窓口 利用規約",
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=14&downloadType=2",
+      "declared_source_crs": "JGD2011",
+      "source_records": 6250,
+      "city_records": 327
+    },
+    "boundary": {
+      "provider": "Project PLATEAU",
+      "title": "藤沢市 行政界",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 1,
+      "city_records": 1
+    },
+    "stations": {
+      "provider": "Project PLATEAU",
+      "title": "藤沢市 鉄道駅",
+      "year": 2025,
+      "license": "PLATEAU Site Policy",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "declared_source_crs": "EPSG:4326",
+      "source_records": 21,
+      "city_records": 20
+    },
+    "bus_stops": {
+      "provider": "国土数値情報",
+      "title": "バス停留所 P11",
+      "year": 2022,
+      "license": "CC BY 4.0",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 10706,
+      "city_records": 446
+    },
+    "medical": {
+      "provider": "国土数値情報",
+      "title": "医療機関 P04",
+      "year": 2020,
+      "license": "国土数値情報利用約款",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "declared_source_crs": "EPSG:6668",
+      "source_records": 12364,
+      "city_records": 436
+    },
+    "plateau": {
+      "title": "3D都市モデル（Project PLATEAU）藤沢市（2025年度）",
+      "year": 2025,
+      "version": 5,
+      "url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "themes": [
+        "建築物 LOD0/1/2.0",
+        "道路 LOD1/3",
+        "都市計画決定情報 LOD1",
+        "土地利用 LOD1",
+        "洪水・高潮・内水・津波・土砂災害リスク"
+      ]
+    }
+  },
+  "source_record_counts": {
+    "stations_source": 21,
+    "stations_web": 20,
+    "bus_stops_source": 10706,
+    "bus_stops_web": 446,
+    "medical_source": 12364,
+    "medical_web": 718,
+    "medical_primary_web": 436
+  },
+  "outputs": [
+    {
+      "file": "mesh_metrics.geojson",
+      "status": "available",
+      "records": 327,
+      "bytes": 443168,
+      "sha256": "58b952ff7c485989e777bf6df53ff6db7fef2f17ee20a7355b41f42ea50310dd"
+    },
+    {
+      "file": "top10.json",
+      "status": "available",
+      "records": 10,
+      "bytes": 15944,
+      "sha256": "1e31d80502a25caabf8df663c74f399bb92aa4360514b704be1b679f4e1e5794"
+    },
+    {
+      "file": "summary.json",
+      "status": "available",
+      "records": 1,
+      "bytes": 8245,
+      "sha256": "4d7343357e8ee799e5261380d5d9cff625134dda916a66362c6a7b9f7e162aa9"
+    },
+    {
+      "file": "stations.geojson",
+      "status": "available",
+      "records": 20,
+      "bytes": 5231,
+      "sha256": "107b59b82fffd5c314d5c2d3320c07c58d8b553ee5d2c27b5feadb75d17aafe6"
+    },
+    {
+      "file": "bus_stops.geojson",
+      "status": "available",
+      "records": 446,
+      "bytes": 117446,
+      "sha256": "8c7b4b1088d903f25cebc93b092949b54e51ea599f720b792b89c4291981beee"
+    },
+    {
+      "file": "medical_facilities.geojson",
+      "status": "available",
+      "records": 718,
+      "bytes": 255085,
+      "sha256": "e18725fd674cf104dcf5b64af2632f51640d566020216a314e724f90a5104c80"
+    },
+    {
+      "file": "boundary.geojson",
+      "status": "available",
+      "records": 1,
+      "bytes": 402187,
+      "sha256": "3b86265deb7f5f638ba10f3e2d0f609d8bc90d5a04b3af3ee5ff5967f306db1c"
+    }
+  ],
+  "limitations": [
+    "Distances are straight-line Euclidean distances, not walking or route distances.",
+    "P11 2022 excludes demand, highway and facility shuttle buses and does not measure service frequency.",
+    "P04 represents facilities collected for July 2020, not current availability.",
+    "Suppressed sources and aggregation destinations are retained but excluded from primary ranks.",
+    "Percentile scores are city-relative; absolute scores must not be compared between cities.",
+    "A high score is an exploratory prompt for field investigation, not proof of a local problem."
+  ]
+}

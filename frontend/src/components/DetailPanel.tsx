@@ -56,6 +56,12 @@ function NearestRow({ label, name, distance }: { label: string; name: unknown; d
   );
 }
 
+function relativeDistance(value: unknown): string {
+  const percentile = percentileValue(value);
+  if (percentile === null) return "市内相対位置 —";
+  return `市内で遠い側 上位約${Math.max(1, Math.round((1 - percentile) * 100))}%`;
+}
+
 export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
   if (!mesh) {
     return (
@@ -73,36 +79,36 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
     <article className="detail-panel">
       <div className="detail-heading">
         <div>
-          <p>{rank ? `CITY GAP #${rank}` : "メッシュ詳細"}</p>
+          <p>{rank ? `CITY GAP候補 #${rank}` : "メッシュ詳細"}</p>
           <h2>{mesh.area_label ?? "名称未確認の地域"}</h2>
-          <small>500m Mesh {mesh.mesh_code} · 最寄り交通名称を使った周辺ラベル</small>
+          <small>最寄りの実在公共交通名称を使った周辺ラベル</small>
         </div>
         {mesh.pareto_frontier && <span className="pareto-badge large">PARETO FRONTIER</span>}
       </div>
 
       <div className="detail-hero-metrics">
-        <div><small>人口</small><strong>{formatInteger(mesh.population)}</strong></div>
-        <div><small>65歳以上</small><strong>{formatInteger(mesh.elderly_population)}</strong></div>
-        <div><small>高齢化率</small><strong>{formatRatio(mesh.elderly_ratio)}</strong></div>
+        <div className="elderly-composition">
+          <small>65歳以上</small>
+          <strong>{formatInteger(mesh.elderly_population)} <span>/ {formatInteger(mesh.population)}</span></strong>
+          <em>{formatRatio(mesh.elderly_ratio)}</em>
+        </div>
       </div>
 
       <div className="distance-cards">
         <div className="distance-card transport">
-          <span className="distance-icon" aria-hidden="true">↔</span>
-          <small>公共交通まで</small>
+          <small>公共交通</small>
           <strong>{formatDistance(mesh.nearest_public_transport_distance_m)}</strong>
-          <span>メッシュ中心からの直線距離</span>
+          <span>{relativeDistance(mesh.transport_distance_percentile)}</span>
         </div>
         <div className="distance-card medical">
-          <span className="distance-icon" aria-hidden="true">＋</span>
-          <small>医療機関まで</small>
+          <small>医療機関</small>
           <strong>{formatDistance(mesh.nearest_medical_distance_m)}</strong>
-          <span>メッシュ中心からの直線距離</span>
+          <span>{relativeDistance(mesh.medical_distance_percentile)}</span>
         </div>
       </div>
 
       <section className="why-section">
-        <div className="section-kicker"><span>WHY</span> なぜCITY GAP候補？</div>
+        <div className="section-kicker"><span>WHY</span> なぜ候補になったか</div>
         {why.length > 0 ? why.map((line) => <p key={line}>{line}</p>) : <p>説明に必要な指標がありません。</p>}
         <div className="percentiles">
           <small className="percentile-scope">比較母集団: {comparisonMeshScope(comparisonMeshCount)}</small>
@@ -120,10 +126,11 @@ export function DetailPanel({ mesh, comparisonMeshCount }: DetailPanelProps) {
         <NearestRow label="病院" name={mesh.nearest_hospital_name} distance={mesh.nearest_hospital_distance_m} />
       </section>
 
-      <section className="score-note">
+      <details className="score-note">
+        <summary>計算値とメッシュ情報</summary>
         <div><span>CITY GAP探索スコア</span><strong>{formatScore(mesh.exploratory_score_c)}</strong></div>
-        <p>高齢者数・交通距離・医療距離の各percentileを掛け合わせた、追加調査候補を比較するための指標です。</p>
-      </section>
+        <p>Mesh {mesh.mesh_code} · 高齢者数・交通距離・医療距離の市内percentileを掛け合わせた追加調査用の相対指標です。</p>
+      </details>
     </article>
   );
 }

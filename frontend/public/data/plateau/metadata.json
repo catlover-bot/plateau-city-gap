@@ -165,6 +165,18 @@
       "1": 296
     }
   },
+  "featured_building": {
+    "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "longitude": 135.39794216934305,
+    "latitude": 35.44696746239316,
+    "usage": "住宅",
+    "measured_height_m": 8.5,
+    "storeys_above_ground": 2,
+    "storeys_below_ground": 0,
+    "building_footprint_area_m2": 61.73,
+    "total_floor_area_m2": 125.54,
+    "lod": 1
+  },
   "files": [
     {
       "uri": "data/data284.b3dm",
