@@ -2,7 +2,7 @@
   "metadata": {
     "algorithm": "1-site: exact evaluation of every screened road anchor. 2/3-site: deterministic forward greedy addition; each stage evaluates every spacing-eligible anchor.",
     "exactness": "1-site exact within candidate pool; 2/3-site approximate greedy, not global optimum",
-    "candidate_count": 12062,
+    "candidate_count": 11460,
     "comparison_mesh_count": 286,
     "constraints": {
       "existing_transport_exclusion_m": 150.0,
@@ -15,7 +15,7 @@
       "robust": "maximize number of Robust Top 20 meshes with shorter distance, then their median reduction"
     },
     "seed": null,
-    "runtime_seconds": 76.068,
+    "runtime_seconds": 70.873,
     "source_data_hashes": {
       "maizuru_mesh_metrics.csv": "2784789996e42eb15875bbebe845419d6849cb0281e8da4b41ef4bdaa3dbc376",
       "final_audit.json": "214697e75295a16f76b03e62f615163f047af661183badcbae087d8d06f66bbf",
@@ -23,12 +23,13 @@
       "p11_bus_stops": "d0a32c14ec1386b69a14b29e50997de5600ac7e2fd2298fe8dc5849952584fa1",
       "plateau_stations": "e010e932dcf8a174f5dfc5f38ea65027c6939cf93e21e72cf4195f89bcff4437"
     },
-    "generated_at": "2026-08-22T10:00:00Z",
+    "generated_at": "2026-08-25T23:17:35Z",
     "road_inventory": {
       "gml_files": 82,
       "gml_uncompressed_bytes": 40401255,
-      "road_surfaces": 16778,
+      "road_surfaces": 15684,
       "geometry_lod": "LOD1 MultiSurface",
+      "parser_policy": "LOD1 exterior with interior rings; LOD2 traffic-area polygons excluded",
       "network_topology": false
     }
   },

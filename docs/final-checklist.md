@@ -89,7 +89,7 @@
 
 - [x] 9 predefined robustness conditions; frequency is not framed as probability
 - [x] Robust candidate ordering is deterministic and documented
-- [x] 12,062 PLATEAU road-surface candidates retain coordinates and source identity
+- [x] 11,460 PLATEAU LOD1 road-surface candidates retain coordinates and source identity
 - [x] 1-site exact within candidate pool
 - [x] 2/3-site deterministic greedy approximation disclosed
 - [x] Overall, fairness, and robust alternatives compare different objectives

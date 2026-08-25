@@ -50,6 +50,9 @@ Vite static build → GitHub Pages
 | `metrics.py` | percentile、Score A/B/C、Pareto |
 | `ranking.py` | 開示条件・人口条件を明示した順位 |
 | `validation.py` | CRS、schema、値域、件数の検証 |
+| `plateau_road_network.py` | LOD1道路面、公式generator adapter、実験graph、Dijkstra |
+| `network_verification.py` | edge最適性とpredecessorによる独立shortest-path証明 |
+| `plateau_terrain.py` | DEM TIN補間、edge標高差、route上り・下り・grade |
 
 `analysis/outputs/real/maizuru_city_gap.geojson`、`maizuru_city_gap_top10.csv`、`maizuru_summary.json` がプロダクトへ渡す確定値です。React側でRank 1などを再入力しません。
 
@@ -76,7 +79,7 @@ Vite static build → GitHub Pages
 4. Top 10の各500m polygonと建物代表点・bounding boxを照合する。
 5. Top 10内0棟をcoverage結果として記録し、geometryを推定しない。
 6. `build_final_demo_assets.py` が44,640建物代表点を500mメッシュへ結合し、PLATEAU-covered Top 5を生成する。
-7. 同scriptがCityGML道路16,778面を読み、既存交通から150m超の道路面代表点でWhat-ifを評価し、1.5km以上離したTop 3を生成する。Deep Diveでは道路135面とDEM TINを抽出する。
+7. 同scriptがCityGML道路LOD1 15,684面を読み、既存交通から150m超の11,460道路面代表点でWhat-ifを評価し、1.5km以上離したTop 3を生成する。Deep Diveでは道路135面とDEM TINを抽出する。
 8. `build_plateau_web_subset.py` が全市23位 `533513314` と交差する3 leaf tileを選び、公式ZIP内memberへhash照合して公開する。
 
 現在のsubset payloadは4,313,608 bytes、856棟です。対象500mメッシュ内の代表点は296棟で、実際のgeometryは全856棟がLOD1です。用途・計測高さ・階数・建築面積・延べ面積・LODはbatch tableに存在する値だけを表示します。
@@ -123,16 +126,16 @@ Viteのbase pathは `/plateau-city-gap/`。GitHub ActionsはmainへのpushでNod
 
 公式配布全体の約161MB 3D Tiles ZIP、約914MB CityGML ZIPや展開済みcontainerは配信しません。3D payloadは4.31MBのDeep Dive subsetに限定します。Cesium runtime、Natural Earth II、分析JSON、3D Tiles、道路GeoJSONは全てstatic assetで、外部地図・分析APIへ実行時依存しません。
 
-## Current implementation and future work
+## Current implementation and claim boundary
 
-| Current product | Not implemented |
+| Current product | Not claimed / not implemented |
 |---|---|
-| mesh中心からの直線距離 | 道路・徒歩network距離 |
-| 地域人口に基づく探索 | 建物への人口配分 |
-| 公式3D建物Deep Diveと面積を含む属性確認 | 建物単位の居住起点 |
+| mesh中心、建物加重Euclidean、実験道路面隣接networkの比較 | 公式歩行者network、徒歩時間 |
+| 500m人口の用途検証済み居住建物への面積按分 | 実在個人・世帯・確認済み入居者 |
+| 公式3D建物Deep Diveと面積を含む属性確認 | 建物入口・確認済み居住起点 |
 | PLATEAU coverageをQAとして表示 | 公式配布全体の3D配信 |
-| 道路面上Top 3と仮想1地点の決定論的再計算 | 道路network、運行、需要、費用の最適化 |
-| DEM TINの標高・局所勾配要約 | 歩行経路の勾配、上下移動負荷 |
+| 道路面上Top 3と従来Euclidean What-if | network-aware配置案、運行、需要、費用の最適化 |
+| DEM TINによる全道路node標高とroute地形component | 測量道路勾配、歩行energy、坂penalty routing |
 
 将来拡張を現行機能としては扱いません。特に建物形状・用途・階数は現時点のCITY GAPスコアへ入っていません。
 

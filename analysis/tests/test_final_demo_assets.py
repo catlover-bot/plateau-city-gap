@@ -60,6 +60,19 @@ def test_final_demo_separates_rank_one_deep_dive_and_placement_claims() -> None:
     assert first["improved_mesh_count"] == 5
     assert first["affected_elderly_population"] == 241
     assert first["top_improvement"]["after_distance_m"] > 0
+    comparison = report["plateau_context"]["distance_comparison"]
+    assert comparison["mesh_code"] == "533513314"
+    assert comparison["centroid_euclidean_transport_distance_m"] == 562.597
+    assert comparison["building_weighted_euclidean_transport_distance_m"] > 0
+    assert comparison["experimental_road_surface_network_transport_distance_m"] > (
+        comparison["building_weighted_euclidean_transport_distance_m"]
+    )
+    assert comparison["pedestrian_network"] is False
+    assert comparison["network_metric_status"] == "available"
+    terrain = report["plateau_context"]["terrain_route_context"]
+    assert terrain["status"] == "available"
+    assert terrain["node_terrain_coverage"] == 1
+    assert terrain["routing_penalty_applied"] is False
     assert report["offline"]["runtime_external_api_required"] is False
 
 

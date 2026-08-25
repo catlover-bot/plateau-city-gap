@@ -26,7 +26,7 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 - 実測値、最寄り施設、percentileを分解した決定論的な「なぜ？」説明
 - 9つの分析条件でTop 10 / Top 20への残り方を示すRobustness View
 - CesiumJS上で公式PLATEAU 2025の3D建物と実属性を確認
-- 12,062のPLATEAU道路面候補から仮想交通支援拠点1〜3地点を比較
+- 11,460のPLATEAU道路LOD1面候補から仮想交通支援拠点1〜3地点を比較
 - 全体改善・取り残し重視・頑健候補の3目的とBefore / Afterを比較
 - 距離・Score・配置案を公式データ、CRS、式、丸め前値まで辿るEvidence Chain
 - データ年次、計算方法、除外条件、限界をアプリ内で開示
@@ -56,7 +56,7 @@ Webデモを開き、地図上の `デモを見る` を押すと次の8ステッ
 ```text
 都市別YAML設定 + 公式rawデータ
   └─ 共通Python / GeoPandas分析（舞鶴 EPSG:6674 / 藤沢 EPSG:6677）
-       ├─ Robustness 9条件 + 12,062道路候補の事前最適化
+       ├─ Robustness 9条件 + 11,460道路候補の事前最適化
        └─ analysis/outputs/real/  ← 分析値のSingle Source of Truth
             └─ 検証付きWeb asset生成
                  └─ frontend/public/data/
@@ -107,7 +107,7 @@ PLATEAUは装飾的な背景としてだけ使っていません。
 
 ## CITY GAP Decision Studio
 
-`施策配置` では、公式PLATEAU道路LOD1面から抽出した12,062候補を事前計算し、1〜3地点、全体改善・取り残し重視・頑健候補を比較します。任意の1地点を地図で試す従来What-ifも維持しています。座標をWGS84からJGD2011 / 平面直角座標系VI（EPSG:6674）へ変換し、分析と同じユークリッド直線距離で次を計算します。
+`施策配置` では、公式PLATEAU道路LOD1面から抽出した11,460候補を事前計算し、1〜3地点、全体改善・取り残し重視・頑健候補を比較します。任意の1地点を地図で試す従来What-ifも維持しています。座標をWGS84からJGD2011 / 平面直角座標系VI（EPSG:6674）へ変換し、分析と同じユークリッド直線距離で次を計算します。
 
 ```text
 after_transport_distance
@@ -255,7 +255,8 @@ PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、
 - percentileは各都市内の相対比較であり、舞鶴市と藤沢市のScoreを直接比較できません。
 - 秘匿・合算影響のある209メッシュは表示しますが、percentileとランキングから除外します。
 - PLATEAU 3D subsetは全市23位のDeep Dive範囲だけで、舞鶴市全域でもTop 10周辺でもありません。
-- 道路LOD1は面形状で、接続トポロジー、歩道、横断、通行可否を持ちません。What-if効果は引き続き直線距離です。
+- 道路LOD1 15,684面から実験的な面隣接graph（23,437辺）を生成し、建物加重Euclideanとの比較成果物を追加しました。これは公式歩行者networkではなく、歩道・横断・通行可否を持ちません。既存What-if効果は引き続き直線距離で、network-aware scenarioとは分離しています。
+- PLATEAU DEM TIN 16,310,504三角形を道路nodeへ照合し、距離とは別にrouteの上り・下り・最大観測gradeを出力します。道路中心線の測量勾配や歩行energyではありません。
 - DEM勾配はTIN三角形の局所要約で、歩行経路の坂を表しません。
 - What-ifは用地、運行可能性、需要、費用を評価しません。
 - Robustness頻度は、定義した9条件内で候補が残る回数であり、確率・信頼度ではありません。

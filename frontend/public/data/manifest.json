@@ -140,8 +140,8 @@
       "file": "final_demo.json",
       "status": "available",
       "records": 1,
-      "bytes": 8847,
-      "sha256": "85f485d01f13210e35c67b6d0acf013dd1be4ce125e77c31ee083c1c10323f53"
+      "bytes": 9610,
+      "sha256": "08c40139fa94a11701e5d219fb6590f788564784f6b84104308b8a4f56e4f25d"
     },
     {
       "file": "plateau_roads.geojson",
@@ -155,21 +155,21 @@
       "status": "available",
       "records": 286,
       "bytes": 246712,
-      "sha256": "8710dbaba709d44a518fc403ea7710d8a18a4d5aa200ff63e6be528c5b94cfff"
+      "sha256": "a931b93e4705eb2889d8892e01a6b76f8863c8b0696038e06eee2622b14d1897"
     },
     {
       "file": "intervention_scenarios.json",
       "status": "available",
       "records": 9,
-      "bytes": 893233,
-      "sha256": "488c8ce467679113cd35d237daa63f59fbd299e0a0c4f5df03073de22a737fce"
+      "bytes": 893322,
+      "sha256": "062cdc88770c984577f0395ac6a0926c9992e9766c3349c1471235a7d570c1cc"
     },
     {
       "file": "evidence.json",
       "status": "available",
       "records": 1,
       "bytes": 10524,
-      "sha256": "0fa2fe88456a3737f3cf38edeb0daddaead83c2c57741c92a5a67b1144d6bbf2"
+      "sha256": "25b9e5058acd9026d6e96b308b571855f45105b8a23a100bd151fbd3b20f4b12"
     }
   ],
   "plateau_reference_outputs": [
@@ -269,7 +269,7 @@
   ],
   "decision_studio": {
     "scenario_count": 9,
-    "candidate_count": 12062,
+    "candidate_count": 11460,
     "algorithm": "1-site: exact evaluation of every screened road anchor. 2/3-site: deterministic forward greedy addition; each stage evaluates every spacing-eligible anchor.",
     "exactness": "1-site exact within candidate pool; 2/3-site approximate greedy, not global optimum"
   }

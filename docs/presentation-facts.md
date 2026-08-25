@@ -62,7 +62,7 @@ Source: `maizuru_intervention_1site.json`〜`3site.json`、`maizuru_intervention
 - 2地点・取り残し重視: 15mesh、65歳以上記録人口417人、worst decile平均185.495m短縮、Score C純減少 -0.124091313
 - 2地点・頑健候補: 18mesh、65歳以上記録人口1,025人、Robust Top 20の7候補を改善、Score C純減少0.141063351
 
-1地点は12,062候補内のexact解。2/3地点は各段階ですべての間隔条件適合候補を評価する決定論的forward greedy近似で、大域的最適解ではありません。最終再生成時runtimeは76.068秒。
+1地点は11,460候補内のexact解。2/3地点は各段階ですべての間隔条件適合候補を評価する決定論的forward greedy近似で、大域的最適解ではありません。現在の成果物に記録された再生成runtimeは70.873秒。
 
 独立検証は9案すべての地点順、1.5km間隔、全meshのafter距離・Score、Evidence Chainを再計算して `exact_match: true`。最大差は `1.9e-8`、公開丸め許容差 `5e-7` 内です。
 

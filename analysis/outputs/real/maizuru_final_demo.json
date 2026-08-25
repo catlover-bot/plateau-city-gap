@@ -286,26 +286,42 @@
     "roads": {
       "gml_files": 82,
       "gml_uncompressed_bytes": 40401255,
-      "road_surfaces": 16778,
+      "road_surfaces": 15684,
       "geometry_lod": "LOD1 MultiSurface",
+      "parser_policy": "LOD1 exterior with interior rings; LOD2 traffic-area polygons excluded",
       "network_topology": false
     },
     "distance_comparison": {
       "mesh_code": "533513314",
-      "euclidean_transport_distance_m": 562.597,
-      "urban_context_aware_distance_m": null,
-      "reason_not_computed": "道路LOD1は面形状で、歩行ネットワークの接続トポロジー・通行可否・横断条件を持たないため、経路距離への置換は実データ以上の主張になる。"
+      "centroid_euclidean_transport_distance_m": 562.597,
+      "building_weighted_euclidean_transport_distance_m": 446.8814183475994,
+      "experimental_road_surface_network_transport_distance_m": 575.4101652921023,
+      "network_metric_status": "available",
+      "graph_version": "exp-4fff5849d650a70b",
+      "pedestrian_network": false,
+      "route_semantics": "PLATEAU LOD1 road-surface adjacency path; mode not validated",
+      "claim_boundary": "実験的なPLATEAU LOD1道路面隣接距離であり、徒歩経路・所要時間ではない。"
+    },
+    "terrain_route_context": {
+      "status": "available",
+      "transport_weighted_mean_ascent_m": 2.9957159712083943,
+      "transport_weighted_mean_descent_m": 8.225847872233341,
+      "node_terrain_coverage": 1.0,
+      "routing_penalty_applied": false,
+      "claim_boundary": "道路面代表点間のDEM端点成分。測量道路勾配・歩行energyではない。"
     },
     "current_use": [
       "500mメッシュ境界と公式施設点を重ねる",
       "公式3D建物と実属性をクリック確認する",
       "建物収録範囲を可視化する",
       "公式道路面上から配置探索アンカーを生成する",
-      "DEM TINから地域内の標高・局所勾配を要約する"
+      "DEM TINから地域内の標高・局所勾配を要約する",
+      "建物加重Euclidean距離と実験道路面隣接距離を比較する",
+      "DEM標高からrouteの上り・下りを距離と分けて表示する"
     ],
     "future_use": [
-      "歩行ネットワークを追加した建物起点の経路距離",
-      "道路接続・横断条件・勾配を含む到達圏",
+      "公式歩行者networkによる建物入口起点の経路距離",
+      "確認済みの道路接続・横断条件を含む到達圏",
       "現地確認済みの候補用地と運行条件による最適化"
     ]
   },

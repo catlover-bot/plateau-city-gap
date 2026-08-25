@@ -48,7 +48,7 @@ def test_robustness_scenarios_and_counts_are_published_without_probability_langu
 
 def test_intervention_plans_cover_one_two_three_sites_and_diminishing_returns() -> None:
     report = _json(WEB / "intervention_scenarios.json")
-    assert report["metadata"]["candidate_count"] == 12_062
+    assert report["metadata"]["candidate_count"] == 11_460
     assert "approximate" in report["metadata"]["exactness"]
     overall = report["plans"]["overall"]
     assert [len(overall[str(count)]["sites"]) for count in (1, 2, 3)] == [1, 2, 3]

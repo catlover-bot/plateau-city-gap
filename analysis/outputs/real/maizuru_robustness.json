@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-22T10:00:00Z",
+  "generated_at": "2026-08-25T23:16:11Z",
   "scenario_count": 9,
   "interpretation": "頻度は設定した分析条件内の出現回数であり、確率・信頼度ではない。",
   "ranking_rule": "Top 10出現回数の降順、median rankの昇順、Top 20出現回数の降順、mesh code昇順。新しい合成スコアは作らない。",

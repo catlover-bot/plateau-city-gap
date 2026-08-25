@@ -14,7 +14,6 @@ import csv
 import json
 import math
 import statistics
-import xml.etree.ElementTree as ET
 import zipfile
 from collections import Counter
 from pathlib import Path
@@ -24,9 +23,10 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 from pyproj import Transformer
-from shapely.geometry import Polygon, mapping
+from shapely.geometry import mapping
 
 from analysis.scripts.inspect_plateau_buildings import LOD_DIRS, parse_directory
+from analysis.src.plateau_road_network import iter_road_surfaces
 from analysis.src.spatial import boundary_from_plateau, intersects_boundary
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,6 +45,13 @@ OUTPUT_CSV = ROOT / "analysis/outputs/real/plateau_covered_candidates.csv"
 OUTPUT_REPORT = ROOT / "analysis/outputs/real/maizuru_final_demo.json"
 OUTPUT_WEB = ROOT / "frontend/public/data/final_demo.json"
 OUTPUT_ROADS = ROOT / "frontend/public/data/plateau_roads.geojson"
+NETWORK_METRICS = ROOT / "analysis/outputs/real/maizuru_network_accessibility_meshes.csv"
+NETWORK_SUMMARY = ROOT / "analysis/outputs/real/maizuru_road_network_summary.json"
+TERRAIN_METRICS = ROOT / "analysis/outputs/real/maizuru_terrain_accessibility_meshes.csv"
+TERRAIN_SUMMARY = ROOT / "analysis/outputs/real/maizuru_terrain_network_summary.json"
+BUILDING_DEMOGRAPHICS_SUMMARY = (
+    ROOT / "analysis/outputs/real/maizuru_building_demographics_summary.json"
+)
 
 WEB_CRS = "EPSG:4326"
 ANALYSIS_CRS = "EPSG:6674"
@@ -52,13 +59,6 @@ MIN_EXISTING_TRANSPORT_DISTANCE_M = 150.0
 MIN_CANDIDATE_SEPARATION_M = 1_500.0
 TOP_CANDIDATES = 3
 TOP_COVERED = 5
-
-NS = {
-    "gml": "http://www.opengis.net/gml",
-    "tran": "http://www.opengis.net/citygml/transportation/2.0",
-}
-GML_ID = "{http://www.opengis.net/gml}id"
-
 
 def _write_json(path: Path, value: Any, *, compact: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -68,6 +68,35 @@ def _write_json(path: Path, value: Any, *, compact: bool = False) -> None:
     else:
         options["indent"] = 2
     path.write_text(json.dumps(value, **options) + "\n", encoding="utf-8")
+
+
+def _building_demographic_detail(mesh_code: str) -> dict[str, Any] | None:
+    if not BUILDING_DEMOGRAPHICS_SUMMARY.exists():
+        return None
+    summary = json.loads(BUILDING_DEMOGRAPHICS_SUMMARY.read_text(encoding="utf-8"))
+    deep = summary.get(f"deep_dive_mesh_{mesh_code}")
+    if deep is None:
+        return None
+    return {
+        "method": "estimated 500m census allocated by strict residential PLATEAU floor area",
+        "privacy": "mesh aggregate only; no per-building estimated person counts",
+        "residential_building_count": int(deep["residential_building_count"]),
+        "mixed_residential_building_count": int(deep["mixed_residential_buildings"]),
+        "estimated_population_allocated": float(deep["estimated_population_allocated"]),
+        "estimated_elderly_allocated": float(deep["estimated_elderly_allocated"]),
+        "centroid_transport_distance_m": float(deep["centroid_transport_distance"]),
+        "weighted_mean_transport_distance_m": float(deep["weighted_mean_transport_distance"]),
+        "weighted_median_transport_distance_m": float(
+            deep["weighted_median_transport_distance"]
+        ),
+        "weighted_p90_transport_distance_m": float(deep["weighted_p90_transport_distance"]),
+        "centroid_medical_distance_m": float(deep["centroid_medical_distance"]),
+        "weighted_mean_medical_distance_m": float(deep["weighted_mean_medical_distance"]),
+        "weighted_median_medical_distance_m": float(
+            deep["weighted_median_medical_distance"]
+        ),
+        "weighted_p90_medical_distance_m": float(deep["weighted_p90_medical_distance"]),
+    }
 
 
 def _area_label(name: Any, transport_type: Any) -> str:
@@ -172,31 +201,23 @@ def _parse_roads(archive: zipfile.ZipFile) -> tuple[gpd.GeoDataFrame, dict[str, 
         if name.startswith("udx/tran/") and name.endswith(".gml")
     )
     for member in members:
-        root = ET.parse(archive.open(member)).getroot()
-        for road in root.findall(".//tran:Road", NS):
-            road_id = road.attrib.get(GML_ID, "")
-            road_name = road.findtext("gml:name", default="", namespaces=NS)
-            road_class = road.findtext("tran:class", default="", namespaces=NS)
-            road_function = road.findtext("tran:function", default="", namespaces=NS)
-            for index, position in enumerate(road.findall(".//gml:posList", NS)):
-                values = [float(value) for value in (position.text or "").split()]
-                if len(values) < 12 or len(values) % 3:
-                    continue
-                coordinates = [
-                    (values[cursor + 1], values[cursor])
-                    for cursor in range(0, len(values), 3)
-                ]
-                polygon = Polygon(coordinates)
-                if polygon.is_empty or not polygon.is_valid or polygon.area <= 0:
-                    continue
+        info = archive.getinfo(member)
+        with archive.open(info) as stream:
+            for surface in iter_road_surfaces(
+                stream,
+                source_member=member,
+                source_member_crc32=f"{info.CRC:08x}",
+            ):
+                polygon = surface["geometry"]
                 point = polygon.representative_point()
                 rows.append(
                     {
-                        "road_id": f"{road_id}-{index}",
-                        "road_name": road_name or None,
-                        "road_class": road_class or None,
-                        "road_function": road_function or None,
+                        "road_id": f"{surface['gml_id']}-{surface['surface_index']}",
+                        "road_name": surface["name"],
+                        "road_class": surface["road_class"],
+                        "road_function": surface["function_code"],
                         "source_member": member,
+                        "source_member_crc32": surface["source_member_crc32"],
                         "anchor_lon": point.x,
                         "anchor_lat": point.y,
                         "geometry": polygon,
@@ -207,6 +228,7 @@ def _parse_roads(archive: zipfile.ZipFile) -> tuple[gpd.GeoDataFrame, dict[str, 
         "gml_uncompressed_bytes": sum(archive.getinfo(name).file_size for name in members),
         "road_surfaces": len(rows),
         "geometry_lod": "LOD1 MultiSurface",
+        "parser_policy": "LOD1 exterior with interior rings; LOD2 traffic-area polygons excluded",
         "network_topology": False,
     }
     return gpd.GeoDataFrame(rows, geometry="geometry", crs=WEB_CRS), inventory
@@ -565,7 +587,33 @@ def build(*, skip_dem: bool = False) -> dict[str, Any]:
     for required in (CITYGML_ZIP, METRICS_CSV, METRICS_GEOJSON, BORDER, STATIONS, BUS_STOPS):
         if not required.is_file():
             raise FileNotFoundError(required)
+    published_building_detail = None
+    if OUTPUT_REPORT.exists():
+        existing_report = json.loads(OUTPUT_REPORT.read_text(encoding="utf-8"))
+        published_building_detail = existing_report.get("deep_dive", {}).get(
+            "building_demographics_detail"
+        )
     metrics = pd.read_csv(METRICS_CSV, dtype={"mesh_code": str})
+    network_metrics = (
+        pd.read_csv(NETWORK_METRICS, dtype={"mesh_code": str}).set_index("mesh_code")
+        if NETWORK_METRICS.exists()
+        else None
+    )
+    terrain_metrics = (
+        pd.read_csv(TERRAIN_METRICS, dtype={"mesh_code": str}).set_index("mesh_code")
+        if TERRAIN_METRICS.exists()
+        else None
+    )
+    network_summary = (
+        json.loads(NETWORK_SUMMARY.read_text(encoding="utf-8"))
+        if NETWORK_SUMMARY.exists()
+        else None
+    )
+    terrain_summary = (
+        json.loads(TERRAIN_SUMMARY.read_text(encoding="utf-8"))
+        if TERRAIN_SUMMARY.exists()
+        else None
+    )
     meshes = gpd.read_file(METRICS_GEOJSON)
     meshes["mesh_code"] = meshes["mesh_code"].astype(str)
     covered, mesh_records = _building_coverage(metrics, meshes)
@@ -607,6 +655,19 @@ def build(*, skip_dem: bool = False) -> dict[str, Any]:
 
     deep_covered = next(row for row in covered_rows if row["mesh_code"] == deep_mesh_code)
     deep_records = mesh_records[deep_mesh_code]
+    published_building_detail = (
+        _building_demographic_detail(deep_mesh_code) or published_building_detail
+    )
+    network_row = (
+        network_metrics.loc[deep_mesh_code]
+        if network_metrics is not None and deep_mesh_code in network_metrics.index
+        else None
+    )
+    terrain_row = (
+        terrain_metrics.loc[deep_mesh_code]
+        if terrain_metrics is not None and deep_mesh_code in terrain_metrics.index
+        else None
+    )
     rank_one = metrics.loc[metrics["rank"] == 1].iloc[0]
     report = {
         "schema_version": "1.0.0",
@@ -636,6 +697,11 @@ def build(*, skip_dem: bool = False) -> dict[str, Any]:
                 "建物属性は地域文脈の確認用。CITY GAPは500mメッシュ単位であり、"
                 "個々の建物にスコアを付与していない。"
             ),
+            **(
+                {"building_demographics_detail": published_building_detail}
+                if published_building_detail is not None
+                else {}
+            ),
         },
         "placement_optimization": {
             "candidate_source": "公式PLATEAU道路LOD1面の内部代表点",
@@ -658,11 +724,53 @@ def build(*, skip_dem: bool = False) -> dict[str, Any]:
             "roads": road_inventory,
             "distance_comparison": {
                 "mesh_code": deep_mesh_code,
-                "euclidean_transport_distance_m": deep_covered["transport_distance"],
-                "urban_context_aware_distance_m": None,
-                "reason_not_computed": (
-                    "道路LOD1は面形状で、歩行ネットワークの接続トポロジー・通行可否・"
-                    "横断条件を持たないため、経路距離への置換は実データ以上の主張になる。"
+                "centroid_euclidean_transport_distance_m": deep_covered[
+                    "transport_distance"
+                ],
+                "building_weighted_euclidean_transport_distance_m": (
+                    float(network_row["weighted_mean_transport_distance"])
+                    if network_row is not None
+                    else None
+                ),
+                "experimental_road_surface_network_transport_distance_m": (
+                    float(network_row["network_transport_weighted_mean_distance_m"])
+                    if network_row is not None
+                    else None
+                ),
+                "network_metric_status": (
+                    network_row["network_metric_status"] if network_row is not None else "unavailable"
+                ),
+                "graph_version": (
+                    network_summary["graph"]["graph_version"] if network_summary else None
+                ),
+                "pedestrian_network": False,
+                "route_semantics": (
+                    network_summary["graph"]["route_semantics"] if network_summary else None
+                ),
+                "claim_boundary": (
+                    "実験的なPLATEAU LOD1道路面隣接距離であり、徒歩経路・所要時間ではない。"
+                ),
+            },
+            "terrain_route_context": {
+                "status": terrain_row["terrain_metric_status"] if terrain_row is not None else "unavailable",
+                "transport_weighted_mean_ascent_m": (
+                    float(terrain_row["transport_weighted_mean_ascent_m"])
+                    if terrain_row is not None
+                    else None
+                ),
+                "transport_weighted_mean_descent_m": (
+                    float(terrain_row["transport_weighted_mean_descent_m"])
+                    if terrain_row is not None
+                    else None
+                ),
+                "node_terrain_coverage": (
+                    terrain_summary["node_terrain"]["node_terrain_coverage"]
+                    if terrain_summary
+                    else None
+                ),
+                "routing_penalty_applied": False,
+                "claim_boundary": (
+                    "道路面代表点間のDEM端点成分。測量道路勾配・歩行energyではない。"
                 ),
             },
             "current_use": [
@@ -671,10 +779,12 @@ def build(*, skip_dem: bool = False) -> dict[str, Any]:
                 "建物収録範囲を可視化する",
                 "公式道路面上から配置探索アンカーを生成する",
                 "DEM TINから地域内の標高・局所勾配を要約する",
+                "建物加重Euclidean距離と実験道路面隣接距離を比較する",
+                "DEM標高からrouteの上り・下りを距離と分けて表示する",
             ],
             "future_use": [
-                "歩行ネットワークを追加した建物起点の経路距離",
-                "道路接続・横断条件・勾配を含む到達圏",
+                "公式歩行者networkによる建物入口起点の経路距離",
+                "確認済みの道路接続・横断条件を含む到達圏",
                 "現地確認済みの候補用地と運行条件による最適化",
             ],
         },

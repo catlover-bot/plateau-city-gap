@@ -88,7 +88,7 @@ P04分類だけでは保証できません。企業健康管理室・医務室�
 
 ## Q22 これは本当に最適解？
 
-1地点はscreening後の12,062候補を全評価した候補集合内exact解です。2/3地点は決定論的forward greedy近似で、大域的最適解ではありません。algorithm、制約、runtime、source hashを成果物に記録しています。
+1地点はscreening後の11,460候補を全評価した候補集合内exact解です。2/3地点は決定論的forward greedy近似で、大域的最適解ではありません。algorithm、制約、runtime、source hashを成果物に記録しています。
 
 ## Q23 公平性とは？
 
@@ -100,7 +100,7 @@ P04分類だけでは保証できません。企業健康管理室・医務室�
 
 ## Q25 どこまで再現できる？
 
-固定した公式raw dataがあれば、9条件、12,062候補、9つの配置案、Web JSONまでscriptで再生成できます。別scriptが全meshの距離・percentile・ScoreとEvidence Chainを独立再計算し、現在は9/9案で一致しています。
+固定した公式raw dataがあれば、9条件、11,460候補、9つの配置案、Web JSONまでscriptで再生成できます。別scriptが全meshの距離・percentile・ScoreとEvidence Chainを独立再計算し、現在は9/9案で一致しています。
 
 ## Q26 PLATEAU道路をどう使った？
 
