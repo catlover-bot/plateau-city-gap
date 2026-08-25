@@ -107,6 +107,48 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Building accessibility not found")
         return detail
 
+    @application.get("/cities/{city_id}/networks")
+    def networks(
+        city_id: str, repo: Annotated[PlatformRepository, Depends(_repository)]
+    ) -> list[dict]:
+        return repo.networks(city_id)
+
+    @application.get("/cities/{city_id}/road-edges")
+    def road_edges(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        bbox: Annotated[
+            str,
+            Query(description="Required minLon,minLat,maxLon,maxLat window"),
+        ],
+        limit: Annotated[int, Query(ge=1, le=1000)] = 250,
+        offset: Annotated[int, Query(ge=0)] = 0,
+        graph_version: str | None = None,
+    ) -> dict:
+        parsed_bbox = _parse_bbox(bbox)
+        return {
+            "city_id": city_id,
+            "bbox": parsed_bbox,
+            "limit": limit,
+            "offset": offset,
+            "features": repo.road_edges(
+                city_id, parsed_bbox, limit, offset, graph_version
+            ),
+        }
+
+    @application.get("/cities/{city_id}/buildings/{gml_id}/network-accessibility")
+    def building_network_accessibility(
+        city_id: str,
+        gml_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        detail = repo.building_network_accessibility(city_id, gml_id)
+        if detail is None:
+            raise HTTPException(
+                status_code=404, detail="Building network accessibility not found"
+            )
+        return detail
+
     return application
 
 

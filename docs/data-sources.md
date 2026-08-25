@@ -11,7 +11,7 @@
 | 国土交通省 国土数値情報「医療機関 P04 京都府」 | 2020-07 / EPSG:6668 | [公式ページ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html)、[ZIP](https://nlftp.mlit.go.jp/ksj/gml/data/P04/P04-20/P04-20_26_GML.zip) / `data/raw/medical/` | 730,337 B ZIP; 1,512,905 B GeoJSON | 3,960 → 舞鶴市105 | 病院8＋診療所63を距離に使用。歯科34は件数のみ。現在の開廃・一般利用可否を保証しない |
 | Project PLATEAU「舞鶴市2025 関連データセット」 | 2025 / Web GeoJSONはEPSG:4326として解釈 | [CKAN](https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025)、[ZIP](https://assets.cms.plateau.reearth.io/assets/84/e288ba-d335-4537-86d4-23ddbcbc7413/26202_maizuru-shi_2025_related.zip) / `data/raw/plateau_related/` | 158,376 B ZIP | stations 9 → 7 unique、boundary 1 | 駅距離と舞鶴市行政界。東舞鶴・西舞鶴の路線別重複を名称＋位置で除外 |
 | Project PLATEAU「3D都市モデル（舞鶴市）2025年度」3D Tiles/MVT | 2025 / 3D Tiles 1.0 | [CKAN](https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025)、[公式ZIP](https://assets.cms.plateau.reearth.io/assets/55/2c1991-f75e-4bf8-9108-531c27952a2b/26202_maizuru-shi_city_2025_3dtiles_mvt_1_op.zip) / `data/raw/plateau_3d/` | 160,582,905 B ZIP | 公式配布内44,640 unique buildings → Web subset 856、Deep Dive mesh内296 | Cesium 3D表示、用途・高さ・階数・面積・LOD、coverage QA。Top 10内は0棟 |
-| Project PLATEAU 舞鶴市2025 CityGML | 2025 / CityGML 2.0・標高付きJGD2011 | [CKAN](https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025) / `data/raw/plateau_citygml/` | 914,222,089 B ZIP | 道路16,778面 → Deep Dive 135面、DEM TIN 20,965三角形集計 | 道路面上の配置anchor、標高・局所勾配文脈。道路network距離には未使用 |
+| Project PLATEAU 舞鶴市2025 CityGML | 2025 / CityGML 2.0・標高付きJGD2011 | [CKAN](https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025) / `data/raw/plateau_citygml/` | 914,222,089 B ZIP | 道路LOD1 15,684面 → Deep Dive 135面。DEM TIN 16,310,504三角形を道路node照合 | 道路面anchor、実験道路面隣接距離、DEM端点標高。歩行networkとは扱わない |
 
 ## Checksums and lineage
 
@@ -80,6 +80,11 @@ LOD2配布コンテナには427 b3dm、46,986 batch instanceがありました�
 | actual LOD2 | 0 |
 | Deep Dive road LOD1 surfaces | 135 |
 | DEM TIN triangles summarized | 20,965 |
+
+道路CityGMLにはLOD1外周15,684、LOD2交通面1,090、内周4があります。`16,778`という旧値は
+全`posList`を数えたもので、LOD1面数ではありません。配置候補とnetwork nodeはLOD1外周だけを
+使用し、内周をholeとして保持します。全市道路node標高処理ではDEM TIN 16,310,504三角形を走査し、
+15,684 nodeすべてを補間できました。Deep Diveの20,965は別途500m mesh内の局所地形要約件数です。
 
 用途、`bldg:measuredHeight`、`bldg:storeysAboveGround`、`bldg:storeysBelowGround`、footprint area、total floor area、`_lod` はbatch tableの実値だけを使います。missing/sentinelに架空値を設定しません。
 

@@ -1,0 +1,261 @@
+{
+  "building_routes": {
+    "medical_status_counts": {
+      "available": 28435,
+      "network_unreachable": 13
+    },
+    "mesh_status_counts": {
+      "available": 145,
+      "partial": 2,
+      "unavailable": 2
+    },
+    "transport_status_counts": {
+      "available": 28443,
+      "network_unreachable": 5
+    }
+  },
+  "edge_terrain": {
+    "absolute_grade_percent": {
+      "maximum": 65.0664183712989,
+      "median": 1.0995610862860268,
+      "p90": 6.130206942255508,
+      "p99": 19.45383692017827
+    },
+    "edge_terrain_coverage": 1.0,
+    "edges_with_endpoint_elevation": 23437,
+    "road_edges": 23437
+  },
+  "graph_version": "exp-4fff5849d650a70b",
+  "limitations": [
+    "Terrain uses DEM interpolation at road representative points, not surveyed road grade.",
+    "Ascent, descent, and grade cover graph edges only; origin/destination connectors are excluded.",
+    "Partial terrain routes retain observed components but do not publish full-route ascent/descent.",
+    "Terrain is not mixed into routing distance or an accessibility score.",
+    "The underlying fallback graph is not a validated pedestrian network."
+  ],
+  "node_terrain": {
+    "dem_members_in_archive": 23,
+    "dem_members_scanned": 10,
+    "interpolation_coordinates": "longitude_latitude_affine_barycentric",
+    "members": [
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533501_dem_6697_op.gml",
+        "source_member_crc32": "5b7ae13c",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 168,
+        "candidate_nodes": 168,
+        "source_member": "udx/dem/533502_dem_6697_op.gml",
+        "source_member_crc32": "2278a434",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 2260439
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533503_dem_6697_op.gml",
+        "source_member_crc32": "41414e6a",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533511_dem_6697_00_op.gml",
+        "source_member_crc32": "d90da531",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533511_dem_6697_05_op.gml",
+        "source_member_crc32": "e76735b3",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533511_dem_6697_50_op.gml",
+        "source_member_crc32": "a86a21f1",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533511_dem_6697_55_op.gml",
+        "source_member_crc32": "3935dcd7",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 479,
+        "candidate_nodes": 479,
+        "source_member": "udx/dem/533512_dem_6697_00_op.gml",
+        "source_member_crc32": "eeca0427",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 1982588
+      },
+      {
+        "assigned_nodes": 5618,
+        "candidate_nodes": 5618,
+        "source_member": "udx/dem/533512_dem_6697_05_op.gml",
+        "source_member_crc32": "ce7fa1bc",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 2050851
+      },
+      {
+        "assigned_nodes": 56,
+        "candidate_nodes": 56,
+        "source_member": "udx/dem/533512_dem_6697_50_op.gml",
+        "source_member_crc32": "f49ff691",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 1781883
+      },
+      {
+        "assigned_nodes": 1256,
+        "candidate_nodes": 1256,
+        "source_member": "udx/dem/533512_dem_6697_55_op.gml",
+        "source_member_crc32": "e34e7233",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 1308998
+      },
+      {
+        "assigned_nodes": 1083,
+        "candidate_nodes": 1092,
+        "source_member": "udx/dem/533513_dem_6697_00_op.gml",
+        "source_member_crc32": "dd7b9cbd",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 1896487
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533513_dem_6697_05_op.gml",
+        "source_member_crc32": "d32db8b7",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 5837,
+        "candidate_nodes": 5838,
+        "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+        "source_member_crc32": "69a31f47",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 1771124
+      },
+      {
+        "assigned_nodes": 379,
+        "candidate_nodes": 379,
+        "source_member": "udx/dem/533513_dem_6697_55_op.gml",
+        "source_member_crc32": "463a8379",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 840532
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533521_dem_6697_op.gml",
+        "source_member_crc32": "2a2a6299",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533522_dem_6697_op.gml",
+        "source_member_crc32": "bb84783b",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 733,
+        "candidate_nodes": 733,
+        "source_member": "udx/dem/533523_dem_6697_00_op.gml",
+        "source_member_crc32": "a639fdc8",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 1866084
+      },
+      {
+        "assigned_nodes": 75,
+        "candidate_nodes": 75,
+        "source_member": "udx/dem/533523_dem_6697_05_op.gml",
+        "source_member_crc32": "d264a707",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 551518
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533523_dem_6697_50_op.gml",
+        "source_member_crc32": "fa97cb4a",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533523_dem_6697_55_op.gml",
+        "source_member_crc32": "2be37d8f",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533533_dem_6697_op.gml",
+        "source_member_crc32": "9c30591d",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      },
+      {
+        "assigned_nodes": 0,
+        "candidate_nodes": 0,
+        "source_member": "udx/dem/533543_dem_6697_op.gml",
+        "source_member_crc32": "b5e14137",
+        "status": "skipped_no_unassigned_nodes_in_envelope",
+        "triangles_scanned": 0
+      }
+    ],
+    "method": "plateau_dem_lod1_tin_barycentric_interpolation",
+    "node_terrain_coverage": 1.0,
+    "nodes_with_elevation": 15684,
+    "road_nodes": 15684,
+    "source_crs": "EPSG:6697_axis_order_latitude_longitude_height",
+    "triangles_scanned": 16310504
+  },
+  "pedestrian_network": false,
+  "performance": {
+    "dem_interpolation_seconds": 660.172,
+    "peak_rss_kib": 443816,
+    "terrain_access_parquet_bytes": 2505391,
+    "terrain_edge_parquet_bytes": 3084170,
+    "terrain_node_parquet_bytes": 2409705,
+    "terrain_route_seconds": 6.821,
+    "total_seconds": 669.465
+  },
+  "provenance": {
+    "analysis_crs": "{\"$schema\": \"https://proj.org/schemas/v0.7/projjson.schema.json\", \"type\": \"ProjectedCRS\", \"name\": \"JGD2011 / Japan Plane Rectangular CS VI\", \"base_crs\": {\"name\": \"JGD2011\", \"datum\": {\"type\": \"GeodeticReferenceFrame\", \"name\": \"Japanese Geodetic Datum 2011\", \"ellipsoid\": {\"name\": \"GRS 1980\", \"semi_major_axis\": 6378137, \"inverse_flattening\": 298.257222101}}, \"coordinate_system\": {\"subtype\": \"ellipsoidal\", \"axis\": [{\"name\": \"Geodetic latitude\", \"abbreviation\": \"Lat\", \"direction\": \"north\", \"unit\": \"degree\"}, {\"name\": \"Geodetic longitude\", \"abbreviation\": \"Lon\", \"direction\": \"east\", \"unit\": \"degree\"}]}, \"id\": {\"authority\": \"EPSG\", \"code\": 6668}}, \"conversion\": {\"name\": \"Japan Plane Rectangular CS zone VI\", \"method\": {\"name\": \"Transverse Mercator\", \"id\": {\"authority\": \"EPSG\", \"code\": 9807}}, \"parameters\": [{\"name\": \"Latitude of natural origin\", \"value\": 36, \"unit\": \"degree\", \"id\": {\"authority\": \"EPSG\", \"code\": 8801}}, {\"name\": \"Longitude of natural origin\", \"value\": 136, \"unit\": \"degree\", \"id\": {\"authority\": \"EPSG\", \"code\": 8802}}, {\"name\": \"Scale factor at natural origin\", \"value\": 0.9999, \"unit\": \"unity\", \"id\": {\"authority\": \"EPSG\", \"code\": 8805}}, {\"name\": \"False easting\", \"value\": 0, \"unit\": \"metre\", \"id\": {\"authority\": \"EPSG\", \"code\": 8806}}, {\"name\": \"False northing\", \"value\": 0, \"unit\": \"metre\", \"id\": {\"authority\": \"EPSG\", \"code\": 8807}}]}, \"coordinate_system\": {\"subtype\": \"Cartesian\", \"axis\": [{\"name\": \"Northing\", \"abbreviation\": \"X\", \"direction\": \"north\", \"unit\": \"metre\"}, {\"name\": \"Easting\", \"abbreviation\": \"Y\", \"direction\": \"east\", \"unit\": \"metre\"}]}, \"scope\": \"Cadastre, engineering survey, topographic mapping (large and medium scale).\", \"area\": \"Japan - onshore - Honshu between approximately 135\\u00b010'E and 136\\u00b045'E - Kyoto-fu; Osaka-fu; Fukui-ken; Shiga-ken; Mie-ken; Nara-ken; Wakayama-ken.\", \"bbox\": {\"south_latitude\": 33.4, \"west_longitude\": 134.86, \"north_latitude\": 36.33, \"east_longitude\": 136.99}, \"id\": {\"authority\": \"EPSG\", \"code\": 6674}}",
+    "generated_at": "2026-08-25T15:49:55.928159+00:00",
+    "plateau_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "road_network_summary_sha256": "051c4a3e43aab6fdf5e3849f7b6570b672e20c5f1aa043ff112b4ac51c196fb9",
+    "software": {
+      "commit": "3e9678432a51a0599f3318199e4cc32ec7e1b642",
+      "worktree_dirty": true
+    }
+  },
+  "route_semantics": "PLATEAU LOD1 road-surface adjacency path; mode not validated",
+  "schema_version": 1,
+  "validation": {
+    "distance_columns_modified": false,
+    "negative_ascent_records": 0,
+    "negative_descent_records": 0,
+    "routing_penalty_applied": false
+  }
+}

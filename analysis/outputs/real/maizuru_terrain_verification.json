@@ -1,0 +1,165 @@
+{
+  "edges": {
+    "maximum_elevation_delta_residual_m": 0.0,
+    "maximum_grade_residual_percent": 0.0,
+    "records": 23437,
+    "top_absolute_grade_edges": [
+      {
+        "absolute_grade_percent": 65.0664183712989,
+        "edge_id": "exp::fa623ab3fa09173aafbb",
+        "length_m": 29.513775274996377,
+        "source_elevation_m": 4.450122831351022,
+        "source_node_id": "exp::tran_6d72faf5-fb44-466f-8603-5f3d5d12d876:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 23.653679328945138,
+        "target_node_id": "exp::tran_88959c24-ef22-4445-acbf-702d626ed249:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 61.908457870773546,
+        "edge_id": "exp::a9e33a87076e5f849aca",
+        "length_m": 3.7359933220495307,
+        "source_elevation_m": 32.5075413449491,
+        "source_node_id": "exp::tran_14937b83-4ea4-491b-abb5-25019c8f9c23:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 34.82043719678504,
+        "target_node_id": "exp::tran_9f9f307b-733c-4530-b493-221da8f06fe0:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 57.08334441918853,
+        "edge_id": "exp::d2ca00b963245b91fb75",
+        "length_m": 2.23790515390697,
+        "source_elevation_m": 64.5301985874024,
+        "source_node_id": "exp::tran_0af195b7-b41b-42ce-ba9c-e95d86cb96ef:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 65.80766969418188,
+        "target_node_id": "exp::tran_88449444-5dcd-4dba-810a-56bd7e1b76f7:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 56.19993586913255,
+        "edge_id": "exp::a3350d8c752768a474fe",
+        "length_m": 30.148802623876794,
+        "source_elevation_m": 18.35171129181105,
+        "source_node_id": "exp::tran_3725da9f-cdea-4f61-8001-4e70b5b48e99:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 1.408103551880937,
+        "target_node_id": "exp::tran_abcd5d06-44dc-478f-9415-a7d1808de649:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 55.746850906865454,
+        "edge_id": "exp::48c133e4af48776c3a9d",
+        "length_m": 35.34932915284546,
+        "source_elevation_m": 3.947541509531252,
+        "source_node_id": "exp::tran_21a9ac4d-5107-41a1-8caf-e74f2e216fc1:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 23.653679328945138,
+        "target_node_id": "exp::tran_88959c24-ef22-4445-acbf-702d626ed249:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 53.0097623066601,
+        "edge_id": "exp::152352fd3a35413e494c",
+        "length_m": 9.81113356163293,
+        "source_elevation_m": 10.9340651282212,
+        "source_node_id": "exp::tran_c3dfc7b4-1012-464c-b8bc-590741ba086d:0",
+        "surface_gap_m": 0.04787849339461209,
+        "target_elevation_m": 16.13492370883177,
+        "target_node_id": "exp::tran_f652419c-0b66-4be0-a1c1-e1123d4debd4:0",
+        "topology_relation": "tolerance_bridge"
+      },
+      {
+        "absolute_grade_percent": 52.78735336838988,
+        "edge_id": "exp::e4fefb250d6b17376035",
+        "length_m": 6.192765827370044,
+        "source_elevation_m": 26.150514686777836,
+        "source_node_id": "exp::tran_a2d9ecd6-6049-4ea6-83b2-6dba1731bc03:0",
+        "surface_gap_m": 1.0423445120323567e-09,
+        "target_elevation_m": 22.881517506207118,
+        "target_node_id": "exp::tran_f851efb5-749f-4662-a5b6-5234f37f053a:0",
+        "topology_relation": "tolerance_bridge"
+      },
+      {
+        "absolute_grade_percent": 50.88531317581083,
+        "edge_id": "exp::b9d69e9c8cc0430f5984",
+        "length_m": 2.6214491826098403,
+        "source_elevation_m": 37.145906777678405,
+        "source_node_id": "exp::tran_5eeccd9d-5075-44b6-b757-72554987c5c7:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 35.811974151362655,
+        "target_node_id": "exp::tran_cd5f63f2-79de-42ce-a1c3-dfa4f1b9de7b:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 47.53028839431968,
+        "edge_id": "exp::647cd08051e07111918f",
+        "length_m": 30.53120100055074,
+        "source_elevation_m": 31.453993316939926,
+        "source_node_id": "exp::tran_11b7be45-e773-445d-881e-8e7ffdee7933:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 16.94242543112874,
+        "target_node_id": "exp::tran_216e8f92-29ee-46d7-b6f7-f239363d8d61:0",
+        "topology_relation": "surface_intersection"
+      },
+      {
+        "absolute_grade_percent": 46.864126965795265,
+        "edge_id": "exp::ca6d195c462271ee464e",
+        "length_m": 4.618563593723246,
+        "source_elevation_m": 16.46215141590554,
+        "source_node_id": "exp::tran_04c2214a-34b7-4161-9e76-8f98660bc71a:0",
+        "surface_gap_m": 0.0,
+        "target_elevation_m": 18.626600922464,
+        "target_node_id": "exp::tran_dd65c0ed-fa52-4bc1-991d-cc2234fb598b:0",
+        "topology_relation": "surface_intersection"
+      }
+    ],
+    "verified": true
+  },
+  "inputs": {
+    "road_evidence_sha256": "2690e75cc3db20fdf2c14ffa595704fc25e5415e5a3d576faab8bc04578726b0",
+    "terrain_edges_sha256": "6fc29d5643f67ddf81193ba9ce1444a5addfe923efd047d798a61c9934fbc8f5",
+    "terrain_evidence_sha256": "8dc27252f98a9d32464a8fc187c47681126d6331348d7d74716aca4282d1cfcd",
+    "terrain_nodes_sha256": "1d3c1e248347111902a625810a2c3ab7de07d12c109b7a9077f007e482def3b3"
+  },
+  "medical_deep_dive": {
+    "edge_count": 57,
+    "maximum_residual": 4.547473508864641e-13,
+    "recomputed_ascent_m": 1.050643322717768,
+    "recomputed_descent_m": 23.28866398821978,
+    "recomputed_graph_edge_distance_m": 1716.4309248305847,
+    "recomputed_maximum_absolute_grade_percent": 10.153914885580376,
+    "residuals": {
+      "ascent_m": 0.0,
+      "descent_m": 1.0658141036401503e-14,
+      "graph_edge_distance_m": 4.547473508864641e-13,
+      "maximum_grade_percent": 0.0
+    },
+    "verified": true
+  },
+  "method": "independent_persisted_edge_and_route_arithmetic",
+  "nodes": {
+    "finite_elevations": 15684,
+    "provenance_complete": true,
+    "records": 15684
+  },
+  "production_terrain_accumulator_reused": false,
+  "tolerance": 1e-07,
+  "transport_deep_dive": {
+    "edge_count": 29,
+    "maximum_residual": 1.1368683772161603e-13,
+    "recomputed_ascent_m": 3.5240669917418046,
+    "recomputed_descent_m": 9.947179007552048,
+    "recomputed_graph_edge_distance_m": 589.0237300664567,
+    "recomputed_maximum_absolute_grade_percent": 7.666077173739564,
+    "residuals": {
+      "ascent_m": 0.0,
+      "descent_m": 0.0,
+      "graph_edge_distance_m": 1.1368683772161603e-13,
+      "maximum_grade_percent": 0.0
+    },
+    "verified": true
+  },
+  "verified": true
+}

@@ -44,6 +44,51 @@ class FakeRepository:
             ],
         }
 
+    def networks(self, city_id: str) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_id": city_id,
+                "graph_version": "exp-test",
+                "pedestrian_network": False,
+            }
+        ]
+
+    def road_edges(
+        self,
+        city_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+        graph_version: str | None,
+    ) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_id": city_id,
+                "edge_id": "edge-1",
+                "bbox": bbox,
+                "limit": limit,
+                "graph_version": graph_version,
+                "pedestrian_network": False,
+            }
+        ]
+
+    def building_network_accessibility(
+        self, city_id: str, gml_id: str
+    ) -> dict[str, Any] | None:
+        if gml_id == "missing":
+            return None
+        return {
+            "city_id": city_id,
+            "gml_id": gml_id,
+            "routes": [
+                {
+                    "destination_class": "transport",
+                    "network_distance_m": 604.9,
+                    "pedestrian_network": False,
+                }
+            ],
+        }
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -81,3 +126,21 @@ def test_priority2_detail_contracts_are_bounded_to_one_mesh_or_building() -> Non
         "building_origin_representative_point"
     )
     assert client.get("/cities/26202/buildings/missing").status_code == 404
+
+
+def test_network_contracts_expose_claim_boundary_and_require_bbox() -> None:
+    networks = client.get("/cities/26202/networks").json()
+    assert networks[0]["graph_version"] == "exp-test"
+    assert networks[0]["pedestrian_network"] is False
+    assert client.get("/cities/26202/road-edges").status_code == 422
+    response = client.get(
+        "/cities/26202/road-edges?bbox=135,35,136,36&graph_version=exp-test"
+    )
+    assert response.status_code == 200
+    assert response.json()["features"][0]["edge_id"] == "edge-1"
+    network = client.get("/cities/26202/buildings/b-1/network-accessibility").json()
+    assert network["routes"][0]["pedestrian_network"] is False
+    assert (
+        client.get("/cities/26202/buildings/missing/network-accessibility").status_code
+        == 404
+    )

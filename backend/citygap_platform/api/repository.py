@@ -23,6 +23,21 @@ class PlatformRepository(Protocol):
 
     def building_accessibility(self, city_id: str, gml_id: str) -> dict[str, Any] | None: ...
 
+    def networks(self, city_id: str) -> list[dict[str, Any]]: ...
+
+    def road_edges(
+        self,
+        city_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+        graph_version: str | None,
+    ) -> list[dict[str, Any]]: ...
+
+    def building_network_accessibility(
+        self, city_id: str, gml_id: str
+    ) -> dict[str, Any] | None: ...
+
 
 class PostGISRepository:
     def __init__(self, database_url: str):
@@ -233,4 +248,160 @@ class PostGISRepository:
         return {
             "gml_id": gml_id,
             "policies": [dict(zip(keys, row, strict=True)) for row in rows],
+        }
+
+    def networks(self, city_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT network.graph_version, network.graph_method,
+                          network.network_type, network.official_generator_executed,
+                          network.pedestrian_network, network.route_semantics,
+                          network.node_count, network.edge_count, network.component_count,
+                          network.terrain_method, network.terrain_node_coverage,
+                          network.generated_at, network.config_hash
+                   FROM road_network_versions AS network
+                   JOIN city_dataset_versions AS version
+                     ON version.id = network.dataset_version_id
+                   WHERE version.city_id = %s AND version.is_current
+                   ORDER BY network.generated_at DESC, network.graph_version""",
+                (city_id,),
+            ).fetchall()
+        keys = (
+            "graph_version",
+            "graph_method",
+            "network_type",
+            "official_generator_executed",
+            "pedestrian_network",
+            "route_semantics",
+            "node_count",
+            "edge_count",
+            "component_count",
+            "terrain_method",
+            "terrain_node_coverage",
+            "generated_at",
+            "config_hash",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def road_edges(
+        self,
+        city_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+        graph_version: str | None,
+    ) -> list[dict[str, Any]]:
+        min_x, min_y, max_x, max_y = bbox
+        with self._connect() as connection:
+            rows = connection.execute(
+                """WITH selected_network AS (
+                       SELECT network.id, network.graph_version, network.route_semantics,
+                              network.pedestrian_network
+                       FROM road_network_versions AS network
+                       JOIN city_dataset_versions AS version
+                         ON version.id = network.dataset_version_id
+                       WHERE version.city_id = %s AND version.is_current
+                         AND (%s IS NULL OR network.graph_version = %s)
+                       ORDER BY network.generated_at DESC LIMIT 1
+                   )
+                   SELECT edge.edge_id, edge.source_node_id, edge.target_node_id,
+                          edge.length_m, edge.topology_relation, edge.surface_gap_m,
+                          edge.absolute_grade_percent, selected.graph_version,
+                          selected.route_semantics, selected.pedestrian_network,
+                          ST_AsGeoJSON(ST_Transform(edge.geom, 4326))
+                   FROM road_network_edges AS edge
+                   JOIN selected_network AS selected ON selected.id = edge.network_version_id
+                   WHERE edge.geom && ST_Transform(
+                       ST_MakeEnvelope(%s, %s, %s, %s, 4326), 6674
+                   )
+                   ORDER BY edge.edge_id LIMIT %s OFFSET %s""",
+                (
+                    city_id,
+                    graph_version,
+                    graph_version,
+                    min_x,
+                    min_y,
+                    max_x,
+                    max_y,
+                    limit,
+                    offset,
+                ),
+            ).fetchall()
+        keys = (
+            "edge_id",
+            "source_node_id",
+            "target_node_id",
+            "length_m",
+            "topology_relation",
+            "surface_gap_m",
+            "absolute_grade_percent",
+            "graph_version",
+            "route_semantics",
+            "pedestrian_network",
+            "geometry",
+        )
+        results = [dict(zip(keys, row, strict=True)) for row in rows]
+        for result in results:
+            result["geometry"] = json.loads(result["geometry"])
+        return results
+
+    def building_network_accessibility(
+        self, city_id: str, gml_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT network.graph_version, network.graph_method,
+                          network.pedestrian_network, network.route_semantics,
+                          accessibility.destination_class,
+                          accessibility.destination_facility_key,
+                          accessibility.destination_name,
+                          accessibility.road_surface_id,
+                          accessibility.snapped_node_id,
+                          accessibility.building_to_surface_distance_m,
+                          accessibility.building_to_node_connector_m,
+                          accessibility.network_distance_m,
+                          accessibility.terrain_route_status,
+                          accessibility.terrain_route_coverage,
+                          accessibility.route_ascent_m,
+                          accessibility.route_descent_m,
+                          accessibility.maximum_absolute_grade_percent,
+                          accessibility.algorithm, accessibility.provenance,
+                          accessibility.calculated_at
+                   FROM building_network_accessibility AS accessibility
+                   JOIN road_network_versions AS network
+                     ON network.id = accessibility.network_version_id
+                   JOIN city_dataset_versions AS version
+                     ON version.id = accessibility.dataset_version_id
+                   WHERE version.city_id = %s AND version.is_current
+                     AND accessibility.building_gml_id = %s
+                   ORDER BY network.generated_at DESC, accessibility.destination_class""",
+                (city_id, gml_id),
+            ).fetchall()
+        if not rows:
+            return None
+        keys = (
+            "graph_version",
+            "graph_method",
+            "pedestrian_network",
+            "route_semantics",
+            "destination_class",
+            "destination_facility_key",
+            "destination_name",
+            "road_surface_id",
+            "snapped_node_id",
+            "building_to_surface_distance_m",
+            "building_to_node_connector_m",
+            "network_distance_m",
+            "terrain_route_status",
+            "terrain_route_coverage",
+            "route_ascent_m",
+            "route_descent_m",
+            "maximum_absolute_grade_percent",
+            "algorithm",
+            "provenance",
+            "calculated_at",
+        )
+        return {
+            "gml_id": gml_id,
+            "routes": [dict(zip(keys, row, strict=True)) for row in rows],
         }

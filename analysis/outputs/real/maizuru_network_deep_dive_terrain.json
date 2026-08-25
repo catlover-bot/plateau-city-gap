@@ -1,0 +1,402 @@
+{
+  "building": {
+    "estimated_elderly_population": 2.1439741341266148,
+    "estimated_population": 5.049059085868178,
+    "gml_id": "bldg_faa3d728-2a78-497c-add1-9dbcf402a9cb",
+    "mesh_code": "533513314",
+    "origin_method": "building_origin_representative_point",
+    "population_source_year": 2020
+  },
+  "distance_terrain_separation": {
+    "building_and_facility_connector_terrain": "not_computed",
+    "network_distance_source": "road-network artifact; unchanged",
+    "routing_penalty_applied": false,
+    "terrain_source": "PLATEAU LOD1 DEM TIN endpoint interpolation"
+  },
+  "graph_version": "exp-4fff5849d650a70b",
+  "interpretation": "PLATEAU DEM elevation components along the experimental road-surface adjacency path; not a validated pedestrian slope or walking-energy model.",
+  "medical": {
+    "ascent_m": 1.050643322717768,
+    "connector_terrain_status": "not_computed",
+    "descent_m": 23.288663988219792,
+    "elevation_profile": [
+      {
+        "elevation_m": 33.8200316671984,
+        "node_id": "exp::tran_364bda4c-feed-43df-b7bf-333466ea2199:0"
+      },
+      {
+        "elevation_m": 32.93055681907789,
+        "node_id": "exp::tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0"
+      },
+      {
+        "elevation_m": 32.22440593255428,
+        "node_id": "exp::tran_c6ebf454-d17b-4b20-9f11-7a3eed8ee0c9:0"
+      },
+      {
+        "elevation_m": 31.102494441969128,
+        "node_id": "exp::tran_59569d5a-9409-48e1-9775-8d7578e1fd42:0"
+      },
+      {
+        "elevation_m": 30.482349669470924,
+        "node_id": "exp::tran_5c1ef0d2-7259-4c9f-af7a-42f56a8202bd:0"
+      },
+      {
+        "elevation_m": 30.754619287531092,
+        "node_id": "exp::tran_53c9b087-9fc8-440b-a3ea-afb2e75e099c:0"
+      },
+      {
+        "elevation_m": 29.559698909682837,
+        "node_id": "exp::tran_183e164d-384d-4677-93cc-b81324b29f1d:0"
+      },
+      {
+        "elevation_m": 29.1242523605682,
+        "node_id": "exp::tran_f7c9a29c-03cd-460e-b45d-a18e6454447b:0"
+      },
+      {
+        "elevation_m": 28.09243075414961,
+        "node_id": "exp::tran_143c570c-7187-424d-819c-2575bb7d6cca:0"
+      },
+      {
+        "elevation_m": 28.809847210335022,
+        "node_id": "exp::tran_2e6dd46e-de68-4b9f-aa77-f0c55fe6146f:0"
+      },
+      {
+        "elevation_m": 28.078232881991788,
+        "node_id": "exp::tran_e84e29cd-b4c5-4ca4-96a8-86dee0dc8a46:0"
+      },
+      {
+        "elevation_m": 27.520217107359358,
+        "node_id": "exp::tran_a766e9d0-b898-45a6-bcbf-a8dbe86a5f5b:0"
+      },
+      {
+        "elevation_m": 26.332498982888097,
+        "node_id": "exp::tran_bfadcc6c-9a3b-48e0-852f-94d0c495e980:0"
+      },
+      {
+        "elevation_m": 25.585870944540122,
+        "node_id": "exp::tran_66e38c0e-7b95-4720-9309-532a0796b695:0"
+      },
+      {
+        "elevation_m": 25.509322503568193,
+        "node_id": "exp::tran_2755a288-9a88-41ef-98e1-b23d86863c59:0"
+      },
+      {
+        "elevation_m": 25.29888071434913,
+        "node_id": "exp::tran_3d5d882a-4062-4090-8d95-b4b28738a083:0"
+      },
+      {
+        "elevation_m": 25.197039397178095,
+        "node_id": "exp::tran_467e3cae-e951-408b-bf46-78ab3aff0bc1:0"
+      },
+      {
+        "elevation_m": 24.976997229183265,
+        "node_id": "exp::tran_0debd995-a09a-487b-b733-d0022178a9e4:0"
+      },
+      {
+        "elevation_m": 24.702354957860024,
+        "node_id": "exp::tran_fc09c44f-4fc5-4a6e-97cf-c555586363f1:0"
+      },
+      {
+        "elevation_m": 24.491855715426972,
+        "node_id": "exp::tran_4b0f865b-56ba-4586-b3ac-cd7dc4d938df:0"
+      },
+      {
+        "elevation_m": 24.254734264605347,
+        "node_id": "exp::tran_86978bf1-556f-4897-8289-6eb98da33606:0"
+      },
+      {
+        "elevation_m": 24.07104157394695,
+        "node_id": "exp::tran_51a87d32-fa61-486e-938a-32a8f6100803:0"
+      },
+      {
+        "elevation_m": 23.02765841106833,
+        "node_id": "exp::tran_ecc05481-d280-4400-9f6c-11ca88c14ba4:0"
+      },
+      {
+        "elevation_m": 21.98847578683167,
+        "node_id": "exp::tran_8fdb058a-a920-4b8f-a715-e38e53506660:0"
+      },
+      {
+        "elevation_m": 21.923547724080887,
+        "node_id": "exp::tran_f0daf978-bb4d-4058-93f0-3d742a0ed6fc:0"
+      },
+      {
+        "elevation_m": 21.984504972553076,
+        "node_id": "exp::tran_9559f10c-5473-450c-b653-d7d798fbe04c:0"
+      },
+      {
+        "elevation_m": 20.1314715057673,
+        "node_id": "exp::tran_fe6bfb15-d13f-4c2c-9746-6a8ed4fdd0e9:0"
+      },
+      {
+        "elevation_m": 19.471414762057606,
+        "node_id": "exp::tran_6db052ba-dd1e-4d03-9b04-12a62e54ee25:0"
+      },
+      {
+        "elevation_m": 18.810043287215443,
+        "node_id": "exp::tran_f05cb478-a096-4059-8ba0-2e055f61e3bc:0"
+      },
+      {
+        "elevation_m": 18.189445882384504,
+        "node_id": "exp::tran_6e65a02e-5ceb-4ef4-8e0f-4bb24ac2b1a3:0"
+      },
+      {
+        "elevation_m": 17.85749911762923,
+        "node_id": "exp::tran_5d786601-0a72-48d3-9d39-ccad7876f5aa:0"
+      },
+      {
+        "elevation_m": 17.514833229130602,
+        "node_id": "exp::tran_b27301ee-ad07-41d2-a5a5-ae5163350aa8:0"
+      },
+      {
+        "elevation_m": 17.299441263358872,
+        "node_id": "exp::tran_32ac4988-bc8a-44ef-acfb-9d305bf42953:0"
+      },
+      {
+        "elevation_m": 16.981330016619935,
+        "node_id": "exp::tran_ed8de624-420f-4743-910b-93c467f7164f:0"
+      },
+      {
+        "elevation_m": 16.9512265671919,
+        "node_id": "exp::tran_4f5c003a-b291-4280-8252-07dc410ce0fb:0"
+      },
+      {
+        "elevation_m": 16.887258838280506,
+        "node_id": "exp::tran_d6ff1cf5-6c99-42a8-b949-f7cdcb697879:0"
+      },
+      {
+        "elevation_m": 16.860327219176845,
+        "node_id": "exp::tran_8015708f-c68f-4834-9bc8-acfe001083cd:0"
+      },
+      {
+        "elevation_m": 16.71423982472833,
+        "node_id": "exp::tran_e8ddd0e4-d0a0-4305-b910-aa2777e6b151:0"
+      },
+      {
+        "elevation_m": 16.45143766361381,
+        "node_id": "exp::tran_464b9cb3-ab34-47c2-a6b0-51b936215909:0"
+      },
+      {
+        "elevation_m": 15.85869597538225,
+        "node_id": "exp::tran_8955b5d5-6009-4d19-85a9-39fdc242c823:0"
+      },
+      {
+        "elevation_m": 15.45957190619029,
+        "node_id": "exp::tran_68cc0604-8955-4406-b783-6d96b8f5fea2:0"
+      },
+      {
+        "elevation_m": 14.766364909267452,
+        "node_id": "exp::tran_58f01c1e-2b4d-4794-b82f-993bf3fcf7b7:0"
+      },
+      {
+        "elevation_m": 14.62321363812068,
+        "node_id": "exp::tran_99d440a3-b22b-42a7-897e-4c441cc49ea5:0"
+      },
+      {
+        "elevation_m": 14.131637941715947,
+        "node_id": "exp::tran_631e6b66-953d-4ca9-8872-6f963b1f86a3:0"
+      },
+      {
+        "elevation_m": 13.797540281757492,
+        "node_id": "exp::tran_99b25141-6834-4993-be44-31812b445c90:0"
+      },
+      {
+        "elevation_m": 13.63847361054472,
+        "node_id": "exp::tran_f9dfe0f8-2a04-4208-866a-b6dc06ca30df:0"
+      },
+      {
+        "elevation_m": 13.346851123622319,
+        "node_id": "exp::tran_72380f19-7a8b-4838-9b37-23d73827ea16:0"
+      },
+      {
+        "elevation_m": 13.130405822102489,
+        "node_id": "exp::tran_d9054c48-27b9-4571-a728-2c77b645a3bd:0"
+      },
+      {
+        "elevation_m": 12.971891465776688,
+        "node_id": "exp::tran_27ef2233-ae64-4982-8320-d87f418940f2:0"
+      },
+      {
+        "elevation_m": 12.940281484693335,
+        "node_id": "exp::tran_16afd0e2-2550-44b9-b791-3ff10f4ee956:0"
+      },
+      {
+        "elevation_m": 12.793823146149848,
+        "node_id": "exp::tran_9d215f7a-255f-4b69-8611-ed46e829e955:0"
+      },
+      {
+        "elevation_m": 12.667492569578355,
+        "node_id": "exp::tran_f5d5c213-2013-48aa-92b4-b4df5930912e:0"
+      },
+      {
+        "elevation_m": 12.466336752838979,
+        "node_id": "exp::tran_0fac7cec-300c-4291-b821-23ad1efcc3e7:0"
+      },
+      {
+        "elevation_m": 12.438126641463395,
+        "node_id": "exp::tran_d1d5568f-5ef8-41a0-abcf-9795923d7ddd:0"
+      },
+      {
+        "elevation_m": 12.164551626547471,
+        "node_id": "exp::tran_067c87e6-0289-4cd0-bb20-11f5128820bc:0"
+      },
+      {
+        "elevation_m": 12.062799661951647,
+        "node_id": "exp::tran_7a489c9a-aff0-45bd-9bc1-53e19d68962e:0"
+      },
+      {
+        "elevation_m": 11.724716021156475,
+        "node_id": "exp::tran_46daed8c-d31a-4765-a04c-1a50f57c3a4e:0"
+      },
+      {
+        "elevation_m": 11.582011001696376,
+        "node_id": "exp::tran_a1e88253-2fe5-4574-8727-161059dc1972:0"
+      }
+    ],
+    "graph_edge_distance_m": 1716.4309248305842,
+    "maximum_observed_absolute_grade_percent": 10.153914885580376,
+    "observed_ascent_m": 1.050643322717768,
+    "observed_descent_m": 23.288663988219792,
+    "terrain_covered_graph_length_m": 1716.4309248305842,
+    "terrain_route_coverage": 1.0,
+    "terrain_route_status": "available"
+  },
+  "provenance": {
+    "plateau_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "road_network_summary_sha256": "051c4a3e43aab6fdf5e3849f7b6570b672e20c5f1aa043ff112b4ac51c196fb9"
+  },
+  "transport": {
+    "ascent_m": 3.5240669917418046,
+    "connector_terrain_status": "not_computed",
+    "descent_m": 9.947179007552048,
+    "elevation_profile": [
+      {
+        "elevation_m": 33.8200316671984,
+        "node_id": "exp::tran_364bda4c-feed-43df-b7bf-333466ea2199:0"
+      },
+      {
+        "elevation_m": 32.93055681907789,
+        "node_id": "exp::tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0"
+      },
+      {
+        "elevation_m": 32.506482946697815,
+        "node_id": "exp::tran_1b7865d9-05e9-4644-bafe-b12c73f790c4:0"
+      },
+      {
+        "elevation_m": 32.240736872869824,
+        "node_id": "exp::tran_e4e4a0c9-8769-455f-a57a-5e4f2a0ad8ed:0"
+      },
+      {
+        "elevation_m": 32.08442519730867,
+        "node_id": "exp::tran_56155d6e-dd2c-476e-8322-def1cfa92271:0"
+      },
+      {
+        "elevation_m": 31.732524899054035,
+        "node_id": "exp::tran_b8a1ea1e-9445-4ee0-ade7-22032fbe7624:0"
+      },
+      {
+        "elevation_m": 31.756906929093393,
+        "node_id": "exp::tran_374ffb80-cc29-4f45-9f98-7c5dfc79b705:0"
+      },
+      {
+        "elevation_m": 31.108435670197277,
+        "node_id": "exp::tran_a74083d3-464d-4003-8d80-a1940d5c5b8a:0"
+      },
+      {
+        "elevation_m": 30.674064930202537,
+        "node_id": "exp::tran_73f4bea7-1f32-47a4-b305-73e2ef6b81d0:0"
+      },
+      {
+        "elevation_m": 30.389997178008294,
+        "node_id": "exp::tran_a615c2ef-6baf-42d9-95e1-a791906503ac:0"
+      },
+      {
+        "elevation_m": 30.136541464316227,
+        "node_id": "exp::tran_d54c60b2-875a-4cf8-9a79-46f10ba89f28:0"
+      },
+      {
+        "elevation_m": 29.806060236414936,
+        "node_id": "exp::tran_bac1f897-454a-44c6-9be5-7ff7436d2d2d:0"
+      },
+      {
+        "elevation_m": 29.530972086989358,
+        "node_id": "exp::tran_bd0c5967-09af-43a5-8246-96149f00d7bb:0"
+      },
+      {
+        "elevation_m": 28.333907625496867,
+        "node_id": "exp::tran_2eaeb4fd-f5c7-488a-a709-ab17e05f3638:0"
+      },
+      {
+        "elevation_m": 28.157782000355574,
+        "node_id": "exp::tran_e1711469-98a3-4f18-b8cf-dae7c1e5ef04:0"
+      },
+      {
+        "elevation_m": 28.292796097898826,
+        "node_id": "exp::tran_b2867344-c563-423d-9ee5-903fbbe7a881:0"
+      },
+      {
+        "elevation_m": 30.085787219310802,
+        "node_id": "exp::tran_04780faa-d098-4fb8-9c28-8309e7019e5f:0"
+      },
+      {
+        "elevation_m": 31.39740274495461,
+        "node_id": "exp::tran_e6f227bb-925e-4cce-879f-a563437f1fce:0"
+      },
+      {
+        "elevation_m": 29.85408208045968,
+        "node_id": "exp::tran_ab0e2b18-6d06-47ab-a2c0-1ee869675f5b:0"
+      },
+      {
+        "elevation_m": 28.258028563972434,
+        "node_id": "exp::tran_0d3e2eae-45c6-481d-b1ae-cd3afac54c6f:0"
+      },
+      {
+        "elevation_m": 27.956683427749027,
+        "node_id": "exp::tran_c8273950-642d-4d67-b759-67b1aab948ec:0"
+      },
+      {
+        "elevation_m": 27.62419263070094,
+        "node_id": "exp::tran_709b4ce1-a9dc-4cc6-af78-438bb167dd42:0"
+      },
+      {
+        "elevation_m": 27.56285145667568,
+        "node_id": "exp::tran_87ed948f-613d-48ab-992d-64eca457face:0"
+      },
+      {
+        "elevation_m": 27.52098252891839,
+        "node_id": "exp::tran_f5a0e624-8768-4c08-bfd4-dd4107e70dfd:0"
+      },
+      {
+        "elevation_m": 27.45233358385895,
+        "node_id": "exp::tran_5a18c5b6-a553-4059-9b3a-dfd525db10f4:0"
+      },
+      {
+        "elevation_m": 27.41989117763889,
+        "node_id": "exp::tran_c8b00b37-e9d0-4b3b-ae03-a913cd5b69e9:0"
+      },
+      {
+        "elevation_m": 27.335717625876367,
+        "node_id": "exp::tran_9246f1c6-6ef4-474c-b999-1519150b0580:0"
+      },
+      {
+        "elevation_m": 27.182492649988863,
+        "node_id": "exp::tran_50992253-4461-4542-97cc-e1911126780e:0"
+      },
+      {
+        "elevation_m": 27.136855434284747,
+        "node_id": "exp::tran_6f19f757-ef80-46f8-84df-ce678d858826:0"
+      },
+      {
+        "elevation_m": 27.396919651388156,
+        "node_id": "exp::tran_635de421-ba53-4ba8-be27-f919ec8663a3:0"
+      }
+    ],
+    "graph_edge_distance_m": 589.0237300664568,
+    "maximum_observed_absolute_grade_percent": 7.666077173739564,
+    "observed_ascent_m": 3.5240669917418046,
+    "observed_descent_m": 9.947179007552048,
+    "terrain_covered_graph_length_m": 589.0237300664568,
+    "terrain_route_coverage": 1.0,
+    "terrain_route_status": "available"
+  }
+}
