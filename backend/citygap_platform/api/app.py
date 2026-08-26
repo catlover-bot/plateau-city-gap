@@ -6,8 +6,28 @@ import os
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from pydantic import BaseModel, Field
+
+from backend.citygap_platform.domain.scenarios import FieldCheckValue, ScenarioStatus
 
 from .repository import PlatformRepository, PostGISRepository
+
+
+class ScenarioTransitionRequest(BaseModel):
+    expected_status: ScenarioStatus
+    proposed_status: ScenarioStatus
+    note: str = Field(default="", max_length=2000)
+
+
+class FieldCheckRequest(BaseModel):
+    site_access: FieldCheckValue = FieldCheckValue.UNKNOWN
+    road_safety: FieldCheckValue = FieldCheckValue.UNKNOWN
+    land_ownership_unknown: FieldCheckValue = FieldCheckValue.UNKNOWN
+    existing_service: FieldCheckValue = FieldCheckValue.UNKNOWN
+    facility_condition: FieldCheckValue = FieldCheckValue.UNKNOWN
+    hazard_confirmation: FieldCheckValue = FieldCheckValue.UNKNOWN
+    operator_consultation: FieldCheckValue = FieldCheckValue.UNKNOWN
+    notes: str = Field(default="", max_length=4000)
 
 
 def _repository(request: Request) -> PlatformRepository:
@@ -208,6 +228,121 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             "interpretation": "overlap requires additional confirmation; feasibility is not determined",
             "hazards": repo.road_edge_hazards(city_id, edge_id, graph_version),
         }
+
+    @application.get("/cities/{city_id}/scenarios")
+    def scenarios(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        status: ScenarioStatus | None = None,
+        limit: Annotated[int, Query(ge=1, le=100)] = 30,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "status": status.value if status else None,
+            "scenarios": repo.scenarios(city_id, status.value if status else None, limit),
+        }
+
+    @application.get("/cities/{city_id}/scenario-comparison")
+    def scenario_comparison(
+        city_id: str,
+        scenario_ids: Annotated[
+            str, Query(description="Two or three comma-separated scenario UUIDs")
+        ],
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        identifiers = [value.strip() for value in scenario_ids.split(",") if value.strip()]
+        if not 2 <= len(identifiers) <= 3 or len(set(identifiers)) != len(identifiers):
+            raise HTTPException(
+                status_code=422, detail="scenario_ids must contain two or three distinct values"
+            )
+        plans = []
+        for identifier in identifiers:
+            detail = repo.scenario_detail(city_id, identifier)
+            if detail is None:
+                raise HTTPException(status_code=404, detail=f"Scenario not found: {identifier}")
+            plans.append(
+                {
+                    "scenario_id": detail["scenario_id"],
+                    "scenario_key": detail["scenario_key"],
+                    "objective_mode": detail["objective_mode"],
+                    "site_count": detail["site_count"],
+                    "sites": detail["sites"],
+                    "impacts": detail["impacts"],
+                    "contexts": detail["contexts"],
+                    "algorithm_kind": detail["algorithm_kind"],
+                    "algorithm_version": detail["algorithm_version"],
+                    "lifecycle_status": detail["lifecycle_status"],
+                }
+            )
+        return {
+            "city_id": city_id,
+            "comparison_limit": 3,
+            "recommendation": None,
+            "interpretation": "trade-off comparison; municipal review required",
+            "plans": plans,
+        }
+
+    @application.get("/cities/{city_id}/scenarios/{scenario_id}")
+    def scenario_detail(
+        city_id: str,
+        scenario_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        detail = repo.scenario_detail(city_id, scenario_id)
+        if detail is None:
+            raise HTTPException(status_code=404, detail="Scenario not found")
+        return detail
+
+    @application.patch("/cities/{city_id}/scenarios/{scenario_id}/status")
+    def transition_scenario(
+        city_id: str,
+        scenario_id: str,
+        transition: ScenarioTransitionRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.transition_scenario(
+                city_id,
+                scenario_id,
+                transition.expected_status.value,
+                transition.proposed_status.value,
+                transition.note.strip(),
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Scenario not found")
+        return result
+
+    @application.get("/cities/{city_id}/scenarios/{scenario_id}/sites/{site_order}/field-check")
+    def field_check(
+        city_id: str,
+        scenario_id: str,
+        site_order: int,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.field_check(city_id, scenario_id, site_order)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Field check not found")
+        return result
+
+    @application.put("/cities/{city_id}/scenarios/{scenario_id}/sites/{site_order}/field-check")
+    def save_field_check(
+        city_id: str,
+        scenario_id: str,
+        site_order: int,
+        checklist: FieldCheckRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.save_field_check(
+            city_id,
+            scenario_id,
+            site_order,
+            checklist.model_dump(mode="json"),
+        )
+        if result is None:
+            raise HTTPException(status_code=404, detail="Scenario site not found")
+        return result
 
     return application
 

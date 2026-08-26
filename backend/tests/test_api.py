@@ -5,9 +5,14 @@ from typing import Any
 from fastapi.testclient import TestClient
 
 from backend.citygap_platform.api.app import create_app
+from backend.citygap_platform.domain.scenarios import validate_status_transition
 
 
 class FakeRepository:
+    def __init__(self) -> None:
+        self.lifecycle_status = "draft"
+        self.checklists: dict[tuple[str, int], dict[str, Any]] = {}
+
     def health(self) -> bool:
         return True
 
@@ -124,6 +129,76 @@ class FakeRepository:
             }
         ]
 
+    def scenarios(self, city_id: str, status: str | None, limit: int) -> list[dict[str, Any]]:
+        scenario = {
+            "scenario_id": "scenario-a",
+            "scenario_key": "network-overall-3",
+            "city_id": city_id,
+            "objective_mode": "overall",
+            "site_count": 3,
+            "lifecycle_status": self.lifecycle_status,
+        }
+        return [scenario] if status is None or status == self.lifecycle_status else []
+
+    def scenario_detail(self, city_id: str, scenario_id: str) -> dict[str, Any] | None:
+        if scenario_id == "missing":
+            return None
+        return {
+            "scenario_id": scenario_id,
+            "scenario_key": f"network-{scenario_id}",
+            "city_id": city_id,
+            "objective_mode": "overall" if scenario_id == "scenario-a" else "worst_served",
+            "site_count": 3,
+            "sites": [{"candidate_id": "tran-1"}],
+            "impacts": {"improved_building_count": {"value": 42, "unit": "building"}},
+            "contexts": [{"type": "hazard", "review_status": "additional_confirmation_required"}],
+            "algorithm_kind": "deterministic_greedy_approximation",
+            "algorithm_version": "network-scenario-test",
+            "lifecycle_status": self.lifecycle_status,
+        }
+
+    def transition_scenario(
+        self,
+        city_id: str,
+        scenario_id: str,
+        expected_status: str,
+        proposed_status: str,
+        note: str,
+    ) -> dict[str, Any] | None:
+        if scenario_id == "missing":
+            return None
+        if expected_status != self.lifecycle_status:
+            raise ValueError("Scenario status changed")
+        validate_status_transition(self.lifecycle_status, proposed_status)
+        self.lifecycle_status = proposed_status
+        return {
+            "scenario_id": scenario_id,
+            "city_id": city_id,
+            "lifecycle_status": proposed_status,
+            "note": note,
+        }
+
+    def field_check(self, city_id: str, scenario_id: str, site_order: int) -> dict[str, Any] | None:
+        return self.checklists.get((scenario_id, site_order))
+
+    def save_field_check(
+        self,
+        city_id: str,
+        scenario_id: str,
+        site_order: int,
+        checklist: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        if scenario_id == "missing":
+            return None
+        value = {
+            "city_id": city_id,
+            "scenario_id": scenario_id,
+            "site_order": site_order,
+            **checklist,
+        }
+        self.checklists[(scenario_id, site_order)] = value
+        return value
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -188,3 +263,61 @@ def test_context_layers_require_bbox_and_preserve_hazard_review_semantics() -> N
     assert candidate["contexts"][0]["review_status"] == ("additional_confirmation_required")
     hazards = client.get("/cities/26202/road-edges/edge-1/hazards?graph_version=exp-test").json()
     assert hazards["hazards"][0]["siting_feasibility"] == "not_determined"
+
+
+def test_scenario_comparison_is_bounded_to_three_without_recommendation() -> None:
+    scenarios = client.get("/cities/26202/scenarios?status=draft").json()
+    assert scenarios["scenarios"][0]["scenario_key"] == "network-overall-3"
+    comparison = client.get("/cities/26202/scenario-comparison?scenario_ids=scenario-a,scenario-b")
+    assert comparison.status_code == 200
+    assert comparison.json()["comparison_limit"] == 3
+    assert comparison.json()["recommendation"] is None
+    assert len(comparison.json()["plans"]) == 2
+    assert client.get("/cities/26202/scenario-comparison?scenario_ids=a,b,c,d").status_code == 422
+
+
+def test_scenario_lifecycle_requires_explicit_valid_transitions() -> None:
+    repository = FakeRepository()
+    scenario_client = TestClient(create_app(repository))
+    invalid = scenario_client.patch(
+        "/cities/26202/scenarios/scenario-a/status",
+        json={
+            "expected_status": "draft",
+            "proposed_status": "reviewed",
+            "note": "must not skip review",
+        },
+    )
+    assert invalid.status_code == 409
+    valid = scenario_client.patch(
+        "/cities/26202/scenarios/scenario-a/status",
+        json={
+            "expected_status": "draft",
+            "proposed_status": "under_review",
+            "note": "submitted by a municipal reviewer",
+        },
+    )
+    assert valid.status_code == 200
+    assert valid.json()["lifecycle_status"] == "under_review"
+
+
+def test_field_check_is_human_entered_and_persisted_by_site() -> None:
+    repository = FakeRepository()
+    scenario_client = TestClient(create_app(repository))
+    path = "/cities/26202/scenarios/scenario-a/sites/1/field-check"
+    assert scenario_client.get(path).status_code == 404
+    saved = scenario_client.put(
+        path,
+        json={
+            "site_access": "confirmed",
+            "road_safety": "attention",
+            "land_ownership_unknown": "unknown",
+            "existing_service": "confirmed",
+            "facility_condition": "unknown",
+            "hazard_confirmation": "attention",
+            "operator_consultation": "unknown",
+            "notes": "現地で横断位置を確認",
+        },
+    )
+    assert saved.status_code == 200
+    assert saved.json()["hazard_confirmation"] == "attention"
+    assert scenario_client.get(path).json()["notes"] == "現地で横断位置を確認"

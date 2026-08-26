@@ -1,0 +1,29 @@
+"""Load verified canonical scenario Parquets into an already-migrated PostGIS database."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+
+from backend.citygap_platform.ingestion.scenarios import load_scenario_artifacts
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-directory", type=Path, default=Path("analysis/outputs/real"))
+    parser.add_argument(
+        "--database-url",
+        default=os.getenv(
+            "CITYGAP_DATABASE_URL",
+            "postgresql://citygap:citygap_dev@localhost:5432/citygap",
+        ),
+    )
+    arguments = parser.parse_args()
+    result = load_scenario_artifacts(arguments.database_url, arguments.output_directory)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "city": {
+    "city_id": "26202",
+    "name": "舞鶴市"
+  },
+  "dataset_version_key": "26202:2025:13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+  "network_version": "exp-4fff5849d650a70b",
+  "context_version": "plateau-context-1.0.0",
+  "context_config_hash": "914ac979c5b30b54920591f2dfa6dfe346f69c2efa1d5b0d81e21cd3e49874d8",
+  "algorithm_version": "network-scenario-1.0.0",
+  "config_hash": "59d0f3049604590d815869dc185657807e617a333e5b24cc58d7c7c35705a04f",
+  "canonical_tables": {
+    "scenario_runs": {
+      "file": "scenario_runs.parquet",
+      "row_count": 30,
+      "size_bytes": 18419,
+      "sha256": "5db6410c4ace800cd7eb7b5de03a66bc68f9aeefb6068f33f5eceb7815eefe52"
+    },
+    "scenario_sites": {
+      "file": "scenario_sites.parquet",
+      "row_count": 90,
+      "size_bytes": 14545,
+      "sha256": "079a38ad1ff848ad773aeab124449f7d733c0042456868752329c96ea7ae889c"
+    },
+    "scenario_objectives": {
+      "file": "scenario_objectives.parquet",
+      "row_count": 155,
+      "size_bytes": 8175,
+      "sha256": "2d9d68f3c1c9cc201e71cef8743f32b7d696b499083b50ce421c14ec503d2c3b"
+    },
+    "scenario_constraints": {
+      "file": "scenario_constraints.parquet",
+      "row_count": 630,
+      "size_bytes": 7425,
+      "sha256": "f517671eb8017f01257dfbddbfb3169279cacef58fbdb831df75a376c871723a"
+    },
+    "scenario_impacts": {
+      "file": "scenario_impacts.parquet",
+      "row_count": 390,
+      "size_bytes": 7622,
+      "sha256": "bd0fb0a92f6a9c85773e56e655c3d9785b246a2b75af3e13252b930003dfd76a"
+    },
+    "scenario_context": {
+      "file": "scenario_context.parquet",
+      "row_count": 450,
+      "size_bytes": 9799,
+      "sha256": "4cf5201c664e543b097d5bee5e48949155519157c53d393a0eca347fe15fb2cf"
+    },
+    "scenario_evidence": {
+      "file": "scenario_evidence.parquet",
+      "row_count": 30,
+      "size_bytes": 34079,
+      "sha256": "46028905bcae6af6e2140192259a5c98284a75e2c0821bd4e64fcaaf941ffc3d"
+    }
+  },
+  "lifecycle_initial_status": "draft",
+  "database_executed": false,
+  "database_status": "canonical Parquet generated; PostGIS loader not executed"
+}
