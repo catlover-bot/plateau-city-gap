@@ -56,8 +56,8 @@
 - [x] Mobile 390px no overflow
 - [x] Optional PLATEAU and WebGL fallback
 - [x] Browser console errors = 0
-- [ ] GitHub Pages deployed
-- [ ] Git worktree clean
+- [x] GitHub Pages deployed
+- [x] Git worktree clean
 
 ## Cross-city and UX final phase
 
@@ -81,9 +81,9 @@
 - [x] Optional PLATEAU fallback and WebGL fallback
 - [x] Browser console errors = 0
 - [x] Final focus-regression rerun
-- [ ] GitHub Pages final deployment
-- [ ] Published city switch and data response verification
-- [ ] Final commit and clean worktree
+- [x] GitHub Pages final deployment
+- [x] Published city switch and data response verification
+- [x] Final commit and clean worktree
 
 ## Decision Studio final phase
 
@@ -103,7 +103,7 @@
 - [x] Mobile styles added for Decision controls and Evidence modal
 - [x] Final-v2 screenshots 01–10 regenerated
 - [x] Production browser console errors = 0
-- [ ] GitHub Pages final deployment and asset response verification
+- [x] GitHub Pages final deployment and asset response verification
 
 ## Municipal Digital Twin Platform final phase
 
