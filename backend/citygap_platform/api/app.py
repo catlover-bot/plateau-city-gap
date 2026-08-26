@@ -131,9 +131,7 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             "bbox": parsed_bbox,
             "limit": limit,
             "offset": offset,
-            "features": repo.road_edges(
-                city_id, parsed_bbox, limit, offset, graph_version
-            ),
+            "features": repo.road_edges(city_id, parsed_bbox, limit, offset, graph_version),
         }
 
     @application.get("/cities/{city_id}/buildings/{gml_id}/network-accessibility")
@@ -144,10 +142,72 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
     ) -> dict:
         detail = repo.building_network_accessibility(city_id, gml_id)
         if detail is None:
-            raise HTTPException(
-                status_code=404, detail="Building network accessibility not found"
-            )
+            raise HTTPException(status_code=404, detail="Building network accessibility not found")
         return detail
+
+    @application.get("/cities/{city_id}/context/{layer}")
+    def context_features(
+        city_id: str,
+        layer: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        bbox: Annotated[
+            str,
+            Query(description="Required minLon,minLat,maxLon,maxLat window"),
+        ],
+        limit: Annotated[int, Query(ge=1, le=1000)] = 250,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        if layer not in {"landuse", "planning", "hazards"}:
+            raise HTTPException(status_code=404, detail="Context layer not found")
+        parsed_bbox = _parse_bbox(bbox)
+        return {
+            "city_id": city_id,
+            "layer": layer,
+            "bbox": parsed_bbox,
+            "limit": limit,
+            "offset": offset,
+            "features": repo.context_features(city_id, layer, parsed_bbox, limit, offset),
+        }
+
+    @application.get("/cities/{city_id}/meshes/{mesh_code}/context")
+    def mesh_context(
+        city_id: str,
+        mesh_code: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "mesh_code": mesh_code,
+            "contexts": repo.mesh_context(city_id, mesh_code),
+        }
+
+    @application.get("/cities/{city_id}/scenario-candidates/{candidate_id}/context")
+    def scenario_candidate_context(
+        city_id: str,
+        candidate_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "candidate_id": candidate_id,
+            "siting_decision": "not_determined",
+            "contexts": repo.scenario_candidate_context(city_id, candidate_id),
+        }
+
+    @application.get("/cities/{city_id}/road-edges/{edge_id}/hazards")
+    def road_edge_hazards(
+        city_id: str,
+        edge_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        graph_version: str | None = None,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "edge_id": edge_id,
+            "graph_version": graph_version,
+            "interpretation": "overlap requires additional confirmation; feasibility is not determined",
+            "hazards": repo.road_edge_hazards(city_id, edge_id, graph_version),
+        }
 
     return application
 

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "verification_method": "independent artifact reload and direct Shapely recomputation",
+  "checks": {
+    "inventory_feature_counts_match": true,
+    "gml_ids_unique": true,
+    "all_geometries_valid": true,
+    "all_required_official_labels_resolved": true,
+    "hazard_overlap_never_encodes_infeasibility": true,
+    "sampled_building_relations_recompute": true,
+    "sampled_road_intersection_lengths_recompute": true,
+    "deep_mesh_intersection_areas_recompute": true,
+    "all_meshes_exported": true,
+    "all_candidates_have_summary": true
+  },
+  "passed": true,
+  "evidence": {
+    "inventory_expected": {
+      "land_use": 31067,
+      "urban_planning": 394,
+      "landslide": 4643,
+      "flood": 666,
+      "tsunami": 23
+    },
+    "normalised_actual": {
+      "land_use": 31067,
+      "urban_planning": 394,
+      "landslide": 4643,
+      "flood": 666,
+      "tsunami": 23
+    },
+    "unique_ids": {
+      "land_use": true,
+      "urban_planning": true,
+      "hazards": true
+    },
+    "geometry_valid": {
+      "land_use": true,
+      "urban_planning": true,
+      "hazards": true
+    },
+    "label_resolution": {
+      "land_use": true,
+      "hazard_rank": true,
+      "land_use_codelist": true,
+      "hazard_codelists": true
+    },
+    "building_relation_sample_count": 300,
+    "building_relation_failures": [],
+    "road_relation_sample_count": 300,
+    "road_max_length_residual_m": 0.0,
+    "deep_mesh_relation_count": 21,
+    "deep_mesh_max_area_residual_m2": 0.0
+  }
+}

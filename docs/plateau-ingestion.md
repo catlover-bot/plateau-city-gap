@@ -71,6 +71,18 @@ The source CRS URI remains in both object and geometry-part provenance. Maizuru 
 using EPSG:6697 are read in GML CRS axis order and written as longitude/latitude EPSG:4326 for GIS
 queries. Metric calculations must use an explicit projected CRS.
 
+The context builder adds package-local official codelist labels and exact EPSG:6674 relations.
+Flood/tsunami rank uses the actual `rankOrg`; landslide uses `areaType`. The base loader does not
+place a description code into a rank-label field and does not derive depth from geometry Z. See
+[PLATEAU context](plateau-context.md).
+
+After CityGML and the matching road graph are loaded, verified Parquet relations can be loaded with:
+
+```bash
+python -m analysis.scripts.load_plateau_context_postgis \
+  --database-url "$CITYGAP_DATABASE_URL"
+```
+
 ## Idempotence and incremental updates
 
 The dataset key is `(city_id, dataset_year, archive_sha256)`. Re-running the same archive upserts
@@ -79,7 +91,7 @@ year receives another dataset version. Future added/removed/changed reports shou
 version-scoped `gml:id` plus normalized attribute/geometry hashes; no cross-year identity is
 assumed when IDs change.
 
-## Known Priority 1 limitations
+## Known database limitations
 
 - The Python event parser and SQL migration are validated in this repository, but a full PostGIS
   load requires Docker/PostGIS and substantial storage. Do not claim DB size or query latency

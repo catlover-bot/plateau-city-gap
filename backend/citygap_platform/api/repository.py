@@ -38,6 +38,25 @@ class PlatformRepository(Protocol):
         self, city_id: str, gml_id: str
     ) -> dict[str, Any] | None: ...
 
+    def context_features(
+        self,
+        city_id: str,
+        layer: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> list[dict[str, Any]]: ...
+
+    def mesh_context(self, city_id: str, mesh_code: str) -> list[dict[str, Any]]: ...
+
+    def scenario_candidate_context(
+        self, city_id: str, candidate_id: str
+    ) -> list[dict[str, Any]]: ...
+
+    def road_edge_hazards(
+        self, city_id: str, edge_id: str, graph_version: str | None
+    ) -> list[dict[str, Any]]: ...
+
 
 class PostGISRepository:
     def __init__(self, database_url: str):
@@ -345,9 +364,7 @@ class PostGISRepository:
             result["geometry"] = json.loads(result["geometry"])
         return results
 
-    def building_network_accessibility(
-        self, city_id: str, gml_id: str
-    ) -> dict[str, Any] | None:
+    def building_network_accessibility(self, city_id: str, gml_id: str) -> dict[str, Any] | None:
         with self._connect() as connection:
             rows = connection.execute(
                 """SELECT network.graph_version, network.graph_method,
@@ -405,3 +422,165 @@ class PostGISRepository:
             "gml_id": gml_id,
             "routes": [dict(zip(keys, row, strict=True)) for row in rows],
         }
+
+    @staticmethod
+    def _context_rows(rows: list[tuple[Any, ...]]) -> list[dict[str, Any]]:
+        keys = (
+            "context_type",
+            "gml_id",
+            "feature_type",
+            "label",
+            "code",
+            "codelist",
+            "measure",
+            "review_status",
+            "siting_feasibility",
+            "source_member",
+            "source_member_crc32",
+            "geometry_envelope",
+        )
+        results = [dict(zip(keys, row, strict=True)) for row in rows]
+        for result in results:
+            geometry = result["geometry_envelope"]
+            result["geometry_envelope"] = json.loads(geometry) if geometry else None
+        return results
+
+    def context_features(
+        self,
+        city_id: str,
+        layer: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> list[dict[str, Any]]:
+        themes = {
+            "landuse": ["luse"],
+            "planning": ["urf"],
+            "hazards": ["lsld", "fld", "tnm"],
+        }[layer]
+        min_x, min_y, max_x, max_y = bbox
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT CASE
+                              WHEN object.theme = 'luse' THEN 'landuse'
+                              WHEN object.theme = 'urf' THEN 'planning'
+                              ELSE 'hazard'
+                          END,
+                          object.gml_id, object.feature_type,
+                          COALESCE(landuse.class_label, planning.function_label,
+                                   planning.urban_plan_type_label, hazard.rank_description),
+                          COALESCE(landuse.class_code, planning.function_code,
+                                   planning.urban_plan_type_code, hazard.rank_code),
+                          COALESCE(landuse.class_codelist, planning.function_codelist,
+                                   planning.urban_plan_type_codelist, hazard.rank_codelist),
+                          NULL::double precision, hazard.overlap_policy,
+                          CASE WHEN hazard.city_object_id IS NOT NULL
+                               THEN 'not_determined' END,
+                          object.source_member, object.source_member_crc32,
+                          ST_AsGeoJSON(object.geometry_envelope)
+                   FROM plateau_city_objects AS object
+                   JOIN city_dataset_versions AS version
+                     ON version.id = object.dataset_version_id
+                   LEFT JOIN plateau_landuse AS landuse
+                     ON landuse.city_object_id = object.id
+                   LEFT JOIN plateau_urban_planning AS planning
+                     ON planning.city_object_id = object.id
+                   LEFT JOIN plateau_hazards AS hazard
+                     ON hazard.city_object_id = object.id
+                   WHERE version.city_id = %s AND version.is_current
+                     AND object.theme = ANY(%s)
+                     AND object.geometry_envelope &&
+                         ST_MakeEnvelope(%s, %s, %s, %s, 4326)
+                   ORDER BY object.theme, object.gml_id LIMIT %s OFFSET %s""",
+                (city_id, themes, min_x, min_y, max_x, max_y, limit, offset),
+            ).fetchall()
+        return self._context_rows(rows)
+
+    def mesh_context(self, city_id: str, mesh_code: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT context.context_type, object.gml_id, object.feature_type,
+                          COALESCE(landuse.class_label, planning.function_label,
+                                   planning.urban_plan_type_label, hazard.rank_description),
+                          COALESCE(landuse.class_code, planning.function_code,
+                                   planning.urban_plan_type_code, hazard.rank_code),
+                          COALESCE(landuse.class_codelist, planning.function_codelist,
+                                   planning.urban_plan_type_codelist, hazard.rank_codelist),
+                          context.intersection_area_m2, context.review_status,
+                          context.siting_feasibility, object.source_member,
+                          object.source_member_crc32, NULL::text
+                   FROM mesh_spatial_context AS context
+                   JOIN spatial_context_runs AS run ON run.id = context.context_run_id
+                   JOIN city_dataset_versions AS version
+                     ON version.id = run.dataset_version_id
+                   JOIN plateau_city_objects AS object
+                     ON object.id = context.context_city_object_id
+                   LEFT JOIN plateau_landuse AS landuse ON landuse.city_object_id = object.id
+                   LEFT JOIN plateau_urban_planning AS planning
+                     ON planning.city_object_id = object.id
+                   LEFT JOIN plateau_hazards AS hazard ON hazard.city_object_id = object.id
+                   WHERE version.city_id = %s AND version.is_current
+                     AND context.mesh_code = %s AND run.status = 'succeeded'
+                   ORDER BY context.context_type, object.gml_id""",
+                (city_id, mesh_code),
+            ).fetchall()
+        return self._context_rows(rows)
+
+    def scenario_candidate_context(self, city_id: str, candidate_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT context.context_type, object.gml_id, object.feature_type,
+                          COALESCE(landuse.class_label, planning.function_label,
+                                   planning.urban_plan_type_label, hazard.rank_description),
+                          COALESCE(landuse.class_code, planning.function_code,
+                                   planning.urban_plan_type_code, hazard.rank_code),
+                          COALESCE(landuse.class_codelist, planning.function_codelist,
+                                   planning.urban_plan_type_codelist, hazard.rank_codelist),
+                          NULL::double precision, context.review_status,
+                          context.siting_feasibility, object.source_member,
+                          object.source_member_crc32,
+                          ST_AsGeoJSON(ST_Transform(context.candidate_geom, 4326))
+                   FROM scenario_candidate_spatial_context AS context
+                   JOIN spatial_context_runs AS run ON run.id = context.context_run_id
+                   JOIN city_dataset_versions AS version
+                     ON version.id = run.dataset_version_id
+                   JOIN plateau_city_objects AS object
+                     ON object.id = context.context_city_object_id
+                   LEFT JOIN plateau_landuse AS landuse ON landuse.city_object_id = object.id
+                   LEFT JOIN plateau_urban_planning AS planning
+                     ON planning.city_object_id = object.id
+                   LEFT JOIN plateau_hazards AS hazard ON hazard.city_object_id = object.id
+                   WHERE version.city_id = %s AND version.is_current
+                     AND context.candidate_id = %s AND run.status = 'succeeded'
+                   ORDER BY context.context_type, object.gml_id""",
+                (city_id, candidate_id),
+            ).fetchall()
+        return self._context_rows(rows)
+
+    def road_edge_hazards(
+        self, city_id: str, edge_id: str, graph_version: str | None
+    ) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT 'hazard', object.gml_id, object.feature_type,
+                          hazard.rank_description, hazard.rank_code, hazard.rank_codelist,
+                          context.intersection_length_m, context.review_status,
+                          context.siting_feasibility, object.source_member,
+                          object.source_member_crc32, NULL::text
+                   FROM road_hazard_context AS context
+                   JOIN spatial_context_runs AS run ON run.id = context.context_run_id
+                   JOIN road_network_versions AS network
+                     ON network.id = context.network_version_id
+                   JOIN city_dataset_versions AS version
+                     ON version.id = network.dataset_version_id
+                   JOIN plateau_city_objects AS object
+                     ON object.id = context.hazard_city_object_id
+                   JOIN plateau_hazards AS hazard ON hazard.city_object_id = object.id
+                   WHERE version.city_id = %s AND version.is_current
+                     AND context.edge_id = %s
+                     AND (%s IS NULL OR network.graph_version = %s)
+                     AND run.status = 'succeeded'
+                   ORDER BY network.generated_at DESC, object.gml_id""",
+                (city_id, edge_id, graph_version, graph_version),
+            ).fetchall()
+        return self._context_rows(rows)

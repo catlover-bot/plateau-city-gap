@@ -5,7 +5,7 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [PLATEAU文脈](docs/plateau-context.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
 このリポジトリには、審査・公開用の静的な **Competition Demo** と、段階的に構築中の **Urban Digital Twin Platform** の2系統があります。静的デモとGitHub Pagesは従来どおりバックエンドなしで動作します。PlatformはPLATEAU CityGML全量取込に加え、Priority 2として実建物への人口配賦と建物起点アクセシビリティを実装しています。
 
@@ -101,9 +101,12 @@ PLATEAUは装飾的な背景としてだけ使っていません。
 - 44,640棟の実CityGML用途・床面積・footprintを監査し、秘匿影響のない149meshで住宅建物へ人口を配賦
 - 住宅建物代表点から交通・医療への直線距離を計算し、500m中心と建物加重平均・中央値・p90を比較
 - 公式DEM TIN 20,965三角形から対象メッシュの標高と局所勾配を要約（歩行経路勾配とは呼ばない）
+- CityGML全8テーマ97,140地物をinventoryし、土地利用31,067・都市計画394・土砂4,643・洪水666・津波23地物を公式コード表付きで分析へ接続
+- 土地利用・都市計画・災害を住宅建物28,448棟、495メッシュ、施策候補11,460地点へ空間結合し、災害を「追加確認が必要」として分離表示
+- 道路LOD1面15,684から実験的面隣接graph（23,437辺）を生成し、建物起点network距離とDEM上り・下りを直線距離とは別に計算
 - Top 10との空間照合が0棟だったことを、欠損を補間せず「公式建物モデルの整備範囲外」として提示
 
-現行の全市Screeningスコアは変更していません。第二段階のPLATEAU Detailでは、建物用途・正確なmesh交差・延べ面積が人口配賦を、建物代表点が交通・医療の加重距離を直接変えます。推計は実居住者ではなく、秘匿影響meshを建物へ分解しません。建物起点の歩行経路、道路接続・横断・坂を含む到達圏はPriority 3です。方法は [建物人口配賦](docs/building-population.md)、[用途監査](docs/building-usage.md)、[建物アクセシビリティ](docs/building-accessibility.md) を参照してください。
+現行の全市Screeningスコアは変更していません。第二段階のPLATEAU Detailでは、建物用途・正確なmesh交差・延べ面積が人口配賦を、建物代表点が交通・医療の加重距離を直接変えます。推計は実居住者ではなく、秘匿影響meshを建物へ分解しません。道路面隣接距離は公式歩行者networkではなく、横断・歩道・通行可否を保証しません。方法は [建物人口配賦](docs/building-population.md)、[用途監査](docs/building-usage.md)、[建物アクセシビリティ](docs/building-accessibility.md)、[network accessibility](docs/network-accessibility.md)、[PLATEAU文脈](docs/plateau-context.md) を参照してください。
 
 ## CITY GAP Decision Studio
 
@@ -128,7 +131,7 @@ after_transport_distance
 | 国土数値情報 P11 バス停 | 2022 | 舞鶴市151 | 公共交通距離 |
 | 国土数値情報 P04 医療機関 | 2020 | 舞鶴市105、距離対象71 | 医療距離 |
 | PLATEAU 舞鶴市関連データ | 2025 | 駅7地点、行政界1 | 駅距離、対象範囲 |
-| PLATEAU 舞鶴市 CityGML / 3D Tiles | 2025 | 公式配布内44,640棟、Web subset 856棟、道路面135件 | 3D実属性、coverage、道路面候補、DEM文脈 |
+| PLATEAU 舞鶴市 CityGML / 3D Tiles | 2025 | 全8テーマ97,140地物、建物44,640、道路15,684、土地利用31,067、都市計画394、災害5,332 | 3D実属性、人口配賦、道路network・DEM、土地利用・計画・災害文脈 |
 | e-Stat / P11 / P04 藤沢市 | 2020 / 2022 | mesh 327、バス停446、医療718（距離対象436） | 横展開検証 |
 | PLATEAU 藤沢市関連データ | 2025 | 駅20地点、行政界1 | 駅距離、対象範囲 |
 
@@ -187,6 +190,10 @@ python -m analysis.scripts.build_plateau_inventory
 python -m analysis.scripts.ingest_plateau_postgis
 python -m analysis.scripts.load_building_demographics_postgis \
   --dataset-version-id UUID --database-url "$CITYGAP_DATABASE_URL"
+python -m analysis.scripts.build_plateau_context
+python -m analysis.scripts.verify_plateau_context
+python -m analysis.scripts.load_plateau_context_postgis \
+  --database-url "$CITYGAP_DATABASE_URL"
 ```
 
 Priority 2の正規計算はPostGIS不要で、PyArrow Parquetを生成してから同じ値をloaderがupsertします。
@@ -213,6 +220,8 @@ SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_decision_studio_as
 python -m analysis.scripts.verify_decision_studio
 python -m analysis.scripts.build_building_demographics
 python -m analysis.scripts.verify_building_demographics
+python -m analysis.scripts.build_plateau_context
+python -m analysis.scripts.verify_plateau_context
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \
   --config analysis/config/fujisawa.yaml \
   --output-dir frontend/public/data/cities/fujisawa
@@ -239,7 +248,7 @@ npm run build
 
 Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
 
-PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、建物用途・面交差・保存・加重分位、PostGIS migration、bbox必須APIと単一建物/mesh詳細契約を対象にします。
+PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、建物用途・面交差・保存・加重分位、道路network、DEM、土地利用・都市計画・災害、PostGIS migration、bbox必須APIと単一建物/mesh詳細契約を対象にします。
 
 ## Data protection
 

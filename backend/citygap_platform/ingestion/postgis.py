@@ -59,7 +59,13 @@ def _integer(attributes: dict[str, Any], *keys: str) -> int | None:
     return int(value) if value is not None else None
 
 
-def _insert_typed_row(connection: Any, theme: str, object_id: int, end: FeatureEnd) -> None:
+def _insert_typed_row(
+    connection: Any,
+    theme: str,
+    object_id: int,
+    feature_type: str,
+    end: FeatureEnd,
+) -> None:
     attributes = end.attributes
     if theme == "bldg":
         connection.execute(
@@ -140,13 +146,16 @@ def _insert_typed_row(connection: Any, theme: str, object_id: int, end: FeatureE
                    name = EXCLUDED.name""",
             (
                 object_id,
-                _first(attributes, "type"),
+                feature_type,
                 _first(attributes, "function"),
                 _first(attributes, "usage"),
                 _first(attributes, "name"),
             ),
         )
     elif theme in {"fld", "tnm", "lsld"}:
+        rank_code = (
+            _first(attributes, "areaType") if theme == "lsld" else _first(attributes, "rankOrg")
+        )
         connection.execute(
             """INSERT INTO plateau_hazards
                    (city_object_id, hazard_type, rank_code, rank_description, depth_m)
@@ -158,15 +167,21 @@ def _insert_typed_row(connection: Any, theme: str, object_id: int, end: FeatureE
                    depth_m = EXCLUDED.depth_m""",
             (
                 object_id,
-                theme,
-                _first(attributes, "rank"),
-                _first(attributes, "rankOrg", "description"),
+                {"fld": "flood", "tnm": "tsunami", "lsld": "landslide"}[theme],
+                rank_code,
+                None,
                 _number(attributes, "depth", "maxDepth"),
             ),
         )
 
 
-def _finish_feature(connection: Any, object_id: int, theme: str, end: FeatureEnd) -> None:
+def _finish_feature(
+    connection: Any,
+    object_id: int,
+    theme: str,
+    feature_type: str,
+    end: FeatureEnd,
+) -> None:
     from psycopg.types.json import Jsonb
 
     connection.execute(
@@ -186,7 +201,7 @@ def _finish_feature(connection: Any, object_id: int, theme: str, end: FeatureEnd
            WHERE object.id = %s""",
         (list(end.lods), list(end.source_crs), Jsonb(end.attributes), object_id, object_id),
     )
-    _insert_typed_row(connection, theme, object_id, end)
+    _insert_typed_row(connection, theme, object_id, feature_type, end)
 
 
 def _flush_geometry_parts(connection: Any, rows: list[tuple]) -> None:
@@ -203,10 +218,10 @@ def _flush_geometry_parts(connection: Any, rows: list[tuple]) -> None:
 
 
 def _finish_pending_features(
-    connection: Any, pending: list[tuple[int, str, FeatureEnd]]
+    connection: Any, pending: list[tuple[int, str, str, FeatureEnd]]
 ) -> None:
-    for object_id, theme, end in pending:
-        _finish_feature(connection, object_id, theme, end)
+    for object_id, theme, feature_type, end in pending:
+        _finish_feature(connection, object_id, theme, feature_type, end)
     pending.clear()
 
 
@@ -274,9 +289,10 @@ def ingest_archive(
                         continue
                     theme = match.group(1).lower()
                     object_id: int | None = None
+                    feature_type: str | None = None
                     part_order = 0
                     geometry_rows: list[tuple] = []
-                    pending_features: list[tuple[int, str, FeatureEnd]] = []
+                    pending_features: list[tuple[int, str, str, FeatureEnd]] = []
                     with source_zip.open(info) as stream:
                         for event in iter_citygml_events(
                             stream,
@@ -285,6 +301,7 @@ def ingest_archive(
                             source_member_crc32=f"{info.CRC:08x}",
                         ):
                             if isinstance(event, FeatureStart):
+                                feature_type = event.feature_type
                                 object_id = connection.execute(
                                     """INSERT INTO plateau_city_objects (
                                            dataset_version_id, ingestion_run_id, gml_id,
@@ -330,9 +347,14 @@ def ingest_archive(
                                 if len(geometry_rows) >= 10_000:
                                     _flush_geometry_parts(connection, geometry_rows)
                                     _finish_pending_features(connection, pending_features)
-                            elif isinstance(event, FeatureEnd) and object_id is not None:
-                                pending_features.append((object_id, theme, event))
+                            elif (
+                                isinstance(event, FeatureEnd)
+                                and object_id is not None
+                                and feature_type is not None
+                            ):
+                                pending_features.append((object_id, theme, feature_type, event))
                                 object_id = None
+                                feature_type = None
                     _flush_geometry_parts(connection, geometry_rows)
                     _finish_pending_features(connection, pending_features)
                     counts["members"] += 1

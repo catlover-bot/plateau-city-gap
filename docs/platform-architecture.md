@@ -5,7 +5,8 @@
 The competition demo remains a static React/Cesium application deployed to GitHub Pages. The
 platform is an additive path; it does not make the public demo depend on PostGIS or the API.
 
-Priority 1 implements the versioned PLATEAU ingestion boundary:
+The implemented boundary now includes full CityGML ingestion, building allocation, an explicitly
+experimental road-surface graph with terrain observations, and land-use/planning/hazard context:
 
 ```text
 Maizuru 2025 CityGML ZIP (Git-ignored)
@@ -13,18 +14,43 @@ Maizuru 2025 CityGML ZIP (Git-ignored)
   -> dataset version + ingestion run
   -> city object metadata + geometry parts
   -> typed building / road / terrain / land-use / planning / hazard tables
+  -> canonical Python + GeoParquet computation
+  -> versioned road/network and spatial-context runs
   -> bounded FastAPI queries
 
 Existing pre-generated analysis -> existing React/Cesium -> GitHub Pages (unchanged)
 ```
 
-Population allocation, generated road topology, network accessibility, detailed frontend mode,
-and DB-backed scenarios are later priorities. Their tables or labels must not imply that those
-calculations already exist.
+DB-backed scenario lifecycle and background workers remain later milestones. Their tables or
+labels must not imply that those calculations already exist.
+
+The product boundary follows this flow:
+
+```text
+PLATEAU
+  buildings | roads | terrain | land use | urban planning | flood | landslide | tsunami
+          + census / transport / facilities
+                          |
+                Urban Data Platform
+                          |
+           building population | routes | hazard/planning context
+                          |
+                   CITY GAP Engine
+                          |
+                discover | verify | propose
+                          |
+                  compare alternatives
+                          |
+                   municipal review
+```
+
+The platform preserves those boundaries: source themes are versioned before analysis; an overlap
+or score is evidence for review, not an automatic municipal decision.
 
 ## Design decisions
 
-- PostgreSQL/PostGIS is the system of record; pgRouting is enabled for the later network phase.
+- PostgreSQL/PostGIS is the production system-of-record design. The current verified canonical
+  computation is Python + Parquet because PostGIS was not executed in this environment.
 - `gml:id` is unique within a dataset version, not globally across years.
 - `city_dataset_versions` allows 2025 and later releases to coexist. Exactly one version per city
   may be marked current.
@@ -40,6 +66,8 @@ calculations already exist.
   called or treated as a building entrance.
 - Large feature APIs require a bbox and enforce pagination. Future citywide thematic display
   should use MVT/PMTiles rather than unbounded GeoJSON.
+- Hazard overlap always means `additional_confirmation_required`; feasibility remains
+  `not_determined` until municipal review.
 
 ## Repository boundaries
 
@@ -63,9 +91,10 @@ should be introduced only when benchmark evidence requires them.
 
 ## Open formats and official interoperability
 
-The platform accepts CityGML directly and stores no proprietary interchange format. Later road
-topology work will prefer importing GeoJSON/Shapefile output from the official
+The platform accepts CityGML directly and stores no proprietary interchange format. The road
+adapter prefers node/link output from the official
 [PLATEAU RoadNetwork Generator](https://github.com/Project-PLATEAU/PLATEAU-RoadNetwork-Generator).
-The official tool is documented for Windows, so its output adapter and any development-only
-fallback extractor remain separate components. Existing official 3D Tiles continue to be served
-by Cesium without conversion through the database.
+The official tool is documented for Windows and was not executed in this environment, so its
+output adapter and the experimental CityGML LOD1 surface-adjacency fallback remain separate.
+Existing official 3D Tiles continue to be served by Cesium without conversion through the
+database.

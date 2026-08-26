@@ -1,0 +1,325 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-26T09:48:08Z",
+  "algorithm_version": "plateau-context-1.0.0",
+  "city": {
+    "city_id": "26202",
+    "name": "舞鶴市"
+  },
+  "dataset": {
+    "plateau_year": 2025,
+    "archive_file": "26202_maizuru-shi_city_2025_citygml_1_op.zip",
+    "archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "source_crs": "EPSG:6697",
+    "analysis_crs": "EPSG:6674"
+  },
+  "feature_counts": {
+    "land_use": 31067,
+    "urban_planning": 394,
+    "landslide": 4643,
+    "flood": 666,
+    "tsunami": 23
+  },
+  "surface_part_counts": {
+    "land_use": 31067,
+    "urban_planning": 394,
+    "landslide": 4643,
+    "flood": 2678026,
+    "tsunami": 63436
+  },
+  "targets": {
+    "strict_residential_buildings": 28448,
+    "census_meshes": 495,
+    "scenario_candidates": 11460,
+    "experimental_road_graph_edges": 23437
+  },
+  "coverage": {
+    "building_landuse": 28448,
+    "building_planning": 28448,
+    "building_hazard": 22379,
+    "mesh_landuse": 392,
+    "mesh_planning": 397,
+    "mesh_hazard": 489,
+    "candidate_landuse": 11458,
+    "candidate_planning": 11459,
+    "candidate_hazard": 8517,
+    "road_edge_hazard": 19227
+  },
+  "landuse_classes": [
+    {
+      "class_code": "201",
+      "class_label": "田（水田）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 2150,
+      "source_area_sum_m2": 9389874.45
+    },
+    {
+      "class_code": "202",
+      "class_label": "畑（畑、樹園地、採草地、養鶏（牛・豚）場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3338,
+      "source_area_sum_m2": 5069532.06
+    },
+    {
+      "class_code": "203",
+      "class_label": "山林（樹林地）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1895,
+      "source_area_sum_m2": 205760113.47
+    },
+    {
+      "class_code": "204",
+      "class_label": "水面（河川水面、湖沼、ため池、用水路、濠、運河水面）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3144,
+      "source_area_sum_m2": 3962620.05
+    },
+    {
+      "class_code": "205",
+      "class_label": "その他自然地（原野・牧野、荒れ地（耕作放棄地等自然的状況のもの）、低湿地、河川敷・河原、海浜、湖岸）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3659,
+      "source_area_sum_m2": 5912849.52
+    },
+    {
+      "class_code": "211",
+      "class_label": "住宅用地（住宅、共同住宅、店舗等併用住宅、店舗等併用共同住宅、作業所併用住宅）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 6473,
+      "source_area_sum_m2": 8934908.76
+    },
+    {
+      "class_code": "212",
+      "class_label": "商業用地（業務施設、商業施設、宿泊施設、商業系複合施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1671,
+      "source_area_sum_m2": 1628425.03
+    },
+    {
+      "class_code": "213",
+      "class_label": "工業用地（工場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 451,
+      "source_area_sum_m2": 2748563.01
+    },
+    {
+      "class_code": "214",
+      "class_label": "公益施設用地（官公庁施設、文教厚生施設、供給処理施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1362,
+      "source_area_sum_m2": 3771373.6
+    },
+    {
+      "class_code": "215",
+      "class_label": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 703,
+      "source_area_sum_m2": 6973568.98
+    },
+    {
+      "class_code": "216",
+      "class_label": "交通施設用地（運輸倉庫施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1231,
+      "source_area_sum_m2": 1643693.7
+    },
+    {
+      "class_code": "217",
+      "class_label": "公共空地（公園・緑地、広場、運動場、墓園）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 551,
+      "source_area_sum_m2": 775229.28
+    },
+    {
+      "class_code": "218",
+      "class_label": "その他公的施設用地（防衛施設用地）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 62,
+      "source_area_sum_m2": 1669795.8
+    },
+    {
+      "class_code": "219",
+      "class_label": "農林漁業施設用地（農林漁業用施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1515,
+      "source_area_sum_m2": 389304.25
+    },
+    {
+      "class_code": "220",
+      "class_label": "その他①（ゴルフ場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1,
+      "source_area_sum_m2": 830220.54
+    },
+    {
+      "class_code": "221",
+      "class_label": "その他②（太陽光発電のシステムを直接整備している土地）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 46,
+      "source_area_sum_m2": 176408.17
+    },
+    {
+      "class_code": "222",
+      "class_label": "その他③（平面駐車場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 793,
+      "source_area_sum_m2": 377828.03
+    },
+    {
+      "class_code": "223",
+      "class_label": "その他④（その他①～③以外の用途に供されている都市的土地利用（建物跡地、資材置場、改変工事中の土地）、法面（道路、造成地等の主利用に含まれない法面））",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1863,
+      "source_area_sum_m2": 1798321.13
+    },
+    {
+      "class_code": "231",
+      "class_label": "不明",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 159,
+      "source_area_sum_m2": 66629.93
+    }
+  ],
+  "planning_feature_types": {
+    "AreaClassification": 19,
+    "DistrictPlan": 16,
+    "FirePreventionDistrict": 28,
+    "LandReadjustmentProject": 2,
+    "MarketsSlaughterhousesCrematoria": 3,
+    "OpenSpaceForPublicUse": 30,
+    "PortZone": 22,
+    "ResidenceAttractionArea": 2,
+    "TrafficFacility": 87,
+    "TreatmentFacility": 17,
+    "UrbanFunctionAttractionArea": 2,
+    "UrbanPlanningArea": 3,
+    "UseDistrict": 163
+  },
+  "hazard_rank_counts": [
+    {
+      "hazard_type": "flood",
+      "rank_code": "1",
+      "rank_label": "0.5m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 141
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "2",
+      "rank_label": "0.5m以上1.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 137
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "3",
+      "rank_label": "1.0m以上2.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 135
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "4",
+      "rank_label": "2.0m以上3.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 114
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "5",
+      "rank_label": "3.0m以上5.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 85
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "6",
+      "rank_label": "5.0m以上",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 54
+    },
+    {
+      "hazard_type": "landslide",
+      "rank_code": "1",
+      "rank_label": "土砂災害警戒区域（指定済）",
+      "rank_codelist": "LandSlideRiskAttribute_areaType.xml",
+      "feature_count": 2375
+    },
+    {
+      "hazard_type": "landslide",
+      "rank_code": "2",
+      "rank_label": "土砂災害特別警戒区域（指定済）",
+      "rank_codelist": "LandSlideRiskAttribute_areaType.xml",
+      "feature_count": 2268
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "1",
+      "rank_label": "0.3m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 5
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "2",
+      "rank_label": "0.3m以上1.0m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 5
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "3",
+      "rank_label": "1.0m以上2.0m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 5
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "4",
+      "rank_label": "2.0m以上4.0m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 4
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "5",
+      "rank_label": "4.0m以上",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 4
+    }
+  ],
+  "deep_dive_mesh": {
+    "mesh_code": "533513314",
+    "landuse_context": "[{\"class_code\":\"201\",\"class_label\":\"田（水田）\",\"feature_count\":13,\"intersection_area_m2\":37798.14631371746},{\"class_code\":\"202\",\"class_label\":\"畑（畑、樹園地、採草地、養鶏（牛・豚）場）\",\"feature_count\":15,\"intersection_area_m2\":12515.198185173465},{\"class_code\":\"203\",\"class_label\":\"山林（樹林地）\",\"feature_count\":11,\"intersection_area_m2\":101438.88435165765},{\"class_code\":\"204\",\"class_label\":\"水面（河川水面、湖沼、ため池、用水路、濠、運河水面）\",\"feature_count\":19,\"intersection_area_m2\":6459.461828127552},{\"class_code\":\"205\",\"class_label\":\"その他自然地（原野・牧野、荒れ地（耕作放棄地等自然的状況のもの）、低湿地、河川敷・河原、海浜、湖岸）\",\"feature_count\":20,\"intersection_area_m2\":13785.142462796186},{\"class_code\":\"211\",\"class_label\":\"住宅用地（住宅、共同住宅、店舗等併用住宅、店舗等併用共同住宅、作業所併用住宅）\",\"feature_count\":43,\"intersection_area_m2\":49576.071649599326},{\"class_code\":\"212\",\"class_label\":\"商業用地（業務施設、商業施設、宿泊施設、商業系複合施設）\",\"feature_count\":1,\"intersection_area_m2\":238.6192945570519},{\"class_code\":\"213\",\"class_label\":\"工業用地（工場）\",\"feature_count\":1,\"intersection_area_m2\":479.11883338970335},{\"class_code\":\"214\",\"class_label\":\"公益施設用地（官公庁施設、文教厚生施設、供給処理施設）\",\"feature_count\":3,\"intersection_area_m2\":1949.1595370169634},{\"class_code\":\"215\",\"class_label\":\"道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）\",\"feature_count\":5,\"intersection_area_m2\":24268.26144872753},{\"class_code\":\"216\",\"class_label\":\"交通施設用地（運輸倉庫施設）\",\"feature_count\":3,\"intersection_area_m2\":6892.946048485287},{\"class_code\":\"217\",\"class_label\":\"公共空地（公園・緑地、広場、運動場、墓園）\",\"feature_count\":3,\"intersection_area_m2\":676.5832074276436},{\"class_code\":\"219\",\"class_label\":\"農林漁業施設用地（農林漁業用施設）\",\"feature_count\":9,\"intersection_area_m2\":1349.7832985698644},{\"class_code\":\"222\",\"class_label\":\"その他③（平面駐車場）\",\"feature_count\":2,\"intersection_area_m2\":1393.4254915411764},{\"class_code\":\"223\",\"class_label\":\"その他④（その他①～③以外の用途に供されている都市的土地利用（建物跡地、資材置場、改変工事中の土地）、法面（道路、造成地等の主利用に含まれない法面））\",\"feature_count\":8,\"intersection_area_m2\":3458.894917972695}]",
+    "planning_context": "[{\"gml_id\":\"urf_dc0cba9a-b897-4b92-9928-f157eebbcbf0\",\"intersection_area_m2\":384.78718725070274,\"name\":null,\"planning_label\":\"第1種低層住居専用地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_f1b7edf9-18df-41a0-9b93-9cf2c82f7140\",\"intersection_area_m2\":1187.4299936243701,\"name\":\"八反田\",\"planning_label\":\"土地区画整理事業\",\"planning_type\":\"LandReadjustmentProject\"},{\"gml_id\":\"urf_6a512abb-b497-490b-9b73-5d4b26dce5cb\",\"intersection_area_m2\":89485.32121602222,\"name\":null,\"planning_label\":\"市街化区域\",\"planning_type\":\"AreaClassification\"},{\"gml_id\":\"urf_02f47b11-c830-45b6-a622-c2a075705737\",\"intersection_area_m2\":73593.61126108182,\"name\":null,\"planning_label\":\"第1種低層住居専用地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_610e98ed-b45d-4d83-858e-022424db5b7b\",\"intersection_area_m2\":15504.160026613612,\"name\":null,\"planning_label\":\"第2種低層住居専用地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_530d967b-52b7-40e9-be15-db65064c5082\",\"intersection_area_m2\":5650.782206177006,\"name\":\"七条通線\",\"planning_label\":\"道路\",\"planning_type\":\"TrafficFacility\"},{\"gml_id\":\"urf_a950572a-0bee-480b-9ade-d0191fbfb27d\",\"intersection_area_m2\":262279.696868761,\"name\":\"舞鶴都市計画区域\",\"planning_label\":\"都市計画区域\",\"planning_type\":\"UrbanPlanningArea\"},{\"gml_id\":\"urf_70522677-fde4-412f-b2d3-9e4f417f7c32\",\"intersection_area_m2\":172790.85434123565,\"name\":null,\"planning_label\":\"市街化調整区域\",\"planning_type\":\"AreaClassification\"}]",
+    "hazard_context": "[{\"gml_id\":\"lsld_36741ec6-e965-425e-9392-c9693feff3b7\",\"hazard_type\":\"landslide\",\"intersection_area_m2\":637.0718026788529,\"rank_code\":\"2\",\"rank_label\":\"土砂災害特別警戒区域（指定済）\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"lsld_a7408018-d13d-4ee9-ad46-396e0c9d9bc9\",\"hazard_type\":\"landslide\",\"intersection_area_m2\":8178.513177367386,\"rank_code\":\"2\",\"rank_label\":\"土砂災害特別警戒区域（指定済）\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"lsld_51358d4c-bea9-4806-84a2-1cdffd67430c\",\"hazard_type\":\"landslide\",\"intersection_area_m2\":18022.414339566578,\"rank_code\":\"1\",\"rank_label\":\"土砂災害警戒区域（指定済）\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_f4e3a350-d360-4d65-9af5-288fa0c5b942\",\"hazard_type\":\"flood\",\"intersection_area_m2\":0.002010928252522054,\"rank_code\":\"1\",\"rank_label\":\"0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_e1e47efa-b536-4cb3-930f-169eef343489\",\"hazard_type\":\"flood\",\"intersection_area_m2\":0.0018652636843969755,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_7eff4b12-1743-4e2a-a576-c91d979e8a09\",\"hazard_type\":\"flood\",\"intersection_area_m2\":655.6856790038988,\"rank_code\":\"4\",\"rank_label\":\"2.0m以上3.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_dbbf0588-a58a-4dda-86ab-8fac2adf5895\",\"hazard_type\":\"flood\",\"intersection_area_m2\":2727.679604948046,\"rank_code\":\"3\",\"rank_label\":\"1.0m以上2.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_9917cdd7-1e9e-4523-9003-aa16bf42c356\",\"hazard_type\":\"flood\",\"intersection_area_m2\":6163.46368850915,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_9bf72759-02d8-4759-a9ac-3e85db4bf690\",\"hazard_type\":\"flood\",\"intersection_area_m2\":8760.02498951048,\"rank_code\":\"1\",\"rank_label\":\"0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"lsld_6de55c18-899a-4437-95b9-596b9922cbb5\",\"hazard_type\":\"landslide\",\"intersection_area_m2\":23742.681334175446,\"rank_code\":\"1\",\"rank_label\":\"土砂災害警戒区域（指定済）\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"lsld_f2b8b583-ebbe-41d8-b822-c4cd5853e7cd\",\"hazard_type\":\"landslide\",\"intersection_area_m2\":9266.747353545003,\"rank_code\":\"2\",\"rank_label\":\"土砂災害特別警戒区域（指定済）\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_ec18db8f-2a67-4176-8979-363efe920592\",\"hazard_type\":\"flood\",\"intersection_area_m2\":0.0805852675761882,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"fld_2bae8e50-3bfb-4712-9c5d-191e98b23cc0\",\"hazard_type\":\"flood\",\"intersection_area_m2\":0.44851019034772865,\"rank_code\":\"1\",\"rank_label\":\"0.5m未満\",\"review_status\":\"additional_confirmation_required\"}]",
+    "hazard_overlap": true,
+    "hazard_review_status": "additional_confirmation_required"
+  },
+  "hazard_interpretation": {
+    "overlap_means": "additional_confirmation_required",
+    "overlap_does_not_mean": "siting_impossible",
+    "depth_source": "official rankOrg codelist labels; geometry Z is not treated as depth",
+    "overlap_measure_note": "Relation tables retain each official feature intersection. Sums across overlapping official features can double-count and are labelled feature-intersection sums."
+  },
+  "lineage": {
+    "feature_key": "PLATEAU gml:id",
+    "source_member_fields": [
+      "source_gml",
+      "source_member_crc32"
+    ],
+    "labels": "package-local official GML codelists only",
+    "geometry": "LOD1 polygons with interior rings preserved",
+    "spatial_relation": "exact intersects/intersection in EPSG:6674"
+  },
+  "runtime_seconds": 263.458,
+  "detailed_outputs": [
+    "maizuru_plateau_landuse.parquet",
+    "maizuru_plateau_urban_planning.parquet",
+    "maizuru_plateau_hazards.parquet",
+    "maizuru_building_plateau_context.parquet",
+    "maizuru_mesh_plateau_context.parquet",
+    "maizuru_road_hazard_context.parquet",
+    "maizuru_scenario_candidate_context.parquet"
+  ]
+}
