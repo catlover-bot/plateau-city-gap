@@ -7,10 +7,11 @@ import { EmptyState, ErrorState, LoadingState } from "./components/AppStates";
 import { LayerPanel } from "./components/LayerPanel";
 import { MethodologyModal } from "./components/MethodologyModal";
 import { MetricSelector } from "./components/MetricSelector";
+import { MunicipalWorkspace } from "./components/MunicipalWorkspace";
 import { RankingPanel } from "./components/RankingPanel";
 import { ScenarioPanel } from "./components/ScenarioPanel";
 import { StoryMode } from "./components/StoryMode";
-import { loadAppData, loadValidationCityData } from "./lib/data";
+import { loadAppData, loadMunicipalWorkspaceData, loadValidationCityData } from "./lib/data";
 import { finiteNumber } from "./lib/format";
 import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
@@ -22,7 +23,10 @@ import type {
   LayerVisibility,
   MeshMetrics,
   MetricMode,
-  RobustCandidate
+  MunicipalWorkspaceData,
+  RobustCandidate,
+  WorkspaceLayerVisibility,
+  WorkspacePhase
 } from "./types";
 
 const CesiumMap = lazy(async () => {
@@ -39,6 +43,17 @@ const INITIAL_LAYERS: LayerVisibility = {
   plateau: false
 };
 
+const INITIAL_WORKSPACE_LAYERS: WorkspaceLayerVisibility = {
+  meshes: true,
+  affectedBuildings: false,
+  routes: false,
+  plateauBuildings: false,
+  roadNetwork: false,
+  landuse: false,
+  planning: false,
+  hazard: false
+};
+
 const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> = {
   gap: { title: "CITY GAP 探索スコア", low: "相対的に低い", high: "要追加調査" },
   elderly: { title: "65歳以上人口 percentile", low: "少ない", high: "多い" },
@@ -48,10 +63,17 @@ const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> 
 
 type SideTab = "ranking" | "detail" | "scenario";
 type CityId = "maizuru" | "fujisawa";
+type ProductView = "demo" | "workspace";
 
 export default function App() {
   const [datasets, setDatasets] = useState<Record<CityId, AppData> | null>(null);
   const [cityId, setCityId] = useState<CityId>("maizuru");
+  const [productView, setProductView] = useState<ProductView>("demo");
+  const [workspaceData, setWorkspaceData] = useState<MunicipalWorkspaceData | null>(null);
+  const [workspaceError, setWorkspaceError] = useState<string | null>(null);
+  const [workspaceRetry, setWorkspaceRetry] = useState(0);
+  const [workspacePhase, setWorkspacePhase] = useState<WorkspacePhase>("baseline");
+  const [workspaceLayers, setWorkspaceLayers] = useState(INITIAL_WORKSPACE_LAYERS);
   const data = datasets?.[cityId] ?? null;
   const [error, setError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
@@ -96,6 +118,24 @@ export default function App() {
       cancelled = true;
     };
   }, [retryKey]);
+
+  useEffect(() => {
+    if (productView !== "workspace" || workspaceData) return;
+    let cancelled = false;
+    setWorkspaceError(null);
+    loadMunicipalWorkspaceData()
+      .then((result) => {
+        if (!cancelled) setWorkspaceData(result);
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) {
+          setWorkspaceError(reason instanceof Error ? reason.message : "Workspaceデータを読み込めませんでした");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [productView, workspaceData, workspaceRetry]);
 
   const switchCity = useCallback((nextCity: CityId) => {
     if (!datasets || nextCity === cityId) return;
@@ -194,6 +234,20 @@ export default function App() {
     }
   }, []);
 
+  const changeProductView = useCallback((next: ProductView) => {
+    setProductView(next);
+    setMapError(null);
+    setMapWarning(null);
+    setStoryStep(null);
+    setSelectedBuilding(null);
+    setPlacementMode(false);
+    if (next === "workspace") {
+      setWorkspacePhase("baseline");
+      setWorkspaceLayers(INITIAL_WORKSPACE_LAYERS);
+      setCityId("maizuru");
+    }
+  }, []);
+
   useEffect(() => {
     if (storyStep === null || !data?.finalDemo) return;
     const rankOne = data.top10[0];
@@ -283,9 +337,20 @@ export default function App() {
   const plateauCoverage = summarizePlateauCoverage(data.plateauMetadata);
   const plateauYear = data.plateauMetadata?.year ?? data.plateauMetadata?.source_year;
   const isPrimary = data.city.mode === "primary_demo";
+  const workspaceActive = productView === "workspace" && isPrimary && workspaceData !== null;
+  const mapLayers: LayerVisibility = productView === "workspace"
+    ? {
+        meshes: workspaceLayers.meshes,
+        stations: false,
+        busStops: false,
+        medical: false,
+        boundary: true,
+        plateau: false
+      }
+    : layers;
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : ""}`}>
       <header className="app-header">
         <div className="brand-block">
           <div>
@@ -294,6 +359,10 @@ export default function App() {
           </div>
         </div>
         <div className="header-actions">
+          <div className="product-switch" role="group" aria-label="CITY GAPの表示モード">
+            <button type="button" className={productView === "demo" ? "active" : ""} aria-pressed={productView === "demo"} onClick={() => changeProductView("demo")}>公開デモ</button>
+            <button type="button" className={productView === "workspace" ? "active" : ""} aria-pressed={productView === "workspace"} onClick={() => changeProductView("workspace")}>自治体Workspace</button>
+          </div>
           <div className="city-switch" role="group" aria-label="分析都市を選択">
             <button type="button" className={cityId === "maizuru" ? "active" : ""} aria-pressed={cityId === "maizuru"} onClick={() => switchCity("maizuru")}>
               <strong>舞鶴市</strong><span>実証・施策シミュレーション</span>
@@ -316,12 +385,16 @@ export default function App() {
             data={data}
             metricMode={metricMode}
             selectedMeshCode={selectedMesh?.mesh_code ?? null}
-            visibility={layers}
-            placementMode={placementMode}
-            virtualPoint={virtualPoint}
-            decisionSites={sideTab === "scenario" && decisionPlan ? decisionPlan.sites : []}
-            afterScores={sideTab === "scenario" ? afterScores : null}
-            decisionFlow={sideTab === "scenario" ? decisionFlow : null}
+            visibility={mapLayers}
+            placementMode={productView === "demo" && placementMode}
+            virtualPoint={productView === "demo" ? virtualPoint : null}
+            decisionSites={productView === "demo" && sideTab === "scenario" && decisionPlan ? decisionPlan.sites : []}
+            afterScores={productView === "demo" && sideTab === "scenario" ? afterScores : null}
+            decisionFlow={productView === "demo" && sideTab === "scenario" ? decisionFlow : null}
+            workspaceMap={workspaceActive ? workspaceData.map : null}
+            workspaceBuildingPoints={workspaceActive ? workspaceData.buildingPoints : null}
+            workspacePhase={workspacePhase}
+            workspaceVisibility={workspaceLayers}
             onMeshSelect={selectMesh}
             onVirtualPointSelect={runScenario}
             onBuildingSelect={setSelectedBuilding}
@@ -350,12 +423,12 @@ export default function App() {
           </div>
         )}
 
-        <div className="map-toolbar">
+        {productView === "demo" && <div className="map-toolbar">
           <span className="toolbar-label">何を見る？</span>
           <MetricSelector value={metricMode} onChange={setMetricMode} />
-        </div>
+        </div>}
 
-        <LayerPanel
+        {productView === "demo" && <LayerPanel
           data={data}
           value={layers}
           open={layerPanelOpen}
@@ -365,9 +438,19 @@ export default function App() {
             if (!nextLayers.plateau) setSelectedBuilding(null);
           }}
           onResetView={() => mapRef.current?.resetView()}
-        />
+        />}
 
-        {isPrimary && data.finalDemo && storyStep === null && (
+        {productView === "workspace" && (
+          <div className="workspace-map-toolbar" role="group" aria-label="地図で表示する比較状態">
+            <span>地図比較</span>
+            <button type="button" className={workspacePhase === "baseline" ? "active" : ""} aria-pressed={workspacePhase === "baseline"} onClick={() => setWorkspacePhase("baseline")}>Baseline</button>
+            <button type="button" disabled={!workspaceActive} className={workspacePhase === "scenario_a" ? "active" : ""} aria-pressed={workspacePhase === "scenario_a"} onClick={() => setWorkspacePhase("scenario_a")}>Scenario A</button>
+            <button type="button" disabled={!workspaceActive} className={workspacePhase === "scenario_b" ? "active" : ""} aria-pressed={workspacePhase === "scenario_b"} onClick={() => setWorkspacePhase("scenario_b")}>Scenario B</button>
+            <button type="button" disabled={!workspaceActive} className={workspacePhase === "scenario_c" ? "active" : ""} aria-pressed={workspacePhase === "scenario_c"} onClick={() => setWorkspacePhase("scenario_c")}>Scenario C</button>
+          </div>
+        )}
+
+        {productView === "demo" && isPrimary && data.finalDemo && storyStep === null && (
           <section className="product-intro">
             <p>舞鶴市 実証・施策シミュレーション</p>
             <h2>必要と、届きにくさの<br />重なりを見つける。</h2>
@@ -379,7 +462,7 @@ export default function App() {
           </section>
         )}
 
-        {!isPrimary && storyStep === null && (
+        {productView === "demo" && !isPrimary && storyStep === null && (
           <section className="validation-intro">
             <p>藤沢市 横展開検証</p>
             <strong>同じCITY GAP Engineを実データへ適用</strong>
@@ -387,7 +470,7 @@ export default function App() {
           </section>
         )}
 
-        {isPrimary && data.finalDemo && storyStep !== null && (
+        {productView === "demo" && isPrimary && data.finalDemo && storyStep !== null && (
           <StoryMode
             step={storyStep}
             onStart={() => changeStoryStep(0)}
@@ -405,27 +488,64 @@ export default function App() {
 
         {selectedBuilding && <BuildingInfoCard building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />}
 
-        {placementMode && (
+        {productView === "demo" && placementMode && (
           <div className="placement-banner" role="status">
             <span aria-hidden="true">⌖</span> 地図をクリックして仮想交通支援拠点を配置
             <button type="button" onClick={() => setPlacementMode(false)}>キャンセル</button>
           </div>
         )}
 
-        <div className="map-legend" aria-label={`${legend.title}の凡例`}>
+        {productView === "demo" && <div className="map-legend" aria-label={`${legend.title}の凡例`}>
           <strong>{legend.title}</strong>
           <div><span>{legend.low}</span><i /><span>{legend.high}</span></div>
           <small>色は地域間の相対比較です</small>
-        </div>
+        </div>}
+
+        {productView === "workspace" && (
+          <div className="workspace-map-legend" aria-label="改善対象建物の凡例">
+            <strong>建物のネットワーク距離改善帯</strong>
+            <span><i className="band-low" />250m未満</span>
+            <span><i className="band-mid" />250–499m</span>
+            <span><i className="band-high" />500m以上</span>
+            <small>建物別人数と厳密な改善値は表示しません</small>
+          </div>
+        )}
 
         <div className="source-chip">
-          {isPrimary && plateauCoverage.referenceIncluded
+          {productView === "workspace"
+            ? "PLATEAU 2025 · 実ネットワーク · 公式計画/災害コンテキスト"
+            : isPrimary && plateauCoverage.referenceIncluded
             ? `PLATEAU 舞鶴市 ${plateauYear ?? "年次不明"} · 3D建物 + 道路面`
             : `PLATEAU ${data.city.name} 2025 · 行政界 + 駅`}
         </div>
-        {isPrimary && <div className="coverage-chip">Top 10内の公式建物 {top10CoverageLabel(plateauCoverage)} · 3Dは別候補で検証</div>}
+        {productView === "demo" && isPrimary && <div className="coverage-chip">Top 10内の公式建物 {top10CoverageLabel(plateauCoverage)} · 3Dは別候補で検証</div>}
       </main>
 
+      {productView === "workspace" ? (
+        <aside className="side-panel workspace-side-panel" aria-label="CITY GAP自治体Workspace">
+          {workspaceData ? (
+            <MunicipalWorkspace
+              data={workspaceData}
+              cityCode={data.city.code}
+              phase={workspacePhase}
+              layers={workspaceLayers}
+              onPhaseChange={setWorkspacePhase}
+              onLayersChange={setWorkspaceLayers}
+            />
+          ) : workspaceError ? (
+            <div className="workspace-load-state" role="alert">
+              <strong>Workspaceデータを読み込めません</strong>
+              <p>{workspaceError}</p>
+              <button type="button" onClick={() => {
+                setWorkspaceError(null);
+                setWorkspaceRetry((value) => value + 1);
+              }}>再読み込み</button>
+            </div>
+          ) : (
+            <div className="workspace-load-state" role="status"><span /> 自治体Workspaceを準備中</div>
+          )}
+        </aside>
+      ) : (
       <aside className="side-panel" aria-label="CITY GAP分析パネル">
         <div className="panel-summary">
           <div>
@@ -518,6 +638,7 @@ export default function App() {
           )}
         </div>
       </aside>
+      )}
 
       <MethodologyModal open={methodologyOpen} data={data} onClose={() => setMethodologyOpen(false)} />
       <EvidenceModal open={evidenceOpen} evidence={data.evidence} plan={decisionPlan} onClose={() => setEvidenceOpen(false)} />

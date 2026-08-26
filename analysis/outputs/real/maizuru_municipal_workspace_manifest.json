@@ -1,0 +1,61 @@
+{
+  "schema_version": "municipal-workspace-manifest-1.0.0",
+  "generated_at": "2026-08-26T13:45:01Z",
+  "city_id": "26202",
+  "story_plan_ids": [
+    "network-overall-3",
+    "network-worst_served-3",
+    "network-robust-3"
+  ],
+  "public_workspace_story": {
+    "path": "frontend/public/data/municipal_workspace_story.json",
+    "sha256": "624fec5028081e58299bf61abaaa6e1aac21751c7ac1918bbd23f5d5f39bf77f",
+    "bytes": 34182,
+    "scenario_count": 3
+  },
+  "public_map": {
+    "path": "frontend/public/data/network_scenario_map.geojson",
+    "sha256": "5b9f35ef6b28d394b05b79d61349bd78a29a681df235e56d68bb6d4414ab33c8",
+    "bytes": 1087200,
+    "feature_count": 55,
+    "layer_counts": {
+      "hazard_context": 10,
+      "landuse_context": 6,
+      "planning_context": 21,
+      "representative_building": 3,
+      "representative_route": 6,
+      "scenario_site": 9
+    },
+    "story_counts": {
+      "scenario_a": 20,
+      "scenario_b": 17,
+      "scenario_c": 18
+    }
+  },
+  "public_building_points": {
+    "path": "frontend/public/data/network_scenario_building_points.json",
+    "sha256": "a7eb9243aa9b143582000e31b68acd14f19fe040b4d140939cbdcb2c1a0f27b1",
+    "bytes": 206075,
+    "point_count": 7684,
+    "story_counts": {
+      "scenario_a": 2911,
+      "scenario_b": 2276,
+      "scenario_c": 2497
+    }
+  },
+  "privacy": "building locations and distance bands only; no per-building person estimates",
+  "database_loaded": false,
+  "database_note": "Static preview built from canonical artifacts; database load not executed here.",
+  "source_files": {
+    "frontend/public/data/network_scenario_story.json": "1ae44f89a1b8eeb36f088b73ca9077c6fe571b1ae3db99810fa229ddcebbd976",
+    "analysis/outputs/real/maizuru_network_scenarios.json": "d8717e5d040ebe611d92bec6f5db10a2d14f9a68cbd56d9a9a6e192cb31c4c5e",
+    "analysis/outputs/real/maizuru_building_network_accessibility.parquet": "a01b87868a25ae66e85c44f9fba1edbb5a0aa063c5b4ff767bcc9380983015aa",
+    "analysis/outputs/real/maizuru_building_demographics.parquet": "94791b2d746d14a74a87d7d1e7f9d73ed022c844ebf923a732158ffd786c2d69",
+    "analysis/outputs/real/maizuru_network_scenario_candidate_gains.parquet": "b56baf682e8bed6c364670c625e247b05e8a77cf62be864dcc2b33ecee6659b1",
+    "analysis/outputs/real/maizuru_road_graph_nodes.parquet": "01a546c6d21981423565e879bb072e89ff96bd58ad4a88deeb657b017a1f0bb4",
+    "analysis/outputs/real/maizuru_scenario_candidate_context.parquet": "e459a8de4a8205c2382e3427800739c31c0c6502db6213aa542ff4c3d63c6cf4",
+    "analysis/outputs/real/maizuru_plateau_landuse.parquet": "21d2e90d38d45702a6dd33d5631814c42c00e04c8fb7d4a595bedd47b235240e",
+    "analysis/outputs/real/maizuru_plateau_urban_planning.parquet": "ee71f1268c626751d83dc6145f580fc9e3dbc7099f6d4eb2cd651a0d421396b1",
+    "analysis/outputs/real/maizuru_plateau_hazards.parquet": "e1d3ce42dbf3c30c300652ec15611f52d982d0978b7e76415789d7533ef3152b"
+  }
+}

@@ -22,7 +22,7 @@ export function LayerPanel({ data, value, open, onOpenChange, onChange, onResetV
     swatch: string;
     available: boolean;
   }> = [
-    { key: "meshes", label: "500mメッシュ", swatch: "gradient", available: data.meshes.features.length > 0 },
+    { key: "meshes", label: "500mメッシュ", swatch: "mesh-scale", available: data.meshes.features.length > 0 },
     { key: "boundary", label: `${data.city.name}境界`, swatch: "boundary", available: Boolean(data.boundary?.features.length) },
     { key: "stations", label: "駅", swatch: "station", available: Boolean(data.stations?.features.length) },
     { key: "busStops", label: "バス停", swatch: "bus", available: Boolean(data.busStops?.features.length) },

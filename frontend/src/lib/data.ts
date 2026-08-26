@@ -7,9 +7,14 @@ import type {
   InterventionData,
   Manifest,
   MeshMetrics,
+  MunicipalWorkspaceData,
+  NetworkScenarioStory,
   PlateauMetadata,
+  PlatformRegistry,
   RobustnessData,
-  Summary
+  Summary,
+  WorkspaceBuildingPoints,
+  WorkspaceMapData
 } from "../types";
 import { finiteNumber } from "./format";
 
@@ -211,5 +216,40 @@ export async function loadValidationCityData(
     interventions: null,
     evidence: null,
     warnings
+  };
+}
+
+export async function loadMunicipalWorkspaceData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL
+): Promise<MunicipalWorkspaceData> {
+  const [storyRaw, mapRaw, buildingPointsRaw, registryRaw] = await Promise.all([
+    fetchJson(fetcher, dataUrl(baseUrl, "municipal_workspace_story.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "network_scenario_map.geojson")),
+    fetchJson(fetcher, dataUrl(baseUrl, "network_scenario_building_points.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "platform_registry.json"))
+  ]);
+  if (
+    !isRecord(storyRaw) ||
+    !Array.isArray(storyRaw.scenario_story) ||
+    storyRaw.scenario_story.length !== 3
+  ) {
+    throw new Error("municipal_workspace_story.json の形式が正しくありません");
+  }
+  if (!isRecord(registryRaw) || !Array.isArray(registryRaw.capabilities)) {
+    throw new Error("platform_registry.json の形式が正しくありません");
+  }
+  if (!isRecord(buildingPointsRaw) || !isRecord(buildingPointsRaw.stories)) {
+    throw new Error("network_scenario_building_points.json の形式が正しくありません");
+  }
+  const map = assertFeatureCollection(mapRaw, "network_scenario_map.geojson") as WorkspaceMapData;
+  if (!isRecord(mapRaw) || !isRecord(mapRaw.layer_counts)) {
+    throw new Error("network_scenario_map.geojson のメタデータが正しくありません");
+  }
+  return {
+    story: storyRaw as unknown as NetworkScenarioStory,
+    map,
+    buildingPoints: buildingPointsRaw as unknown as WorkspaceBuildingPoints,
+    registry: registryRaw as unknown as PlatformRegistry
   };
 }

@@ -71,3 +71,35 @@ archived ─ terminal
 | GET/PUT | `/cities/{city_id}/scenarios/{scenario_id}/sites/{site_order}/field-check` | 人手checklist |
 
 比較APIは最大3案に制限し、overall、worst-served、robust等の異なる目的を横並びにします。単一の謎scoreや自動推奨は返しません。
+
+## Browser workspace
+
+公開画面のヘッダーで `自治体Workspace` を選ぶと、Competition Demoとは独立した業務画面を開きます。静的プレビューはバックエンドを必須にせず、30案の正本から選んだ次の3案だけを配信します。Competition Demoのガイド付きストーリーは従来どおりA/Bだけです。
+
+- Scenario A: `network-overall-3`（建物全体の改善）
+- Scenario B: `network-worst_served-3`（取り残し重視）
+- Scenario C: `network-robust-3`（頑健候補重視）
+
+Baseline / A / B / Cを地図で切り替え、比較UIはAPIと同じく最大3案までです。藤沢市はregistryの`scenario=unavailable`を表示し、舞鶴市の結果を代用しません。
+
+![Municipal Workspace](assets/final-v2/municipal-workspace.png)
+
+画面は次の順で解像度を上げます。
+
+1. 500mメッシュで課題候補を発見
+2. 地域とPLATEAU建物を確認
+3. 実験的道路面ネットワークと代表経路を確認
+4. 土地利用・都市計画・災害を候補地点へ重ねる
+5. A/B/Cの配置地点と改善範囲を確認
+6. 複数案を横並びで比較
+7. 7項目の現地確認、コメント、lifecycleを記録
+8. JSON / CSV /印刷用Evidenceを出力
+
+地図用`network_scenario_map.geojson`は9候補地点、6代表経路、公式PLATEAUコンテキストを含みます。A/B/C合計7,684件の改善建物位置（案間の重複を含む）と距離改善帯は、識別子を持たない軽量な`network_scenario_building_points.json`へ分離し、案を選んだときだけ分割描画します。建物別の推計人口・推計高齢者数と厳密な距離改善値は公開しません。生成と再検証は次で行います。
+
+```bash
+python -m analysis.scripts.build_municipal_workspace_assets
+pytest analysis/tests/test_municipal_workspace_assets.py
+```
+
+公開プレビューのレビュー状態と現地確認入力はブラウザ内だけの操作です。永続化、履歴、同時更新制御は上記Scenario APIへ接続する運用配備で有効になります。このリポジトリを実行した環境ではPostGIS投入を行っていません。

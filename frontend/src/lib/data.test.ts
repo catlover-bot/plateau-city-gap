@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import type { GeoJsonFeatureCollection, MeshMetrics } from "../types";
-import { loadAppData, loadValidationCityData, normalizeTop10, sortRanking } from "./data";
+import {
+  loadAppData,
+  loadMunicipalWorkspaceData,
+  loadValidationCityData,
+  normalizeTop10,
+  sortRanking
+} from "./data";
 
 const EMPTY_COLLECTION: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -129,5 +135,42 @@ describe("data loading", () => {
     expect(data.top10[0].mesh_code).toBe("533913073");
     expect(data.finalDemo).toBeNull();
     expect(fetcher).toHaveBeenCalledWith("/plateau-city-gap/data/cities/fujisawa/manifest.json");
+  });
+
+  it("loads the selected scenario story, Workspace map and city registry", async () => {
+    const fetcher = mockFetch({
+      "municipal_workspace_story.json": {
+        schema_version: "test",
+        scenario_story: [
+          { story_id: "scenario_a" },
+          { story_id: "scenario_b" },
+          { story_id: "scenario_c" }
+        ]
+      },
+      "network_scenario_map.geojson": {
+        type: "FeatureCollection",
+        features: [],
+        layer_counts: {},
+        story_counts: {},
+        schema_version: "test",
+        generated_at: "2026-01-01T00:00:00Z",
+        source: "test",
+        privacy: "test"
+      },
+      "network_scenario_building_points.json": {
+        schema_version: "test",
+        generated_at: "2026-01-01T00:00:00Z",
+        privacy: "test",
+        band_codes: { "0": "under_250" },
+        stories: { scenario_a: [], scenario_b: [], scenario_c: [] }
+      },
+      "platform_registry.json": { capabilities: [], cities: [] }
+    });
+
+    const result = await loadMunicipalWorkspaceData(fetcher, "/");
+    expect(result.story.scenario_story[0].story_id).toBe("scenario_a");
+    expect(result.map.type).toBe("FeatureCollection");
+    expect(result.buildingPoints.stories.scenario_a).toEqual([]);
+    expect(result.registry.capabilities).toEqual([]);
   });
 });

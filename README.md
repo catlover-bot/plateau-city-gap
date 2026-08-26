@@ -7,9 +7,11 @@
 
 [Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Network scenario](docs/network-scenarios.md) · [自治体scenario workspace](docs/scenario-workspace.md) · [Multi-city registry](docs/multi-city-registry.md) · [GTFS/jobs/Evidence export](docs/operations-and-evidence.md) · [PLATEAU文脈](docs/plateau-context.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
-このリポジトリには、審査・公開用の静的な **Competition Demo** と、段階的に構築中の **Urban Digital Twin Platform** の2系統があります。静的デモとGitHub Pagesは従来どおりバックエンドなしで動作します。PlatformはPLATEAU CityGML全量取込に加え、Priority 2として実建物への人口配賦と建物起点アクセシビリティを実装しています。
+このリポジトリには、審査・公開用の静的な **Competition Demo** と、自治体レビュー用の **Urban Digital Twin Platform** の2系統があります。GitHub PagesはバックエンドなしでA/B/CシナリオのWorkspaceプレビューまで動作します。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、1〜5地点の複数目的シナリオ、Scenario API、現地確認、Evidence出力を実装しています。PostGIS投入は環境依存の運用手順として分離し、この実行環境で投入成功は主張しません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
+
+![CITY GAP Municipal Workspace](docs/assets/final-v2/municipal-workspace.png)
 
 ## Problem
 
@@ -50,6 +52,8 @@ Webデモを開き、地図上の `デモを見る` を押すと次の8ステッ
 8. 藤沢市でも同じEngineを再現
 
 3D建物の公式整備範囲とTop 10は重なっていません。Step 4は、同じ286メッシュの比較で全市23位、公式建物296棟を確認できる候補へ移動します。**Top 10内0棟はPLATEAUへの批判ではなく、年度・整備範囲・LOD方針を含む都市データの空白を発見した結果**として扱います。発表時の操作と話す内容は [docs/demo-script.md](docs/demo-script.md) にまとめています。
+
+ヘッダーの `自治体Workspace` では、500m → 建物 → 道路network → 計画・災害 → シナリオ → 比較 → 現地確認 → Evidenceの業務フローへ切り替えます。実計算済みのScenario A/B/CをBaselineと切り替え、合計7,684件の改善建物位置（案間重複を含む）を距離帯で表示しますが、建物別人口推計値は公開しません。ガイド付きCompetition DemoはA/Bの物語を維持します。詳細は [自治体scenario workspace](docs/scenario-workspace.md) を参照してください。
 
 ## How it works
 
@@ -150,6 +154,7 @@ after_transport_distance
 - `analysis/scripts/build_final_demo_assets.py`: PLATEAU-covered候補、道路面Top 3、DEM・Deep Dive assetを再生成
 - `analysis/scripts/build_decision_studio_assets.py`: Robustnessと1/2/3地点・3目的の配置案を事前計算
 - `analysis/scripts/verify_decision_studio.py`: 全9案の距離・Score・Evidenceを独立再計算
+- `analysis/scripts/build_municipal_workspace_assets.py`: 選択済みA/B/Cのprivacy-safe地図packageを実成果物から生成
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGMLストリーミング取込、PostGIS loader、FastAPI
@@ -227,6 +232,7 @@ python -m analysis.scripts.verify_network_scenarios
 python -m analysis.scripts.build_scenario_canonical
 python -m analysis.scripts.build_platform_registry
 python -m analysis.scripts.export_scenario_evidence --plan-id network-overall-3
+python -m analysis.scripts.build_municipal_workspace_assets
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \
   --config analysis/config/fujisawa.yaml \
   --output-dir frontend/public/data/cities/fujisawa
@@ -251,7 +257,7 @@ npm run test
 npm run build
 ```
 
-Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1/2/3地点、fairness、候補間隔、独立再計算を対象にします。Vitest 22テストは2都市の読み込み、表示整形、任意What-ifに加え、Robustness View、目的・地点数切替、Before / After、Evidence Chain、禁止表現を対象にします。
+Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1〜5地点、fairness、候補間隔、独立再計算、Workspace公開境界を対象にします。Vitest 28テストは2都市とWorkspaceの読み込み、業務フロー表示、未提供都市の明示、表示整形、任意What-if、最大3案比較、lifecycle禁止遷移、Robustness View、目的・地点数切替、Before / After、Evidence Chainを対象にします。
 
 PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、建物用途・面交差・保存・加重分位、道路network、DEM、土地利用・都市計画・災害、PostGIS migration、bbox必須APIと単一建物/mesh詳細契約を対象にします。
 

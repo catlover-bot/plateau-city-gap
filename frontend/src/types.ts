@@ -383,3 +383,151 @@ export interface LayerVisibility {
   boundary: boolean;
   plateau: boolean;
 }
+
+export type WorkspacePhase = "baseline" | "scenario_a" | "scenario_b" | "scenario_c";
+
+export interface WorkspaceLayerVisibility {
+  meshes: boolean;
+  affectedBuildings: boolean;
+  routes: boolean;
+  plateauBuildings: boolean;
+  roadNetwork: boolean;
+  landuse: boolean;
+  planning: boolean;
+  hazard: boolean;
+}
+
+export interface NetworkScenarioSite extends JsonProperties {
+  site_order: number;
+  candidate_id: string;
+  node_id: string;
+  road_gml_id: string;
+  road_surface_id: string;
+  road_name: string | null;
+  longitude: number;
+  latitude: number;
+  existing_transport_distance_m: number;
+  landuse_context: string;
+  planning_context: string;
+  hazard_context: string;
+  hazard_overlap: boolean;
+  hazard_review_status: string;
+  siting_feasibility: string;
+  component_id: string;
+  terrain: {
+    elevation_m: number | null;
+    maximum_incident_endpoint_grade_percent: number | null;
+    routing_penalty_applied: boolean;
+  };
+}
+
+export interface NetworkScenarioImpact extends JsonProperties {
+  affected_graph_node_count: number;
+  improved_building_count: number;
+  newly_network_connected_building_count: number;
+  total_building_distance_reduction_m: number;
+  mean_reduction_all_reachable_buildings_m: number;
+  mean_reduction_improved_buildings_m: number;
+  affected_estimated_elderly_population: number;
+  elderly_weighted_distance_reduction_person_m: number;
+  elderly_weighted_mean_reduction_m: number;
+  worst_decile_mean_reduction_m: number;
+  improved_mesh_count: number;
+  robust_top20_improved_mesh_count: number;
+}
+
+export interface NetworkScenarioEvidence extends JsonProperties {
+  building_gml_id: string;
+  origin_representative_point: {
+    longitude: number;
+    latitude: number;
+    method: string;
+  };
+  snap_node_id: string;
+  origin_to_node_connector_m: number;
+  before: {
+    network_distance_m: number;
+    destination_name?: string;
+    road_node_sequence: string[];
+  };
+  after: {
+    network_distance_m: number;
+    virtual_scenario_candidate_id: string;
+    road_node_sequence: string[];
+  };
+  route_semantics: string;
+}
+
+export interface NetworkScenarioStoryPlan extends JsonProperties {
+  story_id: "scenario_a" | "scenario_b" | "scenario_c";
+  plan_id: string;
+  mode: string;
+  label: string;
+  objective: string;
+  site_count: number;
+  exactness: string;
+  sites: NetworkScenarioSite[];
+  impact: NetworkScenarioImpact;
+  representative_evidence: NetworkScenarioEvidence;
+}
+
+export interface NetworkScenarioStory extends JsonProperties {
+  schema_version: string;
+  generated_at: string;
+  city: JsonProperties;
+  source: string;
+  scenario_story: NetworkScenarioStoryPlan[];
+  limitations: string[];
+}
+
+export interface WorkspaceMapData extends GeoJsonFeatureCollection {
+  schema_version: string;
+  generated_at: string;
+  source: string;
+  privacy: string;
+  layer_counts: Record<string, number>;
+  story_counts: Record<string, number>;
+}
+
+export interface WorkspaceBuildingPoints {
+  schema_version: string;
+  generated_at: string;
+  privacy: string;
+  band_codes: Record<string, "under_250" | "250_499" | "500_plus">;
+  stories: Record<"scenario_a" | "scenario_b" | "scenario_c", Array<[number, number, 0 | 1 | 2]>>;
+}
+
+export type CapabilityStatus = "available" | "partial" | "unavailable";
+
+export interface PlatformCapability extends JsonProperties {
+  city_code: string;
+  capability: string;
+  status: CapabilityStatus;
+  note: string;
+  evidence: Array<{ artifact: string; sha256: string; verified_present: boolean }>;
+  dataset_version_ids: string[];
+}
+
+export interface PlatformRegistry extends JsonProperties {
+  schema_version: string;
+  generated_at: string;
+  cities: Array<{
+    city_id: string;
+    city_code: string;
+    name: string;
+    prefecture_name: string;
+    analysis_crs: string;
+    mode: string;
+  }>;
+  capabilities: PlatformCapability[];
+  datasets: JsonProperties[];
+  dataset_versions: JsonProperties[];
+  analysis_runs: JsonProperties[];
+}
+
+export interface MunicipalWorkspaceData {
+  story: NetworkScenarioStory;
+  map: WorkspaceMapData;
+  buildingPoints: WorkspaceBuildingPoints;
+  registry: PlatformRegistry;
+}
