@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "algorithm_version": "network-scenario-1.0.0",
+  "timings_seconds": {
+    "candidate_and_input_generation_seconds": 8.40681,
+    "demand_preparation_seconds": 0.284229,
+    "sparse_matrix_seconds": 4.347305,
+    "optimizer_overall_seconds": 1.52235,
+    "optimizer_elderly_seconds": 1.442094,
+    "optimizer_worst_served_seconds": 1.708987,
+    "optimizer_robust_seconds": 1.484966,
+    "optimizer_balanced_seconds": 2.342834,
+    "optimizer_reachability_seconds": 1.581946
+  },
+  "stage_runtime_by_objective_and_site_count": {
+    "overall": {
+      "1": 0.193357,
+      "2": 0.123261,
+      "3": 0.11884,
+      "4": 0.068859,
+      "5": 0.06529
+    },
+    "elderly": {
+      "1": 0.15227,
+      "2": 0.10596,
+      "3": 0.088827,
+      "4": 0.063081,
+      "5": 0.06495
+    },
+    "worst_served": {
+      "1": 0.156831,
+      "2": 0.148243,
+      "3": 0.094676,
+      "4": 0.090125,
+      "5": 0.109818
+    },
+    "robust": {
+      "1": 0.157813,
+      "2": 0.13894,
+      "3": 0.091418,
+      "4": 0.072466,
+      "5": 0.059771
+    },
+    "balanced": {
+      "1": 0.416823,
+      "2": 0.368678,
+      "3": 0.239365,
+      "4": 0.199737,
+      "5": 0.199612
+    },
+    "reachability": {
+      "1": 0.206071,
+      "2": 0.131222,
+      "3": 0.120489,
+      "4": 0.101257,
+      "5": 0.089789
+    }
+  },
+  "total_runtime_seconds": 23.423821,
+  "peak_rss_kib": 687476,
+  "sparse_improvement_pair_count": 1063003,
+  "dense_candidate_demand_pair_count": 79795980,
+  "avoided_zero_gain_pair_count": 78732977,
+  "artifact_sizes_bytes": {
+    "maizuru_network_scenario_candidate_gains.parquet": 18014758,
+    "maizuru_network_scenario_summary.csv": 9072,
+    "maizuru_network_scenarios.json": 2002153,
+    "network_scenario_story.json": 23241
+  }
+}

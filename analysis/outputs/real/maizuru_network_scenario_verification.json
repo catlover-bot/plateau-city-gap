@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "verification_method": "independent adjacency and Dijkstra implementation",
+  "passed": true,
+  "checks": {
+    "all_30_plan_impacts_recompute": true,
+    "all_one_site_linear_objectives_are_exact": true,
+    "one_site_balanced_max_min_is_exact": true,
+    "one_site_reachability_lexicographic_is_exact": true,
+    "sampled_gain_network_distances_recompute": true,
+    "minimum_site_separation_holds": true,
+    "hazard_context_never_determines_feasibility": true,
+    "six_review_only_feasibility_flags_are_present": true,
+    "representative_evidence_routes_recompute": true,
+    "claim_boundary_is_explicit": true,
+    "pareto_comparison_has_no_recommendation": true
+  },
+  "evidence": {
+    "plan_count": 30,
+    "maximum_published_metric_residual": 0.0004911806900054216,
+    "one_site_optimality": {
+      "overall": {
+        "selected_candidate_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d-0",
+        "selected_value": 455256.2979251715,
+        "maximum_value": 455256.2979251715,
+        "residual": 0.0
+      },
+      "elderly": {
+        "selected_candidate_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7-0",
+        "selected_value": 204874.2668713228,
+        "maximum_value": 204874.2668713228,
+        "residual": 0.0
+      },
+      "worst_served": {
+        "selected_candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+        "selected_value": 323215.51099977735,
+        "maximum_value": 323215.51099977735,
+        "residual": 0.0
+      },
+      "robust": {
+        "selected_candidate_id": "tran_b8a1ea1e-9445-4ee0-ade7-22032fbe7624-0",
+        "selected_value": 76633.10885818739,
+        "maximum_value": 76633.10885818739,
+        "residual": 0.0
+      }
+    },
+    "balanced_one_site_optimality": {
+      "selected_candidate_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f-0",
+      "independently_selected_candidate_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f-0",
+      "selected_key": [
+        0.053049385646,
+        0.155765691068,
+        0.295588983977,
+        0.756310132698,
+        70913.31185935078
+      ]
+    },
+    "reachability_one_site_optimality": {
+      "selected_candidate_id": "tran_065210f8-d257-4e62-9cb3-a02252ba5241-0",
+      "independently_selected_candidate_id": "tran_065210f8-d257-4e62-9cb3-a02252ba5241-0",
+      "selected_key": [
+        2.0,
+        0.0,
+        0.0
+      ]
+    },
+    "gain_pair_sample_count": 200,
+    "maximum_gain_distance_residual_m": 0.0,
+    "spacing_failures": [],
+    "context_failures": [],
+    "flag_failures": [],
+    "evidence_failures": [],
+    "maximum_evidence_distance_residual_m": 0.0010000000000047748
+  }
+}
