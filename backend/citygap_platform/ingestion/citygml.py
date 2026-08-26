@@ -17,6 +17,19 @@ from typing import Any, BinaryIO, Literal
 GML_ID = "{http://www.opengis.net/gml}id"
 LOD_PATTERN = re.compile(r"^lod([0-4])", re.IGNORECASE)
 COORDINATE_TAGS = frozenset({"coordinates", "pos", "posList"})
+UNSAFE_XML_DECLARATIONS = (b"<!DOCTYPE", b"<!ENTITY")
+
+
+def ensure_safe_xml_stream(stream: BinaryIO, inspection_bytes: int = 64 * 1024) -> None:
+    """Reject entity declarations before handing a seekable stream to ElementTree."""
+
+    if not stream.seekable():
+        raise ValueError("CityGML input must be seekable for XML safety inspection")
+    position = stream.tell()
+    prefix = stream.read(inspection_bytes).upper()
+    stream.seek(position)
+    if any(declaration in prefix for declaration in UNSAFE_XML_DECLARATIONS):
+        raise ValueError("CityGML DTD and entity declarations are prohibited")
 
 
 def local_name(tag: str) -> str:
@@ -112,6 +125,8 @@ def iter_citygml_events(
     coordinate_dimension: int = 3,
 ) -> Iterator[CityGMLEvent]:
     """Yield feature lifecycle and geometry events from one CityGML stream."""
+
+    ensure_safe_xml_stream(stream)
 
     stack: list[str] = []
     current: dict | None = None

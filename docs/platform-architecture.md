@@ -80,6 +80,8 @@ or score is evidence for review, not an automatic municipal decision.
 - `analysis/`: reproducible static screening and builders
 - `frontend/`: existing competition UI and GitHub Pages bundle
 - `backend/citygap_platform/ingestion/`: CityGML inventory, event reader, PostGIS loader
+- `backend/citygap_platform/ingestion/adapters.py`: bounded CityGML, GTFS, CSV, GeoJSON and
+  GeoPackage source contracts
 - `backend/citygap_platform/api/`: query boundary and FastAPI
 - `infra/migrations/`: durable schema
 - `infra/docker/`: reproducible local containers
@@ -104,3 +106,7 @@ The official tool is documented for Windows and was not executed in this environ
 output adapter and the experimental CityGML LOD1 surface-adjacency fallback remain separate.
 Existing official 3D Tiles continue to be served by Cesium without conversion through the
 database.
+
+Municipal CSV, GeoJSON and GeoPackage inputs use the same explicit version boundary. Adapter
+inspection records content hashes, sizes, row/feature counts, CRS and layers, but never equates
+inspection with database ingestion. See [municipal data adapters](municipal-data-adapters.md).

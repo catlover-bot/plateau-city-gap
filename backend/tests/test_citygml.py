@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from io import BytesIO
 
+import pytest
 from shapely import from_wkt
 
 from backend.citygap_platform.ingestion.citygml import (
@@ -90,3 +91,18 @@ def test_declared_terrain_lod_applies_to_streamed_triangle() -> None:
     end = next(event for event in events if isinstance(event, FeatureEnd))
     assert geometry.lod == 1
     assert end.lods == (1,)
+
+
+def test_event_reader_rejects_dtd_and_entity_declarations() -> None:
+    unsafe = b'''<?xml version="1.0"?>
+    <!DOCTYPE CityModel [<!ENTITY unsafe "expanded">]>
+    <CityModel>&unsafe;</CityModel>'''
+    with pytest.raises(ValueError, match="DTD and entity declarations are prohibited"):
+        list(
+            iter_citygml_events(
+                BytesIO(unsafe),
+                theme="bldg",
+                source_member="unsafe.gml",
+                source_member_crc32="00000000",
+            )
+        )

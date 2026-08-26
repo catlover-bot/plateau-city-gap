@@ -17,6 +17,8 @@ from collections import Counter
 from pathlib import Path
 from typing import BinaryIO
 
+from backend.citygap_platform.ingestion.citygml import ensure_safe_xml_stream
+
 GML_ID = "{http://www.opengis.net/gml}id"
 LOD_PATTERN = re.compile(r"^lod([0-4])", re.IGNORECASE)
 THEME_PATTERN = re.compile(r"/(?:udx|citygml)/([^/]+)/.+\.gml$", re.IGNORECASE)
@@ -92,6 +94,7 @@ def _inventory_stream(
     seen_gml_ids: set[str],
     member_name: str,
 ) -> None:
+    ensure_safe_xml_stream(stream)
     stack: list[str] = []
     current: dict | None = None
 

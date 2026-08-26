@@ -1,0 +1,73 @@
+{
+  "schema_version": "municipal-platform-final-audit-1.0.0",
+  "audit_date": "2026-08-27",
+  "scope": "tracked real-data artifacts, contracts, static UI and browser audit",
+  "passed": true,
+  "checks": {
+    "plateau_inventory_has_8_themes_and_97140_features": true,
+    "building_demographics_conserve_population": true,
+    "road_graph_is_real_but_not_claimed_as_pedestrian": true,
+    "terrain_components_independently_verify": true,
+    "official_context_counts_and_joins_verify": true,
+    "all_30_network_scenarios_independently_verify": true,
+    "scenario_storage_has_seven_canonical_tables": true,
+    "multi_city_registry_is_explicit": true,
+    "five_municipal_adapter_formats_are_implemented": true,
+    "xml_and_archive_security_boundaries_are_explicit": true,
+    "postgis_schema_covers_municipal_entities": true,
+    "bounded_api_covers_review_workflow": true,
+    "workspace_assets_match_hashes_and_privacy_policy": true,
+    "competition_story_remains_ab_while_workspace_is_abc": true,
+    "browser_workspace_audit_passed": true,
+    "evidence_json_csv_html_hashes_match": true,
+    "database_execution_is_not_overclaimed": true,
+    "sparse_scenario_matrix_avoids_dense_zero_gain_pairs": true
+  },
+  "real_data_metrics": {
+    "plateau_feature_count": 97140,
+    "plateau_theme_count": 8,
+    "citygml_building_count": 44640,
+    "strict_residential_buildings": 29674,
+    "network_demographic_buildings": 28448,
+    "road_nodes": 15684,
+    "road_edges": 23437,
+    "transport_reachable_buildings": 28443,
+    "medical_reachable_buildings": 28435,
+    "scenario_candidates": 11460,
+    "scenario_plans": 30,
+    "workspace_building_points": 7684
+  },
+  "performance": {
+    "network_analysis_seconds": 19.896,
+    "network_peak_rss_kib": 599156,
+    "scenario_analysis_seconds": 23.423821,
+    "scenario_peak_rss_kib": 687476,
+    "sparse_pairs": 1063003,
+    "dense_pairs_avoided": 78732977,
+    "headless_demo_ready_ms": 1100,
+    "headless_scenario_a_points_ready_ms": 49653
+  },
+  "claim_boundaries": {
+    "postgis_executed": false,
+    "official_road_generator_executed": false,
+    "validated_pedestrian_network": false,
+    "gtfs_feed_loaded": false,
+    "automatic_policy_recommendation": false,
+    "building_estimates_are_residents": false
+  },
+  "final_questions": {
+    "A_plateau_removal_preserves_detailed_analysis": "NO",
+    "B_plateau_is_analysis_foundation_not_only_3d": "YES",
+    "C_results_trace_to_sources_and_methods": "YES",
+    "D_new_city_requires_core_logic_rewrite": "NO",
+    "E_closer_to_municipal_platform_than_hackathon_demo": "YES"
+  },
+  "pilot_remaining": [
+    "Execute migrations and canonical loaders against an approved PostGIS environment.",
+    "Acquire and validate actual municipal GTFS or operator timetable data; do not convert P11 points.",
+    "Generate or validate a pedestrian network with crossings, permissions and road-safety review.",
+    "Add authenticated role-based access, durable queue workers, backups and monitoring.",
+    "Collect field checks, land ownership, capacity, operating constraints and reviewed costs.",
+    "Benchmark 100k+ buildings and edges with MVT/PMTiles delivery before a production SLA."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0.0",
+  "environment": "Playwright headless Chromium with SwiftShader",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "demo_ready_ms": 1100,
+  "scenario_a_points_ready_ms_from_navigation": 49653,
+  "resource_timings": [
+    {
+      "name": "municipal_workspace_story.json",
+      "duration_ms": 96,
+      "transfer_bytes": 7095
+    },
+    {
+      "name": "network_scenario_map.geojson",
+      "duration_ms": 254,
+      "transfer_bytes": 1087500
+    },
+    {
+      "name": "network_scenario_building_points.json",
+      "duration_ms": 119,
+      "transfer_bytes": 59817
+    }
+  ],
+  "console_errors": [],
+  "request_or_ui_failures": [],
+  "checks": {
+    "initial_demo_ready": true,
+    "scenario_a_points_rendered": true,
+    "scenario_c_selectable": true,
+    "privacy_disclosure_visible": true,
+    "no_console_errors": true,
+    "no_request_or_ui_failures": true
+  },
+  "screenshot": "docs/assets/final-v2/municipal-workspace.png",
+  "note": "Headless SwiftShader timing is a regression observation, not a production-browser SLA.",
+  "passed": true
+}

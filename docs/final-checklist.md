@@ -104,3 +104,23 @@
 - [x] Final-v2 screenshots 01–10 regenerated
 - [x] Production browser console errors = 0
 - [ ] GitHub Pages final deployment and asset response verification
+
+## Municipal Digital Twin Platform final phase
+
+- [x] PLATEAU 8 themes / 97,140 features and all official context counts re-audited
+- [x] 28,448 network-analysis buildings; 15,684 nodes / 23,437 edges; pedestrian claim prohibited
+- [x] Terrain ascent/descent/grade remains a separate observed route component
+- [x] 30 network scenarios independently verified across six objectives and 1–5 sites
+- [x] Seven canonical scenario tables, review lifecycle and field-check contracts
+- [x] Two-city/version/capability registry; unavailable capability is never substituted
+- [x] CityGML, GTFS, CSV, GeoJSON and GeoPackage bounded adapters
+- [x] DTD/entity rejection, archive traversal/size checks and vector input validation
+- [x] GTFS-ready schema without a fabricated feed or P11 conversion
+- [x] Bounded bbox API, job stages and JSON/CSV/HTML Evidence export
+- [x] Municipal Workspace A/B/C, max-three comparison and manual review lifecycle
+- [x] Privacy-safe 7,684 affected-building points with no per-building person values
+- [x] Browser audit script: A points rendered, C selectable, privacy visible, console/errors zero
+- [x] Machine audit: all 18 tracked real-artifact and contract checks pass
+- [x] PostGIS execution remains explicitly false in all manifests
+- [ ] Approved PostGIS environment, authentication/RBAC and durable worker deployed
+- [ ] Real municipal GTFS, validated pedestrian network and field review acquired

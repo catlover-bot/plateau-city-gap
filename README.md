@@ -5,7 +5,7 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Network scenario](docs/network-scenarios.md) · [自治体scenario workspace](docs/scenario-workspace.md) · [Multi-city registry](docs/multi-city-registry.md) · [GTFS/jobs/Evidence export](docs/operations-and-evidence.md) · [PLATEAU文脈](docs/plateau-context.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Network scenario](docs/network-scenarios.md) · [自治体scenario workspace](docs/scenario-workspace.md) · [Multi-city registry](docs/multi-city-registry.md) · [自治体データadapter](docs/municipal-data-adapters.md) · [GTFS/jobs/Evidence export](docs/operations-and-evidence.md) · [PLATEAU文脈](docs/plateau-context.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
 
 このリポジトリには、審査・公開用の静的な **Competition Demo** と、自治体レビュー用の **Urban Digital Twin Platform** の2系統があります。GitHub PagesはバックエンドなしでA/B/CシナリオのWorkspaceプレビューまで動作します。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、1〜5地点の複数目的シナリオ、Scenario API、現地確認、Evidence出力を実装しています。PostGIS投入は環境依存の運用手順として分離し、この実行環境で投入成功は主張しません。
 
@@ -155,12 +155,15 @@ after_transport_distance
 - `analysis/scripts/build_decision_studio_assets.py`: Robustnessと1/2/3地点・3目的の配置案を事前計算
 - `analysis/scripts/verify_decision_studio.py`: 全9案の距離・Score・Evidenceを独立再計算
 - `analysis/scripts/build_municipal_workspace_assets.py`: 選択済みA/B/Cのprivacy-safe地図packageを実成果物から生成
+- `analysis/scripts/audit_municipal_platform.py`: 実成果物・API・schema・UI監査18項目を再検証
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
-- `backend/citygap_platform/`: CityGMLストリーミング取込、PostGIS loader、FastAPI
+- `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
 - `infra/migrations/`: dataset version・provenance・PLATEAU typed table
 - `docker-compose.yml`: PostGIS / pgRouting、API、静的frontendのローカル構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
+
+最終の機械監査は `python -m analysis.scripts.audit_municipal_platform`、Workspace実ブラウザ監査はproduction preview起動後に `npm run audit:workspace` で再実行できます。前者はtracked成果物・hash・API/schema契約の18項目、後者はA点群描画、C切替、privacy表示、console/通信失敗を検証します。
 
 Competition Demoにはバックエンド、データベース、API keyは不要です。Viteのbase pathは `/plateau-city-gap/` です。Platform設計は [platform architecture](docs/platform-architecture.md)、全量取込は [PLATEAU ingestion](docs/plateau-ingestion.md) を参照してください。
 
