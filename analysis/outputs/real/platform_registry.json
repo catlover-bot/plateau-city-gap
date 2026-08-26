@@ -1,0 +1,627 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-26T15:32:15Z",
+  "cities": [
+    {
+      "city_id": "fujisawa",
+      "city_code": "14205",
+      "name": "藤沢市",
+      "prefecture_code": "14",
+      "prefecture_name": "神奈川県",
+      "analysis_crs": "EPSG:6677",
+      "mode": "cross_city_validation"
+    },
+    {
+      "city_id": "maizuru",
+      "city_code": "26202",
+      "name": "舞鶴市",
+      "prefecture_code": "26",
+      "prefecture_name": "京都府",
+      "analysis_crs": "EPSG:6674",
+      "mode": "primary_demo"
+    }
+  ],
+  "datasets": [
+    {
+      "dataset_id": "4130bcd3-5fc4-5f22-b6f7-aaccf7e272c1",
+      "city_code": "14205",
+      "dataset_key": "boundary",
+      "title": "藤沢市 行政界",
+      "provider": "Project PLATEAU"
+    },
+    {
+      "dataset_id": "8e5af03c-dba2-5619-b01e-61e6ebc7fded",
+      "city_code": "14205",
+      "dataset_key": "bus_stops",
+      "title": "バス停留所 P11",
+      "provider": "国土数値情報"
+    },
+    {
+      "dataset_id": "5ffff9f4-a8bb-549e-95f5-9fc9b79dfffe",
+      "city_code": "14205",
+      "dataset_key": "medical",
+      "title": "医療機関 P04",
+      "provider": "国土数値情報"
+    },
+    {
+      "dataset_id": "81f014b8-e3c5-5276-a660-464cbadb2558",
+      "city_code": "14205",
+      "dataset_key": "plateau",
+      "title": "3D都市モデル（Project PLATEAU）藤沢市（2025年度）",
+      "provider": "Project PLATEAU"
+    },
+    {
+      "dataset_id": "efe104b6-027b-5180-b38a-3339e53b6e1d",
+      "city_code": "14205",
+      "dataset_key": "population",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "provider": "e-Stat"
+    },
+    {
+      "dataset_id": "c1fd9c22-6244-509f-b5bd-d0144c04c62d",
+      "city_code": "14205",
+      "dataset_key": "stations",
+      "title": "藤沢市 鉄道駅",
+      "provider": "Project PLATEAU"
+    },
+    {
+      "dataset_id": "c8beaf7c-7508-5188-8c91-e7a7215975d4",
+      "city_code": "26202",
+      "dataset_key": "boundary",
+      "title": "舞鶴市 行政界",
+      "provider": "Project PLATEAU"
+    },
+    {
+      "dataset_id": "9e5622a9-dd2a-532e-9acf-5fef0e6b4d27",
+      "city_code": "26202",
+      "dataset_key": "bus_stops",
+      "title": "バス停留所 P11",
+      "provider": "国土数値情報"
+    },
+    {
+      "dataset_id": "62c127da-5b02-534c-a622-8ff4b8f7f599",
+      "city_code": "26202",
+      "dataset_key": "medical",
+      "title": "医療機関 P04",
+      "provider": "国土数値情報"
+    },
+    {
+      "dataset_id": "1885249e-4bc7-520e-8924-fbb38ffbeb5f",
+      "city_code": "26202",
+      "dataset_key": "plateau",
+      "title": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+      "provider": "Project PLATEAU"
+    },
+    {
+      "dataset_id": "1ce4571c-bca1-5636-919d-2f64ecbfe3b4",
+      "city_code": "26202",
+      "dataset_key": "population",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "provider": "e-Stat"
+    },
+    {
+      "dataset_id": "a3f8f7ff-a4a5-5752-aa13-39112e1ef6a9",
+      "city_code": "26202",
+      "dataset_key": "stations",
+      "title": "舞鶴市 鉄道駅",
+      "provider": "Project PLATEAU"
+    }
+  ],
+  "dataset_versions": [
+    {
+      "dataset_version_id": "100749f8-fe61-5ff4-968e-aa07c153f89c",
+      "dataset_id": "1885249e-4bc7-520e-8924-fbb38ffbeb5f",
+      "version_key": "2025:5",
+      "year": 2025,
+      "format": "CityGML",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": null,
+      "declared_source_crs": null,
+      "archive_file": "26202_maizuru-shi_city_2025_citygml_1_op.zip",
+      "archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+      "verification_status": "checksum_verified"
+    },
+    {
+      "dataset_version_id": "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+      "dataset_id": "9e5622a9-dd2a-532e-9acf-5fef0e6b4d27",
+      "version_key": "2022:source",
+      "year": 2022,
+      "format": "source GIS/statistics",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "license": "CC BY 4.0",
+      "declared_source_crs": "EPSG:6668",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+      "dataset_id": "62c127da-5b02-534c-a622-8ff4b8f7f599",
+      "version_key": "2020:source",
+      "year": 2020,
+      "format": "source GIS/statistics",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "license": "国土数値情報利用約款",
+      "declared_source_crs": "EPSG:6668",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "2d17cb2f-cce1-5d38-b5d1-7976da4417c3",
+      "dataset_id": "81f014b8-e3c5-5276-a660-464cbadb2558",
+      "version_key": "2025:5",
+      "year": 2025,
+      "format": "CityGML",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "license": null,
+      "declared_source_crs": null,
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+      "dataset_id": "1ce4571c-bca1-5636-919d-2f64ecbfe3b4",
+      "version_key": "2020:source",
+      "year": 2020,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2",
+      "license": "政府統計の総合窓口 利用規約",
+      "declared_source_crs": "JGD2011",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+      "dataset_id": "c1fd9c22-6244-509f-b5bd-d0144c04c62d",
+      "version_key": "2025:source",
+      "year": 2025,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "license": "PLATEAU Site Policy",
+      "declared_source_crs": "EPSG:4326",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "be65e2f0-a406-5513-9d20-8e3360be0fef",
+      "dataset_id": "efe104b6-027b-5180-b38a-3339e53b6e1d",
+      "version_key": "2020:source",
+      "year": 2020,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=14&downloadType=2",
+      "license": "政府統計の総合窓口 利用規約",
+      "declared_source_crs": "JGD2011",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+      "dataset_id": "4130bcd3-5fc4-5f22-b6f7-aaccf7e272c1",
+      "version_key": "2025:source",
+      "year": 2025,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+      "license": "PLATEAU Site Policy",
+      "declared_source_crs": "EPSG:4326",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+      "dataset_id": "a3f8f7ff-a4a5-5752-aa13-39112e1ef6a9",
+      "version_key": "2025:source",
+      "year": 2025,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": "PLATEAU Site Policy",
+      "declared_source_crs": "EPSG:4326",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+      "dataset_id": "8e5af03c-dba2-5619-b01e-61e6ebc7fded",
+      "version_key": "2022:source",
+      "year": 2022,
+      "format": "source GIS/statistics",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "license": "CC BY 4.0",
+      "declared_source_crs": "EPSG:6668",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "edf7bf0c-4eea-50da-a240-f26932a0df71",
+      "dataset_id": "c8beaf7c-7508-5188-8c91-e7a7215975d4",
+      "version_key": "2025:source",
+      "year": 2025,
+      "format": "source GIS/statistics",
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": "PLATEAU Site Policy",
+      "declared_source_crs": "EPSG:4326",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    },
+    {
+      "dataset_version_id": "f058ac43-805d-5b3b-8c13-056496d079ab",
+      "dataset_id": "5ffff9f4-a8bb-549e-95f5-9fc9b79dfffe",
+      "version_key": "2020:source",
+      "year": 2020,
+      "format": "source GIS/statistics",
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "license": "国土数値情報利用約款",
+      "declared_source_crs": "EPSG:6668",
+      "archive_file": null,
+      "archive_sha256": null,
+      "verification_status": "metadata_registered"
+    }
+  ],
+  "analysis_runs": [
+    {
+      "analysis_run_id": "cd46b46c-d087-5fd3-bb1b-f82305705ce9",
+      "city_code": "26202",
+      "analysis_type": "screening",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_summary.json",
+      "output_sha256": "9e3c65792882ad9b508179eadcb6b4801f5f65153a7b256b71cf79058ed58cf6"
+    },
+    {
+      "analysis_run_id": "d1b817ae-f758-53cf-9c24-646e6c78637e",
+      "city_code": "14205",
+      "analysis_type": "screening",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "f2aeb548562ed87b35b29e72dd9d788af46e3cf61b622b8e9b2cec03c310a67c",
+      "output_artifact": "analysis/outputs/real/fujisawa_summary.json",
+      "output_sha256": "51ec2def375db1a31c0930b58080b17800c081467440fe9820ef9909ea03ac47"
+    },
+    {
+      "analysis_run_id": "921d63cd-dfbd-5806-93fc-520bc474b86e",
+      "city_code": "26202",
+      "analysis_type": "building_detail",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_building_demographics_summary.json",
+      "output_sha256": "3cafe06baabde8357f4e645bcfa26b0709dc6aa4e89a9e711b14fea80f0ac484"
+    },
+    {
+      "analysis_run_id": "604ef876-b1d2-5a83-ae06-163e62fbec5f",
+      "city_code": "26202",
+      "analysis_type": "road_network",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_road_network_summary.json",
+      "output_sha256": "051c4a3e43aab6fdf5e3849f7b6570b672e20c5f1aa043ff112b4ac51c196fb9"
+    },
+    {
+      "analysis_run_id": "38500e4f-cd4e-553e-8a96-ddff4fc23cca",
+      "city_code": "26202",
+      "analysis_type": "terrain",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_terrain_network_summary.json",
+      "output_sha256": "58c4061e4c2842825f029505b0a09a7e42d7992d02070a2c4e5e9cffe1fd9cb4"
+    },
+    {
+      "analysis_run_id": "78e3f3e5-d62b-5b0c-8879-2d9456a21646",
+      "city_code": "26202",
+      "analysis_type": "spatial_context",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_plateau_context_summary.json",
+      "output_sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411"
+    },
+    {
+      "analysis_run_id": "98876e81-0432-5493-939b-8580543c0160",
+      "city_code": "26202",
+      "analysis_type": "scenario",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "output_artifact": "analysis/outputs/real/maizuru_network_scenarios.json",
+      "output_sha256": "d8717e5d040ebe611d92bec6f5db10a2d14f9a68cbd56d9a9a6e192cb31c4c5e"
+    }
+  ],
+  "capabilities": [
+    {
+      "city_code": "14205",
+      "capability": "building_detail",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "gtfs",
+      "status": "unavailable",
+      "note": "No GTFS feed is registered; P11 points are not represented as GTFS.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "hazard",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "land_use",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "road_network",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "scenario",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "screening",
+      "status": "available",
+      "note": "Real-data cross-city 500m screening is generated and validated.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_summary.json",
+          "sha256": "51ec2def375db1a31c0930b58080b17800c081467440fe9820ef9909ea03ac47",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "terrain",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "14205",
+      "capability": "urban_planning",
+      "status": "unavailable",
+      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "26202",
+      "capability": "building_detail",
+      "status": "available",
+      "note": "Actual CityGML buildings affect demographic allocation and accessibility.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_building_demographics_summary.json",
+          "sha256": "3cafe06baabde8357f4e645bcfa26b0709dc6aa4e89a9e711b14fea80f0ac484",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "gtfs",
+      "status": "unavailable",
+      "note": "P11 stop points are not GTFS; no feed is loaded and no service is fabricated.",
+      "evidence": [],
+      "dataset_version_ids": []
+    },
+    {
+      "city_code": "26202",
+      "capability": "hazard",
+      "status": "available",
+      "note": "Official PLATEAU context is parsed and spatially joined; it remains review evidence.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_plateau_context_summary.json",
+          "sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "land_use",
+      "status": "available",
+      "note": "Official PLATEAU context is parsed and spatially joined; it remains review evidence.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_plateau_context_summary.json",
+          "sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "road_network",
+      "status": "partial",
+      "note": "Experimental LOD1 surface-adjacency graph; not a validated pedestrian network.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_road_network_summary.json",
+          "sha256": "051c4a3e43aab6fdf5e3849f7b6570b672e20c5f1aa043ff112b4ac51c196fb9",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "scenario",
+      "status": "available",
+      "note": "Verified network-aware 1-5 site alternatives are available.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_network_scenario_verification.json",
+          "sha256": "d861d1b06ca5fbd74cfe52aff184afb0e1078fb14065908dfb7fe36af25cf903",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "screening",
+      "status": "available",
+      "note": "Real 500m census/facility screening is generated and validated.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_summary.json",
+          "sha256": "9e3c65792882ad9b508179eadcb6b4801f5f65153a7b256b71cf79058ed58cf6",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "terrain",
+      "status": "partial",
+      "note": "DEM endpoint observations are available; no walking-energy penalty is inferred.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_terrain_network_summary.json",
+          "sha256": "58c4061e4c2842825f029505b0a09a7e42d7992d02070a2c4e5e9cffe1fd9cb4",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "urban_planning",
+      "status": "available",
+      "note": "Official PLATEAU context is parsed and spatially joined; it remains review evidence.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/maizuru_plateau_context_summary.json",
+          "sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    }
+  ],
+  "policy": {
+    "version_selection": "explicit dataset_version_id; never implicit latest",
+    "unavailable_capabilities": "not fabricated",
+    "gtfs": "P11 stop points do not establish GTFS availability"
+  }
+}

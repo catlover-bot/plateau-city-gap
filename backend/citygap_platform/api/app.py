@@ -344,6 +344,37 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Scenario site not found")
         return result
 
+    @application.get("/registry/cities")
+    def city_registry(
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "capability_statuses": ["available", "partial", "unavailable"],
+            "cities": repo.city_registry(),
+        }
+
+    @application.get("/registry/cities/{city_id}/datasets")
+    def dataset_registry(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "version_selection": "explicit dataset_version_id; never implicit latest",
+            "dataset_versions": repo.dataset_registry(city_id),
+        }
+
+    @application.get("/registry/cities/{city_id}/analysis-runs")
+    def analysis_runs(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=100)] = 30,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "analysis_runs": repo.analysis_runs(city_id, limit),
+        }
+
     return application
 
 

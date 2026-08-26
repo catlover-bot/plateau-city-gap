@@ -199,6 +199,47 @@ class FakeRepository:
         self.checklists[(scenario_id, site_order)] = value
         return value
 
+    def city_registry(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_code": "26202",
+                "city_id": "maizuru",
+                "capabilities": [
+                    {"capability": "screening", "status": "available"},
+                    {"capability": "gtfs", "status": "unavailable"},
+                ],
+            },
+            {
+                "city_code": "14205",
+                "city_id": "fujisawa",
+                "capabilities": [
+                    {"capability": "screening", "status": "available"},
+                    {"capability": "scenario", "status": "unavailable"},
+                ],
+            },
+        ]
+
+    def dataset_registry(self, city_id: str) -> list[dict[str, Any]]:
+        return [
+            {
+                "dataset_version_id": "version-2025",
+                "city_id": city_id,
+                "dataset_key": "plateau",
+                "year": 2025,
+            }
+        ]
+
+    def analysis_runs(self, city_id: str, limit: int) -> list[dict[str, Any]]:
+        return [
+            {
+                "analysis_run_id": "run-screening",
+                "city_id": city_id,
+                "analysis_type": "screening",
+                "status": "succeeded",
+                "limit": limit,
+            }
+        ]
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -321,3 +362,18 @@ def test_field_check_is_human_entered_and_persisted_by_site() -> None:
     assert saved.status_code == 200
     assert saved.json()["hazard_confirmation"] == "attention"
     assert scenario_client.get(path).json()["notes"] == "現地で横断位置を確認"
+
+
+def test_city_dataset_and_analysis_registries_expose_explicit_versions() -> None:
+    cities = client.get("/registry/cities").json()
+    assert cities["capability_statuses"] == ["available", "partial", "unavailable"]
+    assert cities["cities"][1]["capabilities"][1] == {
+        "capability": "scenario",
+        "status": "unavailable",
+    }
+    datasets = client.get("/registry/cities/26202/datasets").json()
+    assert datasets["dataset_versions"][0]["dataset_version_id"] == "version-2025"
+    assert "never implicit latest" in datasets["version_selection"]
+    runs = client.get("/registry/cities/26202/analysis-runs?limit=10").json()
+    assert runs["analysis_runs"][0]["status"] == "succeeded"
+    assert client.get("/registry/cities/26202/analysis-runs?limit=101").status_code == 422

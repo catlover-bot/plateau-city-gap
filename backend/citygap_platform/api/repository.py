@@ -84,6 +84,12 @@ class PlatformRepository(Protocol):
         checklist: dict[str, Any],
     ) -> dict[str, Any] | None: ...
 
+    def city_registry(self) -> list[dict[str, Any]]: ...
+
+    def dataset_registry(self, city_id: str) -> list[dict[str, Any]]: ...
+
+    def analysis_runs(self, city_id: str, limit: int) -> list[dict[str, Any]]: ...
+
 
 class PostGISRepository:
     def __init__(self, database_url: str):
@@ -911,3 +917,110 @@ class PostGISRepository:
             )
             connection.commit()
         return self.field_check(city_id, scenario_id, site_order)
+
+    def city_registry(self) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            city_rows = connection.execute(
+                """SELECT id, city_code, city_key, name, prefecture_code,
+                          prefecture_name, analysis_crs
+                   FROM cities ORDER BY city_code"""
+            ).fetchall()
+            capability_rows = connection.execute(
+                """SELECT city.city_code, capability.capability, capability.status,
+                          capability.note, capability.evidence, capability.updated_at
+                   FROM city_capabilities AS capability
+                   JOIN cities AS city ON city.id = capability.city_id
+                   ORDER BY city.city_code, capability.capability"""
+            ).fetchall()
+        capabilities: dict[str, list[dict[str, Any]]] = {}
+        for row in capability_rows:
+            capabilities.setdefault(row[0], []).append(
+                {
+                    "capability": row[1],
+                    "status": row[2],
+                    "note": row[3],
+                    "evidence": row[4],
+                    "updated_at": row[5],
+                }
+            )
+        keys = (
+            "registry_city_id",
+            "city_code",
+            "city_id",
+            "name",
+            "prefecture_code",
+            "prefecture_name",
+            "analysis_crs",
+        )
+        return [
+            {
+                **dict(zip(keys, row, strict=True)),
+                "capabilities": capabilities.get(row[1], []),
+            }
+            for row in city_rows
+        ]
+
+    def dataset_registry(self, city_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT dataset.id, dataset.dataset_key, dataset.title, dataset.provider,
+                          version.id, version.version_key, version.dataset_year,
+                          version.data_format, version.source_url, version.license,
+                          version.declared_source_crs, version.archive_file_name,
+                          version.archive_sha256, version.verification_status,
+                          version.registered_at
+                   FROM datasets AS dataset
+                   JOIN dataset_versions AS version ON version.dataset_id = dataset.id
+                   JOIN cities AS city ON city.id = dataset.city_id
+                   WHERE city.city_code = %s OR city.city_key = %s
+                   ORDER BY dataset.dataset_key, version.dataset_year, version.version_key""",
+                (city_id, city_id),
+            ).fetchall()
+        keys = (
+            "dataset_id",
+            "dataset_key",
+            "title",
+            "provider",
+            "dataset_version_id",
+            "version_key",
+            "year",
+            "format",
+            "source_url",
+            "license",
+            "declared_source_crs",
+            "archive_file",
+            "archive_sha256",
+            "verification_status",
+            "registered_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def analysis_runs(self, city_id: str, limit: int) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT run.id, run.analysis_type, run.status, run.config_hash,
+                          run.output_artifact, run.output_sha256, run.started_at,
+                          run.completed_at,
+                          array_agg(input.dataset_version_id ORDER BY input.dataset_version_id)
+                   FROM analysis_runs AS run
+                   JOIN cities AS city ON city.id = run.city_id
+                   LEFT JOIN analysis_run_dataset_versions AS input
+                     ON input.analysis_run_id = run.id
+                   WHERE city.city_code = %s OR city.city_key = %s
+                   GROUP BY run.id
+                   ORDER BY run.started_at DESC, run.analysis_type
+                   LIMIT %s""",
+                (city_id, city_id, limit),
+            ).fetchall()
+        keys = (
+            "analysis_run_id",
+            "analysis_type",
+            "status",
+            "config_hash",
+            "output_artifact",
+            "output_sha256",
+            "started_at",
+            "completed_at",
+            "dataset_version_ids",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]

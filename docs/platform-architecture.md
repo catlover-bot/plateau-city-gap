@@ -6,7 +6,8 @@ The competition demo remains a static React/Cesium application deployed to GitHu
 platform is an additive path; it does not make the public demo depend on PostGIS or the API.
 
 The implemented boundary now includes full CityGML ingestion, building allocation, an explicitly
-experimental road-surface graph with terrain observations, and land-use/planning/hazard context:
+experimental road-surface graph with terrain observations, land-use/planning/hazard context,
+versioned scenarios, and an explicit multi-city capability registry:
 
 ```text
 Maizuru 2025 CityGML ZIP (Git-ignored)
@@ -16,13 +17,15 @@ Maizuru 2025 CityGML ZIP (Git-ignored)
   -> typed building / road / terrain / land-use / planning / hazard tables
   -> canonical Python + GeoParquet computation
   -> versioned road/network and spatial-context runs
+  -> versioned scenario runs + municipal review lifecycle
   -> bounded FastAPI queries
 
 Existing pre-generated analysis -> existing React/Cesium -> GitHub Pages (unchanged)
 ```
 
-DB-backed scenario lifecycle and background workers remain later milestones. Their tables or
-labels must not imply that those calculations already exist.
+The DB-backed scenario schema, lifecycle API and canonical loader contract are implemented, but
+PostGIS was not executed in this environment. Background workers remain a later milestone; no
+table or label may imply that a queued calculation has already run.
 
 The product boundary follows this flow:
 
@@ -54,6 +57,8 @@ or score is evidence for review, not an automatic municipal decision.
 - `gml:id` is unique within a dataset version, not globally across years.
 - `city_dataset_versions` allows 2025 and later releases to coexist. Exactly one version per city
   may be marked current.
+- The platform registry separately models city, dataset, dataset version and analysis run. New
+  workflow APIs require explicit version IDs and do not infer "latest" from `is_current`.
 - Every record retains archive SHA-256, source member and CRC32, product specification version,
   ADE schema version, ingestion run and timestamp through direct columns and the provenance view.
 - Typed analysis fields coexist with loss-minimizing JSONB attributes.
