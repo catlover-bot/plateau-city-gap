@@ -24,8 +24,9 @@ Existing pre-generated analysis -> existing React/Cesium -> GitHub Pages (unchan
 ```
 
 The DB-backed scenario schema, lifecycle API and canonical loader contract are implemented, but
-PostGIS was not executed in this environment. Background workers remain a later milestone; no
-table or label may imply that a queued calculation has already run.
+PostGIS was not executed in this environment. The durable job state/stage framework is also
+implemented; a process worker or queue service is not yet connected, and no queued job implies
+that a calculation has already run.
 
 The product boundary follows this flow:
 

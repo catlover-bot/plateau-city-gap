@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import os
-from typing import Annotated
+from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 
+from backend.citygap_platform.domain.jobs import JOB_STAGES
 from backend.citygap_platform.domain.scenarios import FieldCheckValue, ScenarioStatus
 
 from .repository import PlatformRepository, PostGISRepository
@@ -28,6 +29,19 @@ class FieldCheckRequest(BaseModel):
     hazard_confirmation: FieldCheckValue = FieldCheckValue.UNKNOWN
     operator_consultation: FieldCheckValue = FieldCheckValue.UNKNOWN
     notes: str = Field(default="", max_length=4000)
+
+
+class JobCreateRequest(BaseModel):
+    job_type: str
+    dataset_version_ids: list[str] = Field(min_length=1, max_length=50)
+    config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    parameters: dict[str, Any] = Field(default_factory=dict)
+
+
+class JobTransitionRequest(BaseModel):
+    action: Literal["start", "advance", "succeed", "fail"]
+    stage: str | None = None
+    error: str | None = Field(default=None, max_length=4000)
 
 
 def _repository(request: Request) -> PlatformRepository:
@@ -374,6 +388,57 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             "city_id": city_id,
             "analysis_runs": repo.analysis_runs(city_id, limit),
         }
+
+    @application.post("/registry/cities/{city_id}/jobs", status_code=201)
+    def create_job(
+        city_id: str,
+        request_body: JobCreateRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        if request_body.job_type not in JOB_STAGES:
+            raise HTTPException(status_code=422, detail="Unknown job type")
+        try:
+            result = repo.create_job(
+                city_id,
+                request_body.job_type,
+                request_body.dataset_version_ids,
+                request_body.config_hash,
+                request_body.parameters,
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Registry city not found")
+        return result
+
+    @application.get("/jobs/{job_id}")
+    def job_detail(
+        job_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.job_detail(job_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Job not found")
+        return result
+
+    @application.post("/jobs/{job_id}/transition")
+    def transition_job(
+        job_id: str,
+        request_body: JobTransitionRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.transition_job(
+                job_id,
+                request_body.action,
+                request_body.stage,
+                request_body.error,
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Job not found")
+        return result
 
     return application
 

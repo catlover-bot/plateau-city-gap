@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CITY GAP Evidence — network-overall-3</title>
+  <style>
+    :root { color: #172026; background: #f4f2ec; font-family: system-ui, sans-serif; }
+    body { max-width: 960px; margin: 0 auto; padding: 32px; }
+    header { border-bottom: 4px solid #24485c; padding-bottom: 16px; }
+    h1, h2, h3, h4 { color: #17394a; }
+    section { background: #fff; border: 1px solid #c9ced0; margin: 20px 0; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border-bottom: 1px solid #d9dddf; padding: 7px; text-align: left; vertical-align: top; }
+    th { width: 42%; }
+    dt { font-weight: 700; margin-top: 8px; }
+    dd { margin-left: 0; }
+    .boundary { border-left: 6px solid #a45c2a; padding: 12px 16px; background: #fff8ed; }
+    @media print { body { padding: 0; background: #fff; } section { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p>CITY GAP Municipal Review Evidence</p>
+    <h1>建物全体の改善 — 3地点</h1>
+    <p>maximize sum of network-distance reduction across reachable buildings</p>
+    <p>deterministic forward-greedy approximation; not a global N-site optimum</p>
+  </header>
+  <p class="boundary">自動推奨ではありません。設置可能性は未判定です。災害重複は追加確認事項です。</p>
+  <section><h2>影響指標</h2><table><tr><th>affected_graph_node_count</th><td>743</td></tr><tr><th>improved_building_count</th><td>2911</td></tr><tr><th>newly_network_connected_building_count</th><td>0</td></tr><tr><th>total_building_distance_reduction_m</th><td>1103540.923</td></tr><tr><th>mean_reduction_all_reachable_buildings_m</th><td>38.798</td></tr><tr><th>mean_reduction_improved_buildings_m</th><td>379.093</td></tr><tr><th>affected_estimated_elderly_population</th><td>1572.547518</td></tr><tr><th>elderly_weighted_distance_reduction_person_m</th><td>587958.247</td></tr><tr><th>elderly_weighted_mean_reduction_m</th><td>29.806</td></tr><tr><th>worst_decile_mean_reduction_m</th><td>245.967</td></tr><tr><th>robust_top20_elderly_weighted_reduction_person_m</th><td>0.0</td></tr><tr><th>robust_top20_improved_mesh_count</th><td>0</td></tr><tr><th>improved_mesh_count</th><td>16</td></tr></table></section>
+
+            <section>
+              <h3>候補 1: tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d-0</h3>
+              <dl>
+                <dt>PLATEAU道路 gml:id</dt><dd>tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d</dd>
+                <dt>道路</dt><dd>伊佐津七日市線</dd>
+                <dt>土地利用</dt><dd>道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）</dd>
+                <dt>都市計画</dt><dd>市街化区域 | 第1種住居地域 | 道路 | 都市計画区域</dd>
+                <dt>災害文脈</dt><dd>flood: 0.5m以上1.0m未満 | flood: 1.0m以上2.0m未満</dd>
+                <dt>判定</dt><dd>not_determined</dd>
+              </dl>
+              <h4>Review flags</h4><ul><li>hazard_attention: True</li><li>planning_attention: True</li><li>landuse_attention: True</li><li>network_component_attention: False</li><li>long_connector_attention: False</li><li>terrain_attention: False</li></ul>
+              <h4>現地確認票</h4><table><tr><th>site_access</th><td>unknown</td></tr><tr><th>road_safety</th><td>unknown</td></tr><tr><th>land_ownership_unknown</th><td>unknown</td></tr><tr><th>existing_service</th><td>unknown</td></tr><tr><th>facility_condition</th><td>unknown</td></tr><tr><th>hazard_confirmation</th><td>unknown</td></tr><tr><th>operator_consultation</th><td>unknown</td></tr><tr><th>notes</th><td></td></tr></table>
+            </section>
+
+            <section>
+              <h3>候補 2: tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0</h3>
+              <dl>
+                <dt>PLATEAU道路 gml:id</dt><dd>tran_aa88195d-0720-456e-8ff1-8589a3f60d05</dd>
+                <dt>道路</dt><dd>愛宕通線</dd>
+                <dt>土地利用</dt><dd>道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）</dd>
+                <dt>都市計画</dt><dd>市街化区域 | 第1種中高層住居専用地域 | 都市計画区域</dd>
+                <dt>災害文脈</dt><dd>landslide: 土砂災害警戒区域（指定済）</dd>
+                <dt>判定</dt><dd>not_determined</dd>
+              </dl>
+              <h4>Review flags</h4><ul><li>hazard_attention: True</li><li>planning_attention: True</li><li>landuse_attention: True</li><li>network_component_attention: False</li><li>long_connector_attention: False</li><li>terrain_attention: False</li></ul>
+              <h4>現地確認票</h4><table><tr><th>site_access</th><td>unknown</td></tr><tr><th>road_safety</th><td>unknown</td></tr><tr><th>land_ownership_unknown</th><td>unknown</td></tr><tr><th>existing_service</th><td>unknown</td></tr><tr><th>facility_condition</th><td>unknown</td></tr><tr><th>hazard_confirmation</th><td>unknown</td></tr><tr><th>operator_consultation</th><td>unknown</td></tr><tr><th>notes</th><td></td></tr></table>
+            </section>
+
+            <section>
+              <h3>候補 3: tran_d1ce31ad-058f-45b0-abed-11324ea7961c-0</h3>
+              <dl>
+                <dt>PLATEAU道路 gml:id</dt><dd>tran_d1ce31ad-058f-45b0-abed-11324ea7961c</dd>
+                <dt>道路</dt><dd>大宮北通線</dd>
+                <dt>土地利用</dt><dd>道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）</dd>
+                <dt>都市計画</dt><dd>市街化区域 | 準住居地域 | 準防火地域 | 都市計画区域</dd>
+                <dt>災害文脈</dt><dd>landslide: 土砂災害警戒区域（指定済）</dd>
+                <dt>判定</dt><dd>not_determined</dd>
+              </dl>
+              <h4>Review flags</h4><ul><li>hazard_attention: True</li><li>planning_attention: True</li><li>landuse_attention: True</li><li>network_component_attention: False</li><li>long_connector_attention: False</li><li>terrain_attention: False</li></ul>
+              <h4>現地確認票</h4><table><tr><th>site_access</th><td>unknown</td></tr><tr><th>road_safety</th><td>unknown</td></tr><tr><th>land_ownership_unknown</th><td>unknown</td></tr><tr><th>existing_service</th><td>unknown</td></tr><tr><th>facility_condition</th><td>unknown</td></tr><tr><th>hazard_confirmation</th><td>unknown</td></tr><tr><th>operator_consultation</th><td>unknown</td></tr><tr><th>notes</th><td></td></tr></table>
+            </section>
+
+  <section><h2>出典データ</h2><ul><li>2020 — e-Stat: 2020年国勢調査 500mメッシュ 5歳階級別人口</li><li>2025 — Project PLATEAU: 舞鶴市 行政界</li><li>2025 — Project PLATEAU: 舞鶴市 鉄道駅</li><li>2022 — 国土数値情報: バス停留所 P11</li><li>2020 — 国土数値情報: 医療機関 P04</li><li>2025 — Project PLATEAU: 3D都市モデル（Project PLATEAU）舞鶴市（2025年度）</li></ul></section>
+  <section><h2>制約・限界</h2><ul><li>The graph represents LOD1 road-surface adjacency, not a validated pedestrian network.</li><li>Candidate points do not confirm land ownership, constructability, service operation or cost.</li><li>Each one-site result is exact for its stated linear, max-min or lexicographic objective over the screened set; N&gt;1 is greedy.</li><li>Terrain observations are kept separate and are not a hidden routing penalty.</li><li>Hazard and planning overlaps require municipal review and do not determine feasibility.</li></ul></section>
+  <footer><p>Algorithm: network-scenario-1.0.0 / Network: exp-4fff5849d650a70b</p></footer>
+</body>
+</html>

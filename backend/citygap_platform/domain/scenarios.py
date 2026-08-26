@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
@@ -90,4 +90,13 @@ class FieldCheck:
         return cls(**fields)
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {
+            "site_access": self.site_access.value,
+            "road_safety": self.road_safety.value,
+            "land_ownership_unknown": self.land_ownership_unknown.value,
+            "existing_service": self.existing_service.value,
+            "facility_condition": self.facility_condition.value,
+            "hazard_confirmation": self.hazard_confirmation.value,
+            "operator_consultation": self.operator_consultation.value,
+            "notes": self.notes,
+        }

@@ -5,6 +5,13 @@ from typing import Any
 from fastapi.testclient import TestClient
 
 from backend.citygap_platform.api.app import create_app
+from backend.citygap_platform.domain.jobs import (
+    JobSnapshot,
+    advance_job,
+    fail_job,
+    start_job,
+    succeed_job,
+)
 from backend.citygap_platform.domain.scenarios import validate_status_transition
 
 
@@ -12,6 +19,7 @@ class FakeRepository:
     def __init__(self) -> None:
         self.lifecycle_status = "draft"
         self.checklists: dict[tuple[str, int], dict[str, Any]] = {}
+        self.jobs: dict[str, JobSnapshot] = {}
 
     def health(self) -> bool:
         return True
@@ -240,6 +248,49 @@ class FakeRepository:
             }
         ]
 
+    def create_job(
+        self,
+        city_id: str,
+        job_type: str,
+        dataset_version_ids: list[str],
+        config_hash: str,
+        parameters: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        if city_id == "missing":
+            return None
+        self.jobs["job-1"] = JobSnapshot(job_type=job_type)
+        return self.job_detail("job-1")
+
+    def job_detail(self, job_id: str) -> dict[str, Any] | None:
+        snapshot = self.jobs.get(job_id)
+        if snapshot is None:
+            return None
+        return {
+            "job_id": job_id,
+            "job_type": snapshot.job_type,
+            "state": snapshot.state.value,
+            "current_stage": snapshot.current_stage,
+            "completed_stages": snapshot.completed_stages,
+            "error": snapshot.error,
+        }
+
+    def transition_job(
+        self, job_id: str, action: str, stage: str | None, error: str | None
+    ) -> dict[str, Any] | None:
+        snapshot = self.jobs.get(job_id)
+        if snapshot is None:
+            return None
+        if action == "start":
+            updated = start_job(snapshot)
+        elif action == "advance":
+            updated = advance_job(snapshot, stage or "")
+        elif action == "succeed":
+            updated = succeed_job(snapshot)
+        else:
+            updated = fail_job(snapshot, error or "")
+        self.jobs[job_id] = updated
+        return self.job_detail(job_id)
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -377,3 +428,33 @@ def test_city_dataset_and_analysis_registries_expose_explicit_versions() -> None
     runs = client.get("/registry/cities/26202/analysis-runs?limit=10").json()
     assert runs["analysis_runs"][0]["status"] == "succeeded"
     assert client.get("/registry/cities/26202/analysis-runs?limit=101").status_code == 422
+
+
+def test_jobs_report_real_stages_without_fake_percentages() -> None:
+    repository = FakeRepository()
+    job_client = TestClient(create_app(repository))
+    created = job_client.post(
+        "/registry/cities/26202/jobs",
+        json={
+            "job_type": "scenario_optimization",
+            "dataset_version_ids": ["version-2025"],
+            "config_hash": "a" * 64,
+            "parameters": {"site_count": 3},
+        },
+    )
+    assert created.status_code == 201
+    assert created.json()["state"] == "queued"
+    assert "progress" not in created.json()
+    started = job_client.post("/jobs/job-1/transition", json={"action": "start"})
+    assert started.json()["current_stage"] == "prepare_candidates"
+    advanced = job_client.post(
+        "/jobs/job-1/transition",
+        json={"action": "advance", "stage": "build_sparse_matrix"},
+    )
+    assert advanced.json()["current_stage"] == "build_sparse_matrix"
+    invalid = job_client.post(
+        "/jobs/job-1/transition",
+        json={"action": "advance", "stage": "persist_artifacts"},
+    )
+    assert invalid.status_code == 409
+    assert job_client.get("/jobs/missing").status_code == 404

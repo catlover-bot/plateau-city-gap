@@ -1,0 +1,112 @@
+"""Stage-based job state machine; percentages are intentionally absent."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, replace
+from enum import Enum
+
+JOB_STAGES = {
+    "plateau_ingestion": (
+        "validate_source",
+        "inventory_members",
+        "parse_citygml",
+        "persist_features",
+        "verify_counts",
+    ),
+    "building_demographics": (
+        "audit_attributes",
+        "map_usage_codes",
+        "crosswalk_meshes",
+        "allocate_demographics",
+        "verify_conservation",
+        "persist_artifacts",
+    ),
+    "network_generation": (
+        "parse_road_surfaces",
+        "build_topology",
+        "connect_demand",
+        "verify_network",
+        "persist_artifacts",
+    ),
+    "terrain_enrichment": (
+        "parse_dem",
+        "sample_network_nodes",
+        "summarize_routes",
+        "verify_terrain",
+        "persist_artifacts",
+    ),
+    "context_generation": (
+        "parse_context_features",
+        "spatial_join",
+        "verify_context",
+        "persist_artifacts",
+    ),
+    "scenario_optimization": (
+        "prepare_candidates",
+        "build_sparse_matrix",
+        "optimize_objectives",
+        "independent_verification",
+        "persist_artifacts",
+    ),
+}
+
+
+class JobState(str, Enum):
+    QUEUED = "queued"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+
+
+@dataclass(frozen=True, slots=True)
+class JobSnapshot:
+    job_type: str
+    state: JobState = JobState.QUEUED
+    current_stage: str | None = None
+    completed_stages: tuple[str, ...] = ()
+    error: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.job_type not in JOB_STAGES:
+            raise ValueError(f"Unknown job type: {self.job_type}")
+
+
+def start_job(snapshot: JobSnapshot) -> JobSnapshot:
+    if snapshot.state is not JobState.QUEUED:
+        raise ValueError("Only a queued job can start")
+    return replace(snapshot, state=JobState.RUNNING, current_stage=JOB_STAGES[snapshot.job_type][0])
+
+
+def advance_job(snapshot: JobSnapshot, next_stage: str) -> JobSnapshot:
+    if snapshot.state is not JobState.RUNNING or snapshot.current_stage is None:
+        raise ValueError("Only a running job can advance")
+    stages = JOB_STAGES[snapshot.job_type]
+    current_index = stages.index(snapshot.current_stage)
+    if current_index + 1 >= len(stages) or stages[current_index + 1] != next_stage:
+        raise ValueError("Job stages must advance in the declared order")
+    return replace(
+        snapshot,
+        current_stage=next_stage,
+        completed_stages=(*snapshot.completed_stages, snapshot.current_stage),
+    )
+
+
+def succeed_job(snapshot: JobSnapshot) -> JobSnapshot:
+    stages = JOB_STAGES[snapshot.job_type]
+    if snapshot.state is not JobState.RUNNING or snapshot.current_stage != stages[-1]:
+        raise ValueError("A job can succeed only from its final real stage")
+    return replace(
+        snapshot,
+        state=JobState.SUCCEEDED,
+        current_stage=None,
+        completed_stages=(*snapshot.completed_stages, stages[-1]),
+    )
+
+
+def fail_job(snapshot: JobSnapshot, error: str) -> JobSnapshot:
+    if snapshot.state is not JobState.RUNNING:
+        raise ValueError("Only a running job can fail")
+    message = error.strip()
+    if not message:
+        raise ValueError("A failed job requires an error message")
+    return replace(snapshot, state=JobState.FAILED, current_stage=None, error=message)

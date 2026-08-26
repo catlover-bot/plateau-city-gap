@@ -5,6 +5,14 @@ from __future__ import annotations
 import json
 from typing import Any, Protocol
 
+from backend.citygap_platform.domain.jobs import (
+    JobSnapshot,
+    JobState,
+    advance_job,
+    fail_job,
+    start_job,
+    succeed_job,
+)
 from backend.citygap_platform.domain.scenarios import validate_status_transition
 
 
@@ -89,6 +97,21 @@ class PlatformRepository(Protocol):
     def dataset_registry(self, city_id: str) -> list[dict[str, Any]]: ...
 
     def analysis_runs(self, city_id: str, limit: int) -> list[dict[str, Any]]: ...
+
+    def create_job(
+        self,
+        city_id: str,
+        job_type: str,
+        dataset_version_ids: list[str],
+        config_hash: str,
+        parameters: dict[str, Any],
+    ) -> dict[str, Any] | None: ...
+
+    def job_detail(self, job_id: str) -> dict[str, Any] | None: ...
+
+    def transition_job(
+        self, job_id: str, action: str, stage: str | None, error: str | None
+    ) -> dict[str, Any] | None: ...
 
 
 class PostGISRepository:
@@ -1024,3 +1047,166 @@ class PostGISRepository:
             "dataset_version_ids",
         )
         return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def create_job(
+        self,
+        city_id: str,
+        job_type: str,
+        dataset_version_ids: list[str],
+        config_hash: str,
+        parameters: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            city = connection.execute(
+                "SELECT id FROM cities WHERE city_code = %s OR city_key = %s",
+                (city_id, city_id),
+            ).fetchone()
+            if city is None:
+                return None
+            valid_versions = connection.execute(
+                """SELECT version.id FROM dataset_versions AS version
+                   JOIN datasets AS dataset ON dataset.id = version.dataset_id
+                   WHERE dataset.city_id = %s AND version.id = ANY(%s::uuid[])""",
+                (city[0], dataset_version_ids),
+            ).fetchall()
+            if {str(row[0]) for row in valid_versions} != set(dataset_version_ids):
+                raise ValueError("Every job dataset version must belong to the selected city")
+            job_id = connection.execute(
+                """INSERT INTO job_runs (
+                       city_id, job_type, state, config_hash, parameters
+                   ) VALUES (%s, %s, 'queued', %s, %s) RETURNING id""",
+                (city[0], job_type, config_hash, json.dumps(parameters, ensure_ascii=False)),
+            ).fetchone()[0]
+            for version_id in dataset_version_ids:
+                connection.execute(
+                    """INSERT INTO job_dataset_versions (job_run_id, dataset_version_id)
+                       VALUES (%s, %s)""",
+                    (job_id, version_id),
+                )
+            connection.execute(
+                """INSERT INTO job_events (job_run_id, state, message)
+                   VALUES (%s, 'queued', 'job registered; no work has started')""",
+                (job_id,),
+            )
+            connection.commit()
+        return self.job_detail(str(job_id))
+
+    def job_detail(self, job_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT job.id, city.city_code, city.city_key, job.job_type,
+                          job.state, job.current_stage, job.config_hash, job.parameters,
+                          job.queued_at, job.started_at, job.completed_at, job.error_message
+                   FROM job_runs AS job JOIN cities AS city ON city.id = job.city_id
+                   WHERE job.id = %s""",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            keys = (
+                "job_id",
+                "city_code",
+                "city_id",
+                "job_type",
+                "state",
+                "current_stage",
+                "config_hash",
+                "parameters",
+                "queued_at",
+                "started_at",
+                "completed_at",
+                "error",
+            )
+            result = dict(zip(keys, row, strict=True))
+            result["dataset_version_ids"] = [
+                str(value[0])
+                for value in connection.execute(
+                    """SELECT dataset_version_id FROM job_dataset_versions
+                       WHERE job_run_id = %s ORDER BY dataset_version_id""",
+                    (job_id,),
+                ).fetchall()
+            ]
+            result["events"] = [
+                {
+                    "state": event[0],
+                    "stage": event[1],
+                    "message": event[2],
+                    "recorded_at": event[3],
+                }
+                for event in connection.execute(
+                    """SELECT state, stage, message, recorded_at FROM job_events
+                       WHERE job_run_id = %s ORDER BY recorded_at, id""",
+                    (job_id,),
+                ).fetchall()
+            ]
+        return result
+
+    def transition_job(
+        self, job_id: str, action: str, stage: str | None, error: str | None
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT job_type, state, current_stage FROM job_runs
+                   WHERE id = %s FOR UPDATE""",
+                (job_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            event_stages = [
+                value[0]
+                for value in connection.execute(
+                    """SELECT stage FROM job_events
+                       WHERE job_run_id = %s AND stage IS NOT NULL ORDER BY id""",
+                    (job_id,),
+                ).fetchall()
+            ]
+            completed = tuple(value for value in event_stages if value != row[2])
+            snapshot = JobSnapshot(
+                job_type=str(row[0]),
+                state=JobState(str(row[1])),
+                current_stage=row[2],
+                completed_stages=completed,
+                error=None,
+            )
+            if action == "start":
+                updated = start_job(snapshot)
+            elif action == "advance":
+                if stage is None:
+                    raise ValueError("advance requires the next real stage")
+                updated = advance_job(snapshot, stage)
+            elif action == "succeed":
+                updated = succeed_job(snapshot)
+            elif action == "fail":
+                updated = fail_job(snapshot, error or "")
+            else:
+                raise ValueError("Unknown job transition action")
+            connection.execute(
+                """UPDATE job_runs SET state = %s, current_stage = %s,
+                          started_at = CASE
+                              WHEN %s = 'running' THEN COALESCE(started_at, now())
+                              ELSE started_at END,
+                          completed_at = CASE
+                              WHEN %s IN ('succeeded', 'failed') THEN now() ELSE NULL END,
+                          error_message = %s
+                   WHERE id = %s""",
+                (
+                    updated.state.value,
+                    updated.current_stage,
+                    updated.state.value,
+                    updated.state.value,
+                    updated.error,
+                    job_id,
+                ),
+            )
+            connection.execute(
+                """INSERT INTO job_events (job_run_id, state, stage, message)
+                   VALUES (%s, %s, %s, %s)""",
+                (
+                    job_id,
+                    updated.state.value,
+                    updated.current_stage,
+                    updated.error or action,
+                ),
+            )
+            connection.commit()
+        return self.job_detail(job_id)

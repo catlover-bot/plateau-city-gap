@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "plan_id": "network-overall-3",
+  "generated_at": "2026-08-26T13:45:01Z",
+  "formats": {
+    "json": {
+      "path": "evidence.json",
+      "size_bytes": 19253,
+      "sha256": "eb3ef64b44b6523e7349858a4a6edf16ebb6a1b0193e1dfe480ad72f2e6f7afb"
+    },
+    "csv": {
+      "path": "evidence.csv",
+      "size_bytes": 8245,
+      "sha256": "a8a4b8fb8843c061d10f2521fd97981bc2a5309084a401fa8ac7a8cc576e39c2"
+    },
+    "html": {
+      "path": "print.html",
+      "size_bytes": 8080,
+      "sha256": "b8296a3f753690f510b6de349135fe41814195058c40a70538c82aa6f2ded91a"
+    }
+  },
+  "database_executed": false
+}
