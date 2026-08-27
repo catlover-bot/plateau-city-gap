@@ -17,9 +17,20 @@ from fastapi import HTTPException, Request
 ROLES = frozenset({"viewer", "analyst", "planner", "administrator"})
 ROLE_PERMISSIONS = {
     "viewer": frozenset({"platform:read"}),
-    "analyst": frozenset({"platform:read", "analysis:run", "scenario:draft"}),
+    "analyst": frozenset(
+        {"platform:read", "analysis:run", "scenario:draft", "stress_test:create"}
+    ),
     "planner": frozenset(
-        {"platform:read", "analysis:run", "scenario:draft", "scenario:review", "field:write"}
+        {
+            "platform:read",
+            "analysis:run",
+            "scenario:draft",
+            "scenario:review",
+            "stress_test:create",
+            "outcome:review",
+            "field:write",
+            "field:sync",
+        }
     ),
     "administrator": frozenset({"*"}),
 }

@@ -1,0 +1,292 @@
+{
+  "affected_areas": {
+    "component_fragmentation_increase": 8362,
+    "delivery": "aggregated metrics; building-level demographics excluded"
+  },
+  "assumptions": {
+    "assumption_source": "explicit CITY GAP validation exercise rule",
+    "explicitly_confirmed": true,
+    "hazard_classes": [
+      "0.5m以上1.0m未満",
+      "0.5m未満",
+      "1.0m以上2.0m未満",
+      "2.0m以上3.0m未満",
+      "3.0m以上5.0m未満",
+      "5.0m以上",
+      "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図",
+      "伊佐津川水系伊佐津川洪水浸水想定区域図",
+      "志楽川水系志楽川洪水浸水想定区域図",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）",
+      "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）",
+      "祖母谷川水系祖母谷川洪水浸水想定区域図",
+      "福井川水系福井川洪水浸水想定区域図",
+      "高野川水系高野川、女布川洪水浸水想定区域図"
+    ],
+    "hazard_dataset_version": "maizuru-plateau-2025-flood",
+    "hazard_type": "flood",
+    "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+    "rule": "overlap_edges_unavailable"
+  },
+  "city": {
+    "city_code": "26202",
+    "city_id": "maizuru",
+    "name": "舞鶴市"
+  },
+  "critical_roads": [
+    {
+      "affected_buildings": 196,
+      "affected_estimated_elderly_population": 67.992125,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::5e8ef6fef641bd8d05e2",
+      "isolated_node_count": 76,
+      "service_reachability_change": {
+        "evacuation": 196,
+        "medical": 196,
+        "transport_hub": 196
+      },
+      "source": "exp::tran_7427c33c-8a50-4e43-80bd-9bac318c47a9:0",
+      "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+    },
+    {
+      "affected_buildings": 195,
+      "affected_estimated_elderly_population": 67.778882,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::738e9f8a8f7578ead0fe",
+      "isolated_node_count": 75,
+      "service_reachability_change": {
+        "evacuation": 195,
+        "medical": 195,
+        "transport_hub": 195
+      },
+      "source": "exp::tran_bbcfdba2-3293-47f6-a15e-ed9330ab0adf:0",
+      "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+    },
+    {
+      "affected_buildings": 187,
+      "affected_estimated_elderly_population": 138.442279,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::97c2c5b786543d476b7a",
+      "isolated_node_count": 103,
+      "service_reachability_change": {
+        "evacuation": 187,
+        "medical": 187,
+        "transport_hub": 0
+      },
+      "source": "exp::tran_d26321a6-f614-4360-9058-4e04643b3724:0",
+      "target": "exp::tran_fa43dee4-9965-4619-8088-515a5da4fbc4:0"
+    },
+    {
+      "affected_buildings": 179,
+      "affected_estimated_elderly_population": 61.232642,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::7cfca270b52828ea788c",
+      "isolated_node_count": 70,
+      "service_reachability_change": {
+        "evacuation": 179,
+        "medical": 179,
+        "transport_hub": 179
+      },
+      "source": "exp::tran_2794bed8-5e5e-4bea-b817-6c1ef94679af:0",
+      "target": "exp::tran_bbcfdba2-3293-47f6-a15e-ed9330ab0adf:0"
+    },
+    {
+      "affected_buildings": 175,
+      "affected_estimated_elderly_population": 59.563646,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::59ea5dec9330368752ad",
+      "isolated_node_count": 69,
+      "service_reachability_change": {
+        "evacuation": 175,
+        "medical": 175,
+        "transport_hub": 175
+      },
+      "source": "exp::tran_2794bed8-5e5e-4bea-b817-6c1ef94679af:0",
+      "target": "exp::tran_a09f8243-a0fa-4fe9-bf44-78a484404b01:0"
+    },
+    {
+      "affected_buildings": 166,
+      "affected_estimated_elderly_population": 57.050897,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::98d7aa507163a13c7c8a",
+      "isolated_node_count": 66,
+      "service_reachability_change": {
+        "evacuation": 166,
+        "medical": 166,
+        "transport_hub": 166
+      },
+      "source": "exp::tran_62b7c2ef-1349-4134-8559-b554ddc50dde:0",
+      "target": "exp::tran_c72cf83c-d702-4fce-9998-0d67175e62bc:0"
+    },
+    {
+      "affected_buildings": 124,
+      "affected_estimated_elderly_population": 82.246901,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::1d9751bc8b22290ed3f2",
+      "isolated_node_count": 38,
+      "service_reachability_change": {
+        "evacuation": 124,
+        "medical": 124,
+        "transport_hub": 124
+      },
+      "source": "exp::tran_08acbf95-b417-4bb5-a4a8-2f56bf37ec18:0",
+      "target": "exp::tran_cc4fac92-a2b4-4c76-a35d-3b244111e5c0:0"
+    },
+    {
+      "affected_buildings": 115,
+      "affected_estimated_elderly_population": 91.046464,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::e42f1acc1d573c95d195",
+      "isolated_node_count": 67,
+      "service_reachability_change": {
+        "evacuation": 115,
+        "medical": 115,
+        "transport_hub": 0
+      },
+      "source": "exp::tran_470a9040-4f93-4399-92b8-9f8c75954b28:0",
+      "target": "exp::tran_86c06818-d212-41d0-8760-e32775356a8c:0"
+    },
+    {
+      "affected_buildings": 109,
+      "affected_estimated_elderly_population": 87.695618,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::d4aed9edca8ab11738e1",
+      "isolated_node_count": 66,
+      "service_reachability_change": {
+        "evacuation": 109,
+        "medical": 109,
+        "transport_hub": 0
+      },
+      "source": "exp::tran_42018095-3a77-45ab-b035-9d1d14f77572:0",
+      "target": "exp::tran_470a9040-4f93-4399-92b8-9f8c75954b28:0"
+    },
+    {
+      "affected_buildings": 58,
+      "affected_estimated_elderly_population": 33.258359,
+      "algorithm": "tarjan_bridge_subtree_demand_v1",
+      "component_id": 0,
+      "edge_id": "exp::538c932fd0990fca08ba",
+      "isolated_node_count": 20,
+      "service_reachability_change": {
+        "evacuation": 58,
+        "medical": 58,
+        "transport_hub": 58
+      },
+      "source": "exp::tran_7137ecf5-31cc-45da-bf23-46859c861a41:0",
+      "target": "exp::tran_89b17301-57c1-4e1f-9ed6-d20b7d10969a:0"
+    }
+  ],
+  "dataset_years": {
+    "plateau": 2025,
+    "population": 2020
+  },
+  "field_verification": {
+    "automatic_approval": false,
+    "status": "municipal review pending"
+  },
+  "generation_method": "deterministic structured export",
+  "limitations": [
+    "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior."
+  ],
+  "network": {
+    "buildings_with_network_demand": 28448,
+    "edges": 23437,
+    "nodes": 15684,
+    "semantics": "experimental PLATEAU LOD1 road-surface adjacency, not pedestrian network",
+    "version": "exp-4fff5849d650a70b"
+  },
+  "scenario_alternatives": [
+    {
+      "alternative_available": true,
+      "distance_increase_m": 273.522246,
+      "primary_route": {
+        "distance_m": 30.373817,
+        "edge_ids": [
+          "exp::0003d0710612af629c6e"
+        ],
+        "node_ids": [
+          "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
+          "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+        ]
+      },
+      "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+      "second_best_route": {
+        "distance_m": 303.896064,
+        "edge_ids": [
+          "exp::90fde3cfb7309a610c57",
+          "exp::826cbcb3fd3138c6f300",
+          "exp::fd7d813a35441bfd3719",
+          "exp::1383ce2cd3999fd5b117",
+          "exp::ddbae3be66d1fd1a0667",
+          "exp::6d8d3dd3f2dbc262cede",
+          "exp::b177187bf4e174de6769",
+          "exp::213bb1c935051de8d30c",
+          "exp::766e23347b12e789ee4b"
+        ],
+        "node_ids": [
+          "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
+          "exp::tran_2d186638-6dbc-4cd0-b195-fefa95c9e350:0",
+          "exp::tran_391991cc-074d-42f7-a25f-afe8ecd9f0bd:0",
+          "exp::tran_c2f80d47-1d1f-4234-b668-81eed5231dcf:0",
+          "exp::tran_127b399c-154f-4596-9e4f-f20985ebded5:0",
+          "exp::tran_c8156fb8-5f42-42b8-ac24-08cbddd222fb:0",
+          "exp::tran_b16b38a7-08ee-4daf-9a00-40ba9510b9fa:0",
+          "exp::tran_f1d9145f-80bf-48db-bf17-e3f6297374b2:0",
+          "exp::tran_33dacec3-7c6d-4201-b17d-9741c4c20ef4:0",
+          "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+        ]
+      },
+      "selected_destination_node": "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0",
+      "selected_origin_node": "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0"
+    }
+  ],
+  "schema_version": "evidence-v3.0.0",
+  "stress_test": {
+    "baseline_component_count": 5,
+    "closed_edge_count": 13632,
+    "component_fragmentation_increase": 8362,
+    "largest_component_nodes": 2946,
+    "scenario_component_count": 8367,
+    "service_metrics": {
+      "evacuation": {
+        "baseline_reachable_buildings": 28443,
+        "critical_facility_seed_count": 79,
+        "estimated_elderly_population_disconnected": 13356.162868,
+        "estimated_population_disconnected": 45790.789956,
+        "maximum_network_distance_increase_m": 2934.032197,
+        "mean_network_distance_increase_m": 184.833787,
+        "newly_unreachable_buildings": 19399,
+        "scenario_reachable_buildings": 9044
+      },
+      "medical": {
+        "baseline_reachable_buildings": 28435,
+        "critical_facility_seed_count": 68,
+        "estimated_elderly_population_disconnected": 13849.998341,
+        "estimated_population_disconnected": 46616.661312,
+        "maximum_network_distance_increase_m": 3932.57062,
+        "mean_network_distance_increase_m": 445.548475,
+        "newly_unreachable_buildings": 20333,
+        "scenario_reachable_buildings": 8102
+      },
+      "transport_hub": {
+        "baseline_reachable_buildings": 28443,
+        "critical_facility_seed_count": 119,
+        "estimated_elderly_population_disconnected": 13751.052278,
+        "estimated_population_disconnected": 46295.359755,
+        "maximum_network_distance_increase_m": 1499.1499,
+        "mean_network_distance_increase_m": 141.082493,
+        "newly_unreachable_buildings": 19967,
+        "scenario_reachable_buildings": 8476
+      }
+    }
+  },
+  "urban_state": "maizuru-2025-observed"
+}

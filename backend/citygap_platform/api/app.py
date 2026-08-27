@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
+from datetime import datetime
 from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
@@ -63,6 +66,115 @@ class JobTransitionRequest(BaseModel):
     action: Literal["start", "advance", "succeed", "fail"]
     stage: str | None = None
     error: str | None = Field(default=None, max_length=4000)
+
+
+class StressTestAssumptionRequest(BaseModel):
+    assumption_type: Literal[
+        "edge_closure",
+        "road_group_closure",
+        "area_closure",
+        "hazard_overlap_closure",
+        "service_open",
+        "service_close",
+        "service_relocate",
+        "service_temporary_unavailable",
+    ]
+    hazard_dataset_version_id: str | None = Field(default=None, min_length=36, max_length=36)
+    hazard_type: str | None = Field(default=None, max_length=100)
+    hazard_class: str | None = Field(default=None, max_length=500)
+    closure_assumption: str = Field(min_length=1, max_length=2000)
+    assumption_payload: dict[str, Any] = Field(default_factory=dict)
+    assumption_source: str = Field(min_length=1, max_length=2000)
+    explicitly_confirmed: bool
+
+    @field_validator("explicitly_confirmed")
+    @classmethod
+    def require_confirmation(cls, value: bool) -> bool:
+        if not value:
+            raise ValueError("stress-test assumptions must be explicitly confirmed")
+        return value
+
+
+class StressTestCreateRequest(BaseModel):
+    base_urban_state_id: str = Field(min_length=36, max_length=36)
+    network_version_id: str = Field(min_length=36, max_length=36)
+    stress_test_key: str = Field(min_length=1, max_length=200)
+    title: str = Field(min_length=1, max_length=500)
+    stress_test_type: Literal[
+        "edge_closure",
+        "road_group_closure",
+        "area_closure",
+        "hazard_counterfactual",
+        "service_change",
+    ]
+    algorithm_version: str = Field(min_length=1, max_length=200)
+    route_semantics: str = Field(min_length=1, max_length=1000)
+    assumptions: list[StressTestAssumptionRequest] = Field(min_length=1, max_length=100)
+
+    @field_validator("assumptions")
+    @classmethod
+    def validate_hazard_contract(
+        cls, values: list[StressTestAssumptionRequest]
+    ) -> list[StressTestAssumptionRequest]:
+        for value in values:
+            if value.assumption_type == "hazard_overlap_closure" and not all(
+                (value.hazard_dataset_version_id, value.hazard_type, value.hazard_class)
+            ):
+                raise ValueError("hazard overlap requires dataset version, type and class")
+        return values
+
+
+FIELD_SYNC_KEYS = frozenset(
+    {
+        "site_access",
+        "road_safety",
+        "land_ownership_unknown",
+        "existing_service",
+        "facility_condition",
+        "hazard_confirmation",
+        "operator_consultation",
+        "notes",
+        "gps_confirmation",
+    }
+)
+
+
+class OfflinePackageCreateRequest(BaseModel):
+    urban_state_id: str = Field(min_length=36, max_length=36)
+    scenario_run_id: str = Field(min_length=36, max_length=36)
+    site_order: int = Field(ge=1, le=20)
+    expires_at: datetime | None = None
+
+
+class FieldSyncRequest(BaseModel):
+    client_operation_id: str = Field(min_length=36, max_length=36)
+    offline_package_id: str = Field(min_length=36, max_length=36)
+    scenario_run_id: str = Field(min_length=36, max_length=36)
+    site_order: int = Field(ge=1, le=20)
+    base_record_version: int = Field(ge=1)
+    client_updated_at: datetime
+    payload: dict[str, Any]
+
+    @field_validator("payload")
+    @classmethod
+    def validate_payload(cls, value: dict[str, Any]) -> dict[str, Any]:
+        if not value or set(value) - FIELD_SYNC_KEYS:
+            raise ValueError("field sync payload contains missing or unsupported fields")
+        if len(json.dumps(value, ensure_ascii=False).encode()) > 65536:
+            raise ValueError("field sync payload exceeds 64 KiB")
+        return value
+
+
+class ConflictResolutionRequest(BaseModel):
+    resolution_status: Literal["use_server", "use_client", "merged"]
+    resolved_state: dict[str, Any] | None = None
+
+    @field_validator("resolved_state")
+    @classmethod
+    def validate_resolved_state(cls, value: dict[str, Any] | None) -> dict[str, Any] | None:
+        if value is not None and (not value or set(value) - FIELD_SYNC_KEYS):
+            raise ValueError("resolved state contains unsupported fields")
+        return value
 
 
 def _repository(request: Request) -> PlatformRepository:
@@ -142,6 +254,64 @@ def create_app(
         city_id: str, repo: Annotated[PlatformRepository, Depends(_repository)]
     ) -> list[dict]:
         return repo.layers(city_id)
+
+    @application.get("/cities/{city_id}/states")
+    def urban_states(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        lifecycle_status: Literal[
+            "draft", "validated", "current", "superseded", "archived"
+        ]
+        | None = None,
+        limit: Annotated[int, Query(ge=1, le=100)] = 30,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "states": repo.urban_states(city_id, lifecycle_status, limit),
+        }
+
+    @application.get("/cities/{city_id}/states/{state_id}")
+    def urban_state_detail(
+        city_id: str,
+        state_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.urban_state_detail(city_id, state_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Urban state not found")
+        return result
+
+    @application.get("/cities/{city_id}/state-comparison")
+    def state_comparison(
+        city_id: str,
+        state_ids: Annotated[str, Query(description="Two or three comma-separated state UUIDs")],
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        identifiers = [value.strip() for value in state_ids.split(",") if value.strip()]
+        if not 2 <= len(identifiers) <= 3 or len(identifiers) != len(set(identifiers)):
+            raise HTTPException(status_code=422, detail="state_ids requires two or three values")
+        states = []
+        for identifier in identifiers:
+            state = repo.urban_state_detail(city_id, identifier)
+            if state is None:
+                raise HTTPException(status_code=404, detail=f"Urban state not found: {identifier}")
+            states.append(state)
+        return {"city_id": city_id, "comparison_limit": 3, "states": states}
+
+    @application.get("/cities/{city_id}/changes")
+    def state_changes(
+        city_id: str,
+        from_state_id: Annotated[str, Query(min_length=36, max_length=36)],
+        to_state_id: Annotated[str, Query(min_length=36, max_length=36)],
+        bbox: Annotated[str, Query(description="Required bounded map window")],
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=1000)] = 250,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        parsed_bbox = _parse_bbox(bbox)
+        return repo.state_changes(
+            city_id, from_state_id, to_state_id, parsed_bbox, limit, offset
+        )
 
     @application.get("/cities/{city_id}/buildings")
     def buildings(
@@ -382,6 +552,86 @@ def create_app(
             "scenarios": repo.scenarios(city_id, status.value if status else None, limit),
         }
 
+    @application.post(
+        "/cities/{city_id}/stress-tests",
+        status_code=202,
+        dependencies=[Depends(require_permission("stress_test:create"))],
+    )
+    def create_stress_test(
+        city_id: str,
+        request_body: StressTestCreateRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.create_stress_test(city_id, request_body.model_dump(mode="json"))
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="City/state/network combination not found")
+        return result
+
+    @application.get("/stress-tests/{stress_test_id}")
+    def stress_test_detail(
+        stress_test_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.stress_test_detail(stress_test_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Stress test not found")
+        return result
+
+    @application.get("/stress-tests/{stress_test_id}/impacts")
+    def stress_test_impacts(
+        stress_test_id: str,
+        bbox: Annotated[str, Query(description="Required bounded map window")],
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        service_category: Literal[
+            "medical", "emergency", "evacuation", "administrative", "transport_hub"
+        ]
+        | None = None,
+        limit: Annotated[int, Query(ge=1, le=1000)] = 250,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        return repo.stress_test_impacts(
+            stress_test_id, _parse_bbox(bbox), service_category, limit, offset
+        )
+
+    @application.get("/cities/{city_id}/network/criticality")
+    def network_criticality(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        urban_state_id: str | None = None,
+        limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "candidate_label": "network criticality candidate",
+            "candidates": repo.network_criticality(city_id, urban_state_id, limit),
+        }
+
+    @application.get("/cities/{city_id}/future-states")
+    def future_states(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "prediction_claimed": False,
+            "states": repo.future_states(city_id),
+        }
+
+    @application.get("/cities/{city_id}/outcomes")
+    def outcomes(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=100)] = 30,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "causal_effect_claimed": False,
+            "evaluations": repo.outcomes(city_id, limit),
+        }
+
     @application.get("/cities/{city_id}/scenario-comparison")
     def scenario_comparison(
         city_id: str,
@@ -488,6 +738,74 @@ def create_app(
         )
         if result is None:
             raise HTTPException(status_code=404, detail="Scenario site not found")
+        return result
+
+    @application.post(
+        "/cities/{city_id}/field/offline-packages",
+        status_code=201,
+        dependencies=[Depends(require_permission("field:sync"))],
+    )
+    def create_field_offline_package(
+        city_id: str,
+        request_body: OfflinePackageCreateRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.create_field_offline_package(
+            city_id,
+            request_body.urban_state_id,
+            request_body.scenario_run_id,
+            request_body.site_order,
+            request_body.expires_at.isoformat() if request_body.expires_at else None,
+        )
+        if result is None:
+            raise HTTPException(status_code=404, detail="Selected state/scenario site not found")
+        return result
+
+    @application.post(
+        "/cities/{city_id}/field/sync",
+        dependencies=[Depends(require_permission("field:sync"))],
+    )
+    def sync_field_operation(
+        city_id: str,
+        request_body: FieldSyncRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> Response:
+        result = repo.sync_field_operation(city_id, request_body.model_dump(mode="json"))
+        if result is None:
+            raise HTTPException(status_code=404, detail="Offline package or field record not found")
+        status_code = 409 if result.get("status") == "conflict" else 200
+        return JSONResponse(status_code=status_code, content=jsonable_encoder(result))
+
+    @application.get("/field-conflicts/{conflict_id}")
+    def field_sync_conflict(
+        conflict_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.field_sync_conflict(conflict_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Field sync conflict not found")
+        return result
+
+    @application.post(
+        "/cities/{city_id}/field-conflicts/{conflict_id}/resolve",
+        dependencies=[Depends(require_permission("field:sync"))],
+    )
+    def resolve_field_sync_conflict(
+        city_id: str,
+        conflict_id: str,
+        request_body: ConflictResolutionRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        if request_body.resolution_status == "merged" and request_body.resolved_state is None:
+            raise HTTPException(status_code=422, detail="Merged resolution requires state")
+        try:
+            result = repo.resolve_field_sync_conflict(
+                city_id, conflict_id, request_body.model_dump(mode="json")
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Field sync conflict not found")
         return result
 
     @application.get("/registry/cities")

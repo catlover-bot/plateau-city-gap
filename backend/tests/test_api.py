@@ -21,6 +21,9 @@ class FakeRepository:
         self.checklists: dict[tuple[str, int], dict[str, Any]] = {}
         self.jobs: dict[str, JobSnapshot] = {}
         self.tile_calls = 0
+        self.stress_tests: dict[str, dict[str, Any]] = {}
+        self.field_record_version = 1
+        self.field_conflicts: dict[str, dict[str, Any]] = {}
 
     def health(self) -> bool:
         return True
@@ -39,6 +42,54 @@ class FakeRepository:
 
     def layers(self, city_id: str) -> list[dict[str, Any]]:
         return [{"theme": "bldg", "feature_count": 44647, "city_id": city_id}]
+
+    def urban_states(
+        self, city_id: str, lifecycle_status: str | None, limit: int
+    ) -> list[dict[str, Any]]:
+        rows = [
+            {
+                "urban_state_id": "10000000-0000-0000-0000-000000000011",
+                "city_id": city_id,
+                "state_key": "observed-2025",
+                "state_type": "observed",
+                "lifecycle_status": "current",
+                "effective_date": "2025-01-01",
+            },
+            {
+                "urban_state_id": "10000000-0000-0000-0000-000000000012",
+                "city_id": city_id,
+                "state_key": "future-2040",
+                "state_type": "future",
+                "lifecycle_status": "validated",
+                "effective_date": "2040-01-01",
+            },
+        ]
+        return [row for row in rows if lifecycle_status is None or row["lifecycle_status"] == lifecycle_status][
+            :limit
+        ]
+
+    def urban_state_detail(self, city_id: str, state_id: str) -> dict[str, Any] | None:
+        rows = {row["urban_state_id"]: row for row in self.urban_states(city_id, None, 100)}
+        return rows.get(state_id)
+
+    def state_changes(
+        self,
+        city_id: str,
+        from_state_id: str,
+        to_state_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        return {
+            "city_id": city_id,
+            "from_urban_state_id": from_state_id,
+            "to_urban_state_id": to_state_id,
+            "bbox": bbox,
+            "limit": limit,
+            "offset": offset,
+            "features": [{"feature_key": "building-1", "change_type": "geometry_changed"}],
+        }
 
     def buildings(
         self, city_id: str, bbox: tuple[float, float, float, float], limit: int, offset: int
@@ -173,6 +224,74 @@ class FakeRepository:
         }
         return [scenario] if status is None or status == self.lifecycle_status else []
 
+    def create_stress_test(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        value = {
+            "stress_test_id": "10000000-0000-0000-0000-000000000099",
+            "city_id": city_id,
+            "status": "queued",
+            "prediction_claimed": False,
+            "assumptions": request["assumptions"],
+            **{key: value for key, value in request.items() if key != "assumptions"},
+        }
+        self.stress_tests[value["stress_test_id"]] = value
+        return value
+
+    def stress_test_detail(self, stress_test_id: str) -> dict[str, Any] | None:
+        return self.stress_tests.get(stress_test_id)
+
+    def stress_test_impacts(
+        self,
+        stress_test_id: str,
+        bbox: tuple[float, float, float, float],
+        service_category: str | None,
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        return {
+            "stress_test_id": stress_test_id,
+            "bbox": bbox,
+            "service_category": service_category,
+            "limit": limit,
+            "offset": offset,
+            "delivery": "bounded_bbox",
+            "features": [{"building_gml_id": "b-1", "impact_status": "disconnected"}],
+        }
+
+    def network_criticality(
+        self, city_id: str, urban_state_id: str | None, limit: int
+    ) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_id": city_id,
+                "urban_state_id": urban_state_id,
+                "rank": 1,
+                "candidate_label": "network criticality candidate",
+                "affected_buildings": 42,
+            }
+        ][:limit]
+
+    def future_states(self, city_id: str) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_id": city_id,
+                "projection_year": 2040,
+                "source_verified": True,
+                "fixed_service_assumption": True,
+            }
+        ]
+
+    def outcomes(self, city_id: str, limit: int) -> list[dict[str, Any]]:
+        return [
+            {
+                "city_id": city_id,
+                "planned_effect": {"distance_m": -100},
+                "observed_change": {"distance_m": -80},
+                "causal_effect_claimed": False,
+            }
+        ][:limit]
+
     def scenario_detail(self, city_id: str, scenario_id: str) -> dict[str, Any] | None:
         if scenario_id == "missing":
             return None
@@ -231,6 +350,75 @@ class FakeRepository:
         }
         self.checklists[(scenario_id, site_order)] = value
         return value
+
+    def create_field_offline_package(
+        self,
+        city_id: str,
+        urban_state_id: str,
+        scenario_run_id: str,
+        site_order: int,
+        expires_at: str | None,
+    ) -> dict[str, Any] | None:
+        return {
+            "offline_package_id": "10000000-0000-0000-0000-000000000071",
+            "package_version": 1,
+            "expires_at": expires_at,
+            "content": {
+                "package_scope": "single_selected_site",
+                "city_id": city_id,
+                "urban_state_id": urban_state_id,
+                "scenario_run_id": scenario_run_id,
+                "site_order": site_order,
+                "field_record": {"record_version": self.field_record_version},
+            },
+        }
+
+    def sync_field_operation(
+        self, city_id: str, operation: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        if operation["base_record_version"] != self.field_record_version:
+            conflict_id = "10000000-0000-0000-0000-000000000081"
+            conflict = {
+                "conflict_id": conflict_id,
+                "client_operation_id": operation["client_operation_id"],
+                "city_id": city_id,
+                "status": "conflict",
+                "resolution_status": "unresolved",
+                "server_record_version": self.field_record_version,
+                "server_state": {"notes": "server"},
+                "client_state": operation["payload"],
+                "silent_last_write_wins": False,
+            }
+            self.field_conflicts[conflict_id] = conflict
+            return conflict
+        self.field_record_version += 1
+        return {
+            "client_operation_id": operation["client_operation_id"],
+            "status": "applied",
+            "record_version": self.field_record_version,
+        }
+
+    def field_sync_conflict(self, conflict_id: str) -> dict[str, Any] | None:
+        return self.field_conflicts.get(conflict_id)
+
+    def resolve_field_sync_conflict(
+        self, city_id: str, conflict_id: str, resolution: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        conflict = self.field_conflicts.get(conflict_id)
+        if conflict is None:
+            return None
+        if conflict["resolution_status"] != "unresolved":
+            raise ValueError("already resolved")
+        self.field_record_version += int(resolution["resolution_status"] != "use_server")
+        conflict.update(
+            {
+                "city_id": city_id,
+                "resolution_status": resolution["resolution_status"],
+                "resolved_state": resolution.get("resolved_state") or conflict["server_state"],
+                "record_version": self.field_record_version,
+            }
+        )
+        return conflict
 
     def city_registry(self) -> list[dict[str, Any]]:
         return [
@@ -576,3 +764,146 @@ def test_rbac_separates_view_analysis_review_and_platform_operations() -> None:
     assert rbac_client.get("/admin/snapshot", headers=administrator).json()["cities"] == [
         {"city_code": "26202"}
     ]
+
+
+def test_temporal_states_comparison_and_change_map_are_bounded() -> None:
+    states = client.get("/cities/26202/states").json()["states"]
+    assert [row["state_type"] for row in states] == ["observed", "future"]
+    state_ids = ",".join(row["urban_state_id"] for row in states)
+    comparison = client.get(f"/cities/26202/state-comparison?state_ids={state_ids}")
+    assert comparison.status_code == 200
+    assert comparison.json()["comparison_limit"] == 3
+    assert client.get(f"/cities/26202/changes?from_state_id={states[0]['urban_state_id']}").status_code == 422
+    changes = client.get(
+        "/cities/26202/changes",
+        params={
+            "from_state_id": states[0]["urban_state_id"],
+            "to_state_id": states[1]["urban_state_id"],
+            "bbox": "135,35,136,36",
+        },
+    )
+    assert changes.status_code == 200
+    assert changes.json()["features"][0]["change_type"] == "geometry_changed"
+
+
+def test_stress_test_contract_requires_explicit_assumptions_and_analyst_role() -> None:
+    repository = FakeRepository()
+    resilience_client = TestClient(create_app(repository))
+    viewer = {"X-CITYGAP-Actor": "viewer-1", "X-CITYGAP-Roles": "viewer"}
+    analyst = {"X-CITYGAP-Actor": "analyst-1", "X-CITYGAP-Roles": "analyst"}
+    payload = {
+        "base_urban_state_id": "10000000-0000-0000-0000-000000000011",
+        "network_version_id": "10000000-0000-0000-0000-000000000021",
+        "stress_test_key": "maizuru-flood-review",
+        "title": "Flood overlap closure exercise",
+        "stress_test_type": "hazard_counterfactual",
+        "algorithm_version": "urban-resilience-1.0.0",
+        "route_semantics": "road-surface adjacency, not pedestrian routing",
+        "assumptions": [
+            {
+                "assumption_type": "hazard_overlap_closure",
+                "hazard_dataset_version_id": "10000000-0000-0000-0000-000000000031",
+                "hazard_type": "flood",
+                "hazard_class": "all published classes",
+                "closure_assumption": "overlapping edges unavailable",
+                "assumption_payload": {"rule": "overlap_edges_unavailable"},
+                "assumption_source": "municipal exercise",
+                "explicitly_confirmed": True,
+            }
+        ],
+    }
+    assert resilience_client.post(
+        "/cities/26202/stress-tests", headers=viewer, json=payload
+    ).status_code == 403
+    created = resilience_client.post(
+        "/cities/26202/stress-tests", headers=analyst, json=payload
+    )
+    assert created.status_code == 202
+    assert created.json()["prediction_claimed"] is False
+    stress_test_id = created.json()["stress_test_id"]
+    assert resilience_client.get(f"/stress-tests/{stress_test_id}").status_code == 200
+    assert resilience_client.get(f"/stress-tests/{stress_test_id}/impacts").status_code == 422
+    impacts = resilience_client.get(
+        f"/stress-tests/{stress_test_id}/impacts?bbox=135,35,136,36"
+    ).json()
+    assert impacts["delivery"] == "bounded_bbox"
+
+    payload["assumptions"][0]["explicitly_confirmed"] = False
+    assert resilience_client.post(
+        "/cities/26202/stress-tests", headers=analyst, json=payload
+    ).status_code == 422
+
+
+def test_criticality_future_and_outcomes_preserve_claim_boundaries() -> None:
+    criticality = client.get("/cities/26202/network/criticality").json()
+    assert criticality["candidate_label"] == "network criticality candidate"
+    future = client.get("/cities/26202/future-states").json()
+    assert future["prediction_claimed"] is False
+    assert future["states"][0]["source_verified"] is True
+    outcomes = client.get("/cities/26202/outcomes").json()
+    assert outcomes["causal_effect_claimed"] is False
+    assert outcomes["evaluations"][0]["planned_effect"] != outcomes["evaluations"][0][
+        "observed_change"
+    ]
+
+
+def test_selected_site_offline_sync_requires_explicit_conflict_resolution() -> None:
+    repository = FakeRepository()
+    field_client = TestClient(create_app(repository))
+    planner = {"X-CITYGAP-Actor": "planner-1", "X-CITYGAP-Roles": "planner"}
+    package = field_client.post(
+        "/cities/26202/field/offline-packages",
+        headers=planner,
+        json={
+            "urban_state_id": "10000000-0000-0000-0000-000000000011",
+            "scenario_run_id": "10000000-0000-0000-0000-000000000041",
+            "site_order": 1,
+        },
+    )
+    assert package.status_code == 201
+    assert package.json()["content"]["package_scope"] == "single_selected_site"
+    common = {
+        "offline_package_id": package.json()["offline_package_id"],
+        "scenario_run_id": "10000000-0000-0000-0000-000000000041",
+        "site_order": 1,
+        "client_updated_at": "2026-08-27T10:00:00+09:00",
+        "payload": {
+            "notes": "現地確認",
+            "gps_confirmation": {"latitude": 35.4, "longitude": 135.3},
+        },
+    }
+    applied = field_client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **common,
+            "client_operation_id": "10000000-0000-0000-0000-000000000091",
+            "base_record_version": 1,
+        },
+    )
+    assert applied.status_code == 200 and applied.json()["record_version"] == 2
+    conflict = field_client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **common,
+            "client_operation_id": "10000000-0000-0000-0000-000000000092",
+            "base_record_version": 1,
+        },
+    )
+    assert conflict.status_code == 409
+    assert conflict.json()["silent_last_write_wins"] is False
+    conflict_id = conflict.json()["conflict_id"]
+    assert field_client.get(f"/field-conflicts/{conflict_id}").json()[
+        "resolution_status"
+    ] == "unresolved"
+    resolved = field_client.post(
+        f"/cities/26202/field-conflicts/{conflict_id}/resolve",
+        headers=planner,
+        json={
+            "resolution_status": "merged",
+            "resolved_state": {"notes": "自治体レビュー済み統合"},
+        },
+    )
+    assert resolved.status_code == 200
+    assert resolved.json()["resolution_status"] == "merged"

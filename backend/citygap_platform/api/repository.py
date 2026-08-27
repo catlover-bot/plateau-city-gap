@@ -28,6 +28,22 @@ class PlatformRepository(Protocol):
 
     def layers(self, city_id: str) -> list[dict[str, Any]]: ...
 
+    def urban_states(
+        self, city_id: str, lifecycle_status: str | None, limit: int
+    ) -> list[dict[str, Any]]: ...
+
+    def urban_state_detail(self, city_id: str, state_id: str) -> dict[str, Any] | None: ...
+
+    def state_changes(
+        self,
+        city_id: str,
+        from_state_id: str,
+        to_state_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]: ...
+
     def buildings(
         self, city_id: str, bbox: tuple[float, float, float, float], limit: int, offset: int
     ) -> list[dict[str, Any]]: ...
@@ -74,6 +90,29 @@ class PlatformRepository(Protocol):
 
     def scenarios(self, city_id: str, status: str | None, limit: int) -> list[dict[str, Any]]: ...
 
+    def create_stress_test(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None: ...
+
+    def stress_test_detail(self, stress_test_id: str) -> dict[str, Any] | None: ...
+
+    def stress_test_impacts(
+        self,
+        stress_test_id: str,
+        bbox: tuple[float, float, float, float],
+        service_category: str | None,
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]: ...
+
+    def network_criticality(
+        self, city_id: str, urban_state_id: str | None, limit: int
+    ) -> list[dict[str, Any]]: ...
+
+    def future_states(self, city_id: str) -> list[dict[str, Any]]: ...
+
+    def outcomes(self, city_id: str, limit: int) -> list[dict[str, Any]]: ...
+
     def scenario_detail(self, city_id: str, scenario_id: str) -> dict[str, Any] | None: ...
 
     def transition_scenario(
@@ -95,6 +134,25 @@ class PlatformRepository(Protocol):
         scenario_id: str,
         site_order: int,
         checklist: dict[str, Any],
+    ) -> dict[str, Any] | None: ...
+
+    def create_field_offline_package(
+        self,
+        city_id: str,
+        urban_state_id: str,
+        scenario_run_id: str,
+        site_order: int,
+        expires_at: str | None,
+    ) -> dict[str, Any] | None: ...
+
+    def sync_field_operation(
+        self, city_id: str, operation: dict[str, Any]
+    ) -> dict[str, Any] | None: ...
+
+    def field_sync_conflict(self, conflict_id: str) -> dict[str, Any] | None: ...
+
+    def resolve_field_sync_conflict(
+        self, city_id: str, conflict_id: str, resolution: dict[str, Any]
     ) -> dict[str, Any] | None: ...
 
     def city_registry(self) -> list[dict[str, Any]]: ...
@@ -265,6 +323,215 @@ class PostGISRepository:
             "ready": all(checks.values()),
             "checks": checks,
             "details": details,
+        }
+
+    def urban_states(
+        self, city_id: str, lifecycle_status: str | None, limit: int
+    ) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT state.id, state.state_key, state.label, state.effective_date,
+                          state.state_type, state.lifecycle_status, state.base_state_id,
+                          state.primary_plateau_dataset_version_id, state.source_verified,
+                          state.population_model, state.fixed_service_assumption,
+                          state.validated_at, state.updated_at
+                   FROM urban_states AS state
+                   JOIN cities AS city ON city.id = state.city_id
+                   WHERE (city.city_code = %s OR city.city_key = %s)
+                     AND (CAST(%s AS text) IS NULL OR state.lifecycle_status = %s)
+                   ORDER BY state.effective_date DESC, state.state_key
+                   LIMIT %s""",
+                (city_id, city_id, lifecycle_status, lifecycle_status, limit),
+            ).fetchall()
+        keys = (
+            "urban_state_id",
+            "state_key",
+            "label",
+            "effective_date",
+            "state_type",
+            "lifecycle_status",
+            "base_urban_state_id",
+            "primary_plateau_dataset_version_id",
+            "source_verified",
+            "population_model",
+            "fixed_service_assumption",
+            "validated_at",
+            "updated_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def urban_state_detail(self, city_id: str, state_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT state.id, state.state_key, state.label, state.effective_date,
+                          state.state_type, state.lifecycle_status, state.base_state_id,
+                          state.primary_plateau_dataset_version_id, state.source_verified,
+                          state.population_model, state.fixed_service_assumption,
+                          state.validation_report, state.created_by, state.created_at,
+                          state.validated_at, state.updated_at
+                   FROM urban_states AS state
+                   JOIN cities AS city ON city.id = state.city_id
+                   WHERE (city.city_code = %s OR city.city_key = %s) AND state.id = %s""",
+                (city_id, city_id, state_id),
+            ).fetchone()
+            if row is None:
+                return None
+            dataset_rows = connection.execute(
+                """SELECT dataset_role, dataset_version_id, source_verified,
+                          metadata, attached_at
+                   FROM state_dataset_versions WHERE urban_state_id = %s
+                   ORDER BY dataset_role, dataset_version_id""",
+                (state_id,),
+            ).fetchall()
+            network_rows = connection.execute(
+                """SELECT link.network_version_id, link.purpose, network.graph_version,
+                          network.network_type, network.pedestrian_network,
+                          network.route_semantics, network.node_count, network.edge_count
+                   FROM state_network_versions AS link
+                   JOIN road_network_versions AS network ON network.id = link.network_version_id
+                   WHERE link.urban_state_id = %s
+                   ORDER BY link.purpose, network.graph_version""",
+                (state_id,),
+            ).fetchall()
+            analysis_rows = connection.execute(
+                """SELECT link.analysis_run_id, link.result_role, run.analysis_type,
+                          run.status, run.config_hash, run.output_sha256
+                   FROM state_analysis_runs AS link
+                   JOIN analysis_runs AS run ON run.id = link.analysis_run_id
+                   WHERE link.urban_state_id = %s
+                   ORDER BY run.analysis_type, link.analysis_run_id""",
+                (state_id,),
+            ).fetchall()
+        state_keys = (
+            "urban_state_id",
+            "state_key",
+            "label",
+            "effective_date",
+            "state_type",
+            "lifecycle_status",
+            "base_urban_state_id",
+            "primary_plateau_dataset_version_id",
+            "source_verified",
+            "population_model",
+            "fixed_service_assumption",
+            "validation_report",
+            "created_by",
+            "created_at",
+            "validated_at",
+            "updated_at",
+        )
+        dataset_keys = (
+            "dataset_role",
+            "dataset_version_id",
+            "source_verified",
+            "metadata",
+            "attached_at",
+        )
+        network_keys = (
+            "network_version_id",
+            "purpose",
+            "graph_version",
+            "network_type",
+            "pedestrian_network",
+            "route_semantics",
+            "node_count",
+            "edge_count",
+        )
+        analysis_keys = (
+            "analysis_run_id",
+            "result_role",
+            "analysis_type",
+            "status",
+            "config_hash",
+            "output_sha256",
+        )
+        return {
+            "city_id": city_id,
+            **dict(zip(state_keys, row, strict=True)),
+            "dataset_versions": [
+                dict(zip(dataset_keys, item, strict=True)) for item in dataset_rows
+            ],
+            "network_versions": [
+                dict(zip(network_keys, item, strict=True)) for item in network_rows
+            ],
+            "analysis_runs": [
+                dict(zip(analysis_keys, item, strict=True)) for item in analysis_rows
+            ],
+            "provenance": (
+                "result -> urban_state -> dataset/PLATEAU/network versions -> algorithm"
+            ),
+        }
+
+    def state_changes(
+        self,
+        city_id: str,
+        from_state_id: str,
+        to_state_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            change_set = connection.execute(
+                """SELECT change_set.id, change_set.status, change_set.algorithm_version,
+                          change_set.summary, change_set.completed_at
+                   FROM urban_state_change_sets AS change_set
+                   JOIN cities AS city ON city.id = change_set.city_id
+                   WHERE (city.city_code = %s OR city.city_key = %s)
+                     AND change_set.from_urban_state_id = %s
+                     AND change_set.to_urban_state_id = %s
+                   ORDER BY change_set.created_at DESC LIMIT 1""",
+                (city_id, city_id, from_state_id, to_state_id),
+            ).fetchone()
+            if change_set is None:
+                return {
+                    "city_id": city_id,
+                    "from_urban_state_id": from_state_id,
+                    "to_urban_state_id": to_state_id,
+                    "change_set": None,
+                    "features": [],
+                }
+            rows = connection.execute(
+                """SELECT change.feature_key, change.before_gml_id, change.after_gml_id,
+                          change.feature_type, change.change_type, change.matched_by,
+                          change.important_attribute_changes,
+                          ST_AsGeoJSON(change.affected_envelope)::jsonb
+                   FROM urban_state_feature_changes AS change
+                   WHERE change.change_set_id = %s
+                     AND change.affected_envelope IS NOT NULL
+                     AND ST_Intersects(
+                         change.affected_envelope,
+                         ST_MakeEnvelope(%s, %s, %s, %s, 4326)
+                     )
+                   ORDER BY change.feature_type, change.change_type, change.feature_key
+                   LIMIT %s OFFSET %s""",
+                (change_set[0], *bbox, limit, offset),
+            ).fetchall()
+        keys = (
+            "feature_key",
+            "before_gml_id",
+            "after_gml_id",
+            "feature_type",
+            "change_type",
+            "matched_by",
+            "important_attribute_changes",
+            "geometry",
+        )
+        return {
+            "city_id": city_id,
+            "from_urban_state_id": from_state_id,
+            "to_urban_state_id": to_state_id,
+            "bbox": bbox,
+            "change_set": {
+                "change_set_id": change_set[0],
+                "status": change_set[1],
+                "algorithm_version": change_set[2],
+                "summary": change_set[3],
+                "completed_at": change_set[4],
+            },
+            "features": [dict(zip(keys, row, strict=True)) for row in rows],
+            "limit": limit,
+            "offset": offset,
         }
 
     def cities(self) -> list[dict[str, Any]]:
@@ -778,6 +1045,400 @@ class PostGISRepository:
             ).fetchall()
         return self._context_rows(rows)
 
+    def create_stress_test(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        assumptions = sorted(
+            request["assumptions"],
+            key=lambda row: json.dumps(row, ensure_ascii=False, sort_keys=True),
+        )
+        assumption_payload = json.dumps(
+            assumptions, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        )
+        assumption_hash = hashlib.sha256(assumption_payload.encode()).hexdigest()
+        cache_payload = json.dumps(
+            {
+                "city": city_id,
+                "urban_state": request["base_urban_state_id"],
+                "network_version": request["network_version_id"],
+                "assumption_hash": assumption_hash,
+                "algorithm_version": request["algorithm_version"],
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        cache_key = hashlib.sha256(cache_payload.encode()).hexdigest()
+        context = current_request_context()
+        with self._connect() as connection:
+            city = connection.execute(
+                """SELECT city.id
+                   FROM cities AS city
+                   JOIN urban_states AS state ON state.city_id = city.id
+                   JOIN road_network_versions AS network ON network.id = %s
+                   JOIN city_dataset_versions AS dataset
+                     ON dataset.id = network.dataset_version_id
+                   WHERE (city.city_code = %s OR city.city_key = %s)
+                     AND state.id = %s
+                     AND state.lifecycle_status IN ('validated', 'current')
+                     AND dataset.city_id = city.city_code""",
+                (
+                    request["network_version_id"],
+                    city_id,
+                    city_id,
+                    request["base_urban_state_id"],
+                ),
+            ).fetchone()
+            if city is None:
+                return None
+            cached = connection.execute(
+                "SELECT stress_test_run_id FROM stress_test_result_cache WHERE cache_key = %s",
+                (cache_key,),
+            ).fetchone()
+            if cached is not None:
+                cached_id = str(cached[0])
+            else:
+                row = connection.execute(
+                    """INSERT INTO stress_test_runs (
+                           city_id, base_urban_state_id, network_version_id,
+                           stress_test_key, title, stress_test_type, status,
+                           assumption_hash, algorithm_version, cache_key,
+                           route_semantics, prediction_claimed, limitation, created_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, 'queued', %s, %s, %s, %s,
+                                 false, %s, %s)
+                       RETURNING id""",
+                    (
+                        city[0],
+                        request["base_urban_state_id"],
+                        request["network_version_id"],
+                        request["stress_test_key"],
+                        request["title"],
+                        request["stress_test_type"],
+                        assumption_hash,
+                        request["algorithm_version"],
+                        cache_key,
+                        request["route_semantics"],
+                        (
+                            "This is a counterfactual stress test, not a prediction of "
+                            "disaster damage or actual road passability."
+                        ),
+                        context.actor,
+                    ),
+                ).fetchone()
+                stress_test_id = str(row[0])
+                for assumption in assumptions:
+                    connection.execute(
+                        """INSERT INTO stress_test_assumptions (
+                               stress_test_run_id, assumption_type,
+                               hazard_dataset_version_id, hazard_type, hazard_class,
+                               closure_assumption, assumption_payload,
+                               assumption_source, explicitly_confirmed
+                           ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, true)""",
+                        (
+                            stress_test_id,
+                            assumption["assumption_type"],
+                            assumption.get("hazard_dataset_version_id"),
+                            assumption.get("hazard_type"),
+                            assumption.get("hazard_class"),
+                            assumption["closure_assumption"],
+                            json.dumps(
+                                assumption.get("assumption_payload", {}), ensure_ascii=False
+                            ),
+                            assumption["assumption_source"],
+                        ),
+                    )
+                connection.execute(
+                    """INSERT INTO stress_test_result_cache (
+                           cache_key, city_id, urban_state_id, network_version_id,
+                           assumption_hash, algorithm_version, stress_test_run_id
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    (
+                        cache_key,
+                        city[0],
+                        request["base_urban_state_id"],
+                        request["network_version_id"],
+                        assumption_hash,
+                        request["algorithm_version"],
+                        stress_test_id,
+                    ),
+                )
+                self._audit(
+                    connection,
+                    "stress_test.assumption.create",
+                    "stress_test",
+                    stress_test_id,
+                    city_id,
+                    None,
+                    {
+                        "status": "queued",
+                        "assumption_hash": assumption_hash,
+                        "explicit_assumption_count": len(assumptions),
+                        "prediction_claimed": False,
+                    },
+                )
+                connection.commit()
+                cached_id = stress_test_id
+        return self.stress_test_detail(cached_id)
+
+    def stress_test_detail(self, stress_test_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT run.id, city.city_code, run.base_urban_state_id,
+                          run.network_version_id, run.stress_test_key, run.title,
+                          run.stress_test_type, run.status, run.assumption_hash,
+                          run.algorithm_version, run.cache_key, run.route_semantics,
+                          run.prediction_claimed, run.limitation, run.created_by,
+                          run.created_at, run.started_at, run.completed_at, run.metadata
+                   FROM stress_test_runs AS run
+                   JOIN cities AS city ON city.id = run.city_id
+                   WHERE run.id = %s""",
+                (stress_test_id,),
+            ).fetchone()
+            if row is None:
+                return None
+            assumptions = connection.execute(
+                """SELECT id, assumption_type, hazard_dataset_version_id,
+                          hazard_type, hazard_class, closure_assumption,
+                          assumption_payload, assumption_source,
+                          explicitly_confirmed, created_at
+                   FROM stress_test_assumptions WHERE stress_test_run_id = %s
+                   ORDER BY created_at, id""",
+                (stress_test_id,),
+            ).fetchall()
+            metrics = connection.execute(
+                """SELECT metric_name, service_category, value, unit, definition
+                   FROM stress_test_metrics WHERE stress_test_run_id = %s
+                   ORDER BY metric_name, service_category""",
+                (stress_test_id,),
+            ).fetchall()
+            impact_counts = connection.execute(
+                """SELECT
+                       (SELECT count(*) FROM stress_test_edge_impacts
+                        WHERE stress_test_run_id = %s),
+                       (SELECT count(*) FROM stress_test_building_impacts
+                        WHERE stress_test_run_id = %s),
+                       (SELECT count(*) FROM stress_test_facility_impacts
+                        WHERE stress_test_run_id = %s)""",
+                (stress_test_id, stress_test_id, stress_test_id),
+            ).fetchone()
+        run_keys = (
+            "stress_test_id",
+            "city_id",
+            "base_urban_state_id",
+            "network_version_id",
+            "stress_test_key",
+            "title",
+            "stress_test_type",
+            "status",
+            "assumption_hash",
+            "algorithm_version",
+            "cache_key",
+            "route_semantics",
+            "prediction_claimed",
+            "limitation",
+            "created_by",
+            "created_at",
+            "started_at",
+            "completed_at",
+            "metadata",
+        )
+        assumption_keys = (
+            "assumption_id",
+            "assumption_type",
+            "hazard_dataset_version_id",
+            "hazard_type",
+            "hazard_class",
+            "closure_assumption",
+            "assumption_payload",
+            "assumption_source",
+            "explicitly_confirmed",
+            "created_at",
+        )
+        metric_keys = ("metric_name", "service_category", "value", "unit", "definition")
+        return {
+            **dict(zip(run_keys, row, strict=True)),
+            "assumptions": [
+                dict(zip(assumption_keys, item, strict=True)) for item in assumptions
+            ],
+            "metrics": [dict(zip(metric_keys, item, strict=True)) for item in metrics],
+            "impact_counts": dict(
+                zip(("edges", "buildings", "facilities"), impact_counts, strict=True)
+            ),
+        }
+
+    def stress_test_impacts(
+        self,
+        stress_test_id: str,
+        bbox: tuple[float, float, float, float],
+        service_category: str | None,
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT impact.building_gml_id, impact.service_category,
+                          impact.baseline_distance_m, impact.scenario_distance_m,
+                          impact.impact_status, impact.estimated_population,
+                          impact.estimated_elderly_population, impact.evidence,
+                          ST_AsGeoJSON(ST_Force2D(object.representative_point))::jsonb
+                   FROM stress_test_building_impacts AS impact
+                   JOIN plateau_city_objects AS object
+                     ON object.dataset_version_id = impact.dataset_version_id
+                    AND object.gml_id = impact.building_gml_id
+                   WHERE impact.stress_test_run_id = %s
+                     AND (CAST(%s AS text) IS NULL OR impact.service_category = %s)
+                     AND object.representative_point &&
+                         ST_Force3D(ST_MakeEnvelope(%s, %s, %s, %s, 4326))
+                   ORDER BY impact.service_category, impact.building_gml_id
+                   LIMIT %s OFFSET %s""",
+                (
+                    stress_test_id,
+                    service_category,
+                    service_category,
+                    *bbox,
+                    limit,
+                    offset,
+                ),
+            ).fetchall()
+        keys = (
+            "building_gml_id",
+            "service_category",
+            "baseline_distance_m",
+            "scenario_distance_m",
+            "impact_status",
+            "estimated_population",
+            "estimated_elderly_population",
+            "evidence",
+            "geometry",
+        )
+        return {
+            "stress_test_id": stress_test_id,
+            "bbox": bbox,
+            "service_category": service_category,
+            "features": [dict(zip(keys, row, strict=True)) for row in rows],
+            "limit": limit,
+            "offset": offset,
+            "delivery": "bounded_bbox",
+        }
+
+    def network_criticality(
+        self, city_id: str, urban_state_id: str | None, limit: int
+    ) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """WITH selected AS (
+                       SELECT run.id, run.algorithm_version, run.runtime_seconds,
+                              run.peak_rss_kib, run.completed_at
+                       FROM network_criticality_runs AS run
+                       JOIN cities AS city ON city.id = run.city_id
+                       WHERE (city.city_code = %s OR city.city_key = %s)
+                         AND run.status = 'succeeded'
+                         AND (CAST(%s AS text) IS NULL OR run.urban_state_id = %s)
+                       ORDER BY run.completed_at DESC, run.id DESC LIMIT 1
+                   )
+                   SELECT candidate.rank, candidate.edge_id, candidate.road_gml_ids,
+                          candidate.connected_component_id,
+                          candidate.isolated_node_count, candidate.affected_buildings,
+                          candidate.affected_estimated_elderly_population,
+                          candidate.facility_reachability_change,
+                          candidate.candidate_label, candidate.evidence,
+                          selected.algorithm_version, selected.runtime_seconds,
+                          selected.peak_rss_kib, selected.completed_at
+                   FROM selected
+                   JOIN network_criticality_candidates AS candidate
+                     ON candidate.criticality_run_id = selected.id
+                   ORDER BY candidate.rank LIMIT %s""",
+                (city_id, city_id, urban_state_id, urban_state_id, limit),
+            ).fetchall()
+        keys = (
+            "rank",
+            "edge_id",
+            "road_gml_ids",
+            "connected_component_id",
+            "isolated_node_count",
+            "affected_buildings",
+            "affected_estimated_elderly_population",
+            "facility_reachability_change",
+            "candidate_label",
+            "evidence",
+            "algorithm_version",
+            "runtime_seconds",
+            "peak_rss_kib",
+            "completed_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def future_states(self, city_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT state.id, state.state_key, state.effective_date,
+                          state.lifecycle_status, future.projection_series,
+                          future.projection_year, future.total_population,
+                          future.age_65_plus, future.source_verified,
+                          future.allocation_algorithm_version,
+                          future.allocation_assumption,
+                          future.fixed_service_assumption
+                   FROM future_population_states AS future
+                   JOIN urban_states AS state ON state.id = future.urban_state_id
+                   JOIN cities AS city ON city.id = state.city_id
+                   WHERE city.city_code = %s OR city.city_key = %s
+                   ORDER BY future.projection_series, future.projection_year""",
+                (city_id, city_id),
+            ).fetchall()
+        keys = (
+            "urban_state_id",
+            "state_key",
+            "effective_date",
+            "lifecycle_status",
+            "projection_series",
+            "projection_year",
+            "official_total_population",
+            "official_age_65_plus",
+            "source_verified",
+            "allocation_algorithm_version",
+            "allocation_assumption",
+            "fixed_service_assumption",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def outcomes(self, city_id: str, limit: int) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT outcome.id, outcome.implementation_record_id,
+                          implementation.status, outcome.baseline_urban_state_id,
+                          outcome.expected_scenario_run_id,
+                          outcome.observed_urban_state_id, outcome.status,
+                          outcome.causal_effect_claimed, outcome.planned_effect,
+                          outcome.observed_change, outcome.reviewer_note,
+                          outcome.created_by, outcome.created_at, outcome.reviewed_at
+                   FROM outcome_evaluations AS outcome
+                   JOIN implementation_records AS implementation
+                     ON implementation.id = outcome.implementation_record_id
+                   JOIN portfolio_interventions AS intervention
+                     ON intervention.id = implementation.portfolio_intervention_id
+                   JOIN policy_portfolios AS portfolio ON portfolio.id = intervention.portfolio_id
+                   JOIN cities AS city ON city.id = portfolio.city_id
+                   WHERE city.city_code = %s OR city.city_key = %s
+                   ORDER BY outcome.created_at DESC, outcome.id DESC LIMIT %s""",
+                (city_id, city_id, limit),
+            ).fetchall()
+        keys = (
+            "outcome_evaluation_id",
+            "implementation_record_id",
+            "implementation_status",
+            "baseline_urban_state_id",
+            "expected_scenario_run_id",
+            "observed_urban_state_id",
+            "review_status",
+            "causal_effect_claimed",
+            "planned_effect",
+            "observed_change",
+            "reviewer_note",
+            "created_by",
+            "created_at",
+            "reviewed_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
     def scenarios(self, city_id: str, status: str | None, limit: int) -> list[dict[str, Any]]:
         with self._connect() as connection:
             rows = connection.execute(
@@ -1007,7 +1668,8 @@ class PostGISRepository:
                           check_row.facility_condition, check_row.hazard_confirmation,
                           check_row.operator_consultation, check_row.notes,
                           check_row.photo_urls, check_row.location_context,
-                          check_row.checked_at, check_row.updated_at
+                          check_row.gps_confirmation, check_row.record_version,
+                          check_row.updated_by, check_row.checked_at, check_row.updated_at
                    FROM scenario_field_checks AS check_row
                    JOIN scenario_runs AS scenario ON scenario.id = check_row.scenario_run_id
                    JOIN city_dataset_versions AS dataset
@@ -1029,6 +1691,9 @@ class PostGISRepository:
             "notes",
             "photo_urls",
             "location_context",
+            "gps_confirmation",
+            "record_version",
+            "updated_by",
             "checked_at",
             "updated_at",
         )
@@ -1078,8 +1743,8 @@ class PostGISRepository:
                        scenario_run_id, site_order, site_access, road_safety,
                        land_ownership_unknown, existing_service, facility_condition,
                        hazard_confirmation, operator_consultation, notes, photo_urls,
-                       location_context, checked_at
-                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())
+                       location_context, checked_at, updated_by
+                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now(), %s)
                    ON CONFLICT (scenario_run_id, site_order) DO UPDATE SET
                        site_access = EXCLUDED.site_access,
                        road_safety = EXCLUDED.road_safety,
@@ -1090,7 +1755,7 @@ class PostGISRepository:
                        operator_consultation = EXCLUDED.operator_consultation,
                        notes = EXCLUDED.notes, photo_urls = EXCLUDED.photo_urls,
                        location_context = EXCLUDED.location_context,
-                       checked_at = now(), updated_at = now()""",
+                       checked_at = now(), updated_at = now(), updated_by = EXCLUDED.updated_by""",
                 (
                     scenario_id,
                     site_order,
@@ -1098,6 +1763,7 @@ class PostGISRepository:
                     checklist["notes"],
                     checklist.get("photo_urls", []),
                     json.dumps(checklist.get("location_context", {}), ensure_ascii=False),
+                    current_request_context().actor,
                 ),
             )
             before_keys = (*fields, "notes", "photo_urls", "location_context")
@@ -1112,6 +1778,493 @@ class PostGISRepository:
             )
             connection.commit()
         return self.field_check(city_id, scenario_id, site_order)
+
+    def create_field_offline_package(
+        self,
+        city_id: str,
+        urban_state_id: str,
+        scenario_run_id: str,
+        site_order: int,
+        expires_at: str | None,
+    ) -> dict[str, Any] | None:
+        actor = current_request_context().actor
+        with self._connect() as connection:
+            site = connection.execute(
+                """SELECT scenario.scenario_key, scenario.lifecycle_status,
+                          state.state_key, state.effective_date,
+                          site.candidate_id, site.network_node_id, site.road_gml_id,
+                          site.road_surface_id, site.road_name,
+                          site.existing_transport_distance_m, site.component_id,
+                          site.candidate_to_graph_connector_m, site.siting_feasibility,
+                          ST_AsGeoJSON(site.geom)::jsonb,
+                          check_row.site_access, check_row.road_safety,
+                          check_row.land_ownership_unknown, check_row.existing_service,
+                          check_row.facility_condition, check_row.hazard_confirmation,
+                          check_row.operator_consultation, check_row.notes,
+                          check_row.gps_confirmation, check_row.record_version,
+                          check_row.updated_by, check_row.updated_at
+                   FROM scenario_sites AS site
+                   JOIN scenario_runs AS scenario ON scenario.id = site.scenario_run_id
+                   JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
+                   JOIN cities AS city ON city.id = state.city_id
+                   LEFT JOIN scenario_field_checks AS check_row
+                     ON check_row.scenario_run_id = site.scenario_run_id
+                    AND check_row.site_order = site.site_order
+                   WHERE (city.city_code = %s OR city.city_key = %s)
+                     AND state.id = %s AND scenario.id = %s AND site.site_order = %s""",
+                (city_id, city_id, urban_state_id, scenario_run_id, site_order),
+            ).fetchone()
+            if site is None:
+                return None
+            contexts = connection.execute(
+                """SELECT context_type, label, feature_count, review_status,
+                          siting_feasibility, source_payload
+                   FROM scenario_context
+                   WHERE scenario_run_id = %s AND site_order = %s
+                   ORDER BY context_type""",
+                (scenario_run_id, site_order),
+            ).fetchall()
+            evidence = connection.execute(
+                "SELECT evidence FROM scenario_evidence WHERE scenario_run_id = %s",
+                (scenario_run_id,),
+            ).fetchone()
+            site_keys = (
+                "scenario_key",
+                "scenario_lifecycle_status",
+                "urban_state_key",
+                "effective_date",
+                "candidate_id",
+                "network_node_id",
+                "road_gml_id",
+                "road_surface_id",
+                "road_name",
+                "existing_transport_distance_m",
+                "component_id",
+                "candidate_to_graph_connector_m",
+                "siting_feasibility",
+                "geometry",
+            )
+            field_keys = (
+                "site_access",
+                "road_safety",
+                "land_ownership_unknown",
+                "existing_service",
+                "facility_condition",
+                "hazard_confirmation",
+                "operator_consultation",
+                "notes",
+                "gps_confirmation",
+                "record_version",
+                "updated_by",
+                "updated_at",
+            )
+            content = {
+                "package_scope": "single_selected_site",
+                "city_id": city_id,
+                "urban_state_id": urban_state_id,
+                "scenario_run_id": scenario_run_id,
+                "site_order": site_order,
+                "site": dict(zip(site_keys, site[: len(site_keys)], strict=True)),
+                "field_record": dict(zip(field_keys, site[len(site_keys) :], strict=True)),
+                "contexts": [
+                    dict(
+                        zip(
+                            (
+                                "context_type",
+                                "label",
+                                "feature_count",
+                                "review_status",
+                                "siting_feasibility",
+                                "source_payload",
+                            ),
+                            row,
+                            strict=True,
+                        )
+                    )
+                    for row in contexts
+                ],
+                "evidence_summary": evidence[0] if evidence else {},
+            }
+            canonical = json.dumps(
+                content, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str
+            )
+            content_hash = hashlib.sha256(canonical.encode()).hexdigest()
+            version = connection.execute(
+                """SELECT COALESCE(max(package_version), 0) + 1
+                   FROM field_offline_packages
+                   WHERE scenario_run_id = %s AND site_order = %s""",
+                (scenario_run_id, site_order),
+            ).fetchone()[0]
+            package = connection.execute(
+                """INSERT INTO field_offline_packages (
+                       city_id, urban_state_id, scenario_run_id, site_order,
+                       package_version, content, content_sha256, expires_at, created_by
+                   )
+                   SELECT city.id, %s, %s, %s, %s, %s, %s, %s, %s
+                   FROM cities AS city
+                   WHERE city.city_code = %s OR city.city_key = %s
+                   RETURNING id, package_version, content_sha256, expires_at, created_at""",
+                (
+                    urban_state_id,
+                    scenario_run_id,
+                    site_order,
+                    version,
+                    canonical,
+                    content_hash,
+                    expires_at,
+                    actor,
+                    city_id,
+                    city_id,
+                ),
+            ).fetchone()
+            self._audit(
+                connection,
+                "field.offline_package.create",
+                "scenario_site",
+                f"{scenario_run_id}:{site_order}",
+                city_id,
+                None,
+                {
+                    "offline_package_id": str(package[0]),
+                    "package_version": package[1],
+                    "content_sha256": package[2],
+                    "scope": "single_selected_site",
+                },
+            )
+            connection.commit()
+        return {
+            "offline_package_id": package[0],
+            "package_version": package[1],
+            "content_sha256": package[2],
+            "expires_at": package[3],
+            "created_at": package[4],
+            "content": content,
+        }
+
+    def sync_field_operation(
+        self, city_id: str, operation: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        actor = current_request_context().actor
+        field_names = (
+            "site_access",
+            "road_safety",
+            "land_ownership_unknown",
+            "existing_service",
+            "facility_condition",
+            "hazard_confirmation",
+            "operator_consultation",
+            "notes",
+            "gps_confirmation",
+        )
+        with self._connect() as connection:
+            prior = connection.execute(
+                """SELECT operation.status, conflict.id
+                   FROM field_sync_operations AS operation
+                   LEFT JOIN field_sync_conflicts AS conflict
+                     ON conflict.field_sync_operation_id = operation.id
+                   WHERE operation.client_operation_id = %s""",
+                (operation["client_operation_id"],),
+            ).fetchone()
+            if prior is not None:
+                return {
+                    "client_operation_id": operation["client_operation_id"],
+                    "status": prior[0],
+                    "conflict_id": prior[1],
+                    "idempotent_replay": True,
+                }
+            package = connection.execute(
+                """SELECT package.id
+                   FROM field_offline_packages AS package
+                   JOIN cities AS city ON city.id = package.city_id
+                   WHERE package.id = %s AND package.scenario_run_id = %s
+                     AND package.site_order = %s
+                     AND (city.city_code = %s OR city.city_key = %s)
+                     AND (package.expires_at IS NULL OR package.expires_at > now())""",
+                (
+                    operation["offline_package_id"],
+                    operation["scenario_run_id"],
+                    operation["site_order"],
+                    city_id,
+                    city_id,
+                ),
+            ).fetchone()
+            if package is None:
+                return None
+            connection.execute(
+                """INSERT INTO scenario_field_checks (
+                       scenario_run_id, site_order, updated_by
+                   ) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING""",
+                (operation["scenario_run_id"], operation["site_order"], actor),
+            )
+            current = connection.execute(
+                """SELECT site_access, road_safety, land_ownership_unknown,
+                          existing_service, facility_condition, hazard_confirmation,
+                          operator_consultation, notes, gps_confirmation,
+                          record_version, updated_by, updated_at
+                   FROM scenario_field_checks
+                   WHERE scenario_run_id = %s AND site_order = %s FOR UPDATE""",
+                (operation["scenario_run_id"], operation["site_order"]),
+            ).fetchone()
+            server_state = dict(
+                zip((*field_names, "record_version", "actor", "updated_at"), current, strict=True)
+            )
+            sync_row = connection.execute(
+                """INSERT INTO field_sync_operations (
+                       client_operation_id, offline_package_id, scenario_run_id,
+                       site_order, actor, base_record_version, client_updated_at, payload
+                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                (
+                    operation["client_operation_id"],
+                    operation["offline_package_id"],
+                    operation["scenario_run_id"],
+                    operation["site_order"],
+                    actor,
+                    operation["base_record_version"],
+                    operation["client_updated_at"],
+                    json.dumps(operation["payload"], ensure_ascii=False),
+                ),
+            ).fetchone()
+            if int(current[9]) != int(operation["base_record_version"]):
+                connection.execute(
+                    "UPDATE field_sync_operations SET status = 'conflict' WHERE id = %s",
+                    (sync_row[0],),
+                )
+                conflict = connection.execute(
+                    """INSERT INTO field_sync_conflicts (
+                           field_sync_operation_id, server_record_version,
+                           server_state, client_state
+                       ) VALUES (%s, %s, %s, %s) RETURNING id, created_at""",
+                    (
+                        sync_row[0],
+                        current[9],
+                        json.dumps(server_state, ensure_ascii=False, default=str),
+                        json.dumps(operation["payload"], ensure_ascii=False),
+                    ),
+                ).fetchone()
+                self._audit(
+                    connection,
+                    "field.sync.conflict",
+                    "scenario_site",
+                    f"{operation['scenario_run_id']}:{operation['site_order']}",
+                    city_id,
+                    server_state,
+                    {
+                        "client_operation_id": operation["client_operation_id"],
+                        "base_record_version": operation["base_record_version"],
+                        "resolution_status": "unresolved",
+                    },
+                )
+                connection.commit()
+                return {
+                    "client_operation_id": operation["client_operation_id"],
+                    "status": "conflict",
+                    "conflict_id": conflict[0],
+                    "server_record_version": current[9],
+                    "server_state": server_state,
+                    "client_state": operation["payload"],
+                    "created_at": str(conflict[1]),
+                    "silent_last_write_wins": False,
+                }
+            values = {name: current[index] for index, name in enumerate(field_names)}
+            values.update(operation["payload"])
+            updated = connection.execute(
+                """UPDATE scenario_field_checks SET
+                       site_access = %s, road_safety = %s, land_ownership_unknown = %s,
+                       existing_service = %s, facility_condition = %s,
+                       hazard_confirmation = %s, operator_consultation = %s,
+                       notes = %s, gps_confirmation = %s, updated_by = %s
+                   WHERE scenario_run_id = %s AND site_order = %s
+                   RETURNING record_version, updated_by, updated_at""",
+                (
+                    *(values[name] for name in field_names[:-1]),
+                    json.dumps(values["gps_confirmation"], ensure_ascii=False),
+                    actor,
+                    operation["scenario_run_id"],
+                    operation["site_order"],
+                ),
+            ).fetchone()
+            connection.execute(
+                """UPDATE field_sync_operations
+                   SET status = 'applied', applied_at = now() WHERE id = %s""",
+                (sync_row[0],),
+            )
+            self._audit(
+                connection,
+                "field.sync.apply",
+                "scenario_site",
+                f"{operation['scenario_run_id']}:{operation['site_order']}",
+                city_id,
+                server_state,
+                {
+                    **values,
+                    "record_version": updated[0],
+                    "actor": updated[1],
+                    "updated_at": updated[2],
+                },
+            )
+            connection.commit()
+        return {
+            "client_operation_id": operation["client_operation_id"],
+            "status": "applied",
+            "record_version": updated[0],
+            "actor": updated[1],
+            "updated_at": updated[2],
+        }
+
+    def field_sync_conflict(self, conflict_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT conflict.id, operation.client_operation_id,
+                          operation.scenario_run_id, operation.site_order,
+                          operation.actor, operation.base_record_version,
+                          conflict.server_record_version, conflict.server_state,
+                          conflict.client_state, conflict.resolution_status,
+                          conflict.resolved_state, conflict.resolved_by,
+                          conflict.resolved_at, conflict.created_at
+                   FROM field_sync_conflicts AS conflict
+                   JOIN field_sync_operations AS operation
+                     ON operation.id = conflict.field_sync_operation_id
+                   WHERE conflict.id = %s""",
+                (conflict_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        keys = (
+            "conflict_id",
+            "client_operation_id",
+            "scenario_run_id",
+            "site_order",
+            "operation_actor",
+            "base_record_version",
+            "server_record_version",
+            "server_state",
+            "client_state",
+            "resolution_status",
+            "resolved_state",
+            "resolved_by",
+            "resolved_at",
+            "created_at",
+        )
+        return {**dict(zip(keys, row, strict=True)), "silent_last_write_wins": False}
+
+    def resolve_field_sync_conflict(
+        self, city_id: str, conflict_id: str, resolution: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        actor = current_request_context().actor
+        field_names = (
+            "site_access",
+            "road_safety",
+            "land_ownership_unknown",
+            "existing_service",
+            "facility_condition",
+            "hazard_confirmation",
+            "operator_consultation",
+            "notes",
+            "gps_confirmation",
+        )
+        with self._connect() as connection:
+            conflict = connection.execute(
+                """SELECT conflict.field_sync_operation_id,
+                          conflict.server_record_version, conflict.server_state,
+                          conflict.client_state, conflict.resolution_status,
+                          operation.scenario_run_id, operation.site_order
+                   FROM field_sync_conflicts AS conflict
+                   JOIN field_sync_operations AS operation
+                     ON operation.id = conflict.field_sync_operation_id
+                   JOIN scenario_runs AS scenario ON scenario.id = operation.scenario_run_id
+                   JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
+                   JOIN cities AS city ON city.id = state.city_id
+                   WHERE conflict.id = %s
+                     AND (city.city_code = %s OR city.city_key = %s)
+                   FOR UPDATE OF conflict""",
+                (conflict_id, city_id, city_id),
+            ).fetchone()
+            if conflict is None:
+                return None
+            if conflict[4] != "unresolved":
+                raise ValueError("Field sync conflict was already explicitly resolved")
+            current = connection.execute(
+                """SELECT site_access, road_safety, land_ownership_unknown,
+                          existing_service, facility_condition, hazard_confirmation,
+                          operator_consultation, notes, gps_confirmation,
+                          record_version, updated_by, updated_at
+                   FROM scenario_field_checks
+                   WHERE scenario_run_id = %s AND site_order = %s FOR UPDATE""",
+                (conflict[5], conflict[6]),
+            ).fetchone()
+            if current is None:
+                return None
+            current_state = dict(
+                zip((*field_names, "record_version", "actor", "updated_at"), current, strict=True)
+            )
+            status = resolution["resolution_status"]
+            if status == "use_server":
+                resolved_state = current_state
+                operation_status = "rejected"
+            else:
+                if int(current[9]) != int(conflict[1]):
+                    raise ValueError(
+                        "Server record changed again; refresh before explicit conflict resolution"
+                    )
+                selected = conflict[3] if status == "use_client" else resolution["resolved_state"]
+                values = {name: current[index] for index, name in enumerate(field_names)}
+                values.update(selected)
+                updated = connection.execute(
+                    """UPDATE scenario_field_checks SET
+                           site_access = %s, road_safety = %s, land_ownership_unknown = %s,
+                           existing_service = %s, facility_condition = %s,
+                           hazard_confirmation = %s, operator_consultation = %s,
+                           notes = %s, gps_confirmation = %s, updated_by = %s
+                       WHERE scenario_run_id = %s AND site_order = %s
+                       RETURNING record_version, updated_by, updated_at""",
+                    (
+                        *(values[name] for name in field_names[:-1]),
+                        json.dumps(values["gps_confirmation"], ensure_ascii=False),
+                        actor,
+                        conflict[5],
+                        conflict[6],
+                    ),
+                ).fetchone()
+                resolved_state = {
+                    **values,
+                    "record_version": updated[0],
+                    "actor": updated[1],
+                    "updated_at": updated[2],
+                }
+                operation_status = "applied"
+            connection.execute(
+                """UPDATE field_sync_conflicts SET
+                       resolution_status = %s, resolved_state = %s,
+                       resolved_by = %s, resolved_at = now()
+                   WHERE id = %s""",
+                (
+                    status,
+                    json.dumps(resolved_state, ensure_ascii=False, default=str),
+                    actor,
+                    conflict_id,
+                ),
+            )
+            connection.execute(
+                """UPDATE field_sync_operations SET status = %s,
+                       applied_at = CASE WHEN %s = 'applied' THEN now() ELSE NULL END
+                   WHERE id = %s""",
+                (operation_status, operation_status, conflict[0]),
+            )
+            self._audit(
+                connection,
+                "field.sync.conflict.resolve",
+                "scenario_site",
+                f"{conflict[5]}:{conflict[6]}",
+                city_id,
+                {"resolution_status": "unresolved", "server_state": conflict[2]},
+                {
+                    "resolution_status": status,
+                    "resolved_state": resolved_state,
+                    "resolved_by": actor,
+                },
+            )
+            connection.commit()
+        return self.field_sync_conflict(conflict_id)
 
     def city_registry(self) -> list[dict[str, Any]]:
         with self._connect() as connection:

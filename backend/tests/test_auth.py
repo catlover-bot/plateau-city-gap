@@ -51,3 +51,16 @@ def test_injected_oidc_verifier_receives_issuer_audience_and_supplies_rbac_ident
     assert calls == [
         ("signed-token", "https://identity.example.invalid", "citygap-pilot")
     ]
+
+
+def test_temporal_resilience_permissions_follow_municipal_roles() -> None:
+    viewer = Identity("v", "test", frozenset({"viewer"}))
+    analyst = Identity("a", "test", frozenset({"analyst"}))
+    planner = Identity("p", "test", frozenset({"planner"}))
+    admin = Identity("x", "test", frozenset({"administrator"}))
+    assert viewer.permits("platform:read")
+    assert not viewer.permits("stress_test:create")
+    assert analyst.permits("stress_test:create")
+    assert not analyst.permits("outcome:review")
+    assert planner.permits("outcome:review") and planner.permits("field:sync")
+    assert admin.permits("state:manage")
