@@ -61,6 +61,15 @@ datasets:
     license: 国土数値情報利用約款
     source_url: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html
     source_crs: EPSG:6668
+  shelters:
+    path: data/raw/plateau_related_fujisawa/14205_fujisawa-shi_city_2025_shelter.geojson
+    provider: Project PLATEAU / 藤沢市公開データ
+    title: 藤沢市 指定避難所・避難場所
+    year: 2025
+    license: PLATEAU Site Policy
+    source_url: https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025
+    source_crs: EPSG:4326
+    source_sha256: d06294e9a72739a574a21b0b1fd12086d03b279043342f4c86f80dd6b60a6124
 thresholds:
   minimum_population: 20
   minimum_elderly_population: 10

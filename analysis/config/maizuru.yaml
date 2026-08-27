@@ -55,6 +55,15 @@ datasets:
     license: 国土数値情報利用約款
     source_url: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html
     source_crs: EPSG:6668
+  shelters:
+    path: data/raw/plateau_related/26202_maizuru-shi_city_2025_shelter.geojson
+    provider: Project PLATEAU / 舞鶴市公開データ
+    title: 舞鶴市 指定避難所・避難場所
+    year: 2025
+    license: PLATEAU Site Policy
+    source_url: https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025
+    source_crs: EPSG:4326
+    source_sha256: faa9e4523f1f268cc833d0a8a78da841d6b6e37be0525bb315a3683750e8bcdd
 thresholds:
   minimum_population: 20
   minimum_elderly_population: 10

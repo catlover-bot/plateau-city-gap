@@ -149,6 +149,7 @@ class VectorSourceAdapter:
         source_format: Literal["geojson", "geopackage"],
         layer: str | None = None,
         required_columns: Sequence[str] = (),
+        declared_crs: str | None = None,
         bbox: tuple[float, float, float, float] | None = None,
         max_bytes: int = DEFAULT_FILE_LIMIT,
         max_rows: int = DEFAULT_ROW_LIMIT,
@@ -158,6 +159,7 @@ class VectorSourceAdapter:
         self.source_format: SourceFormat = source_format
         self.layer = layer
         self.required_columns = tuple(required_columns)
+        self.declared_crs = declared_crs
         self.bbox = bbox
         self.max_rows = max_rows
         self._frame: gpd.GeoDataFrame | None = None
@@ -196,6 +198,8 @@ class VectorSourceAdapter:
             if len(frame) > self.max_rows:
                 raise ValueError(f"Vector source exceeds the {self.max_rows}-feature limit")
             _require_columns(frame, self.required_columns)
+            if frame.crs is None and self.declared_crs:
+                frame = frame.set_crs(self.declared_crs, allow_override=False)
             if frame.crs is None:
                 raise ValueError("Vector source must declare a coordinate reference system")
             if frame.geometry.name not in frame.columns:

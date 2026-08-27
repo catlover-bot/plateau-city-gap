@@ -1,0 +1,64 @@
+{
+  "all_requested_scales_executed": true,
+  "benchmarks": [
+    {
+      "algorithm_note": "No edges x full-city Dijkstra loop; O(V+E) bridge analysis.",
+      "buildings": 100000,
+      "criticality_candidate_count": 0,
+      "criticality_seconds": 1.1211670550110284,
+      "explicit_closed_edges": 10,
+      "fixture": "synthetic_ring_one_building_per_node",
+      "generated_from_synthetic_data": true,
+      "generation_seconds": 0.756272958999034,
+      "peak_rss_mib": 186.859375,
+      "road_edges": 100000,
+      "road_nodes": 100000,
+      "stress_result": {
+        "newly_unreachable_buildings": 90000,
+        "scenario_component_count": 10
+      },
+      "stress_test_seconds": 1.0243014769948786,
+      "total_algorithm_seconds": 2.145468532005907
+    },
+    {
+      "algorithm_note": "No edges x full-city Dijkstra loop; O(V+E) bridge analysis.",
+      "buildings": 250000,
+      "criticality_candidate_count": 0,
+      "criticality_seconds": 4.046250112005509,
+      "explicit_closed_edges": 25,
+      "fixture": "synthetic_ring_one_building_per_node",
+      "generated_from_synthetic_data": true,
+      "generation_seconds": 1.7991634549980517,
+      "peak_rss_mib": 429.296875,
+      "road_edges": 250000,
+      "road_nodes": 250000,
+      "stress_result": {
+        "newly_unreachable_buildings": 240000,
+        "scenario_component_count": 25
+      },
+      "stress_test_seconds": 3.7926638910139445,
+      "total_algorithm_seconds": 7.838914003019454
+    },
+    {
+      "algorithm_note": "No edges x full-city Dijkstra loop; O(V+E) bridge analysis.",
+      "buildings": 500000,
+      "criticality_candidate_count": 0,
+      "criticality_seconds": 7.438911606994225,
+      "explicit_closed_edges": 50,
+      "fixture": "synthetic_ring_one_building_per_node",
+      "generated_from_synthetic_data": true,
+      "generation_seconds": 4.1589738839975325,
+      "peak_rss_mib": 850.19921875,
+      "road_edges": 500000,
+      "road_nodes": 500000,
+      "stress_result": {
+        "newly_unreachable_buildings": 490000,
+        "scenario_component_count": 50
+      },
+      "stress_test_seconds": 6.344185859998106,
+      "total_algorithm_seconds": 13.78309746699233
+    }
+  ],
+  "classification": "synthetic_performance_fixture_not_real_city_data",
+  "schema_version": "urban-resilience-scale-1.0.0"
+}
