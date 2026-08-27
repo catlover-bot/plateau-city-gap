@@ -49,3 +49,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+        with:
+          # GitHub's Pages backend can remain in progress beyond the action's
+          # ten-minute default even after the artifact upload has succeeded.
+          timeout: 900000
