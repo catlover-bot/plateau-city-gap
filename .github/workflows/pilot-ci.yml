@@ -98,7 +98,7 @@ jobs:
           npm ci
           npm run test -- src/components/validationWorkspace.test.tsx
           npm run typecheck
-          npx playwright install --with-deps chromium
+          ./node_modules/.bin/playwright-core install --with-deps chromium
           npm run build
           npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/citygap-validation-preview.log 2>&1 &
           preview_pid=$!
