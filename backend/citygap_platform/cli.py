@@ -23,6 +23,7 @@ from backend.citygap_platform.ingestion.quality import (
 )
 from backend.citygap_platform.ingestion.uploads import inspect_upload
 from backend.citygap_platform.observability import operation_context
+from backend.citygap_platform.readiness import PilotReadinessService
 
 NAMESPACE = uuid.UUID("b58bf5a8-29c0-5da0-8d90-00cc8c581721")
 
@@ -229,6 +230,11 @@ def _network_import(args: argparse.Namespace) -> dict[str, Any]:
     )
 
 
+def _readiness(args: argparse.Namespace) -> dict[str, Any]:
+    repository = PostGISRepository(_database_url(args))
+    return PilotReadinessService(repository).check(args.city)
+
+
 def _add_database(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--database-url")
 
@@ -317,6 +323,10 @@ def build_parser() -> argparse.ArgumentParser:
     network.add_argument("--target-node-id", default="end_id")
     network.add_argument("--length-field", default="distance")
     network.set_defaults(handler=_network_import)
+    readiness = subcommands.add_parser("readiness")
+    _add_database(readiness)
+    readiness.add_argument("--city", required=True)
+    readiness.set_defaults(handler=_readiness)
     return parser
 
 

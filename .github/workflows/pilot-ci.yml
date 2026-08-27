@@ -66,6 +66,83 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest backend/tests/test_real_inventory_artifact.py analysis/tests/test_web_assets.py analysis/tests/test_municipal_workspace_assets.py -q
 
+  migration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgrouting/pgrouting:16-3.5-4.0@sha256:bd277edf6e855db49837314209b0eb8902e8f0fa6f9d6ac6952f7355fdb24465
+        env:
+          POSTGRES_DB: citygap
+          POSTGRES_USER: citygap
+          POSTGRES_PASSWORD: citygap_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U citygap -d citygap"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      CITYGAP_DATABASE_URL: postgresql://citygap:citygap_ci@127.0.0.1:5432/citygap
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[platform]"
+      - name: Apply and verify every checksummed migration
+        run: |
+          python -m backend.citygap_platform.database.migrations upgrade
+          python -m backend.citygap_platform.database.migrations status
+      - name: Verify spatial extensions execute
+        run: python -c "import os, psycopg; c=psycopg.connect(os.environ['CITYGAP_DATABASE_URL']); assert c.execute('SELECT PostGIS_Version() IS NOT NULL, pgr_version() IS NOT NULL').fetchone() == (True, True)"
+
+  api-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgrouting/pgrouting:16-3.5-4.0@sha256:bd277edf6e855db49837314209b0eb8902e8f0fa6f9d6ac6952f7355fdb24465
+        env:
+          POSTGRES_DB: citygap
+          POSTGRES_USER: citygap
+          POSTGRES_PASSWORD: citygap_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U citygap -d citygap"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      CITYGAP_DATABASE_URL: postgresql://citygap:citygap_ci@127.0.0.1:5432/citygap
+      CITYGAP_TEST_DATABASE_URL: postgresql://citygap:citygap_ci@127.0.0.1:5432/citygap
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[platform,dev]"
+      - run: python -m analysis.scripts.build_scenario_canonical >/tmp/scenario-manifest.json
+      - name: Exercise database-backed API, spatial query, MVT and comparison
+        run: pytest backend/integration/test_postgis_platform.py::test_real_canonical_scenarios_spatial_api_and_comparison -q
+      - name: Start API and verify health plus database readiness
+        run: |
+          uvicorn backend.citygap_platform.api.app:app --host 127.0.0.1 --port 8000 > /tmp/citygap-api.log 2>&1 &
+          api_pid=$!
+          trap 'kill ${api_pid}' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8000/ready >/tmp/ready.json; then break; fi
+            sleep 1
+          done
+          python -c 'import json; data=json.load(open("/tmp/ready.json")); assert data["ready"] is True'
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate Compose model
+        run: docker compose config --quiet
+      - name: Build API/worker and frontend images
+        run: |
+          docker build --file infra/docker/api.Dockerfile --tag citygap-api:ci .
+          docker build --file infra/docker/frontend.Dockerfile --tag citygap-frontend:ci .
+
   postgis-integration:
     runs-on: ubuntu-latest
     services:
@@ -107,6 +184,8 @@ jobs:
         run: python -m backend.citygap_platform.database.migrations upgrade
       - name: Exercise real PostGIS, pgRouting, loader, API and transactions
         run: pytest backend/integration -q
+      - name: Benchmark 100k buildings and 100k road edges
+        run: python -m analysis.scripts.benchmark_pilot_api --output /tmp/pilot-performance.json
       - name: Start the real database-backed API process
         run: |
           uvicorn backend.citygap_platform.api.app:app --host 127.0.0.1 --port 8000 > /tmp/citygap-api.log 2>&1 &
@@ -124,3 +203,10 @@ jobs:
         run: |
           psql --dbname=citygap --command="SELECT extname, extversion FROM pg_extension WHERE extname IN ('postgis','pgrouting')" || true
           psql --dbname=citygap --command="SELECT version, applied_at FROM schema_migrations ORDER BY version" || true
+      - name: Publish performance artifact
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: pilot-performance
+          path: /tmp/pilot-performance.json
+          if-no-files-found: warn

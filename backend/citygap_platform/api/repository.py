@@ -121,6 +121,21 @@ class PlatformRepository(Protocol):
 
     def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]: ...
 
+    def vector_tile(
+        self,
+        city_id: str,
+        layer: str,
+        z: int,
+        x: int,
+        y: int,
+        dataset_version_id: str,
+        network_version_id: str | None,
+        scenario_id: str | None,
+        algorithm_version: str | None,
+    ) -> bytes: ...
+
+    def admin_snapshot(self) -> dict[str, list[dict[str, Any]]]: ...
+
 
 class PostGISRepository:
     def __init__(self, database_url: str):
@@ -478,7 +493,7 @@ class PostGISRepository:
                    FROM road_network_edges AS edge
                    JOIN selected_network AS selected ON selected.id = edge.network_version_id
                    WHERE edge.geom && ST_Transform(
-                       ST_MakeEnvelope(%s, %s, %s, %s, 4326), 6674
+                       ST_MakeEnvelope(%s, %s, %s, %s, 4326), ST_SRID(edge.geom)
                    )
                    ORDER BY edge.edge_id LIMIT %s OFFSET %s""",
                 (
@@ -1389,6 +1404,237 @@ class PostGISRepository:
             )
             connection.commit()
         return self.job_detail(job_id)
+
+    def vector_tile(
+        self,
+        city_id: str,
+        layer: str,
+        z: int,
+        x: int,
+        y: int,
+        dataset_version_id: str,
+        network_version_id: str | None,
+        scenario_id: str | None,
+        algorithm_version: str | None,
+    ) -> bytes:
+        bounds = (z, x, y)
+        if layer == "buildings":
+            query = """WITH bounds AS (SELECT ST_TileEnvelope(%s, %s, %s) AS geom),
+                tile AS (
+                    SELECT object.gml_id, building.usage_code,
+                           ST_AsMVTGeom(
+                               ST_Transform(object.representative_point, 3857),
+                               bounds.geom, 4096, 64, true
+                           ) AS geom
+                    FROM bounds, plateau_city_objects AS object
+                    JOIN plateau_buildings AS building ON building.city_object_id = object.id
+                    JOIN city_dataset_versions AS dataset
+                      ON dataset.id = object.dataset_version_id
+                    WHERE dataset.id = %s::uuid AND dataset.city_id = %s
+                      AND object.representative_point IS NOT NULL
+                      AND object.representative_point && ST_Transform(bounds.geom, 4326)
+                    ORDER BY object.gml_id LIMIT 50000
+                )
+                SELECT COALESCE(ST_AsMVT(tile, 'buildings', 4096, 'geom'), ''::bytea)
+                FROM tile"""
+            parameters: tuple[Any, ...] = (*bounds, dataset_version_id, city_id)
+        elif layer == "road_edges":
+            if network_version_id is None:
+                raise ValueError("road_edges tiles require network_version_id")
+            query = """WITH bounds AS (SELECT ST_TileEnvelope(%s, %s, %s) AS geom),
+                tile AS (
+                    SELECT edge.edge_id, edge.length_m, edge.pedestrian_permission,
+                           ST_AsMVTGeom(
+                               ST_Transform(edge.geom, 3857),
+                               bounds.geom, 4096, 64, true
+                           ) AS geom
+                    FROM bounds, road_network_edges AS edge
+                    JOIN road_network_versions AS network ON network.id = edge.network_version_id
+                    JOIN city_dataset_versions AS dataset
+                      ON dataset.id = network.dataset_version_id
+                    WHERE dataset.id = %s::uuid AND dataset.city_id = %s
+                      AND network.id = %s::uuid
+                      AND edge.geom && ST_Transform(bounds.geom, ST_SRID(edge.geom))
+                    ORDER BY edge.edge_id LIMIT 50000
+                )
+                SELECT COALESCE(ST_AsMVT(tile, 'road_edges', 4096, 'geom'), ''::bytea)
+                FROM tile"""
+            parameters = (*bounds, dataset_version_id, city_id, network_version_id)
+        elif layer == "hazards":
+            query = """WITH bounds AS (SELECT ST_TileEnvelope(%s, %s, %s) AS geom),
+                tile AS (
+                    SELECT object.gml_id, hazard.hazard_type, hazard.rank_code,
+                           ST_AsMVTGeom(
+                               ST_Transform(ST_Force2D(part.geom), 3857),
+                               bounds.geom, 4096, 64, true
+                           ) AS geom
+                    FROM bounds, plateau_hazards AS hazard
+                    JOIN plateau_city_objects AS object ON object.id = hazard.city_object_id
+                    JOIN plateau_geometry_parts AS part ON part.city_object_id = object.id
+                    JOIN city_dataset_versions AS dataset
+                      ON dataset.id = object.dataset_version_id
+                    WHERE dataset.id = %s::uuid AND dataset.city_id = %s
+                      AND part.geom && ST_Force3D(ST_Transform(bounds.geom, 4326))
+                    ORDER BY object.gml_id, part.part_order LIMIT 50000
+                )
+                SELECT COALESCE(ST_AsMVT(tile, 'hazards', 4096, 'geom'), ''::bytea)
+                FROM tile"""
+            parameters = (*bounds, dataset_version_id, city_id)
+        elif layer == "scenario_impacts":
+            if network_version_id is None or scenario_id is None or algorithm_version is None:
+                raise ValueError(
+                    "scenario_impacts tiles require network, scenario, and algorithm versions"
+                )
+            query = """WITH bounds AS (SELECT ST_TileEnvelope(%s, %s, %s) AS geom),
+                tile AS (
+                    SELECT impact.building_gml_id, impact.distance_reduction_m,
+                           impact.impact_band,
+                           ST_AsMVTGeom(
+                               ST_Transform(object.representative_point, 3857),
+                               bounds.geom, 4096, 64, true
+                           ) AS geom
+                    FROM bounds, scenario_building_impacts AS impact
+                    JOIN scenario_runs AS scenario ON scenario.id = impact.scenario_run_id
+                    JOIN plateau_city_objects AS object
+                      ON object.dataset_version_id = impact.dataset_version_id
+                     AND object.gml_id = impact.building_gml_id
+                    JOIN city_dataset_versions AS dataset
+                      ON dataset.id = impact.dataset_version_id
+                    WHERE dataset.id = %s::uuid AND dataset.city_id = %s
+                      AND scenario.id = %s::uuid
+                      AND scenario.network_version_id = %s::uuid
+                      AND scenario.algorithm_version = %s
+                      AND object.representative_point && ST_Transform(bounds.geom, 4326)
+                    ORDER BY impact.building_gml_id LIMIT 50000
+                )
+                SELECT COALESCE(ST_AsMVT(tile, 'scenario_impacts', 4096, 'geom'), ''::bytea)
+                FROM tile"""
+            parameters = (
+                *bounds,
+                dataset_version_id,
+                city_id,
+                scenario_id,
+                network_version_id,
+                algorithm_version,
+            )
+        else:
+            raise ValueError(f"Unsupported vector tile layer: {layer}")
+        with self._connect() as connection:
+            row = connection.execute(query, parameters).fetchone()
+        return bytes(row[0]) if row and row[0] else b""
+
+    def admin_snapshot(self) -> dict[str, list[dict[str, Any]]]:
+        with self._connect() as connection:
+            cities = connection.execute(
+                """SELECT city_code, city_key, name, prefecture_name, analysis_crs, updated_at
+                   FROM cities ORDER BY city_code"""
+            ).fetchall()
+            datasets = connection.execute(
+                """SELECT city.city_code, dataset.dataset_key, dataset.title,
+                          version.id, version.version_key, version.dataset_year,
+                          version.verification_status, version.lifecycle_status,
+                          version.quality_status, version.analysis_ready, version.registered_at
+                   FROM dataset_versions AS version
+                   JOIN datasets AS dataset ON dataset.id=version.dataset_id
+                   JOIN cities AS city ON city.id=dataset.city_id
+                   ORDER BY city.city_code, dataset.dataset_key, version.registered_at DESC"""
+            ).fetchall()
+            capabilities = connection.execute(
+                """SELECT city.city_code, capability.capability, capability.status,
+                          capability.note, capability.updated_at
+                   FROM city_capabilities AS capability
+                   JOIN cities AS city ON city.id=capability.city_id
+                   ORDER BY city.city_code, capability.capability"""
+            ).fetchall()
+            networks = connection.execute(
+                """SELECT dataset.city_id, network.id, network.graph_version,
+                          network.source_type, network.network_type,
+                          network.pedestrian_network, network.node_count,
+                          network.edge_count, network.generated_at
+                   FROM road_network_versions AS network
+                   JOIN city_dataset_versions AS dataset
+                     ON dataset.id=network.dataset_version_id
+                   ORDER BY dataset.city_id, network.generated_at DESC"""
+            ).fetchall()
+            jobs = connection.execute(
+                """SELECT city.city_code, job.id, job.job_type, job.state,
+                          job.current_stage, job.retry_count, job.max_retries,
+                          job.queued_at, job.started_at, job.finished_at
+                   FROM job_runs AS job JOIN cities AS city ON city.id=job.city_id
+                   ORDER BY job.queued_at DESC LIMIT 200"""
+            ).fetchall()
+            users = connection.execute(
+                """SELECT user_record.id, user_record.display_name, user_record.email,
+                          user_record.issuer, user_record.active,
+                          COALESCE(jsonb_agg(jsonb_build_object(
+                              'city_code', city.city_code, 'role', role.role
+                          )) FILTER (WHERE role.role IS NOT NULL), '[]'::jsonb) AS roles
+                   FROM platform_users AS user_record
+                   LEFT JOIN platform_user_roles AS role ON role.user_id=user_record.id
+                   LEFT JOIN cities AS city ON city.id=role.city_id
+                   GROUP BY user_record.id ORDER BY user_record.display_name"""
+            ).fetchall()
+
+        def records(keys: tuple[str, ...], rows: list[tuple[Any, ...]]) -> list[dict[str, Any]]:
+            return [dict(zip(keys, row, strict=True)) for row in rows]
+
+        return {
+            "cities": records(
+                ("city_code", "city_key", "name", "prefecture", "analysis_crs", "updated_at"),
+                cities,
+            ),
+            "datasets": records(
+                (
+                    "city_code",
+                    "dataset_key",
+                    "title",
+                    "dataset_version_id",
+                    "version_key",
+                    "year",
+                    "verification_status",
+                    "lifecycle_status",
+                    "quality_status",
+                    "analysis_ready",
+                    "registered_at",
+                ),
+                datasets,
+            ),
+            "capabilities": records(
+                ("city_code", "capability", "status", "note", "updated_at"), capabilities
+            ),
+            "networks": records(
+                (
+                    "city_code",
+                    "network_version_id",
+                    "graph_version",
+                    "source_type",
+                    "network_type",
+                    "pedestrian_network",
+                    "node_count",
+                    "edge_count",
+                    "generated_at",
+                ),
+                networks,
+            ),
+            "jobs": records(
+                (
+                    "city_code",
+                    "job_id",
+                    "job_type",
+                    "state",
+                    "stage",
+                    "retry_count",
+                    "max_retries",
+                    "queued_at",
+                    "started_at",
+                    "finished_at",
+                ),
+                jobs,
+            ),
+            "users": records(
+                ("user_id", "display_name", "email", "issuer", "active", "roles"), users
+            ),
+        }
 
     def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]:
         with self._connect() as connection:

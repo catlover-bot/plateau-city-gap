@@ -26,6 +26,16 @@ def test_extensions_migrations_indexes_and_foreign_keys(database_url: str) -> No
         assert set(extensions) == {"postgis", "pgrouting"}
         assert connection.execute("SELECT PostGIS_Version() IS NOT NULL").fetchone() == (True,)
         assert connection.execute("SELECT pgr_version() IS NOT NULL").fetchone() == (True,)
+        geometry_srids = dict(
+            connection.execute(
+                """SELECT attrelid::regclass::text, postgis_typmod_srid(atttypmod)
+                   FROM pg_attribute
+                   WHERE attrelid IN ('road_network_nodes'::regclass,
+                                      'road_network_edges'::regclass)
+                     AND attname = 'geom'"""
+            ).fetchall()
+        )
+        assert geometry_srids == {"road_network_nodes": 0, "road_network_edges": 0}
         indexes = connection.execute(
             """SELECT indexname FROM pg_indexes
                WHERE indexname IN ('plateau_city_objects_envelope_idx', 'scenario_sites_geom_idx')"""
@@ -63,6 +73,19 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
     )
     assert buildings.status_code == 200
     assert buildings.json()["features"][0]["gml_id"] == "fixture-building-1"
+    tile = client.get(
+        "/cities/26202/tiles/buildings/0/0/0.mvt",
+        params={"dataset_version_id": "20000000-0000-0000-0000-000000000001"},
+    )
+    assert tile.status_code == 200
+    assert tile.headers["content-type"].startswith("application/vnd.mapbox-vector-tile")
+    assert len(tile.content) > 0
+    unchanged = client.get(
+        "/cities/26202/tiles/buildings/0/0/0.mvt",
+        params={"dataset_version_id": "20000000-0000-0000-0000-000000000001"},
+        headers={"If-None-Match": tile.headers["etag"]},
+    )
+    assert unchanged.status_code == 304
 
     scenarios = client.get("/cities/26202/scenarios").json()["scenarios"]
     assert len(scenarios) == 30

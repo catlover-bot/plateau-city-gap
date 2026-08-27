@@ -386,13 +386,17 @@ def load_context_artifacts(
                        context_run_id, candidate_id, context_city_object_id, context_type,
                        candidate_geom, review_status, siting_feasibility
                    ) SELECT %s, source.candidate_id, context.id, source.context_type,
-                            ST_SetSRID(ST_MakePoint(source.candidate_x, source.candidate_y), 6674),
+                            ST_SetSRID(ST_MakePoint(source.candidate_x, source.candidate_y), %s),
                             source.review_status, source.siting_feasibility
                      FROM context_candidate_relation AS source
                      JOIN plateau_city_objects AS context
                        ON context.dataset_version_id = %s
                       AND context.gml_id = source.context_gml_id""",
-                (run_id, dataset_version_id),
+                (
+                    run_id,
+                    int(summary["dataset"]["analysis_crs"].split(":")[-1]),
+                    dataset_version_id,
+                ),
             ).rowcount
 
             connection.execute(

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import os
 from typing import Annotated, Any, Literal
 
@@ -21,6 +22,7 @@ from backend.citygap_platform.security.auth import (
 )
 
 from .repository import PlatformRepository, PostGISRepository
+from .tile_cache import CachedVectorTile, VectorTileKey, VersionedTileCache
 
 
 class ScenarioTransitionRequest(BaseModel):
@@ -92,6 +94,9 @@ def create_app(
     )
     application.state.repository = repository or PostGISRepository(database_url)
     application.state.auth_settings = auth_settings or AuthSettings.from_environment()
+    application.state.tile_cache = VersionedTileCache(
+        int(os.getenv("CITYGAP_TILE_CACHE_ITEMS", "512"))
+    )
 
     @application.middleware("http")
     async def authentication_and_observability(request: Request, call_next):
@@ -217,6 +222,77 @@ def create_app(
             "offset": offset,
             "features": repo.road_edges(city_id, parsed_bbox, limit, offset, graph_version),
         }
+
+    @application.get("/cities/{city_id}/tiles/{layer}/{z}/{x}/{y}.mvt")
+    def vector_tile(
+        city_id: str,
+        layer: Literal["buildings", "road_edges", "hazards", "scenario_impacts"],
+        z: int,
+        x: int,
+        y: int,
+        request: Request,
+        dataset_version_id: Annotated[str, Query(min_length=36, max_length=36)],
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        _identity: Annotated[Identity, Depends(require_permission("platform:read"))],
+        network_version_id: Annotated[str | None, Query(min_length=36, max_length=36)] = None,
+        scenario_id: Annotated[str | None, Query(min_length=36, max_length=36)] = None,
+        algorithm_version: Annotated[str | None, Query(max_length=200)] = None,
+    ) -> Response:
+        tile_count = 1 << z if 0 <= z <= 22 else 0
+        if tile_count == 0 or not (0 <= x < tile_count and 0 <= y < tile_count):
+            raise HTTPException(status_code=422, detail="invalid Web Mercator tile coordinate")
+        if layer == "road_edges" and network_version_id is None:
+            raise HTTPException(status_code=422, detail="road_edges requires network_version_id")
+        if layer == "scenario_impacts" and (
+            network_version_id is None or scenario_id is None or algorithm_version is None
+        ):
+            raise HTTPException(
+                status_code=422,
+                detail="scenario_impacts requires network, scenario, and algorithm versions",
+            )
+        key = VectorTileKey(
+            city_id=city_id,
+            dataset_version_id=dataset_version_id,
+            network_version_id=network_version_id,
+            scenario_id=scenario_id,
+            algorithm_version=algorithm_version,
+            layer=layer,
+            z=z,
+            x=x,
+            y=y,
+        )
+        cache: VersionedTileCache = request.app.state.tile_cache
+        cached = cache.get(key)
+        if cached is None:
+            try:
+                content = repo.vector_tile(
+                    city_id,
+                    layer,
+                    z,
+                    x,
+                    y,
+                    dataset_version_id,
+                    network_version_id,
+                    scenario_id,
+                    algorithm_version,
+                )
+            except ValueError as error:
+                raise HTTPException(status_code=422, detail=str(error)) from error
+            digest = hashlib.sha256(repr(key).encode() + content).hexdigest()
+            cached = CachedVectorTile(content=content, etag=f'"{digest}"')
+            cache.put(key, cached)
+        headers = {
+            "ETag": cached.etag,
+            "Cache-Control": "private, max-age=31536000, immutable",
+            "X-CITYGAP-Dataset-Version": dataset_version_id,
+        }
+        if request.headers.get("If-None-Match") == cached.etag:
+            return Response(status_code=304, headers=headers)
+        return Response(
+            content=cached.content,
+            media_type="application/vnd.mapbox-vector-tile",
+            headers=headers,
+        )
 
     @application.get("/cities/{city_id}/buildings/{gml_id}/network-accessibility")
     def building_network_accessibility(
@@ -514,6 +590,29 @@ def create_app(
         limit: Annotated[int, Query(ge=1, le=500)] = 100,
     ) -> dict:
         return {"events": repo.audit_events(city_id, limit)}
+
+    @application.get(
+        "/admin/snapshot",
+        dependencies=[Depends(require_permission("platform:operate"))],
+    )
+    def admin_snapshot(
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return repo.admin_snapshot()
+
+    @application.get(
+        "/admin/pilot-readiness/{city_id}",
+        dependencies=[Depends(require_permission("platform:operate"))],
+    )
+    def pilot_readiness(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        if not isinstance(repo, PostGISRepository):
+            raise HTTPException(status_code=501, detail="Pilot readiness requires PostGIS")
+        from backend.citygap_platform.readiness import PilotReadinessService
+
+        return PilotReadinessService(repo).check(city_id)
 
     return application
 

@@ -20,6 +20,7 @@ class FakeRepository:
         self.lifecycle_status = "draft"
         self.checklists: dict[tuple[str, int], dict[str, Any]] = {}
         self.jobs: dict[str, JobSnapshot] = {}
+        self.tile_calls = 0
 
     def health(self) -> bool:
         return True
@@ -93,6 +94,21 @@ class FakeRepository:
                 "pedestrian_network": False,
             }
         ]
+
+    def vector_tile(
+        self,
+        city_id: str,
+        layer: str,
+        z: int,
+        x: int,
+        y: int,
+        dataset_version_id: str,
+        network_version_id: str | None,
+        scenario_id: str | None,
+        algorithm_version: str | None,
+    ) -> bytes:
+        self.tile_calls += 1
+        return f"{city_id}:{dataset_version_id}:{layer}:{z}/{x}/{y}".encode()
 
     def building_network_accessibility(self, city_id: str, gml_id: str) -> dict[str, Any] | None:
         if gml_id == "missing":
@@ -304,6 +320,16 @@ class FakeRepository:
     def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]:
         return [{"actor": "test", "city_id": city_id, "limit": limit}]
 
+    def admin_snapshot(self) -> dict[str, list[dict[str, Any]]]:
+        return {
+            "cities": [{"city_code": "26202"}],
+            "datasets": [],
+            "capabilities": [],
+            "networks": [],
+            "jobs": [],
+            "users": [],
+        }
+
 
 client = TestClient(create_app(FakeRepository()))
 
@@ -355,6 +381,32 @@ def test_network_contracts_expose_claim_boundary_and_require_bbox() -> None:
     network = client.get("/cities/26202/buildings/b-1/network-accessibility").json()
     assert network["routes"][0]["pedestrian_network"] is False
     assert client.get("/cities/26202/buildings/missing/network-accessibility").status_code == 404
+
+
+def test_versioned_vector_tiles_are_bounded_cached_and_private() -> None:
+    repository = FakeRepository()
+    tile_client = TestClient(create_app(repository))
+    version = "10000000-0000-0000-0000-000000000002"
+    url = f"/cities/26202/tiles/buildings/0/0/0.mvt?dataset_version_id={version}"
+    response = tile_client.get(url, headers={"X-CITYGAP-Roles": "viewer"})
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("application/vnd.mapbox-vector-tile")
+    assert response.headers["cache-control"] == "private, max-age=31536000, immutable"
+    assert response.headers["x-citygap-dataset-version"] == version
+    etag = response.headers["etag"]
+    assert repository.tile_calls == 1
+    cached = tile_client.get(
+        url,
+        headers={"X-CITYGAP-Roles": "viewer", "If-None-Match": etag},
+    )
+    assert cached.status_code == 304
+    assert repository.tile_calls == 1
+    assert tile_client.get(
+        f"/cities/26202/tiles/buildings/2/4/0.mvt?dataset_version_id={version}"
+    ).status_code == 422
+    assert tile_client.get(
+        f"/cities/26202/tiles/road_edges/0/0/0.mvt?dataset_version_id={version}"
+    ).status_code == 422
 
 
 def test_context_layers_require_bbox_and_preserve_hazard_review_semantics() -> None:
@@ -483,6 +535,7 @@ def test_rbac_separates_view_analysis_review_and_platform_operations() -> None:
     viewer = {"X-CITYGAP-Actor": "viewer-1", "X-CITYGAP-Roles": "viewer"}
     analyst = {"X-CITYGAP-Actor": "analyst-1", "X-CITYGAP-Roles": "analyst"}
     planner = {"X-CITYGAP-Actor": "planner-1", "X-CITYGAP-Roles": "planner"}
+    administrator = {"X-CITYGAP-Actor": "admin-1", "X-CITYGAP-Roles": "administrator"}
     assert rbac_client.get("/cities", headers=viewer).status_code == 200
     assert rbac_client.post(
         "/registry/cities/26202/jobs",
@@ -515,3 +568,7 @@ def test_rbac_separates_view_analysis_review_and_platform_operations() -> None:
         json={"notes": "allowed"},
     ).status_code == 200
     assert rbac_client.get("/admin/audit", headers=planner).status_code == 403
+    assert rbac_client.get("/admin/snapshot", headers=planner).status_code == 403
+    assert rbac_client.get("/admin/snapshot", headers=administrator).json()["cities"] == [
+        {"city_code": "26202"}
+    ]
