@@ -15,12 +15,14 @@
     "audit:futures": "node scripts/audit-urban-futures.mjs",
     "audit:validation": "node scripts/audit-validation.mjs",
     "verify:browser": "node scripts/capture-demo.mjs",
+    "audit:product-v2": "node scripts/audit-product-v2.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty false"
   },
   "dependencies": {
     "cesium": "1.121.0",
+    "maplibre-gl": "6.6.0",
     "proj4": "^2.12.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
