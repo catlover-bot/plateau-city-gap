@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 from backend.citygap_platform.api.app import create_app
 from backend.citygap_platform.api.repository import PostGISRepository
 from backend.citygap_platform.database.migrations import migration_files, migration_status
+from backend.citygap_platform.worker import ClaimedJob, PostgresWorker
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,7 +51,10 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
 
     repository = PostGISRepository(database_url)
     client = TestClient(create_app(repository))
-    assert client.get("/health").json() == {"status": "ok", "database": True}
+    assert client.get("/health").json() == {"status": "ok"}
+    ready = client.get("/ready")
+    assert ready.status_code == 200
+    assert ready.json()["ready"] is True
     cities = client.get("/cities")
     assert cities.status_code == 200
     assert cities.json()[0]["city_id"] == "26202"
@@ -129,3 +133,49 @@ def test_loader_rejects_wrong_dataset_version(database_url: str) -> None:
         connection.commit()
     with pytest.raises(RuntimeError, match="Exact scenario dataset version is not loaded"):
         load_scenario_artifacts(database_url, ROOT / "analysis/outputs/real")
+
+
+def test_database_worker_idempotency_success_retry_and_audit(database_url: str) -> None:
+    import psycopg
+
+    repository = PostGISRepository(database_url)
+    version_id = "10000000-0000-0000-0000-000000000002"
+    first = repository.create_job(
+        "26202", "evidence_export", [version_id], "a" * 64, "evidence-v2", {"scenario": "A"}
+    )
+    duplicate = repository.create_job(
+        "26202", "evidence_export", [version_id], "a" * 64, "evidence-v2", {"scenario": "A"}
+    )
+    assert first is not None and duplicate is not None
+    assert first["job_id"] == duplicate["job_id"]
+
+    completed: list[str] = []
+
+    class RecordingExecutor:
+        def execute(self, job: ClaimedJob, stage: str) -> None:
+            completed.append(stage)
+
+    worker = PostgresWorker(database_url, "integration-worker")
+    assert worker.run_once(RecordingExecutor()) is True
+    succeeded = repository.job_detail(str(first["job_id"]))
+    assert succeeded is not None and succeeded["state"] == "succeeded"
+    assert completed[-1] == "persist_artifacts"
+
+    failing = repository.create_job(
+        "26202", "evidence_export", [version_id], "b" * 64, "evidence-v2", {"scenario": "B"}
+    )
+    assert failing is not None
+    with psycopg.connect(database_url) as connection:
+        connection.execute("UPDATE job_runs SET max_retries=0 WHERE id=%s", (failing["job_id"],))
+        connection.commit()
+
+    class FailingExecutor:
+        def execute(self, job: ClaimedJob, stage: str) -> None:
+            raise RuntimeError("fixture failure")
+
+    assert worker.run_once(FailingExecutor()) is True
+    failed = repository.job_detail(str(failing["job_id"]))
+    assert failed is not None and failed["state"] == "failed"
+    assert "fixture failure" in failed["error"]
+    audit = repository.audit_events("26202", 20)
+    assert any(event["action"] == "job.create" for event in audit)

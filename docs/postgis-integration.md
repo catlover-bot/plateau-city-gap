@@ -10,7 +10,7 @@ runner and then exercises:
 - all migrations and their recorded SHA-256 checksums;
 - GiST indexes and foreign-key metadata;
 - a bbox query through the HTTP repository;
-- the 30 tracked Maizuru canonical scenario artifacts and their 90 sites;
+- 30 Maizuru canonical scenarios and 90 sites regenerated from tracked verified inputs;
 - scenario comparison, guarded lifecycle changes and a field check;
 - constraint failure and transaction rollback;
 - strict dataset/network/context version matching;
@@ -18,8 +18,8 @@ runner and then exercises:
 - `pg_dump` followed by restore into a fresh database.
 
 This is an integration-contract test, not a full Maizuru database load. It uses the
-tracked, real-analysis-derived scenario artifacts plus one deliberately small spatial
-fixture. The fixture does not represent city feature totals, and CI must never be cited
+tracked real-analysis inputs, reproducibly regenerated Parquet tables, plus one deliberately
+small spatial fixture. The fixture does not represent city feature totals, and CI must never be cited
 as evidence that all 97,140 Maizuru CityGML features were loaded into PostGIS.
 
 ## Run locally

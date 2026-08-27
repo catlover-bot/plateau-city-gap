@@ -2,7 +2,7 @@ name: city-gap-platform
 
 services:
   postgres:
-    image: pgrouting/pgrouting:16-3.5-4.0
+    image: pgrouting/pgrouting:16-3.5-4.0@sha256:bd277edf6e855db49837314209b0eb8902e8f0fa6f9d6ac6952f7355fdb24465
     environment:
       POSTGRES_DB: ${CITYGAP_POSTGRES_DB:-citygap}
       POSTGRES_USER: ${CITYGAP_POSTGRES_USER:-citygap}
@@ -11,7 +11,6 @@ services:
       - "${CITYGAP_POSTGRES_PORT:-5432}:5432"
     volumes:
       - citygap_postgres:/var/lib/postgresql/data
-      - ./infra/migrations:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -19,22 +18,53 @@ services:
       retries: 20
     restart: unless-stopped
 
+  migrate:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    command: ["python", "-m", "backend.citygap_platform.database.migrations", "upgrade"]
+    environment:
+      CITYGAP_DATABASE_URL: postgresql://${CITYGAP_POSTGRES_USER:-citygap}:${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}@postgres:5432/${CITYGAP_POSTGRES_DB:-citygap}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
   api:
     build:
       context: .
       dockerfile: infra/docker/api.Dockerfile
     environment:
       CITYGAP_DATABASE_URL: postgresql://${CITYGAP_POSTGRES_USER:-citygap}:${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}@postgres:5432/${CITYGAP_POSTGRES_DB:-citygap}
+      CITYGAP_ENVIRONMENT: ${CITYGAP_ENVIRONMENT:-development}
+      CITYGAP_AUTH_MODE: ${CITYGAP_AUTH_MODE:-development}
+      CITYGAP_REQUIRED_CITY_ID: ${CITYGAP_REQUIRED_CITY_ID:-}
     ports:
       - "${CITYGAP_API_PORT:-8000}:8000"
     depends_on:
-      postgres:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    command: ["python", "-m", "backend.citygap_platform.worker"]
+    environment:
+      CITYGAP_DATABASE_URL: postgresql://${CITYGAP_POSTGRES_USER:-citygap}:${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}@postgres:5432/${CITYGAP_POSTGRES_DB:-citygap}
+      CITYGAP_WORKER_ID: ${CITYGAP_WORKER_ID:-compose-worker}
+      CITYGAP_JOB_STAGE_TIMEOUT_SECONDS: ${CITYGAP_JOB_STAGE_TIMEOUT_SECONDS:-3600}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - citygap_artifacts:/app/var
     restart: unless-stopped
 
   frontend:
@@ -50,3 +80,4 @@ services:
 
 volumes:
   citygap_postgres:
+  citygap_artifacts:

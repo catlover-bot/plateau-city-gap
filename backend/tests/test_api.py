@@ -24,6 +24,15 @@ class FakeRepository:
     def health(self) -> bool:
         return True
 
+    def readiness(self, required_city_id: str | None) -> dict[str, Any]:
+        ready = self.health()
+        return {
+            "status": "ready" if ready else "not_ready",
+            "ready": ready,
+            "checks": {"database": ready},
+            "details": {"required_city_id": required_city_id},
+        }
+
     def cities(self) -> list[dict[str, Any]]:
         return [{"city_id": "26202", "city_name": "舞鶴市"}]
 
@@ -254,6 +263,7 @@ class FakeRepository:
         job_type: str,
         dataset_version_ids: list[str],
         config_hash: str,
+        algorithm_version: str,
         parameters: dict[str, Any],
     ) -> dict[str, Any] | None:
         if city_id == "missing":
@@ -291,22 +301,28 @@ class FakeRepository:
         self.jobs[job_id] = updated
         return self.job_detail(job_id)
 
+    def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]:
+        return [{"actor": "test", "city_id": city_id, "limit": limit}]
+
 
 client = TestClient(create_app(FakeRepository()))
 
 
 def test_health_and_city_endpoints() -> None:
-    assert client.get("/health").json() == {"status": "ok", "database": True}
+    assert client.get("/health").json() == {"status": "ok"}
+    assert client.get("/ready").json()["ready"] is True
     assert client.get("/cities").json()[0]["city_id"] == "26202"
     assert client.get("/cities/26202/layers").json()[0]["theme"] == "bldg"
 
 
-def test_health_is_not_ready_when_database_is_unavailable() -> None:
+def test_liveness_is_independent_but_readiness_checks_dependencies() -> None:
     repository = FakeRepository()
     repository.health = lambda: False  # type: ignore[method-assign]
-    response = TestClient(create_app(repository)).get("/health")
+    probe_client = TestClient(create_app(repository))
+    assert probe_client.get("/health").status_code == 200
+    response = probe_client.get("/ready")
     assert response.status_code == 503
-    assert response.json()["status"] == "degraded"
+    assert response.json()["status"] == "not_ready"
 
 
 def test_buildings_requires_valid_bbox_and_is_bounded() -> None:
@@ -439,6 +455,7 @@ def test_jobs_report_real_stages_without_fake_percentages() -> None:
             "job_type": "scenario_optimization",
             "dataset_version_ids": ["version-2025"],
             "config_hash": "a" * 64,
+            "algorithm_version": "network-scenario-test",
             "parameters": {"site_count": 3},
         },
     )
@@ -458,3 +475,43 @@ def test_jobs_report_real_stages_without_fake_percentages() -> None:
     )
     assert invalid.status_code == 409
     assert job_client.get("/jobs/missing").status_code == 404
+
+
+def test_rbac_separates_view_analysis_review_and_platform_operations() -> None:
+    repository = FakeRepository()
+    rbac_client = TestClient(create_app(repository))
+    viewer = {"X-CITYGAP-Actor": "viewer-1", "X-CITYGAP-Roles": "viewer"}
+    analyst = {"X-CITYGAP-Actor": "analyst-1", "X-CITYGAP-Roles": "analyst"}
+    planner = {"X-CITYGAP-Actor": "planner-1", "X-CITYGAP-Roles": "planner"}
+    assert rbac_client.get("/cities", headers=viewer).status_code == 200
+    assert rbac_client.post(
+        "/registry/cities/26202/jobs",
+        headers=viewer,
+        json={
+            "job_type": "scenario_optimization",
+            "dataset_version_ids": ["version-2025"],
+            "config_hash": "a" * 64,
+            "algorithm_version": "test",
+        },
+    ).status_code == 403
+    assert rbac_client.post(
+        "/registry/cities/26202/jobs",
+        headers=analyst,
+        json={
+            "job_type": "scenario_optimization",
+            "dataset_version_ids": ["version-2025"],
+            "config_hash": "a" * 64,
+            "algorithm_version": "test",
+        },
+    ).status_code == 201
+    assert rbac_client.put(
+        "/cities/26202/scenarios/scenario-a/sites/1/field-check",
+        headers=analyst,
+        json={"notes": "not allowed"},
+    ).status_code == 403
+    assert rbac_client.put(
+        "/cities/26202/scenarios/scenario-a/sites/1/field-check",
+        headers=planner,
+        json={"notes": "allowed"},
+    ).status_code == 200
+    assert rbac_client.get("/admin/audit", headers=planner).status_code == 403

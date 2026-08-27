@@ -21,11 +21,25 @@ JOB_STAGES = {
         "verify_conservation",
         "persist_artifacts",
     ),
+    "road_network": (
+        "parse_road_surfaces",
+        "build_topology",
+        "connect_demand",
+        "verify_network",
+        "persist_artifacts",
+    ),
     "network_generation": (
         "parse_road_surfaces",
         "build_topology",
         "connect_demand",
         "verify_network",
+        "persist_artifacts",
+    ),
+    "terrain": (
+        "parse_dem",
+        "sample_network_nodes",
+        "summarize_routes",
+        "verify_terrain",
         "persist_artifacts",
     ),
     "terrain_enrichment": (
@@ -35,7 +49,7 @@ JOB_STAGES = {
         "verify_terrain",
         "persist_artifacts",
     ),
-    "context_generation": (
+    "spatial_context": (
         "parse_context_features",
         "spatial_join",
         "verify_context",
@@ -46,6 +60,18 @@ JOB_STAGES = {
         "build_sparse_matrix",
         "optimize_objectives",
         "independent_verification",
+        "persist_artifacts",
+    ),
+    "context_generation": (
+        "parse_context_features",
+        "spatial_join",
+        "verify_context",
+        "persist_artifacts",
+    ),
+    "evidence_export": (
+        "collect_provenance",
+        "render_package",
+        "verify_artifacts",
         "persist_artifacts",
     ),
 }

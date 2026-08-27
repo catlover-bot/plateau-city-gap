@@ -7,6 +7,7 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY analysis ./analysis
 COPY backend ./backend
+COPY infra ./infra
 RUN pip install --no-cache-dir ".[platform]" \
     && useradd --create-home --uid 10001 citygap
 

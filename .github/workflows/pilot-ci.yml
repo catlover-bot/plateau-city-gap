@@ -101,6 +101,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
+      - name: Regenerate real-analysis-derived canonical scenario tables
+        run: python -m analysis.scripts.build_scenario_canonical >/tmp/scenario-manifest.json
       - name: Apply all migrations through checksum runner
         run: python -m backend.citygap_platform.database.migrations upgrade
       - name: Exercise real PostGIS, pgRouting, loader, API and transactions
@@ -114,7 +116,7 @@ jobs:
             if curl --fail --silent http://127.0.0.1:8000/health >/tmp/health.json; then break; fi
             sleep 1
           done
-          python -c 'import json; data=json.load(open("/tmp/health.json")); assert data["database"] is True'
+          python -c 'import json; data=json.load(open("/tmp/health.json")); assert data == {"status": "ok"}'
       - name: Verify pg_dump and pg_restore
         run: bash infra/scripts/verify_backup_restore.sh
       - name: Publish PostGIS diagnostics

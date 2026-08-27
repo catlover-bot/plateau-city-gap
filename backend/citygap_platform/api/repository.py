@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from typing import Any, Protocol
 
+from backend.citygap_platform.database.migrations import migration_files
 from backend.citygap_platform.domain.jobs import (
     JobSnapshot,
     JobState,
@@ -14,10 +16,13 @@ from backend.citygap_platform.domain.jobs import (
     succeed_job,
 )
 from backend.citygap_platform.domain.scenarios import validate_status_transition
+from backend.citygap_platform.observability import current_request_context
 
 
 class PlatformRepository(Protocol):
     def health(self) -> bool: ...
+
+    def readiness(self, required_city_id: str | None) -> dict[str, Any]: ...
 
     def cities(self) -> list[dict[str, Any]]: ...
 
@@ -104,6 +109,7 @@ class PlatformRepository(Protocol):
         job_type: str,
         dataset_version_ids: list[str],
         config_hash: str,
+        algorithm_version: str,
         parameters: dict[str, Any],
     ) -> dict[str, Any] | None: ...
 
@@ -112,6 +118,8 @@ class PlatformRepository(Protocol):
     def transition_job(
         self, job_id: str, action: str, stage: str | None, error: str | None
     ) -> dict[str, Any] | None: ...
+
+    def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]: ...
 
 
 class PostGISRepository:
@@ -123,6 +131,34 @@ class PostGISRepository:
 
         return psycopg.connect(self.database_url)
 
+    @staticmethod
+    def _audit(
+        connection,
+        action: str,
+        resource_type: str,
+        resource_id: str,
+        city_id: str | None,
+        before: dict[str, Any] | None,
+        after: dict[str, Any] | None,
+    ) -> None:
+        context = current_request_context()
+        connection.execute(
+            """INSERT INTO audit_log (
+                   actor, action, resource_type, resource_id, city_id, request_id,
+                   before_state, after_state
+               ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+            (
+                context.actor,
+                action,
+                resource_type,
+                resource_id,
+                city_id,
+                context.request_id,
+                json.dumps(before, ensure_ascii=False, default=str) if before is not None else None,
+                json.dumps(after, ensure_ascii=False, default=str) if after is not None else None,
+            ),
+        )
+
     def health(self) -> bool:
         import psycopg
 
@@ -131,6 +167,59 @@ class PostGISRepository:
                 return connection.execute("SELECT 1").fetchone() == (1,)
         except (psycopg.Error, OSError):
             return False
+
+    def readiness(self, required_city_id: str | None) -> dict[str, Any]:
+        import psycopg
+
+        checks: dict[str, bool] = {
+            "database": False,
+            "migrations": False,
+            "extensions": False,
+            "required_dataset": False,
+            "network_version": False,
+            "scenario_store": False,
+        }
+        details: dict[str, Any] = {"required_city_id": required_city_id}
+        try:
+            with self._connect() as connection:
+                checks["database"] = connection.execute("SELECT 1").fetchone() == (1,)
+                expected = len(migration_files("infra/migrations"))
+                applied = connection.execute("SELECT count(*) FROM schema_migrations").fetchone()[0]
+                checks["migrations"] = applied == expected
+                details["migration_count"] = {"expected": expected, "applied": applied}
+                extensions = {
+                    row[0]
+                    for row in connection.execute(
+                        "SELECT extname FROM pg_extension WHERE extname IN ('postgis','pgrouting')"
+                    ).fetchall()
+                }
+                checks["extensions"] = extensions == {"postgis", "pgrouting"}
+                details["extensions"] = sorted(extensions)
+                dataset = connection.execute(
+                    """SELECT id FROM city_dataset_versions
+                       WHERE is_current AND (%s IS NULL OR city_id = %s) LIMIT 1""",
+                    (required_city_id, required_city_id),
+                ).fetchone()
+                checks["required_dataset"] = dataset is not None
+                if dataset:
+                    checks["network_version"] = (
+                        connection.execute(
+                            "SELECT EXISTS(SELECT 1 FROM road_network_versions WHERE dataset_version_id=%s)",
+                            (dataset[0],),
+                        ).fetchone()[0]
+                        is True
+                    )
+                checks["scenario_store"] = connection.execute(
+                    "SELECT to_regclass('public.scenario_runs') IS NOT NULL"
+                ).fetchone()[0]
+        except (psycopg.Error, OSError) as error:
+            details["error"] = type(error).__name__
+        return {
+            "status": "ready" if all(checks.values()) else "not_ready",
+            "ready": all(checks.values()),
+            "checks": checks,
+            "details": details,
+        }
 
     def cities(self) -> list[dict[str, Any]]:
         with self._connect() as connection:
@@ -846,6 +935,15 @@ class PostGISRepository:
                    ) VALUES (%s, %s, %s, %s)""",
                 (scenario_id, current, proposed_status, note),
             )
+            self._audit(
+                connection,
+                "scenario.status.transition",
+                "scenario",
+                scenario_id,
+                city_id,
+                {"lifecycle_status": current},
+                {"lifecycle_status": proposed_status, "note": note},
+            )
             connection.commit()
         return {
             "scenario_id": scenario_id,
@@ -860,6 +958,7 @@ class PostGISRepository:
                           check_row.land_ownership_unknown, check_row.existing_service,
                           check_row.facility_condition, check_row.hazard_confirmation,
                           check_row.operator_consultation, check_row.notes,
+                          check_row.photo_urls, check_row.location_context,
                           check_row.checked_at, check_row.updated_at
                    FROM scenario_field_checks AS check_row
                    JOIN scenario_runs AS scenario ON scenario.id = check_row.scenario_run_id
@@ -880,6 +979,8 @@ class PostGISRepository:
             "hazard_confirmation",
             "operator_consultation",
             "notes",
+            "photo_urls",
+            "location_context",
             "checked_at",
             "updated_at",
         )
@@ -916,12 +1017,21 @@ class PostGISRepository:
             ).fetchone()
             if site is None:
                 return None
+            existing = connection.execute(
+                """SELECT site_access, road_safety, land_ownership_unknown,
+                          existing_service, facility_condition, hazard_confirmation,
+                          operator_consultation, notes, photo_urls, location_context
+                   FROM scenario_field_checks
+                   WHERE scenario_run_id = %s AND site_order = %s""",
+                (scenario_id, site_order),
+            ).fetchone()
             connection.execute(
                 """INSERT INTO scenario_field_checks (
                        scenario_run_id, site_order, site_access, road_safety,
                        land_ownership_unknown, existing_service, facility_condition,
-                       hazard_confirmation, operator_consultation, notes, checked_at
-                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())
+                       hazard_confirmation, operator_consultation, notes, photo_urls,
+                       location_context, checked_at
+                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())
                    ON CONFLICT (scenario_run_id, site_order) DO UPDATE SET
                        site_access = EXCLUDED.site_access,
                        road_safety = EXCLUDED.road_safety,
@@ -930,13 +1040,27 @@ class PostGISRepository:
                        facility_condition = EXCLUDED.facility_condition,
                        hazard_confirmation = EXCLUDED.hazard_confirmation,
                        operator_consultation = EXCLUDED.operator_consultation,
-                       notes = EXCLUDED.notes, checked_at = now(), updated_at = now()""",
+                       notes = EXCLUDED.notes, photo_urls = EXCLUDED.photo_urls,
+                       location_context = EXCLUDED.location_context,
+                       checked_at = now(), updated_at = now()""",
                 (
                     scenario_id,
                     site_order,
                     *(checklist[name] for name in fields),
                     checklist["notes"],
+                    checklist.get("photo_urls", []),
+                    json.dumps(checklist.get("location_context", {}), ensure_ascii=False),
                 ),
+            )
+            before_keys = (*fields, "notes", "photo_urls", "location_context")
+            self._audit(
+                connection,
+                "field_check.upsert",
+                "scenario_site",
+                f"{scenario_id}:{site_order}",
+                city_id,
+                dict(zip(before_keys, existing, strict=True)) if existing else None,
+                {key: checklist.get(key) for key in before_keys},
             )
             connection.commit()
         return self.field_check(city_id, scenario_id, site_order)
@@ -1054,6 +1178,7 @@ class PostGISRepository:
         job_type: str,
         dataset_version_ids: list[str],
         config_hash: str,
+        algorithm_version: str,
         parameters: dict[str, Any],
     ) -> dict[str, Any] | None:
         with self._connect() as connection:
@@ -1071,23 +1196,57 @@ class PostGISRepository:
             ).fetchall()
             if {str(row[0]) for row in valid_versions} != set(dataset_version_ids):
                 raise ValueError("Every job dataset version must belong to the selected city")
+            idempotency_payload = {
+                "city": city_id,
+                "datasets": sorted(set(dataset_version_ids)),
+                "job_type": job_type,
+                "algorithm_version": algorithm_version,
+                "config_hash": config_hash,
+            }
+            idempotency_key = hashlib.sha256(
+                json.dumps(idempotency_payload, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
             job_id = connection.execute(
                 """INSERT INTO job_runs (
-                       city_id, job_type, state, config_hash, parameters
-                   ) VALUES (%s, %s, 'queued', %s, %s) RETURNING id""",
-                (city[0], job_type, config_hash, json.dumps(parameters, ensure_ascii=False)),
+                       city_id, job_type, state, config_hash, algorithm_version,
+                       idempotency_key, parameters
+                   ) VALUES (%s, %s, 'queued', %s, %s, %s, %s)
+                   ON CONFLICT (idempotency_key) WHERE idempotency_key IS NOT NULL
+                   DO UPDATE SET idempotency_key = EXCLUDED.idempotency_key
+                   RETURNING id, (xmax = 0) AS inserted""",
+                (
+                    city[0],
+                    job_type,
+                    config_hash,
+                    algorithm_version,
+                    idempotency_key,
+                    json.dumps(parameters, ensure_ascii=False),
+                ),
             ).fetchone()[0]
-            for version_id in dataset_version_ids:
+            existing_inputs = connection.execute(
+                "SELECT count(*) FROM job_dataset_versions WHERE job_run_id = %s", (job_id,)
+            ).fetchone()[0]
+            if existing_inputs == 0:
+                for version_id in sorted(set(dataset_version_ids)):
+                    connection.execute(
+                        """INSERT INTO job_dataset_versions (job_run_id, dataset_version_id)
+                           VALUES (%s, %s)""",
+                        (job_id, version_id),
+                    )
                 connection.execute(
-                    """INSERT INTO job_dataset_versions (job_run_id, dataset_version_id)
-                       VALUES (%s, %s)""",
-                    (job_id, version_id),
+                    """INSERT INTO job_events (job_run_id, state, message)
+                       VALUES (%s, 'queued', 'job registered; no work has started')""",
+                    (job_id,),
                 )
-            connection.execute(
-                """INSERT INTO job_events (job_run_id, state, message)
-                   VALUES (%s, 'queued', 'job registered; no work has started')""",
-                (job_id,),
-            )
+                self._audit(
+                    connection,
+                    "job.create",
+                    "job",
+                    str(job_id),
+                    city_id,
+                    None,
+                    {**idempotency_payload, "state": "queued"},
+                )
             connection.commit()
         return self.job_detail(str(job_id))
 
@@ -1095,8 +1254,10 @@ class PostGISRepository:
         with self._connect() as connection:
             row = connection.execute(
                 """SELECT job.id, city.city_code, city.city_key, job.job_type,
-                          job.state, job.current_stage, job.config_hash, job.parameters,
-                          job.queued_at, job.started_at, job.completed_at, job.error_message
+                          job.state, job.current_stage, job.config_hash,
+                          job.algorithm_version, job.idempotency_key, job.parameters,
+                          job.retry_count, job.max_retries, job.queued_at, job.started_at,
+                          job.finished_at, job.error_message
                    FROM job_runs AS job JOIN cities AS city ON city.id = job.city_id
                    WHERE job.id = %s""",
                 (job_id,),
@@ -1111,10 +1272,14 @@ class PostGISRepository:
                 "state",
                 "current_stage",
                 "config_hash",
+                "algorithm_version",
+                "idempotency_key",
                 "parameters",
+                "retry_count",
+                "max_retries",
                 "queued_at",
                 "started_at",
-                "completed_at",
+                "finished_at",
                 "error",
             )
             result = dict(zip(keys, row, strict=True))
@@ -1187,11 +1352,14 @@ class PostGISRepository:
                               ELSE started_at END,
                           completed_at = CASE
                               WHEN %s IN ('succeeded', 'failed') THEN now() ELSE NULL END,
+                          finished_at = CASE
+                              WHEN %s IN ('succeeded', 'failed') THEN now() ELSE NULL END,
                           error_message = %s
                    WHERE id = %s""",
                 (
                     updated.state.value,
                     updated.current_stage,
+                    updated.state.value,
                     updated.state.value,
                     updated.state.value,
                     updated.error,
@@ -1208,5 +1376,36 @@ class PostGISRepository:
                     updated.error or action,
                 ),
             )
+            self._audit(
+                connection,
+                f"job.{action}",
+                "job",
+                job_id,
+                None,
+                {"state": row[1], "stage": row[2]},
+                {"state": updated.state.value, "stage": updated.current_stage},
+            )
             connection.commit()
         return self.job_detail(job_id)
+
+    def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT actor, action, resource_type, resource_id, city_id,
+                          request_id, before_state, after_state, occurred_at
+                   FROM audit_log WHERE (%s IS NULL OR city_id = %s)
+                   ORDER BY occurred_at DESC, id DESC LIMIT %s""",
+                (city_id, city_id, limit),
+            ).fetchall()
+        keys = (
+            "actor",
+            "action",
+            "resource_type",
+            "resource_id",
+            "city_id",
+            "request_id",
+            "before",
+            "after",
+            "timestamp",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]

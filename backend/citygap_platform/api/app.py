@@ -6,10 +6,19 @@ import os
 from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
-from pydantic import BaseModel, Field
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field, field_validator
 
 from backend.citygap_platform.domain.jobs import JOB_STAGES
 from backend.citygap_platform.domain.scenarios import FieldCheckValue, ScenarioStatus
+from backend.citygap_platform.observability import request_observability_middleware
+from backend.citygap_platform.security.auth import (
+    AuthSettings,
+    Identity,
+    OidcVerifier,
+    require_permission,
+    resolve_identity,
+)
 
 from .repository import PlatformRepository, PostGISRepository
 
@@ -29,12 +38,22 @@ class FieldCheckRequest(BaseModel):
     hazard_confirmation: FieldCheckValue = FieldCheckValue.UNKNOWN
     operator_consultation: FieldCheckValue = FieldCheckValue.UNKNOWN
     notes: str = Field(default="", max_length=4000)
+    photo_urls: list[str] = Field(default_factory=list, max_length=10)
+    location_context: dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator("photo_urls")
+    @classmethod
+    def validate_photo_urls(cls, values: list[str]) -> list[str]:
+        if any(not value.startswith("https://") or len(value) > 2000 for value in values):
+            raise ValueError("photo_urls must contain bounded HTTPS references")
+        return values
 
 
 class JobCreateRequest(BaseModel):
     job_type: str
     dataset_version_ids: list[str] = Field(min_length=1, max_length=50)
     config_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    algorithm_version: str = Field(min_length=1, max_length=200)
     parameters: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -58,7 +77,11 @@ def _parse_bbox(value: str) -> tuple[float, float, float, float]:
     return parts
 
 
-def create_app(repository: PlatformRepository | None = None) -> FastAPI:
+def create_app(
+    repository: PlatformRepository | None = None,
+    auth_settings: AuthSettings | None = None,
+    oidc_verifier: OidcVerifier | None = None,
+) -> FastAPI:
     application = FastAPI(
         title="CITY GAP Urban Digital Twin Platform",
         version="0.1.0",
@@ -68,15 +91,42 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
         "CITYGAP_DATABASE_URL", "postgresql://citygap:citygap_dev@postgres:5432/citygap"
     )
     application.state.repository = repository or PostGISRepository(database_url)
+    application.state.auth_settings = auth_settings or AuthSettings.from_environment()
+
+    @application.middleware("http")
+    async def authentication_and_observability(request: Request, call_next):
+        if request.url.path in {"/health", "/ready"}:
+            request.state.identity = Identity(
+                actor="health-probe", issuer="citygap-internal", roles=frozenset({"viewer"})
+            )
+        else:
+            try:
+                request.state.identity = resolve_identity(
+                    request, application.state.auth_settings, oidc_verifier
+                )
+            except HTTPException as error:
+                failure = JSONResponse(
+                    status_code=error.status_code, content={"detail": error.detail}
+                )
+
+                async def unauthorized(_request: Request):
+                    return failure
+
+                return await request_observability_middleware(request, unauthorized)
+        return await request_observability_middleware(request, call_next)
 
     @application.get("/health")
-    def health(
+    def health() -> dict:
+        return {"status": "ok"}
+
+    @application.get("/ready")
+    def ready(
         response: Response, repo: Annotated[PlatformRepository, Depends(_repository)]
     ) -> dict:
-        database = repo.health()
-        if not database:
+        detail = repo.readiness(os.getenv("CITYGAP_REQUIRED_CITY_ID"))
+        if not detail["ready"]:
             response.status_code = 503
-        return {"status": "ok" if database else "degraded", "database": database}
+        return detail
 
     @application.get("/cities")
     def cities(repo: Annotated[PlatformRepository, Depends(_repository)]) -> list[dict]:
@@ -307,7 +357,10 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Scenario not found")
         return detail
 
-    @application.patch("/cities/{city_id}/scenarios/{scenario_id}/status")
+    @application.patch(
+        "/cities/{city_id}/scenarios/{scenario_id}/status",
+        dependencies=[Depends(require_permission("scenario:review"))],
+    )
     def transition_scenario(
         city_id: str,
         scenario_id: str,
@@ -340,7 +393,10 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Field check not found")
         return result
 
-    @application.put("/cities/{city_id}/scenarios/{scenario_id}/sites/{site_order}/field-check")
+    @application.put(
+        "/cities/{city_id}/scenarios/{scenario_id}/sites/{site_order}/field-check",
+        dependencies=[Depends(require_permission("field:write"))],
+    )
     def save_field_check(
         city_id: str,
         scenario_id: str,
@@ -389,7 +445,11 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             "analysis_runs": repo.analysis_runs(city_id, limit),
         }
 
-    @application.post("/registry/cities/{city_id}/jobs", status_code=201)
+    @application.post(
+        "/registry/cities/{city_id}/jobs",
+        status_code=201,
+        dependencies=[Depends(require_permission("analysis:run"))],
+    )
     def create_job(
         city_id: str,
         request_body: JobCreateRequest,
@@ -403,6 +463,7 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
                 request_body.job_type,
                 request_body.dataset_version_ids,
                 request_body.config_hash,
+                request_body.algorithm_version,
                 request_body.parameters,
             )
         except ValueError as error:
@@ -421,7 +482,10 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Job not found")
         return result
 
-    @application.post("/jobs/{job_id}/transition")
+    @application.post(
+        "/jobs/{job_id}/transition",
+        dependencies=[Depends(require_permission("platform:operate"))],
+    )
     def transition_job(
         job_id: str,
         request_body: JobTransitionRequest,
@@ -439,6 +503,17 @@ def create_app(repository: PlatformRepository | None = None) -> FastAPI:
         if result is None:
             raise HTTPException(status_code=404, detail="Job not found")
         return result
+
+    @application.get(
+        "/admin/audit",
+        dependencies=[Depends(require_permission("platform:operate"))],
+    )
+    def audit_events(
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        city_id: str | None = None,
+        limit: Annotated[int, Query(ge=1, le=500)] = 100,
+    ) -> dict:
+        return {"events": repo.audit_events(city_id, limit)}
 
     return application
 
