@@ -19,7 +19,8 @@ from backend.citygap_platform.api.tile_cache import VersionedTileCache
 
 ROOT = Path(__file__).resolve().parents[2]
 REAL = ROOT / "analysis/outputs/real"
-SYNTHETIC_CITY = "benchmark-100k"
+SYNTHETIC_CITY = "99999"
+SYNTHETIC_CITY_KEY = "benchmark-100k"
 DATASET_ID = "90000000-0000-0000-0000-000000000001"
 INGESTION_ID = "90000000-0000-0000-0000-000000000002"
 NETWORK_ID = "90000000-0000-0000-0000-000000000003"
@@ -51,6 +52,14 @@ def _seed(database_url: str, building_count: int, edge_count: int) -> None:
     import psycopg
 
     with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """INSERT INTO cities (
+                   city_code, city_key, name, prefecture_code, prefecture_name, analysis_crs
+               ) VALUES (%s, %s, 'SYNTHETIC SCALE FIXTURE', '99',
+                         'SYNTHETIC - NOT A MUNICIPALITY', 'EPSG:6674')
+               ON CONFLICT (city_code) DO NOTHING""",
+            (SYNTHETIC_CITY, SYNTHETIC_CITY_KEY),
+        )
         connection.execute(
             """INSERT INTO city_dataset_versions (
                    id, city_id, city_name, dataset_year, dataset_name,
@@ -172,6 +181,7 @@ def _cleanup(database_url: str) -> None:
         )
         connection.execute("DELETE FROM ingestion_runs WHERE id = %s", (INGESTION_ID,))
         connection.execute("DELETE FROM city_dataset_versions WHERE id = %s", (DATASET_ID,))
+        connection.execute("DELETE FROM cities WHERE city_code = %s", (SYNTHETIC_CITY,))
         connection.commit()
 
 
@@ -196,8 +206,8 @@ def _real_pipeline_measurements() -> dict[str, object]:
 
 
 def benchmark(database_url: str, building_count: int, edge_count: int) -> dict[str, object]:
-    _seed(database_url, building_count, edge_count)
     try:
+        _seed(database_url, building_count, edge_count)
         repository = PostGISRepository(database_url)
         app = create_app(repository)
         client = TestClient(app)
