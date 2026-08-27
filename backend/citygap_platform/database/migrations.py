@@ -72,6 +72,7 @@ def migration_status(database_url: str, directory: str | Path) -> dict[str, obje
         return {"ready": False, "expected": sorted(expected), "applied": [], "problems": ["unavailable"]}
     actual = {name: digest.strip() for name, digest in rows}
     problems = [f"missing:{name}" for name in expected.keys() - actual.keys()]
+    problems.extend(f"unexpected:{name}" for name in actual.keys() - expected.keys())
     problems.extend(
         f"checksum:{name}" for name in expected.keys() & actual.keys() if expected[name] != actual[name]
     )

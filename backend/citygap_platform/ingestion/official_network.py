@@ -153,11 +153,25 @@ def load_official_network(
 ) -> dict[str, object]:
     import psycopg
 
+    from backend.citygap_platform.api.repository import PostGISRepository
+
     nodes, edges = adapter.frames()
     inspection = adapter.inspect()
     network_type = "walk" if adapter.source_type == "official_walk" else "road"
     permission = "official_walk" if adapter.source_type == "official_walk" else "official_drive"
     with psycopg.connect(database_url) as connection:
+        dataset = connection.execute(
+            "SELECT city_id FROM city_dataset_versions WHERE id=%s",
+            (dataset_version_id,),
+        ).fetchone()
+        if dataset is None:
+            raise ValueError("Official network dataset version is not registered")
+        before = connection.execute(
+            """SELECT id, source_type, graph_version, node_count, edge_count
+               FROM road_network_versions
+               WHERE dataset_version_id=%s AND graph_version=%s""",
+            (dataset_version_id, inspection.graph_version),
+        ).fetchone()
         network_id = connection.execute(
             """INSERT INTO road_network_versions (
                    dataset_version_id, graph_version, graph_method, network_type, source_type,
@@ -229,5 +243,32 @@ def load_official_network(
                     adapter.analysis_crs.split(":")[-1],
                 ),
             )
+        PostGISRepository._audit(
+            connection,
+            "network.official.import",
+            "network_version",
+            str(network_id),
+            str(dataset[0]),
+            (
+                {
+                    "network_version_id": str(before[0]),
+                    "source_type": before[1],
+                    "graph_version": before[2],
+                    "node_count": before[3],
+                    "edge_count": before[4],
+                }
+                if before
+                else None
+            ),
+            {
+                "network_version_id": str(network_id),
+                "source_type": inspection.source_type,
+                "graph_version": inspection.graph_version,
+                "node_count": inspection.node_count,
+                "edge_count": inspection.edge_count,
+                "generator_commit": generator_commit,
+                "software_commit": software_commit,
+            },
+        )
         connection.commit()
     return {"network_version_id": str(network_id), **asdict(inspection)}

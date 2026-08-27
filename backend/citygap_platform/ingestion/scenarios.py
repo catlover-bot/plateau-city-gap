@@ -87,6 +87,8 @@ def load_scenario_artifacts(
 
     import psycopg
 
+    from backend.citygap_platform.api.repository import PostGISRepository
+
     manifest, paths = canonical_scenario_files(output, artifact_prefix)
     frames = {name: pd.read_parquet(path) for name, path in paths.items()}
     expected = {name: int(manifest["canonical_tables"][name]["row_count"]) for name in TABLE_NAMES}
@@ -131,6 +133,9 @@ def load_scenario_artifacts(
         context_run_id = context[0]
 
         for row in frames["scenario_runs"].itertuples(index=False):
+            existed = connection.execute(
+                "SELECT 1 FROM scenario_runs WHERE id = %s", (row.scenario_run_id,)
+            ).fetchone()
             connection.execute(
                 """INSERT INTO scenario_runs (
                        id, scenario_key, dataset_version_id, network_version_id,
@@ -164,6 +169,24 @@ def load_scenario_artifacts(
                     json.dumps(_json(row.metadata_json), ensure_ascii=False),
                 ),
             )
+            if existed is None:
+                PostGISRepository._audit(
+                    connection,
+                    "scenario.create",
+                    "scenario",
+                    str(row.scenario_run_id),
+                    str(manifest["city"]["city_id"]),
+                    None,
+                    {
+                        "scenario_key": row.scenario_key,
+                        "dataset_version_id": str(dataset_version_id),
+                        "network_version_id": str(network_version_id),
+                        "algorithm_version": row.algorithm_version,
+                        "objective_mode": row.objective_mode,
+                        "site_count": int(row.site_count),
+                        "lifecycle_status": "draft",
+                    },
+                )
             connection.execute(
                 """INSERT INTO scenario_lifecycle_events (
                        scenario_run_id, from_status, to_status, note

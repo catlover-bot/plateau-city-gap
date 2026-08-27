@@ -169,40 +169,44 @@ class PilotReadinessService:
     def _database_facts(self, city_id: str) -> dict[str, int | bool]:
         with self.repository._connect() as connection:
             row = connection.execute(
-                """SELECT
-                    EXISTS(SELECT 1 FROM city_dataset_versions
-                           WHERE city_id=%s AND is_current) AS plateau_registered,
+                """WITH selected_version AS (
+                    SELECT version.id, version.registry_version_id
+                    FROM city_dataset_versions AS version
+                    WHERE version.city_id=%s AND version.is_current
+                      AND EXISTS (
+                          SELECT 1 FROM ingestion_runs AS ingestion
+                          WHERE ingestion.dataset_version_id=version.id
+                            AND ingestion.status='completed'
+                      )
+                )
+                SELECT
+                    EXISTS(SELECT 1 FROM selected_version) AS plateau_registered,
                     EXISTS(SELECT 1 FROM dataset_registry_provenance
                            WHERE city_code=%s AND dataset_key ILIKE '%%population%%') AS population_registered,
                     EXISTS(SELECT 1 FROM facility_registry AS facility
-                           JOIN city_dataset_versions AS version
-                             ON version.id=facility.dataset_version_id
-                           WHERE version.city_id=%s) AS facility_registered,
-                    EXISTS(SELECT 1 FROM dataset_versions AS version
-                           JOIN datasets AS dataset ON dataset.id=version.dataset_id
-                           JOIN cities AS city ON city.id=dataset.city_id
-                           WHERE city.city_code=%s AND dataset.dataset_key ILIKE '%%plateau%%'
-                             AND version.quality_status='passed' AND version.analysis_ready) AS quality_gate,
+                           WHERE facility.dataset_version_id IN (
+                               SELECT id FROM selected_version
+                           )) AS facility_registered,
+                    EXISTS(SELECT 1 FROM selected_version AS selected
+                           JOIN dataset_versions AS version
+                             ON version.id=selected.registry_version_id
+                           WHERE version.quality_status='passed'
+                             AND version.analysis_ready) AS quality_gate,
                     (SELECT count(*) FROM road_network_versions AS network
-                     JOIN city_dataset_versions AS version ON version.id=network.dataset_version_id
-                     WHERE version.city_id=%s),
+                     WHERE network.dataset_version_id IN (SELECT id FROM selected_version)),
                     (SELECT count(*) FROM scenario_runs AS scenario
-                     JOIN city_dataset_versions AS version ON version.id=scenario.dataset_version_id
-                     WHERE version.city_id=%s),
+                     WHERE scenario.dataset_version_id IN (SELECT id FROM selected_version)),
                     (SELECT count(*) FROM evidence_exports AS evidence
                      JOIN scenario_runs AS scenario ON scenario.id=evidence.scenario_run_id
-                     JOIN city_dataset_versions AS version ON version.id=scenario.dataset_version_id
-                     WHERE version.city_id=%s),
+                     WHERE scenario.dataset_version_id IN (SELECT id FROM selected_version)),
                     (SELECT count(*) FROM gtfs_feeds AS feed
                      JOIN dataset_versions AS registry ON registry.id=feed.dataset_version_id
                      JOIN datasets AS dataset ON dataset.id=registry.dataset_id
                      JOIN cities AS city ON city.id=dataset.city_id WHERE city.city_code=%s),
                     (SELECT count(*) FROM building_demographics AS demographics
-                     JOIN city_dataset_versions AS version
-                       ON version.id=demographics.dataset_version_id
-                     WHERE version.city_id=%s)
+                     WHERE demographics.dataset_version_id IN (SELECT id FROM selected_version))
                 """,
-                (city_id,) * 9,
+                (city_id, city_id, city_id),
             ).fetchone()
         keys = (
             "plateau_registered",

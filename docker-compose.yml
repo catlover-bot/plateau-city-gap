@@ -66,6 +66,7 @@ services:
       CITYGAP_DATABASE_URL: postgresql://${CITYGAP_POSTGRES_USER:-citygap}:${CITYGAP_POSTGRES_PASSWORD:-citygap_dev}@postgres:5432/${CITYGAP_POSTGRES_DB:-citygap}
       CITYGAP_WORKER_ID: ${CITYGAP_WORKER_ID:-compose-worker}
       CITYGAP_JOB_STAGE_TIMEOUT_SECONDS: ${CITYGAP_JOB_STAGE_TIMEOUT_SECONDS:-3600}
+      CITYGAP_JOB_STALE_AFTER_SECONDS: ${CITYGAP_JOB_STALE_AFTER_SECONDS:-3900}
     depends_on:
       migrate:
         condition: service_completed_successfully

@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from backend.citygap_platform.api.repository import PostGISRepository
+from backend.citygap_platform.ingestion.evidence import register_evidence_manifest
 from backend.citygap_platform.ingestion.official_network import (
     OfficialNetworkFieldMap,
     OfficialRoadNetworkAdapter,
@@ -235,6 +236,10 @@ def _readiness(args: argparse.Namespace) -> dict[str, Any]:
     return PilotReadinessService(repository).check(args.city)
 
 
+def _evidence_register(args: argparse.Namespace) -> dict[str, Any]:
+    return register_evidence_manifest(_database_url(args), args.manifest)
+
+
 def _add_database(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--database-url")
 
@@ -308,6 +313,10 @@ def build_parser() -> argparse.ArgumentParser:
     export = subcommands.add_parser("export")
     _add_job(export)
     export.set_defaults(handler=lambda args: _enqueue(args, "evidence_export"))
+    evidence_register = subcommands.add_parser("evidence-register")
+    _add_database(evidence_register)
+    evidence_register.add_argument("--manifest", required=True)
+    evidence_register.set_defaults(handler=_evidence_register)
     network = subcommands.add_parser("network-import")
     _add_database(network)
     network.add_argument("--dataset-version-id", required=True)

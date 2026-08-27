@@ -229,8 +229,13 @@ def ingest_archive(
     archive_path: str | Path,
     database_url: str,
     metadata: DatasetMetadata,
-) -> dict[str, int | str]:
-    """Ingest an archive, committing each source member as a restart boundary."""
+) -> dict[str, int | str | bool]:
+    """Ingest an archive without exposing a partially loaded version as current.
+
+    Source members remain restart-sized transaction boundaries, but the city-wide
+    ``is_current`` pointer moves only in the same transaction that marks the full
+    ingestion completed.  Repeating an already completed archive is idempotent.
+    """
 
     import psycopg
 
@@ -265,13 +270,23 @@ def ingest_archive(
                 metadata.published_at,
             ),
         ).fetchone()[0]
-        connection.execute(
-            "UPDATE city_dataset_versions SET is_current = false WHERE city_id = %s AND id <> %s",
-            (metadata.city_id, version_id),
-        )
-        connection.execute(
-            "UPDATE city_dataset_versions SET is_current = true WHERE id = %s", (version_id,)
-        )
+        completed = connection.execute(
+            """SELECT id, processed_members, processed_features, processed_geometry_parts
+               FROM ingestion_runs
+               WHERE dataset_version_id = %s AND status = 'completed'
+               ORDER BY completed_at DESC, started_at DESC LIMIT 1""",
+            (version_id,),
+        ).fetchone()
+        if completed is not None:
+            connection.commit()
+            return {
+                "members": int(completed[1]),
+                "features": int(completed[2]),
+                "geometry_parts": int(completed[3]),
+                "dataset_version_id": str(version_id),
+                "ingestion_run_id": str(completed[0]),
+                "reused": True,
+            }
         run_id = connection.execute(
             """INSERT INTO ingestion_runs
                    (dataset_version_id, parser_version, status)
@@ -372,6 +387,15 @@ def ingest_archive(
                        processed_geometry_parts = %s WHERE id = %s""",
                 (counts["members"], counts["features"], counts["geometry_parts"], run_id),
             )
+            connection.execute(
+                """UPDATE city_dataset_versions SET is_current = false
+                   WHERE city_id = %s AND id <> %s AND is_current""",
+                (metadata.city_id, version_id),
+            )
+            connection.execute(
+                "UPDATE city_dataset_versions SET is_current = true WHERE id = %s",
+                (version_id,),
+            )
             connection.commit()
         except Exception as error:
             connection.rollback()
@@ -383,4 +407,9 @@ def ingest_archive(
             connection.commit()
             raise
 
-    return {**counts, "dataset_version_id": str(version_id), "ingestion_run_id": str(run_id)}
+    return {
+        **counts,
+        "dataset_version_id": str(version_id),
+        "ingestion_run_id": str(run_id),
+        "reused": False,
+    }

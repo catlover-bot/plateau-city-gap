@@ -1,7 +1,7 @@
 {
   "schema_version": "municipal-platform-final-audit-1.0.0",
   "audit_date": "2026-08-27",
-  "scope": "tracked real-data artifacts, contracts, static UI and browser audit",
+  "scope": "tracked real-data artifacts, platform contracts, static UI and browser audit; deployment-specific pilot readiness is evaluated separately",
   "passed": true,
   "checks": {
     "plateau_inventory_has_8_themes_and_97140_features": true,
@@ -63,11 +63,12 @@
     "E_closer_to_municipal_platform_than_hackathon_demo": "YES"
   },
   "pilot_remaining": [
-    "Execute migrations and canonical loaders against an approved PostGIS environment.",
-    "Acquire and validate actual municipal GTFS or operator timetable data; do not convert P11 points.",
-    "Generate or validate a pedestrian network with crossings, permissions and road-safety review.",
-    "Add authenticated role-based access, durable queue workers, backups and monitoring.",
-    "Collect field checks, land ownership, capacity, operating constraints and reviewed costs.",
-    "Benchmark 100k+ buildings and edges with MVT/PMTiles delivery before a production SLA."
+    "Load and reconcile the approved full municipal datasets in the intended PostGIS instance.",
+    "Configure and integration-test the municipality's OIDC issuer, audience, verifier and role claims.",
+    "Configure encrypted off-host backup retention and complete a timed restore drill for the pilot environment.",
+    "Register municipality-approved population and facility inputs and pass the production quality gate.",
+    "Acquire and validate official GTFS if required; do not convert P11 points into a feed.",
+    "Import an official road/walk network or formally accept the experimental-network limitation.",
+    "Complete privacy, licensing, field, policy and publication review with municipal owners."
   ]
 }

@@ -100,7 +100,7 @@ def test_archive_safety_rejects_traversal_symlink_expansion_and_xml_entities(tmp
 
 def test_municipal_cli_exposes_complete_workflow_and_explicit_versions() -> None:
     parser = build_parser()
-    for command in ("city-init", "dataset-add", "validate"):
+    for command in ("city-init", "dataset-add", "validate", "evidence-register"):
         with pytest.raises(SystemExit) as exit_info:
             parser.parse_args([command, "--help"])
         assert exit_info.value.code == 0

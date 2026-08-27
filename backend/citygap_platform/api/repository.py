@@ -6,7 +6,7 @@ import hashlib
 import json
 from typing import Any, Protocol
 
-from backend.citygap_platform.database.migrations import migration_files
+from backend.citygap_platform.database.migrations import checksum, migration_files
 from backend.citygap_platform.domain.jobs import (
     JobSnapshot,
     JobState,
@@ -198,10 +198,34 @@ class PostGISRepository:
         try:
             with self._connect() as connection:
                 checks["database"] = connection.execute("SELECT 1").fetchone() == (1,)
-                expected = len(migration_files("infra/migrations"))
-                applied = connection.execute("SELECT count(*) FROM schema_migrations").fetchone()[0]
-                checks["migrations"] = applied == expected
-                details["migration_count"] = {"expected": expected, "applied": applied}
+                expected_migrations = {
+                    path.name: checksum(path) for path in migration_files("infra/migrations")
+                }
+                applied_migrations = {
+                    str(row[0]): str(row[1]).strip()
+                    for row in connection.execute(
+                        "SELECT version, checksum_sha256 FROM schema_migrations ORDER BY version"
+                    ).fetchall()
+                }
+                migration_problems = [
+                    f"missing:{name}"
+                    for name in expected_migrations.keys() - applied_migrations.keys()
+                ]
+                migration_problems.extend(
+                    f"unexpected:{name}"
+                    for name in applied_migrations.keys() - expected_migrations.keys()
+                )
+                migration_problems.extend(
+                    f"checksum:{name}"
+                    for name in expected_migrations.keys() & applied_migrations.keys()
+                    if expected_migrations[name] != applied_migrations[name]
+                )
+                checks["migrations"] = not migration_problems
+                details["migration_count"] = {
+                    "expected": len(expected_migrations),
+                    "applied": len(applied_migrations),
+                }
+                details["migration_problems"] = sorted(migration_problems)
                 extensions = {
                     row[0]
                     for row in connection.execute(
@@ -211,8 +235,15 @@ class PostGISRepository:
                 checks["extensions"] = extensions == {"postgis", "pgrouting"}
                 details["extensions"] = sorted(extensions)
                 dataset = connection.execute(
-                    """SELECT id FROM city_dataset_versions
-                       WHERE is_current AND (CAST(%s AS text) IS NULL OR city_id = %s) LIMIT 1""",
+                    """SELECT version.id FROM city_dataset_versions AS version
+                       WHERE version.is_current
+                         AND (CAST(%s AS text) IS NULL OR version.city_id = %s)
+                         AND EXISTS (
+                             SELECT 1 FROM ingestion_runs AS ingestion
+                             WHERE ingestion.dataset_version_id=version.id
+                               AND ingestion.status='completed'
+                         )
+                       ORDER BY version.created_at DESC LIMIT 1""",
                     (required_city_id, required_city_id),
                 ).fetchone()
                 checks["required_dataset"] = dataset is not None

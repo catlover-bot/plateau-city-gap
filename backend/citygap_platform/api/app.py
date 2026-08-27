@@ -128,7 +128,7 @@ def create_app(
     def ready(
         response: Response, repo: Annotated[PlatformRepository, Depends(_repository)]
     ) -> dict:
-        detail = repo.readiness(os.getenv("CITYGAP_REQUIRED_CITY_ID"))
+        detail = repo.readiness(os.getenv("CITYGAP_REQUIRED_CITY_ID") or None)
         if not detail["ready"]:
             response.status_code = 503
         return detail
