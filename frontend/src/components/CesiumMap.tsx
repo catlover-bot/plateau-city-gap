@@ -19,7 +19,7 @@ import {
   PointPrimitive,
   PointPrimitiveCollection,
   ScreenSpaceEventType,
-  TileMapServiceImageryProvider,
+  UrlTemplateImageryProvider,
   Viewer
 } from "cesium";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
@@ -51,6 +51,8 @@ interface CesiumMapProps {
   metricMode: MetricMode;
   selectedMeshCode: string | null;
   visibility: LayerVisibility;
+  plateauVisibility?: { buildings: boolean; roads: boolean };
+  meshPresentation?: "analysis" | "outline";
   placementMode: boolean;
   virtualPoint: VirtualPoint | null;
   decisionSites: InterventionSite[];
@@ -184,7 +186,8 @@ function styleMeshes(
   dataSource: GeoJsonDataSource,
   mode: MetricMode,
   selectedMeshCode: string | null,
-  afterScores: Record<string, number> | null
+  afterScores: Record<string, number> | null,
+  presentation: "analysis" | "outline" = "analysis"
 ) {
   const values = dataSource.entities.values.map((entity) => styledValue(entityValues(entity), mode, afterScores));
   const maxGap = mode === "gap" ? Math.max(...values.filter((value): value is number => value !== null), 0.01) : 1;
@@ -197,17 +200,19 @@ function styleMeshes(
     const normalized = value === null ? null : value / maxGap;
     const isSelected = selectedMeshCode === code;
     const isTop10 = isTop10Rank(properties.rank);
-    const baseColor = normalized === null ? Color.fromCssColorString("#72828a").withAlpha(0.12) : colorScale(normalized, mode);
+    const baseColor = presentation === "outline"
+      ? Color.fromCssColorString("#7b8c86").withAlpha(0.045)
+      : normalized === null ? Color.fromCssColorString("#72828a").withAlpha(0.12) : colorScale(normalized, mode);
     entity.polygon.material = new ColorMaterialProperty(
-      isSelected ? Color.fromCssColorString("#ffe29a").withAlpha(0.8) : baseColor
+      isSelected ? Color.fromCssColorString("#e6b64d").withAlpha(presentation === "outline" ? 0.16 : 0.8) : baseColor
     );
     entity.polygon.outline = new ConstantProperty(true);
     entity.polygon.outlineColor = new ConstantProperty(
       isSelected
-        ? Color.fromCssColorString("#fff4c9")
+        ? Color.fromCssColorString(presentation === "outline" ? "#173f3c" : "#fff4c9")
         : isTop10
-          ? Color.fromCssColorString("#fff0bd")
-          : Color.fromCssColorString("#d5f3f1").withAlpha(0.45)
+          ? Color.fromCssColorString(presentation === "outline" ? "#4d7770" : "#fff0bd")
+          : Color.fromCssColorString("#53766f").withAlpha(presentation === "outline" ? 0.2 : 0.45)
     );
     entity.polygon.outlineWidth = new ConstantProperty(isSelected ? 4 : isTop10 ? 2 : 1);
   }
@@ -223,6 +228,7 @@ async function addGeoJson(
     clampToGround: false,
     ...options
   });
+  if (viewer.isDestroyed()) return undefined;
   await viewer.dataSources.add(source);
   return source;
 }
@@ -499,6 +505,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     metricMode,
     selectedMeshCode,
     visibility,
+    plateauVisibility,
+    meshPresentation = "analysis",
     placementMode,
     virtualPoint,
     decisionSites,
@@ -540,6 +548,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const afterScoresRef = useRef(afterScores);
   const decisionSiteIdsRef = useRef<string[]>([]);
   const visibilityRef = useRef(visibility);
+  const plateauVisibilityRef = useRef(plateauVisibility);
+  const meshPresentationRef = useRef(meshPresentation);
   const workspacePhaseRef = useRef(workspacePhase);
   const workspaceVisibilityRef = useRef(workspaceVisibility);
   const futuresStressModeRef = useRef(futuresStressMode);
@@ -554,6 +564,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   selectedMeshCodeRef.current = selectedMeshCode;
   afterScoresRef.current = afterScores;
   visibilityRef.current = visibility;
+  plateauVisibilityRef.current = plateauVisibility;
+  meshPresentationRef.current = meshPresentation;
   workspacePhaseRef.current = workspacePhase;
   workspaceVisibilityRef.current = workspaceVisibility;
   workspaceMapRef.current = workspaceMap;
@@ -578,7 +590,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           color: "color('#eef4f2', 0.98)"
         });
         viewer.scene.primitives.add(tileset);
-        tileset.show = visibilityRef.current.plateau || (
+        tileset.show = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
           workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
         );
         sourcesRef.current.plateauTileset = tileset;
@@ -600,15 +612,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       const longitude = finiteNumber(mesh.centroid_lon);
       const latitude = finiteNumber(mesh.centroid_lat);
       if (!viewerRef.current || longitude === null || latitude === null) return;
-      viewerRef.current.camera.flyTo({
-        destination: Cartesian3.fromDegrees(longitude, latitude, 2_700),
-        orientation: {
-          heading: CesiumMath.toRadians(2),
-          pitch: CesiumMath.toRadians(-52),
-          roll: 0
-        },
-        duration: 1.15
-      });
+      viewerRef.current.camera.flyToBoundingSphere(
+        new BoundingSphere(Cartesian3.fromDegrees(longitude, latitude, 0), 380),
+        { offset: new HeadingPitchRange(CesiumMath.toRadians(8), CesiumMath.toRadians(-48), 2_700), duration: 1.15 }
+      );
     },
     flyToPlateau() {
       const viewer = viewerRef.current;
@@ -672,6 +679,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       return;
     }
     viewerRef.current = viewer;
+    (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer = viewer;
     viewer.scene.globe.depthTestAgainstTerrain = false;
     viewer.scene.globe.baseColor = Color.fromCssColorString("#d8dfda");
     viewer.scene.backgroundColor = Color.fromCssColorString("#dfe5e1");
@@ -680,10 +688,13 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
 
     async function loadLayers() {
       try {
-        const localImagery = await TileMapServiceImageryProvider.fromUrl(
-          `${import.meta.env.BASE_URL}cesium/Assets/Textures/NaturalEarthII`
-        );
-        viewer.imageryLayers.addImageryProvider(localImagery);
+        const paleImagery = new UrlTemplateImageryProvider({
+          url: "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",
+          minimumLevel: 5,
+          maximumLevel: 18,
+          credit: "地理院タイル"
+        });
+        viewer.imageryLayers.addImageryProvider(paleImagery);
         const boundary = await addGeoJson(viewer, data.boundary);
         const plateauGeoJson = await addGeoJson(viewer, data.plateauBuildings);
         const plateauRoads = await addGeoJson(viewer, data.plateauRoads);
@@ -699,15 +710,15 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         styleBoundary(boundary);
         styleBuildings(plateauGeoJson);
         styleRoads(plateauRoads);
-        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current, afterScoresRef.current);
+        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current, afterScoresRef.current, meshPresentationRef.current);
         stylePoints(stations, Color.fromCssColorString("#d5a43c"), 11);
         stylePoints(busStops, Color.fromCssColorString("#28766f"), 7);
         stylePoints(medical, Color.fromCssColorString("#a64f3f"), 9);
 
         const currentVisibility = visibilityRef.current;
         if (boundary) boundary.show = currentVisibility.boundary;
-        if (plateauGeoJson) plateauGeoJson.show = currentVisibility.plateau || (workspaceMapRef.current !== null && workspaceVisibilityRef.current.plateauBuildings);
-        if (plateauRoads) plateauRoads.show = currentVisibility.plateau || (workspaceMapRef.current !== null && workspaceVisibilityRef.current.roadNetwork);
+        if (plateauGeoJson) plateauGeoJson.show = (plateauVisibilityRef.current?.buildings ?? currentVisibility.plateau) || (workspaceMapRef.current !== null && workspaceVisibilityRef.current.plateauBuildings);
+        if (plateauRoads) plateauRoads.show = (plateauVisibilityRef.current?.roads ?? currentVisibility.plateau) || (workspaceMapRef.current !== null && workspaceVisibilityRef.current.roadNetwork);
         if (meshes) meshes.show = currentVisibility.meshes;
         if (stations) stations.show = currentVisibility.stations;
         if (busStops) busStops.show = currentVisibility.busStops;
@@ -752,6 +763,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       cancelled = true;
       sourcesRef.current = {};
       viewerRef.current = null;
+      delete (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer;
       if (!viewer.isDestroyed()) viewer.destroy();
     };
   }, [data]);
@@ -855,9 +867,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   }, [decisionFlow]);
 
   useEffect(() => {
-    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores);
+    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores, meshPresentation);
     viewerRef.current?.scene.requestRender();
-  }, [afterScores, metricMode, selectedMeshCode]);
+  }, [afterScores, meshPresentation, metricMode, selectedMeshCode]);
 
   useEffect(() => {
     const sources = sourcesRef.current;
@@ -868,12 +880,14 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     if (sources.boundary) sources.boundary.show = visibility.boundary;
     const workspaceBuildings = workspaceMap !== null && workspaceVisibility.plateauBuildings;
     const workspaceRoads = workspaceMap !== null && workspaceVisibility.roadNetwork;
-    if (sources.plateauGeoJson) sources.plateauGeoJson.show = visibility.plateau || workspaceBuildings;
-    if (sources.plateauRoads) sources.plateauRoads.show = visibility.plateau || workspaceRoads;
-    if (sources.plateauTileset) sources.plateauTileset.show = visibility.plateau || workspaceBuildings;
-    if ((visibility.plateau || workspaceBuildings) && !sources.plateauTileset) void loadPlateauTileset();
+    const plateauBuildings = plateauVisibility?.buildings ?? visibility.plateau;
+    const plateauRoads = plateauVisibility?.roads ?? visibility.plateau;
+    if (sources.plateauGeoJson) sources.plateauGeoJson.show = plateauBuildings || workspaceBuildings;
+    if (sources.plateauRoads) sources.plateauRoads.show = plateauRoads || workspaceRoads;
+    if (sources.plateauTileset) sources.plateauTileset.show = plateauBuildings || workspaceBuildings;
+    if ((plateauBuildings || workspaceBuildings) && !sources.plateauTileset) void loadPlateauTileset();
     viewerRef.current?.scene.requestRender();
-  }, [loadPlateauTileset, visibility, workspaceMap, workspaceVisibility]);
+  }, [loadPlateauTileset, plateauVisibility, visibility, workspaceMap, workspaceVisibility]);
 
   useEffect(() => {
     setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility);
