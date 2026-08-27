@@ -48,7 +48,7 @@ export function StoryMode({
     { label: "条件を変えても残る", title: robustRankOne?.area_label ?? "頑健候補を確認", body: robustRankOne ? `${robustRankOne.scenario_count}条件すべてでTop 10に残り、順位範囲は${robustRankOne.rank_min}〜${robustRankOne.rank_max}位です。これは確率ではなく、条件別の出現回数です。` : "複数の分析条件で候補の残り方を確認します。" },
     { label: "PLATEAUで空間確認", title: `${deepDive.area_label}へ`, body: plateauStepBody },
     { label: "1地点なら", title: "PLATEAU道路面から1地点を比較", body: oneSite ? `${oneSite.impact.improved_mesh_count}メッシュで距離が短くなり、対象メッシュに記録された65歳以上人口は${oneSite.impact.affected_elderly_population.toLocaleString("ja-JP")}人。改善メッシュの平均短縮は${formatDistance(oneSite.impact.mean_improvement_among_improved_m)}です。` : bestCandidate ? `${bestCandidate.area_label}の道路面上で再計算します。` : "道路面上の候補で再計算します。" },
-    { label: "2地点なら", title: "追加施策の効果を比較", body: twoSite ? `2地点では${twoSite.impact.improved_mesh_count}メッシュ、65歳以上人口${twoSite.impact.affected_elderly_population.toLocaleString("ja-JP")}人が記録された範囲を改善します。2/3地点案は決定論的greedy近似で、全組合せの最適解ではありません。` : "1地点と2地点の追加効果を比較します。" },
+    { label: "2地点なら", title: "追加施策のモデル差を比較", body: twoSite ? `2地点では${twoSite.impact.improved_mesh_count}メッシュ、65歳以上人口${twoSite.impact.affected_elderly_population.toLocaleString("ja-JP")}人が記録された範囲でモデル距離が短縮します。2/3地点案は決定論的greedy近似で、全組合せや政策の最適解ではありません。` : "1地点と2地点のモデル差を比較します。" },
     { label: "全体 vs 取り残し", title: "目的を変えると配置も変わる", body: fairness ? `取り残し重視案は、交通距離が長い側10%の平均を${formatDistance(fairness.impact.worst_decile_mean_reduction_m)}短縮します。全体Scoreとのtrade-offも隠さず表示します。` : "全体改善と、アクセスが特に弱い地域の改善を比較します。" },
     { label: "藤沢でも再現", title: "同じEngineを別都市へ", body: "藤沢市263メッシュでも同じ決定論的GIS・統計ロジックを実行済みです。都市間のScore値は直接比較せず、横展開可能性を確認します。" }
   ];

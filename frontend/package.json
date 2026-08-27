@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "audit:workspace": "node scripts/audit-workspace.mjs",
     "audit:futures": "node scripts/audit-urban-futures.mjs",
+    "audit:validation": "node scripts/audit-validation.mjs",
     "verify:browser": "node scripts/capture-demo.mjs",
     "test": "vitest run",
     "test:watch": "vitest",

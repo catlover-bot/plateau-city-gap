@@ -4,6 +4,7 @@ import {
   loadAppData,
   loadMunicipalWorkspaceData,
   loadUrbanFuturesData,
+  loadValidationWorkspaceData,
   loadValidationCityData,
   normalizeTop10,
   sortRanking
@@ -44,6 +45,24 @@ describe("ranking normalization", () => {
   });
 });
 describe("data loading", () => {
+  it("loads the separate Validation Workspace evidence contract", async () => {
+    const collection = { type: "FeatureCollection", features: [] };
+    const fetcher = mockFetch({
+      "network_cross_validation.json": { cities: [{ city_id: "maizuru" }] },
+      "sensitivity_validation.json": { cities: { maizuru: {}, fujisawa: {} } },
+      "real_temporal_validation.json": { themes: [] },
+      "network_disagreement_routes.geojson": collection,
+      "temporal_change_samples.geojson": collection,
+      "criticality_map_audit.geojson": collection
+    });
+    const result = await loadValidationWorkspaceData(fetcher, "/plateau-city-gap/");
+    expect(result.network.cities[0].city_id).toBe("maizuru");
+    expect(result.disagreementRoutes.type).toBe("FeatureCollection");
+    expect(fetcher).toHaveBeenCalledWith(
+      "/plateau-city-gap/data/validation/network_cross_validation.json"
+    );
+  });
+
   it("loads required and optional static web assets", async () => {
     const meshCollection: GeoJsonFeatureCollection = {
       type: "FeatureCollection",

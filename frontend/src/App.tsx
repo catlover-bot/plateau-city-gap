@@ -13,10 +13,12 @@ import { RankingPanel } from "./components/RankingPanel";
 import { ScenarioPanel } from "./components/ScenarioPanel";
 import { StoryMode } from "./components/StoryMode";
 import { UrbanFuturesWorkspace } from "./components/UrbanFuturesWorkspace";
+import { ValidationWorkspace } from "./components/ValidationWorkspace";
 import {
   loadAppData,
   loadMunicipalWorkspaceData,
   loadUrbanFuturesData,
+  loadValidationWorkspaceData,
   loadValidationCityData
 } from "./lib/data";
 import { finiteNumber } from "./lib/format";
@@ -34,6 +36,7 @@ import type {
   FuturesStressMode,
   RobustCandidate,
   UrbanFuturesData,
+  ValidationWorkspaceData,
   WorkspaceLayerVisibility,
   WorkspacePhase
 } from "./types";
@@ -72,7 +75,7 @@ const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> 
 
 type SideTab = "ranking" | "detail" | "scenario";
 type CityId = "maizuru" | "fujisawa";
-type ProductView = "demo" | "workspace" | "futures" | "admin";
+type ProductView = "demo" | "workspace" | "validation" | "futures" | "admin";
 
 export default function App() {
   const [datasets, setDatasets] = useState<Record<CityId, AppData> | null>(null);
@@ -80,6 +83,7 @@ export default function App() {
   const [productView, setProductView] = useState<ProductView>("demo");
   const [workspaceData, setWorkspaceData] = useState<MunicipalWorkspaceData | null>(null);
   const [futuresData, setFuturesData] = useState<UrbanFuturesData | null>(null);
+  const [validationData, setValidationData] = useState<ValidationWorkspaceData | null>(null);
   const [futureYear, setFutureYear] = useState(2040);
   const [futuresStressMode, setFuturesStressMode] = useState<FuturesStressMode>("normal");
   const [workspaceError, setWorkspaceError] = useState<string | null>(null);
@@ -117,11 +121,12 @@ export default function App() {
     setMapReady(false);
     setMapError(null);
     setMapWarning(null);
-    Promise.all([loadAppData(), loadValidationCityData(), loadUrbanFuturesData()])
-      .then(([maizuru, fujisawa, urbanFutures]) => {
+    Promise.all([loadAppData(), loadValidationCityData(), loadUrbanFuturesData(), loadValidationWorkspaceData()])
+      .then(([maizuru, fujisawa, urbanFutures, validation]) => {
         if (cancelled) return;
         setDatasets({ maizuru, fujisawa });
         setFuturesData(urbanFutures);
+        setValidationData(validation);
         setSelectedMesh(maizuru.top10[0] ?? null);
       })
       .catch((reason: unknown) => {
@@ -378,7 +383,7 @@ export default function App() {
     : layers;
 
   return (
-    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : productView === "futures" ? "futures-mode" : productView === "admin" ? "admin-mode" : ""}`}>
+    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : productView === "validation" ? "validation-mode" : productView === "futures" ? "futures-mode" : productView === "admin" ? "admin-mode" : ""}`}>
       <header className="app-header">
         <div className="brand-block">
           <div>
@@ -390,6 +395,7 @@ export default function App() {
           <div className="product-switch" role="group" aria-label="CITY GAPの表示モード">
             <button type="button" className={productView === "demo" ? "active" : ""} aria-pressed={productView === "demo"} onClick={() => changeProductView("demo")}>公開デモ</button>
             <button type="button" className={productView === "workspace" ? "active" : ""} aria-pressed={productView === "workspace"} onClick={() => changeProductView("workspace")}>自治体Workspace</button>
+            <button type="button" className={productView === "validation" ? "active" : ""} aria-pressed={productView === "validation"} onClick={() => changeProductView("validation")}>検証Evidence</button>
             <button type="button" className={productView === "futures" ? "active" : ""} aria-pressed={productView === "futures"} onClick={() => changeProductView("futures")}>時間・レジリエンス</button>
             <button type="button" className={productView === "admin" ? "active" : ""} aria-pressed={productView === "admin"} onClick={() => changeProductView("admin")}>運用管理</button>
           </div>
@@ -407,7 +413,9 @@ export default function App() {
         </div>
       </header>
 
-      {productView === "admin" ? (
+      {productView === "validation" ? (
+        validationData ? <ValidationWorkspace data={validationData} cityId={cityId} /> : <LoadingState />
+      ) : productView === "admin" ? (
         <MunicipalAdmin cityId={cityId} />
       ) : <>
       <main className="map-stage">

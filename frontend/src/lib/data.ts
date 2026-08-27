@@ -14,6 +14,7 @@ import type {
   RobustnessData,
   Summary,
   UrbanFuturesData,
+  ValidationWorkspaceData,
   WorkspaceBuildingPoints,
   WorkspaceMapData
 } from "../types";
@@ -293,4 +294,36 @@ export async function loadUrbanFuturesData(
     throw new Error("urban_futures_resilience.json の公開境界が正しくありません");
   }
   return raw as unknown as UrbanFuturesData;
+}
+
+export async function loadValidationWorkspaceData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL
+): Promise<ValidationWorkspaceData> {
+  const url = (filename: string) => dataUrl(baseUrl, `validation/${filename}`);
+  const [network, sensitivity, temporal, routes, temporalSamples, criticalityAudit] = await Promise.all([
+    fetchJson(fetcher, url("network_cross_validation.json")),
+    fetchJson(fetcher, url("sensitivity_validation.json")),
+    fetchJson(fetcher, url("real_temporal_validation.json")),
+    fetchJson(fetcher, url("network_disagreement_routes.geojson")),
+    fetchJson(fetcher, url("temporal_change_samples.geojson")),
+    fetchJson(fetcher, url("criticality_map_audit.geojson"))
+  ]);
+  if (!isRecord(network) || !Array.isArray(network.cities)) throw new Error("network cross-validation evidenceが不正です");
+  if (!isRecord(sensitivity) || !isRecord(sensitivity.cities)) throw new Error("sensitivity evidenceが不正です");
+  if (!isRecord(temporal) || (!Array.isArray(temporal.themes) && !isRecord(temporal.themes))) {
+    throw new Error("temporal evidenceが不正です");
+  }
+  const normalizedTemporal = {
+    ...temporal,
+    themes: Array.isArray(temporal.themes) ? temporal.themes : Object.values(temporal.themes)
+  };
+  return {
+    network,
+    sensitivity,
+    temporal: normalizedTemporal,
+    disagreementRoutes: assertFeatureCollection(routes, "network_disagreement_routes.geojson"),
+    temporalSamples: assertFeatureCollection(temporalSamples, "temporal_change_samples.geojson"),
+    criticalityAudit: assertFeatureCollection(criticalityAudit, "criticality_map_audit.geojson")
+  } as unknown as ValidationWorkspaceData;
 }

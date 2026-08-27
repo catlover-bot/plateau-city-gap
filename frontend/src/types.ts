@@ -611,3 +611,81 @@ export interface UrbanFuturesData {
   cities: Record<"maizuru" | "fujisawa", UrbanFuturesCity>;
   limitations: string[];
 }
+
+export interface ValidationNetworkCity {
+  city_id: "maizuru" | "fujisawa";
+  city_name: string;
+  validation_status: string;
+  metrics: {
+    sample_count: number;
+    comparable_distance_count: number;
+    distance_mae_m: number;
+    median_absolute_difference_m: number;
+    p90_absolute_difference_m: number;
+    spearman_rank_correlation: number;
+    connectivity_agreement_fraction: number;
+    connectivity_disagreement_count: number;
+    destination_agreement_fraction: number;
+    median_primary_snap_m: number;
+    median_reference_snap_m: number;
+    median_route_overlap_fraction: number;
+    agreement_categories: Record<string, number>;
+  };
+  major_disagreements: JsonProperties[];
+  field_validation: string;
+  municipal_review: string;
+}
+
+export interface ValidationSensitivityCity extends JsonProperties {
+  city_id: "maizuru" | "fujisawa";
+  city_name: string;
+  validation_status: string;
+  hazard_assumption_matrix: Array<{
+    hazard_type: string;
+    assumption: string;
+    rule: string;
+    affected_edges: number;
+    disconnected_buildings: number;
+    component_fragmentation: number;
+    probability_claimed: false;
+  }>;
+  criticality_sensitivity: {
+    models: Record<string, { edge_count: number; building_demand_count: number; candidate_count: number }>;
+    robust_candidate_count: number;
+  };
+  future_population_sensitivity: JsonProperties;
+  field_validation: string;
+  municipal_review: string;
+}
+
+export interface TemporalValidationTheme {
+  theme_label: string;
+  diff_counts: Record<"added" | "removed" | "geometry_changed" | "attribute_changed" | "unchanged", number>;
+  match_audit: { ambiguous_fraction_of_both_versions: number };
+  incremental_vs_full: { count_agreement: boolean; hash_agreement: boolean };
+}
+
+export interface ValidationWorkspaceData {
+  network: {
+    schema_version: string;
+    claim: string;
+    validation_method: string;
+    validation_status: string;
+    reference_warning: string;
+    cities: ValidationNetworkCity[];
+  };
+  sensitivity: {
+    schema_version: string;
+    confidence_percentage_used: false;
+    cities: Record<"maizuru" | "fujisawa", ValidationSensitivityCity>;
+  };
+  temporal: {
+    schema_version: string;
+    city: { city_name: string; purpose: string; product_city: false };
+    validation_status: string;
+    themes: TemporalValidationTheme[];
+  };
+  disagreementRoutes: GeoJsonFeatureCollection;
+  temporalSamples: GeoJsonFeatureCollection;
+  criticalityAudit: GeoJsonFeatureCollection;
+}
