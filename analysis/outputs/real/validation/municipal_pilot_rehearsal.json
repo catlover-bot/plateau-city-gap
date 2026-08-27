@@ -1,0 +1,206 @@
+{
+  "counts": {
+    "BLOCKED_EXTERNAL": 3,
+    "FAIL": 0,
+    "PASS": 8,
+    "PASS_WITH_LIMITATION": 7
+  },
+  "data_scope": "public official data and tracked reproducible model artifacts only",
+  "fake_field_observations_created": false,
+  "fake_municipal_facts_created": false,
+  "generated_at": "2026-08-27T13:12:27.066133+00:00",
+  "municipal_approval_claimed": false,
+  "overall_status": "PASS_WITH_LIMITATION",
+  "peak_rss_mb": 16.12109375,
+  "runtime_seconds": 0.006703377002850175,
+  "safe_environment": "read-only artifact rehearsal; chaos is confined to pytest/ephemeral PostGIS",
+  "schema_version": "municipal-pilot-rehearsal-v1.0.0",
+  "stages": [
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/platform_registry.json",
+        "sha256": "1f72d3fcab19cb1103763620b142ce616bc0102158af71610908e09faf605b0b"
+      },
+      "note": "Two explicit product cities are registered.",
+      "stage": 1,
+      "stage_key": "city_registration",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/maizuru_plateau_inventory.json",
+        "sha256": "fe7bfac32b5aaa28368fff051cb0806e1eadc4f70aace2f550a5c3a793fe769f"
+      },
+      "note": "Public official source and version metadata are registered.",
+      "stage": 2,
+      "stage_key": "dataset_registration",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/municipal_platform_final_audit.json",
+        "sha256": "4ee0dedbfe850e1c43888e18ca9afa6e7f818e8d430e60ada7e3d0a4a2ebd1d5"
+      },
+      "note": "Tracked real-data quality audit passes.",
+      "stage": 3,
+      "stage_key": "quality_gate",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/urban_futures_validation.json",
+        "sha256": "6db84f6b5f3bfb5732113aca5b19bf905351d7b571d51850cd579f62b443db76"
+      },
+      "note": "Observed state and explicit future states are versioned.",
+      "stage": 4,
+      "stage_key": "urban_state_validation",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/maizuru_summary.json",
+        "sha256": "9e3c65792882ad9b508179eadcb6b4801f5f65153a7b256b71cf79058ed58cf6"
+      },
+      "note": "Public-data screening artifact exists.",
+      "stage": 5,
+      "stage_key": "screening",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/maizuru_plateau_context_summary.json",
+        "sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411"
+      },
+      "note": "PLATEAU building/planning/hazard detail is available.",
+      "stage": 6,
+      "stage_key": "plateau_detail",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/validation/network_cross_validation.json",
+        "sha256": "2972199102a3d229807ba9243fbbcc5ee0d1a744978dd196e3f91a4de55e5947"
+      },
+      "note": "Experimental network is cross-validated but is not a pedestrian ground truth.",
+      "stage": 7,
+      "stage_key": "network_analysis",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/validation/sensitivity_validation.json",
+        "sha256": "1a708119216a895b0ad021343c17312ff3a8dd2e35dfacfdf959ee835bf1354d"
+      },
+      "note": "Counterfactual assumption matrix runs; no damage or passability forecast is claimed.",
+      "stage": 8,
+      "stage_key": "stress_test",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/evidence_packages/scenario-comparison-v2/comparison.json",
+        "sha256": "97cdda9b419b5018cbe5abd0f609f0a64c690cd3d4e7018910bf8913ae6e770d"
+      },
+      "note": "A/B/C model comparison exists; no preferred policy is selected.",
+      "stage": 9,
+      "stage_key": "scenario_comparison",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/maizuru_municipal_workspace_manifest.json",
+        "sha256": "40fc8fdb3ab092e78b140de61996b875af0fe618a9dd96cf086a31c4a9b15717"
+      },
+      "note": "Workflow declares field confirmation requirements.",
+      "stage": 10,
+      "stage_key": "field_check_required",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "docs/operations.md",
+        "sha256": "bd37430c6a914d77ea82e47f5545fd2316fa4eb1368bddd99bb690b65e269f2b"
+      },
+      "note": "Versioned offline contract is implemented and fixture-tested; this rehearsal does not invent an observation.",
+      "stage": 11,
+      "stage_key": "offline_package",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": null,
+      "note": "No real municipal field observation exists; capability remains awaiting_field_validation.",
+      "stage": 12,
+      "stage_key": "field_result_sync",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "evidence": null,
+      "note": "No municipal reviewer participated; feedback remains not_reviewed.",
+      "stage": 13,
+      "stage_key": "municipal_review",
+      "status": "BLOCKED_EXTERNAL"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/scripts/build_validation_evidence_package.py",
+        "sha256": "dec9a6aa7eaba87aec82530a4c0e151be4d3b796729a097e1b0a247b5ebb9f07"
+      },
+      "note": "Validation JSON/CSV/print HTML generator and manifest verifier are present; package generation follows this rehearsal.",
+      "stage": 14,
+      "stage_key": "evidence_package",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "infra/scripts/verify_backup_restore.sh",
+        "sha256": "249840001e98008d18b9c7ce3512ed7cddfcc79161e061972cae65033a2f028e"
+      },
+      "note": "Ephemeral PostGIS CI executes pg_dump; off-host municipal retention is external.",
+      "stage": 15,
+      "stage_key": "backup",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "docs/backup-restore.md",
+        "sha256": "954ca35a6ad319fb0eaeee53cbcb659b719cb71bb86367e083564c0696f94e9e"
+      },
+      "note": "Ephemeral CI restores and verifies fixtures; no production environment is touched.",
+      "stage": 16,
+      "stage_key": "restore",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": {
+        "exists": true,
+        "path": "analysis/outputs/real/validation/kunitachi_real_temporal_validation.json",
+        "sha256": "8f13c424be35a79f2a0b855afd85e42f61aa00e27b4105a20b087bd367d171ef"
+      },
+      "note": "Real 2023/2025 PLATEAU update is validated in a temporal-only city; product cities have one official version.",
+      "stage": 17,
+      "stage_key": "dataset_update",
+      "status": "PASS_WITH_LIMITATION"
+    },
+    {
+      "evidence": null,
+      "note": "No implemented municipal intervention and later observed state exist; no causal outcome is fabricated.",
+      "stage": 18,
+      "stage_key": "outcome_state",
+      "status": "BLOCKED_EXTERNAL"
+    }
+  ]
+}
