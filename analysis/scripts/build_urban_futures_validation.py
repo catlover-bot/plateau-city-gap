@@ -389,6 +389,8 @@ def build(output_path: Path, public_output_path: Path) -> dict[str, object]:
                 "future_population": "available",
                 "hazard_stress_test": "available",
                 "criticality": "available",
+                "evacuation_reachability": "available",
+                "planning_monitoring": "available",
                 "field_mode": "partial",
                 "outcome_monitoring": "partial",
             }

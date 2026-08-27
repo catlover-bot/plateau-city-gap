@@ -215,6 +215,67 @@ def build() -> dict[str, Any]:
             ),
         ]
     )
+
+    urban_futures_evidence = [
+        _artifact("analysis/outputs/real/urban_futures_validation.json")
+    ]
+    future_capabilities = (
+        (
+            "temporal_diff",
+            "partial",
+            "Version-aware diff is implemented and identity-checked; annual change requires a second official PLATEAU version.",
+        ),
+        (
+            "future_population",
+            "available",
+            "Official IPSS population scenarios are spatially allocated under an explicit fixed-service assumption; this is not a CITY GAP prediction.",
+        ),
+        (
+            "hazard_stress_test",
+            "available",
+            "Counterfactual flood, landslide and tsunami road-closure assumptions are evaluated against the real experimental graph.",
+        ),
+        (
+            "criticality",
+            "available",
+            "Tarjan bridge candidates are computed and independently removal-verified; they are not dangerous-road designations.",
+        ),
+        (
+            "evacuation_reachability",
+            "available",
+            "Official shelter locations are used for network reachability; this is not evacuation or crowd simulation.",
+        ),
+        (
+            "planning_monitoring",
+            "available",
+            "Official planning designations are compared with observed building-use context; no legal-compliance judgment is made.",
+        ),
+        (
+            "field_mode",
+            "partial",
+            "Selected-site offline packages and conflict-safe synchronization are implemented; municipal field validation remains pending.",
+        ),
+        (
+            "outcome_monitoring",
+            "partial",
+            "Versioned before/after outcome contracts are implemented; a reviewed intervention and later observed state are not yet registered.",
+        ),
+    )
+    for city_code, dataset_versions in (
+        ("26202", maizuru_versions),
+        ("14205", fujisawa_versions),
+    ):
+        capabilities.extend(
+            _capability(
+                city_code,
+                name,
+                status,
+                note,
+                urban_futures_evidence,
+                dataset_versions,
+            )
+            for name, status, note in future_capabilities
+        )
     capabilities.append(
         _capability(
             "14205",
@@ -314,6 +375,16 @@ def build() -> dict[str, Any]:
             "spatial_context",
             "analysis/outputs/real/fujisawa_plateau_context_summary.json",
         ),
+        (
+            "26202",
+            "urban_futures_resilience",
+            "analysis/outputs/real/urban_futures_validation.json",
+        ),
+        (
+            "14205",
+            "urban_futures_resilience",
+            "analysis/outputs/real/urban_futures_validation.json",
+        ),
     )
     analysis_runs = []
     for city_code, analysis_type, artifact_name in run_specs:
@@ -338,7 +409,7 @@ def build() -> dict[str, Any]:
         )
 
     registry = {
-        "schema_version": "1.0.0",
+        "schema_version": "2.0.0",
         "generated_at": _generated_at(),
         "cities": sorted(cities, key=lambda row: row["city_code"]),
         "datasets": sorted(datasets, key=lambda row: (row["city_code"], row["dataset_key"])),

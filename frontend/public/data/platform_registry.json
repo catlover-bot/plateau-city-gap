@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "generated_at": "2026-08-27T08:39:44Z",
+  "schema_version": "2.0.0",
+  "generated_at": "2026-08-26T16:00:00Z",
   "cities": [
     {
       "city_id": "fujisawa",
@@ -279,7 +279,7 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_summary.json",
       "output_sha256": "9e3c65792882ad9b508179eadcb6b4801f5f65153a7b256b71cf79058ed58cf6"
     },
@@ -296,7 +296,7 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
       "output_artifact": "analysis/outputs/real/fujisawa_summary.json",
       "output_sha256": "51ec2def375db1a31c0930b58080b17800c081467440fe9820ef9909ea03ac47"
     },
@@ -313,7 +313,7 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_building_demographics_summary.json",
       "output_sha256": "3cafe06baabde8357f4e645bcfa26b0709dc6aa4e89a9e711b14fea80f0ac484"
     },
@@ -330,7 +330,7 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_road_network_summary.json",
       "output_sha256": "051c4a3e43aab6fdf5e3849f7b6570b672e20c5f1aa043ff112b4ac51c196fb9"
     },
@@ -347,7 +347,7 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_terrain_network_summary.json",
       "output_sha256": "58c4061e4c2842825f029505b0a09a7e42d7992d02070a2c4e5e9cffe1fd9cb4"
     },
@@ -364,7 +364,7 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_plateau_context_summary.json",
       "output_sha256": "4a0cce7da62d04a99321238ef4615b4367ee9369b499113c5eeb1a9084877411"
     },
@@ -381,12 +381,12 @@
         "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ],
-      "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
       "output_artifact": "analysis/outputs/real/maizuru_network_scenarios.json",
       "output_sha256": "d8717e5d040ebe611d92bec6f5db10a2d14f9a68cbd56d9a9a6e192cb31c4c5e"
     },
     {
-      "analysis_run_id": "10936d7c-1ad6-5976-9af0-6a86c43a79e0",
+      "analysis_run_id": "54af729d-aba6-5c58-998d-db4583cf479b",
       "city_code": "14205",
       "analysis_type": "building_detail",
       "status": "succeeded",
@@ -398,9 +398,9 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
       "output_artifact": "analysis/outputs/real/fujisawa_building_demographics_summary.json",
-      "output_sha256": "964801db7434c752795f7bd9529a1e0b8b8090870ad0486f8702175af4903085"
+      "output_sha256": "f1973cf473e8d4d5ea23a548cad53dbbf911030f6abb102108b6caa8b03f532e"
     },
     {
       "analysis_run_id": "8a1ddeaa-017a-5089-95aa-4ff588ef7132",
@@ -415,7 +415,7 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
       "output_artifact": "analysis/outputs/real/fujisawa_road_network_summary.json",
       "output_sha256": "748944968d81cd622082d05b0fa26fa5fec6dd3e905cbd14f526bc4447ba744c"
     },
@@ -432,7 +432,7 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
       "output_artifact": "analysis/outputs/real/fujisawa_terrain_network_summary.json",
       "output_sha256": "955530fbf89e257b7358fd53559dee946ebbc8dc3e898f3324b23c72bf8fc866"
     },
@@ -449,9 +449,43 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
       "output_artifact": "analysis/outputs/real/fujisawa_plateau_context_summary.json",
       "output_sha256": "8c1d1b686a86bf44efc7101b5e3588be18351046c88c7ebd2b6f99716c9f4693"
+    },
+    {
+      "analysis_run_id": "25d53382-296b-573d-8444-9545f6d1a453",
+      "city_code": "26202",
+      "analysis_type": "urban_futures_resilience",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ],
+      "config_hash": "60c3901e4a7cefc94aacab63e1e6c2d60919ab5eae47418187b161e54a0eaed0",
+      "output_artifact": "analysis/outputs/real/urban_futures_validation.json",
+      "output_sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d"
+    },
+    {
+      "analysis_run_id": "9da303f4-2b01-5ebd-a0c8-a66e8fb13cfb",
+      "city_code": "14205",
+      "analysis_type": "urban_futures_resilience",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "209ca3f4ef90e27d2a02ced4652b0c78fd2aa725c80257a8f2957177228f0543",
+      "output_artifact": "analysis/outputs/real/urban_futures_validation.json",
+      "output_sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d"
     }
   ],
   "capabilities": [
@@ -463,11 +497,95 @@
       "evidence": [
         {
           "artifact": "analysis/outputs/real/fujisawa_building_demographics_summary.json",
-          "sha256": "964801db7434c752795f7bd9529a1e0b8b8090870ad0486f8702175af4903085",
+          "sha256": "f1973cf473e8d4d5ea23a548cad53dbbf911030f6abb102108b6caa8b03f532e",
           "verified_present": true
         }
       ],
       "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "criticality",
+      "status": "available",
+      "note": "Tarjan bridge candidates are computed and independently removal-verified; they are not dangerous-road designations.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "evacuation_reachability",
+      "status": "available",
+      "note": "Official shelter locations are used for network reachability; this is not evacuation or crowd simulation.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "field_mode",
+      "status": "partial",
+      "note": "Selected-site offline packages and conflict-safe synchronization are implemented; municipal field validation remains pending.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "future_population",
+      "status": "available",
+      "note": "Official IPSS population scenarios are spatially allocated under an explicit fixed-service assumption; this is not a CITY GAP prediction.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ]
     },
@@ -497,6 +615,27 @@
     },
     {
       "city_code": "14205",
+      "capability": "hazard_stress_test",
+      "status": "available",
+      "note": "Counterfactual flood, landslide and tsunami road-closure assumptions are evaluated against the real experimental graph.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
       "capability": "land_use",
       "status": "available",
       "note": "Official Fujisawa PLATEAU context is parsed and spatially joined for review.",
@@ -508,6 +647,48 @@
         }
       ],
       "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "outcome_monitoring",
+      "status": "partial",
+      "note": "Versioned before/after outcome contracts are implemented; a reviewed intervention and later observed state are not yet registered.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "planning_monitoring",
+      "status": "available",
+      "note": "Official planning designations are compared with observed building-use context; no legal-compliance judgment is made.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ]
     },
@@ -544,6 +725,27 @@
         {
           "artifact": "analysis/outputs/real/fujisawa_summary.json",
           "sha256": "51ec2def375db1a31c0930b58080b17800c081467440fe9820ef9909ea03ac47",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
+    },
+    {
+      "city_code": "14205",
+      "capability": "temporal_diff",
+      "status": "partial",
+      "note": "Version-aware diff is implemented and identity-checked; annual change requires a second official PLATEAU version.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
           "verified_present": true
         }
       ],
@@ -606,6 +808,90 @@
     },
     {
       "city_code": "26202",
+      "capability": "criticality",
+      "status": "available",
+      "note": "Tarjan bridge candidates are computed and independently removal-verified; they are not dangerous-road designations.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "evacuation_reachability",
+      "status": "available",
+      "note": "Official shelter locations are used for network reachability; this is not evacuation or crowd simulation.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "field_mode",
+      "status": "partial",
+      "note": "Selected-site offline packages and conflict-safe synchronization are implemented; municipal field validation remains pending.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "future_population",
+      "status": "available",
+      "note": "Official IPSS population scenarios are spatially allocated under an explicit fixed-service assumption; this is not a CITY GAP prediction.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
       "capability": "gtfs",
       "status": "unavailable",
       "note": "P11 stop points are not GTFS; no feed is loaded and no service is fabricated.",
@@ -630,6 +916,27 @@
     },
     {
       "city_code": "26202",
+      "capability": "hazard_stress_test",
+      "status": "available",
+      "note": "Counterfactual flood, landslide and tsunami road-closure assumptions are evaluated against the real experimental graph.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
       "capability": "land_use",
       "status": "available",
       "note": "Official PLATEAU context is parsed and spatially joined; it remains review evidence.",
@@ -641,6 +948,48 @@
         }
       ],
       "dataset_version_ids": [
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "outcome_monitoring",
+      "status": "partial",
+      "note": "Versioned before/after outcome contracts are implemented; a reviewed intervention and later observed state are not yet registered.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "planning_monitoring",
+      "status": "available",
+      "note": "Official planning designations are compared with observed building-use context; no legal-compliance judgment is made.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
         "100749f8-fe61-5ff4-968e-aa07c153f89c"
       ]
     },
@@ -690,6 +1039,27 @@
         {
           "artifact": "analysis/outputs/real/maizuru_summary.json",
           "sha256": "9e3c65792882ad9b508179eadcb6b4801f5f65153a7b256b71cf79058ed58cf6",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "9e152782-0a4f-5ab9-b055-c712e6a35c54",
+        "edf7bf0c-4eea-50da-a240-f26932a0df71",
+        "d0d0ccc1-7616-50f0-9e25-9b06934d66b4",
+        "1b02aa5e-977b-5546-9eaf-6fb922c5e06d",
+        "1f6a8cf4-c213-50ba-b570-baaf50141ec0",
+        "100749f8-fe61-5ff4-968e-aa07c153f89c"
+      ]
+    },
+    {
+      "city_code": "26202",
+      "capability": "temporal_diff",
+      "status": "partial",
+      "note": "Version-aware diff is implemented and identity-checked; annual change requires a second official PLATEAU version.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/urban_futures_validation.json",
+          "sha256": "d4f6f85166837ad22cc50e2365f2972b1fffe41cd0a5a9e09801c229ff98e00d",
           "verified_present": true
         }
       ],

@@ -907,3 +907,35 @@ def test_selected_site_offline_sync_requires_explicit_conflict_resolution() -> N
     )
     assert resolved.status_code == 200
     assert resolved.json()["resolution_status"] == "merged"
+
+
+def test_field_sync_rejects_invalid_offline_values_before_database_write() -> None:
+    field_client = TestClient(create_app(FakeRepository()))
+    planner = {"X-CITYGAP-Actor": "planner-1", "X-CITYGAP-Roles": "planner"}
+    base = {
+        "client_operation_id": "10000000-0000-0000-0000-000000000091",
+        "offline_package_id": "10000000-0000-0000-0000-000000000081",
+        "scenario_run_id": "10000000-0000-0000-0000-000000000041",
+        "site_order": 1,
+        "base_record_version": 1,
+    }
+    invalid_status = field_client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **base,
+            "client_updated_at": "2026-08-27T10:00:00+09:00",
+            "payload": {"road_safety": "silently_overwrite"},
+        },
+    )
+    assert invalid_status.status_code == 422
+    naive_timestamp = field_client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **base,
+            "client_updated_at": "2026-08-27T10:00:00",
+            "payload": {"road_safety": "confirmed"},
+        },
+    )
+    assert naive_timestamp.status_code == 422

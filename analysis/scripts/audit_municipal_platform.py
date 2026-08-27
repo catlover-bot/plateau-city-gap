@@ -151,8 +151,10 @@ def build_audit() -> dict[str, Any]:
         ),
         "multi_city_registry_is_explicit": (
             len(registry["cities"]) == 2
-            and len(registry["capabilities"]) == 18
+            and len(registry["capabilities"]) == 34
             and maizuru_capabilities["gtfs"] == "unavailable"
+            and maizuru_capabilities["hazard_stress_test"] == "available"
+            and maizuru_capabilities["temporal_diff"] == "partial"
         ),
         "five_municipal_adapter_formats_are_implemented": all(
             name in adapter_source

@@ -62,3 +62,13 @@ def test_capability_matrix_never_substitutes_unavailable_fujisawa_features() -> 
         assert capabilities[("14205", capability)] in {"available", "partial"}
     assert capabilities[("14205", "scenario")] == "unavailable"
     assert capabilities[("14205", "gtfs")] == "unavailable"
+    for capability in (
+        "future_population",
+        "hazard_stress_test",
+        "criticality",
+        "evacuation_reachability",
+        "planning_monitoring",
+    ):
+        assert capabilities[("14205", capability)] == "available"
+    for capability in ("temporal_diff", "field_mode", "outcome_monitoring"):
+        assert capabilities[("14205", capability)] == "partial"

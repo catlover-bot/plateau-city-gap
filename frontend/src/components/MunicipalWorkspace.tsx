@@ -53,7 +53,15 @@ const CAPABILITY_LABELS: Record<string, string> = {
   urban_planning: "都市計画",
   hazard: "災害",
   scenario: "シナリオ",
-  gtfs: "GTFS"
+  gtfs: "GTFS",
+  temporal_diff: "都市状態・年次差分",
+  future_population: "将来人口シナリオ",
+  hazard_stress_test: "災害ストレステスト",
+  criticality: "重要道路候補",
+  evacuation_reachability: "避難所到達性",
+  planning_monitoring: "都市計画モニタリング",
+  field_mode: "現地確認オフライン",
+  outcome_monitoring: "施策後モニタリング"
 };
 
 const LIFECYCLE_LABELS: Record<ScenarioLifecycleStatus, string> = {

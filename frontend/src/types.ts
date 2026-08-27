@@ -531,3 +531,79 @@ export interface MunicipalWorkspaceData {
   buildingPoints: WorkspaceBuildingPoints;
   registry: PlatformRegistry;
 }
+
+export type FuturesStressMode = "normal" | "flood" | "landslide" | "tsunami";
+
+export interface ResilienceServiceMetric {
+  baseline_reachable_buildings: number;
+  scenario_reachable_buildings: number;
+  newly_unreachable_buildings: number;
+  estimated_population_disconnected: number;
+  estimated_elderly_population_disconnected: number;
+  mean_network_distance_increase_m: number;
+  maximum_network_distance_increase_m: number;
+  critical_facility_seed_count: number;
+}
+
+export interface PublicStressTest {
+  assumption: {
+    hazard_type: string;
+    hazard_classes: string[];
+    rule: string;
+    assumption_source: string;
+    explicitly_confirmed: boolean;
+    limitation: string;
+  };
+  result: {
+    closed_edge_count: number;
+    baseline_component_count: number;
+    scenario_component_count: number;
+    largest_component_nodes: number;
+    component_fragmentation_increase: number;
+    service_metrics: Record<string, ResilienceServiceMetric>;
+  };
+  runtime_seconds: number;
+  peak_rss_mib: number;
+}
+
+export interface PublicCriticalityCandidate {
+  edge_id: string;
+  component_id: number;
+  isolated_node_count: number;
+  affected_buildings: number;
+  affected_estimated_elderly_population: number;
+  service_reachability_change: Record<string, number>;
+  algorithm: string;
+}
+
+export interface UrbanFuturesCity {
+  city_name: string;
+  urban_state: string;
+  network: {
+    version: string;
+    nodes: number;
+    edges: number;
+    buildings_with_network_demand: number;
+    semantics: string;
+  };
+  stress_tests: Partial<Record<Exclude<FuturesStressMode, "normal">, PublicStressTest>>;
+  criticality: {
+    candidate_count: number;
+    top_candidates: PublicCriticalityCandidate[];
+    claim_boundary: string;
+  };
+  limitations: string[];
+}
+
+export interface UrbanFuturesData {
+  schema_version: string;
+  analysis_status: string;
+  building_level_demographics_included: false;
+  story: {
+    title: string;
+    steps: string[];
+    prediction_claimed: false;
+  };
+  cities: Record<"maizuru" | "fujisawa", UrbanFuturesCity>;
+  limitations: string[];
+}

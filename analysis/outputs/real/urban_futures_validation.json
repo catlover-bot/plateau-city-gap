@@ -4,18 +4,22 @@
   "capability_matrix": {
     "fujisawa": {
       "criticality": "available",
+      "evacuation_reachability": "available",
       "field_mode": "partial",
       "future_population": "available",
       "hazard_stress_test": "available",
       "outcome_monitoring": "partial",
+      "planning_monitoring": "available",
       "temporal_diff": "partial"
     },
     "maizuru": {
       "criticality": "available",
+      "evacuation_reachability": "available",
       "field_mode": "partial",
       "future_population": "available",
       "hazard_stress_test": "available",
       "outcome_monitoring": "partial",
+      "planning_monitoring": "available",
       "temporal_diff": "partial"
     }
   },
@@ -42,8 +46,8 @@
             "independent_removal_verifier": true
           }
         ],
-        "peak_rss_mib": 1027.789062,
-        "runtime_seconds": 1.475843,
+        "peak_rss_mib": 978.269531,
+        "runtime_seconds": 1.115511,
         "top_candidates": [
           {
             "affected_buildings": 120,
@@ -222,9 +226,9 @@
           2045,
           2050
         ],
-        "peak_rss_mib": 1027.789062,
+        "peak_rss_mib": 978.269531,
         "prediction_claimed": false,
-        "runtime_seconds": 4.031291,
+        "runtime_seconds": 3.721983,
         "semantics": "official demographic projection + CITY GAP spatial allocation model",
         "series": {
           "fujisawa-municipal-2023": [
@@ -643,7 +647,7 @@
         "designation_count": 13,
         "label": "planning-context mismatch candidate",
         "legal_compliance_claimed": false,
-        "runtime_seconds": 2.416151
+        "runtime_seconds": 1.863109
       },
       "plateau_version": 5,
       "redundancy": {
@@ -680,7 +684,7 @@
         "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
         "comparison": "current official road state versus itself",
         "correctness_check": true,
-        "peak_rss_mib": 1027.789062,
+        "peak_rss_mib": 978.269531,
         "result": {
           "added": 0,
           "attribute_changed": 0,
@@ -688,7 +692,7 @@
           "removed": 0,
           "unchanged": 71487
         },
-        "runtime_seconds": 4.299658
+        "runtime_seconds": 3.143026
       },
       "stress_tests": {
         "flood": {
@@ -716,7 +720,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 762.617188,
+          "peak_rss_mib": 732.417969,
           "result": {
             "baseline_component_count": 18,
             "closed_edge_count": 17561,
@@ -756,7 +760,7 @@
               }
             }
           },
-          "runtime_seconds": 2.222359
+          "runtime_seconds": 2.047055
         }
       },
       "urban_state": "fujisawa-2025-observed"
@@ -783,8 +787,8 @@
             "independent_removal_verifier": true
           }
         ],
-        "peak_rss_mib": 450.800781,
-        "runtime_seconds": 0.246602,
+        "peak_rss_mib": 441.203125,
+        "runtime_seconds": 0.421911,
         "top_candidates": [
           {
             "affected_buildings": 196,
@@ -963,9 +967,9 @@
           2045,
           2050
         ],
-        "peak_rss_mib": 450.800781,
+        "peak_rss_mib": 441.203125,
         "prediction_claimed": false,
-        "runtime_seconds": 0.401836,
+        "runtime_seconds": 0.472826,
         "semantics": "official demographic projection + CITY GAP spatial allocation model",
         "series": {
           "ipss-regional-2023": [
@@ -1260,7 +1264,7 @@
         "designation_count": 12,
         "label": "planning-context mismatch candidate",
         "legal_compliance_claimed": false,
-        "runtime_seconds": 0.430047
+        "runtime_seconds": 0.528709
       },
       "plateau_version": 5,
       "redundancy": {
@@ -1311,7 +1315,7 @@
         "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
         "comparison": "current official road state versus itself",
         "correctness_check": true,
-        "peak_rss_mib": 450.800781,
+        "peak_rss_mib": 441.203125,
         "result": {
           "added": 0,
           "attribute_changed": 0,
@@ -1319,7 +1323,7 @@
           "removed": 0,
           "unchanged": 23437
         },
-        "runtime_seconds": 0.895029
+        "runtime_seconds": 1.151606
       },
       "stress_tests": {
         "flood": {
@@ -1347,7 +1351,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 13632,
@@ -1387,7 +1391,7 @@
               }
             }
           },
-          "runtime_seconds": 0.354193
+          "runtime_seconds": 0.666854
         },
         "landslide": {
           "assumption": {
@@ -1402,7 +1406,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 7331,
@@ -1442,7 +1446,7 @@
               }
             }
           },
-          "runtime_seconds": 0.463668
+          "runtime_seconds": 0.56238
         },
         "tsunami": {
           "assumption": {
@@ -1459,7 +1463,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 719,
@@ -1499,7 +1503,7 @@
               }
             }
           },
-          "runtime_seconds": 0.532302
+          "runtime_seconds": 0.604783
         }
       },
       "urban_state": "maizuru-2025-observed"
@@ -1543,7 +1547,7 @@
     "Annual added/removed/changed counts require a second registered official PLATEAU version.",
     "Building demographics are model estimates and are excluded from the public artifact."
   ],
-  "peak_rss_mib": 1027.789062,
+  "peak_rss_mib": 978.269531,
   "schema_version": "urban-futures-validation-1.0.0",
-  "total_runtime_seconds": 27.256189
+  "total_runtime_seconds": 27.671862
 }

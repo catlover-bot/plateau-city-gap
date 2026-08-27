@@ -3,6 +3,7 @@ import type { GeoJsonFeatureCollection, MeshMetrics } from "../types";
 import {
   loadAppData,
   loadMunicipalWorkspaceData,
+  loadUrbanFuturesData,
   loadValidationCityData,
   normalizeTop10,
   sortRanking
@@ -172,5 +173,33 @@ describe("data loading", () => {
     expect(result.map.type).toBe("FeatureCollection");
     expect(result.buildingPoints.stories.scenario_a).toEqual([]);
     expect(result.registry.capabilities).toEqual([]);
+  });
+
+  it("loads only reviewed aggregated urban futures data", async () => {
+    const fetcher = mockFetch({
+      "urban_futures_resilience.json": {
+        schema_version: "urban-futures-public-1.0.0",
+        analysis_status: "reviewed_aggregated_real_data",
+        building_level_demographics_included: false,
+        story: { title: "test", steps: [], prediction_claimed: false },
+        cities: {
+          maizuru: { city_name: "舞鶴市", stress_tests: {} },
+          fujisawa: { city_name: "藤沢市", stress_tests: {} }
+        },
+        limitations: []
+      }
+    });
+    const result = await loadUrbanFuturesData(fetcher, "/plateau-city-gap/");
+    expect(result.cities.maizuru.city_name).toBe("舞鶴市");
+    expect(result.building_level_demographics_included).toBe(false);
+
+    const unsafe = mockFetch({
+      "urban_futures_resilience.json": {
+        building_level_demographics_included: true,
+        story: { prediction_claimed: false },
+        cities: { maizuru: {}, fujisawa: {} }
+      }
+    });
+    await expect(loadUrbanFuturesData(unsafe, "/")).rejects.toThrow("公開境界");
   });
 });

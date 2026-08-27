@@ -15,6 +15,14 @@ CAPABILITIES = (
     "hazard",
     "gtfs",
     "scenario",
+    "temporal_diff",
+    "future_population",
+    "hazard_stress_test",
+    "criticality",
+    "evacuation_reachability",
+    "planning_monitoring",
+    "field_mode",
+    "outcome_monitoring",
 )
 
 

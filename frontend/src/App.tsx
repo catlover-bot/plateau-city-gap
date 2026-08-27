@@ -12,7 +12,13 @@ import { MunicipalWorkspace } from "./components/MunicipalWorkspace";
 import { RankingPanel } from "./components/RankingPanel";
 import { ScenarioPanel } from "./components/ScenarioPanel";
 import { StoryMode } from "./components/StoryMode";
-import { loadAppData, loadMunicipalWorkspaceData, loadValidationCityData } from "./lib/data";
+import { UrbanFuturesWorkspace } from "./components/UrbanFuturesWorkspace";
+import {
+  loadAppData,
+  loadMunicipalWorkspaceData,
+  loadUrbanFuturesData,
+  loadValidationCityData
+} from "./lib/data";
 import { finiteNumber } from "./lib/format";
 import { summarizePlateauCoverage, top10CoverageLabel } from "./lib/plateau";
 import { calculateScenario, type ScenarioResult, type VirtualPoint } from "./lib/scenario";
@@ -25,7 +31,9 @@ import type {
   MeshMetrics,
   MetricMode,
   MunicipalWorkspaceData,
+  FuturesStressMode,
   RobustCandidate,
+  UrbanFuturesData,
   WorkspaceLayerVisibility,
   WorkspacePhase
 } from "./types";
@@ -64,13 +72,16 @@ const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> 
 
 type SideTab = "ranking" | "detail" | "scenario";
 type CityId = "maizuru" | "fujisawa";
-type ProductView = "demo" | "workspace" | "admin";
+type ProductView = "demo" | "workspace" | "futures" | "admin";
 
 export default function App() {
   const [datasets, setDatasets] = useState<Record<CityId, AppData> | null>(null);
   const [cityId, setCityId] = useState<CityId>("maizuru");
   const [productView, setProductView] = useState<ProductView>("demo");
   const [workspaceData, setWorkspaceData] = useState<MunicipalWorkspaceData | null>(null);
+  const [futuresData, setFuturesData] = useState<UrbanFuturesData | null>(null);
+  const [futureYear, setFutureYear] = useState(2040);
+  const [futuresStressMode, setFuturesStressMode] = useState<FuturesStressMode>("normal");
   const [workspaceError, setWorkspaceError] = useState<string | null>(null);
   const [workspaceRetry, setWorkspaceRetry] = useState(0);
   const [workspacePhase, setWorkspacePhase] = useState<WorkspacePhase>("baseline");
@@ -106,10 +117,11 @@ export default function App() {
     setMapReady(false);
     setMapError(null);
     setMapWarning(null);
-    Promise.all([loadAppData(), loadValidationCityData()])
-      .then(([maizuru, fujisawa]) => {
+    Promise.all([loadAppData(), loadValidationCityData(), loadUrbanFuturesData()])
+      .then(([maizuru, fujisawa, urbanFutures]) => {
         if (cancelled) return;
         setDatasets({ maizuru, fujisawa });
+        setFuturesData(urbanFutures);
         setSelectedMesh(maizuru.top10[0] ?? null);
       })
       .catch((reason: unknown) => {
@@ -121,7 +133,7 @@ export default function App() {
   }, [retryKey]);
 
   useEffect(() => {
-    if (productView !== "workspace" || workspaceData) return;
+    if ((productView !== "workspace" && productView !== "futures") || workspaceData) return;
     let cancelled = false;
     setWorkspaceError(null);
     loadMunicipalWorkspaceData()
@@ -137,6 +149,16 @@ export default function App() {
       cancelled = true;
     };
   }, [productView, workspaceData, workspaceRetry]);
+
+  useEffect(() => {
+    if (productView !== "futures") return;
+    setWorkspaceLayers((current) => ({
+      ...current,
+      meshes: false,
+      roadNetwork: true,
+      hazard: futuresStressMode !== "normal"
+    }));
+  }, [futuresStressMode, productView]);
 
   const switchCity = useCallback((nextCity: CityId) => {
     if (!datasets || nextCity === cityId) return;
@@ -156,6 +178,7 @@ export default function App() {
     setSiteCount(1);
     setMapPhase("before");
     setEvidenceOpen(false);
+    setFuturesStressMode("normal");
     setMapReady(false);
     setMapError(null);
     setMapWarning(null);
@@ -242,10 +265,11 @@ export default function App() {
     setStoryStep(null);
     setSelectedBuilding(null);
     setPlacementMode(false);
-    if (next === "workspace") {
+    if (next === "workspace" || next === "futures") {
       setWorkspacePhase("baseline");
-      setWorkspaceLayers(INITIAL_WORKSPACE_LAYERS);
-      setCityId("maizuru");
+      setWorkspaceLayers(next === "futures"
+        ? { ...INITIAL_WORKSPACE_LAYERS, meshes: false, roadNetwork: true, hazard: false }
+        : INITIAL_WORKSPACE_LAYERS);
     }
   }, []);
 
@@ -338,8 +362,8 @@ export default function App() {
   const plateauCoverage = summarizePlateauCoverage(data.plateauMetadata);
   const plateauYear = data.plateauMetadata?.year ?? data.plateauMetadata?.source_year;
   const isPrimary = data.city.mode === "primary_demo";
-  const workspaceActive = productView === "workspace" && isPrimary && workspaceData !== null;
-  const mapLayers: LayerVisibility = productView === "workspace"
+  const workspaceActive = (productView === "workspace" || productView === "futures") && workspaceData !== null;
+  const mapLayers: LayerVisibility = productView === "workspace" || productView === "futures"
     ? {
         meshes: workspaceLayers.meshes,
         stations: false,
@@ -351,7 +375,7 @@ export default function App() {
     : layers;
 
   return (
-    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : productView === "admin" ? "admin-mode" : ""}`}>
+    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : productView === "futures" ? "futures-mode" : productView === "admin" ? "admin-mode" : ""}`}>
       <header className="app-header">
         <div className="brand-block">
           <div>
@@ -363,6 +387,7 @@ export default function App() {
           <div className="product-switch" role="group" aria-label="CITY GAPの表示モード">
             <button type="button" className={productView === "demo" ? "active" : ""} aria-pressed={productView === "demo"} onClick={() => changeProductView("demo")}>公開デモ</button>
             <button type="button" className={productView === "workspace" ? "active" : ""} aria-pressed={productView === "workspace"} onClick={() => changeProductView("workspace")}>自治体Workspace</button>
+            <button type="button" className={productView === "futures" ? "active" : ""} aria-pressed={productView === "futures"} onClick={() => changeProductView("futures")}>時間・レジリエンス</button>
             <button type="button" className={productView === "admin" ? "active" : ""} aria-pressed={productView === "admin"} onClick={() => changeProductView("admin")}>運用管理</button>
           </div>
           <div className="city-switch" role="group" aria-label="分析都市を選択">
@@ -455,6 +480,15 @@ export default function App() {
           </div>
         )}
 
+        {productView === "futures" && (
+          <div className="futures-map-context" aria-label="地図の時間状態">
+            <span><small>CITY</small>{data.city.name}</span>
+            <span><small>DATA</small>2025 observed</span>
+            <span><small>SCENARIO</small>{futureYear}</span>
+            <span className={futuresStressMode === "normal" ? "" : "active"}><small>STRESS</small>{futuresStressMode}</span>
+          </div>
+        )}
+
         {productView === "demo" && isPrimary && data.finalDemo && storyStep === null && (
           <section className="product-intro">
             <p>舞鶴市 実証・施策シミュレーション</p>
@@ -516,9 +550,20 @@ export default function App() {
           </div>
         )}
 
+        {productView === "futures" && (
+          <div className="futures-map-legend">
+            <strong>地図表示</strong>
+            <span><i className="road" />PLATEAU道路面network</span>
+            <span><i className="hazard" />選択時: 災害context</span>
+            <small>到達不能建物は公開せず集約値のみ表示</small>
+          </div>
+        )}
+
         <div className="source-chip">
           {productView === "workspace"
             ? "PLATEAU 2025 · 実ネットワーク · 公式計画/災害コンテキスト"
+            : productView === "futures"
+            ? "PLATEAU 2025 · 公式将来人口 · counterfactual stress test"
             : isPrimary && plateauCoverage.referenceIncluded
             ? `PLATEAU 舞鶴市 ${plateauYear ?? "年次不明"} · 3D建物 + 道路面`
             : `PLATEAU ${data.city.name} 2025 · 行政界 + 駅`}
@@ -548,6 +593,21 @@ export default function App() {
             </div>
           ) : (
             <div className="workspace-load-state" role="status"><span /> 自治体Workspaceを準備中</div>
+          )}
+        </aside>
+      ) : productView === "futures" ? (
+        <aside className="side-panel futures-side-panel" aria-label="CITY GAP時間・レジリエンスWorkspace">
+          {futuresData ? (
+            <UrbanFuturesWorkspace
+              data={futuresData}
+              cityId={cityId}
+              futureYear={futureYear}
+              stressMode={futuresStressMode}
+              onFutureYearChange={setFutureYear}
+              onStressModeChange={setFuturesStressMode}
+            />
+          ) : (
+            <div className="workspace-load-state" role="status"><span /> 時間状態を準備中</div>
           )}
         </aside>
       ) : (

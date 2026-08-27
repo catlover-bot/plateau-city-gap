@@ -137,6 +137,8 @@ FIELD_SYNC_KEYS = frozenset(
         "gps_confirmation",
     }
 )
+FIELD_CHECK_KEYS = FIELD_SYNC_KEYS - {"notes", "gps_confirmation"}
+FIELD_CHECK_VALUES = frozenset(value.value for value in FieldCheckValue)
 
 
 class OfflinePackageCreateRequest(BaseModel):
@@ -160,8 +162,26 @@ class FieldSyncRequest(BaseModel):
     def validate_payload(cls, value: dict[str, Any]) -> dict[str, Any]:
         if not value or set(value) - FIELD_SYNC_KEYS:
             raise ValueError("field sync payload contains missing or unsupported fields")
+        invalid_checks = {
+            key: item
+            for key, item in value.items()
+            if key in FIELD_CHECK_KEYS and item not in FIELD_CHECK_VALUES
+        }
+        if invalid_checks:
+            raise ValueError("field sync checklist contains an unsupported status")
+        if "notes" in value and not isinstance(value["notes"], str):
+            raise ValueError("field sync notes must be text")
+        if "gps_confirmation" in value and not isinstance(value["gps_confirmation"], dict):
+            raise ValueError("field sync GPS confirmation must be an object")
         if len(json.dumps(value, ensure_ascii=False).encode()) > 65536:
             raise ValueError("field sync payload exceeds 64 KiB")
+        return value
+
+    @field_validator("client_updated_at")
+    @classmethod
+    def validate_client_timestamp(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("field sync timestamp must include a timezone")
         return value
 
 

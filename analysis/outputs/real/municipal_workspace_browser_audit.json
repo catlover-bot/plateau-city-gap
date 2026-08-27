@@ -5,23 +5,23 @@
     "width": 1440,
     "height": 900
   },
-  "demo_ready_ms": 1100,
-  "scenario_a_points_ready_ms_from_navigation": 49653,
+  "demo_ready_ms": 354,
+  "scenario_a_points_ready_ms_from_navigation": 46006,
   "resource_timings": [
     {
       "name": "municipal_workspace_story.json",
-      "duration_ms": 96,
-      "transfer_bytes": 7095
+      "duration_ms": 58,
+      "transfer_bytes": 0
     },
     {
       "name": "network_scenario_map.geojson",
-      "duration_ms": 254,
-      "transfer_bytes": 1087500
+      "duration_ms": 122,
+      "transfer_bytes": 0
     },
     {
       "name": "network_scenario_building_points.json",
-      "duration_ms": 119,
-      "transfer_bytes": 59817
+      "duration_ms": 118,
+      "transfer_bytes": 0
     }
   ],
   "console_errors": [],

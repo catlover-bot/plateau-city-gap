@@ -13,6 +13,7 @@ import type {
   PlatformRegistry,
   RobustnessData,
   Summary,
+  UrbanFuturesData,
   WorkspaceBuildingPoints,
   WorkspaceMapData
 } from "../types";
@@ -252,4 +253,23 @@ export async function loadMunicipalWorkspaceData(
     buildingPoints: buildingPointsRaw as unknown as WorkspaceBuildingPoints,
     registry: registryRaw as unknown as PlatformRegistry
   };
+}
+
+export async function loadUrbanFuturesData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL
+): Promise<UrbanFuturesData> {
+  const raw = await fetchJson(fetcher, dataUrl(baseUrl, "urban_futures_resilience.json"));
+  if (
+    !isRecord(raw) ||
+    raw.building_level_demographics_included !== false ||
+    !isRecord(raw.story) ||
+    raw.story.prediction_claimed !== false ||
+    !isRecord(raw.cities) ||
+    !isRecord(raw.cities.maizuru) ||
+    !isRecord(raw.cities.fujisawa)
+  ) {
+    throw new Error("urban_futures_resilience.json の公開境界が正しくありません");
+  }
+  return raw as unknown as UrbanFuturesData;
 }

@@ -39,6 +39,17 @@ def test_real_registry_declares_every_capability_without_faking_fujisawa() -> No
         assert by_city["14205"][capability]["status"] == "partial"
     for capability in ("scenario", "gtfs"):
         assert by_city["14205"][capability]["status"] == "unavailable"
+    for city_code in ("26202", "14205"):
+        for capability in (
+            "future_population",
+            "hazard_stress_test",
+            "criticality",
+            "evacuation_reachability",
+            "planning_monitoring",
+        ):
+            assert by_city[city_code][capability]["status"] == "available"
+        for capability in ("temporal_diff", "field_mode", "outcome_monitoring"):
+            assert by_city[city_code][capability]["status"] == "partial"
     assert not any(version["format"].lower() == "gtfs" for version in registry["dataset_versions"])
 
 
@@ -66,7 +77,7 @@ def test_registry_dataset_and_analysis_versions_are_explicit_and_unique() -> Non
     version_ids = [row["dataset_version_id"] for row in registry["dataset_versions"]]
     run_ids = [row["analysis_run_id"] for row in registry["analysis_runs"]]
     assert len(version_ids) == len(set(version_ids)) == 12
-    assert len(run_ids) == len(set(run_ids)) == 11
+    assert len(run_ids) == len(set(run_ids)) == 13
     assert all(len(run["config_hash"]) == 64 for run in registry["analysis_runs"])
     assert all(run["dataset_version_ids"] for run in registry["analysis_runs"])
     assert "never implicit latest" in registry["policy"]["version_selection"]

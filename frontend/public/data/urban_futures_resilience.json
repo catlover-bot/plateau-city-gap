@@ -91,7 +91,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 762.617188,
+          "peak_rss_mib": 732.417969,
           "result": {
             "baseline_component_count": 18,
             "closed_edge_count": 17561,
@@ -131,7 +131,7 @@
               }
             }
           },
-          "runtime_seconds": 2.222359
+          "runtime_seconds": 2.047055
         }
       },
       "urban_state": "fujisawa-2025-observed"
@@ -225,7 +225,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 13632,
@@ -265,7 +265,7 @@
               }
             }
           },
-          "runtime_seconds": 0.354193
+          "runtime_seconds": 0.666854
         },
         "landslide": {
           "assumption": {
@@ -280,7 +280,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 7331,
@@ -320,7 +320,7 @@
               }
             }
           },
-          "runtime_seconds": 0.463668
+          "runtime_seconds": 0.56238
         },
         "tsunami": {
           "assumption": {
@@ -337,7 +337,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 387.652344,
+          "peak_rss_mib": 393.269531,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 719,
@@ -377,7 +377,7 @@
               }
             }
           },
-          "runtime_seconds": 0.532302
+          "runtime_seconds": 0.604783
         }
       },
       "urban_state": "maizuru-2025-observed"

@@ -2697,6 +2697,89 @@ input:focus-visible,
   background: #285f59;
   color: #fffdf7;
 }
+
+/* Urban Futures & Resilience workspace */
+.futures-mode .map-stage { right: 430px; }
+.futures-side-panel { width: 430px; background: #f3f4ef; color: #303a34; border-left-color: #c9cec6; }
+.futures-workspace { height: 100%; overflow-y: auto; background: #f3f4ef; }
+.futures-heading { padding: 20px 18px 15px; border-bottom: 2px solid #285f59; background: #fafbf7; }
+.futures-heading p { margin: 0 0 6px; color: #2c716a; font-size: 8px; font-weight: 900; letter-spacing: .13em; }
+.futures-heading h2 { margin: 0; font: 500 21px/1.2 Georgia, "Yu Mincho", serif; }
+.futures-heading span { display: block; margin-top: 6px; color: #68716a; font-size: 8px; }
+.temporal-context { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #cfd4cc; border-bottom: 1px solid #c5cbc3; }
+.temporal-context > div, .temporal-context label { min-width: 0; padding: 10px 12px; background: #e8ebe5; }
+.temporal-context small { display: block; margin-bottom: 4px; color: #6d766f; font-size: 7px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.temporal-context strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.temporal-context select { width: 100%; min-height: 29px; border: 1px solid #aeb7ae; border-radius: 2px; background: #fff; color: #26312b; font-size: 9px; }
+.futures-section { margin: 0 13px; padding: 16px 2px; border-bottom: 1px solid #cfd4cc; }
+.futures-section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.futures-section-title > span { color: #2c716a; font: 700 8px/1 monospace; }
+.futures-section-title h3 { margin: 0; font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+.state-comparison-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #c9cec6; }
+.state-comparison-grid article { min-width: 0; padding: 9px; background: #fafbf7; }
+.state-comparison-grid article.alert { background: #f4e8dc; }
+.state-comparison-grid small, .state-comparison-grid strong, .state-comparison-grid span { display: block; }
+.state-comparison-grid small { color: #68746c; font-size: 6px; font-weight: 900; letter-spacing: .1em; }
+.state-comparison-grid strong { margin-top: 5px; overflow: hidden; color: #285f59; font: 600 15px/1 Georgia, serif; text-overflow: ellipsis; }
+.state-comparison-grid span { margin-top: 5px; color: #68716a; font-size: 7px; line-height: 1.4; }
+.futures-boundary { margin: 9px 0 0; padding-left: 8px; border-left: 2px solid #9a7b3f; color: #626962; font-size: 7px; line-height: 1.65; }
+.resilience-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #cbd0c8; }
+.resilience-metrics div { padding: 9px; background: #fafbf7; }
+.resilience-metrics small, .resilience-metrics strong { display: block; }
+.resilience-metrics small { min-height: 20px; color: #667067; font-size: 7px; line-height: 1.4; }
+.resilience-metrics strong { color: #874c36; font: 600 17px/1.2 Georgia, serif; }
+.resilience-metrics em { margin-left: 4px; color: #737b74; font-size: 6px; font-style: normal; }
+.stress-contract { margin: 9px 0 0; padding: 8px 9px; border: 1px solid #d5bca9; background: #f6eae1; color: #704a39; font-size: 7px; line-height: 1.6; }
+.normal-state-card { padding: 13px; border: 1px solid #c9d4cc; background: #f8faf6; }
+.normal-state-card strong, .normal-state-card span { display: block; }
+.normal-state-card strong { color: #285f59; font-size: 10px; }
+.normal-state-card span { margin-top: 5px; color: #68716a; font-size: 8px; }
+.criticality-card { padding: 11px; border: 1px solid #c7cdc5; background: #fafbf7; }
+.criticality-card > small, .criticality-card code { display: block; }
+.criticality-card > small { color: #6e776f; font-size: 7px; }
+.criticality-card code { margin: 7px 0; overflow: hidden; color: #285f59; font-size: 8px; text-overflow: ellipsis; }
+.criticality-card > div { display: flex; justify-content: space-between; padding: 5px 0; border-top: 1px solid #e0e3dd; font-size: 8px; }
+.criticality-card > div strong { color: #7d4d39; }
+.offline-field-section ol { display: grid; gap: 1px; margin: 0; padding: 0; background: #cdd2ca; list-style: none; counter-reset: field; }
+.offline-field-section li { padding: 9px 10px; background: #fafbf7; }
+.offline-field-section li strong, .offline-field-section li span { display: block; }
+.offline-field-section li strong { color: #285f59; font-size: 9px; }
+.offline-field-section li span { margin-top: 3px; color: #697169; font-size: 7px; line-height: 1.45; }
+.pilot-api-note { display: block; margin-top: 8px; color: #7c6540; font-size: 7px; }
+.futures-footer { display: flex; justify-content: space-between; padding: 12px 15px 18px; color: #68716a; font-size: 7px; }
+.futures-footer strong { color: #285f59; }
+.futures-map-context { position: absolute; z-index: 13; top: 16px; left: 50%; display: flex; transform: translateX(-50%); border: 1px solid rgba(171,222,218,.22); border-radius: 8px; overflow: hidden; background: rgba(6,23,29,.92); box-shadow: 0 8px 24px rgba(0,0,0,.22); }
+.futures-map-context span { min-width: 88px; padding: 7px 10px; border-right: 1px solid rgba(171,222,218,.14); color: #d5e4e3; font-size: 8px; white-space: nowrap; }
+.futures-map-context span:last-child { border: 0; }
+.futures-map-context span.active { background: rgba(159,81,55,.35); color: #ffd2bd; }
+.futures-map-context small { display: block; margin-bottom: 3px; color: #6f9494; font-size: 6px; font-weight: 900; letter-spacing: .1em; }
+.futures-map-legend { position: absolute; z-index: 8; bottom: 22px; left: 18px; display: grid; gap: 5px; padding: 10px 12px; border: 1px solid rgba(171,222,218,.18); border-radius: 8px; background: rgba(6,23,29,.88); font-size: 8px; }
+.futures-map-legend strong { font-size: 9px; }
+.futures-map-legend span { display: flex; align-items: center; gap: 6px; color: #a8bcbd; }
+.futures-map-legend i { width: 12px; height: 3px; background: #5ad2c4; }
+.futures-map-legend i.hazard { height: 8px; background: rgba(255,135,105,.6); }
+.futures-map-legend small { color: #6f898d; font-size: 7px; }
+
+@media (max-width: 1080px) {
+  .futures-mode .map-stage { right: 390px; }
+  .futures-side-panel { width: 390px; }
+  .futures-map-context span { min-width: 72px; padding-inline: 7px; }
+}
+
+@media (max-width: 760px) {
+  .futures-mode .map-stage { right: 0; bottom: 52dvh; }
+  .futures-side-panel { top: 48dvh; width: 100%; height: 52dvh; }
+  .futures-map-context { top: 7px; max-width: calc(100% - 14px); overflow-x: auto; }
+  .futures-map-context span { min-width: 78px; }
+  .futures-map-legend { display: none; }
+}
+
+@media print {
+  .futures-mode .app-header, .futures-mode .map-stage { display: none !important; }
+  .futures-mode .futures-side-panel { position: static; width: 100%; height: auto; border: 0; }
+  .futures-workspace { overflow: visible; }
+  .futures-section { break-inside: avoid; }
+}
 .robustness-section {
   margin: 18px 0;
   padding: 15px 18px;
