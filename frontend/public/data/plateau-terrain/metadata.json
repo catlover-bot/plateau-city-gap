@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "dataset": "Project PLATEAU 舞鶴市2025 DEM TIN Deep Dive terrain",
+  "theme": "dem",
+  "source_crs": "EPSG:6697 (JGD2011 + JGD2011 gravity-related height)",
+  "render_crs": "EPSG:4979/4978 (WGS84 ellipsoidal height/ECEF)",
+  "vertical_transform": {
+    "method": "PROJ inverse JGD2011 vertical grid transformation",
+    "grid": "jp_gsi_gsigeo2011.tif",
+    "grid_url": "https://cdn.proj.org/jp_gsi_gsigeo2011.tif",
+    "interpolation_or_exaggeration": false
+  },
+  "quality_boundary": {
+    "kind": "verified Deep Dive region only",
+    "mesh_code": "533513314",
+    "area_label": "常団地前バス停周辺",
+    "bounds_wgs84": [
+      135.3925,
+      35.4447,
+      135.4052,
+      35.451
+    ],
+    "whole_city_terrain_claimed": false
+  },
+  "source_archive": {
+    "path": "data/raw/plateau_citygml/26202_maizuru-shi_city_2025_citygml_1_op.zip",
+    "bytes": 914222089,
+    "sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "members": [
+      {
+        "member": "udx/dem/533513_dem_6697_00_op.gml",
+        "member_crc32": "dd7b9cbd",
+        "member_uncompressed_bytes": 694282369,
+        "envelope": [
+          135.37499229529098,
+          35.41666360789712,
+          135.43754740859936,
+          35.458374779943405
+        ],
+        "triangles_scanned": 1896487,
+        "triangles_selected": 65232
+      }
+    ]
+  },
+  "source_triangles_selected": 65232,
+  "rendered_triangles": 65232,
+  "rendered_vertices": 32990,
+  "orthometric_height_m": {
+    "minimum": 25.063,
+    "maximum": 164.581
+  },
+  "ellipsoidal_height_m": {
+    "minimum": 62.08777883304856,
+    "maximum": 201.645397209049
+  },
+  "terrain_glb": {
+    "triangles": 65232,
+    "vertices": 32990,
+    "source_vertex_references": 195696,
+    "indexed_without_resampling": true,
+    "local_min": [
+      -581.5014038085938,
+      -354.5075988769531,
+      -69.7933578491211
+    ],
+    "local_max": [
+      581.534912109375,
+      354.51983642578125,
+      69.74378204345703
+    ],
+    "bytes": 1575692,
+    "sha256": "137cb6478a7e7c26c921a7e50508547380149c7f02f399873b8e3486e20a99fa"
+  }
+}

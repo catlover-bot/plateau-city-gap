@@ -55,6 +55,20 @@ PLATEAU
 The platform preserves those boundaries: source themes are versioned before analysis; an overlap
 or score is evidence for review, not an automatic municipal decision.
 
+The browser boundary is a Spatial OS rather than a collection of disconnected map pages. A single
+URL-serializable state carries city, urban state, typed selection, intent, spatial resolution,
+ScenePreset, primary layer, viewport and 2D/3D mode. Eight ScenePresets bind camera, renderer,
+required layers, legend and Context Inspector. MapLibre + GSI pale tiles remain the analytical 2D
+surface; Cesium is lazy-loaded for the PLATEAU 3D Decision Twin. The central registry currently
+governs 26 analysis, PLATEAU, infrastructure, planning, hazard, scenario, validation and reference
+layers. See [Spatial Workspace](spatial-workspace.md).
+
+PLATEAU buildings use a staged delivery path: a losslessly Draco-decoded 15-building official tile,
+a verified local 856-building fallback, then the official camera-driven Maizuru 2025 stream of
+44,640 LOD1 buildings. Local actual terrain is built from 65,232 official CityGML DEM triangles for
+the verified Deep Dive only; broad context uses PLATEAU-Terrain. The two must not be conflated. See
+[3D rendering](3d-rendering.md) and [visual coverage](plateau-visual-coverage.md).
+
 ## Design decisions
 
 - PostgreSQL/PostGIS is the municipal system of record; Python + versioned Parquet remains the

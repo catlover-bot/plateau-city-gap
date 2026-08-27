@@ -94,6 +94,23 @@ export interface PlateauMetadata extends JsonProperties {
   record_count?: number;
   available_attributes?: string[];
   limitations?: string[];
+  streaming?: {
+    status?: string;
+    building_tileset_url?: string;
+    building_count?: number;
+    building_lod?: number;
+    terrain_url?: string;
+    terrain_kind?: string;
+    terrain_attribution?: string;
+    local_dem_tileset_url?: string;
+    local_dem_metadata_url?: string;
+    local_dem_kind?: string;
+    quality_boundary?: string;
+    fast_start_tileset_url?: string;
+    fast_start_metadata_url?: string;
+    fallback_tileset_url?: string;
+    service_note?: string;
+  };
   building_layer?: {
     status?: string;
     records?: number;

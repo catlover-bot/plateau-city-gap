@@ -1,7 +1,7 @@
 import type { MunicipalWorkspaceData } from "../../types";
 
 export function OperationsWorkspace({ data, onShare, onEvidence }: { data: MunicipalWorkspaceData | null; onShare(): void; onEvidence(): void }) {
-  const capabilities = data?.registry.capabilities.filter((item) => item.city_code === "262021");
+  const capabilities = data?.registry.capabilities.filter((item) => item.city_code === "26202");
   const available = capabilities?.filter((item) => item.status === "available").length ?? 0;
   return (
     <section className="task-workspace operations-workspace">

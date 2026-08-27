@@ -773,6 +773,23 @@ def _build_plateau_status(
         "bytes": inspection_path.stat().st_size,
         "sha256": _sha256(inspection_path),
     }
+    status["streaming"] = {
+        "status": "official_camera_driven_with_local_fallback",
+        "building_tileset_url": "https://api.plateauview.mlit.go.jp/datacatalog/3dtiles/26202-bldg-lod1-texture-2025/tileset.json",
+        "building_count": 44_640,
+        "building_lod": 1,
+        "terrain_url": "https://tile.plateauview.mlit.go.jp/terrain",
+        "terrain_kind": "PLATEAU-Terrain quantized-mesh broad context",
+        "terrain_attribution": "PLATEAU | Mapterhorn | 国土地理院",
+        "local_dem_tileset_url": "data/plateau-terrain/tileset.json",
+        "local_dem_metadata_url": "data/plateau-terrain/metadata.json",
+        "local_dem_kind": "舞鶴市2025 PLATEAU dem:TINRelief Deep Dive surface",
+        "quality_boundary": "常団地前バス停周辺・500mメッシュ533513314近傍",
+        "fast_start_tileset_url": "data/plateau-fast/tileset.json?v=maizuru-fast-start-v2",
+        "fast_start_metadata_url": "data/plateau-fast/metadata.json",
+        "fallback_tileset_url": "data/plateau/tileset.json",
+        "service_note": "Official delivery APIs are experimental; the bundled 856-record subset remains the offline fallback.",
+    }
     attach_reference_layer()
     return status, inspection_path
 

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "purpose": "first visible PLATEAU LOD1 buildings before full Deep Dive/all-city stream",
+  "source": "frontend/public/data/plateau/data/data287.b3dm",
+  "source_format": "official Project PLATEAU b3dm; embedded glTF Draco decoded losslessly",
+  "geometry_simplified": false,
+  "height_estimated": false,
+  "batch_length": 15,
+  "compressed_bytes": 76828,
+  "decompressed_bytes": 82068,
+  "source_sha256": "28ed16f8165a9475c098c0bf275df721fa283bc95ba6e2dadab4305eaa7ec3a7",
+  "output_sha256": "94838ce29222d50bd661da6642f50eab7b38387aeb96f3004be4a4afb43a88e5"
+}

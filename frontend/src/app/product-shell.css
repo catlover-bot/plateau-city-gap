@@ -33,6 +33,8 @@ body { background: var(--cg-paper); }
 .map-mode-switch button.active { background: var(--cg-ink); color: #fff; }
 .map-mode-switch b { margin-right: 3px; font-size: 8px; letter-spacing: .08em; }
 .share-map-button { height: 40px; padding: 0 12px; background: rgb(250 250 246 / 94%); box-shadow: var(--cg-shadow-panel); font-size: 10px; font-weight: 700; }
+.presentation-trigger { height: 40px; padding: 0 11px; border: 1px solid var(--cg-line-strong); border-radius: var(--cg-radius); background: rgb(250 250 246 / 94%); box-shadow: var(--cg-shadow-panel); color: var(--cg-ink); cursor: pointer; font-size: 9px; font-weight: 800; letter-spacing: .04em; }
+.presentation-trigger.active { border-color: var(--cg-teal-dark); background: var(--cg-teal-dark); color: #fff; }
 .open-inspector { position: absolute; z-index: 22; top: 16px; right: 16px; padding: 10px 14px; border: 1px solid var(--cg-line-strong); background: var(--cg-panel); box-shadow: var(--cg-shadow-panel); cursor: pointer; }
 .utility-menu { position: fixed; z-index: 80; top: 52px; right: 10px; display: flex; width: 250px; flex-direction: column; padding: 8px; border: 1px solid var(--cg-line-strong); background: var(--cg-panel); box-shadow: var(--cg-shadow-panel); }
 .utility-menu header { display: flex; align-items: center; justify-content: space-between; padding: 7px 8px 10px; border-bottom: 1px solid var(--cg-line); }
@@ -93,6 +95,7 @@ body { background: var(--cg-paper); }
   .product-app .map-toolbar { top: 8px; left: 8px; width: auto; margin: 0; transform: none; }
   .map-mode-switch button { height: 30px; padding: 0 10px; }
   .share-map-button { display: none; }
+  .presentation-trigger { display: none; }
   .context-inspector { position: absolute !important; right: 0; bottom: 0; left: 0; width: 100%; height: min(46%, 370px); max-height: none; border-width: 1px 0 0 !important; }
   .context-inspector.closed { transform: translateY(calc(100% - 38px)); opacity: 1 !important; pointer-events: auto !important; }
   .context-legend { bottom: calc(min(46%, 370px) + 8px) !important; left: 8px !important; }

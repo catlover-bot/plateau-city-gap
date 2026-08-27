@@ -87,6 +87,23 @@
     "bytes": 51230,
     "sha256": "168a2b97e27a209f751671c9e5cbe05ec9608e4267fc83dd6e5fadb612326803"
   },
+  "streaming": {
+    "status": "official_camera_driven_with_local_fallback",
+    "building_tileset_url": "https://api.plateauview.mlit.go.jp/datacatalog/3dtiles/26202-bldg-lod1-texture-2025/tileset.json",
+    "building_count": 44640,
+    "building_lod": 1,
+    "terrain_url": "https://tile.plateauview.mlit.go.jp/terrain",
+    "terrain_kind": "PLATEAU-Terrain quantized-mesh broad context",
+    "terrain_attribution": "PLATEAU | Mapterhorn | 国土地理院",
+    "local_dem_tileset_url": "data/plateau-terrain/tileset.json",
+    "local_dem_metadata_url": "data/plateau-terrain/metadata.json",
+    "local_dem_kind": "舞鶴市2025 PLATEAU dem:TINRelief Deep Dive surface",
+    "quality_boundary": "常団地前バス停周辺・500mメッシュ533513314近傍",
+    "fast_start_tileset_url": "data/plateau-fast/tileset.json?v=maizuru-fast-start-v2",
+    "fast_start_metadata_url": "data/plateau-fast/metadata.json",
+    "fallback_tileset_url": "data/plateau/tileset.json",
+    "service_note": "Official delivery APIs are experimental; the bundled 856-record subset remains the offline fallback."
+  },
   "reference_layer": {
     "status": "included",
     "scope": "常団地前バス停周辺・全市23位の3D Deep Dive; Top 10ではない",

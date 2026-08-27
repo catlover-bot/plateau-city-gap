@@ -1,12 +1,23 @@
-import { CITY_VIEWPORTS, type SpatialAction, type SpatialState } from "./types";
+import { SCENE_PRESETS } from "../../map/core/scenePresets";
+import { CITY_VIEWPORTS, type SelectionType, type SpatialAction, type SpatialResolution, type SpatialState } from "./types";
 
 const TASK_PRESETS = {
-  discover: ["discovery", "analysis-city-gap", "overview"],
-  detail: ["plateau-detail", "plateau-buildings", "focus"],
-  try: ["scenario-compare", "scenario-footprint", "compare"],
-  validate: ["validation-compare", "validation-disagreement", "validation"],
-  operate: ["discovery", "analysis-city-gap", "focus"]
+  discover: ["discovery", "analysis-city-gap", "overview", "discover", "city", "gap_discovery"],
+  detail: ["plateau-detail", "plateau-buildings", "focus", "inspect", "mesh", "plateau_detail"],
+  try: ["scenario-compare", "scenario-footprint", "compare", "scenario", "site", "scenario_compare"],
+  validate: ["validation-compare", "validation-disagreement", "validation", "validate", "route", "validation_disagreement"],
+  operate: ["discovery", "analysis-city-gap", "focus", "inspect", "mesh", "gap_discovery"]
 } as const;
+
+const RESOLUTION_BY_SELECTION: Record<SelectionType, SpatialResolution> = {
+  mesh: "mesh",
+  building: "building",
+  road: "route",
+  facility: "site",
+  scenario_site: "site",
+  validation_sample: "route",
+  temporal_change: "building",
+};
 
 export function spatialReducer(state: SpatialState, action: SpatialAction): SpatialState {
   switch (action.type) {
@@ -20,8 +31,8 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
       mapState: "overview"
     };
     case "set-task": {
-      const [preset, primaryLayer, mapState] = TASK_PRESETS[action.task];
-      return { ...state, task: action.task, preset, primaryLayer, mapState, demoMode: false };
+      const [preset, primaryLayer, mapState, intent, resolution, scenePreset] = TASK_PRESETS[action.task];
+      return { ...state, task: action.task, preset, primaryLayer, mapState, intent, resolution, scenePreset, demoMode: false };
     }
     case "set-urban-state": return {
       ...state,
@@ -31,6 +42,7 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
     case "set-selection": return {
       ...state,
       selection: action.selection,
+      resolution: action.selection ? RESOLUTION_BY_SELECTION[action.selection.type] : "city",
       inspectorOpen: action.selection ? true : state.inspectorOpen,
       mapState: action.selection ? state.mapMode === "plateau3d" ? "detail3d" : state.task === "validate" ? "validation" : "focus" : "overview",
       validationSample: action.selection?.type === "validation_sample" ? action.selection.id : state.validationSample
@@ -44,6 +56,21 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
       viewport: { ...state.viewport, bearing: 0, pitch: action.mapMode === "plateau3d" ? 48 : 0 }
     };
     case "set-map-state": return { ...state, mapState: action.mapState };
+    case "set-intent": return { ...state, intent: action.intent };
+    case "set-resolution": return { ...state, resolution: action.resolution };
+    case "set-scene-preset": {
+      const scene = SCENE_PRESETS[action.scenePreset];
+      return {
+        ...state,
+        scenePreset: scene.id,
+        intent: scene.intent,
+        resolution: scene.resolution,
+        preset: scene.legacyLayerPreset,
+        primaryLayer: scene.primaryLayer,
+        mapMode: scene.recommendedMapMode,
+        mapState: scene.recommendedMapMode === "plateau3d" ? "detail3d" : scene.intent === "validate" ? "validation" : scene.intent === "scenario" ? "compare" : state.selection ? "focus" : "overview",
+      };
+    }
     case "set-preset": return { ...state, preset: action.preset, primaryLayer: action.primaryLayer };
     case "set-primary-layer": return { ...state, primaryLayer: action.primaryLayer };
     case "set-viewport": return { ...state, viewport: action.viewport };

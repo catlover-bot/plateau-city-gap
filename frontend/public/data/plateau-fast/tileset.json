@@ -1,0 +1,24 @@
+{
+  "asset": {
+    "version": "1.0",
+    "tilesetVersion": "maizuru-fast-start-v2"
+  },
+  "geometricError": 64,
+  "root": {
+    "boundingVolume": {
+      "region": [
+        2.3631326040002505,
+        0.6186600205878718,
+        2.3631607345367773,
+        0.6186661558983303,
+        72.56712492627456,
+        81.11224318287418
+      ]
+    },
+    "geometricError": 64,
+    "refine": "REPLACE",
+    "content": {
+      "uri": "data/data287.b3dm?v=maizuru-fast-start-v2"
+    }
+  }
+}

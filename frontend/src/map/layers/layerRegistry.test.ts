@@ -12,6 +12,14 @@ describe("renderer-neutral layer registry", () => {
       expect(layer.attribution).toBeTruthy();
       expect(layer.evidenceLink).toBeTruthy();
       expect(layer.minZoom).toBeLessThan(layer.maxZoom);
+      expect(layer.provider).toBeTruthy();
+      expect(layer.sourceYear).toBe(layer.year);
+      expect(layer.minCameraHeight).toBeLessThan(layer.maxCameraHeight);
+      expect(layer.defaultOpacity).toBe(layer.opacity);
+      expect(layer.capability.length).toBeGreaterThan(0);
+      expect(layer.loadingStrategy).toBeTruthy();
+      expect(layer.interaction).toBeTruthy();
+      expect(layer.provenance.evidenceLink).toBe(layer.evidenceLink);
     }
     expect(new Set(LAYER_PRESETS.map((preset) => preset.primaryLayer)).size).toBe(LAYER_PRESETS.length);
   });

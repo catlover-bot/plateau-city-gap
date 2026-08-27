@@ -1,8 +1,10 @@
 import { forwardRef, lazy, Suspense, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import type { AppData, BuildingInfo, MeshMetrics } from "../../types";
+import type { AppData, BuildingInfo, FuturesStressMode, GeoJsonFeatureCollection, InterventionSite, MeshMetrics, WorkspaceBuildingPoints, WorkspaceMapData, WorkspacePhase } from "../../types";
 import type { SpatialSelection, SpatialViewport } from "../../state/spatial/types";
+import type { ScenePresetId } from "../../state/spatial/types";
 import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import type { CesiumMapHandle } from "../../components/CesiumMap";
+import { SCENE_PRESETS } from "../core/scenePresets";
 
 const CesiumMap = lazy(async () => {
   const module = await import("../../components/CesiumMap");
@@ -14,6 +16,15 @@ interface Props {
   selection: SpatialSelection | null;
   viewport: SpatialViewport;
   activeLayerIds: string[];
+  scenePreset: ScenePresetId;
+  workspaceMap?: WorkspaceMapData | null;
+  workspaceBuildingPoints?: WorkspaceBuildingPoints | null;
+  workspacePhase?: WorkspacePhase;
+  futuresMap?: GeoJsonFeatureCollection | null;
+  stressMode?: FuturesStressMode;
+  decisionSites?: InterventionSite[];
+  afterScores?: Record<string, number> | null;
+  decisionFlow?: { meshLongitude: number; meshLatitude: number; siteLongitude: number; siteLatitude: number } | null;
   onSelectionChange(selection: SpatialSelection | null): void;
   onReady?(): void;
 }
@@ -64,6 +75,15 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   selection,
   viewport,
   activeLayerIds,
+  scenePreset,
+  workspaceMap = null,
+  workspaceBuildingPoints = null,
+  workspacePhase = "baseline",
+  futuresMap = null,
+  stressMode = "normal",
+  decisionSites = [],
+  afterScores = null,
+  decisionFlow = null,
   onSelectionChange,
   onReady
 }, ref) {
@@ -72,8 +92,12 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const mesh = useMemo(() => meshFromSelection(data, selection), [data, selection]);
-  const buildings = activeLayerIds.includes("plateau-buildings");
-  const roads = activeLayerIds.includes("plateau-roads");
+  const decisionTwinContext = scenePreset === "scenario_compare" || scenePreset === "hazard_stress";
+  const buildings = activeLayerIds.includes("plateau-buildings") || decisionTwinContext;
+  const roads = activeLayerIds.includes("plateau-roads") || decisionTwinContext;
+  const terrain = activeLayerIds.includes("plateau-terrain") || decisionTwinContext;
+  const deepDiveCode = data.plateauMetadata?.reference_layer?.deep_dive_mesh_code;
+  const scene = SCENE_PRESETS[scenePreset];
 
   useImperativeHandle(ref, () => ({
     setViewport() { if (!selection) cesiumRef.current?.resetView(); },
@@ -94,10 +118,11 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
 
   useEffect(() => {
     if (!ready) return;
-    if (mesh) cesiumRef.current?.flyToMesh(mesh);
-    else if (selection?.type === "building") cesiumRef.current?.flyToPlateau();
+    if (mesh?.mesh_code === deepDiveCode) cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
+    else if (mesh) cesiumRef.current?.flyToMesh(mesh);
+    else if (selection?.type === "building") cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
     else cesiumRef.current?.resetView();
-  }, [mesh, ready, selection]);
+  }, [deepDiveCode, mesh, ready, scene.camera, selection]);
 
   return (
     <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready}>
@@ -107,20 +132,30 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           data={data}
           metricMode="gap"
           selectedMeshCode={mesh?.mesh_code ?? null}
+          selectedBuildingId={selection?.type === "building" ? selection.id : null}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
-          plateauVisibility={{ buildings, roads }}
+          plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
           placementMode={false}
           virtualPoint={null}
-          decisionSites={[]}
-          afterScores={null}
-          decisionFlow={null}
-          workspaceMap={null}
-          workspaceBuildingPoints={null}
-          futuresMap={null}
-          futuresStressMode="normal"
-          workspacePhase="baseline"
-          workspaceVisibility={EMPTY_WORKSPACE_LAYERS}
+          decisionSites={decisionSites}
+          afterScores={afterScores}
+          decisionFlow={decisionFlow}
+          workspaceMap={workspaceMap}
+          workspaceBuildingPoints={workspaceBuildingPoints}
+          futuresMap={futuresMap}
+          futuresStressMode={stressMode}
+          workspacePhase={workspacePhase}
+          workspaceVisibility={{
+            ...EMPTY_WORKSPACE_LAYERS,
+            affectedBuildings: scene.intent === "scenario",
+            routes: scene.intent === "scenario" || scene.intent === "resilience",
+            plateauBuildings: buildings,
+            roadNetwork: roads,
+            landuse: activeLayerIds.includes("plateau-landuse"),
+            planning: activeLayerIds.includes("plateau-planning"),
+            hazard: scene.intent === "resilience" || activeLayerIds.includes("hazard-composite"),
+          }}
           onMeshSelect={(selected) => onSelectionChange({ type: "mesh", id: selected.mesh_code, city: data.city.id, urbanState: "2025", label: selected.area_label ? String(selected.area_label) : `500mメッシュ ${selected.mesh_code}`, longitude: Number(selected.centroid_lon), latitude: Number(selected.centroid_lat), properties: selected })}
           onVirtualPointSelect={() => undefined}
           onBuildingSelect={(building) => building ? onSelectionChange(buildingSelection(data, building, selection)) : undefined}
@@ -129,7 +164,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           onWarning={setWarning}
         />
       </Suspense>
-      <div className="plateau-3d-context"><strong>PLATEAU 3D</strong><span>選択地点だけを詳しく確認</span><small>meshは薄い輪郭 · 建物と道路を個別表示</small></div>
+      {!ready && !error && <div className="map-engine-loading" role="status"><span />PLATEAU地物と背景図を読み込み中</div>}
+      <div className="plateau-3d-context"><strong>PLATEAU 3D DECISION TWIN · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>
       {warning && <div className="map-inline-warning" role="status">{warning}</div>}
       {error && <div className="map-engine-fallback" role="alert"><strong>3Dを表示できません</strong><p>{error}</p><span>2D地図と候補一覧は引き続き利用できます。</span></div>}
     </div>

@@ -133,8 +133,8 @@
       "file": "plateau_metadata.json",
       "status": "available",
       "records": 1,
-      "bytes": 4161,
-      "sha256": "a110ebc9f82819f30fffe68a598ac19de3d45da1eac06f4c51cb37cf5dc71a84"
+      "bytes": 5262,
+      "sha256": "99da79652e06a8285c9882c6252a88f1ab61403e5a4cda3f13a3c078a54741e2"
     },
     {
       "file": "final_demo.json",

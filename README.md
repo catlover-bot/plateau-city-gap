@@ -5,11 +5,13 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Spatial Workspace](docs/spatial-workspace.md) · [PLATEAU可視化範囲](docs/plateau-visual-coverage.md) · [3D rendering](docs/3d-rendering.md) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
 
-このリポジトリは、審査用 **Competition Demo**、業務用 **Municipal Workspace**、モデル検証用 **Validation Workspace** を明確に分離しています。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンス・検証Workspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
+このリポジトリは、審査用 **Competition Demo**、業務用 **Municipal Workspace**、モデル検証用 **Validation Workspace** の責務を保ちながら、同じ選択地点を引き継ぐ **CITY GAP Spatial OS / PLATEAU 3D Decision Twin** として統合しています。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンス・検証Workspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
+
+![CITY GAP Spatial OS / PLATEAU 3D Decision Twin](docs/assets/spatial-v1/03-plateau-3d-overview.png)
 
 ![CITY GAP Municipal Workspace](docs/assets/final-v2/municipal-workspace.png)
 
@@ -30,6 +32,9 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 - 実測値、最寄り施設、percentileを分解した決定論的な「なぜ？」説明
 - 9つの分析条件でTop 10 / Top 20への残り方を示すRobustness View
 - CesiumJS上で公式PLATEAU 2025の3D建物と実属性を確認
+- 8 ScenePresetと都市→500m→建物→道路→施策のResolution RailをURL共有可能な状態として保持
+- 公式PLATEAU全市44,640建物をcamera streamし、15棟fast-start / 856棟検証済みfallbackを段階配信
+- 公式CityGML DEM 65,232三角形を垂直座標変換し、常団地前Deep Diveで無補間・無誇張表示
 - 11,460のPLATEAU道路LOD1面候補から仮想交通支援拠点1〜3地点を比較
 - 全体改善・取り残し重視・頑健候補の3目的とBefore / Afterを比較
 - 距離・Score・配置案を公式データ、CRS、式、丸め前値まで辿るEvidence Chain

@@ -36,6 +36,8 @@ export function SpatialProvider({ children }: { children: ReactNode }) {
   return <SpatialContext.Provider value={value}>{children}</SpatialContext.Provider>;
 }
 
+// Provider and hook intentionally share the same private context contract.
+// eslint-disable-next-line react-refresh/only-export-components
 export function useSpatialContext(): SpatialContextValue {
   const context = useContext(SpatialContext);
   if (!context) throw new Error("useSpatialContext must be used inside SpatialProvider");

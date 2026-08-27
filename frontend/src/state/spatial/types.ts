@@ -6,6 +6,20 @@ export type MapMode = "map2d" | "plateau3d";
 
 export type MapState = "overview" | "focus" | "detail3d" | "compare" | "placement" | "validation";
 
+export type SpatialIntent = "discover" | "inspect" | "scenario" | "resilience" | "validate";
+
+export type SpatialResolution = "city" | "mesh" | "building" | "route" | "site";
+
+export type ScenePresetId =
+  | "city_overview"
+  | "gap_discovery"
+  | "plateau_detail"
+  | "network_access"
+  | "scenario_compare"
+  | "hazard_stress"
+  | "temporal_change"
+  | "validation_disagreement";
+
 export type UrbanStateId = "2020" | "2023" | "2025" | "2040";
 
 export type SelectionType =
@@ -54,6 +68,9 @@ export interface SpatialState {
   validationSample: string | null;
   mapMode: MapMode;
   mapState: MapState;
+  intent: SpatialIntent;
+  resolution: SpatialResolution;
+  scenePreset: ScenePresetId;
   preset: LayerPresetId;
   primaryLayer: string;
   viewport: SpatialViewport;
@@ -71,6 +88,9 @@ export type SpatialAction =
   | { type: "set-validation-sample"; validationSample: string | null }
   | { type: "set-map-mode"; mapMode: MapMode }
   | { type: "set-map-state"; mapState: MapState }
+  | { type: "set-intent"; intent: SpatialIntent }
+  | { type: "set-resolution"; resolution: SpatialResolution }
+  | { type: "set-scene-preset"; scenePreset: ScenePresetId }
   | { type: "set-preset"; preset: LayerPresetId; primaryLayer: string }
   | { type: "set-primary-layer"; primaryLayer: string }
   | { type: "set-viewport"; viewport: SpatialViewport }
@@ -91,6 +111,9 @@ export const DEFAULT_SPATIAL_STATE: SpatialState = {
   validationSample: null,
   mapMode: "map2d",
   mapState: "overview",
+  intent: "discover",
+  resolution: "city",
+  scenePreset: "gap_discovery",
   preset: "discovery",
   primaryLayer: "analysis-city-gap",
   viewport: CITY_VIEWPORTS.maizuru,

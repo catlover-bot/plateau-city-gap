@@ -4,7 +4,7 @@
 .maplibregl-ctrl-top-right { top: 64px; right: 6px; }
 .maplibregl-ctrl-group { border-radius: var(--cg-radius); box-shadow: var(--cg-shadow-panel); }
 .maplibregl-ctrl-attrib { font-size: 9px; }
-.semantic-zoom-indicator { position: absolute; z-index: 5; top: 64px; left: 14px; display: flex; flex-direction: column; padding: 7px 9px; border-left: 2px solid var(--cg-teal); background: rgb(250 250 246 / 88%); color: var(--cg-ink); font-size: 10px; font-weight: 700; pointer-events: none; }
+.semantic-zoom-indicator { position: absolute; z-index: 5; top: 124px; left: 14px; display: flex; flex-direction: column; padding: 7px 9px; border-left: 2px solid var(--cg-teal); background: rgb(250 250 246 / 88%); color: var(--cg-ink); font-size: 10px; font-weight: 700; pointer-events: none; }
 .semantic-zoom-indicator span { color: var(--cg-ink-soft); font-size: 8px; letter-spacing: .1em; }
 .north-up-indicator { position: absolute; z-index: 5; top: 66px; right: 52px; padding: 5px 7px; border: 1px solid var(--cg-line); background: rgb(250 250 246 / 88%); font: 10px var(--cg-mono); pointer-events: none; }
 .map-preset-bar { position: absolute; z-index: 21; top: 14px; right: 14px; display: flex; max-width: calc(100% - 340px); align-items: center; padding: 3px; border: 1px solid var(--cg-line-strong); border-radius: var(--cg-radius); background: rgb(250 250 246 / 95%); box-shadow: var(--cg-shadow-panel); }
@@ -50,6 +50,11 @@
 .compare-map > header span { color: var(--cg-teal); font-size: 8px; font-weight: 900; letter-spacing: .12em; }
 .compare-map > header strong { font-size: 10px; }
 .plateau-3d-shell { background: #dfe4e0; }
+.cesium-map::after { position: absolute; z-index: 7; right: 14px; bottom: 24px; padding: 6px 8px; border: 1px solid var(--cg-line); background: rgb(248 248 243 / 90%); color: var(--cg-ink-soft); content: "背景図 読込中 · 分析 読込中 · PLATEAU 3D 読込中"; font: 8px var(--cg-mono); pointer-events: none; }
+.cesium-map[data-basemap="ready"][data-analysis="ready"]::after { content: "背景図 ✓ · 分析 ✓ · PLATEAU 3D 読込中"; }
+.cesium-map[data-basemap="ready"][data-analysis="ready"][data-building-tiles-loaded="fast"]::after { color: var(--cg-good); content: "背景図 ✓ · PLATEAU建物 初期scene ✓ · 詳細 読込中"; }
+.cesium-map[data-basemap="ready"][data-analysis="ready"][data-building-tiles-loaded="fallback"]::after { color: var(--cg-good); content: "背景図 ✓ · 分析 ✓ · PLATEAU建物 ✓ · 全市stream 読込中"; }
+.cesium-map[data-basemap="ready"][data-analysis="ready"][data-building-tiles-loaded="official"]::after { color: var(--cg-good); content: "背景図 ✓ · 分析 ✓ · PLATEAU全市建物 ✓"; }
 .plateau-3d-context { position: absolute; z-index: 8; bottom: 24px; left: 14px; display: flex; flex-direction: column; padding: 10px 12px; border-left: 3px solid var(--cg-teal); background: rgb(248 248 243 / 93%); box-shadow: var(--cg-shadow-panel); }
 .plateau-3d-context strong { font-size: 10px; letter-spacing: .1em; }
 .plateau-3d-context span { margin-top: 3px; font-size: 11px; font-weight: 700; }
@@ -58,6 +63,28 @@
 .map-engine-loading span { width: 16px; height: 16px; border: 2px solid var(--cg-line); border-top-color: var(--cg-teal); border-radius: 50%; animation: cg-spin 1s linear infinite; }
 @keyframes cg-spin { to { transform: rotate(360deg); } }
 .map-engine-fallback, .map-inline-warning { position: absolute; z-index: 12; right: 18px; bottom: 18px; max-width: 360px; padding: 12px; border-left: 4px solid var(--cg-amber); background: var(--cg-panel); box-shadow: var(--cg-shadow-panel); font-size: 10px; }
+.resolution-rail { position: absolute; z-index: 20; top: 65px; left: 14px; display: flex; align-items: stretch; border: 1px solid var(--cg-line-strong); background: rgb(250 250 246 / 95%); box-shadow: var(--cg-shadow-panel); }
+.resolution-rail-label { display: flex; align-items: center; padding: 0 8px; border-right: 1px solid var(--cg-line); color: var(--cg-ink-soft); font-size: 7px; font-weight: 900; letter-spacing: .12em; writing-mode: vertical-rl; }
+.resolution-rail ol { display: flex; margin: 0; padding: 0; list-style: none; }
+.resolution-rail li { position: relative; }
+.resolution-rail li + li::before { position: absolute; z-index: 1; top: 50%; left: -4px; width: 7px; height: 7px; border-width: 1px 1px 0 0; border-style: solid; border-color: var(--cg-line-strong); background: var(--cg-panel); content: ""; transform: translateY(-50%) rotate(45deg); }
+.resolution-rail button { display: flex; min-width: 71px; height: 48px; flex-direction: column; justify-content: center; padding: 0 10px 0 13px; border: 0; background: transparent; color: var(--cg-ink-soft); cursor: pointer; text-align: left; }
+.resolution-rail button strong { font-size: 10px; }
+.resolution-rail button small { margin-top: 2px; font-size: 7px; }
+.resolution-rail li.reached button { color: var(--cg-ink); }
+.resolution-rail button.active { background: var(--cg-teal-pale); color: var(--cg-teal-dark); box-shadow: inset 0 -3px var(--cg-teal); }
+.presentation-guide { position: absolute; z-index: 29; right: 14px; bottom: 24px; left: 14px; display: grid; grid-template-columns: minmax(210px, .7fr) 1fr; border: 1px solid var(--cg-line-strong); background: rgb(248 248 244 / 97%); box-shadow: 0 12px 32px rgb(24 45 43 / 20%); }
+.presentation-guide header { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 10px 38px 10px 14px; border-right: 1px solid var(--cg-line); }
+.presentation-guide header span { color: var(--cg-teal); font-size: 7px; font-weight: 900; letter-spacing: .14em; }
+.presentation-guide header strong { margin-top: 4px; font-size: 10px; }
+.presentation-guide header button { position: absolute; top: 6px; right: 7px; border: 0; background: transparent; cursor: pointer; }
+.presentation-guide ol { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; }
+.presentation-guide li { min-width: 0; border-right: 1px solid var(--cg-line); }
+.presentation-guide li:last-child { border-right: 0; }
+.presentation-guide li button { display: flex; width: 100%; height: 58px; flex-direction: column; justify-content: center; padding: 0 9px; border: 0; background: transparent; cursor: pointer; text-align: left; }
+.presentation-guide li button.active { background: var(--cg-teal-dark); color: #fff; }
+.presentation-guide li span { font: 8px var(--cg-mono); opacity: .72; }
+.presentation-guide li strong { margin-top: 3px; overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 
 @media (max-width: 1050px) {
   .map-preset-bar { max-width: calc(100% - 250px); }
@@ -69,4 +96,16 @@
   .synchronized-maps { grid-template-columns: 1fr; }
   .compare-map:first-child { display: none; }
   .compare-map > header { left: 120px; transform: none; }
+  .resolution-rail button { min-width: 56px; padding-inline: 9px; }
+  .resolution-rail button small { display: none; }
+  .presentation-guide { grid-template-columns: 1fr; }
+  .presentation-guide header { display: none; }
+}
+@media (max-width: 540px) {
+  .resolution-rail { top: 88px; right: 8px; left: 8px; }
+  .resolution-rail-label { display: none; }
+  .resolution-rail ol { width: 100%; }
+  .resolution-rail li { flex: 1; }
+  .resolution-rail button { width: 100%; min-width: 0; height: 34px; align-items: center; padding: 0 3px; text-align: center; }
+  .semantic-zoom-indicator { top: 130px; left: 8px; }
 }

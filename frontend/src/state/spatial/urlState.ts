@@ -5,16 +5,23 @@ import {
   type LayerPresetId,
   type MapMode,
   type ProductTask,
+  type ScenePresetId,
   type SelectionType,
+  type SpatialIntent,
+  type SpatialResolution,
   type SpatialSelection,
   type SpatialState,
   type UrbanStateId
 } from "./types";
+import { scenePresetById } from "../../map/core/scenePresets";
 
 const TASKS = new Set<ProductTask>(["discover", "detail", "try", "validate", "operate"]);
 const CITIES = new Set<CityId>(["maizuru", "fujisawa"]);
 const STATES = new Set<UrbanStateId>(["2020", "2023", "2025", "2040"]);
 const MAP_MODES = new Set<MapMode>(["map2d", "plateau3d"]);
+const INTENTS = new Set<SpatialIntent>(["discover", "inspect", "scenario", "resilience", "validate"]);
+const RESOLUTIONS = new Set<SpatialResolution>(["city", "mesh", "building", "route", "site"]);
+const SCENES = new Set<ScenePresetId>(["city_overview", "gap_discovery", "plateau_detail", "network_access", "scenario_compare", "hazard_stress", "temporal_change", "validation_disagreement"]);
 const PRESETS = new Set<LayerPresetId>([
   "discovery", "plateau-detail", "transport", "medical", "hazard", "scenario-compare", "validation-compare"
 ]);
@@ -62,11 +69,17 @@ export function parseSpatialUrl(search: string): SpatialState {
   const urbanState = stateParam && STATES.has(stateParam) ? stateParam : DEFAULT_SPATIAL_STATE.urbanState;
   const taskParam = params.get("task") as ProductTask | null;
   const legacy = params.get("workspace");
-  const task = taskParam && TASKS.has(taskParam) ? taskParam : legacy && LEGACY_TASKS[legacy] ? LEGACY_TASKS[legacy] : DEFAULT_SPATIAL_STATE.task;
+  const explicitTask = taskParam && TASKS.has(taskParam) ? taskParam : legacy && LEGACY_TASKS[legacy] ? LEGACY_TASKS[legacy] : null;
+  const intentParam = params.get("intent") as SpatialIntent | null;
+  const resolutionParam = params.get("resolution") as SpatialResolution | null;
+  const sceneParam = params.get("scene") as ScenePresetId | null;
+  const scenePreset = sceneParam && SCENES.has(sceneParam) ? sceneParam : DEFAULT_SPATIAL_STATE.scenePreset;
+  const scene = scenePresetById(scenePreset);
+  const task: ProductTask = explicitTask ?? (scene.intent === "discover" ? "discover" : scene.intent === "inspect" ? "detail" : scene.intent === "scenario" || scene.intent === "resilience" ? "try" : "validate");
   const mapModeParam = params.get("mapMode") as MapMode | null;
-  const mapMode = mapModeParam && MAP_MODES.has(mapModeParam) ? mapModeParam : DEFAULT_SPATIAL_STATE.mapMode;
+  const mapMode = mapModeParam && MAP_MODES.has(mapModeParam) ? mapModeParam : scene.recommendedMapMode;
   const presetParam = params.get("preset") as LayerPresetId | null;
-  const preset = presetParam && PRESETS.has(presetParam) ? presetParam : DEFAULT_SPATIAL_STATE.preset;
+  const preset = presetParam && PRESETS.has(presetParam) ? presetParam : scene.legacyLayerPreset;
   const viewport = CITY_VIEWPORTS[city];
   const selection = selectionFromParams(params, city, urbanState);
   return {
@@ -78,9 +91,12 @@ export function parseSpatialUrl(search: string): SpatialState {
     scenario: params.get("scenario"),
     validationSample: params.get("validationSample"),
     mapMode,
+    intent: intentParam && INTENTS.has(intentParam) ? intentParam : scene.intent,
+    resolution: resolutionParam && RESOLUTIONS.has(resolutionParam) ? resolutionParam : selection ? selection.type === "building" ? "building" : selection.type === "road" || selection.type === "validation_sample" ? "route" : selection.type === "scenario_site" || selection.type === "facility" ? "site" : "mesh" : scene.resolution,
+    scenePreset,
     mapState: mapMode === "plateau3d" ? "detail3d" : task === "validate" ? "validation" : selection ? "focus" : "overview",
     preset,
-    primaryLayer: params.get("layer") ?? DEFAULT_SPATIAL_STATE.primaryLayer,
+    primaryLayer: params.get("layer") ?? scene.primaryLayer,
     viewport: {
       longitude: finite(params.get("lng"), viewport.longitude),
       latitude: finite(params.get("lat"), viewport.latitude),
@@ -100,6 +116,9 @@ export function spatialStateToSearch(state: SpatialState): string {
   params.set("workspace", state.task === "discover" ? "demo" : state.task === "validate" ? "validation" : state.task === "try" ? "futures" : state.task === "operate" ? "workspace" : "demo");
   params.set("urbanState", state.urbanState);
   params.set("mapMode", state.mapMode);
+  params.set("intent", state.intent);
+  params.set("resolution", state.resolution);
+  params.set("scene", state.scenePreset);
   params.set("preset", state.preset);
   params.set("layer", state.primaryLayer);
   params.set("lng", state.viewport.longitude.toFixed(5));

@@ -1,18 +1,15 @@
 import {
   Cartesian3,
   Cartesian2,
-  BoundingSphere,
   Cartographic,
-  Cesium3DTileStyle,
   Cesium3DTileset,
+  ClassificationType,
   Color,
   ColorMaterialProperty,
   ConstantProperty,
-  EllipsoidTerrainProvider,
   Entity,
   GeoJsonDataSource,
   HeightReference,
-  HeadingPitchRange,
   LabelGraphics,
   Math as CesiumMath,
   PointGraphics,
@@ -39,10 +36,20 @@ import type {
 } from "../types";
 import { finiteNumber, isTop10Rank } from "../lib/format";
 import type { VirtualPoint } from "../lib/scenario";
+import { CameraController } from "../map/3d/CameraController";
+import {
+  addTileset,
+  applyBuildingStyle,
+  createBroadTerrain,
+  loadBundledBuildingTileset,
+  loadFastStartBuildingTileset,
+  loadOfficialBuildingTileset,
+  loadLocalDemTileset,
+} from "../map/3d/cesiumSources";
 
 export interface CesiumMapHandle {
   flyToMesh: (mesh: MeshMetrics) => void;
-  flyToPlateau: () => void;
+  flyToPlateau: (intent?: "building" | "route" | "hazard" | "scenario") => void;
   resetView: () => void;
 }
 
@@ -50,8 +57,9 @@ interface CesiumMapProps {
   data: AppData;
   metricMode: MetricMode;
   selectedMeshCode: string | null;
+  selectedBuildingId?: string | null;
   visibility: LayerVisibility;
-  plateauVisibility?: { buildings: boolean; roads: boolean };
+  plateauVisibility?: { buildings: boolean; roads: boolean; terrain?: boolean };
   meshPresentation?: "analysis" | "outline";
   placementMode: boolean;
   virtualPoint: VirtualPoint | null;
@@ -81,6 +89,9 @@ interface DataSourceRefs {
   plateauGeoJson?: GeoJsonDataSource;
   plateauRoads?: GeoJsonDataSource;
   plateauTileset?: Cesium3DTileset;
+  plateauFastTileset?: Cesium3DTileset;
+  plateauFallbackTileset?: Cesium3DTileset;
+  plateauTerrainTileset?: Cesium3DTileset;
   workspace?: GeoJsonDataSource;
   futures?: GeoJsonDataSource;
   workspacePoints?: WorkspacePointRef[];
@@ -139,13 +150,6 @@ function buildingFromFeature(feature: TileFeatureLike): BuildingInfo {
     totalFloorArea: boundedNumber(read("uro:totalFloorArea") ?? details["uro:totalFloorArea"], 0, 10_000_000),
     lod: rawLod === null || rawLod === undefined ? null : `LOD${String(rawLod)}`
   };
-}
-
-function tilesetUrl(data: AppData): string | null {
-  const path = data.plateauMetadata?.reference_layer?.tileset_url;
-  if (typeof path !== "string" || !path.trim()) return null;
-  const relative = path.replace(/^\/+/, "");
-  return `${import.meta.env.BASE_URL}${relative}`;
 }
 
 function modeValue(properties: Record<string, unknown>, mode: MetricMode): number | null {
@@ -284,9 +288,11 @@ function styleRoads(source: GeoJsonDataSource | undefined) {
   if (!source) return;
   for (const entity of source.entities.values) {
     if (!entity.polygon) continue;
-    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString("#f4b860").withAlpha(0.34));
+    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString("#d8a64e").withAlpha(0.56));
+    entity.polygon.heightReference = new ConstantProperty(HeightReference.CLAMP_TO_GROUND);
+    entity.polygon.classificationType = new ConstantProperty(ClassificationType.BOTH);
     entity.polygon.outline = new ConstantProperty(true);
-    entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString("#ffd28a").withAlpha(0.8));
+    entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString("#fff0c4").withAlpha(0.9));
   }
 }
 
@@ -487,23 +493,12 @@ function setFuturesVisibility(
   return visible;
 }
 
-function setInitialView(viewer: Viewer, data: AppData) {
-  const view = data.city.map_view;
-  viewer.camera.setView({
-    destination: Cartesian3.fromDegrees(view.longitude, view.latitude, view.height),
-    orientation: {
-      heading: CesiumMath.toRadians(0),
-      pitch: CesiumMath.toRadians(-90),
-      roll: 0
-    }
-  });
-}
-
 export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function CesiumMap(
   {
     data,
     metricMode,
     selectedMeshCode,
+    selectedBuildingId = null,
     visibility,
     plateauVisibility,
     meshPresentation = "analysis",
@@ -529,8 +524,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
+  const cameraControllerRef = useRef<CameraController | null>(null);
   const sourcesRef = useRef<DataSourceRefs>({});
   const plateauLoadRef = useRef<Promise<void> | null>(null);
+  const plateauTerrainLoadRef = useRef<Promise<void> | null>(null);
   const workspacePointLoadRef = useRef<Promise<WorkspacePointRef[]> | null>(null);
   const workspaceSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
   const futuresSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
@@ -545,6 +542,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const onWarningRef = useRef(onWarning);
   const metricModeRef = useRef(metricMode);
   const selectedMeshCodeRef = useRef(selectedMeshCode);
+  const selectedBuildingIdRef = useRef(selectedBuildingId);
   const afterScoresRef = useRef(afterScores);
   const decisionSiteIdsRef = useRef<string[]>([]);
   const visibilityRef = useRef(visibility);
@@ -562,6 +560,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   onWarningRef.current = onWarning;
   metricModeRef.current = metricMode;
   selectedMeshCodeRef.current = selectedMeshCode;
+  selectedBuildingIdRef.current = selectedBuildingId;
   afterScoresRef.current = afterScores;
   visibilityRef.current = visibility;
   plateauVisibilityRef.current = plateauVisibility;
@@ -573,33 +572,92 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   futuresStressModeRef.current = futuresStressMode;
 
   const loadPlateauTileset = useCallback(() => {
-    if (sourcesRef.current.plateauTileset || plateauLoadRef.current) {
+    if (sourcesRef.current.plateauTileset || sourcesRef.current.plateauFallbackTileset || sourcesRef.current.plateauFastTileset || plateauLoadRef.current) {
       return plateauLoadRef.current ?? Promise.resolve();
     }
     const viewer = viewerRef.current;
-    const officialTilesetUrl = tilesetUrl(data);
-    if (!viewer || viewer.isDestroyed() || !officialTilesetUrl) return Promise.resolve();
+    if (!viewer || viewer.isDestroyed()) return Promise.resolve();
     plateauLoadRef.current = (async () => {
+      const visible = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
+        workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
+      );
       try {
-        const tileset = await Cesium3DTileset.fromUrl(officialTilesetUrl, {
-          maximumScreenSpaceError: 12,
-          skipLevelOfDetail: false
+        let officialStarted = false;
+        let fallbackStarted = false;
+
+        const startOfficialStream = async () => {
+          if (officialStarted || viewer.isDestroyed()) return;
+          officialStarted = true;
+          containerRef.current?.setAttribute("data-building-source", "official-stream-loading");
+          try {
+            const tileset = await loadOfficialBuildingTileset(data);
+            if (!tileset || viewer.isDestroyed()) return;
+            applyBuildingStyle(tileset, selectedBuildingIdRef.current);
+            addTileset(viewer, tileset);
+            tileset.show = visible;
+            sourcesRef.current.plateauTileset = tileset;
+            tileset.initialTilesLoaded.addEventListener(() => {
+              if (viewer.isDestroyed()) return;
+              if (sourcesRef.current.plateauFastTileset) sourcesRef.current.plateauFastTileset.show = false;
+              if (sourcesRef.current.plateauFallbackTileset) sourcesRef.current.plateauFallbackTileset.show = false;
+              containerRef.current?.setAttribute("data-building-source", "official-stream");
+              containerRef.current?.setAttribute("data-building-tiles-loaded", "official");
+              viewer.scene.requestRender();
+            });
+            viewer.scene.requestRender();
+          } catch (error) {
+            console.warn("Official PLATEAU building stream failed; retaining the verified local subset", error);
+            containerRef.current?.setAttribute("data-building-source", "bundled-fallback");
+            containerRef.current?.setAttribute(
+              "data-building-tiles-loaded",
+              sourcesRef.current.plateauFallbackTileset ? "fallback" : sourcesRef.current.plateauFastTileset ? "fast" : "false",
+            );
+            onWarningRef.current(
+              "全市PLATEAU建物streamを読み込めませんでした。検証済みDeep Dive建物で操作を継続します。",
+            );
+          }
+        };
+
+        const startBundledFallback = async () => {
+          if (fallbackStarted || viewer.isDestroyed()) return;
+          fallbackStarted = true;
+          const fallback = await loadBundledBuildingTileset(data);
+          if (!fallback || viewer.isDestroyed()) { await startOfficialStream(); return; }
+          applyBuildingStyle(fallback, selectedBuildingIdRef.current);
+          addTileset(viewer, fallback);
+          fallback.show = visible;
+          sourcesRef.current.plateauFallbackTileset = fallback;
+          containerRef.current?.setAttribute("data-building-source", "bundled-fallback-loading");
+          fallback.initialTilesLoaded.addEventListener(() => {
+            if (viewer.isDestroyed()) return;
+            if (sourcesRef.current.plateauFastTileset) sourcesRef.current.plateauFastTileset.show = false;
+            containerRef.current?.setAttribute("data-building-source", "bundled-fallback");
+            containerRef.current?.setAttribute("data-building-tiles-loaded", "fallback");
+            viewer.scene.requestRender();
+            window.setTimeout(() => void startOfficialStream(), 350);
+          });
+          window.setTimeout(() => void startOfficialStream(), 4_000);
+        };
+
+        const fast = await loadFastStartBuildingTileset(data);
+        if (!fast || viewer.isDestroyed()) { await startBundledFallback(); return; }
+        applyBuildingStyle(fast, selectedBuildingIdRef.current);
+        addTileset(viewer, fast);
+        fast.show = visible;
+        sourcesRef.current.plateauFastTileset = fast;
+        containerRef.current?.setAttribute("data-building-source", "fast-start-loading");
+        fast.initialTilesLoaded.addEventListener(() => {
+          if (viewer.isDestroyed()) return;
+          containerRef.current?.setAttribute("data-building-source", "fast-start");
+          containerRef.current?.setAttribute("data-building-tiles-loaded", "fast");
+          viewer.scene.requestRender();
+          window.setTimeout(() => void startBundledFallback(), 250);
         });
-        if (viewer.isDestroyed()) return;
-        tileset.style = new Cesium3DTileStyle({
-          color: "color('#eef4f2', 0.98)"
-        });
-        viewer.scene.primitives.add(tileset);
-        tileset.show = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
-          workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
-        );
-        sourcesRef.current.plateauTileset = tileset;
-        viewer.scene.requestRender();
+        window.setTimeout(() => void startBundledFallback(), 1_200);
       } catch (error) {
-        console.warn("Optional PLATEAU 3D Tiles loading failed; continuing with core map layers", error);
-        onWarningRef.current(
-          "PLATEAU 3D建物だけを読み込めませんでした。500mメッシュと施設レイヤーは引き続き操作できます。"
-        );
+        console.warn("Bundled PLATEAU building subset failed to initialize", error);
+        containerRef.current?.setAttribute("data-building-source", "unavailable");
+        onWarningRef.current("PLATEAU建物を読み込めませんでした。2D分析は継続して利用できます。");
       } finally {
         plateauLoadRef.current = null;
       }
@@ -607,41 +665,40 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     return plateauLoadRef.current;
   }, [data, workspaceMap]);
 
+  const loadPlateauTerrain = useCallback(() => {
+    if (sourcesRef.current.plateauTerrainTileset || plateauTerrainLoadRef.current) {
+      return plateauTerrainLoadRef.current ?? Promise.resolve();
+    }
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return Promise.resolve();
+    plateauTerrainLoadRef.current = (async () => {
+      try {
+        const tileset = await loadLocalDemTileset(data);
+        if (!tileset || viewer.isDestroyed()) return;
+        addTileset(viewer, tileset);
+        tileset.show = plateauVisibilityRef.current?.terrain ?? false;
+        sourcesRef.current.plateauTerrainTileset = tileset;
+        containerRef.current?.setAttribute("data-local-dem", "ready");
+      } catch (error) {
+        console.warn("Local PLATEAU DEM terrain loading failed", error);
+        containerRef.current?.setAttribute("data-local-dem", "fallback");
+        onWarningRef.current("局所PLATEAU DEM面を読み込めませんでした。広域PLATEAU-Terrainで表示しています。");
+      } finally {
+        plateauTerrainLoadRef.current = null;
+      }
+    })();
+    return plateauTerrainLoadRef.current;
+  }, [data]);
+
   useImperativeHandle(ref, () => ({
     flyToMesh(mesh) {
-      const longitude = finiteNumber(mesh.centroid_lon);
-      const latitude = finiteNumber(mesh.centroid_lat);
-      if (!viewerRef.current || longitude === null || latitude === null) return;
-      viewerRef.current.camera.flyToBoundingSphere(
-        new BoundingSphere(Cartesian3.fromDegrees(longitude, latitude, 0), 380),
-        { offset: new HeadingPitchRange(CesiumMath.toRadians(8), CesiumMath.toRadians(-48), 2_700), duration: 1.15 }
-      );
+      cameraControllerRef.current?.mesh(mesh);
     },
-    flyToPlateau() {
-      const viewer = viewerRef.current;
-      const tileset = sourcesRef.current.plateauTileset;
-      const viewpoint = data.plateauMetadata?.reference_layer?.viewpoint;
-      const longitude = finiteNumber(viewpoint?.longitude);
-      const latitude = finiteNumber(viewpoint?.latitude);
-      const range = finiteNumber(viewpoint?.height) ?? 520;
-      if (viewer && longitude !== null && latitude !== null) {
-        viewer.camera.flyToBoundingSphere(
-          new BoundingSphere(Cartesian3.fromDegrees(longitude, latitude, 0), 120),
-          {
-          offset: new HeadingPitchRange(
-            CesiumMath.toRadians(14),
-            CesiumMath.toRadians(-34),
-            range
-          ),
-          duration: 1.35
-          }
-        );
-      } else if (viewer && tileset) {
-        void viewer.flyTo(tileset, { duration: 1.35 });
-      }
+    flyToPlateau(intent = "building") {
+      cameraControllerRef.current?.plateau(intent);
     },
     resetView() {
-      if (viewerRef.current) setInitialView(viewerRef.current, data);
+      cameraControllerRef.current?.city();
     }
   }));
 
@@ -656,7 +713,6 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     try {
       viewer = new Viewer(container, {
         baseLayer: false,
-        terrainProvider: new EllipsoidTerrainProvider(),
         animation: false,
         timeline: false,
         geocoder: false,
@@ -679,12 +735,32 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       return;
     }
     viewerRef.current = viewer;
+    cameraControllerRef.current = new CameraController(viewer, data);
     (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer = viewer;
-    viewer.scene.globe.depthTestAgainstTerrain = false;
+    viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.baseColor = Color.fromCssColorString("#d8dfda");
     viewer.scene.backgroundColor = Color.fromCssColorString("#dfe5e1");
-    viewer.scene.highDynamicRange = true;
-    setInitialView(viewer, data);
+    viewer.scene.highDynamicRange = false;
+    viewer.scene.skyBox.show = false;
+    if (selectedMeshCodeRef.current === data.plateauMetadata?.reference_layer?.deep_dive_mesh_code) {
+      cameraControllerRef.current.plateau("building");
+    } else {
+      cameraControllerRef.current.city();
+    }
+    container.setAttribute("data-basemap", "loading");
+    container.setAttribute("data-analysis", "loading");
+    container.setAttribute("data-building-tiles-loaded", "false");
+    container.setAttribute("data-local-dem", "loading");
+
+    void createBroadTerrain(data).then((provider) => {
+      if (!provider || cancelled || viewer.isDestroyed()) return;
+      viewer.terrainProvider = provider;
+      containerRef.current?.setAttribute("data-broad-terrain", "ready");
+      viewer.scene.requestRender();
+    }).catch((error: unknown) => {
+      console.warn("PLATEAU-Terrain loading failed; retaining ellipsoid fallback", error);
+      container.setAttribute("data-broad-terrain", "fallback");
+    });
 
     async function loadLayers() {
       try {
@@ -695,6 +771,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           credit: "地理院タイル"
         });
         viewer.imageryLayers.addImageryProvider(paleImagery);
+        containerRef.current?.setAttribute("data-basemap", "ready");
         const boundary = await addGeoJson(viewer, data.boundary);
         const plateauGeoJson = await addGeoJson(viewer, data.plateauBuildings);
         const plateauRoads = await addGeoJson(viewer, data.plateauRoads);
@@ -723,6 +800,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         if (stations) stations.show = currentVisibility.stations;
         if (busStops) busStops.show = currentVisibility.busStops;
         if (medical) medical.show = currentVisibility.medical;
+        if (plateauVisibilityRef.current?.buildings ?? currentVisibility.plateau) await loadPlateauTileset();
+        if (plateauVisibilityRef.current?.terrain) await loadPlateauTerrain();
+        if (cancelled || viewer.isDestroyed()) return;
+        containerRef.current?.setAttribute("data-analysis", "ready");
         viewer.scene.requestRender();
         onReadyRef.current();
       } catch (error) {
@@ -763,10 +844,11 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       cancelled = true;
       sourcesRef.current = {};
       viewerRef.current = null;
+      cameraControllerRef.current = null;
       delete (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer;
       if (!viewer.isDestroyed()) viewer.destroy();
     };
-  }, [data]);
+  }, [data, loadPlateauTerrain, loadPlateauTileset]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -868,8 +950,11 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
 
   useEffect(() => {
     if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores, meshPresentation);
+    if (sourcesRef.current.plateauTileset) applyBuildingStyle(sourcesRef.current.plateauTileset, selectedBuildingId);
+    if (sourcesRef.current.plateauFastTileset) applyBuildingStyle(sourcesRef.current.plateauFastTileset, selectedBuildingId);
+    if (sourcesRef.current.plateauFallbackTileset) applyBuildingStyle(sourcesRef.current.plateauFallbackTileset, selectedBuildingId);
     viewerRef.current?.scene.requestRender();
-  }, [afterScores, meshPresentation, metricMode, selectedMeshCode]);
+  }, [afterScores, meshPresentation, metricMode, selectedBuildingId, selectedMeshCode]);
 
   useEffect(() => {
     const sources = sourcesRef.current;
@@ -882,12 +967,21 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     const workspaceRoads = workspaceMap !== null && workspaceVisibility.roadNetwork;
     const plateauBuildings = plateauVisibility?.buildings ?? visibility.plateau;
     const plateauRoads = plateauVisibility?.roads ?? visibility.plateau;
+    const plateauTerrain = plateauVisibility?.terrain ?? false;
     if (sources.plateauGeoJson) sources.plateauGeoJson.show = plateauBuildings || workspaceBuildings;
     if (sources.plateauRoads) sources.plateauRoads.show = plateauRoads || workspaceRoads;
     if (sources.plateauTileset) sources.plateauTileset.show = plateauBuildings || workspaceBuildings;
-    if ((plateauBuildings || workspaceBuildings) && !sources.plateauTileset) void loadPlateauTileset();
+    if (sources.plateauFastTileset) {
+      sources.plateauFastTileset.show = (plateauBuildings || workspaceBuildings) && !sources.plateauFallbackTileset?.tilesLoaded && !sources.plateauTileset?.tilesLoaded;
+    }
+    if (sources.plateauFallbackTileset) {
+      sources.plateauFallbackTileset.show = (plateauBuildings || workspaceBuildings) && !sources.plateauTileset?.tilesLoaded;
+    }
+    if (sources.plateauTerrainTileset) sources.plateauTerrainTileset.show = plateauTerrain;
+    if ((plateauBuildings || workspaceBuildings) && !sources.plateauTileset && !sources.plateauFallbackTileset && !sources.plateauFastTileset) void loadPlateauTileset();
+    if (plateauTerrain && !sources.plateauTerrainTileset) void loadPlateauTerrain();
     viewerRef.current?.scene.requestRender();
-  }, [loadPlateauTileset, plateauVisibility, visibility, workspaceMap, workspaceVisibility]);
+  }, [loadPlateauTerrain, loadPlateauTileset, plateauVisibility, visibility, workspaceMap, workspaceVisibility]);
 
   useEffect(() => {
     setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility);

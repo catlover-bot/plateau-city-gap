@@ -4,6 +4,10 @@ export type LayerGroup = "Analysis" | "PLATEAU" | "Infrastructure" | "Planning" 
 export type LayerRenderMode = "2d" | "3d" | "both";
 export type LayerAvailability = "available" | "available_with_limitation" | "not_available";
 export type LayerSourceKind = "raster" | "static-geojson" | "mvt" | "derived" | "citygml";
+export type LayerCapability = "screen" | "inspect" | "compare" | "stream" | "validate";
+export type LayerPrivacyClass = "public-aggregate" | "public-official" | "municipal-restricted";
+export type LayerLoadingStrategy = "eager" | "semantic-zoom" | "camera-stream" | "on-demand";
+export type LayerInteraction = "none" | "hover" | "select" | "compare";
 
 export interface LayerLegendStop {
   label: string;
@@ -17,25 +21,40 @@ export interface LayerDefinition {
   group: LayerGroup;
   source: { kind: LayerSourceKind; url?: string; publicFallback?: string };
   year: string;
+  sourceYear: string;
+  provider: string;
   plateauTheme: string | null;
   availability: Record<CityId, LayerAvailability>;
   defaultVisibility: boolean;
   minZoom: number;
   maxZoom: number;
+  minCameraHeight: number;
+  maxCameraHeight: number;
   opacity: number;
+  defaultOpacity: number;
   legend: LayerLegendStop[];
   attribution: string;
   renderMode: LayerRenderMode;
   exclusiveGroup: string | null;
   evidenceLink: string;
+  capability: LayerCapability[];
+  privacyClass: LayerPrivacyClass;
+  loadingStrategy: LayerLoadingStrategy;
+  interaction: LayerInteraction;
+  provenance: { source: string; year: string; theme: string | null; evidenceLink: string };
 }
+
+type LayerSeed = Omit<LayerDefinition,
+  "sourceYear" | "provider" | "minCameraHeight" | "maxCameraHeight" | "defaultOpacity" |
+  "capability" | "privacyClass" | "loadingStrategy" | "interaction" | "provenance"
+>;
 
 const both = (value: LayerAvailability = "available"): Record<CityId, LayerAvailability> => ({ maizuru: value, fujisawa: value });
 const thematic = "primary-thematic";
 const plateau = "PLATEAU 2025";
 const gsi = '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noreferrer">地理院タイル</a>';
 
-export const LAYER_REGISTRY: LayerDefinition[] = [
+const LAYER_SEEDS: LayerSeed[] = [
   { id: "reference-gsi-pale", name: "地理院淡色地図", group: "Reference", source: { kind: "raster", url: "https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png" }, year: "current", plateauTheme: null, availability: both(), defaultVisibility: true, minZoom: 5, maxZoom: 18, opacity: .78, legend: [{ label: "地理的文脈", color: "#e8e7df" }], attribution: gsi, renderMode: "2d", exclusiveGroup: "basemap", evidenceLink: "https://maps.gsi.go.jp/development/ichiran.html" },
   { id: "analysis-city-gap", name: "CITY GAP", group: "Analysis", source: { kind: "mvt", url: "/api/tiles/{city}/meshes/{z}/{x}/{y}.mvt", publicFallback: "mesh_metrics.geojson" }, year: "2020–2025", plateauTheme: "building", availability: both(), defaultVisibility: true, minZoom: 8, maxZoom: 16, opacity: .58, legend: [{ label: "相対的に低い", color: "#dce9e2" }, { label: "要追加調査", color: "#c58b2b" }], attribution: "CITY GAP / e-Stat / PLATEAU", renderMode: "both", exclusiveGroup: thematic, evidenceLink: "data/evidence.json" },
   { id: "analysis-population", name: "65歳以上人口", group: "Analysis", source: { kind: "mvt", url: "/api/tiles/{city}/meshes/{z}/{x}/{y}.mvt", publicFallback: "mesh_metrics.geojson" }, year: "2020", plateauTheme: "building", availability: both(), defaultVisibility: false, minZoom: 8, maxZoom: 16, opacity: .52, legend: [{ label: "少ない", color: "#e8eee9" }, { label: "多い", color: "#ad7a36" }], attribution: "e-Stat 2020 / PLATEAU building allocation", renderMode: "both", exclusiveGroup: thematic, evidenceLink: "data/evidence.json" },
@@ -64,6 +83,37 @@ export const LAYER_REGISTRY: LayerDefinition[] = [
   { id: "reference-osm", name: "OSM参照ネットワーク", group: "Reference", source: { kind: "derived" }, year: "2026-08-27", plateauTheme: null, availability: both(), defaultVisibility: false, minZoom: 12, maxZoom: 22, opacity: .45, legend: [{ label: "参照network", color: "#78994e", pattern: "dash" }], attribution: "© OpenStreetMap contributors, ODbL", renderMode: "2d", exclusiveGroup: null, evidenceLink: "data/validation/network_cross_validation.json" }
 ];
 
+function providerFor(layer: LayerSeed): string {
+  if (layer.id === "reference-gsi-pale") return "国土地理院";
+  if (layer.id === "reference-osm" || layer.id === "validation-reference-route") return "OpenStreetMap contributors";
+  if (layer.plateauTheme) return "Project PLATEAU / 国土交通省";
+  if (layer.group === "Infrastructure") return "国土数値情報 / 国土交通省";
+  return "CITY GAP";
+}
+
+function capabilitiesFor(layer: LayerSeed): LayerCapability[] {
+  const capabilities: LayerCapability[] = ["screen"];
+  if (layer.renderMode === "3d" || layer.renderMode === "both") capabilities.push("inspect");
+  if (layer.group === "Scenario" || layer.group === "Hazard") capabilities.push("compare");
+  if (layer.group === "Validation" || layer.group === "Reference") capabilities.push("validate");
+  if (layer.source.kind === "citygml") capabilities.push("stream");
+  return [...new Set(capabilities)];
+}
+
+export const LAYER_REGISTRY: LayerDefinition[] = LAYER_SEEDS.map((layer) => ({
+  ...layer,
+  sourceYear: layer.year,
+  provider: providerFor(layer),
+  minCameraHeight: layer.minZoom >= 14 ? 25 : layer.minZoom >= 12 ? 75 : 250,
+  maxCameraHeight: layer.maxZoom >= 22 ? 25_000 : 100_000,
+  defaultOpacity: layer.opacity,
+  capability: capabilitiesFor(layer),
+  privacyClass: layer.id.startsWith("analysis-") ? "public-aggregate" : "public-official",
+  loadingStrategy: layer.source.kind === "citygml" && layer.renderMode !== "2d" ? "camera-stream" : layer.defaultVisibility ? "eager" : layer.minZoom >= 12 ? "semantic-zoom" : "on-demand",
+  interaction: layer.group === "Validation" ? "compare" : layer.renderMode === "3d" || layer.renderMode === "both" ? "select" : layer.legend.length ? "hover" : "none",
+  provenance: { source: providerFor(layer), year: layer.year, theme: layer.plateauTheme, evidenceLink: layer.evidenceLink },
+}));
+
 export interface LayerPreset {
   id: LayerPresetId;
   name: string;
@@ -74,7 +124,7 @@ export interface LayerPreset {
 
 export const LAYER_PRESETS: LayerPreset[] = [
   { id: "discovery", name: "課題を探す", primaryLayer: "analysis-city-gap", contextLayers: ["reference-gsi-pale", "infra-stations", "infra-medical"], description: "CITY GAPと主要施設だけで都市全体を読む" },
-  { id: "plateau-detail", name: "PLATEAU詳細", primaryLayer: "plateau-buildings", contextLayers: ["reference-gsi-pale", "plateau-roads"], description: "選択地点の建物・道路を確認" },
+  { id: "plateau-detail", name: "PLATEAU詳細", primaryLayer: "plateau-buildings", contextLayers: ["reference-gsi-pale", "plateau-roads", "plateau-terrain"], description: "実建物・道路・DEM地形を同じ場所で確認" },
   { id: "transport", name: "交通を見る", primaryLayer: "analysis-transport", contextLayers: ["reference-gsi-pale", "infra-stations", "infra-bus"], description: "交通アクセスと施設を読む" },
   { id: "medical", name: "医療を見る", primaryLayer: "analysis-medical", contextLayers: ["reference-gsi-pale", "infra-medical"], description: "医療アクセスと施設を読む" },
   { id: "hazard", name: "災害を見る", primaryLayer: "hazard-composite", contextLayers: ["reference-gsi-pale", "plateau-roads", "infra-medical"], description: "公式hazardと道路・医療を重ねる" },

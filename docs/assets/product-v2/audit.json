@@ -1,0 +1,68 @@
+{
+  "baseUrl": "http://127.0.0.1:5173/plateau-city-gap/",
+  "generatedAt": "2026-08-27T15:56:58.572Z",
+  "overviewCesiumRequests": [],
+  "consoleErrors": [],
+  "consoleMessages": [],
+  "gsiRequests": [],
+  "plateauRequests": [],
+  "screenshots": [
+    "01-discovery-2d.png",
+    "02-selected-mesh.png",
+    "03-plateau-3d.png",
+    "04-network.png",
+    "05-hazard.png",
+    "06-scenario-compare.png",
+    "07-validation.png",
+    "08-temporal.png",
+    "09-municipal.png",
+    "10-mobile.png"
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "horizontalOverflow": false,
+      "mapWidth": 1070,
+      "inspectorVisible": true,
+      "activePrimary": "CITY GAP",
+      "mapAttributionVisible": true
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "horizontalOverflow": false,
+      "mapWidth": 910,
+      "inspectorVisible": true,
+      "activePrimary": "CITY GAP",
+      "mapAttributionVisible": true
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "horizontalOverflow": false,
+      "mapWidth": 694,
+      "inspectorVisible": true,
+      "activePrimary": "CITY GAP",
+      "mapAttributionVisible": true
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "horizontalOverflow": false,
+      "mapWidth": 768,
+      "inspectorVisible": true,
+      "activePrimary": "CITY GAP",
+      "mapAttributionVisible": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "horizontalOverflow": false,
+      "mapWidth": 390,
+      "inspectorVisible": true,
+      "activePrimary": "CITY GAP",
+      "mapAttributionVisible": true
+    }
+  ]
+}

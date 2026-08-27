@@ -9,8 +9,9 @@ export function DetailWorkspace({ selection, onOpen3D }: { selection: SpatialSel
         <div><b className="plateau-data-badge">PLATEAU</b><span><strong>道路</strong><small>道路面・経路との関係</small></span></div>
         <div><b className="plateau-data-badge">PLATEAU</b><span><strong>地形・計画・災害</strong><small>利用可否はレイヤー詳細で確認</small></span></div>
       </div>
-      <button type="button" className="primary-action" onClick={onOpen3D}>{selection ? "選択地点をPLATEAU 3Dで開く" : "PLATEAU 3Dを開く"}</button>
+      <button type="button" className="primary-action" onClick={onOpen3D}>{selection?.properties?.plateau_coverage === "verified_deep_dive" || selection?.type === "building" ? "選択地点をPLATEAU 3Dで開く" : "PLATEAU収録候補を3Dで開く"}</button>
       {!selection && <p className="workspace-hint">地図上の500mメッシュを先に選ぶと、その地点へ移動します。</p>}
+      {selection && selection.properties?.plateau_coverage !== "verified_deep_dive" && selection.type !== "building" && <p className="workspace-hint">Top候補には公式建物がないため、実建物296棟を確認できる常団地前へ移動します。</p>}
     </section>
   );
 }

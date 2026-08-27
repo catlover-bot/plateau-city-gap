@@ -246,6 +246,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       map.addLayer({ id: "validation-selected", type: "line", source: "validation-routes", minzoom: 9, filter: ["==", ["get", "sample_id"], "__none__"], layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": "#d3982d", "line-width": 7, "line-opacity": .78 } });
       map.addLayer({ id: "temporal-fill", type: "fill", source: "temporal", minzoom: 10, layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "change_type"], "added", "#2b7a6e", "removed", "#9a5547", "#b4862e"], "fill-opacity": .5 } });
       map.addLayer({ id: "temporal-line", type: "line", source: "temporal", minzoom: 10, layout: { visibility: "none" }, paint: { "line-color": ["match", ["get", "change_type"], "added", "#1f6a60", "removed", "#8b493e", "#9a6d1f"], "line-width": 2.4, "line-dasharray": ["case", ["==", ["get", "change_type"], "removed"], ["literal", [2, 1.5]], ["literal", [1, 0]]] } });
+      map.addLayer({ id: "temporal-point", type: "circle", source: "temporal", minzoom: 10, layout: { visibility: "none" }, paint: { "circle-color": ["match", ["get", "change_type"], "added", "#2b7a6e", "removed", "#9a5547", "#b4862e"], "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 4, 15, 8], "circle-stroke-color": "#fff", "circle-stroke-width": 2, "circle-opacity": .9 } });
+      map.addLayer({ id: "temporal-point-label", type: "symbol", source: "temporal", minzoom: 12.5, layout: { visibility: "none", "text-field": ["match", ["get", "change_type"], "added", "+", "removed", "−", "△"], "text-size": 11, "text-allow-overlap": false }, paint: { "text-color": "#fff" } });
       map.addLayer({ id: "scenario-mesh-fill", type: "fill", source: "scenario-meshes", minzoom: 8, layout: { visibility: "none" }, paint: { "fill-color": ["interpolate", ["linear"], ["coalesce", ["to-number", ["get", "after_score_c"]], 0], 0, "#e5ece7", 1, "#9a6f83"], "fill-opacity": .55 } });
       map.addLayer({ id: "scenario-site-point", type: "circle", source: "scenario-sites", minzoom: 9, layout: { visibility: "none" }, paint: { "circle-color": ["match", ["get", "scenario"], "A", "#25766f", "B", "#aa7a2f", "#855f78"], "circle-radius": 9, "circle-stroke-color": "#fff", "circle-stroke-width": 3 } });
       map.addLayer({ id: "resilience-network", type: "line", source: "resilience", minzoom: 8, filter: ["in", ["get", "layer_type"], ["literal", ["normal_route", "disrupted_route", "critical_edge"]]], layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": ["match", ["get", "layer_type"], "critical_edge", "#b47a21", "disrupted_route", "#945442", "#526f7e"], "line-width": ["match", ["get", "layer_type"], "critical_edge", 6, "disrupted_route", 4, 2], "line-opacity": .88 } });
@@ -299,6 +301,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       layerVisibility(map, "validation-selected", activeIds.has("validation-disagreement"));
       layerVisibility(map, "temporal-fill", primaryLayer === "validation-temporal");
       layerVisibility(map, "temporal-line", primaryLayer === "validation-temporal");
+      layerVisibility(map, "temporal-point", primaryLayer === "validation-temporal");
+      layerVisibility(map, "temporal-point-label", primaryLayer === "validation-temporal");
       layerVisibility(map, "scenario-mesh-fill", primaryLayer === "scenario-footprint");
       layerVisibility(map, "scenario-site-point", activeIds.has("scenario-sites"));
       layerVisibility(map, "resilience-network", primaryLayer === "hazard-composite");
@@ -348,6 +352,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     layerVisibility(map, "validation-selected", activeIds.has("validation-disagreement"));
     layerVisibility(map, "temporal-fill", primaryLayer === "validation-temporal");
     layerVisibility(map, "temporal-line", primaryLayer === "validation-temporal");
+    layerVisibility(map, "temporal-point", primaryLayer === "validation-temporal");
+    layerVisibility(map, "temporal-point-label", primaryLayer === "validation-temporal");
     layerVisibility(map, "scenario-mesh-fill", primaryLayer === "scenario-footprint");
     layerVisibility(map, "scenario-site-point", activeIds.has("scenario-sites"));
     layerVisibility(map, "resilience-network", primaryLayer === "hazard-composite");
