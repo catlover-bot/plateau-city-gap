@@ -197,7 +197,7 @@ class PostGISRepository:
                 details["extensions"] = sorted(extensions)
                 dataset = connection.execute(
                     """SELECT id FROM city_dataset_versions
-                       WHERE is_current AND (%s IS NULL OR city_id = %s) LIMIT 1""",
+                       WHERE is_current AND (CAST(%s AS text) IS NULL OR city_id = %s) LIMIT 1""",
                     (required_city_id, required_city_id),
                 ).fetchone()
                 checks["required_dataset"] = dataset is not None
@@ -467,7 +467,7 @@ class PostGISRepository:
                        JOIN city_dataset_versions AS version
                          ON version.id = network.dataset_version_id
                        WHERE version.city_id = %s AND version.is_current
-                         AND (%s IS NULL OR network.graph_version = %s)
+                         AND (CAST(%s AS text) IS NULL OR network.graph_version = %s)
                        ORDER BY network.generated_at DESC LIMIT 1
                    )
                    SELECT edge.edge_id, edge.source_node_id, edge.target_node_id,
@@ -725,7 +725,7 @@ class PostGISRepository:
                    JOIN plateau_hazards AS hazard ON hazard.city_object_id = object.id
                    WHERE version.city_id = %s AND version.is_current
                      AND context.edge_id = %s
-                     AND (%s IS NULL OR network.graph_version = %s)
+                     AND (CAST(%s AS text) IS NULL OR network.graph_version = %s)
                      AND run.status = 'succeeded'
                    ORDER BY network.generated_at DESC, object.gml_id""",
                 (city_id, edge_id, graph_version, graph_version),
@@ -747,7 +747,7 @@ class PostGISRepository:
                    JOIN road_network_versions AS network
                      ON network.id = scenario.network_version_id
                    WHERE dataset.city_id = %s
-                     AND (%s IS NULL OR scenario.lifecycle_status = %s)
+                     AND (CAST(%s AS text) IS NULL OR scenario.lifecycle_status = %s)
                    ORDER BY scenario.generated_at DESC, scenario.scenario_key
                    LIMIT %s""",
                 (city_id, status, status, limit),
@@ -1395,7 +1395,7 @@ class PostGISRepository:
             rows = connection.execute(
                 """SELECT actor, action, resource_type, resource_id, city_id,
                           request_id, before_state, after_state, occurred_at
-                   FROM audit_log WHERE (%s IS NULL OR city_id = %s)
+                   FROM audit_log WHERE (CAST(%s AS text) IS NULL OR city_id = %s)
                    ORDER BY occurred_at DESC, id DESC LIMIT %s""",
                 (city_id, city_id, limit),
             ).fetchall()
