@@ -65,6 +65,17 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
     ready = client.get("/ready")
     assert ready.status_code == 200
     assert ready.json()["ready"] is True
+    pilot = client.get("/admin/pilot-readiness/26202")
+    assert pilot.status_code == 200
+    assert pilot.json()["status"] == "NOT_READY"
+    assert pilot.json()["facts"]["plateau_registered"] is True
+    assert {"population_registered", "facility_registered", "quality_gate", "auth_mode"} <= set(
+        pilot.json()["blockers"]
+    )
+    snapshot = client.get("/admin/snapshot")
+    assert snapshot.status_code == 200
+    assert snapshot.json()["cities"][0]["city_code"] == "26202"
+    assert snapshot.json()["networks"][0]["source_type"] == "experimental_surface_adjacency"
     cities = client.get("/cities")
     assert cities.status_code == 200
     assert cities.json()[0]["city_id"] == "26202"
