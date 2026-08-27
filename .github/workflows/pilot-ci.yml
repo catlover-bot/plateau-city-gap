@@ -67,6 +67,53 @@ jobs:
       - run: pytest backend/tests/test_real_inventory_artifact.py analysis/tests/test_web_assets.py analysis/tests/test_municipal_workspace_assets.py -q
       - run: python -m analysis.scripts.audit_urban_futures_platform
 
+  validation-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: pip install -e ".[platform,dev]"
+      - name: validation-unit and cross-model-contract
+        run: >-
+          pytest analysis/tests/test_model_validation.py
+          analysis/tests/test_sensitivity_validation.py
+          analysis/tests/test_temporal_validation.py
+          backend/tests/test_validation_domain.py
+          backend/tests/test_validation_api.py -q
+      - name: chaos and failure recovery
+        run: pytest backend/tests/test_validation_chaos.py -q
+      - name: privacy-leak
+        run: pytest backend/tests/test_public_validation_privacy.py -q
+      - name: accessibility and Validation Workspace contract
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run test -- src/components/validationWorkspace.test.tsx
+          npm run typecheck
+          npx playwright install --with-deps chromium
+          npm run build
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/citygap-validation-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill ${preview_pid}' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/plateau-city-gap/ >/dev/null; then break; fi
+            sleep 1
+          done
+          npm run audit:validation
+      - name: pilot-rehearsal and Evidence integrity
+        run: |
+          python -m analysis.scripts.run_validation_pilot_rehearsal
+          python -m analysis.scripts.build_validation_evidence_package
+          pytest backend/tests/test_validation_artifacts.py -q
+
   migration:
     runs-on: ubuntu-latest
     services:
