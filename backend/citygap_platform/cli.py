@@ -6,6 +6,8 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
+import sys
 import uuid
 from pathlib import Path
 from typing import Any
@@ -191,6 +193,70 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
     return payload
 
 
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validation_reproduce(args: argparse.Namespace) -> dict[str, Any]:
+    root = Path(__file__).resolve().parents[2]
+    manifest_path = root / "analysis/outputs/real/validation/reproducibility/manifest.json"
+    if not manifest_path.exists():
+        raise ValueError("reproducibility manifest is missing; build the Validation Evidence Package")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    source = next(
+        (row for row in manifest["source_manifest"] if f"/{args.city}-" in row["path"]),
+        None,
+    )
+    if source is None:
+        raise ValueError(f"No pinned source is registered for {args.city}")
+    source_path = root / source["path"]
+    if not source_path.exists():
+        raise ValueError(
+            f"Pinned raw source is not downloaded: {source['path']}; obtain it under its source license and verify {source['sha256']}"
+        )
+    measured = _file_sha256(source_path)
+    if measured != source["sha256"]:
+        raise ValueError(f"Source checksum mismatch for {source['path']}: {measured}")
+    commands = [
+        [sys.executable, "-m", "analysis.scripts.build_network_cross_validation", "--city", args.city],
+        [sys.executable, "-m", "analysis.scripts.build_sensitivity_validation", "--city", args.city],
+    ]
+    for command in commands:
+        subprocess.run(command, cwd=root, check=True, capture_output=not args.show_output, text=True)
+    output = json.loads(
+        (root / "analysis/outputs/real/validation/network_cross_validation.json").read_text(encoding="utf-8")
+    )
+    city = next(row for row in output["cities"] if row["city_id"] == args.city)
+    summary = json.dumps(city["metrics"], sort_keys=True, separators=(",", ":"))
+    summary_sha256 = hashlib.sha256(summary.encode()).hexdigest()
+    expected = manifest["expected_city_metric_sha256"][args.city]
+    if summary_sha256 != expected:
+        raise ValueError(f"Reproduced city metric hash differs: expected {expected}, got {summary_sha256}")
+    return {
+        "city": args.city,
+        "source_verified": True,
+        "analysis_executed": True,
+        "validation_executed": True,
+        "summary_hash_verified": True,
+        "summary_sha256": summary_sha256,
+        "ground_truth_claimed": False,
+    }
+
+
+def _validate_dispatch(args: argparse.Namespace) -> dict[str, Any]:
+    if args.validation_action == "reproduce":
+        if not args.city:
+            raise ValueError("validate reproduce requires --city")
+        return _validation_reproduce(args)
+    if not args.format or not args.path:
+        raise ValueError("validate requires --format and --path, or the reproduce action")
+    return _validate(args)
+
+
 def _enqueue(args: argparse.Namespace, job_type: str) -> dict[str, Any]:
     parameters = json.loads(args.parameters)
     config_hash = args.config_hash or _hash(parameters)
@@ -284,17 +350,20 @@ def build_parser() -> argparse.ArgumentParser:
     dataset.set_defaults(handler=_dataset_add)
 
     validate = subcommands.add_parser("validate")
+    validate.add_argument("validation_action", nargs="?", choices=("reproduce",))
     _add_database(validate)
-    validate.add_argument("--format", required=True, choices=(
+    validate.add_argument("--format", choices=(
         "csv", "geojson", "geopackage", "gtfs", "citygml", "citygml_zip"
     ))
-    validate.add_argument("--path", required=True)
+    validate.add_argument("--path")
+    validate.add_argument("--city", choices=("maizuru", "fujisawa"))
+    validate.add_argument("--show-output", action="store_true")
     validate.add_argument("--theme")
     validate.add_argument("--layer")
     validate.add_argument("--minimum-features", type=int, default=1)
     validate.add_argument("--allowed-crs", action="append", default=[])
     validate.add_argument("--dataset-version-id")
-    validate.set_defaults(handler=_validate)
+    validate.set_defaults(handler=_validate_dispatch)
 
     ingest = subcommands.add_parser("ingest")
     _add_job(ingest)

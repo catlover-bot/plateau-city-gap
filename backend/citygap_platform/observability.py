@@ -11,8 +11,10 @@ from contextvars import ContextVar
 from dataclasses import dataclass
 
 from fastapi import Request
+from fastapi.responses import JSONResponse
 
 LOGGER = logging.getLogger("citygap.request")
+MAX_REQUEST_BODY_BYTES = 1024 * 1024
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,6 +47,24 @@ async def request_observability_middleware(request: Request, call_next):
     started = time.perf_counter()
     status = 500
     try:
+        content_length = request.headers.get("content-length")
+        if content_length is not None and not content_length.isdecimal():
+            status = 400
+            response = JSONResponse(status_code=400, content={"detail": "invalid content-length"})
+            response.headers["X-Request-ID"] = request_id
+            return response
+        if (
+            request.method in {"POST", "PUT", "PATCH"}
+            and content_length is not None
+            and int(content_length) > MAX_REQUEST_BODY_BYTES
+        ):
+            status = 413
+            response = JSONResponse(
+                status_code=413,
+                content={"detail": "request body exceeds the 1 MiB platform limit"},
+            )
+            response.headers["X-Request-ID"] = request_id
+            return response
         response = await call_next(request)
         status = response.status_code
         response.headers["X-Request-ID"] = request_id

@@ -179,6 +179,48 @@ class PlatformRepository(Protocol):
 
     def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]: ...
 
+    def validation_claims(self) -> list[dict[str, Any]]: ...
+
+    def city_validations(self, city_id: str, limit: int, offset: int) -> list[dict[str, Any]]: ...
+
+    def create_validation_run(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None: ...
+
+    def validation_detail(self, validation_id: str) -> dict[str, Any] | None: ...
+
+    def validation_samples(
+        self,
+        validation_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]: ...
+
+    def validation_disagreements(
+        self,
+        validation_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]: ...
+
+    def validation_sensitivity(
+        self, validation_id: str, limit: int, offset: int
+    ) -> dict[str, Any]: ...
+
+    def create_validation_field_review(
+        self, validation_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None: ...
+
+    def update_validation_status(
+        self, validation_id: str, expected: str, proposed: str, note: str
+    ) -> dict[str, Any] | None: ...
+
+    def register_validation_reference(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None: ...
+
     def vector_tile(
         self,
         city_id: str,
@@ -2852,6 +2894,392 @@ class PostGISRepository:
             "users": records(
                 ("user_id", "display_name", "email", "issuer", "active", "roles"), users
             ),
+        }
+
+    @staticmethod
+    def _validation_city(connection, city_id: str) -> tuple[Any, ...] | None:
+        return connection.execute(
+            """SELECT id, city_code, city_key, name FROM cities
+               WHERE CAST(id AS text) = %s OR city_code = %s OR city_key = %s
+               ORDER BY city_code LIMIT 1""",
+            (city_id, city_id, city_id),
+        ).fetchone()
+
+    def validation_claims(self) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT claim_key, what_it_means, what_it_does_not_mean,
+                          required_data, validation_method,
+                          current_validation_status, status_changed_at, updated_at
+                   FROM validation_claims ORDER BY claim_key"""
+            ).fetchall()
+        keys = (
+            "claim_key",
+            "what_it_means",
+            "what_it_does_not_mean",
+            "required_data",
+            "validation_method",
+            "current_validation_status",
+            "status_changed_at",
+            "updated_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def city_validations(self, city_id: str, limit: int, offset: int) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            city = self._validation_city(connection, city_id)
+            if city is None:
+                return []
+            rows = connection.execute(
+                """SELECT run.id, run.run_key, run.claim_key, run.method_key,
+                          run.urban_state_id, run.dataset_versions,
+                          run.network_version_id, run.algorithm_version,
+                          run.reference_source, run.sample_rule, run.metrics,
+                          run.result, run.limitations, run.validation_status,
+                          run.run_status, run.generated_at
+                   FROM validation_runs AS run WHERE run.city_id = %s
+                   ORDER BY run.generated_at DESC, run.id LIMIT %s OFFSET %s""",
+                (city[0], limit, offset),
+            ).fetchall()
+        keys = (
+            "validation_id", "run_key", "claim_key", "method_key", "urban_state_id",
+            "dataset_versions", "network_version_id", "algorithm_version",
+            "reference_source", "sample_rule", "metrics", "result", "limitations",
+            "validation_status", "run_status", "generated_at",
+        )
+        return [dict(zip(keys, row, strict=True)) for row in rows]
+
+    def create_validation_run(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        serialized = json.dumps(request, ensure_ascii=False, sort_keys=True, default=str)
+        if "ground_truth" in serialized.lower() or "confidence_percentage" in serialized.lower():
+            raise ValueError("Validation references cannot claim ground truth or confidence percentages")
+        context = current_request_context()
+        with self._connect() as connection:
+            city = self._validation_city(connection, city_id)
+            if city is None:
+                return None
+            digest = hashlib.sha256(f"{city[0]}|{serialized}".encode()).hexdigest()
+            run_key = f"validation:{city[1]}:{request['claim_key']}:{digest[:24]}"
+            row = connection.execute(
+                """INSERT INTO validation_runs (
+                       run_key, claim_key, method_key, city_id, urban_state_id,
+                       dataset_versions, network_version_id, algorithm_version,
+                       reference_source, sample_rule, limitations,
+                       validation_status, run_status, generated_at, created_by
+                   ) VALUES (
+                       %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                       'unvalidated', 'queued', now(), %s
+                   ) ON CONFLICT (run_key) DO UPDATE SET run_key=EXCLUDED.run_key
+                   RETURNING id, run_key, validation_status, run_status, generated_at""",
+                (
+                    run_key,
+                    request["claim_key"],
+                    request["method_key"],
+                    city[0],
+                    request.get("urban_state_id"),
+                    json.dumps(request["dataset_versions"], ensure_ascii=False),
+                    request.get("network_version_id"),
+                    request["algorithm_version"],
+                    json.dumps(request["reference_source"], ensure_ascii=False),
+                    json.dumps(request["sample_rule"], ensure_ascii=False),
+                    json.dumps(request["limitations"], ensure_ascii=False),
+                    context.actor,
+                ),
+            ).fetchone()
+            self._audit(
+                connection,
+                "validation.run.create",
+                "validation_run",
+                str(row[0]),
+                str(city[0]),
+                None,
+                {"run_key": row[1], "validation_status": row[2], "run_status": row[3]},
+            )
+            connection.commit()
+        return {
+            "validation_id": row[0],
+            "run_key": row[1],
+            "validation_status": row[2],
+            "run_status": row[3],
+            "generated_at": row[4],
+        }
+
+    def validation_detail(self, validation_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                """SELECT run.id, run.run_key, city.city_code, city.city_key,
+                          run.claim_key, claim.what_it_means, claim.what_it_does_not_mean,
+                          run.method_key, run.urban_state_id, run.dataset_versions,
+                          run.network_version_id, run.algorithm_version,
+                          run.reference_source, run.sample_rule, run.metrics,
+                          run.result, run.limitations, run.validation_status,
+                          run.run_status, run.generated_at,
+                          (SELECT count(*) FROM validation_samples sample
+                           WHERE sample.validation_run_id=run.id),
+                          (SELECT count(*) FROM validation_disagreements disagreement
+                           WHERE disagreement.validation_run_id=run.id)
+                   FROM validation_runs AS run
+                   JOIN cities AS city ON city.id=run.city_id
+                   JOIN validation_claims AS claim ON claim.claim_key=run.claim_key
+                   WHERE run.id=%s""",
+                (validation_id,),
+            ).fetchone()
+        if row is None:
+            return None
+        keys = (
+            "validation_id", "run_key", "city_code", "city_id", "claim_key",
+            "what_it_means", "what_it_does_not_mean", "method_key", "urban_state_id",
+            "dataset_versions", "network_version_id", "algorithm_version",
+            "reference_source", "sample_rule", "metrics", "result", "limitations",
+            "validation_status", "run_status", "generated_at", "sample_count",
+            "disagreement_count",
+        )
+        return dict(zip(keys, row, strict=True))
+
+    def validation_samples(
+        self,
+        validation_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT id, sample_key, strata, origin_reference,
+                          destination_reference, origin_snap, destination_snap,
+                          sampling_rank, metadata, ST_AsGeoJSON(geometry)::jsonb
+                   FROM validation_samples
+                   WHERE validation_run_id=%s AND geometry IS NOT NULL
+                     AND ST_Intersects(geometry, ST_MakeEnvelope(%s,%s,%s,%s,4326))
+                   ORDER BY sampling_rank, sample_key LIMIT %s OFFSET %s""",
+                (validation_id, *bbox, limit, offset),
+            ).fetchall()
+        keys = (
+            "validation_sample_id", "sample_key", "strata", "origin_reference",
+            "destination_reference", "origin_snap", "destination_snap", "sampling_rank",
+            "metadata", "geometry",
+        )
+        return {
+            "validation_id": validation_id,
+            "bbox": bbox,
+            "limit": limit,
+            "offset": offset,
+            "features": [dict(zip(keys, row, strict=True)) for row in rows],
+        }
+
+    def validation_disagreements(
+        self,
+        validation_id: str,
+        bbox: tuple[float, float, float, float],
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT disagreement.id, sample.sample_key,
+                          disagreement.disagreement_class,
+                          disagreement.primary_value, disagreement.reference_value,
+                          disagreement.cause_candidate, disagreement.cause_rule,
+                          disagreement.priority_rank,
+                          ST_AsGeoJSON(disagreement.geometry)::jsonb
+                   FROM validation_disagreements AS disagreement
+                   JOIN validation_samples AS sample
+                     ON sample.id=disagreement.validation_sample_id
+                   WHERE disagreement.validation_run_id=%s
+                     AND disagreement.geometry IS NOT NULL
+                     AND ST_Intersects(
+                         disagreement.geometry, ST_MakeEnvelope(%s,%s,%s,%s,4326)
+                     )
+                   ORDER BY disagreement.priority_rank NULLS LAST, sample.sample_key
+                   LIMIT %s OFFSET %s""",
+                (validation_id, *bbox, limit, offset),
+            ).fetchall()
+        keys = (
+            "disagreement_id", "sample_key", "disagreement_class", "primary_value",
+            "reference_value", "cause_candidate", "cause_rule", "priority_rank", "geometry",
+        )
+        return {
+            "validation_id": validation_id,
+            "bbox": bbox,
+            "limit": limit,
+            "offset": offset,
+            "features": [dict(zip(keys, row, strict=True)) for row in rows],
+        }
+
+    def validation_sensitivity(
+        self, validation_id: str, limit: int, offset: int
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """SELECT id, category, known_limitation, sensitivity_evidence,
+                          reference_agreement, coverage, validation_status, created_at
+                   FROM model_uncertainty WHERE validation_run_id=%s
+                   ORDER BY category, id LIMIT %s OFFSET %s""",
+                (validation_id, limit, offset),
+            ).fetchall()
+        keys = (
+            "uncertainty_id", "category", "known_limitation", "sensitivity_evidence",
+            "reference_agreement", "coverage", "validation_status", "created_at",
+        )
+        return {
+            "validation_id": validation_id,
+            "aggregation_score": None,
+            "limit": limit,
+            "offset": offset,
+            "uncertainties": [dict(zip(keys, row, strict=True)) for row in rows],
+        }
+
+    def create_validation_field_review(
+        self, validation_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        longitude = request.get("longitude")
+        latitude = request.get("latitude")
+        if (longitude is None) != (latitude is None):
+            raise ValueError("Field review GPS requires both longitude and latitude")
+        context = current_request_context()
+        with self._connect() as connection:
+            result = connection.execute(
+                """SELECT result.id, run.city_id FROM validation_results AS result
+                   JOIN validation_runs AS run ON run.id=result.validation_run_id
+                   WHERE result.id=%s AND run.id=%s""",
+                (request["validation_result_id"], validation_id),
+            ).fetchone()
+            if result is None:
+                return None
+            status = (
+                "submitted"
+                if request["municipal_feedback"] == "not_reviewed"
+                else "reviewed"
+            )
+            row = connection.execute(
+                """INSERT INTO field_validation (
+                       validation_result_id, observation_type,
+                       observed_accessibility_issue, road_passability,
+                       facility_availability, gps, observed_at, reviewer,
+                       evidence_attachment_reference, municipal_feedback,
+                       review_note, status
+                   ) VALUES (
+                       %s,%s,%s,%s,%s,
+                       CASE WHEN %s IS NULL THEN NULL ELSE
+                           ST_SetSRID(ST_MakePoint(%s,%s),4326) END,
+                       %s,%s,%s,%s,%s,%s
+                   ) RETURNING id, municipal_feedback, status, created_at""",
+                (
+                    result[0], request["observation_type"],
+                    request.get("observed_accessibility_issue"),
+                    request.get("road_passability"), request.get("facility_availability"),
+                    longitude, longitude, latitude, request["observed_at"], context.actor,
+                    request.get("evidence_attachment_reference"),
+                    request["municipal_feedback"], request.get("review_note", ""), status,
+                ),
+            ).fetchone()
+            self._audit(
+                connection,
+                "validation.field_review.create",
+                "field_validation",
+                str(row[0]),
+                str(result[1]),
+                None,
+                {"municipal_feedback": row[1], "status": row[2]},
+            )
+            connection.commit()
+        return {
+            "field_validation_id": row[0],
+            "municipal_feedback": row[1],
+            "status": row[2],
+            "created_at": row[3],
+        }
+
+    def update_validation_status(
+        self, validation_id: str, expected: str, proposed: str, note: str
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            current = connection.execute(
+                """SELECT id, city_id, validation_status FROM validation_runs
+                   WHERE id=%s FOR UPDATE""",
+                (validation_id,),
+            ).fetchone()
+            if current is None:
+                return None
+            if str(current[2]) != expected:
+                raise ValueError(f"Validation status is {current[2]}, expected {expected}")
+            updated = connection.execute(
+                """UPDATE validation_runs SET validation_status=%s
+                   WHERE id=%s RETURNING validation_status, generated_at""",
+                (proposed, validation_id),
+            ).fetchone()
+            self._audit(
+                connection,
+                "validation.status.change",
+                "validation_run",
+                validation_id,
+                str(current[1]),
+                {"validation_status": expected},
+                {"validation_status": proposed, "note": note, "changed_by": context.actor},
+            )
+            connection.commit()
+        return {
+            "validation_id": validation_id,
+            "validation_status": updated[0],
+            "generated_at": updated[1],
+            "automatic_promotion": False,
+        }
+
+    def register_validation_reference(
+        self, city_id: str, request: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            city = self._validation_city(connection, city_id)
+            if city is None:
+                return None
+            row = connection.execute(
+                """INSERT INTO validation_reference_datasets (
+                       city_id, reference_key, source_type, source_url,
+                       retrieval_date, source_sha256, license, attribution,
+                       extraction_rule, coverage, status, limitations, registered_by
+                   ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                   ON CONFLICT (city_id, reference_key) DO UPDATE SET
+                       source_type=EXCLUDED.source_type,
+                       source_url=EXCLUDED.source_url,
+                       retrieval_date=EXCLUDED.retrieval_date,
+                       source_sha256=EXCLUDED.source_sha256,
+                       license=EXCLUDED.license,
+                       attribution=EXCLUDED.attribution,
+                       extraction_rule=EXCLUDED.extraction_rule,
+                       coverage=EXCLUDED.coverage,
+                       status=EXCLUDED.status,
+                       limitations=EXCLUDED.limitations,
+                       registered_by=EXCLUDED.registered_by,
+                       registered_at=now()
+                   RETURNING id, reference_key, status, registered_at""",
+                (
+                    city[0], request["reference_key"], request["source_type"],
+                    request["source_url"], request["retrieval_date"],
+                    request["source_sha256"], request["license"], request["attribution"],
+                    request["extraction_rule"], json.dumps(request["coverage"], ensure_ascii=False),
+                    request["status"], json.dumps(request["limitations"], ensure_ascii=False),
+                    context.actor,
+                ),
+            ).fetchone()
+            self._audit(
+                connection,
+                "validation.reference.register",
+                "validation_reference_dataset",
+                str(row[0]),
+                str(city[0]),
+                None,
+                {"reference_key": row[1], "status": row[2]},
+            )
+            connection.commit()
+        return {
+            "validation_reference_id": row[0],
+            "reference_key": row[1],
+            "status": row[2],
+            "registered_at": row[3],
         }
 
     def audit_events(self, city_id: str | None, limit: int) -> list[dict[str, Any]]:

@@ -118,6 +118,28 @@ JOB_STAGES = {
         "enforce_human_review_boundary",
         "persist_artifacts",
     ),
+    "validation_run": (
+        "validate_claim_and_versions",
+        "select_deterministic_samples",
+        "run_primary_and_reference_models",
+        "classify_disagreements",
+        "verify_evidence",
+        "persist_artifacts",
+    ),
+    "validation_reproduce": (
+        "verify_source_manifest",
+        "verify_data_hashes",
+        "run_validation",
+        "compare_summary_hashes",
+        "persist_artifacts",
+    ),
+    "pilot_rehearsal": (
+        "verify_public_inputs",
+        "rehearse_workflow",
+        "classify_external_blocks",
+        "verify_evidence",
+        "persist_artifacts",
+    ),
 }
 
 

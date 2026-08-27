@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from backend.citygap_platform.domain.jobs import JOB_STAGES
 from backend.citygap_platform.domain.scenarios import FieldCheckValue, ScenarioStatus
+from backend.citygap_platform.domain.validation import MunicipalFeedback, ValidationStatus
 from backend.citygap_platform.observability import request_observability_middleware
 from backend.citygap_platform.security.auth import (
     AuthSettings,
@@ -66,6 +67,66 @@ class JobTransitionRequest(BaseModel):
     action: Literal["start", "advance", "succeed", "fail"]
     stage: str | None = None
     error: str | None = Field(default=None, max_length=4000)
+
+
+class ValidationRunRequest(BaseModel):
+    claim_key: str = Field(min_length=1, max_length=200)
+    method_key: str = Field(min_length=1, max_length=200)
+    urban_state_id: str | None = Field(default=None, min_length=36, max_length=36)
+    dataset_versions: dict[str, str] = Field(min_length=1, max_length=100)
+    network_version_id: str | None = Field(default=None, min_length=36, max_length=36)
+    algorithm_version: str = Field(min_length=1, max_length=200)
+    reference_source: dict[str, Any]
+    sample_rule: dict[str, Any]
+    limitations: list[str] = Field(min_length=1, max_length=100)
+
+
+class ValidationFieldReviewRequest(BaseModel):
+    validation_result_id: str = Field(min_length=36, max_length=36)
+    observation_type: str = Field(min_length=1, max_length=200)
+    observed_accessibility_issue: str | None = Field(default=None, max_length=4000)
+    road_passability: Literal["passable", "not_passable", "uncertain"] | None = None
+    facility_availability: Literal["available", "unavailable", "uncertain"] | None = None
+    longitude: float | None = Field(default=None, ge=-180, le=180)
+    latitude: float | None = Field(default=None, ge=-90, le=90)
+    observed_at: datetime
+    evidence_attachment_reference: str | None = Field(default=None, max_length=2000)
+    municipal_feedback: MunicipalFeedback = MunicipalFeedback.NOT_REVIEWED
+    review_note: str = Field(default="", max_length=4000)
+
+    @field_validator("observed_at")
+    @classmethod
+    def field_timestamp_has_timezone(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("field observation timestamp must include a timezone")
+        return value
+
+    @field_validator("evidence_attachment_reference")
+    @classmethod
+    def evidence_reference_is_bounded_https_or_object_key(cls, value: str | None) -> str | None:
+        if value and not value.startswith(("https://", "evidence://")):
+            raise ValueError("evidence attachment must be HTTPS or an evidence:// object reference")
+        return value
+
+
+class ValidationStatusRequest(BaseModel):
+    expected_status: ValidationStatus
+    proposed_status: ValidationStatus
+    note: str = Field(min_length=1, max_length=4000)
+
+
+class ValidationReferenceRequest(BaseModel):
+    reference_key: str = Field(min_length=1, max_length=200)
+    source_type: Literal["official_plateau", "municipal_public", "other_public", "osm"]
+    source_url: str = Field(min_length=1, max_length=2000)
+    retrieval_date: str = Field(pattern=r"^\d{4}-\d{2}-\d{2}$")
+    source_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    license: str = Field(min_length=1, max_length=1000)
+    attribution: str = Field(min_length=1, max_length=1000)
+    extraction_rule: str = Field(min_length=1, max_length=4000)
+    coverage: dict[str, Any]
+    status: Literal["available", "not_available", "manual_import_required"]
+    limitations: list[str] = Field(min_length=1, max_length=100)
 
 
 class StressTestAssumptionRequest(BaseModel):
@@ -916,6 +977,148 @@ def create_app(
             raise HTTPException(status_code=409, detail=str(error)) from error
         if result is None:
             raise HTTPException(status_code=404, detail="Job not found")
+        return result
+
+    @application.get("/validation/claims")
+    def validation_claims(
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        return {
+            "status_semantics": (
+                "Recorded evidence-governance status; test success never promotes a claim automatically."
+            ),
+            "allowed_statuses": [status.value for status in ValidationStatus],
+            "claims": repo.validation_claims(),
+        }
+
+    @application.get("/cities/{city_id}/validation")
+    def city_validations(
+        city_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=100)] = 30,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        return {
+            "city_id": city_id,
+            "limit": limit,
+            "offset": offset,
+            "validation_runs": repo.city_validations(city_id, limit, offset),
+        }
+
+    @application.post(
+        "/cities/{city_id}/validation",
+        status_code=201,
+        dependencies=[Depends(require_permission("validation:run"))],
+    )
+    def create_validation_run(
+        city_id: str,
+        request_body: ValidationRunRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.create_validation_run(city_id, request_body.model_dump(mode="json"))
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="City, claim, method, or version not found")
+        return result
+
+    @application.get("/validation/{validation_id}")
+    def validation_detail(
+        validation_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.validation_detail(validation_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Validation run not found")
+        return result
+
+    @application.get("/validation/{validation_id}/samples")
+    def validation_samples(
+        validation_id: str,
+        bbox: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=5000)] = 500,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        return repo.validation_samples(validation_id, _parse_bbox(bbox), limit, offset)
+
+    @application.get("/validation/{validation_id}/disagreements")
+    def validation_disagreements(
+        validation_id: str,
+        bbox: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=5000)] = 500,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        return repo.validation_disagreements(validation_id, _parse_bbox(bbox), limit, offset)
+
+    @application.get("/validation/{validation_id}/sensitivity")
+    def validation_sensitivity(
+        validation_id: str,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+        limit: Annotated[int, Query(ge=1, le=1000)] = 200,
+        offset: Annotated[int, Query(ge=0)] = 0,
+    ) -> dict:
+        return repo.validation_sensitivity(validation_id, limit, offset)
+
+    @application.post(
+        "/validation/{validation_id}/field-review",
+        status_code=201,
+        dependencies=[Depends(require_permission("validation:review"))],
+    )
+    def validation_field_review(
+        validation_id: str,
+        request_body: ValidationFieldReviewRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.create_validation_field_review(
+                validation_id, request_body.model_dump(mode="json")
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Validation result not found")
+        return result
+
+    @application.patch(
+        "/validation/{validation_id}/status",
+        dependencies=[Depends(require_permission("validation:review"))],
+    )
+    def update_validation_status(
+        validation_id: str,
+        request_body: ValidationStatusRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        try:
+            result = repo.update_validation_status(
+                validation_id,
+                request_body.expected_status.value,
+                request_body.proposed_status.value,
+                request_body.note,
+            )
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error)) from error
+        if result is None:
+            raise HTTPException(status_code=404, detail="Validation run not found")
+        return result
+
+    @application.post(
+        "/cities/{city_id}/validation/references",
+        status_code=201,
+        dependencies=[Depends(require_permission("validation:reference:register"))],
+    )
+    def register_validation_reference(
+        city_id: str,
+        request_body: ValidationReferenceRequest,
+        repo: Annotated[PlatformRepository, Depends(_repository)],
+    ) -> dict:
+        result = repo.register_validation_reference(
+            city_id, request_body.model_dump(mode="json")
+        )
+        if result is None:
+            raise HTTPException(status_code=404, detail="City not found")
         return result
 
     @application.get(

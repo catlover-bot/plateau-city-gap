@@ -18,7 +18,13 @@ ROLES = frozenset({"viewer", "analyst", "planner", "administrator"})
 ROLE_PERMISSIONS = {
     "viewer": frozenset({"platform:read"}),
     "analyst": frozenset(
-        {"platform:read", "analysis:run", "scenario:draft", "stress_test:create"}
+        {
+            "platform:read",
+            "analysis:run",
+            "scenario:draft",
+            "stress_test:create",
+            "validation:run",
+        }
     ),
     "planner": frozenset(
         {
@@ -30,6 +36,8 @@ ROLE_PERMISSIONS = {
             "outcome:review",
             "field:write",
             "field:sync",
+            "validation:run",
+            "validation:review",
         }
     ),
     "administrator": frozenset({"*"}),

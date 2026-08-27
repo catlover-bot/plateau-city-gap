@@ -64,3 +64,15 @@ def test_temporal_resilience_permissions_follow_municipal_roles() -> None:
     assert not analyst.permits("outcome:review")
     assert planner.permits("outcome:review") and planner.permits("field:sync")
     assert admin.permits("state:manage")
+
+
+def test_validation_permissions_follow_evidence_governance_roles() -> None:
+    viewer = Identity("v", "test", frozenset({"viewer"}))
+    analyst = Identity("a", "test", frozenset({"analyst"}))
+    planner = Identity("p", "test", frozenset({"planner"}))
+    admin = Identity("x", "test", frozenset({"administrator"}))
+    assert viewer.permits("platform:read") and not viewer.permits("validation:run")
+    assert analyst.permits("validation:run") and not analyst.permits("validation:review")
+    assert planner.permits("validation:review")
+    assert not planner.permits("validation:reference:register")
+    assert admin.permits("validation:reference:register")
