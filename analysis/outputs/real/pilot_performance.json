@@ -1,0 +1,149 @@
+{
+  "classification": {
+    "api_database": "SYNTHETIC_SCALE",
+    "production_sla_claimed": false,
+    "real_pipeline": "REAL_MUNICIPAL_DATA"
+  },
+  "environment": {
+    "ci": true,
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.12.14"
+  },
+  "real_pipeline": {
+    "fujisawa": {
+      "building_detail": {
+        "accessibility_seconds": 9.179,
+        "allocation_seconds": 0.635,
+        "audit_json_bytes": 13282,
+        "building_parse_seconds": 241.943,
+        "crosswalk_seconds": 10.916,
+        "detail_csv_bytes": 106627,
+        "parquet_bytes": 22173405,
+        "peak_rss_kib": 1016164,
+        "total_seconds": 293.074
+      },
+      "road_network": {
+        "access_parquet_bytes": 18664672,
+        "aggregation_seconds": 12.356,
+        "edge_parquet_bytes": 8215591,
+        "graph_build_seconds": 9.31,
+        "medical_labels_parquet_bytes": 5657290,
+        "mesh_csv_bytes": 170725,
+        "node_parquet_bytes": 6885410,
+        "peak_rss_kib": 947592,
+        "road_parse_seconds": 13.371,
+        "routing_seconds": 24.934,
+        "snap_seconds": 13.519,
+        "total_seconds": 77.479,
+        "transport_labels_parquet_bytes": 5647976
+      },
+      "spatial_context": {
+        "runtime_seconds": 1116.126
+      },
+      "terrain": {
+        "dem_interpolation_seconds": 475.9,
+        "peak_rss_kib": 860964,
+        "terrain_access_parquet_bytes": 11692012,
+        "terrain_edge_parquet_bytes": 10485564,
+        "terrain_node_parquet_bytes": 7809954,
+        "terrain_route_seconds": 25.098,
+        "total_seconds": 522.011
+      }
+    },
+    "maizuru": {
+      "building_detail": {
+        "accessibility_seconds": 4.795,
+        "allocation_seconds": 0.152,
+        "audit_json_bytes": 18244,
+        "building_parse_seconds": 48.288,
+        "crosswalk_seconds": 2.627,
+        "detail_csv_bytes": 52669,
+        "parquet_bytes": 5584626,
+        "peak_rss_kib": 523724,
+        "total_seconds": 72.01
+      },
+      "road_network": {
+        "access_parquet_bytes": 3964000,
+        "aggregation_seconds": 1.474,
+        "edge_parquet_bytes": 2354622,
+        "graph_build_seconds": 1.677,
+        "medical_labels_parquet_bytes": 1549225,
+        "mesh_csv_bytes": 83641,
+        "node_parquet_bytes": 2133160,
+        "peak_rss_kib": 599156,
+        "road_parse_seconds": 3.277,
+        "routing_seconds": 3.535,
+        "snap_seconds": 4.318,
+        "total_seconds": 19.896,
+        "transport_labels_parquet_bytes": 1549069
+      },
+      "spatial_context": {
+        "runtime_seconds": 263.458
+      },
+      "terrain": {
+        "dem_interpolation_seconds": 660.172,
+        "peak_rss_kib": 443816,
+        "terrain_access_parquet_bytes": 2505391,
+        "terrain_edge_parquet_bytes": 3084170,
+        "terrain_node_parquet_bytes": 2409705,
+        "terrain_route_seconds": 6.821,
+        "total_seconds": 669.465
+      }
+    }
+  },
+  "schema_version": 1,
+  "synthetic_scale": {
+    "api_p50_p95": {
+      "bbox_buildings": {
+        "maximum_ms": 86.573,
+        "p50_ms": 61.694,
+        "p95_ms": 63.532,
+        "samples": 30
+      },
+      "cities": {
+        "maximum_ms": 12.017,
+        "p50_ms": 10.647,
+        "p95_ms": 11.113,
+        "samples": 30
+      },
+      "mesh_detail": {
+        "maximum_ms": 13.445,
+        "p50_ms": 12.587,
+        "p95_ms": 12.919,
+        "samples": 30
+      },
+      "route_detail": {
+        "maximum_ms": 12.956,
+        "p50_ms": 12.329,
+        "p95_ms": 12.772,
+        "samples": 30
+      },
+      "scenario_comparison": {
+        "maximum_ms": 80.624,
+        "p50_ms": 68.387,
+        "p95_ms": 70.594,
+        "samples": 30
+      },
+      "scenario_detail": {
+        "maximum_ms": 26.406,
+        "p50_ms": 24.902,
+        "p95_ms": 25.683,
+        "samples": 30
+      },
+      "tile_cached": {
+        "maximum_ms": 3.564,
+        "p50_ms": 2.559,
+        "p95_ms": 3.357,
+        "samples": 30
+      },
+      "tile_uncached": {
+        "maximum_ms": 842.642,
+        "p50_ms": 803.776,
+        "p95_ms": 842.642,
+        "samples": 10
+      }
+    },
+    "buildings": 100000,
+    "road_edges": 100000
+  }
+}
