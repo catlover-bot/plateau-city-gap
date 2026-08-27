@@ -44,3 +44,24 @@ staging/transactions and only set a dataset analysis-ready after their final val
 
 No production RPO/RTO is asserted. Municipal owners must set retention, escalation,
 credential rotation and incident-response policy before handling private operational data.
+
+## Field review and evidence
+
+Planner-authorized field checks persist per scenario site. They retain checklist observations,
+notes, bounded HTTPS photo references and structured location context; CITY GAP does not upload
+or host photos. A hazard overlap remains a confirmation flag and never changes siting feasibility
+automatically. Scenario status and field-check mutations write actor/request/before/after audit
+evidence in the same transaction.
+
+Evidence Package V2 compares exactly three selected plans and emits deterministic JSON plus a
+print-friendly HTML review sheet. It includes cover, assumptions/data years, candidate coordinates,
+A/B/C metrics, coordinate map, network caveat, planning/hazard context, field checks, provenance,
+algorithm/config hash and limitations. `recommendation` and `preferred_scenario` remain null.
+
+```bash
+python -m analysis.scripts.export_scenario_comparison_evidence
+```
+
+The authenticated `運用管理` surface reads `/admin/snapshot` and the pilot-readiness endpoint. It
+shows current cities, datasets/versions/quality state, capabilities, networks, jobs and users/roles.
+It contains no fallback operational records and reports connection/auth failures explicitly.

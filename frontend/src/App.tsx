@@ -7,6 +7,7 @@ import { EmptyState, ErrorState, LoadingState } from "./components/AppStates";
 import { LayerPanel } from "./components/LayerPanel";
 import { MethodologyModal } from "./components/MethodologyModal";
 import { MetricSelector } from "./components/MetricSelector";
+import { MunicipalAdmin } from "./components/MunicipalAdmin";
 import { MunicipalWorkspace } from "./components/MunicipalWorkspace";
 import { RankingPanel } from "./components/RankingPanel";
 import { ScenarioPanel } from "./components/ScenarioPanel";
@@ -63,7 +64,7 @@ const LEGENDS: Record<MetricMode, { title: string; low: string; high: string }> 
 
 type SideTab = "ranking" | "detail" | "scenario";
 type CityId = "maizuru" | "fujisawa";
-type ProductView = "demo" | "workspace";
+type ProductView = "demo" | "workspace" | "admin";
 
 export default function App() {
   const [datasets, setDatasets] = useState<Record<CityId, AppData> | null>(null);
@@ -350,7 +351,7 @@ export default function App() {
     : layers;
 
   return (
-    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : ""}`}>
+    <div className={`app-shell ${productView === "workspace" ? "workspace-mode" : productView === "admin" ? "admin-mode" : ""}`}>
       <header className="app-header">
         <div className="brand-block">
           <div>
@@ -362,6 +363,7 @@ export default function App() {
           <div className="product-switch" role="group" aria-label="CITY GAPの表示モード">
             <button type="button" className={productView === "demo" ? "active" : ""} aria-pressed={productView === "demo"} onClick={() => changeProductView("demo")}>公開デモ</button>
             <button type="button" className={productView === "workspace" ? "active" : ""} aria-pressed={productView === "workspace"} onClick={() => changeProductView("workspace")}>自治体Workspace</button>
+            <button type="button" className={productView === "admin" ? "active" : ""} aria-pressed={productView === "admin"} onClick={() => changeProductView("admin")}>運用管理</button>
           </div>
           <div className="city-switch" role="group" aria-label="分析都市を選択">
             <button type="button" className={cityId === "maizuru" ? "active" : ""} aria-pressed={cityId === "maizuru"} onClick={() => switchCity("maizuru")}>
@@ -377,6 +379,9 @@ export default function App() {
         </div>
       </header>
 
+      {productView === "admin" ? (
+        <MunicipalAdmin cityId={cityId} />
+      ) : <>
       <main className="map-stage">
         <Suspense fallback={<div className="map-loading" role="status"><span /> 地図エンジンを準備中</div>}>
           <CesiumMap
@@ -642,6 +647,7 @@ export default function App() {
 
       <MethodologyModal open={methodologyOpen} data={data} onClose={() => setMethodologyOpen(false)} />
       <EvidenceModal open={evidenceOpen} evidence={data.evidence} plan={decisionPlan} onClose={() => setEvidenceOpen(false)} />
+      </>}
     </div>
   );
 }

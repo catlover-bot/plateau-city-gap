@@ -12,6 +12,9 @@ explicit authentication modes:
 
 `CITYGAP_ENVIRONMENT=pilot` or `production` refuses to start with development auth.
 This guard prevents convenient local headers from silently becoming production auth.
+Pilot readiness also remains blocked until the deployment has integration-tested the
+injected signature-verifying adapter and explicitly sets
+`CITYGAP_OIDC_VERIFIER_CONFIGURED=true`; issuer/audience strings alone never pass the gate.
 
 ## Roles
 

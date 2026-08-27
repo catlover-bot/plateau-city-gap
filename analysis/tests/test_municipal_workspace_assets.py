@@ -84,3 +84,28 @@ def test_workspace_manifest_matches_public_asset():
         len(value) for value in points["stories"].values()
     )
     assert manifest["database_loaded"] is False
+
+
+def test_public_bundle_contains_no_building_level_demographic_or_municipal_parquet():
+    public_root = ROOT / "frontend/public"
+    names = [path.name.lower() for path in public_root.rglob("*") if path.is_file()]
+    assert not any("building_demographic" in name for name in names)
+    assert not any(name.endswith((".parquet", ".gpkg", ".sqlite")) for name in names)
+
+    def records(value):
+        if isinstance(value, dict):
+            yield value
+            for item in value.values():
+                yield from records(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from records(item)
+
+    for path in public_root.rglob("*.json"):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        # Aggregate scenario metrics may contain population totals in a separate record. A public
+        # building record must never carry a building-level population estimate.
+        for record in records(payload):
+            if "building_gml_id" in record:
+                assert "estimated_population" not in record
+                assert "estimated_elderly_population" not in record

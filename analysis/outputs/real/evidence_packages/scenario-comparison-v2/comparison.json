@@ -1,0 +1,1188 @@
+{
+  "schema_version": "2.0.0",
+  "package_type": "municipal_scenario_comparison_evidence",
+  "generated_at": "2026-08-26T13:45:01Z",
+  "city": {
+    "city_id": "26202",
+    "name": "舞鶴市"
+  },
+  "comparison": [
+    {
+      "comparison_label": "A",
+      "scenario": {
+        "plan_id": "network-overall-3",
+        "mode": "overall",
+        "label": "建物全体の改善",
+        "site_count": 3,
+        "objective": "maximize sum of network-distance reduction across reachable buildings",
+        "exactness": "deterministic forward-greedy approximation; not a global N-site optimum",
+        "sites": [
+          {
+            "site_order": 1,
+            "candidate_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d-0",
+            "node_id": "exp::tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d:0",
+            "road_gml_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d",
+            "road_surface_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d:0",
+            "road_name": "伊佐津七日市線",
+            "longitude": 135.332805923,
+            "latitude": 35.435368484,
+            "existing_transport_distance_m": 534.824,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種住居地域 | 道路 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 4,
+            "hazard_context": "flood: 0.5m以上1.0m未満 | flood: 1.0m以上2.0m未満",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351226_tran_6697_op.gml",
+              "source_member_crc32": "6cd45077"
+            },
+            "candidate_to_graph_connector_m": 0.055034951,
+            "terrain": {
+              "elevation_m": 5.435,
+              "source_member": "udx/dem/533512_dem_6697_05_op.gml",
+              "source_member_crc32": "ce7fa1bc",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 1.78
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 2,
+            "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "node_id": "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_gml_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05",
+            "road_surface_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_name": "愛宕通線",
+            "longitude": 135.408737906,
+            "latitude": 35.483493063,
+            "existing_transport_distance_m": 644.835,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種中高層住居専用地域 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 3,
+            "hazard_context": "landslide: 土砂災害警戒区域（指定済）",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351382_tran_6697_op.gml",
+              "source_member_crc32": "bbc851ae"
+            },
+            "candidate_to_graph_connector_m": 0.003615528,
+            "terrain": {
+              "elevation_m": 3.421,
+              "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+              "source_member_crc32": "69a31f47",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 5.216
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 3,
+            "candidate_id": "tran_d1ce31ad-058f-45b0-abed-11324ea7961c-0",
+            "node_id": "exp::tran_d1ce31ad-058f-45b0-abed-11324ea7961c:0",
+            "road_gml_id": "tran_d1ce31ad-058f-45b0-abed-11324ea7961c",
+            "road_surface_id": "tran_d1ce31ad-058f-45b0-abed-11324ea7961c:0",
+            "road_name": "大宮北通線",
+            "longitude": 135.40421708,
+            "latitude": 35.460221686,
+            "existing_transport_distance_m": 493.568,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 準住居地域 | 準防火地域 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 4,
+            "hazard_context": "landslide: 土砂災害警戒区域（指定済）",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351352_tran_6697_op.gml",
+              "source_member_crc32": "5938a6d5"
+            },
+            "candidate_to_graph_connector_m": 0.01328028,
+            "terrain": {
+              "elevation_m": 24.889,
+              "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+              "source_member_crc32": "69a31f47",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 4.965
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          }
+        ],
+        "impact": {
+          "affected_graph_node_count": 743,
+          "improved_building_count": 2911,
+          "newly_network_connected_building_count": 0,
+          "total_building_distance_reduction_m": 1103540.923,
+          "mean_reduction_all_reachable_buildings_m": 38.798,
+          "mean_reduction_improved_buildings_m": 379.093,
+          "affected_estimated_elderly_population": 1572.547518,
+          "elderly_weighted_distance_reduction_person_m": 587958.247,
+          "elderly_weighted_mean_reduction_m": 29.806,
+          "worst_decile_mean_reduction_m": 245.967,
+          "robust_top20_elderly_weighted_reduction_person_m": 0.0,
+          "robust_top20_improved_mesh_count": 0,
+          "improved_mesh_count": 16
+        },
+        "assigned_demand_node_count": 743,
+        "selection_trace": [
+          {
+            "step": 1,
+            "candidate_index": 6988,
+            "candidate_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d-0",
+            "marginal_objective": 455256.2979251715,
+            "marginal_overall_building_distance_m": 455256.2979251715,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.193357
+          },
+          {
+            "step": 2,
+            "candidate_index": 7606,
+            "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "marginal_objective": 375094.1791315951,
+            "marginal_overall_building_distance_m": 375094.1791315951,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.123261
+          },
+          {
+            "step": 3,
+            "candidate_index": 9473,
+            "candidate_id": "tran_d1ce31ad-058f-45b0-abed-11324ea7961c-0",
+            "marginal_objective": 273190.4461166572,
+            "marginal_overall_building_distance_m": 273190.4461166572,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.11884
+          }
+        ],
+        "representative_evidence": {
+          "building_gml_id": "bldg_0681b426-f27d-4aa1-9089-8a693931b04a",
+          "estimated_demographic_source": {
+            "source_population_year": 2020,
+            "allocation_method": "strict_residential",
+            "population_resolution": "building_estimate",
+            "privacy": "model source only; no per-building person estimate is exported"
+          },
+          "origin_representative_point": {
+            "longitude": 135.408540811,
+            "latitude": 35.483522151,
+            "method": "nearest_lod1_road_surface_to_representative_graph_node"
+          },
+          "snap_node_id": "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+          "origin_to_node_connector_m": 14.906,
+          "before": {
+            "network_distance_m": 954.679,
+            "destination_id": "bus_stop::0064::市場",
+            "destination_name": "市場",
+            "road_edge_sequence": [
+              "exp::68e721c8583ee38d5eed",
+              "exp::58db587e62120587c47f",
+              "exp::d978f32840184aa2da3d",
+              "exp::e854599e67cff4af613e",
+              "exp::dae7718d0cb86fbd801c",
+              "exp::9db23b6e029d9ffd0589",
+              "exp::edd359bf9713c14015cc",
+              "exp::f6a8dd73907392c23056",
+              "exp::ac1a6e466b6b18ad1c38",
+              "exp::3348ef2f0f320ce1d087",
+              "exp::e8d9199c5c31d85ca131",
+              "exp::cf572e2827050064ea4f",
+              "exp::7056e10df43fb28618ee",
+              "exp::aa0b9f6eeb9c3db7cbc5",
+              "exp::789118f5d1d0a8ec06fc",
+              "exp::5b416ef3590be7e96c65",
+              "exp::793f1726a08f4a380fef",
+              "exp::a6939f6c9b68fed26e91",
+              "exp::49461fef3c29c6a3b023",
+              "exp::e7ca666f7ec2420bda6f",
+              "exp::6c28c302eda289b123a6",
+              "exp::547eb51d4d7bdde52463",
+              "exp::19bbb1ee6a37a28b1273",
+              "exp::adf5d6e6025b39818477",
+              "exp::b0336fbe068353b71ec6",
+              "exp::a2ab15cfcf837b15cb16",
+              "exp::006b8eae0f77bbc7938d",
+              "exp::301c86b0387cce173869",
+              "exp::4210cd8f8879e729f552",
+              "exp::2fbc6c3b8f2bdc15e127",
+              "exp::b5d15cd10234e508f882",
+              "exp::8cbf5bfa74970a18e1d9"
+            ],
+            "road_node_sequence": [
+              "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+              "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+              "exp::tran_ddc37b12-8f33-45f8-b370-9b0c1dd56464:0",
+              "exp::tran_9faded80-e773-44ad-b131-2d9d90f8b257:0",
+              "exp::tran_156fcda3-00be-4f10-aa02-c77ac9993de7:0",
+              "exp::tran_f66c32e5-fef5-4492-a2c2-527ab45f65b0:0",
+              "exp::tran_fb5332c4-aa3b-4982-bef1-a385f865eabe:0",
+              "exp::tran_8138556d-e516-48d3-9545-0410e784fcb2:0",
+              "exp::tran_10c3184e-25c5-45b6-9d9a-ea83d920d5f9:0",
+              "exp::tran_60543b1d-0956-42fe-b92c-f3816516ab4c:0",
+              "exp::tran_e4f5b8e3-509b-4be6-92c8-6b3737f01ae5:0",
+              "exp::tran_bc0c657e-75ad-4b51-bfcd-38b681921c6a:0",
+              "exp::tran_4de59b10-5bf0-4f9e-9475-e2c02e05d0f6:0",
+              "exp::tran_1bad3647-1aeb-4a31-a55e-094aa9467f3f:0",
+              "exp::tran_bacb431e-960c-4b18-86c4-c63bf351613f:0",
+              "exp::tran_ee05ac0a-1487-45c6-ad17-340419df9d1b:0",
+              "exp::tran_c1bb051a-7a2b-4ed9-be38-7820840b3557:0",
+              "exp::tran_96dc45d2-3a91-4110-a20a-3663d4ebea5e:0",
+              "exp::tran_de3093c9-b3a3-44d8-a406-475f8df3af13:0",
+              "exp::tran_155a1b42-dfc0-45f0-abd3-e1628b803b13:0",
+              "exp::tran_21cf1928-f6f1-4d8f-b63a-08d8eac3e0be:0",
+              "exp::tran_a6484ba7-b6d5-4e98-9da3-74830924cde5:0",
+              "exp::tran_7324f3a3-6a37-4374-8781-bd82a4360d96:0",
+              "exp::tran_ea056e45-25d0-44f3-af18-4fb429a0a881:0",
+              "exp::tran_f8e9b7a8-02d0-4297-9593-17d02219d18f:0",
+              "exp::tran_035f5488-10e3-4e57-8ca4-f30230d1dd6a:0",
+              "exp::tran_bc875d52-9127-458a-bfb4-a40b93bfca54:0",
+              "exp::tran_fae6cde2-7b59-4fd7-a62f-886f348b459d:0",
+              "exp::tran_4a6528ac-1edd-44f1-b72a-0d9ea391d6fa:0",
+              "exp::tran_2bfc6a28-a8e1-402c-8a9f-94aa116666df:0",
+              "exp::tran_6f47db00-c937-449b-8177-f7316b854717:0",
+              "exp::tran_a50a4bd1-f432-45c7-8a80-bfedc881c2e7:0",
+              "exp::tran_726f06bb-a058-48e9-a53c-118686095832:0"
+            ]
+          },
+          "after": {
+            "network_distance_m": 42.084,
+            "graph_distance_from_snap_node_m": 27.178,
+            "virtual_scenario_candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "virtual_scenario_node_id": "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_edge_sequence": [
+              "exp::68e721c8583ee38d5eed"
+            ],
+            "road_node_sequence": [
+              "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+              "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0"
+            ],
+            "plateau_road_gml_ids": [
+              "tran_d57423a6-8037-4485-ba1b-20d6a5f31550",
+              "tran_aa88195d-0720-456e-8ff1-8589a3f60d05"
+            ],
+            "terrain": {
+              "ascent_m": 0.0,
+              "descent_m": 0.052,
+              "maximum_observed_endpoint_grade_percent": 0.191,
+              "routing_penalty_applied": false
+            }
+          },
+          "route_semantics": "road_surface_adjacency_not_validated_pedestrian"
+        },
+        "marginal_from_previous_site": {
+          "site_count": 3,
+          "total_building_distance_reduction_m": 1103540.923,
+          "affected_building_count": 2911,
+          "affected_estimated_elderly_population": 1572.547518,
+          "worst_decile_mean_reduction_m": 245.967,
+          "marginal_total_building_distance_reduction_m": 273190.446,
+          "marginal_affected_building_count": 775,
+          "marginal_affected_estimated_elderly_population": 518.737898,
+          "marginal_worst_decile_mean_reduction_m": 35.311,
+          "newly_network_connected_building_count": 0,
+          "marginal_newly_network_connected_building_count": 0
+        }
+      },
+      "versions": {
+        "dataset_version_key": "26202:2025:13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "dataset_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "plateau_product_specification_version": "5.0",
+        "network_version": "exp-4fff5849d650a70b",
+        "context_version": "plateau-context-1.0.0",
+        "context_config_hash": "914ac979c5b30b54920591f2dfa6dfe346f69c2efa1d5b0d81e21cd3e49874d8",
+        "algorithm_version": "network-scenario-1.0.0",
+        "scenario_config_hash": "59d0f3049604590d815869dc185657807e617a333e5b24cc58d7c7c35705a04f"
+      },
+      "field_check_items": [
+        {
+          "site_order": 1,
+          "candidate_id": "tran_9d171b5f-9b32-4cdc-aa2d-460602a5c71d-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 2,
+          "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 3,
+          "candidate_id": "tran_d1ce31ad-058f-45b0-abed-11324ea7961c-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        }
+      ],
+      "limitations": [
+        "The graph represents LOD1 road-surface adjacency, not a validated pedestrian network.",
+        "Candidate points do not confirm land ownership, constructability, service operation or cost.",
+        "Each one-site result is exact for its stated linear, max-min or lexicographic objective over the screened set; N>1 is greedy.",
+        "Terrain observations are kept separate and are not a hidden routing penalty.",
+        "Hazard and planning overlaps require municipal review and do not determine feasibility."
+      ]
+    },
+    {
+      "comparison_label": "B",
+      "scenario": {
+        "plan_id": "network-elderly-3",
+        "mode": "elderly",
+        "label": "高齢者加重の改善",
+        "site_count": 3,
+        "objective": "maximize elderly-estimate-weighted network-distance reduction",
+        "exactness": "deterministic forward-greedy approximation; not a global N-site optimum",
+        "sites": [
+          {
+            "site_order": 1,
+            "candidate_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7-0",
+            "node_id": "exp::tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7:0",
+            "road_gml_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7",
+            "road_surface_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7:0",
+            "road_name": "伊佐津七日市線",
+            "longitude": 135.332782689,
+            "latitude": 35.435190462,
+            "existing_transport_distance_m": 546.851,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種住居地域 | 道路 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 4,
+            "hazard_context": "flood: 0.5m未満 | flood: 1.0m以上2.0m未満",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351226_tran_6697_op.gml",
+              "source_member_crc32": "6cd45077"
+            },
+            "candidate_to_graph_connector_m": 0.000267732,
+            "terrain": {
+              "elevation_m": 5.631,
+              "source_member": "udx/dem/533512_dem_6697_05_op.gml",
+              "source_member_crc32": "ce7fa1bc",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 1.577
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 2,
+            "candidate_id": "tran_8138556d-e516-48d3-9545-0410e784fcb2-0",
+            "node_id": "exp::tran_8138556d-e516-48d3-9545-0410e784fcb2:0",
+            "road_gml_id": "tran_8138556d-e516-48d3-9545-0410e784fcb2",
+            "road_surface_id": "tran_8138556d-e516-48d3-9545-0410e784fcb2:0",
+            "road_name": "愛宕通線",
+            "longitude": 135.407462219,
+            "latitude": 35.480982865,
+            "existing_transport_distance_m": 557.675,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種中高層住居専用地域 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 3,
+            "hazard_context": null,
+            "hazard_overlap": false,
+            "hazard_review_status": "no_overlap_in_source_layers",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351372_tran_6697_op.gml",
+              "source_member_crc32": "99632e96"
+            },
+            "candidate_to_graph_connector_m": 0.038606478,
+            "terrain": {
+              "elevation_m": 2.667,
+              "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+              "source_member_crc32": "69a31f47",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 4.109
+            },
+            "feasibility_flags": {
+              "hazard_attention": false,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 3,
+            "candidate_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f-0",
+            "node_id": "exp::tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0",
+            "road_gml_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f",
+            "road_surface_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0",
+            "road_name": "小倉西舞鶴線",
+            "longitude": 135.404581037,
+            "latitude": 35.460436996,
+            "existing_transport_distance_m": 490.348,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 準住居地域 | 道路 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 4,
+            "hazard_context": "landslide: 土砂災害警戒区域（指定済）",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351352_tran_6697_op.gml",
+              "source_member_crc32": "5938a6d5"
+            },
+            "candidate_to_graph_connector_m": 0.016552462,
+            "terrain": {
+              "elevation_m": 26.112,
+              "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+              "source_member_crc32": "69a31f47",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 4.549
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          }
+        ],
+        "impact": {
+          "affected_graph_node_count": 782,
+          "improved_building_count": 3059,
+          "newly_network_connected_building_count": 0,
+          "total_building_distance_reduction_m": 1055851.455,
+          "mean_reduction_all_reachable_buildings_m": 37.122,
+          "mean_reduction_improved_buildings_m": 345.162,
+          "affected_estimated_elderly_population": 1828.459229,
+          "elderly_weighted_distance_reduction_person_m": 593802.023,
+          "elderly_weighted_mean_reduction_m": 30.103,
+          "worst_decile_mean_reduction_m": 211.898,
+          "robust_top20_elderly_weighted_reduction_person_m": 0.0,
+          "robust_top20_improved_mesh_count": 0,
+          "improved_mesh_count": 18
+        },
+        "assigned_demand_node_count": 782,
+        "selection_trace": [
+          {
+            "step": 1,
+            "candidate_index": 2889,
+            "candidate_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7-0",
+            "marginal_objective": 204874.26687132285,
+            "marginal_overall_building_distance_m": 453335.0865989093,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.15227
+          },
+          {
+            "step": 2,
+            "candidate_index": 5772,
+            "candidate_id": "tran_8138556d-e516-48d3-9545-0410e784fcb2-0",
+            "marginal_objective": 203451.1918023754,
+            "marginal_overall_building_distance_m": 330335.6799318474,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.10596
+          },
+          {
+            "step": 3,
+            "candidate_index": 11353,
+            "candidate_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f-0",
+            "marginal_objective": 185476.56436724484,
+            "marginal_overall_building_distance_m": 272180.68874553137,
+            "newly_reachable_weight": 0.0,
+            "stage_runtime_seconds": 0.088827
+          }
+        ],
+        "representative_evidence": {
+          "building_gml_id": "bldg_7530e616-45fc-44e5-bbda-e961a8effc15",
+          "estimated_demographic_source": {
+            "source_population_year": 2020,
+            "allocation_method": "strict_residential",
+            "population_resolution": "building_estimate",
+            "privacy": "model source only; no per-building person estimate is exported"
+          },
+          "origin_representative_point": {
+            "longitude": 135.404366476,
+            "latitude": 35.460276794,
+            "method": "nearest_lod1_road_surface_to_representative_graph_node"
+          },
+          "snap_node_id": "exp::tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0",
+          "origin_to_node_connector_m": 26.352,
+          "before": {
+            "network_distance_m": 710.866,
+            "destination_id": "bus_stop::0090::舞鶴医療センター前",
+            "destination_name": "舞鶴医療センター前",
+            "road_edge_sequence": [
+              "exp::0ed499dd8a0b59805592",
+              "exp::5903f35a4aed25352cd5",
+              "exp::4e1cec5050cc73fb3599",
+              "exp::4018384014187bff844e",
+              "exp::fe11617927066e2640a8",
+              "exp::835ecd79ff61cc8d173a",
+              "exp::4bf0ab83f2841a144f26",
+              "exp::f6a50f270acdab76805a",
+              "exp::bbebf2de77035ca38cdc",
+              "exp::13ad7a5b925c9224107a",
+              "exp::de97a7ee0ddaa0296f29",
+              "exp::28c40e1f0c4678481637",
+              "exp::3308672520c7ecfd561a",
+              "exp::e1fa099f13d955c5f3c8",
+              "exp::8ba22df3e858ce8ca1b1",
+              "exp::cd64fb4b8571d1fd5116",
+              "exp::fd2e1ced8d7cfb9180f3",
+              "exp::d81fd84ab4a2c924cc4e",
+              "exp::c282b476c5d4c267ff0b",
+              "exp::9f5b7d341f9e209db0ad",
+              "exp::4b295c57a4a37f38c7b2",
+              "exp::eca7c0a0545fcebeae4b",
+              "exp::a5fc7fe72c327da9fc7e",
+              "exp::8970fc2f018cb7361f53",
+              "exp::894db03b7583c364051e",
+              "exp::552f4e7df7608fd9e96f"
+            ],
+            "road_node_sequence": [
+              "exp::tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0",
+              "exp::tran_c5a13f44-97a7-4d7d-9261-57b84a026885:0",
+              "exp::tran_aeb3df84-9b75-4bea-b254-c3db1581fcf9:0",
+              "exp::tran_d3b6b253-d3a9-4307-96fc-82261ca7622e:0",
+              "exp::tran_82f0daed-3267-427c-b6e7-143e07ed1c46:0",
+              "exp::tran_05bd3977-6b81-40e0-bd82-162d4c3fec82:0",
+              "exp::tran_9d60f4b7-61c8-481e-9e90-4f4c6838e129:0",
+              "exp::tran_ffc252ec-109c-4646-9471-398529e11328:0",
+              "exp::tran_466c7bd8-453e-487d-9e49-6de5f2c5c7d3:0",
+              "exp::tran_e375cef1-caa8-4572-a6c3-f581ba7fa2e9:0",
+              "exp::tran_dc8afa90-3963-478b-8c7d-a5193517821c:0",
+              "exp::tran_4fd1d5e1-d393-4fe7-a669-04932632acf0:0",
+              "exp::tran_cdc2d14f-9dc0-4aff-9509-e16c0fae3fc1:0",
+              "exp::tran_7969cb15-728a-49c2-9931-be360a90a775:0",
+              "exp::tran_890ee8bb-fd8d-4046-aff1-a8680043bd0f:0",
+              "exp::tran_b6968a0a-dcff-401b-bad8-ea4e2084af2f:0",
+              "exp::tran_8fbcf2cf-4aea-4b39-98a1-941e6e3922ff:0",
+              "exp::tran_9224f5ed-e145-4ba4-b60e-1d63175e6338:0",
+              "exp::tran_e970ee71-5540-45a5-94c2-07444addc490:0",
+              "exp::tran_df34ef98-0cce-4fc8-a427-8d6319446c15:0",
+              "exp::tran_b3bfdc25-c4fc-4635-bfd8-cb731bb234cf:0",
+              "exp::tran_6b3b60a7-f97c-490b-afad-41409de7eb29:0",
+              "exp::tran_b0d61655-2f18-41a5-b5ab-54fc72706a35:0",
+              "exp::tran_b3170789-1914-4c72-8d32-18bd5b335173:0",
+              "exp::tran_94a1301c-1337-4f99-a0f5-b8d5107d7b3b:0",
+              "exp::tran_3765aace-763f-4808-8e78-5668a4b30b6f:0",
+              "exp::tran_c67b9271-4588-4d35-a928-da20eb413d84:0"
+            ]
+          },
+          "after": {
+            "network_distance_m": 26.352,
+            "graph_distance_from_snap_node_m": 0.0,
+            "virtual_scenario_candidate_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f-0",
+            "virtual_scenario_node_id": "exp::tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0",
+            "road_edge_sequence": [],
+            "road_node_sequence": [
+              "exp::tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f:0"
+            ],
+            "plateau_road_gml_ids": [
+              "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f"
+            ],
+            "terrain": {
+              "ascent_m": 0.0,
+              "descent_m": 0.0,
+              "maximum_observed_endpoint_grade_percent": 0.0,
+              "routing_penalty_applied": false
+            }
+          },
+          "route_semantics": "road_surface_adjacency_not_validated_pedestrian"
+        },
+        "marginal_from_previous_site": {
+          "site_count": 3,
+          "total_building_distance_reduction_m": 1055851.455,
+          "affected_building_count": 3059,
+          "affected_estimated_elderly_population": 1828.459229,
+          "worst_decile_mean_reduction_m": 211.898,
+          "marginal_total_building_distance_reduction_m": 272180.688,
+          "marginal_affected_building_count": 760,
+          "marginal_affected_estimated_elderly_population": 509.46336,
+          "marginal_worst_decile_mean_reduction_m": 36.147,
+          "newly_network_connected_building_count": 0,
+          "marginal_newly_network_connected_building_count": 0
+        }
+      },
+      "versions": {
+        "dataset_version_key": "26202:2025:13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "dataset_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "plateau_product_specification_version": "5.0",
+        "network_version": "exp-4fff5849d650a70b",
+        "context_version": "plateau-context-1.0.0",
+        "context_config_hash": "914ac979c5b30b54920591f2dfa6dfe346f69c2efa1d5b0d81e21cd3e49874d8",
+        "algorithm_version": "network-scenario-1.0.0",
+        "scenario_config_hash": "59d0f3049604590d815869dc185657807e617a333e5b24cc58d7c7c35705a04f"
+      },
+      "field_check_items": [
+        {
+          "site_order": 1,
+          "candidate_id": "tran_4125c5ae-afc2-4f97-a822-94fbfd4481d7-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 2,
+          "candidate_id": "tran_8138556d-e516-48d3-9545-0410e784fcb2-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 3,
+          "candidate_id": "tran_fd15501a-b5e0-4253-96cd-3faa2bc9875f-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        }
+      ],
+      "limitations": [
+        "The graph represents LOD1 road-surface adjacency, not a validated pedestrian network.",
+        "Candidate points do not confirm land ownership, constructability, service operation or cost.",
+        "Each one-site result is exact for its stated linear, max-min or lexicographic objective over the screened set; N>1 is greedy.",
+        "Terrain observations are kept separate and are not a hidden routing penalty.",
+        "Hazard and planning overlaps require municipal review and do not determine feasibility."
+      ]
+    },
+    {
+      "comparison_label": "C",
+      "scenario": {
+        "plan_id": "network-balanced-3",
+        "mode": "balanced",
+        "label": "バランス案",
+        "site_count": 3,
+        "objective": "greedy max-min compromise across separately normalized overall, elderly, worst-served and robust marginal objectives; no weighted composite score",
+        "exactness": "deterministic forward-greedy approximation; not a global N-site optimum",
+        "sites": [
+          {
+            "site_order": 1,
+            "candidate_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f-0",
+            "node_id": "exp::tran_cef764dd-3b03-4ac3-8229-348084291d6f:0",
+            "road_gml_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f",
+            "road_surface_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f:0",
+            "road_name": "舞鶴和知線",
+            "longitude": 135.396830452,
+            "latitude": 35.447727584,
+            "existing_transport_distance_m": 580.275,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化調整区域 | 道路 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 3,
+            "hazard_context": null,
+            "hazard_overlap": false,
+            "hazard_review_status": "no_overlap_in_source_layers",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351331_tran_6697_op.gml",
+              "source_member_crc32": "e83b7e06"
+            },
+            "candidate_to_graph_connector_m": 0.004460308,
+            "terrain": {
+              "elevation_m": 34.065,
+              "source_member": "udx/dem/533513_dem_6697_00_op.gml",
+              "source_member_crc32": "dd7b9cbd",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 2.673
+            },
+            "feasibility_flags": {
+              "hazard_attention": false,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 2,
+            "candidate_id": "tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4-0",
+            "node_id": "exp::tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4:0",
+            "road_gml_id": "tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4",
+            "road_surface_id": "tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4:0",
+            "road_name": "戸田井３号線",
+            "longitude": 135.333814285,
+            "latitude": 35.435618368,
+            "existing_transport_distance_m": 589.344,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種住居地域 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 3,
+            "hazard_context": "flood: 2.0m以上3.0m未満",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351226_tran_6697_op.gml",
+              "source_member_crc32": "6cd45077"
+            },
+            "candidate_to_graph_connector_m": 8.9417e-05,
+            "terrain": {
+              "elevation_m": 5.689,
+              "source_member": "udx/dem/533512_dem_6697_05_op.gml",
+              "source_member_crc32": "ce7fa1bc",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 1.681
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          },
+          {
+            "site_order": 3,
+            "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "node_id": "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_gml_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05",
+            "road_surface_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_name": "愛宕通線",
+            "longitude": 135.408737906,
+            "latitude": 35.483493063,
+            "existing_transport_distance_m": 644.835,
+            "landuse_context": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+            "planning_context": "市街化区域 | 第1種中高層住居専用地域 | 都市計画区域",
+            "landuse_feature_count": 1,
+            "planning_feature_count": 3,
+            "hazard_context": "landslide: 土砂災害警戒区域（指定済）",
+            "hazard_overlap": true,
+            "hazard_review_status": "additional_confirmation_required",
+            "siting_feasibility": "not_determined",
+            "component_id": "component_0001",
+            "road_source": {
+              "source_member": "udx/tran/53351382_tran_6697_op.gml",
+              "source_member_crc32": "bbc851ae"
+            },
+            "candidate_to_graph_connector_m": 0.003615528,
+            "terrain": {
+              "elevation_m": 3.421,
+              "source_member": "udx/dem/533513_dem_6697_50_op.gml",
+              "source_member_crc32": "69a31f47",
+              "routing_penalty_applied": false,
+              "maximum_incident_endpoint_grade_percent": 5.216
+            },
+            "feasibility_flags": {
+              "hazard_attention": true,
+              "planning_attention": true,
+              "landuse_attention": true,
+              "network_component_attention": false,
+              "long_connector_attention": false,
+              "terrain_attention": false,
+              "interpretation": "review prompts only; no flag is an automatic policy decision"
+            }
+          }
+        ],
+        "impact": {
+          "affected_graph_node_count": 565,
+          "improved_building_count": 2293,
+          "newly_network_connected_building_count": 0,
+          "total_building_distance_reduction_m": 884064.915,
+          "mean_reduction_all_reachable_buildings_m": 31.082,
+          "mean_reduction_improved_buildings_m": 385.549,
+          "affected_estimated_elderly_population": 1198.689858,
+          "elderly_weighted_distance_reduction_person_m": 447964.982,
+          "elderly_weighted_mean_reduction_m": 22.709,
+          "worst_decile_mean_reduction_m": 224.489,
+          "robust_top20_elderly_weighted_reduction_person_m": 57958.397,
+          "robust_top20_improved_mesh_count": 1,
+          "improved_mesh_count": 13
+        },
+        "assigned_demand_node_count": 565,
+        "selection_trace": [
+          {
+            "step": 1,
+            "candidate_index": 9340,
+            "candidate_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f-0",
+            "marginal_objectives": {
+              "overall": 70913.31185935078,
+              "elderly": 60558.576387603265,
+              "worst_served": 17146.384289749196,
+              "robust": 57958.396729616434
+            },
+            "normalized_maximin_vector": [
+              0.05304938564585475,
+              0.1557656910679498,
+              0.2955889839773719,
+              0.7563101326982669
+            ],
+            "marginal_overall_building_distance_m": 70913.31185935078,
+            "stage_runtime_seconds": 0.416823
+          },
+          {
+            "step": 2,
+            "candidate_index": 1459,
+            "candidate_id": "tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4-0",
+            "marginal_objectives": {
+              "overall": 438057.4243455848,
+              "elderly": 189224.62855091863,
+              "worst_served": 298308.09914753423,
+              "robust": 0.0
+            },
+            "normalized_maximin_vector": [
+              0.9229386864040066,
+              0.9236134505353304,
+              0.9622215581465419,
+              1.0
+            ],
+            "marginal_overall_building_distance_m": 438057.4243455848,
+            "stage_runtime_seconds": 0.368678
+          },
+          {
+            "step": 3,
+            "candidate_index": 7606,
+            "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "marginal_objectives": {
+              "overall": 375094.1791315951,
+              "elderly": 198181.77673591443,
+              "worst_served": 323215.51099977735,
+              "robust": 0.0
+            },
+            "normalized_maximin_vector": [
+              0.9740998564826326,
+              1.0,
+              1.0,
+              1.0
+            ],
+            "marginal_overall_building_distance_m": 375094.1791315951,
+            "stage_runtime_seconds": 0.239365
+          }
+        ],
+        "representative_evidence": {
+          "building_gml_id": "bldg_0681b426-f27d-4aa1-9089-8a693931b04a",
+          "estimated_demographic_source": {
+            "source_population_year": 2020,
+            "allocation_method": "strict_residential",
+            "population_resolution": "building_estimate",
+            "privacy": "model source only; no per-building person estimate is exported"
+          },
+          "origin_representative_point": {
+            "longitude": 135.408540811,
+            "latitude": 35.483522151,
+            "method": "nearest_lod1_road_surface_to_representative_graph_node"
+          },
+          "snap_node_id": "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+          "origin_to_node_connector_m": 14.906,
+          "before": {
+            "network_distance_m": 954.679,
+            "destination_id": "bus_stop::0064::市場",
+            "destination_name": "市場",
+            "road_edge_sequence": [
+              "exp::68e721c8583ee38d5eed",
+              "exp::58db587e62120587c47f",
+              "exp::d978f32840184aa2da3d",
+              "exp::e854599e67cff4af613e",
+              "exp::dae7718d0cb86fbd801c",
+              "exp::9db23b6e029d9ffd0589",
+              "exp::edd359bf9713c14015cc",
+              "exp::f6a8dd73907392c23056",
+              "exp::ac1a6e466b6b18ad1c38",
+              "exp::3348ef2f0f320ce1d087",
+              "exp::e8d9199c5c31d85ca131",
+              "exp::cf572e2827050064ea4f",
+              "exp::7056e10df43fb28618ee",
+              "exp::aa0b9f6eeb9c3db7cbc5",
+              "exp::789118f5d1d0a8ec06fc",
+              "exp::5b416ef3590be7e96c65",
+              "exp::793f1726a08f4a380fef",
+              "exp::a6939f6c9b68fed26e91",
+              "exp::49461fef3c29c6a3b023",
+              "exp::e7ca666f7ec2420bda6f",
+              "exp::6c28c302eda289b123a6",
+              "exp::547eb51d4d7bdde52463",
+              "exp::19bbb1ee6a37a28b1273",
+              "exp::adf5d6e6025b39818477",
+              "exp::b0336fbe068353b71ec6",
+              "exp::a2ab15cfcf837b15cb16",
+              "exp::006b8eae0f77bbc7938d",
+              "exp::301c86b0387cce173869",
+              "exp::4210cd8f8879e729f552",
+              "exp::2fbc6c3b8f2bdc15e127",
+              "exp::b5d15cd10234e508f882",
+              "exp::8cbf5bfa74970a18e1d9"
+            ],
+            "road_node_sequence": [
+              "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+              "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+              "exp::tran_ddc37b12-8f33-45f8-b370-9b0c1dd56464:0",
+              "exp::tran_9faded80-e773-44ad-b131-2d9d90f8b257:0",
+              "exp::tran_156fcda3-00be-4f10-aa02-c77ac9993de7:0",
+              "exp::tran_f66c32e5-fef5-4492-a2c2-527ab45f65b0:0",
+              "exp::tran_fb5332c4-aa3b-4982-bef1-a385f865eabe:0",
+              "exp::tran_8138556d-e516-48d3-9545-0410e784fcb2:0",
+              "exp::tran_10c3184e-25c5-45b6-9d9a-ea83d920d5f9:0",
+              "exp::tran_60543b1d-0956-42fe-b92c-f3816516ab4c:0",
+              "exp::tran_e4f5b8e3-509b-4be6-92c8-6b3737f01ae5:0",
+              "exp::tran_bc0c657e-75ad-4b51-bfcd-38b681921c6a:0",
+              "exp::tran_4de59b10-5bf0-4f9e-9475-e2c02e05d0f6:0",
+              "exp::tran_1bad3647-1aeb-4a31-a55e-094aa9467f3f:0",
+              "exp::tran_bacb431e-960c-4b18-86c4-c63bf351613f:0",
+              "exp::tran_ee05ac0a-1487-45c6-ad17-340419df9d1b:0",
+              "exp::tran_c1bb051a-7a2b-4ed9-be38-7820840b3557:0",
+              "exp::tran_96dc45d2-3a91-4110-a20a-3663d4ebea5e:0",
+              "exp::tran_de3093c9-b3a3-44d8-a406-475f8df3af13:0",
+              "exp::tran_155a1b42-dfc0-45f0-abd3-e1628b803b13:0",
+              "exp::tran_21cf1928-f6f1-4d8f-b63a-08d8eac3e0be:0",
+              "exp::tran_a6484ba7-b6d5-4e98-9da3-74830924cde5:0",
+              "exp::tran_7324f3a3-6a37-4374-8781-bd82a4360d96:0",
+              "exp::tran_ea056e45-25d0-44f3-af18-4fb429a0a881:0",
+              "exp::tran_f8e9b7a8-02d0-4297-9593-17d02219d18f:0",
+              "exp::tran_035f5488-10e3-4e57-8ca4-f30230d1dd6a:0",
+              "exp::tran_bc875d52-9127-458a-bfb4-a40b93bfca54:0",
+              "exp::tran_fae6cde2-7b59-4fd7-a62f-886f348b459d:0",
+              "exp::tran_4a6528ac-1edd-44f1-b72a-0d9ea391d6fa:0",
+              "exp::tran_2bfc6a28-a8e1-402c-8a9f-94aa116666df:0",
+              "exp::tran_6f47db00-c937-449b-8177-f7316b854717:0",
+              "exp::tran_a50a4bd1-f432-45c7-8a80-bfedc881c2e7:0",
+              "exp::tran_726f06bb-a058-48e9-a53c-118686095832:0"
+            ]
+          },
+          "after": {
+            "network_distance_m": 42.084,
+            "graph_distance_from_snap_node_m": 27.178,
+            "virtual_scenario_candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+            "virtual_scenario_node_id": "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0",
+            "road_edge_sequence": [
+              "exp::68e721c8583ee38d5eed"
+            ],
+            "road_node_sequence": [
+              "exp::tran_d57423a6-8037-4485-ba1b-20d6a5f31550:0",
+              "exp::tran_aa88195d-0720-456e-8ff1-8589a3f60d05:0"
+            ],
+            "plateau_road_gml_ids": [
+              "tran_d57423a6-8037-4485-ba1b-20d6a5f31550",
+              "tran_aa88195d-0720-456e-8ff1-8589a3f60d05"
+            ],
+            "terrain": {
+              "ascent_m": 0.0,
+              "descent_m": 0.052,
+              "maximum_observed_endpoint_grade_percent": 0.191,
+              "routing_penalty_applied": false
+            }
+          },
+          "route_semantics": "road_surface_adjacency_not_validated_pedestrian"
+        },
+        "marginal_from_previous_site": {
+          "site_count": 3,
+          "total_building_distance_reduction_m": 884064.915,
+          "affected_building_count": 2293,
+          "affected_estimated_elderly_population": 1198.689858,
+          "worst_decile_mean_reduction_m": 224.489,
+          "marginal_total_building_distance_reduction_m": 375094.179,
+          "marginal_affected_building_count": 774,
+          "marginal_affected_estimated_elderly_population": 418.220047,
+          "marginal_worst_decile_mean_reduction_m": 113.609,
+          "newly_network_connected_building_count": 0,
+          "marginal_newly_network_connected_building_count": 0
+        }
+      },
+      "versions": {
+        "dataset_version_key": "26202:2025:13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "dataset_archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "plateau_product_specification_version": "5.0",
+        "network_version": "exp-4fff5849d650a70b",
+        "context_version": "plateau-context-1.0.0",
+        "context_config_hash": "914ac979c5b30b54920591f2dfa6dfe346f69c2efa1d5b0d81e21cd3e49874d8",
+        "algorithm_version": "network-scenario-1.0.0",
+        "scenario_config_hash": "59d0f3049604590d815869dc185657807e617a333e5b24cc58d7c7c35705a04f"
+      },
+      "field_check_items": [
+        {
+          "site_order": 1,
+          "candidate_id": "tran_cef764dd-3b03-4ac3-8229-348084291d6f-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 2,
+          "candidate_id": "tran_21ec2f16-fea0-4765-abe4-af7f7086e8f4-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        },
+        {
+          "site_order": 3,
+          "candidate_id": "tran_aa88195d-0720-456e-8ff1-8589a3f60d05-0",
+          "site_access": "unknown",
+          "road_safety": "unknown",
+          "land_ownership_unknown": "unknown",
+          "existing_service": "unknown",
+          "facility_condition": "unknown",
+          "hazard_confirmation": "unknown",
+          "operator_consultation": "unknown",
+          "notes": ""
+        }
+      ],
+      "limitations": [
+        "The graph represents LOD1 road-surface adjacency, not a validated pedestrian network.",
+        "Candidate points do not confirm land ownership, constructability, service operation or cost.",
+        "Each one-site result is exact for its stated linear, max-min or lexicographic objective over the screened set; N>1 is greedy.",
+        "Terrain observations are kept separate and are not a hidden routing penalty.",
+        "Hazard and planning overlaps require municipal review and do not determine feasibility."
+      ]
+    }
+  ],
+  "source_datasets": [
+    {
+      "dataset_key": "population",
+      "title": "2020年国勢調査 500mメッシュ 5歳階級別人口",
+      "provider": "e-Stat",
+      "year": 2020,
+      "source_url": "https://www.e-stat.go.jp/gis/statmap-search/data?statsId=T001192&code=26&downloadType=2",
+      "license": "政府統計の総合窓口 利用規約"
+    },
+    {
+      "dataset_key": "boundary",
+      "title": "舞鶴市 行政界",
+      "provider": "Project PLATEAU",
+      "year": 2025,
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": "PLATEAU Site Policy"
+    },
+    {
+      "dataset_key": "stations",
+      "title": "舞鶴市 鉄道駅",
+      "provider": "Project PLATEAU",
+      "year": 2025,
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": "PLATEAU Site Policy"
+    },
+    {
+      "dataset_key": "bus_stops",
+      "title": "バス停留所 P11",
+      "provider": "国土数値情報",
+      "year": 2022,
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P11-2022.html",
+      "license": "CC BY 4.0"
+    },
+    {
+      "dataset_key": "medical",
+      "title": "医療機関 P04",
+      "provider": "国土数値情報",
+      "year": 2020,
+      "source_url": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html",
+      "license": "国土数値情報利用約款"
+    },
+    {
+      "dataset_key": "plateau",
+      "title": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+      "provider": "Project PLATEAU",
+      "year": 2025,
+      "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+      "license": null
+    }
+  ],
+  "constraints": {
+    "minimum_site_separation_m": 1500.0,
+    "candidate_count": 11460,
+    "land_availability_confirmed": false,
+    "pedestrian_network": false,
+    "route_semantics": "road_surface_adjacency_not_validated_pedestrian",
+    "context_policy": {
+      "hazard": "displayed as additional_confirmation_required, never automatic rejection",
+      "planning": "displayed from actual PLATEAU overlaps, not used as a guessed constraint",
+      "landuse": "displayed from actual official codelist labels; availability remains unconfirmed",
+      "attention_flags": {
+        "long_connector_threshold_m": 50.0,
+        "terrain_incident_grade_threshold_percent": 10.0,
+        "effect": "review prompt only; never automatic rejection or approval"
+      }
+    }
+  },
+  "review_boundary": {
+    "recommendation": null,
+    "preferred_scenario": null,
+    "siting_feasibility": "not_determined",
+    "map_role": "candidate location evidence; not a cadastral or legal map",
+    "decision": "municipal review and field confirmation required"
+  }
+}

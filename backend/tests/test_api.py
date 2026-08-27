@@ -476,11 +476,15 @@ def test_field_check_is_human_entered_and_persisted_by_site() -> None:
             "hazard_confirmation": "attention",
             "operator_consultation": "unknown",
             "notes": "現地で横断位置を確認",
+            "photo_urls": ["https://municipality.example/field/site-1.jpg"],
+            "location_context": {"latitude": 35.46, "longitude": 135.32},
         },
     )
     assert saved.status_code == 200
     assert saved.json()["hazard_confirmation"] == "attention"
+    assert saved.json()["photo_urls"] == ["https://municipality.example/field/site-1.jpg"]
     assert scenario_client.get(path).json()["notes"] == "現地で横断位置を確認"
+    assert scenario_client.put(path, json={"photo_urls": ["http://unsafe.example/photo"]}).status_code == 422
 
 
 def test_city_dataset_and_analysis_registries_expose_explicit_versions() -> None:

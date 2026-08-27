@@ -23,10 +23,11 @@ Maizuru 2025 CityGML ZIP (Git-ignored)
 Existing pre-generated analysis -> existing React/Cesium -> GitHub Pages (unchanged)
 ```
 
-The DB-backed scenario schema, lifecycle API and canonical loader contract are implemented, but
-PostGIS was not executed in this environment. The durable job state/stage framework is also
-implemented; a process worker or queue service is not yet connected, and no queued job implies
-that a calculation has already run.
+The DB-backed schema, loaders, API and PostgreSQL worker are exercised against real PostGIS and
+pgRouting in CI. The integration boundary uses a small spatial fixture plus canonical scenario
+tables, so it does not claim a full Maizuru/Fujisawa database load. The worker durably claims jobs
+with `SKIP LOCKED`, records attempts/heartbeats/errors, applies bounded retries and preserves an
+idempotency key over city, exact datasets, algorithm and configuration.
 
 The product boundary follows this flow:
 
@@ -53,8 +54,8 @@ or score is evidence for review, not an automatic municipal decision.
 
 ## Design decisions
 
-- PostgreSQL/PostGIS is the production system-of-record design. The current verified canonical
-  computation is Python + Parquet because PostGIS was not executed in this environment.
+- PostgreSQL/PostGIS is the municipal system of record; Python + versioned Parquet remains the
+  reproducible computation/interchange boundary. Real DB integration is separately verified.
 - `gml:id` is unique within a dataset version, not globally across years.
 - `city_dataset_versions` allows 2025 and later releases to coexist. Exactly one version per city
   may be marked current.
@@ -70,8 +71,8 @@ or score is evidence for review, not an automatic municipal decision.
   appropriate local projected CRS (Maizuru: EPSG:6674).
 - `representative_point` is a derived point-on-envelope for indexing and discovery. It is not
   called or treated as a building entrance.
-- Large feature APIs require a bbox and enforce pagination. Future citywide thematic display
-  should use MVT/PMTiles rather than unbounded GeoJSON.
+- Large feature APIs require a bbox and enforce pagination. Citywide municipal layers use
+  version-explicit authenticated MVT with ETag and a bounded LRU cache, not unbounded GeoJSON.
 - Hazard overlap always means `additional_confirmation_required`; feasibility remains
   `not_determined` until municipal review.
 
@@ -91,11 +92,10 @@ Python's standard-library `platform` module.
 
 ## Scale and evolution
 
-The engineering target is 100,000+ buildings and road edges per city, with a multi-city feature
-class reaching 1,000,000 records. These are design targets, not measured capacity claims. GiST
-geometry indexes, per-member commits and bbox APIs establish the first scaling boundary. Bulk
-COPY, partitioning, vector-tile generation, connection pooling and asynchronous scenario workers
-should be introduced only when benchmark evidence requires them.
+The CI scale benchmark inserts 100,000 synthetic buildings and 100,000 synthetic road edges and
+reports API p50/p95 without calling it real municipal data or a production SLA. GiST indexes,
+bulk COPY paths, bounded bbox queries, MVT and an asynchronous PostgreSQL worker establish the
+current scaling boundary. Partitioning/connection pooling remain evidence-driven deployment choices.
 
 ## Open formats and official interoperability
 

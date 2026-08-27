@@ -1,0 +1,20 @@
+{
+  "schema_version": "2.0.0",
+  "plan_ids": [
+    "network-overall-3",
+    "network-elderly-3",
+    "network-balanced-3"
+  ],
+  "generated_at": "2026-08-26T13:45:01Z",
+  "recommendation": null,
+  "formats": {
+    "json": {
+      "bytes": 56356,
+      "sha256": "97cdda9b419b5018cbe5abd0f609f0a64c690cd3d4e7018910bf8913ae6e770d"
+    },
+    "html": {
+      "bytes": 9784,
+      "sha256": "5b532157f185a49934b43bf109d81c26e364d7b3cd68d1a9f14b37f70b0a7498"
+    }
+  }
+}

@@ -5,9 +5,9 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [4分デモ台本](docs/demo-script.md) · [発表用の固定数字](docs/presentation-facts.md) · [Robustness](docs/robustness.md) · [配置最適化](docs/intervention-optimization.md) · [Network scenario](docs/network-scenarios.md) · [自治体scenario workspace](docs/scenario-workspace.md) · [Multi-city registry](docs/multi-city-registry.md) · [自治体データadapter](docs/municipal-data-adapters.md) · [GTFS/jobs/Evidence export](docs/operations-and-evidence.md) · [PLATEAU文脈](docs/plateau-context.md) · [Evidence Chain](docs/evidence-chain.md) · [想定Q&A](docs/qa.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md) · [v0.x checklist](docs/release-checklist.md)
 
-このリポジトリには、審査・公開用の静的な **Competition Demo** と、自治体レビュー用の **Urban Digital Twin Platform** の2系統があります。GitHub PagesはバックエンドなしでA/B/CシナリオのWorkspaceプレビューまで動作します。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、1〜5地点の複数目的シナリオ、Scenario API、現地確認、Evidence出力を実装しています。PostGIS投入は環境依存の運用手順として分離し、この実行環境で投入成功は主張しません。
+このリポジトリには、審査・公開用の静的な **Competition Demo** と、認証された自治体向け **Municipal Pilot Platform** の2系統があります。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceプレビューまで動作します。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario API、現地確認、Evidence V2、PostgreSQL worker、RBAC/audit、quality/readiness、MVTを実装しています。実PostGIS 3.5 / pgRouting 4.0 integration、API、transaction、migration、dump/restoreはGitHub Actionsで実行検証しています。CI fixtureは全量CityGML DB投入の証明ではありません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
@@ -33,6 +33,7 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 - 距離・Score・配置案を公式データ、CRS、式、丸め前値まで辿るEvidence Chain
 - データ年次、計算方法、除外条件、限界をアプリ内で開示
 - 藤沢市327メッシュ、Top 10、WHYを横展開検証モードで表示（3D・What-ifは舞鶴市のみ）
+- 公式藤沢市2025 CityGML 399,271地物を舞鶴市と同じPLATEAU-native 5段pipelineで処理
 
 スコアは政策判断の正解や危険度ではなく、現地確認・ヒアリング・施策検討を始めるための探索用指標です。
 
@@ -138,6 +139,7 @@ after_transport_distance
 | PLATEAU 舞鶴市 CityGML / 3D Tiles | 2025 | 全8テーマ97,140地物、建物44,640、道路15,684、土地利用31,067、都市計画394、災害5,332 | 3D実属性、人口配賦、道路network・DEM、土地利用・計画・災害文脈 |
 | e-Stat / P11 / P04 藤沢市 | 2020 / 2022 | mesh 327、バス停446、医療718（距離対象436） | 横展開検証 |
 | PLATEAU 藤沢市関連データ | 2025 | 駅20地点、行政界1 | 駅距離、対象範囲 |
+| PLATEAU 藤沢市 CityGML | 2025 | 全11テーマ399,271地物、建物169,856、道路53,658、土地利用110,898、都市計画1,537、災害63,309 | 共通pipeline、建物人口、network・DEM、計画・災害文脈 |
 
 出典URL、チェックサム、加工内容、属性実装率は [data-sources](docs/data-sources.md) に記録しています。大容量rawデータはGit管理外です。
 
@@ -160,7 +162,7 @@ after_transport_distance
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
 - `infra/migrations/`: dataset version・provenance・PLATEAU typed table
-- `docker-compose.yml`: PostGIS / pgRouting、API、静的frontendのローカル構成
+- `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 
 最終の機械監査は `python -m analysis.scripts.audit_municipal_platform`、Workspace実ブラウザ監査はproduction preview起動後に `npm run audit:workspace` で再実行できます。前者はtracked成果物・hash・API/schema契約の18項目、後者はA点群描画、C切替、privacy表示、console/通信失敗を検証します。
@@ -204,8 +206,7 @@ python -m analysis.scripts.load_plateau_context_postgis \
   --database-url "$CITYGAP_DATABASE_URL"
 ```
 
-Priority 2の正規計算はPostGIS不要で、PyArrow Parquetを生成してから同じ値をloaderがupsertします。
-この環境ではDB投入を実行せず、migration/SQL契約をunit testしています。APIは大量geometryの無制限配信を行わず、建物取得にbboxと最大1,000件のlimitを要求し、詳細endpointは単一meshまたは単一建物だけを返します。
+正規計算はPostGIS不要で、PyArrow Parquetを生成してから同じ値をloaderがupsertします。実DB契約はpinned PostGIS/pgRouting service上のCIで毎回検証します。APIは大量geometryの無制限配信を行わず、建物取得にbboxと最大1,000件のlimitを要求し、全市表示はdataset/network/scenario version固定の認証済みMVTを利用します。
 
 ## Reproduce analysis
 
@@ -260,7 +261,7 @@ npm run test
 npm run build
 ```
 
-Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市、Robustness、1〜5地点、fairness、候補間隔、独立再計算、Workspace公開境界を対象にします。Vitest 28テストは2都市とWorkspaceの読み込み、業務フロー表示、未提供都市の明示、表示整形、任意What-if、最大3案比較、lifecycle禁止遷移、Robustness View、目的・地点数切替、Before / After、Evidence Chainを対象にします。
+Pythonテストはmesh復号、空間抽出、距離、指標、秘匿処理、2都市PLATEAU-native処理、Robustness、scenario、dataset差分/quality、RBAC、worker、readiness、MVT、Evidence、公開境界を対象にします。Vitestは2都市、Workspace、lifecycle、Decision Studio、Evidence Chainと認証管理画面を対象にします。
 
 PlatformテストはCityGMLのstream境界、`gml:id`一意性、軸順変換、LOD・属性、建物用途・面交差・保存・加重分位、道路network、DEM、土地利用・都市計画・災害、PostGIS migration、bbox必須APIと単一建物/mesh詳細契約を対象にします。
 
