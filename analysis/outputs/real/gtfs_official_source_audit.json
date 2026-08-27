@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "checked_at": "2026-08-27T00:00:00+09:00",
+  "policy": "Only an official or operator-authorized GTFS/GTFS-JP feed may be ingested. P11 is never converted or represented as GTFS.",
+  "cities": [
+    {
+      "city_code": "26202",
+      "city_name": "舞鶴市",
+      "status": "unavailable",
+      "feed_ingested": false,
+      "findings": [
+        "The municipal open-data entry and current bus information pages did not expose a downloadable GTFS/GTFS-JP feed.",
+        "The regional plan states that GTFS conversion should be promoted; that planning statement is not a feed.",
+        "Operator timetable and bus-location web services are not treated as licensed GTFS downloads."
+      ],
+      "sources": [
+        "https://www.city.maizuru.kyoto.jp/shisei/0000004879.html",
+        "https://www.city.maizuru.kyoto.jp/kurashi/0000015340.html",
+        "https://www.city.maizuru.kyoto.jp/kurashi/cmsfiles/contents/0000011/11975/tantetsuplan.pdf",
+        "https://www.kyotokotsu.jp/"
+      ],
+      "external_input_needed": "An official feed URL/file, license and update contact from the municipality or relevant operators."
+    },
+    {
+      "city_code": "14205",
+      "city_name": "藤沢市",
+      "status": "unavailable",
+      "feed_ingested": false,
+      "findings": [
+        "No stable public GTFS download was found on the municipal, Kanachu or Enoden public pages checked.",
+        "Kanachu is listed as a Public Transportation Open Data Challenge 2026 cooperating operator, but challenge participation is not proof of an unrestricted stable production feed.",
+        "No credentialed or challenge-limited artifact was copied into CITY GAP."
+      ],
+      "sources": [
+        "https://www.city.fujisawa.kanagawa.jp/tosikei/bus_norikata.html",
+        "https://www.kanachu.co.jp/",
+        "https://www.enoden.co.jp/bus/search/map",
+        "https://challenge2026.odpt.org/ja/outline.html",
+        "https://ckan.odpt.org/ja/dataset"
+      ],
+      "external_input_needed": "Operator/ODPT authorization, applicable license and a stable official feed endpoint or file."
+    }
+  ]
+}

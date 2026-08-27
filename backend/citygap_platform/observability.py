@@ -6,6 +6,7 @@ import json
 import logging
 import time
 import uuid
+from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
 
@@ -25,6 +26,15 @@ _CONTEXT: ContextVar[RequestContext | None] = ContextVar("citygap_request_contex
 
 def current_request_context() -> RequestContext:
     return _CONTEXT.get() or RequestContext()
+
+
+@contextmanager
+def operation_context(actor: str, request_id: str):
+    token = _CONTEXT.set(RequestContext(request_id=request_id[:200], actor=actor[:200]))
+    try:
+        yield
+    finally:
+        _CONTEXT.reset(token)
 
 
 async def request_observability_middleware(request: Request, call_next):

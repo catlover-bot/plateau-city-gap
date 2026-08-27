@@ -53,7 +53,7 @@ jobs:
       - name: Reject tracked secrets and raw municipal data
         run: |
           ! git grep -En '(BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16})'
-          test -z "$(git ls-files data/raw)"
+          test -z "$(git ls-files data/raw ':!data/raw/.gitkeep')"
 
   public-assets:
     runs-on: ubuntu-latest

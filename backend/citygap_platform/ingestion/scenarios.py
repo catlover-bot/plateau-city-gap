@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -55,7 +56,17 @@ def _value(value: Any) -> Any:
 def _json(value: Any) -> Any:
     if value is None or pd.isna(value):
         return None
-    return json.loads(str(value))
+    return _json_safe(json.loads(str(value)))
+
+
+def _json_safe(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_safe(item) for item in value]
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
 
 
 def load_scenario_artifacts(database_url: str, output: str | Path) -> dict[str, Any]:

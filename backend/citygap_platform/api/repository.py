@@ -418,7 +418,8 @@ class PostGISRepository:
         with self._connect() as connection:
             rows = connection.execute(
                 """SELECT network.graph_version, network.graph_method,
-                          network.network_type, network.official_generator_executed,
+                          network.network_type, network.source_type,
+                          network.official_generator_executed,
                           network.pedestrian_network, network.route_semantics,
                           network.node_count, network.edge_count, network.component_count,
                           network.terrain_method, network.terrain_node_coverage,
@@ -434,6 +435,7 @@ class PostGISRepository:
             "graph_version",
             "graph_method",
             "network_type",
+            "source_type",
             "official_generator_executed",
             "pedestrian_network",
             "route_semantics",

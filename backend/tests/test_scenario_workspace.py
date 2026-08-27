@@ -82,6 +82,10 @@ def test_real_scenarios_normalize_to_versioned_canonical_parquets(tmp_path: Path
     assert set(runs.algorithm_kind) == {"exact", "deterministic_greedy_approximation"}
     assert runs.dataset_version_key.nunique() == 1
     assert runs.network_version.nunique() == 1
+    for table in ("scenario_context", "scenario_evidence", "scenario_runs"):
+        frame = pd.read_parquet(paths[table])
+        json_columns = [column for column in frame.columns if column.endswith("_json")]
+        assert all("NaN" not in str(value) for column in json_columns for value in frame[column])
 
     constraints = pd.read_parquet(paths["scenario_constraints"])
     attention = constraints.loc[constraints.constraint_name.str.endswith("_attention")]
