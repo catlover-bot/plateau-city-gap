@@ -154,7 +154,7 @@
 - [x] Six real-data Maizuru golden cases and selected independent verification
 - [x] 100k / 250k / 500k synthetic scale fixtures clearly separated from real data
 - [x] Public workspace is aggregated and excludes building-level estimated demographics
-- [x] Production build and browser audit: six futures checks, existing workspace, zero console errors
-- [ ] Final PostGIS integration workflow passed for migrations 011–013
-- [ ] Final GitHub Actions suite passed and GitHub Pages deployment verified
+- [x] Production build and browser audit: seven futures checks including aggregated map geometry, existing workspace, zero console errors
+- [x] Final PostGIS integration workflow passed for migrations 011–013 — CI run `33066544364`
+- [x] Final GitHub Actions suite passed and GitHub Pages deployment verified — Pages run `33066544350`
 - [ ] Municipality-approved full DB load, OIDC, network/shelter snap and field/outcome review

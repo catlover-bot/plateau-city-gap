@@ -108,9 +108,10 @@ candidate`, never dangerous-road designations. Evidence retains the source road 
 edge/component, affected buildings, model-estimated elderly population and service reachability
 change.
 
-Selected origin/destination pairs use k-shortest simple paths for primary/second-route review.
-This does not turn the experimental PLATEAU LOD1 surface-adjacency graph into a validated pedestrian
-network.
+Selected origin/destination pairs use k-shortest simple paths for primary/second-route review. The
+tracked comparison deterministically selects the longest non-critical edge that has a verified
+second path, so a reviewer can see the alternative at city scale. This does not turn the
+experimental PLATEAU LOD1 surface-adjacency graph into a validated pedestrian network.
 
 ## Real-data validation
 
@@ -123,7 +124,7 @@ official/raw validation assets and explicitly records `generated_from_synthetic_
 | network edges | 23,437 | 71,487 |
 | buildings with network demand | 28,448 | 107,557 |
 | criticality candidates | 1,412 | 7,897 |
-| criticality runtime (latest tracked run) | 0.422 s | 1.116 s |
+| criticality runtime (latest tracked run) | 0.225 s | 1.436 s |
 | official shelters | 126 | 81 |
 | shelter network seeds | 79 | 81 |
 | normal shelter-reachable buildings | 28,443 | 107,557 |
@@ -216,6 +217,8 @@ npm run build
 npm run preview
 npm run audit:futures
 ```
+
+Reference verification for commit `b724ee7` passed [Municipal Pilot CI run 33066544364](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33066544364), including PostGIS 3.5/pgRouting 4.0 migrations 011–013, the temporal/resilience/offline integration case, 100k DB/API benchmark and dump/restore. [Pages run 33066544350](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33066544350) deployed successfully. The current production-browser audit passes seven boundaries with zero console errors, including visible aggregated route, critical-edge, disconnected-area and affected-facility geometries.
 
 The 100k/250k/500k benchmark is a synthetic ring fixture and is never presented as real municipal
 data or a production SLA. See [performance](performance.md).

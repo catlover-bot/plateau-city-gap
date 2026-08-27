@@ -1,0 +1,42 @@
+{
+  "schema_version": "urban-futures-platform-final-audit-1.0.0",
+  "audit_date": "2026-08-27",
+  "baseline_commit": "a8d382a3f007e9d8146e98d83704e82983530736",
+  "passed": true,
+  "checks": {
+    "existing_municipal_platform_remains_valid": true,
+    "two_real_cities_use_non_synthetic_validation": true,
+    "urban_state_identity_diff_is_correctly_bounded": true,
+    "future_population_is_official_verified_and_not_prediction": true,
+    "maizuru_runs_three_explicit_hazard_stress_tests": true,
+    "fujisawa_missing_hazard_types_are_not_fabricated": true,
+    "criticality_is_linear_and_independently_verified": true,
+    "official_shelters_are_network_reachability_only": true,
+    "planning_comparison_makes_no_legal_claim": true,
+    "capability_matrix_is_complete_and_evidence_backed": true,
+    "postgis_schema_covers_temporal_resilience_cycle": true,
+    "api_is_bounded_and_covers_temporal_cycle": true,
+    "jobs_cover_detect_through_reevaluate": true,
+    "rbac_separates_analysis_planning_and_admin": true,
+    "evidence_v3_has_three_nonempty_formats": true,
+    "public_asset_is_aggregated_and_not_predictive": true,
+    "public_resilience_maps_are_aggregated_and_bounded": true,
+    "public_browser_audit_passes_seven_boundaries": true,
+    "all_requested_synthetic_scales_are_separate": true,
+    "golden_maizuru_has_at_least_five_real_cases": true
+  },
+  "check_count": 20,
+  "external_verification": {
+    "municipal_pilot_ci_run": 33066544364,
+    "pages_deploy_run": 33066544350,
+    "verified_commit": "b724ee736751b0f4ef86daf68b519d6ddb48d323",
+    "note": "External run IDs are recorded facts; this local audit does not query GitHub."
+  },
+  "remaining_municipal_validation": [
+    "Register a second official PLATEAU version before claiming annual change counts.",
+    "Approve a full municipal PostGIS load, network source and shelter snap tolerances.",
+    "Configure production OIDC, audit retention, backups and field-device policy.",
+    "Register a real implemented intervention and later observed state before outcome use.",
+    "Complete municipal legal, licensing, accessibility, privacy and publication review."
+  ]
+}

@@ -592,6 +592,10 @@ export interface UrbanFuturesCity {
     top_candidates: PublicCriticalityCandidate[];
     claim_boundary: string;
   };
+  resilience_map: GeoJsonFeatureCollection & {
+    privacy: string;
+    claim_boundary: string;
+  };
   limitations: string[];
 }
 

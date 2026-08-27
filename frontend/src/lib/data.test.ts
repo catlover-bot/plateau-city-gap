@@ -183,8 +183,8 @@ describe("data loading", () => {
         building_level_demographics_included: false,
         story: { title: "test", steps: [], prediction_claimed: false },
         cities: {
-          maizuru: { city_name: "舞鶴市", stress_tests: {} },
-          fujisawa: { city_name: "藤沢市", stress_tests: {} }
+          maizuru: { city_name: "舞鶴市", stress_tests: {}, resilience_map: EMPTY_COLLECTION },
+          fujisawa: { city_name: "藤沢市", stress_tests: {}, resilience_map: EMPTY_COLLECTION }
         },
         limitations: []
       }
@@ -201,5 +201,26 @@ describe("data loading", () => {
       }
     });
     await expect(loadUrbanFuturesData(unsafe, "/")).rejects.toThrow("公開境界");
+
+    const buildingLevelMap = mockFetch({
+      "urban_futures_resilience.json": {
+        building_level_demographics_included: false,
+        story: { prediction_claimed: false },
+        cities: {
+          maizuru: {
+            resilience_map: {
+              type: "FeatureCollection",
+              features: [{
+                type: "Feature",
+                geometry: null,
+                properties: { layer_type: "affected_building", stress_mode: "flood", gml_id: "secret" }
+              }]
+            }
+          },
+          fujisawa: { resilience_map: EMPTY_COLLECTION }
+        }
+      }
+    });
+    await expect(loadUrbanFuturesData(buildingLevelMap, "/")).rejects.toThrow("公開境界");
   });
 });

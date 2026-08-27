@@ -14,6 +14,8 @@ import geopandas as gpd
 import pandas as pd
 import yaml
 from shapely import from_wkb
+from shapely.geometry import MultiPoint, mapping
+from shapely.ops import unary_union
 from shapely.strtree import STRtree
 
 from analysis.src.planning_monitoring import compare_planning_context
@@ -233,7 +235,7 @@ def _future_states(
 
 
 def _redundancy(edges: tuple[NetworkEdge, ...], bridge_ids: set[str]) -> dict[str, object]:
-    for edge in sorted(edges, key=lambda item: item.edge_id):
+    for edge in sorted(edges, key=lambda item: (-item.length_m, item.edge_id)):
         if edge.edge_id in bridge_ids:
             continue
         paths = k_shortest_paths(edges, edge.source, edge.target, 2)
@@ -245,9 +247,36 @@ def _redundancy(edges: tuple[NetworkEdge, ...], bridge_ids: set[str]) -> dict[st
                 "second_best_route": asdict(paths[1]),
                 "distance_increase_m": paths[1].distance_m - paths[0].distance_m,
                 "alternative_available": True,
+                "selection_method": "longest non-critical edge with a verified second path",
                 "route_semantics": "road-surface adjacency; not a validated pedestrian route",
             }
     return {"alternative_available": False, "reason": "no qualifying selected pair"}
+
+
+def _wgs84_geometry(geometry: object, analysis_crs: str) -> dict[str, object]:
+    transformed = gpd.GeoSeries([geometry], crs=analysis_crs).to_crs("EPSG:4326").iloc[0]
+    return mapping(transformed)
+
+
+def _map_feature(
+    feature_id: str,
+    geometry: object,
+    analysis_crs: str,
+    **properties: object,
+) -> dict[str, object]:
+    return {
+        "type": "Feature",
+        "id": feature_id,
+        "geometry": _wgs84_geometry(geometry, analysis_crs),
+        "properties": properties,
+    }
+
+
+def _route_geometry(edge_ids: list[str], geometry_by_edge: dict[str, object]) -> object:
+    lines = [geometry_by_edge[edge_id] for edge_id in edge_ids if edge_id in geometry_by_edge]
+    if not lines:
+        raise ValueError("Selected resilience route has no registered edge geometry")
+    return unary_union(lines)
 
 
 def validate_city(config_path: Path) -> dict[str, object]:
@@ -270,6 +299,7 @@ def validate_city(config_path: Path) -> dict[str, object]:
     critical_started = time.perf_counter()
     critical = network_criticality_candidates(edge_rows, buildings, service_seeds)
     critical_runtime = time.perf_counter() - critical_started
+    redundancy = _redundancy(edge_rows, {row.edge_id for row in critical})
     verified = [
         {
             "edge_id": row.edge_id,
@@ -279,8 +309,69 @@ def validate_city(config_path: Path) -> dict[str, object]:
     ]
 
     hazards = pd.read_parquet(REAL / f"{city_id}_road_hazard_context.parquet")
+    analysis_crs = str(raw["analysis_crs"])
+    edge_geometry = from_wkb(edges_frame["geometry"].to_numpy())
+    geometry_by_edge = dict(zip(edges_frame["edge_id"].astype(str), edge_geometry, strict=True))
+    node_geometry = from_wkb(nodes["geometry"].to_numpy())
+    geometry_by_node = dict(zip(nodes["node_id"].astype(str), node_geometry, strict=True))
+    common_map_features: list[dict[str, object]] = []
+    if redundancy.get("alternative_available"):
+        primary = redundancy["primary_route"]
+        alternative = redundancy["second_best_route"]
+        assert isinstance(primary, dict) and isinstance(alternative, dict)
+        common_map_features.extend(
+            [
+                _map_feature(
+                    f"{city_id}:selected-pair:normal",
+                    _route_geometry(list(primary["edge_ids"]), geometry_by_edge),
+                    analysis_crs,
+                    layer_type="normal_route",
+                    stress_mode="all",
+                    distance_m=primary["distance_m"],
+                    route_semantics=redundancy["route_semantics"],
+                    selection_method=redundancy["selection_method"],
+                    review_label="selected-pair primary route",
+                ),
+                _map_feature(
+                    f"{city_id}:selected-pair:alternative",
+                    _route_geometry(list(alternative["edge_ids"]), geometry_by_edge),
+                    analysis_crs,
+                    layer_type="disrupted_route",
+                    stress_mode="all",
+                    distance_m=alternative["distance_m"],
+                    distance_increase_m=redundancy["distance_increase_m"],
+                    route_semantics=redundancy["route_semantics"],
+                    selection_method=redundancy["selection_method"],
+                    review_label="second-best route when the selected primary edge is unavailable",
+                ),
+            ]
+        )
+    if critical:
+        common_map_features.append(
+            _map_feature(
+                f"{city_id}:critical:{critical[0].edge_id}",
+                geometry_by_edge[critical[0].edge_id],
+                analysis_crs,
+                layer_type="critical_edge",
+                stress_mode="all",
+                edge_id=critical[0].edge_id,
+                affected_buildings=critical[0].affected_buildings,
+                candidate_label="network criticality candidate",
+                dangerous_road_claimed=False,
+            )
+        )
+    accessibility = pd.read_parquet(
+        REAL / f"{city_id}_building_network_accessibility.parquet"
+    )
+    medical_labels = pd.read_parquet(REAL / f"{city_id}_medical_network_labels.parquet")
+    medical_seed_rows = medical_labels.loc[
+        medical_labels.groupby("destination_id", sort=False)[
+            "network_to_destination_distance_m"
+        ].idxmin()
+    ].set_index("destination_id")
     selected_hazards = ("flood", "landslide", "tsunami") if city_id == "maizuru" else ("flood",)
     stress_tests: dict[str, object] = {}
+    resilience_map_features = list(common_map_features)
     for hazard_type in selected_hazards:
         selected = hazards.loc[hazards["hazard_type"].eq(hazard_type)]
         if selected.empty:
@@ -305,6 +396,65 @@ def validate_city(config_path: Path) -> dict[str, object]:
         closed = frozenset(selected["edge_id"].astype(str).unique())
         started = time.perf_counter()
         result = run_network_stress_test(edge_rows, buildings, service_seeds, closed)
+        scenario_medical_distances = multi_source_distances(edge_rows, medical_seeds, closed)
+        disconnected = [
+            building
+            for building in buildings
+            if building.baseline_distances_m.get("medical") is not None
+            and scenario_medical_distances.get(building.node_id, float("inf")) == float("inf")
+        ]
+        disconnected_nodes = sorted({building.node_id for building in disconnected})
+        disconnected_points = [
+            geometry_by_node[node_id]
+            for node_id in disconnected_nodes
+            if node_id in geometry_by_node
+        ]
+        if disconnected_points:
+            aggregate_area = MultiPoint(disconnected_points).convex_hull.buffer(150)
+            resilience_map_features.append(
+                _map_feature(
+                    f"{city_id}:{hazard_type}:disconnected-area",
+                    aggregate_area,
+                    analysis_crs,
+                    layer_type="disconnected_area",
+                    stress_mode=hazard_type,
+                    service_category="medical",
+                    newly_unreachable_buildings=len(disconnected),
+                    aggregation="150m-buffered convex hull of disconnected demand nodes",
+                    exact_affected_area_claimed=False,
+                )
+            )
+        disconnected_ids = {building.building_id for building in disconnected}
+        affected_destinations = (
+            accessibility.loc[
+                accessibility["gml_id"].astype(str).isin(disconnected_ids),
+                ["nearest_network_medical_id", "nearest_network_medical_name"],
+            ]
+            .value_counts()
+            .reset_index(name="disconnected_buildings")
+            .head(3)
+        )
+        for rank, facility in enumerate(affected_destinations.itertuples(index=False), start=1):
+            destination_id = str(facility.nearest_network_medical_id)
+            if destination_id not in medical_seed_rows.index:
+                continue
+            seed_node_id = str(medical_seed_rows.loc[destination_id, "node_id"])
+            if seed_node_id not in geometry_by_node:
+                continue
+            resilience_map_features.append(
+                _map_feature(
+                    f"{city_id}:{hazard_type}:facility:{rank}",
+                    geometry_by_node[seed_node_id],
+                    analysis_crs,
+                    layer_type="affected_facility",
+                    stress_mode=hazard_type,
+                    service_category="medical",
+                    facility_name=str(facility.nearest_network_medical_name),
+                    disconnected_buildings=int(facility.disconnected_buildings),
+                    facility_status_change_claimed=False,
+                    review_label="baseline destination for disconnected building-demand records",
+                )
+            )
         stress_tests[hazard_type] = {
             "assumption": assumption.canonical_payload(),
             "result": asdict(result),
@@ -358,7 +508,13 @@ def validate_city(config_path: Path) -> dict[str, object]:
             "independent_verification": verified,
             "claim_boundary": "network criticality candidate; not a dangerous-road designation",
         },
-        "redundancy": _redundancy(edge_rows, {row.edge_id for row in critical}),
+        "redundancy": redundancy,
+        "resilience_map": {
+            "type": "FeatureCollection",
+            "features": resilience_map_features,
+            "privacy": "aggregated areas/routes/facilities only; no building-level demographics",
+            "claim_boundary": "map review evidence; not disaster, passability or damage prediction",
+        },
         "planning_context": {
             "designation_count": len(planning),
             "comparisons": [row.as_dict() for row in planning[:20]],
@@ -433,6 +589,7 @@ def build(output_path: Path, public_output_path: Path) -> dict[str, object]:
                     "top_candidates": city["criticality"]["top_candidates"][:3],
                     "claim_boundary": city["criticality"]["claim_boundary"],
                 },
+                "resilience_map": city["resilience_map"],
                 "limitations": city["limitations"],
             }
             for city_id, city in cities.items()

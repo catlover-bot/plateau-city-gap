@@ -26,6 +26,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 
 import type {
   AppData,
   BuildingInfo,
+  FuturesStressMode,
   GeoJsonFeatureCollection,
   LayerVisibility,
   MeshMetrics,
@@ -57,6 +58,8 @@ interface CesiumMapProps {
   decisionFlow: { meshLongitude: number; meshLatitude: number; siteLongitude: number; siteLatitude: number } | null;
   workspaceMap: WorkspaceMapData | null;
   workspaceBuildingPoints: WorkspaceBuildingPoints | null;
+  futuresMap: GeoJsonFeatureCollection | null;
+  futuresStressMode: FuturesStressMode;
   workspacePhase: WorkspacePhase;
   workspaceVisibility: WorkspaceLayerVisibility;
   onMeshSelect: (mesh: MeshMetrics) => void;
@@ -77,6 +80,7 @@ interface DataSourceRefs {
   plateauRoads?: GeoJsonDataSource;
   plateauTileset?: Cesium3DTileset;
   workspace?: GeoJsonDataSource;
+  futures?: GeoJsonDataSource;
   workspacePoints?: WorkspacePointRef[];
 }
 
@@ -413,6 +417,70 @@ function setWorkspaceVisibility(
   }
 }
 
+function styleFuturesMap(source: GeoJsonDataSource | undefined) {
+  if (!source) return;
+  for (const entity of source.entities.values) {
+    const values = entityValues(entity);
+    const layer = String(values.layer_type ?? "");
+    entity.billboard = undefined;
+    if (entity.polyline) {
+      const colors: Record<string, Color> = {
+        normal_route: Color.fromCssColorString("#dce8e6"),
+        disrupted_route: Color.fromCssColorString("#e7a949"),
+        critical_edge: Color.fromCssColorString("#d74d4d")
+      };
+      entity.polyline.material = new ColorMaterialProperty(
+        (colors[layer] ?? Color.fromCssColorString("#8fa3a4")).withAlpha(0.96)
+      );
+      entity.polyline.width = new ConstantProperty(layer === "critical_edge" ? 8 : 5);
+      entity.polyline.clampToGround = new ConstantProperty(true);
+      entity.polyline.zIndex = new ConstantProperty(layer === "critical_edge" ? 40 : 30);
+    }
+    if (layer === "disconnected_area" && entity.polygon) {
+      const areaColor = Color.fromCssColorString("#cf5b45");
+      entity.polygon.material = new ColorMaterialProperty(areaColor.withAlpha(0.34));
+      entity.polygon.outline = new ConstantProperty(true);
+      entity.polygon.outlineColor = new ConstantProperty(areaColor.withAlpha(0.96));
+      entity.polygon.outlineWidth = new ConstantProperty(3);
+      entity.polygon.heightReference = new ConstantProperty(HeightReference.CLAMP_TO_GROUND);
+      entity.polygon.zIndex = new ConstantProperty(1);
+    }
+    if (layer === "affected_facility") {
+      entity.point = new PointGraphics({
+        color: Color.fromCssColorString("#ff8769"),
+        pixelSize: 13,
+        outlineColor: Color.fromCssColorString("#441d1b"),
+        outlineWidth: 3,
+        heightReference: HeightReference.CLAMP_TO_GROUND,
+        disableDepthTestDistance: Number.POSITIVE_INFINITY
+      });
+      entity.label = new LabelGraphics({
+        text: String(values.facility_name ?? "medical service destination"),
+        font: "700 11px sans-serif",
+        fillColor: Color.fromCssColorString("#fff5ef"),
+        outlineColor: Color.fromCssColorString("#441d1b"),
+        outlineWidth: 3,
+        style: 2,
+        pixelOffset: new Cartesian2(0, -22),
+        disableDepthTestDistance: Number.POSITIVE_INFINITY
+      });
+    }
+  }
+}
+
+function setFuturesVisibility(
+  source: GeoJsonDataSource | undefined,
+  stressMode: FuturesStressMode
+): number {
+  let visible = 0;
+  for (const entity of source?.entities.values ?? []) {
+    const featureStressMode = String(entityValues(entity).stress_mode ?? "");
+    entity.show = featureStressMode === "all" || featureStressMode === stressMode;
+    if (entity.show) visible += 1;
+  }
+  return visible;
+}
+
 function setInitialView(viewer: Viewer, data: AppData) {
   const view = data.city.map_view;
   viewer.camera.setView({
@@ -438,6 +506,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     decisionFlow,
     workspaceMap,
     workspaceBuildingPoints,
+    futuresMap,
+    futuresStressMode,
     workspacePhase,
     workspaceVisibility,
     onMeshSelect,
@@ -455,7 +525,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const plateauLoadRef = useRef<Promise<void> | null>(null);
   const workspacePointLoadRef = useRef<Promise<WorkspacePointRef[]> | null>(null);
   const workspaceSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
+  const futuresSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
   const workspaceMapRef = useRef(workspaceMap);
+  const futuresMapRef = useRef(futuresMap);
   const onMeshSelectRef = useRef(onMeshSelect);
   const onVirtualPointSelectRef = useRef(onVirtualPointSelect);
   const onBuildingSelectRef = useRef(onBuildingSelect);
@@ -470,6 +542,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const visibilityRef = useRef(visibility);
   const workspacePhaseRef = useRef(workspacePhase);
   const workspaceVisibilityRef = useRef(workspaceVisibility);
+  const futuresStressModeRef = useRef(futuresStressMode);
   onMeshSelectRef.current = onMeshSelect;
   onVirtualPointSelectRef.current = onVirtualPointSelect;
   onBuildingSelectRef.current = onBuildingSelect;
@@ -484,6 +557,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   workspacePhaseRef.current = workspacePhase;
   workspaceVisibilityRef.current = workspaceVisibility;
   workspaceMapRef.current = workspaceMap;
+  futuresMapRef.current = futuresMap;
+  futuresStressModeRef.current = futuresStressMode;
 
   const loadPlateauTileset = useCallback(() => {
     if (sourcesRef.current.plateauTileset || plateauLoadRef.current) {
@@ -805,6 +880,60 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     setWorkspacePointVisibility(sourcesRef.current.workspacePoints, workspacePhase, workspaceVisibility);
     viewerRef.current?.scene.requestRender();
   }, [workspacePhase, workspaceVisibility]);
+
+  useEffect(() => {
+    const visible = setFuturesVisibility(sourcesRef.current.futures, futuresStressMode);
+    if (sourcesRef.current.futures) {
+      containerRef.current?.setAttribute("data-futures-visible", String(visible));
+    }
+    viewerRef.current?.scene.requestRender();
+  }, [futuresStressMode]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewer || viewer.isDestroyed()) return;
+    if (!futuresMap) {
+      if (sourcesRef.current.futures) sourcesRef.current.futures.show = false;
+      containerRef.current?.setAttribute("data-futures-map", "idle");
+      containerRef.current?.setAttribute("data-futures-visible", "0");
+      viewer.scene.requestRender();
+      return;
+    }
+    if (sourcesRef.current.futures) {
+      sourcesRef.current.futures.show = true;
+      const visible = setFuturesVisibility(
+        sourcesRef.current.futures,
+        futuresStressModeRef.current
+      );
+      containerRef.current?.setAttribute("data-futures-map", "ready");
+      containerRef.current?.setAttribute("data-futures-visible", String(visible));
+      viewer.scene.requestRender();
+      return;
+    }
+    if (futuresSourceLoadRef.current) return;
+    containerRef.current?.setAttribute("data-futures-map", "loading");
+    futuresSourceLoadRef.current = addGeoJson(viewer, futuresMap);
+    void futuresSourceLoadRef.current
+      .then((source) => {
+        if (!viewer.isDestroyed() && source) {
+          sourcesRef.current.futures = source;
+          styleFuturesMap(source);
+          source.show = futuresMapRef.current !== null;
+          const visible = setFuturesVisibility(source, futuresStressModeRef.current);
+          containerRef.current?.setAttribute("data-futures-map", "ready");
+          containerRef.current?.setAttribute("data-futures-visible", String(visible));
+          viewer.scene.requestRender();
+        }
+      })
+      .catch((error: unknown) => {
+        console.warn("Urban futures map rendering failed", error);
+        containerRef.current?.setAttribute("data-futures-map", "error");
+        onWarningRef.current("時間・レジリエンスの集約地図を描画できませんでした。");
+      })
+      .finally(() => {
+        futuresSourceLoadRef.current = null;
+      });
+  }, [futuresMap]);
 
   useEffect(() => {
     const viewer = viewerRef.current;

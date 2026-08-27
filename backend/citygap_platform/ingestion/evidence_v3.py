@@ -72,7 +72,7 @@ def export_evidence_v3(
     rows: list[tuple[str, str]] = []
     _flatten("", manifest, rows)
     with csv_path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(("field", "value"))
         writer.writerows(rows)
     body = "\n".join(

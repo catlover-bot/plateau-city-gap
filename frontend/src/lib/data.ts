@@ -260,6 +260,26 @@ export async function loadUrbanFuturesData(
   baseUrl = import.meta.env.BASE_URL
 ): Promise<UrbanFuturesData> {
   const raw = await fetchJson(fetcher, dataUrl(baseUrl, "urban_futures_resilience.json"));
+  const allowedMapLayers = new Set([
+    "normal_route",
+    "disrupted_route",
+    "critical_edge",
+    "disconnected_area",
+    "affected_facility"
+  ]);
+  const cities = isRecord(raw) && isRecord(raw.cities)
+    ? [raw.cities.maizuru, raw.cities.fujisawa]
+    : [];
+  const mapsAreSafe = cities.length === 2 && cities.every((city) => {
+    if (!isRecord(city) || !isRecord(city.resilience_map)) return false;
+    const map = assertFeatureCollection(city.resilience_map, "urban_futures_resilience.json");
+    return map.features.every((feature) => {
+      const properties = feature.properties;
+      if (!properties || !allowedMapLayers.has(String(properties.layer_type ?? ""))) return false;
+      if (!["all", "flood", "landslide", "tsunami"].includes(String(properties.stress_mode ?? ""))) return false;
+      return !("gml_id" in properties || "building_id" in properties || "estimated_population" in properties);
+    });
+  });
   if (
     !isRecord(raw) ||
     raw.building_level_demographics_included !== false ||
@@ -267,7 +287,8 @@ export async function loadUrbanFuturesData(
     raw.story.prediction_claimed !== false ||
     !isRecord(raw.cities) ||
     !isRecord(raw.cities.maizuru) ||
-    !isRecord(raw.cities.fujisawa)
+    !isRecord(raw.cities.fujisawa) ||
+    !mapsAreSafe
   ) {
     throw new Error("urban_futures_resilience.json の公開境界が正しくありません");
   }

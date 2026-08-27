@@ -362,7 +362,10 @@ export default function App() {
   const plateauCoverage = summarizePlateauCoverage(data.plateauMetadata);
   const plateauYear = data.plateauMetadata?.year ?? data.plateauMetadata?.source_year;
   const isPrimary = data.city.mode === "primary_demo";
-  const workspaceActive = (productView === "workspace" || productView === "futures") && workspaceData !== null;
+  const workspaceActive = productView === "workspace" && workspaceData !== null;
+  const futuresMap = productView === "futures" && futuresData
+    ? futuresData.cities[cityId].resilience_map
+    : null;
   const mapLayers: LayerVisibility = productView === "workspace" || productView === "futures"
     ? {
         meshes: workspaceLayers.meshes,
@@ -423,6 +426,8 @@ export default function App() {
             decisionFlow={productView === "demo" && sideTab === "scenario" ? decisionFlow : null}
             workspaceMap={workspaceActive ? workspaceData.map : null}
             workspaceBuildingPoints={workspaceActive ? workspaceData.buildingPoints : null}
+            futuresMap={futuresMap}
+            futuresStressMode={futuresStressMode}
             workspacePhase={workspacePhase}
             workspaceVisibility={workspaceLayers}
             onMeshSelect={selectMesh}
@@ -551,11 +556,14 @@ export default function App() {
         )}
 
         {productView === "futures" && (
-          <div className="futures-map-legend">
+          <div className="futures-map-legend" aria-label="レジリエンス地図の凡例">
             <strong>地図表示</strong>
-            <span><i className="road" />PLATEAU道路面network</span>
-            <span><i className="hazard" />選択時: 災害context</span>
-            <small>到達不能建物は公開せず集約値のみ表示</small>
+            <span><i className="normal" />選択node間の通常経路</span>
+            <span><i className="alternative" />選択edge除外時の第2経路</span>
+            <span><i className="critical" />network criticality候補</span>
+            {futuresStressMode !== "normal" && <span><i className="area" />医療到達不能nodeの集約域</span>}
+            {futuresStressMode !== "normal" && <span><i className="facility" />baseline医療到達先</span>}
+            <small>経路・集約域はレビュー材料であり通行可否・被災予測ではありません</small>
           </div>
         )}
 

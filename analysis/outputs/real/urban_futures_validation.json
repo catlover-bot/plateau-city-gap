@@ -46,8 +46,8 @@
             "independent_removal_verifier": true
           }
         ],
-        "peak_rss_mib": 978.269531,
-        "runtime_seconds": 1.115511,
+        "peak_rss_mib": 1083.019531,
+        "runtime_seconds": 1.435745,
         "top_candidates": [
           {
             "affected_buildings": 120,
@@ -226,9 +226,9 @@
           2045,
           2050
         ],
-        "peak_rss_mib": 978.269531,
+        "peak_rss_mib": 1083.019531,
         "prediction_claimed": false,
-        "runtime_seconds": 3.721983,
+        "runtime_seconds": 4.524948,
         "semantics": "official demographic projection + CITY GAP spatial allocation model",
         "series": {
           "fujisawa-municipal-2023": [
@@ -647,44 +647,551 @@
         "designation_count": 13,
         "label": "planning-context mismatch candidate",
         "legal_compliance_claimed": false,
-        "runtime_seconds": 1.863109
+        "runtime_seconds": 2.977934
       },
       "plateau_version": 5,
       "redundancy": {
         "alternative_available": true,
-        "distance_increase_m": 6.839293,
+        "distance_increase_m": 18.222006,
         "primary_route": {
-          "distance_m": 12.369428,
+          "distance_m": 488.037545,
           "edge_ids": [
-            "exp::0003d6ebb742f54b1f3a"
+            "exp::69f1092fff313149775a"
           ],
           "node_ids": [
-            "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0",
-            "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0"
+            "exp::tran_3ab846e9-416b-4bcd-b31b-327bb860b41d:0",
+            "exp::tran_7d905329-b456-4c80-8147-01cade3572d7:0"
           ]
         },
         "route_semantics": "road-surface adjacency; not a validated pedestrian route",
         "second_best_route": {
-          "distance_m": 19.208721,
+          "distance_m": 506.25955,
           "edge_ids": [
-            "exp::7577b16b3b51b39228e4",
-            "exp::6b428f096fde357f0917"
+            "exp::a8cce36c58656578e030",
+            "exp::9f8beee16cf8daa4144f"
           ],
           "node_ids": [
-            "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0",
-            "exp::tran_080def97-7ec1-46f5-8960-ced88047341d:0",
-            "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0"
+            "exp::tran_3ab846e9-416b-4bcd-b31b-327bb860b41d:0",
+            "exp::tran_ff38035a-6266-4988-8541-242fc1544d7d:0",
+            "exp::tran_7d905329-b456-4c80-8147-01cade3572d7:0"
           ]
         },
-        "selected_destination_node": "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0",
-        "selected_origin_node": "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0"
+        "selected_destination_node": "exp::tran_7d905329-b456-4c80-8147-01cade3572d7:0",
+        "selected_origin_node": "exp::tran_3ab846e9-416b-4bcd-b31b-327bb860b41d:0",
+        "selection_method": "longest non-critical edge with a verified second path"
+      },
+      "resilience_map": {
+        "claim_boundary": "map review evidence; not disaster, passability or damage prediction",
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  139.500704,
+                  35.33312
+                ],
+                [
+                  139.501978,
+                  35.337393
+                ]
+              ],
+              "type": "LineString"
+            },
+            "id": "fujisawa:selected-pair:normal",
+            "properties": {
+              "distance_m": 488.037545,
+              "layer_type": "normal_route",
+              "review_label": "selected-pair primary route",
+              "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+              "selection_method": "longest non-critical edge with a verified second path",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    139.500704,
+                    35.33312
+                  ],
+                  [
+                    139.500495,
+                    35.333184
+                  ]
+                ],
+                [
+                  [
+                    139.501978,
+                    35.337393
+                  ],
+                  [
+                    139.500495,
+                    35.333184
+                  ]
+                ]
+              ],
+              "type": "MultiLineString"
+            },
+            "id": "fujisawa:selected-pair:alternative",
+            "properties": {
+              "distance_increase_m": 18.222006,
+              "distance_m": 506.25955,
+              "layer_type": "disrupted_route",
+              "review_label": "second-best route when the selected primary edge is unavailable",
+              "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+              "selection_method": "longest non-critical edge with a verified second path",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  139.48354,
+                  35.306521
+                ],
+                [
+                  139.484381,
+                  35.307506
+                ]
+              ],
+              "type": "LineString"
+            },
+            "id": "fujisawa:critical:exp::14a31f729f6e78d14f6f",
+            "properties": {
+              "affected_buildings": 120,
+              "candidate_label": "network criticality candidate",
+              "dangerous_road_claimed": false,
+              "edge_id": "exp::14a31f729f6e78d14f6f",
+              "layer_type": "critical_edge",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    139.483226,
+                    35.307155
+                  ],
+                  [
+                    139.483062,
+                    35.307127
+                  ],
+                  [
+                    139.482895,
+                    35.307114
+                  ],
+                  [
+                    139.482728,
+                    35.307114
+                  ],
+                  [
+                    139.482562,
+                    35.307128
+                  ],
+                  [
+                    139.482398,
+                    35.307156
+                  ],
+                  [
+                    139.482238,
+                    35.307198
+                  ],
+                  [
+                    139.481736,
+                    35.307352
+                  ],
+                  [
+                    139.481634,
+                    35.307386
+                  ],
+                  [
+                    139.439536,
+                    35.322965
+                  ],
+                  [
+                    139.439399,
+                    35.323021
+                  ],
+                  [
+                    139.43927,
+                    35.323088
+                  ],
+                  [
+                    139.439149,
+                    35.323165
+                  ],
+                  [
+                    139.439037,
+                    35.32325
+                  ],
+                  [
+                    139.438935,
+                    35.323343
+                  ],
+                  [
+                    139.438844,
+                    35.323444
+                  ],
+                  [
+                    139.438765,
+                    35.323551
+                  ],
+                  [
+                    139.399395,
+                    35.382754
+                  ],
+                  [
+                    139.399323,
+                    35.382875
+                  ],
+                  [
+                    139.399267,
+                    35.383002
+                  ],
+                  [
+                    139.399226,
+                    35.383133
+                  ],
+                  [
+                    139.399202,
+                    35.383267
+                  ],
+                  [
+                    139.399194,
+                    35.383402
+                  ],
+                  [
+                    139.399202,
+                    35.383537
+                  ],
+                  [
+                    139.399227,
+                    35.38367
+                  ],
+                  [
+                    139.399268,
+                    35.383801
+                  ],
+                  [
+                    139.399325,
+                    35.383928
+                  ],
+                  [
+                    139.399396,
+                    35.38405
+                  ],
+                  [
+                    139.423556,
+                    35.420189
+                  ],
+                  [
+                    139.423641,
+                    35.420303
+                  ],
+                  [
+                    139.42374,
+                    35.42041
+                  ],
+                  [
+                    139.423851,
+                    35.420508
+                  ],
+                  [
+                    139.423974,
+                    35.420597
+                  ],
+                  [
+                    139.424107,
+                    35.420675
+                  ],
+                  [
+                    139.424249,
+                    35.420742
+                  ],
+                  [
+                    139.424398,
+                    35.420797
+                  ],
+                  [
+                    139.424553,
+                    35.42084
+                  ],
+                  [
+                    139.463946,
+                    35.430001
+                  ],
+                  [
+                    139.464096,
+                    35.43003
+                  ],
+                  [
+                    139.464248,
+                    35.430047
+                  ],
+                  [
+                    139.464401,
+                    35.430053
+                  ],
+                  [
+                    139.464555,
+                    35.430046
+                  ],
+                  [
+                    139.464813,
+                    35.430026
+                  ],
+                  [
+                    139.464979,
+                    35.430006
+                  ],
+                  [
+                    139.465143,
+                    35.429972
+                  ],
+                  [
+                    139.465301,
+                    35.429925
+                  ],
+                  [
+                    139.465452,
+                    35.429864
+                  ],
+                  [
+                    139.465596,
+                    35.429792
+                  ],
+                  [
+                    139.465729,
+                    35.429708
+                  ],
+                  [
+                    139.478362,
+                    35.42086
+                  ],
+                  [
+                    139.47848,
+                    35.420769
+                  ],
+                  [
+                    139.478587,
+                    35.420668
+                  ],
+                  [
+                    139.478681,
+                    35.42056
+                  ],
+                  [
+                    139.478761,
+                    35.420444
+                  ],
+                  [
+                    139.478827,
+                    35.420323
+                  ],
+                  [
+                    139.512979,
+                    35.348372
+                  ],
+                  [
+                    139.513024,
+                    35.348264
+                  ],
+                  [
+                    139.51565,
+                    35.340964
+                  ],
+                  [
+                    139.515688,
+                    35.340832
+                  ],
+                  [
+                    139.515711,
+                    35.340697
+                  ],
+                  [
+                    139.515717,
+                    35.340561
+                  ],
+                  [
+                    139.515706,
+                    35.340425
+                  ],
+                  [
+                    139.515678,
+                    35.340291
+                  ],
+                  [
+                    139.515634,
+                    35.340159
+                  ],
+                  [
+                    139.515574,
+                    35.340032
+                  ],
+                  [
+                    139.513039,
+                    35.335363
+                  ],
+                  [
+                    139.512966,
+                    35.335244
+                  ],
+                  [
+                    139.512878,
+                    35.335132
+                  ],
+                  [
+                    139.512215,
+                    35.334364
+                  ],
+                  [
+                    139.512214,
+                    35.334363
+                  ],
+                  [
+                    139.511617,
+                    35.333673
+                  ],
+                  [
+                    139.511608,
+                    35.333663
+                  ],
+                  [
+                    139.491772,
+                    35.311191
+                  ],
+                  [
+                    139.491662,
+                    35.311079
+                  ],
+                  [
+                    139.491538,
+                    35.310978
+                  ],
+                  [
+                    139.491402,
+                    35.310887
+                  ],
+                  [
+                    139.487819,
+                    35.308764
+                  ],
+                  [
+                    139.487704,
+                    35.308702
+                  ],
+                  [
+                    139.487583,
+                    35.308647
+                  ],
+                  [
+                    139.484777,
+                    35.307511
+                  ],
+                  [
+                    139.48462,
+                    35.307456
+                  ],
+                  [
+                    139.484457,
+                    35.307414
+                  ],
+                  [
+                    139.483226,
+                    35.307155
+                  ]
+                ]
+              ],
+              "type": "Polygon"
+            },
+            "id": "fujisawa:flood:disconnected-area",
+            "properties": {
+              "aggregation": "150m-buffered convex hull of disconnected demand nodes",
+              "exact_affected_area_claimed": false,
+              "layer_type": "disconnected_area",
+              "newly_unreachable_buildings": 28045,
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                139.4702,
+                35.321251
+              ],
+              "type": "Point"
+            },
+            "id": "fujisawa:flood:facility:1",
+            "properties": {
+              "disconnected_buildings": 1038,
+              "facility_name": "医療法人社団みずしな整形外科",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                139.482819,
+                35.34761
+              ],
+              "type": "Point"
+            },
+            "id": "fujisawa:flood:facility:2",
+            "properties": {
+              "disconnected_buildings": 991,
+              "facility_name": "後藤内科医院",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                139.476796,
+                35.31731
+              ],
+              "type": "Point"
+            },
+            "id": "fujisawa:flood:facility:3",
+            "properties": {
+              "disconnected_buildings": 984,
+              "facility_name": "海の診療所",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          }
+        ],
+        "privacy": "aggregated areas/routes/facilities only; no building-level demographics",
+        "type": "FeatureCollection"
       },
       "scenario_comparison_runtime_seconds": "not available for this validation city",
       "state_diff_identity_validation": {
         "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
         "comparison": "current official road state versus itself",
         "correctness_check": true,
-        "peak_rss_mib": 978.269531,
+        "peak_rss_mib": 1083.019531,
         "result": {
           "added": 0,
           "attribute_changed": 0,
@@ -692,7 +1199,7 @@
           "removed": 0,
           "unchanged": 71487
         },
-        "runtime_seconds": 3.143026
+        "runtime_seconds": 5.281689
       },
       "stress_tests": {
         "flood": {
@@ -720,7 +1227,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 732.417969,
+          "peak_rss_mib": 827.453125,
           "result": {
             "baseline_component_count": 18,
             "closed_edge_count": 17561,
@@ -760,7 +1267,7 @@
               }
             }
           },
-          "runtime_seconds": 2.047055
+          "runtime_seconds": 2.645597
         }
       },
       "urban_state": "fujisawa-2025-observed"
@@ -787,8 +1294,8 @@
             "independent_removal_verifier": true
           }
         ],
-        "peak_rss_mib": 441.203125,
-        "runtime_seconds": 0.421911,
+        "peak_rss_mib": 493.113281,
+        "runtime_seconds": 0.22514,
         "top_candidates": [
           {
             "affected_buildings": 196,
@@ -967,9 +1474,9 @@
           2045,
           2050
         ],
-        "peak_rss_mib": 441.203125,
+        "peak_rss_mib": 493.113281,
         "prediction_claimed": false,
-        "runtime_seconds": 0.472826,
+        "runtime_seconds": 0.383148,
         "semantics": "official demographic projection + CITY GAP spatial allocation model",
         "series": {
           "ipss-regional-2023": [
@@ -1264,58 +1771,2321 @@
         "designation_count": 12,
         "label": "planning-context mismatch candidate",
         "legal_compliance_claimed": false,
-        "runtime_seconds": 0.528709
+        "runtime_seconds": 0.448635
       },
       "plateau_version": 5,
       "redundancy": {
         "alternative_available": true,
-        "distance_increase_m": 273.522246,
+        "distance_increase_m": 2798.479661,
         "primary_route": {
-          "distance_m": 30.373817,
+          "distance_m": 715.971737,
           "edge_ids": [
-            "exp::0003d0710612af629c6e"
+            "exp::5b9cf10b8bfeea607efa"
           ],
           "node_ids": [
-            "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
-            "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+            "exp::tran_0c22507d-ea5e-4550-8cb8-1d6cb89febc8:0",
+            "exp::tran_d729920e-7aa2-459c-b516-94435e4c7a36:0"
           ]
         },
         "route_semantics": "road-surface adjacency; not a validated pedestrian route",
         "second_best_route": {
-          "distance_m": 303.896064,
+          "distance_m": 3514.451399,
           "edge_ids": [
-            "exp::90fde3cfb7309a610c57",
-            "exp::826cbcb3fd3138c6f300",
-            "exp::fd7d813a35441bfd3719",
-            "exp::1383ce2cd3999fd5b117",
-            "exp::ddbae3be66d1fd1a0667",
-            "exp::6d8d3dd3f2dbc262cede",
-            "exp::b177187bf4e174de6769",
-            "exp::213bb1c935051de8d30c",
-            "exp::766e23347b12e789ee4b"
+            "exp::5222b0bbc01d485cd406",
+            "exp::574cfc4bf11e14f6b156",
+            "exp::97a784571006335ac004",
+            "exp::66a6becd3c77b5ad391f",
+            "exp::6ed43c67f2378c16a4f8",
+            "exp::ef8bea2c3d8304370e1a",
+            "exp::66f38aa88fe73930e997",
+            "exp::393b52fb386824ce26b6",
+            "exp::a65c10d7efdd52b5d9ea",
+            "exp::3258edcc0c3f7de0be5c",
+            "exp::43f41960f775913aaa95",
+            "exp::451b75965cec3b9b25ab",
+            "exp::8a9623171c0a9f42fdd2",
+            "exp::9f7aa33236a56e8d36c4",
+            "exp::c8cea7c75dba6f00c479",
+            "exp::6f54eff648fdf850b2a6",
+            "exp::c4013fb6b7f5fcfdc69f",
+            "exp::0aaa9e26126b4e2f5ef2",
+            "exp::9a226044d55b5aa8e2b2",
+            "exp::c20217c524d68346beba",
+            "exp::f9a128c2ed51fce7aa86",
+            "exp::ee20fef7543d3f7e9348",
+            "exp::d351640367564e0df6f7",
+            "exp::2a7ab837dae1de0d4a66",
+            "exp::5d971b17065efacc2dbc",
+            "exp::8bae1bcfb50dbac89c31",
+            "exp::dfc69121ddb0956f24b4",
+            "exp::e112dbb20299a84b811b",
+            "exp::7e974bb98b2f1c6ca36c",
+            "exp::f4d74ffbedcd90be3e1c",
+            "exp::860cf65dad7900b5b931",
+            "exp::cef26d267e85d2c419d5",
+            "exp::1387578a9f7a090f10e1",
+            "exp::1adb16601e75bc1375b7",
+            "exp::cdf4685b51e6bbf2f07f",
+            "exp::b07f1a64d7f881daa427",
+            "exp::dca7778010c10e011c62",
+            "exp::3b1fd23a46c2e5d00963",
+            "exp::3fd60363f7a0e1fdd199",
+            "exp::d05c070a72da08e8417c",
+            "exp::a04e7c7fdb35254cb121",
+            "exp::c10277d4c6b77ace8a49",
+            "exp::45444b2246d407b3f219",
+            "exp::ad3e02a48724f07a431f",
+            "exp::9c67d190925be64118a7",
+            "exp::795ff2fa4c270e2a999f",
+            "exp::5266c245c3b8ed71f0ba",
+            "exp::7644d49021257b1e88ed",
+            "exp::42db4799b22f240ddbd4",
+            "exp::7466fe82ed8a3507cc22",
+            "exp::a9c2db527a0ae93779cb",
+            "exp::1fb7b74e236e94dc14b8",
+            "exp::97e9ddb067482d2b8308",
+            "exp::372a7f3e46086a3e608e",
+            "exp::33b31fbe623719ca2873",
+            "exp::64e8fc8b80c79f9761a9",
+            "exp::6bf985d54007ba8f28ff",
+            "exp::519fdcc2cd2c01e8c384",
+            "exp::8812d4b03bbaa629e8e0",
+            "exp::c00291c08b88ab83d647",
+            "exp::b1bbd3a04f9cd817eca6",
+            "exp::d25d5bd1b10dd431cd66",
+            "exp::95b54a4b8aa10eb2cdf3",
+            "exp::a003629cdcd4c849e254",
+            "exp::7e0d1f9f2e5f4361dcb7",
+            "exp::4df4bd818465a0f11fff",
+            "exp::4fa12a7a1dfc3f272466",
+            "exp::af84dce6c4758dddc61f",
+            "exp::fb26592d2b93ab9c408a",
+            "exp::c113e74a7fc210ad546f",
+            "exp::877454397a1141d5d76b",
+            "exp::3d36a028af32e9ab071e",
+            "exp::4d9cc2638351a0cbd0f8",
+            "exp::9f6fca8e367e118e5e0a",
+            "exp::fa8f0c7edff2b574dea8",
+            "exp::2e44157d06dafd34456c",
+            "exp::396759617f9ba85b8b09",
+            "exp::a5034b0e5133a562b6e9",
+            "exp::c29b5c795771278a5506",
+            "exp::31d4e901e95c2198d1d6",
+            "exp::ee1b038272b55da3024d",
+            "exp::0f1440e6fd622d07d363"
           ],
           "node_ids": [
-            "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
-            "exp::tran_2d186638-6dbc-4cd0-b195-fefa95c9e350:0",
-            "exp::tran_391991cc-074d-42f7-a25f-afe8ecd9f0bd:0",
-            "exp::tran_c2f80d47-1d1f-4234-b668-81eed5231dcf:0",
-            "exp::tran_127b399c-154f-4596-9e4f-f20985ebded5:0",
-            "exp::tran_c8156fb8-5f42-42b8-ac24-08cbddd222fb:0",
-            "exp::tran_b16b38a7-08ee-4daf-9a00-40ba9510b9fa:0",
-            "exp::tran_f1d9145f-80bf-48db-bf17-e3f6297374b2:0",
-            "exp::tran_33dacec3-7c6d-4201-b17d-9741c4c20ef4:0",
-            "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+            "exp::tran_0c22507d-ea5e-4550-8cb8-1d6cb89febc8:0",
+            "exp::tran_b9e8d476-6532-47d1-a3aa-df152f1ed51c:0",
+            "exp::tran_a013d603-6890-4292-8e3b-923feac7acf7:0",
+            "exp::tran_32a8e1aa-d426-4a92-bd87-0dd8c1a39c29:0",
+            "exp::tran_483d6c09-f5ae-4a99-9305-3bb987538182:0",
+            "exp::tran_7aad3bca-dd25-456b-b3e7-1604364d6c78:0",
+            "exp::tran_35231055-7c16-4c9c-ac69-2433f1936eb7:0",
+            "exp::tran_2396790e-4c77-4907-9647-4e292470bccc:0",
+            "exp::tran_68b4bb26-9064-4f56-9634-388ef8404ff2:0",
+            "exp::tran_f3abdc3f-ec60-45d1-aa0a-1d3dd4f5b591:0",
+            "exp::tran_00cd29d2-6b88-4215-91f9-5942e078b719:0",
+            "exp::tran_1164f315-7384-49e1-b062-5465ceecca8e:0",
+            "exp::tran_1afb247e-dc79-4e28-9f3a-0e77fba64535:0",
+            "exp::tran_f237c134-30e1-4d44-a611-95a9428e3e03:0",
+            "exp::tran_09a35cc1-153f-4583-91e2-7c673e7a834e:0",
+            "exp::tran_8ce9abc9-256a-413e-89ff-61ae59037689:0",
+            "exp::tran_689be9d1-8ee1-40e5-a1e1-66c05006c037:0",
+            "exp::tran_dc548fb8-5e10-468a-ba4b-eb6fbcd86b2e:0",
+            "exp::tran_0bf800b8-b062-4d05-95d8-5ff99ca08fa1:0",
+            "exp::tran_beb7cd2e-aa77-4010-92e7-b90b8692b5df:0",
+            "exp::tran_6513d544-d39c-4988-ac69-006fb53883e0:0",
+            "exp::tran_9c118abb-fc80-41f3-b9d1-92e4d96b7523:0",
+            "exp::tran_e2ee96ca-0ab6-4657-b63d-dbedcc8cf07a:0",
+            "exp::tran_4dd29a74-53fa-45f4-82e8-621836f49bb4:0",
+            "exp::tran_ef7f840c-8876-4501-abd0-8f38d2cd10d3:0",
+            "exp::tran_e459923b-e758-4411-94c2-814f38997fe5:0",
+            "exp::tran_31447756-9491-4f7c-b34f-62999ac3e2ba:0",
+            "exp::tran_b4090014-d2c2-4fcc-bdfc-fcf38b6ef547:0",
+            "exp::tran_d26dc40b-cb5d-48e1-ac15-4e0051184a8a:0",
+            "exp::tran_b965eebf-5f8a-4f73-8d9d-03507920ac5b:0",
+            "exp::tran_73565429-d921-4220-9a12-1d070ebaf404:0",
+            "exp::tran_2225955f-d794-4e33-9aa8-46ac6f4d5e40:0",
+            "exp::tran_72d7fc85-eb98-4475-92a3-fd166c090839:0",
+            "exp::tran_69b52472-59f2-4cbf-afd4-332f678ce500:0",
+            "exp::tran_3ec28171-33db-4ac5-8c7a-df2d19f4a6fb:0",
+            "exp::tran_15cb1947-2fa4-4e38-ab32-9926e15eed4f:0",
+            "exp::tran_e91dd83f-a2ea-47e6-a697-550652bc7c18:0",
+            "exp::tran_d8205157-de3d-4987-9072-35d44ed8fb19:0",
+            "exp::tran_d1e93942-3671-49b6-8018-d31f98950913:0",
+            "exp::tran_5c603f83-f2a7-49a0-a1f5-f2cf3d3960e8:0",
+            "exp::tran_23ded7e1-c3cc-4496-aaed-3620427b1d1a:0",
+            "exp::tran_ea998406-7a32-4fff-9c7a-66596f76c3b0:0",
+            "exp::tran_97921083-5720-4841-a743-dd9ade22c803:0",
+            "exp::tran_b4cf088b-db94-45cd-ad67-d761e0325f6a:0",
+            "exp::tran_f0a92ad7-db7d-4780-880e-07c6768e5659:0",
+            "exp::tran_cf7cbdf3-8a61-40bf-9d4f-3e975635ed18:0",
+            "exp::tran_5cb2ebcb-10b7-4351-b064-90376f54c7db:0",
+            "exp::tran_4bc87100-6ed9-4e79-96ff-5890f6dc8108:0",
+            "exp::tran_b2c991a0-0b1f-403f-89f6-004885cf1d5a:0",
+            "exp::tran_b61a9952-9702-4ecc-93af-8b04168769d2:0",
+            "exp::tran_1cc7d64b-2a00-4d3c-84e8-a09ffa401db2:0",
+            "exp::tran_efb79a4f-3339-4705-9fce-aecd332c6eee:0",
+            "exp::tran_30fd55f7-bca8-4687-98bc-0df82668ed61:0",
+            "exp::tran_169102d5-cbb1-4dc7-bed0-bdf95ad200cd:0",
+            "exp::tran_28948c13-2868-49ef-886a-a49631b2369a:0",
+            "exp::tran_2e992599-83a8-416c-95e6-dc0b67b3f6a5:0",
+            "exp::tran_6ac2f45c-0f74-4338-8140-1f847ce03082:0",
+            "exp::tran_f4f4d446-4db1-4cce-95d9-1644c1257bb1:0",
+            "exp::tran_bd3481cb-78d8-4c09-bcef-abf9d778bde3:0",
+            "exp::tran_44b470d9-48fe-4695-9baa-acd64011140f:0",
+            "exp::tran_b4c66585-0524-4ddc-8cfa-97af35f8ce43:0",
+            "exp::tran_3ca564ea-8c33-45b4-9ee1-6dbb9e5687b9:0",
+            "exp::tran_c395da18-1d4a-4213-b3f3-6a9be64c3009:0",
+            "exp::tran_c74e2e3d-7078-452a-8e4a-2a1ccf929e6f:0",
+            "exp::tran_e7afa775-8470-438b-9e4c-cca1d43a28bf:0",
+            "exp::tran_f155459f-9419-4db9-9c61-37379808e1a3:0",
+            "exp::tran_7ed34587-8304-4538-a335-189f38c29c62:0",
+            "exp::tran_7035c20e-813d-4975-a36f-929315244af8:0",
+            "exp::tran_03214b10-a1dd-4e4a-a3f2-f2761a5000ef:0",
+            "exp::tran_6327d161-82f3-4af6-a7ef-57b055b32e52:0",
+            "exp::tran_3b26ab84-949a-4ade-b4e0-df02a25320e8:0",
+            "exp::tran_dcddaac5-5be6-4303-82f3-5f51f1e36b92:0",
+            "exp::tran_75e57088-a7f9-401b-b905-0bd8e4057ff9:0",
+            "exp::tran_e2e952e2-35d2-42f5-a277-08337a2cbf99:0",
+            "exp::tran_9f6b26f0-dbb1-439c-93b0-02e4f7c8d7b9:0",
+            "exp::tran_0d626ca9-dc7b-4bf1-81ea-bb4c79fcb9df:0",
+            "exp::tran_479c73e5-b236-43a2-84ff-2071ab5cb11f:0",
+            "exp::tran_0b25a9cc-1a33-4e81-a9fd-836f59271352:0",
+            "exp::tran_c49338b1-84ee-4e5a-923f-98ca190f2077:0",
+            "exp::tran_8874877e-a2e6-4273-ac92-978543869f8f:0",
+            "exp::tran_b90c0d18-8fe0-45f5-9f28-713e3cd0c2fd:0",
+            "exp::tran_a47af5d9-566d-4bee-ab02-8653925c4934:0",
+            "exp::tran_d729920e-7aa2-459c-b516-94435e4c7a36:0"
           ]
         },
-        "selected_destination_node": "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0",
-        "selected_origin_node": "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0"
+        "selected_destination_node": "exp::tran_d729920e-7aa2-459c-b516-94435e4c7a36:0",
+        "selected_origin_node": "exp::tran_0c22507d-ea5e-4550-8cb8-1d6cb89febc8:0",
+        "selection_method": "longest non-critical edge with a verified second path"
+      },
+      "resilience_map": {
+        "claim_boundary": "map review evidence; not disaster, passability or damage prediction",
+        "features": [
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  135.373411,
+                  35.488016
+                ],
+                [
+                  135.367373,
+                  35.483862
+                ]
+              ],
+              "type": "LineString"
+            },
+            "id": "maizuru:selected-pair:normal",
+            "properties": {
+              "distance_m": 715.971737,
+              "layer_type": "normal_route",
+              "review_label": "selected-pair primary route",
+              "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+              "selection_method": "longest non-critical edge with a verified second path",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    135.373411,
+                    35.488016
+                  ],
+                  [
+                    135.37307,
+                    35.488318
+                  ]
+                ],
+                [
+                  [
+                    135.372683,
+                    35.488664
+                  ],
+                  [
+                    135.37307,
+                    35.488318
+                  ]
+                ],
+                [
+                  [
+                    135.372285,
+                    35.488806
+                  ],
+                  [
+                    135.372683,
+                    35.488664
+                  ]
+                ],
+                [
+                  [
+                    135.372285,
+                    35.488806
+                  ],
+                  [
+                    135.371986,
+                    35.488946
+                  ]
+                ],
+                [
+                  [
+                    135.371986,
+                    35.488946
+                  ],
+                  [
+                    135.371878,
+                    35.488997
+                  ]
+                ],
+                [
+                  [
+                    135.371757,
+                    35.489055
+                  ],
+                  [
+                    135.371878,
+                    35.488997
+                  ]
+                ],
+                [
+                  [
+                    135.369782,
+                    35.489084
+                  ],
+                  [
+                    135.371757,
+                    35.489055
+                  ]
+                ],
+                [
+                  [
+                    135.369782,
+                    35.489084
+                  ],
+                  [
+                    135.368756,
+                    35.488825
+                  ]
+                ],
+                [
+                  [
+                    135.368756,
+                    35.488825
+                  ],
+                  [
+                    135.36788,
+                    35.488621
+                  ]
+                ],
+                [
+                  [
+                    135.366712,
+                    35.488419
+                  ],
+                  [
+                    135.36788,
+                    35.488621
+                  ]
+                ],
+                [
+                  [
+                    135.366712,
+                    35.488419
+                  ],
+                  [
+                    135.365172,
+                    35.487844
+                  ]
+                ],
+                [
+                  [
+                    135.365172,
+                    35.487844
+                  ],
+                  [
+                    135.364384,
+                    35.487299
+                  ]
+                ],
+                [
+                  [
+                    135.364384,
+                    35.487299
+                  ],
+                  [
+                    135.363923,
+                    35.486974
+                  ]
+                ],
+                [
+                  [
+                    135.363478,
+                    35.486693
+                  ],
+                  [
+                    135.363923,
+                    35.486974
+                  ]
+                ],
+                [
+                  [
+                    135.363478,
+                    35.486693
+                  ],
+                  [
+                    135.363355,
+                    35.486648
+                  ]
+                ],
+                [
+                  [
+                    135.363203,
+                    35.48661
+                  ],
+                  [
+                    135.363355,
+                    35.486648
+                  ]
+                ],
+                [
+                  [
+                    135.363203,
+                    35.48661
+                  ],
+                  [
+                    135.36309,
+                    35.486593
+                  ]
+                ],
+                [
+                  [
+                    135.362811,
+                    35.48656
+                  ],
+                  [
+                    135.36309,
+                    35.486593
+                  ]
+                ],
+                [
+                  [
+                    135.362811,
+                    35.48656
+                  ],
+                  [
+                    135.362658,
+                    35.486391
+                  ]
+                ],
+                [
+                  [
+                    135.362658,
+                    35.486365
+                  ],
+                  [
+                    135.362658,
+                    35.486391
+                  ]
+                ],
+                [
+                  [
+                    135.362658,
+                    35.486365
+                  ],
+                  [
+                    135.362639,
+                    35.486315
+                  ]
+                ],
+                [
+                  [
+                    135.362639,
+                    35.486315
+                  ],
+                  [
+                    135.362636,
+                    35.486263
+                  ]
+                ],
+                [
+                  [
+                    135.362635,
+                    35.486231
+                  ],
+                  [
+                    135.362636,
+                    35.486263
+                  ]
+                ],
+                [
+                  [
+                    135.362635,
+                    35.486231
+                  ],
+                  [
+                    135.362633,
+                    35.4862
+                  ]
+                ],
+                [
+                  [
+                    135.362628,
+                    35.486106
+                  ],
+                  [
+                    135.362633,
+                    35.4862
+                  ]
+                ],
+                [
+                  [
+                    135.362624,
+                    35.486032
+                  ],
+                  [
+                    135.362628,
+                    35.486106
+                  ]
+                ],
+                [
+                  [
+                    135.362624,
+                    35.486032
+                  ],
+                  [
+                    135.362622,
+                    35.486007
+                  ]
+                ],
+                [
+                  [
+                    135.362622,
+                    35.486007
+                  ],
+                  [
+                    135.362621,
+                    35.485976
+                  ]
+                ],
+                [
+                  [
+                    135.362615,
+                    35.485881
+                  ],
+                  [
+                    135.362621,
+                    35.485976
+                  ]
+                ],
+                [
+                  [
+                    135.362605,
+                    35.4857
+                  ],
+                  [
+                    135.362615,
+                    35.485881
+                  ]
+                ],
+                [
+                  [
+                    135.362602,
+                    35.485634
+                  ],
+                  [
+                    135.362605,
+                    35.4857
+                  ]
+                ],
+                [
+                  [
+                    135.362602,
+                    35.485634
+                  ],
+                  [
+                    135.36261,
+                    35.485526
+                  ]
+                ],
+                [
+                  [
+                    135.362592,
+                    35.485464
+                  ],
+                  [
+                    135.36261,
+                    35.485526
+                  ]
+                ],
+                [
+                  [
+                    135.362576,
+                    35.485395
+                  ],
+                  [
+                    135.362592,
+                    35.485464
+                  ]
+                ],
+                [
+                  [
+                    135.362586,
+                    35.485369
+                  ],
+                  [
+                    135.362576,
+                    35.485395
+                  ]
+                ],
+                [
+                  [
+                    135.362586,
+                    35.485369
+                  ],
+                  [
+                    135.362601,
+                    35.485317
+                  ]
+                ],
+                [
+                  [
+                    135.362573,
+                    35.48512
+                  ],
+                  [
+                    135.362601,
+                    35.485317
+                  ]
+                ],
+                [
+                  [
+                    135.362554,
+                    35.485
+                  ],
+                  [
+                    135.362573,
+                    35.48512
+                  ]
+                ],
+                [
+                  [
+                    135.362518,
+                    35.484104
+                  ],
+                  [
+                    135.362554,
+                    35.485
+                  ]
+                ],
+                [
+                  [
+                    135.36221,
+                    35.483258
+                  ],
+                  [
+                    135.362518,
+                    35.484104
+                  ]
+                ],
+                [
+                  [
+                    135.36221,
+                    35.483258
+                  ],
+                  [
+                    135.362062,
+                    35.482756
+                  ]
+                ],
+                [
+                  [
+                    135.361744,
+                    35.482279
+                  ],
+                  [
+                    135.362062,
+                    35.482756
+                  ]
+                ],
+                [
+                  [
+                    135.361744,
+                    35.482279
+                  ],
+                  [
+                    135.3612,
+                    35.481478
+                  ]
+                ],
+                [
+                  [
+                    135.3612,
+                    35.481478
+                  ],
+                  [
+                    135.360059,
+                    35.480552
+                  ]
+                ],
+                [
+                  [
+                    135.360291,
+                    35.480237
+                  ],
+                  [
+                    135.360059,
+                    35.480552
+                  ]
+                ],
+                [
+                  [
+                    135.36043,
+                    35.479908
+                  ],
+                  [
+                    135.360291,
+                    35.480237
+                  ]
+                ],
+                [
+                  [
+                    135.360471,
+                    35.47981
+                  ],
+                  [
+                    135.36043,
+                    35.479908
+                  ]
+                ],
+                [
+                  [
+                    135.360471,
+                    35.47981
+                  ],
+                  [
+                    135.360514,
+                    35.47972
+                  ]
+                ],
+                [
+                  [
+                    135.360514,
+                    35.47972
+                  ],
+                  [
+                    135.360546,
+                    35.479659
+                  ]
+                ],
+                [
+                  [
+                    135.360603,
+                    35.479562
+                  ],
+                  [
+                    135.360546,
+                    35.479659
+                  ]
+                ],
+                [
+                  [
+                    135.360603,
+                    35.479562
+                  ],
+                  [
+                    135.361056,
+                    35.479187
+                  ]
+                ],
+                [
+                  [
+                    135.361659,
+                    35.478804
+                  ],
+                  [
+                    135.361056,
+                    35.479187
+                  ]
+                ],
+                [
+                  [
+                    135.36208,
+                    35.478536
+                  ],
+                  [
+                    135.361659,
+                    35.478804
+                  ]
+                ],
+                [
+                  [
+                    135.36208,
+                    35.478536
+                  ],
+                  [
+                    135.362681,
+                    35.478553
+                  ]
+                ],
+                [
+                  [
+                    135.362681,
+                    35.478553
+                  ],
+                  [
+                    135.363244,
+                    35.478585
+                  ]
+                ],
+                [
+                  [
+                    135.363244,
+                    35.478585
+                  ],
+                  [
+                    135.363627,
+                    35.478449
+                  ]
+                ],
+                [
+                  [
+                    135.363627,
+                    35.478449
+                  ],
+                  [
+                    135.363771,
+                    35.478397
+                  ]
+                ],
+                [
+                  [
+                    135.363962,
+                    35.47833
+                  ],
+                  [
+                    135.363771,
+                    35.478397
+                  ]
+                ],
+                [
+                  [
+                    135.364115,
+                    35.478275
+                  ],
+                  [
+                    135.363962,
+                    35.47833
+                  ]
+                ],
+                [
+                  [
+                    135.364115,
+                    35.478275
+                  ],
+                  [
+                    135.364288,
+                    35.478211
+                  ]
+                ],
+                [
+                  [
+                    135.36447,
+                    35.478147
+                  ],
+                  [
+                    135.364288,
+                    35.478211
+                  ]
+                ],
+                [
+                  [
+                    135.36447,
+                    35.478147
+                  ],
+                  [
+                    135.364784,
+                    35.478039
+                  ]
+                ],
+                [
+                  [
+                    135.364784,
+                    35.478039
+                  ],
+                  [
+                    135.365026,
+                    35.477952
+                  ]
+                ],
+                [
+                  [
+                    135.365026,
+                    35.477952
+                  ],
+                  [
+                    135.365332,
+                    35.477844
+                  ]
+                ],
+                [
+                  [
+                    135.365332,
+                    35.477844
+                  ],
+                  [
+                    135.365559,
+                    35.477764
+                  ]
+                ],
+                [
+                  [
+                    135.365794,
+                    35.47768
+                  ],
+                  [
+                    135.365559,
+                    35.477764
+                  ]
+                ],
+                [
+                  [
+                    135.366163,
+                    35.477549
+                  ],
+                  [
+                    135.365794,
+                    35.47768
+                  ]
+                ],
+                [
+                  [
+                    135.366624,
+                    35.477519
+                  ],
+                  [
+                    135.366163,
+                    35.477549
+                  ]
+                ],
+                [
+                  [
+                    135.366624,
+                    35.477519
+                  ],
+                  [
+                    135.366949,
+                    35.477721
+                  ]
+                ],
+                [
+                  [
+                    135.367275,
+                    35.477998
+                  ],
+                  [
+                    135.366949,
+                    35.477721
+                  ]
+                ],
+                [
+                  [
+                    135.367275,
+                    35.477998
+                  ],
+                  [
+                    135.36724,
+                    35.478367
+                  ]
+                ],
+                [
+                  [
+                    135.367363,
+                    35.478639
+                  ],
+                  [
+                    135.36724,
+                    35.478367
+                  ]
+                ],
+                [
+                  [
+                    135.367363,
+                    35.478639
+                  ],
+                  [
+                    135.36766,
+                    35.478964
+                  ]
+                ],
+                [
+                  [
+                    135.367838,
+                    35.478863
+                  ],
+                  [
+                    135.36766,
+                    35.478964
+                  ]
+                ],
+                [
+                  [
+                    135.368018,
+                    35.47879
+                  ],
+                  [
+                    135.367838,
+                    35.478863
+                  ]
+                ],
+                [
+                  [
+                    135.368018,
+                    35.47879
+                  ],
+                  [
+                    135.368314,
+                    35.478636
+                  ]
+                ],
+                [
+                  [
+                    135.368554,
+                    35.478626
+                  ],
+                  [
+                    135.368314,
+                    35.478636
+                  ]
+                ],
+                [
+                  [
+                    135.368554,
+                    35.478626
+                  ],
+                  [
+                    135.368766,
+                    35.47863
+                  ]
+                ],
+                [
+                  [
+                    135.36894,
+                    35.478655
+                  ],
+                  [
+                    135.368766,
+                    35.47863
+                  ]
+                ],
+                [
+                  [
+                    135.36894,
+                    35.478655
+                  ],
+                  [
+                    135.369413,
+                    35.479224
+                  ]
+                ],
+                [
+                  [
+                    135.369639,
+                    35.479742
+                  ],
+                  [
+                    135.369413,
+                    35.479224
+                  ]
+                ],
+                [
+                  [
+                    135.369639,
+                    35.479742
+                  ],
+                  [
+                    135.367373,
+                    35.483862
+                  ]
+                ]
+              ],
+              "type": "MultiLineString"
+            },
+            "id": "maizuru:selected-pair:alternative",
+            "properties": {
+              "distance_increase_m": 2798.479661,
+              "distance_m": 3514.451399,
+              "layer_type": "disrupted_route",
+              "review_label": "second-best route when the selected primary edge is unavailable",
+              "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+              "selection_method": "longest non-critical edge with a verified second path",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  135.335274,
+                  35.43444
+                ],
+                [
+                  135.335254,
+                  35.434093
+                ]
+              ],
+              "type": "LineString"
+            },
+            "id": "maizuru:critical:exp::5e8ef6fef641bd8d05e2",
+            "properties": {
+              "affected_buildings": 196,
+              "candidate_label": "network criticality candidate",
+              "dangerous_road_claimed": false,
+              "edge_id": "exp::5e8ef6fef641bd8d05e2",
+              "layer_type": "critical_edge",
+              "stress_mode": "all"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    135.321472,
+                    35.39807
+                  ],
+                  [
+                    135.321337,
+                    35.397999
+                  ],
+                  [
+                    135.321194,
+                    35.397939
+                  ],
+                  [
+                    135.321044,
+                    35.39789
+                  ],
+                  [
+                    135.320889,
+                    35.397854
+                  ],
+                  [
+                    135.320731,
+                    35.39783
+                  ],
+                  [
+                    135.320571,
+                    35.397819
+                  ],
+                  [
+                    135.32041,
+                    35.397821
+                  ],
+                  [
+                    135.32025,
+                    35.397835
+                  ],
+                  [
+                    135.320093,
+                    35.397862
+                  ],
+                  [
+                    135.319939,
+                    35.397902
+                  ],
+                  [
+                    135.319791,
+                    35.397953
+                  ],
+                  [
+                    135.31965,
+                    35.398017
+                  ],
+                  [
+                    135.319517,
+                    35.398091
+                  ],
+                  [
+                    135.319394,
+                    35.398175
+                  ],
+                  [
+                    135.319281,
+                    35.398269
+                  ],
+                  [
+                    135.319179,
+                    35.398371
+                  ],
+                  [
+                    135.319091,
+                    35.398481
+                  ],
+                  [
+                    135.319016,
+                    35.398598
+                  ],
+                  [
+                    135.318728,
+                    35.399101
+                  ],
+                  [
+                    135.318723,
+                    35.399111
+                  ],
+                  [
+                    135.293816,
+                    35.443613
+                  ],
+                  [
+                    135.293792,
+                    35.443657
+                  ],
+                  [
+                    135.293417,
+                    35.444396
+                  ],
+                  [
+                    135.293364,
+                    35.444515
+                  ],
+                  [
+                    135.293325,
+                    35.444639
+                  ],
+                  [
+                    135.293301,
+                    35.444765
+                  ],
+                  [
+                    135.293291,
+                    35.444892
+                  ],
+                  [
+                    135.293296,
+                    35.44502
+                  ],
+                  [
+                    135.293315,
+                    35.445146
+                  ],
+                  [
+                    135.293349,
+                    35.445271
+                  ],
+                  [
+                    135.293397,
+                    35.445392
+                  ],
+                  [
+                    135.293459,
+                    35.445509
+                  ],
+                  [
+                    135.293535,
+                    35.445621
+                  ],
+                  [
+                    135.293622,
+                    35.445727
+                  ],
+                  [
+                    135.29471,
+                    35.446911
+                  ],
+                  [
+                    135.29473,
+                    35.446931
+                  ],
+                  [
+                    135.305439,
+                    35.458132
+                  ],
+                  [
+                    135.305531,
+                    35.45822
+                  ],
+                  [
+                    135.305631,
+                    35.458301
+                  ],
+                  [
+                    135.309993,
+                    35.461529
+                  ],
+                  [
+                    135.310059,
+                    35.461576
+                  ],
+                  [
+                    135.39428,
+                    35.517541
+                  ],
+                  [
+                    135.394413,
+                    35.517622
+                  ],
+                  [
+                    135.394556,
+                    35.51769
+                  ],
+                  [
+                    135.394707,
+                    35.517747
+                  ],
+                  [
+                    135.394864,
+                    35.517791
+                  ],
+                  [
+                    135.395025,
+                    35.517822
+                  ],
+                  [
+                    135.39519,
+                    35.517839
+                  ],
+                  [
+                    135.395356,
+                    35.517844
+                  ],
+                  [
+                    135.396624,
+                    35.517822
+                  ],
+                  [
+                    135.396677,
+                    35.517821
+                  ],
+                  [
+                    135.397404,
+                    35.51779
+                  ],
+                  [
+                    135.397608,
+                    35.517771
+                  ],
+                  [
+                    135.444924,
+                    35.510866
+                  ],
+                  [
+                    135.445081,
+                    35.510836
+                  ],
+                  [
+                    135.445233,
+                    35.510795
+                  ],
+                  [
+                    135.44538,
+                    35.510741
+                  ],
+                  [
+                    135.44552,
+                    35.510676
+                  ],
+                  [
+                    135.445651,
+                    35.5106
+                  ],
+                  [
+                    135.445773,
+                    35.510514
+                  ],
+                  [
+                    135.445884,
+                    35.510419
+                  ],
+                  [
+                    135.445983,
+                    35.510316
+                  ],
+                  [
+                    135.446069,
+                    35.510205
+                  ],
+                  [
+                    135.446142,
+                    35.510088
+                  ],
+                  [
+                    135.446201,
+                    35.509965
+                  ],
+                  [
+                    135.446244,
+                    35.509839
+                  ],
+                  [
+                    135.446273,
+                    35.509709
+                  ],
+                  [
+                    135.446286,
+                    35.509578
+                  ],
+                  [
+                    135.447584,
+                    35.476618
+                  ],
+                  [
+                    135.447582,
+                    35.47649
+                  ],
+                  [
+                    135.447565,
+                    35.476364
+                  ],
+                  [
+                    135.447533,
+                    35.476239
+                  ],
+                  [
+                    135.447488,
+                    35.476117
+                  ],
+                  [
+                    135.447428,
+                    35.476
+                  ],
+                  [
+                    135.447355,
+                    35.475887
+                  ],
+                  [
+                    135.446439,
+                    35.474618
+                  ],
+                  [
+                    135.446359,
+                    35.474517
+                  ],
+                  [
+                    135.446268,
+                    35.474423
+                  ],
+                  [
+                    135.446167,
+                    35.474335
+                  ],
+                  [
+                    135.446058,
+                    35.474255
+                  ],
+                  [
+                    135.403926,
+                    35.446266
+                  ],
+                  [
+                    135.403844,
+                    35.446215
+                  ],
+                  [
+                    135.321472,
+                    35.39807
+                  ]
+                ]
+              ],
+              "type": "Polygon"
+            },
+            "id": "maizuru:flood:disconnected-area",
+            "properties": {
+              "aggregation": "150m-buffered convex hull of disconnected demand nodes",
+              "exact_affected_area_claimed": false,
+              "layer_type": "disconnected_area",
+              "newly_unreachable_buildings": 20346,
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.395955,
+                35.461678
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:flood:facility:1",
+            "properties": {
+              "disconnected_buildings": 1814,
+              "facility_name": "医療法人社団悠慈会指宿医院",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.326923,
+                35.426399
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:flood:facility:2",
+            "properties": {
+              "disconnected_buildings": 1737,
+              "facility_name": "医療法人荒木クリニック",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.331126,
+                35.437721
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:flood:facility:3",
+            "properties": {
+              "disconnected_buildings": 1469,
+              "facility_name": "井上耳鼻いんこう科",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "flood"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    135.321472,
+                    35.39807
+                  ],
+                  [
+                    135.321333,
+                    35.397997
+                  ],
+                  [
+                    135.321185,
+                    35.397935
+                  ],
+                  [
+                    135.321031,
+                    35.397886
+                  ],
+                  [
+                    135.320871,
+                    35.39785
+                  ],
+                  [
+                    135.320708,
+                    35.397828
+                  ],
+                  [
+                    135.320542,
+                    35.397818
+                  ],
+                  [
+                    135.320377,
+                    35.397822
+                  ],
+                  [
+                    135.320213,
+                    35.39784
+                  ],
+                  [
+                    135.320052,
+                    35.397872
+                  ],
+                  [
+                    135.319895,
+                    35.397916
+                  ],
+                  [
+                    135.319745,
+                    35.397973
+                  ],
+                  [
+                    135.319602,
+                    35.398042
+                  ],
+                  [
+                    135.319469,
+                    35.398122
+                  ],
+                  [
+                    135.319346,
+                    35.398213
+                  ],
+                  [
+                    135.319235,
+                    35.398313
+                  ],
+                  [
+                    135.319136,
+                    35.398422
+                  ],
+                  [
+                    135.319052,
+                    35.398539
+                  ],
+                  [
+                    135.287573,
+                    35.447322
+                  ],
+                  [
+                    135.287511,
+                    35.447431
+                  ],
+                  [
+                    135.28746,
+                    35.447543
+                  ],
+                  [
+                    135.287422,
+                    35.447658
+                  ],
+                  [
+                    135.287396,
+                    35.447776
+                  ],
+                  [
+                    135.287383,
+                    35.447895
+                  ],
+                  [
+                    135.287354,
+                    35.448447
+                  ],
+                  [
+                    135.287355,
+                    35.448575
+                  ],
+                  [
+                    135.28737,
+                    35.448703
+                  ],
+                  [
+                    135.287401,
+                    35.448829
+                  ],
+                  [
+                    135.287445,
+                    35.448952
+                  ],
+                  [
+                    135.287504,
+                    35.449071
+                  ],
+                  [
+                    135.287576,
+                    35.449185
+                  ],
+                  [
+                    135.287662,
+                    35.449293
+                  ],
+                  [
+                    135.287759,
+                    35.449393
+                  ],
+                  [
+                    135.287868,
+                    35.449486
+                  ],
+                  [
+                    135.287986,
+                    35.44957
+                  ],
+                  [
+                    135.394304,
+                    35.517557
+                  ],
+                  [
+                    135.394436,
+                    35.517633
+                  ],
+                  [
+                    135.394576,
+                    35.517699
+                  ],
+                  [
+                    135.394724,
+                    35.517752
+                  ],
+                  [
+                    135.394877,
+                    35.517794
+                  ],
+                  [
+                    135.395034,
+                    35.517823
+                  ],
+                  [
+                    135.395194,
+                    35.51784
+                  ],
+                  [
+                    135.395356,
+                    35.517844
+                  ],
+                  [
+                    135.396624,
+                    35.517822
+                  ],
+                  [
+                    135.396677,
+                    35.517821
+                  ],
+                  [
+                    135.397404,
+                    35.51779
+                  ],
+                  [
+                    135.397608,
+                    35.517771
+                  ],
+                  [
+                    135.444924,
+                    35.510866
+                  ],
+                  [
+                    135.445081,
+                    35.510836
+                  ],
+                  [
+                    135.445233,
+                    35.510795
+                  ],
+                  [
+                    135.44538,
+                    35.510741
+                  ],
+                  [
+                    135.44552,
+                    35.510676
+                  ],
+                  [
+                    135.445651,
+                    35.5106
+                  ],
+                  [
+                    135.445773,
+                    35.510514
+                  ],
+                  [
+                    135.445884,
+                    35.510419
+                  ],
+                  [
+                    135.445983,
+                    35.510316
+                  ],
+                  [
+                    135.446069,
+                    35.510205
+                  ],
+                  [
+                    135.446142,
+                    35.510088
+                  ],
+                  [
+                    135.446201,
+                    35.509965
+                  ],
+                  [
+                    135.446244,
+                    35.509839
+                  ],
+                  [
+                    135.446273,
+                    35.509709
+                  ],
+                  [
+                    135.446286,
+                    35.509578
+                  ],
+                  [
+                    135.447584,
+                    35.476618
+                  ],
+                  [
+                    135.447582,
+                    35.47649
+                  ],
+                  [
+                    135.447565,
+                    35.476364
+                  ],
+                  [
+                    135.447533,
+                    35.476239
+                  ],
+                  [
+                    135.447488,
+                    35.476117
+                  ],
+                  [
+                    135.447428,
+                    35.476
+                  ],
+                  [
+                    135.447355,
+                    35.475887
+                  ],
+                  [
+                    135.446439,
+                    35.474618
+                  ],
+                  [
+                    135.446338,
+                    35.474494
+                  ],
+                  [
+                    135.44622,
+                    35.474379
+                  ],
+                  [
+                    135.446088,
+                    35.474276
+                  ],
+                  [
+                    135.426917,
+                    35.460904
+                  ],
+                  [
+                    135.42686,
+                    35.460865
+                  ],
+                  [
+                    135.403899,
+                    35.446249
+                  ],
+                  [
+                    135.403844,
+                    35.446215
+                  ],
+                  [
+                    135.321472,
+                    35.39807
+                  ]
+                ]
+              ],
+              "type": "Polygon"
+            },
+            "id": "maizuru:landslide:disconnected-area",
+            "properties": {
+              "aggregation": "150m-buffered convex hull of disconnected demand nodes",
+              "exact_affected_area_claimed": false,
+              "layer_type": "disconnected_area",
+              "newly_unreachable_buildings": 10743,
+              "service_category": "medical",
+              "stress_mode": "landslide"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.364494,
+                35.477536
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:landslide:facility:1",
+            "properties": {
+              "disconnected_buildings": 1229,
+              "facility_name": "西村医院",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "landslide"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.439247,
+                35.490017
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:landslide:facility:2",
+            "properties": {
+              "disconnected_buildings": 1220,
+              "facility_name": "地域密着型特別養護老人ホームやすらぎの郷",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "landslide"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.317846,
+                35.450955
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:landslide:facility:3",
+            "properties": {
+              "disconnected_buildings": 924,
+              "facility_name": "国土交通省共済組合第八管区 海上保安本部支部診療所",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "landslide"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                [
+                  [
+                    135.335035,
+                    35.435759
+                  ],
+                  [
+                    135.334898,
+                    35.435688
+                  ],
+                  [
+                    135.334754,
+                    35.435629
+                  ],
+                  [
+                    135.334603,
+                    35.435582
+                  ],
+                  [
+                    135.334446,
+                    35.435547
+                  ],
+                  [
+                    135.334287,
+                    35.435524
+                  ],
+                  [
+                    135.334126,
+                    35.435515
+                  ],
+                  [
+                    135.333964,
+                    35.435518
+                  ],
+                  [
+                    135.333803,
+                    35.435534
+                  ],
+                  [
+                    135.333645,
+                    35.435563
+                  ],
+                  [
+                    135.333492,
+                    35.435605
+                  ],
+                  [
+                    135.333344,
+                    35.435659
+                  ],
+                  [
+                    135.333203,
+                    35.435724
+                  ],
+                  [
+                    135.333071,
+                    35.4358
+                  ],
+                  [
+                    135.332948,
+                    35.435887
+                  ],
+                  [
+                    135.322583,
+                    35.44396
+                  ],
+                  [
+                    135.322472,
+                    35.444056
+                  ],
+                  [
+                    135.322372,
+                    35.44416
+                  ],
+                  [
+                    135.322286,
+                    35.444271
+                  ],
+                  [
+                    135.322213,
+                    35.444389
+                  ],
+                  [
+                    135.322155,
+                    35.444512
+                  ],
+                  [
+                    135.322111,
+                    35.444639
+                  ],
+                  [
+                    135.322083,
+                    35.444769
+                  ],
+                  [
+                    135.322071,
+                    35.444901
+                  ],
+                  [
+                    135.322047,
+                    35.445558
+                  ],
+                  [
+                    135.322048,
+                    35.445658
+                  ],
+                  [
+                    135.322059,
+                    35.445759
+                  ],
+                  [
+                    135.323606,
+                    35.456246
+                  ],
+                  [
+                    135.323628,
+                    35.456356
+                  ],
+                  [
+                    135.323661,
+                    35.456465
+                  ],
+                  [
+                    135.323705,
+                    35.456571
+                  ],
+                  [
+                    135.326262,
+                    35.461983
+                  ],
+                  [
+                    135.326345,
+                    35.462132
+                  ],
+                  [
+                    135.328686,
+                    35.465722
+                  ],
+                  [
+                    135.32876,
+                    35.465824
+                  ],
+                  [
+                    135.328844,
+                    35.46592
+                  ],
+                  [
+                    135.328939,
+                    35.46601
+                  ],
+                  [
+                    135.347919,
+                    35.482563
+                  ],
+                  [
+                    135.348003,
+                    35.482631
+                  ],
+                  [
+                    135.394201,
+                    35.517486
+                  ],
+                  [
+                    135.394322,
+                    35.517569
+                  ],
+                  [
+                    135.394452,
+                    35.517642
+                  ],
+                  [
+                    135.394591,
+                    35.517705
+                  ],
+                  [
+                    135.394736,
+                    35.517756
+                  ],
+                  [
+                    135.394886,
+                    35.517796
+                  ],
+                  [
+                    135.395041,
+                    35.517824
+                  ],
+                  [
+                    135.395197,
+                    35.51784
+                  ],
+                  [
+                    135.395356,
+                    35.517844
+                  ],
+                  [
+                    135.396624,
+                    35.517822
+                  ],
+                  [
+                    135.396677,
+                    35.517821
+                  ],
+                  [
+                    135.397404,
+                    35.51779
+                  ],
+                  [
+                    135.397552,
+                    35.517778
+                  ],
+                  [
+                    135.397699,
+                    35.517755
+                  ],
+                  [
+                    135.397842,
+                    35.517722
+                  ],
+                  [
+                    135.39824,
+                    35.517613
+                  ],
+                  [
+                    135.398317,
+                    35.51759
+                  ],
+                  [
+                    135.402842,
+                    35.516149
+                  ],
+                  [
+                    135.402985,
+                    35.516097
+                  ],
+                  [
+                    135.403121,
+                    35.516034
+                  ],
+                  [
+                    135.40325,
+                    35.515961
+                  ],
+                  [
+                    135.403369,
+                    35.515878
+                  ],
+                  [
+                    135.403479,
+                    35.515787
+                  ],
+                  [
+                    135.403577,
+                    35.515687
+                  ],
+                  [
+                    135.403663,
+                    35.51558
+                  ],
+                  [
+                    135.403737,
+                    35.515467
+                  ],
+                  [
+                    135.403797,
+                    35.515349
+                  ],
+                  [
+                    135.403843,
+                    35.515227
+                  ],
+                  [
+                    135.403875,
+                    35.515102
+                  ],
+                  [
+                    135.403892,
+                    35.514974
+                  ],
+                  [
+                    135.406644,
+                    35.479312
+                  ],
+                  [
+                    135.406646,
+                    35.479187
+                  ],
+                  [
+                    135.406635,
+                    35.479063
+                  ],
+                  [
+                    135.406421,
+                    35.477631
+                  ],
+                  [
+                    135.406394,
+                    35.477503
+                  ],
+                  [
+                    135.406352,
+                    35.477378
+                  ],
+                  [
+                    135.406296,
+                    35.477257
+                  ],
+                  [
+                    135.406226,
+                    35.47714
+                  ],
+                  [
+                    135.406142,
+                    35.47703
+                  ],
+                  [
+                    135.406046,
+                    35.476926
+                  ],
+                  [
+                    135.405938,
+                    35.476831
+                  ],
+                  [
+                    135.405819,
+                    35.476744
+                  ],
+                  [
+                    135.401081,
+                    35.473609
+                  ],
+                  [
+                    135.400989,
+                    35.473552
+                  ],
+                  [
+                    135.335035,
+                    35.435759
+                  ]
+                ]
+              ],
+              "type": "Polygon"
+            },
+            "id": "maizuru:tsunami:disconnected-area",
+            "properties": {
+              "aggregation": "150m-buffered convex hull of disconnected demand nodes",
+              "exact_affected_area_claimed": false,
+              "layer_type": "disconnected_area",
+              "newly_unreachable_buildings": 834,
+              "service_category": "medical",
+              "stress_mode": "tsunami"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.33063,
+                35.451179
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:tsunami:facility:1",
+            "properties": {
+              "disconnected_buildings": 537,
+              "facility_name": "医療法人泰山会あいおい橋四方クリニック",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "tsunami"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.324794,
+                35.451981
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:tsunami:facility:2",
+            "properties": {
+              "disconnected_buildings": 95,
+              "facility_name": "隅山医院",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "tsunami"
+            },
+            "type": "Feature"
+          },
+          {
+            "geometry": {
+              "coordinates": [
+                135.326568,
+                35.448975
+              ],
+              "type": "Point"
+            },
+            "id": "maizuru:tsunami:facility:3",
+            "properties": {
+              "disconnected_buildings": 60,
+              "facility_name": "医療法人たなか内科クリニック",
+              "facility_status_change_claimed": false,
+              "layer_type": "affected_facility",
+              "review_label": "baseline destination for disconnected building-demand records",
+              "service_category": "medical",
+              "stress_mode": "tsunami"
+            },
+            "type": "Feature"
+          }
+        ],
+        "privacy": "aggregated areas/routes/facilities only; no building-level demographics",
+        "type": "FeatureCollection"
       },
       "scenario_comparison_runtime_seconds": 23.423821,
       "state_diff_identity_validation": {
         "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
         "comparison": "current official road state versus itself",
         "correctness_check": true,
-        "peak_rss_mib": 441.203125,
+        "peak_rss_mib": 493.113281,
         "result": {
           "added": 0,
           "attribute_changed": 0,
@@ -1323,7 +4093,7 @@
           "removed": 0,
           "unchanged": 23437
         },
-        "runtime_seconds": 1.151606
+        "runtime_seconds": 0.81148
       },
       "stress_tests": {
         "flood": {
@@ -1351,7 +4121,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 393.269531,
+          "peak_rss_mib": 433.660156,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 13632,
@@ -1391,7 +4161,7 @@
               }
             }
           },
-          "runtime_seconds": 0.666854
+          "runtime_seconds": 0.562315
         },
         "landslide": {
           "assumption": {
@@ -1406,7 +4176,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 393.269531,
+          "peak_rss_mib": 434.910156,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 7331,
@@ -1446,7 +4216,7 @@
               }
             }
           },
-          "runtime_seconds": 0.56238
+          "runtime_seconds": 0.539832
         },
         "tsunami": {
           "assumption": {
@@ -1463,7 +4233,7 @@
             "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
             "rule": "overlap_edges_unavailable"
           },
-          "peak_rss_mib": 393.269531,
+          "peak_rss_mib": 435.035156,
           "result": {
             "baseline_component_count": 5,
             "closed_edge_count": 719,
@@ -1503,7 +4273,7 @@
               }
             }
           },
-          "runtime_seconds": 0.604783
+          "runtime_seconds": 0.606263
         }
       },
       "urban_state": "maizuru-2025-observed"
@@ -1547,7 +4317,7 @@
     "Annual added/removed/changed counts require a second registered official PLATEAU version.",
     "Building demographics are model estimates and are excluded from the public artifact."
   ],
-  "peak_rss_mib": 978.269531,
+  "peak_rss_mib": 1083.019531,
   "schema_version": "urban-futures-validation-1.0.0",
-  "total_runtime_seconds": 27.671862
+  "total_runtime_seconds": 29.95734
 }

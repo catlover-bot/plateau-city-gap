@@ -176,7 +176,7 @@ after_transport_distance
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 
-最終の機械監査は `python -m analysis.scripts.audit_municipal_platform`、Workspace実ブラウザ監査はproduction preview起動後に `npm run audit:workspace` で再実行できます。前者はtracked成果物・hash・API/schema契約の18項目、後者はA点群描画、C切替、privacy表示、console/通信失敗を検証します。
+最終の機械監査は `python -m analysis.scripts.audit_municipal_platform` と `python -m analysis.scripts.audit_urban_futures_platform`、実ブラウザ監査はproduction preview起動後に `npm run audit:workspace` / `npm run audit:futures` で再実行できます。既存監査18項目に加え、Urban Futures監査20項目と、3 state・明示仮定・criticality表現・offline conflict・非予測・公開集約境界・集約地図描画の7ブラウザ条件を検証します。
 
 Competition Demoにはバックエンド、データベース、API keyは不要です。Viteのbase pathは `/plateau-city-gap/` です。Platform設計は [platform architecture](docs/platform-architecture.md)、全量取込は [PLATEAU ingestion](docs/plateau-ingestion.md) を参照してください。
 
@@ -249,6 +249,7 @@ python -m analysis.scripts.build_platform_registry
 python -m analysis.scripts.build_urban_futures_validation
 python -m analysis.scripts.benchmark_urban_resilience_scale
 python -m analysis.scripts.build_evidence_v3
+python -m analysis.scripts.audit_urban_futures_platform
 python -m analysis.scripts.export_scenario_evidence --plan-id network-overall-3
 python -m analysis.scripts.build_municipal_workspace_assets
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \

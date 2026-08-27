@@ -44,8 +44,8 @@
     "scenario_peak_rss_kib": 687476,
     "sparse_pairs": 1063003,
     "dense_pairs_avoided": 78732977,
-    "headless_demo_ready_ms": 354,
-    "headless_scenario_a_points_ready_ms": 46006
+    "headless_demo_ready_ms": 776,
+    "headless_scenario_a_points_ready_ms": 84626
   },
   "claim_boundaries": {
     "postgis_executed": false,

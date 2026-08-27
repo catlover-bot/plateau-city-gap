@@ -1,0 +1,22 @@
+{
+  "schema_version": "urban-futures-browser-audit-1.0.0",
+  "base_url": "http://127.0.0.1:4173/plateau-city-gap/",
+  "environment": "Playwright headless Chromium with SwiftShader",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "visible_map_entities": 88,
+  "screenshot": "docs/assets/urban-futures-workspace.png",
+  "checks": {
+    "three_state_comparison": true,
+    "explicit_assumption": true,
+    "criticality_boundary": true,
+    "offline_conflict": true,
+    "no_prediction": true,
+    "aggregated_only": true,
+    "map_geometry_rendered": true
+  },
+  "console_errors": [],
+  "passed": true
+}
