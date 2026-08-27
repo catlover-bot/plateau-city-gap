@@ -1,8 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "cesium/Build/Cesium/Widgets/widgets.css";
+import "maplibre-gl/dist/maplibre-gl.css";
 import App from "./App";
 import "./styles.css";
+import "./design-system/tokens.css";
+import "./app/product-shell.css";
+import "./map/map.css";
+import "./features/inspector/inspector.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,0 +1,42 @@
+:root {
+  --cg-ink: #182c2c;
+  --cg-ink-soft: #4c6260;
+  --cg-paper: #f7f7f2;
+  --cg-panel: #fbfbf7;
+  --cg-line: #cbd3ce;
+  --cg-line-strong: #8c9d97;
+  --cg-teal: #246c67;
+  --cg-teal-dark: #174d4a;
+  --cg-teal-pale: #dce9e4;
+  --cg-amber: #b47a21;
+  --cg-amber-pale: #f2e7d2;
+  --cg-brick: #945442;
+  --cg-bluegray: #526f7e;
+  --cg-hazard: #68617e;
+  --cg-selected: #132f31;
+  --cg-good: #3d7457;
+  --cg-error: #9a443d;
+  --cg-space-1: 4px;
+  --cg-space-2: 8px;
+  --cg-space-3: 12px;
+  --cg-space-4: 16px;
+  --cg-space-5: 24px;
+  --cg-space-6: 32px;
+  --cg-radius: 3px;
+  --cg-shadow-panel: 0 4px 18px rgb(18 45 44 / 14%);
+  --cg-font: "Noto Sans JP", "Yu Gothic UI", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+  --cg-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --cg-z-map: 1;
+  --cg-z-map-ui: 20;
+  --cg-z-inspector: 40;
+  --cg-z-modal: 100;
+  color: var(--cg-ink);
+  font-family: var(--cg-font);
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+button, select, input { font: inherit; }
+button { color: inherit; }
+:focus-visible { outline: 3px solid #dd9d32 !important; outline-offset: 2px; }
+::selection { background: #c9dfd8; color: var(--cg-ink); }
