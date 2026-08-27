@@ -1,0 +1,1549 @@
+{
+  "algorithm_version": "urban-resilience-1.0.0",
+  "analysis_status": "real_official_data",
+  "capability_matrix": {
+    "fujisawa": {
+      "criticality": "available",
+      "field_mode": "partial",
+      "future_population": "available",
+      "hazard_stress_test": "available",
+      "outcome_monitoring": "partial",
+      "temporal_diff": "partial"
+    },
+    "maizuru": {
+      "criticality": "available",
+      "field_mode": "partial",
+      "future_population": "available",
+      "hazard_stress_test": "available",
+      "outcome_monitoring": "partial",
+      "temporal_diff": "partial"
+    }
+  },
+  "cities": {
+    "fujisawa": {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "city_name": "藤沢市",
+      "criticality": {
+        "algorithm": "iterative Tarjan bridges with subtree demand/service aggregation, O(V+E)",
+        "candidate_count": 7897,
+        "claim_boundary": "network criticality candidate; not a dangerous-road designation",
+        "independent_verification": [
+          {
+            "edge_id": "exp::14a31f729f6e78d14f6f",
+            "independent_removal_verifier": true
+          },
+          {
+            "edge_id": "exp::08b1067671618ef00111",
+            "independent_removal_verifier": true
+          },
+          {
+            "edge_id": "exp::bc468481bc4ad719dead",
+            "independent_removal_verifier": true
+          }
+        ],
+        "peak_rss_mib": 1027.789062,
+        "runtime_seconds": 1.475843,
+        "top_candidates": [
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::14a31f729f6e78d14f6f",
+            "isolated_node_count": 190,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_1b54aa45-7e00-47b0-983a-e3cf24a25692:0",
+            "target": "exp::tran_3312d07e-7a18-48a4-959f-7567e38cdf3d:0"
+          },
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::08b1067671618ef00111",
+            "isolated_node_count": 189,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_1b54aa45-7e00-47b0-983a-e3cf24a25692:0",
+            "target": "exp::tran_6e569ef6-c7ea-4a1a-ab99-8a0ab09ef63a:0"
+          },
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::bc468481bc4ad719dead",
+            "isolated_node_count": 188,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_3c035be6-66cf-4a6d-876f-e773200ac172:0",
+            "target": "exp::tran_6e569ef6-c7ea-4a1a-ab99-8a0ab09ef63a:0"
+          },
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::ce1c254752a3956b9808",
+            "isolated_node_count": 187,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_3c035be6-66cf-4a6d-876f-e773200ac172:0",
+            "target": "exp::tran_e84fc519-9825-4d74-a648-8e68e136ea6d:0"
+          },
+          {
+            "affected_buildings": 117,
+            "affected_estimated_elderly_population": 711.514505,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::4a5df1f1a15f077b4b1a",
+            "isolated_node_count": 79,
+            "service_reachability_change": {
+              "evacuation": 117,
+              "medical": 117,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_01d7f11b-7f25-4ff0-87d4-d5d591689fce:0",
+            "target": "exp::tran_7f237229-01f9-4884-94a8-89aed03225c4:0"
+          },
+          {
+            "affected_buildings": 116,
+            "affected_estimated_elderly_population": 710.519897,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::6c5b36832d9b14bc3a93",
+            "isolated_node_count": 77,
+            "service_reachability_change": {
+              "evacuation": 116,
+              "medical": 116,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_2b0cec2f-ce39-4434-97aa-a77547adbad6:0",
+            "target": "exp::tran_7f237229-01f9-4884-94a8-89aed03225c4:0"
+          },
+          {
+            "affected_buildings": 116,
+            "affected_estimated_elderly_population": 710.519897,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::b511d4078ea421cb165d",
+            "isolated_node_count": 76,
+            "service_reachability_change": {
+              "evacuation": 116,
+              "medical": 116,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_0c897a11-5972-4eb2-ab26-c1e813c4e18a:0",
+            "target": "exp::tran_2b0cec2f-ce39-4434-97aa-a77547adbad6:0"
+          },
+          {
+            "affected_buildings": 109,
+            "affected_estimated_elderly_population": 177.445746,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::fe4b29b8d33b767332d6",
+            "isolated_node_count": 21,
+            "service_reachability_change": {
+              "evacuation": 109,
+              "medical": 109,
+              "transport_hub": 109
+            },
+            "source": "exp::tran_2b4f9ead-78c8-40e9-9e0b-cc0f0ba45877:0",
+            "target": "exp::tran_f25a828c-4f42-43f2-8a07-de3134c66d2f:0"
+          },
+          {
+            "affected_buildings": 107,
+            "affected_estimated_elderly_population": 171.878849,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::507476ca8e0024f458d2",
+            "isolated_node_count": 20,
+            "service_reachability_change": {
+              "evacuation": 107,
+              "medical": 107,
+              "transport_hub": 107
+            },
+            "source": "exp::tran_0dd4929b-6342-49cb-92ed-a41f9a1dbbe3:0",
+            "target": "exp::tran_2b4f9ead-78c8-40e9-9e0b-cc0f0ba45877:0"
+          },
+          {
+            "affected_buildings": 76,
+            "affected_estimated_elderly_population": 165.035398,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::4baa56840db43fc787b9",
+            "isolated_node_count": 7,
+            "service_reachability_change": {
+              "evacuation": 76,
+              "medical": 76,
+              "transport_hub": 76
+            },
+            "source": "exp::tran_7efb81a2-4995-4728-a416-4bbfc1920b97:0",
+            "target": "exp::tran_8686de18-9576-4c09-8bc8-64351f8bafe3:0"
+          }
+        ]
+      },
+      "limitations": [
+        "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior."
+      ],
+      "network": {
+        "buildings_with_network_demand": 107557,
+        "edges": 71487,
+        "nodes": 53658,
+        "semantics": "experimental PLATEAU LOD1 road-surface adjacency, not pedestrian network",
+        "version": "exp-0ca779b30e21144b"
+      },
+      "normal_evacuation_reachability": {
+        "network_seed_count": 81,
+        "reachable_buildings": 107367,
+        "semantics": "network reachability only; not evacuation or crowd simulation"
+      },
+      "official_future_population": {
+        "available_years": [
+          2020,
+          2025,
+          2030,
+          2035,
+          2040,
+          2045,
+          2050
+        ],
+        "peak_rss_mib": 1027.789062,
+        "prediction_claimed": false,
+        "runtime_seconds": 4.031291,
+        "semantics": "official demographic projection + CITY GAP spatial allocation model",
+        "series": {
+          "fujisawa-municipal-2023": [
+            {
+              "estimated_elderly_medical_burden": 353.251114,
+              "estimated_elderly_transport_burden": 556.836908,
+              "estimated_population_medical_burden": 1421.977557,
+              "estimated_population_transport_burden": 2241.492113,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 108537,
+              "official_total_population": 436905,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2020,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 370.556146,
+              "estimated_elderly_transport_burden": 584.115181,
+              "estimated_population_medical_burden": 1449.502223,
+              "estimated_population_transport_burden": 2284.879803,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 113854,
+              "official_total_population": 445362,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2025,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 398.406278,
+              "estimated_elderly_transport_burden": 628.01591,
+              "estimated_population_medical_burden": 1464.727526,
+              "estimated_population_transport_burden": 2308.879757,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 122411,
+              "official_total_population": 450040,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2030,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 439.366183,
+              "estimated_elderly_transport_burden": 692.581841,
+              "estimated_population_medical_burden": 1477.674566,
+              "estimated_population_transport_burden": 2329.28844,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 134996,
+              "official_total_population": 454018,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2035,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 485.836229,
+              "estimated_elderly_transport_burden": 765.833519,
+              "estimated_population_medical_burden": 1472.060277,
+              "estimated_population_transport_burden": 2320.438521,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 149274,
+              "official_total_population": 452293,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2040,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 514.770164,
+              "estimated_elderly_transport_burden": 811.442667,
+              "estimated_population_medical_burden": 1465.895949,
+              "estimated_population_transport_burden": 2310.721567,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 158164,
+              "official_total_population": 450399,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2045,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 528.133801,
+              "estimated_elderly_transport_burden": 832.50804,
+              "estimated_population_medical_burden": 1455.487544,
+              "estimated_population_transport_burden": 2294.314586,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 162270,
+              "official_total_population": 447201,
+              "projection_series": "fujisawa-municipal-2023",
+              "projection_year": 2050,
+              "publisher": "藤沢市",
+              "source_sha256": "f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4",
+              "source_url": "https://www.city.fujisawa.kanagawa.jp/documents/30105/fujisawasi-syourai-jinnkou-suikei-2022.pdf",
+              "source_verified": true
+            }
+          ],
+          "ipss-regional-2023": [
+            {
+              "estimated_elderly_medical_burden": 352.505797,
+              "estimated_elderly_transport_burden": 555.66205,
+              "estimated_population_medical_burden": 1421.977557,
+              "estimated_population_transport_burden": 2241.492113,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 108308,
+              "official_total_population": 436905,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2020,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 366.312068,
+              "estimated_elderly_transport_burden": 577.425155,
+              "estimated_population_medical_burden": 1442.14669,
+              "estimated_population_transport_burden": 2273.285126,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 112550,
+              "official_total_population": 443102,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2025,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 389.527563,
+              "estimated_elderly_transport_burden": 614.020212,
+              "estimated_population_medical_burden": 1447.966023,
+              "estimated_population_transport_burden": 2282.45826,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 119683,
+              "official_total_population": 444890,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2030,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 426.162025,
+              "estimated_elderly_transport_burden": 671.767857,
+              "estimated_population_medical_burden": 1446.667413,
+              "estimated_population_transport_burden": 2280.411235,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 130939,
+              "official_total_population": 444491,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2035,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 468.13413,
+              "estimated_elderly_transport_burden": 737.929339,
+              "estimated_population_medical_burden": 1438.315954,
+              "estimated_population_transport_burden": 2267.24666,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 143835,
+              "official_total_population": 441925,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2040,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 490.044506,
+              "estimated_elderly_transport_burden": 772.467111,
+              "estimated_population_medical_burden": 1424.724491,
+              "estimated_population_transport_burden": 2245.82216,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 150567,
+              "official_total_population": 437749,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2045,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 498.773506,
+              "estimated_elderly_transport_burden": 786.226811,
+              "estimated_population_medical_burden": 1407.966242,
+              "estimated_population_transport_burden": 2219.405793,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 153249,
+              "official_total_population": 432600,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2050,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            }
+          ]
+        }
+      },
+      "official_shelters": {
+        "capacity_available_count": 81,
+        "capacity_missing_count": 0,
+        "city_code": "14205",
+        "declared_capacity_total": 71797,
+        "facility_types": [
+          "避難所"
+        ],
+        "feature_count": 81,
+        "graph_seed_count": 81,
+        "hazard_applicability_values": [
+          "地震",
+          "水害"
+        ],
+        "reachability_semantics": "network reachability only; not evacuation simulation",
+        "snap_distance_m": {
+          "maximum": 142.730013,
+          "median": 51.504794,
+          "minimum": 17.498222
+        },
+        "source_sha256": "d06294e9a72739a574a21b0b1fd12086d03b279043342f4c86f80dd6b60a6124",
+        "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
+        "source_year": 2025
+      },
+      "planning_context": {
+        "comparisons": [
+          {
+            "building_count": 1031,
+            "building_use_composition": {
+              "residential": 1031
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:商業地域",
+            "estimated_elderly_population": 4052.272445,
+            "estimated_population": 17218.129566,
+            "legal_compliance_claimed": false,
+            "planning_designation": "商業地域"
+          },
+          {
+            "building_count": 724,
+            "building_use_composition": {
+              "residential": 724
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:工業地域",
+            "estimated_elderly_population": 2227.062339,
+            "estimated_population": 8802.797048,
+            "legal_compliance_claimed": false,
+            "planning_designation": "工業地域"
+          },
+          {
+            "building_count": 26,
+            "building_use_composition": {
+              "residential": 26
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:工業専用地域",
+            "estimated_elderly_population": 73.900415,
+            "estimated_population": 260.648744,
+            "legal_compliance_claimed": false,
+            "planning_designation": "工業専用地域"
+          },
+          {
+            "building_count": 1866,
+            "building_use_composition": {
+              "residential": 1866
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:準住居地域",
+            "estimated_elderly_population": 1933.761077,
+            "estimated_population": 8423.536561,
+            "legal_compliance_claimed": false,
+            "planning_designation": "準住居地域"
+          },
+          {
+            "building_count": 2585,
+            "building_use_composition": {
+              "residential": 2585
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:準工業地域",
+            "estimated_elderly_population": 3627.46124,
+            "estimated_population": 16299.568597,
+            "legal_compliance_claimed": false,
+            "planning_designation": "準工業地域"
+          },
+          {
+            "building_count": 9476,
+            "building_use_composition": {
+              "residential": 9476
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:田園住居地域",
+            "estimated_elderly_population": 9838.178635,
+            "estimated_population": 30157.115829,
+            "legal_compliance_claimed": false,
+            "planning_designation": "田園住居地域"
+          },
+          {
+            "building_count": 3783,
+            "building_use_composition": {
+              "residential": 3783
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種中高層住居専用地域",
+            "estimated_elderly_population": 9760.367697,
+            "estimated_population": 34435.202313,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種中高層住居専用地域"
+          },
+          {
+            "building_count": 65272,
+            "building_use_composition": {
+              "residential": 65272
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種低層住居専用地域",
+            "estimated_elderly_population": 59439.963938,
+            "estimated_population": 239012.352948,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種低層住居専用地域"
+          },
+          {
+            "building_count": 14526,
+            "building_use_composition": {
+              "residential": 14526
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種住居地域",
+            "estimated_elderly_population": 17819.286982,
+            "estimated_population": 78450.45723,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種住居地域"
+          },
+          {
+            "building_count": 1093,
+            "building_use_composition": {
+              "residential": 1093
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種中高層住居専用地域",
+            "estimated_elderly_population": 1564.942829,
+            "estimated_population": 6563.779293,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種中高層住居専用地域"
+          },
+          {
+            "building_count": 781,
+            "building_use_composition": {
+              "residential": 781
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種低層住居専用地域",
+            "estimated_elderly_population": 848.132647,
+            "estimated_population": 3777.160742,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種低層住居専用地域"
+          },
+          {
+            "building_count": 3173,
+            "building_use_composition": {
+              "residential": 3173
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種住居地域",
+            "estimated_elderly_population": 5101.15494,
+            "estimated_population": 23842.251562,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種住居地域"
+          },
+          {
+            "building_count": 3150,
+            "building_use_composition": {
+              "residential": 3150
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:近隣商業地域",
+            "estimated_elderly_population": 4461.3342,
+            "estimated_population": 17245.195227,
+            "legal_compliance_claimed": false,
+            "planning_designation": "近隣商業地域"
+          }
+        ],
+        "designation_count": 13,
+        "label": "planning-context mismatch candidate",
+        "legal_compliance_claimed": false,
+        "runtime_seconds": 2.416151
+      },
+      "plateau_version": 5,
+      "redundancy": {
+        "alternative_available": true,
+        "distance_increase_m": 6.839293,
+        "primary_route": {
+          "distance_m": 12.369428,
+          "edge_ids": [
+            "exp::0003d6ebb742f54b1f3a"
+          ],
+          "node_ids": [
+            "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0",
+            "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0"
+          ]
+        },
+        "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+        "second_best_route": {
+          "distance_m": 19.208721,
+          "edge_ids": [
+            "exp::7577b16b3b51b39228e4",
+            "exp::6b428f096fde357f0917"
+          ],
+          "node_ids": [
+            "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0",
+            "exp::tran_080def97-7ec1-46f5-8960-ced88047341d:0",
+            "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0"
+          ]
+        },
+        "selected_destination_node": "exp::tran_ffbfe609-f67d-47c1-b491-8a4875873db1:0",
+        "selected_origin_node": "exp::tran_ca671d89-5b4c-4224-b0c9-fd616ea5f5b3:0"
+      },
+      "scenario_comparison_runtime_seconds": "not available for this validation city",
+      "state_diff_identity_validation": {
+        "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
+        "comparison": "current official road state versus itself",
+        "correctness_check": true,
+        "peak_rss_mib": 1027.789062,
+        "result": {
+          "added": 0,
+          "attribute_changed": 0,
+          "geometry_changed": 0,
+          "removed": 0,
+          "unchanged": 71487
+        },
+        "runtime_seconds": 4.299658
+      },
+      "stress_tests": {
+        "flood": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.5m以上3.0m未満",
+              "0.5m未満",
+              "10.0m以上20.0m未満",
+              "3.0m以上5.0m未満",
+              "5.0m以上10.0m未満",
+              "境川水系境川",
+              "境川水系滝川",
+              "境川水系白旗川",
+              "引地川水系一色川",
+              "引地川水系不動川",
+              "引地川水系小糸川",
+              "引地川水系引地川・蓼川",
+              "相模川水系小出川",
+              "相模川水系打戻川"
+            ],
+            "hazard_dataset_version": "fujisawa-plateau-2025-flood",
+            "hazard_type": "flood",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 762.617188,
+          "result": {
+            "baseline_component_count": 18,
+            "closed_edge_count": 17561,
+            "component_fragmentation_increase": 12364,
+            "largest_component_nodes": 12862,
+            "scenario_component_count": 12382,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 81,
+                "estimated_elderly_population_disconnected": 27591.565907,
+                "estimated_population_disconnected": 114405.976589,
+                "maximum_network_distance_increase_m": 2767.232482,
+                "mean_network_distance_increase_m": 78.915965,
+                "newly_unreachable_buildings": 26819,
+                "scenario_reachable_buildings": 80548
+              },
+              "medical": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 326,
+                "estimated_elderly_population_disconnected": 26226.823067,
+                "estimated_population_disconnected": 111512.373631,
+                "maximum_network_distance_increase_m": 2152.672155,
+                "mean_network_distance_increase_m": 53.288373,
+                "newly_unreachable_buildings": 27855,
+                "scenario_reachable_buildings": 79512
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 423,
+                "estimated_elderly_population_disconnected": 24433.035567,
+                "estimated_population_disconnected": 104422.527656,
+                "maximum_network_distance_increase_m": 943.881588,
+                "mean_network_distance_increase_m": 18.377922,
+                "newly_unreachable_buildings": 25858,
+                "scenario_reachable_buildings": 81509
+              }
+            }
+          },
+          "runtime_seconds": 2.222359
+        }
+      },
+      "urban_state": "fujisawa-2025-observed"
+    },
+    "maizuru": {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "city_name": "舞鶴市",
+      "criticality": {
+        "algorithm": "iterative Tarjan bridges with subtree demand/service aggregation, O(V+E)",
+        "candidate_count": 1412,
+        "claim_boundary": "network criticality candidate; not a dangerous-road designation",
+        "independent_verification": [
+          {
+            "edge_id": "exp::5e8ef6fef641bd8d05e2",
+            "independent_removal_verifier": true
+          },
+          {
+            "edge_id": "exp::738e9f8a8f7578ead0fe",
+            "independent_removal_verifier": true
+          },
+          {
+            "edge_id": "exp::97c2c5b786543d476b7a",
+            "independent_removal_verifier": true
+          }
+        ],
+        "peak_rss_mib": 450.800781,
+        "runtime_seconds": 0.246602,
+        "top_candidates": [
+          {
+            "affected_buildings": 196,
+            "affected_estimated_elderly_population": 67.992125,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::5e8ef6fef641bd8d05e2",
+            "isolated_node_count": 76,
+            "service_reachability_change": {
+              "evacuation": 196,
+              "medical": 196,
+              "transport_hub": 196
+            },
+            "source": "exp::tran_7427c33c-8a50-4e43-80bd-9bac318c47a9:0",
+            "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+          },
+          {
+            "affected_buildings": 195,
+            "affected_estimated_elderly_population": 67.778882,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::738e9f8a8f7578ead0fe",
+            "isolated_node_count": 75,
+            "service_reachability_change": {
+              "evacuation": 195,
+              "medical": 195,
+              "transport_hub": 195
+            },
+            "source": "exp::tran_bbcfdba2-3293-47f6-a15e-ed9330ab0adf:0",
+            "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+          },
+          {
+            "affected_buildings": 187,
+            "affected_estimated_elderly_population": 138.442279,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::97c2c5b786543d476b7a",
+            "isolated_node_count": 103,
+            "service_reachability_change": {
+              "evacuation": 187,
+              "medical": 187,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_d26321a6-f614-4360-9058-4e04643b3724:0",
+            "target": "exp::tran_fa43dee4-9965-4619-8088-515a5da4fbc4:0"
+          },
+          {
+            "affected_buildings": 179,
+            "affected_estimated_elderly_population": 61.232642,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::7cfca270b52828ea788c",
+            "isolated_node_count": 70,
+            "service_reachability_change": {
+              "evacuation": 179,
+              "medical": 179,
+              "transport_hub": 179
+            },
+            "source": "exp::tran_2794bed8-5e5e-4bea-b817-6c1ef94679af:0",
+            "target": "exp::tran_bbcfdba2-3293-47f6-a15e-ed9330ab0adf:0"
+          },
+          {
+            "affected_buildings": 175,
+            "affected_estimated_elderly_population": 59.563646,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::59ea5dec9330368752ad",
+            "isolated_node_count": 69,
+            "service_reachability_change": {
+              "evacuation": 175,
+              "medical": 175,
+              "transport_hub": 175
+            },
+            "source": "exp::tran_2794bed8-5e5e-4bea-b817-6c1ef94679af:0",
+            "target": "exp::tran_a09f8243-a0fa-4fe9-bf44-78a484404b01:0"
+          },
+          {
+            "affected_buildings": 166,
+            "affected_estimated_elderly_population": 57.050897,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::98d7aa507163a13c7c8a",
+            "isolated_node_count": 66,
+            "service_reachability_change": {
+              "evacuation": 166,
+              "medical": 166,
+              "transport_hub": 166
+            },
+            "source": "exp::tran_62b7c2ef-1349-4134-8559-b554ddc50dde:0",
+            "target": "exp::tran_c72cf83c-d702-4fce-9998-0d67175e62bc:0"
+          },
+          {
+            "affected_buildings": 124,
+            "affected_estimated_elderly_population": 82.246901,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::1d9751bc8b22290ed3f2",
+            "isolated_node_count": 38,
+            "service_reachability_change": {
+              "evacuation": 124,
+              "medical": 124,
+              "transport_hub": 124
+            },
+            "source": "exp::tran_08acbf95-b417-4bb5-a4a8-2f56bf37ec18:0",
+            "target": "exp::tran_cc4fac92-a2b4-4c76-a35d-3b244111e5c0:0"
+          },
+          {
+            "affected_buildings": 115,
+            "affected_estimated_elderly_population": 91.046464,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::e42f1acc1d573c95d195",
+            "isolated_node_count": 67,
+            "service_reachability_change": {
+              "evacuation": 115,
+              "medical": 115,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_470a9040-4f93-4399-92b8-9f8c75954b28:0",
+            "target": "exp::tran_86c06818-d212-41d0-8760-e32775356a8c:0"
+          },
+          {
+            "affected_buildings": 109,
+            "affected_estimated_elderly_population": 87.695618,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::d4aed9edca8ab11738e1",
+            "isolated_node_count": 66,
+            "service_reachability_change": {
+              "evacuation": 109,
+              "medical": 109,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_42018095-3a77-45ab-b035-9d1d14f77572:0",
+            "target": "exp::tran_470a9040-4f93-4399-92b8-9f8c75954b28:0"
+          },
+          {
+            "affected_buildings": 58,
+            "affected_estimated_elderly_population": 33.258359,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::538c932fd0990fca08ba",
+            "isolated_node_count": 20,
+            "service_reachability_change": {
+              "evacuation": 58,
+              "medical": 58,
+              "transport_hub": 58
+            },
+            "source": "exp::tran_7137ecf5-31cc-45da-bf23-46859c861a41:0",
+            "target": "exp::tran_89b17301-57c1-4e1f-9ed6-d20b7d10969a:0"
+          }
+        ]
+      },
+      "limitations": [
+        "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior."
+      ],
+      "network": {
+        "buildings_with_network_demand": 28448,
+        "edges": 23437,
+        "nodes": 15684,
+        "semantics": "experimental PLATEAU LOD1 road-surface adjacency, not pedestrian network",
+        "version": "exp-4fff5849d650a70b"
+      },
+      "normal_evacuation_reachability": {
+        "network_seed_count": 79,
+        "reachable_buildings": 28443,
+        "semantics": "network reachability only; not evacuation or crowd simulation"
+      },
+      "official_future_population": {
+        "available_years": [
+          2020,
+          2025,
+          2030,
+          2035,
+          2040,
+          2045,
+          2050
+        ],
+        "peak_rss_mib": 450.800781,
+        "prediction_claimed": false,
+        "runtime_seconds": 0.401836,
+        "semantics": "official demographic projection + CITY GAP spatial allocation model",
+        "series": {
+          "ipss-regional-2023": [
+            {
+              "estimated_elderly_medical_burden": 1420.450817,
+              "estimated_elderly_transport_burden": 591.915288,
+              "estimated_population_medical_burden": 4409.154855,
+              "estimated_population_transport_burden": 1837.336523,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 25881,
+              "official_total_population": 80336,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2020,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1375.720419,
+              "estimated_elderly_transport_burden": 573.275708,
+              "estimated_population_medical_burden": 4164.098138,
+              "estimated_population_transport_burden": 1735.219072,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 25066,
+              "official_total_population": 75871,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2025,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1330.82537,
+              "estimated_elderly_transport_burden": 554.567517,
+              "estimated_population_medical_burden": 3916.626528,
+              "estimated_population_transport_burden": 1632.095312,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 24248,
+              "official_total_population": 71362,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2030,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1296.632686,
+              "estimated_elderly_transport_burden": 540.319102,
+              "estimated_population_medical_burden": 3669.813525,
+              "estimated_population_transport_burden": 1529.245999,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 23625,
+              "official_total_population": 66865,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2035,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1309.255988,
+              "estimated_elderly_transport_burden": 545.579351,
+              "estimated_population_medical_burden": 3426.18379,
+              "estimated_population_transport_burden": 1427.723185,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 23855,
+              "official_total_population": 62426,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2040,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1273.416786,
+              "estimated_elderly_transport_burden": 530.644817,
+              "estimated_population_medical_burden": 3184.749412,
+              "estimated_population_transport_burden": 1327.115196,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 23202,
+              "official_total_population": 58027,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2045,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            },
+            {
+              "estimated_elderly_medical_burden": 1208.818409,
+              "estimated_elderly_transport_burden": 503.726062,
+              "estimated_population_medical_burden": 2953.46856,
+              "estimated_population_transport_burden": 1230.738278,
+              "fixed_service_assumption": true,
+              "limitation": "official population scenario under fixed service assumptions",
+              "official_age_65_plus": 22025,
+              "official_total_population": 53813,
+              "projection_series": "ipss-regional-2023",
+              "projection_year": 2050,
+              "publisher": "国立社会保障・人口問題研究所",
+              "source_sha256": "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",
+              "source_url": "https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/3kekka/suikei_kekka.xlsx",
+              "source_verified": true
+            }
+          ]
+        }
+      },
+      "official_shelters": {
+        "capacity_available_count": 126,
+        "capacity_missing_count": 0,
+        "city_code": "26202",
+        "declared_capacity_total": 25884,
+        "facility_types": [
+          "地域避難所",
+          "拠点避難所",
+          "準拠点避難所",
+          "自主避難所"
+        ],
+        "feature_count": 126,
+        "graph_seed_count": 79,
+        "hazard_applicability_values": [
+          "指定なし"
+        ],
+        "reachability_semantics": "network reachability only; not evacuation simulation",
+        "snap_distance_m": {
+          "maximum": 8523.717488,
+          "median": 1227.196731,
+          "minimum": 7.755087
+        },
+        "source_sha256": "faa9e4523f1f268cc833d0a8a78da841d6b6e37be0525bb315a3683750e8bcdd",
+        "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+        "source_year": 2025
+      },
+      "planning_context": {
+        "comparisons": [
+          {
+            "building_count": 775,
+            "building_use_composition": {
+              "residential": 775
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:商業地域",
+            "estimated_elderly_population": 786.440271,
+            "estimated_population": 2286.549557,
+            "legal_compliance_claimed": false,
+            "planning_designation": "商業地域"
+          },
+          {
+            "building_count": 100,
+            "building_use_composition": {
+              "residential": 100
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:工業地域",
+            "estimated_elderly_population": 61.10784,
+            "estimated_population": 284.855012,
+            "legal_compliance_claimed": false,
+            "planning_designation": "工業地域"
+          },
+          {
+            "building_count": 12,
+            "building_use_composition": {
+              "residential": 12
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:工業専用地域",
+            "estimated_elderly_population": 6.569624,
+            "estimated_population": 24.276731,
+            "legal_compliance_claimed": false,
+            "planning_designation": "工業専用地域"
+          },
+          {
+            "building_count": 1251,
+            "building_use_composition": {
+              "residential": 1251
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:準住居地域",
+            "estimated_elderly_population": 954.940159,
+            "estimated_population": 2856.574606,
+            "legal_compliance_claimed": false,
+            "planning_designation": "準住居地域"
+          },
+          {
+            "building_count": 1710,
+            "building_use_composition": {
+              "residential": 1710
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:準工業地域",
+            "estimated_elderly_population": 1290.664203,
+            "estimated_population": 3672.107771,
+            "legal_compliance_claimed": false,
+            "planning_designation": "準工業地域"
+          },
+          {
+            "building_count": 4461,
+            "building_use_composition": {
+              "residential": 4461
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種中高層住居専用地域",
+            "estimated_elderly_population": 3359.826175,
+            "estimated_population": 11607.520343,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種中高層住居専用地域"
+          },
+          {
+            "building_count": 6811,
+            "building_use_composition": {
+              "residential": 6811
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種低層住居専用地域",
+            "estimated_elderly_population": 4326.456665,
+            "estimated_population": 14969.384006,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種低層住居専用地域"
+          },
+          {
+            "building_count": 9123,
+            "building_use_composition": {
+              "residential": 9123
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第1種住居地域",
+            "estimated_elderly_population": 6066.86018,
+            "estimated_population": 21602.849559,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第1種住居地域"
+          },
+          {
+            "building_count": 1390,
+            "building_use_composition": {
+              "residential": 1390
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種中高層住居専用地域",
+            "estimated_elderly_population": 907.234535,
+            "estimated_population": 2875.762031,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種中高層住居専用地域"
+          },
+          {
+            "building_count": 291,
+            "building_use_composition": {
+              "residential": 291
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種低層住居専用地域",
+            "estimated_elderly_population": 193.552692,
+            "estimated_population": 638.373229,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種低層住居専用地域"
+          },
+          {
+            "building_count": 823,
+            "building_use_composition": {
+              "residential": 823
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:第2種住居地域",
+            "estimated_elderly_population": 568.924632,
+            "estimated_population": 1974.28923,
+            "legal_compliance_claimed": false,
+            "planning_designation": "第2種住居地域"
+          },
+          {
+            "building_count": 955,
+            "building_use_composition": {
+              "residential": 955
+            },
+            "candidate_label": "planning-context mismatch candidate",
+            "comparison_key": "UseDistrict:近隣商業地域",
+            "estimated_elderly_population": 830.784987,
+            "estimated_population": 2672.410862,
+            "legal_compliance_claimed": false,
+            "planning_designation": "近隣商業地域"
+          }
+        ],
+        "designation_count": 12,
+        "label": "planning-context mismatch candidate",
+        "legal_compliance_claimed": false,
+        "runtime_seconds": 0.430047
+      },
+      "plateau_version": 5,
+      "redundancy": {
+        "alternative_available": true,
+        "distance_increase_m": 273.522246,
+        "primary_route": {
+          "distance_m": 30.373817,
+          "edge_ids": [
+            "exp::0003d0710612af629c6e"
+          ],
+          "node_ids": [
+            "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
+            "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+          ]
+        },
+        "route_semantics": "road-surface adjacency; not a validated pedestrian route",
+        "second_best_route": {
+          "distance_m": 303.896064,
+          "edge_ids": [
+            "exp::90fde3cfb7309a610c57",
+            "exp::826cbcb3fd3138c6f300",
+            "exp::fd7d813a35441bfd3719",
+            "exp::1383ce2cd3999fd5b117",
+            "exp::ddbae3be66d1fd1a0667",
+            "exp::6d8d3dd3f2dbc262cede",
+            "exp::b177187bf4e174de6769",
+            "exp::213bb1c935051de8d30c",
+            "exp::766e23347b12e789ee4b"
+          ],
+          "node_ids": [
+            "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0",
+            "exp::tran_2d186638-6dbc-4cd0-b195-fefa95c9e350:0",
+            "exp::tran_391991cc-074d-42f7-a25f-afe8ecd9f0bd:0",
+            "exp::tran_c2f80d47-1d1f-4234-b668-81eed5231dcf:0",
+            "exp::tran_127b399c-154f-4596-9e4f-f20985ebded5:0",
+            "exp::tran_c8156fb8-5f42-42b8-ac24-08cbddd222fb:0",
+            "exp::tran_b16b38a7-08ee-4daf-9a00-40ba9510b9fa:0",
+            "exp::tran_f1d9145f-80bf-48db-bf17-e3f6297374b2:0",
+            "exp::tran_33dacec3-7c6d-4201-b17d-9741c4c20ef4:0",
+            "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0"
+          ]
+        },
+        "selected_destination_node": "exp::tran_d4b05639-1ea1-4222-864a-08ba69ce651a:0",
+        "selected_origin_node": "exp::tran_9e854a6f-a9c6-45d4-bf23-a857df961c46:0"
+      },
+      "scenario_comparison_runtime_seconds": 23.423821,
+      "state_diff_identity_validation": {
+        "annual_change_detection": "unavailable until a second official PLATEAU version is registered",
+        "comparison": "current official road state versus itself",
+        "correctness_check": true,
+        "peak_rss_mib": 450.800781,
+        "result": {
+          "added": 0,
+          "attribute_changed": 0,
+          "geometry_changed": 0,
+          "removed": 0,
+          "unchanged": 23437
+        },
+        "runtime_seconds": 0.895029
+      },
+      "stress_tests": {
+        "flood": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.5m以上1.0m未満",
+              "0.5m未満",
+              "1.0m以上2.0m未満",
+              "2.0m以上3.0m未満",
+              "3.0m以上5.0m未満",
+              "5.0m以上",
+              "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図",
+              "伊佐津川水系伊佐津川洪水浸水想定区域図",
+              "志楽川水系志楽川洪水浸水想定区域図",
+              "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）",
+              "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）",
+              "祖母谷川水系祖母谷川洪水浸水想定区域図",
+              "福井川水系福井川洪水浸水想定区域図",
+              "高野川水系高野川、女布川洪水浸水想定区域図"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-flood",
+            "hazard_type": "flood",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 13632,
+            "component_fragmentation_increase": 8362,
+            "largest_component_nodes": 2946,
+            "scenario_component_count": 8367,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 13356.162868,
+                "estimated_population_disconnected": 45790.789956,
+                "maximum_network_distance_increase_m": 2934.032197,
+                "mean_network_distance_increase_m": 184.833787,
+                "newly_unreachable_buildings": 19399,
+                "scenario_reachable_buildings": 9044
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 13849.998341,
+                "estimated_population_disconnected": 46616.661312,
+                "maximum_network_distance_increase_m": 3932.57062,
+                "mean_network_distance_increase_m": 445.548475,
+                "newly_unreachable_buildings": 20333,
+                "scenario_reachable_buildings": 8102
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 13751.052278,
+                "estimated_population_disconnected": 46295.359755,
+                "maximum_network_distance_increase_m": 1499.1499,
+                "mean_network_distance_increase_m": 141.082493,
+                "newly_unreachable_buildings": 19967,
+                "scenario_reachable_buildings": 8476
+              }
+            }
+          },
+          "runtime_seconds": 0.354193
+        },
+        "landslide": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "土砂災害特別警戒区域（指定済）",
+              "土砂災害警戒区域（指定済）"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-landslide",
+            "hazard_type": "landslide",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 7331,
+            "component_fragmentation_increase": 4850,
+            "largest_component_nodes": 4260,
+            "scenario_component_count": 4855,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 6760.023372,
+                "estimated_population_disconnected": 22169.636949,
+                "maximum_network_distance_increase_m": 3661.023984,
+                "mean_network_distance_increase_m": 79.31865,
+                "newly_unreachable_buildings": 9869,
+                "scenario_reachable_buildings": 18574
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 7307.18435,
+                "estimated_population_disconnected": 23760.796352,
+                "maximum_network_distance_increase_m": 2146.483982,
+                "mean_network_distance_increase_m": 132.091201,
+                "newly_unreachable_buildings": 10730,
+                "scenario_reachable_buildings": 17705
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 6142.467048,
+                "estimated_population_disconnected": 20248.31124,
+                "maximum_network_distance_increase_m": 1072.390778,
+                "mean_network_distance_increase_m": 18.810749,
+                "newly_unreachable_buildings": 8938,
+                "scenario_reachable_buildings": 19505
+              }
+            }
+          },
+          "runtime_seconds": 0.463668
+        },
+        "tsunami": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.3m以上1.0m未満",
+              "0.3m未満",
+              "1.0m以上2.0m未満",
+              "京都府津波浸水想定図"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-tsunami",
+            "hazard_type": "tsunami",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 719,
+            "component_fragmentation_increase": 358,
+            "largest_component_nodes": 15079,
+            "scenario_component_count": 363,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 642.292011,
+                "estimated_population_disconnected": 1625.144654,
+                "maximum_network_distance_increase_m": 837.060221,
+                "mean_network_distance_increase_m": 2.452276,
+                "newly_unreachable_buildings": 829,
+                "scenario_reachable_buildings": 27614
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 638.309885,
+                "estimated_population_disconnected": 1614.482719,
+                "maximum_network_distance_increase_m": 980.36732,
+                "mean_network_distance_increase_m": 5.370999,
+                "newly_unreachable_buildings": 821,
+                "scenario_reachable_buildings": 27614
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 512.605215,
+                "estimated_population_disconnected": 1308.060667,
+                "maximum_network_distance_increase_m": 939.246386,
+                "mean_network_distance_increase_m": 8.433825,
+                "newly_unreachable_buildings": 665,
+                "scenario_reachable_buildings": 27778
+              }
+            }
+          },
+          "runtime_seconds": 0.532302
+        }
+      },
+      "urban_state": "maizuru-2025-observed"
+    }
+  },
+  "generated_from_synthetic_data": false,
+  "golden_maizuru_cases": [
+    {
+      "case": "normal evacuation network reachability",
+      "real_data": true,
+      "status": "pass"
+    },
+    {
+      "case": "flood counterfactual stress test",
+      "real_data": true,
+      "status": "pass"
+    },
+    {
+      "case": "landslide counterfactual stress test",
+      "real_data": true,
+      "status": "pass"
+    },
+    {
+      "case": "tsunami counterfactual stress test",
+      "real_data": true,
+      "status": "pass"
+    },
+    {
+      "case": "critical-road independent verification",
+      "real_data": true,
+      "status": "pass"
+    },
+    {
+      "case": "official future-population fixed-service accessibility",
+      "real_data": true,
+      "status": "pass"
+    }
+  ],
+  "limitations": [
+    "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior.",
+    "Annual added/removed/changed counts require a second registered official PLATEAU version.",
+    "Building demographics are model estimates and are excluded from the public artifact."
+  ],
+  "peak_rss_mib": 1027.789062,
+  "schema_version": "urban-futures-validation-1.0.0",
+  "total_runtime_seconds": 27.256189
+}

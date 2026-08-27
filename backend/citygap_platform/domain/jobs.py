@@ -74,6 +74,50 @@ JOB_STAGES = {
         "verify_artifacts",
         "persist_artifacts",
     ),
+    "dataset_diff": (
+        "validate_versions",
+        "fingerprint_features",
+        "match_features",
+        "classify_changes",
+        "plan_recomputation",
+        "persist_artifacts",
+    ),
+    "incremental_recompute": (
+        "load_plan",
+        "execute_scopes",
+        "verify_against_full_rebuild",
+        "persist_artifacts",
+    ),
+    "future_population": (
+        "validate_official_source",
+        "create_urban_states",
+        "allocate_residential_capacity",
+        "calculate_fixed_service_accessibility",
+        "quality_gate",
+        "persist_artifacts",
+    ),
+    "stress_test": (
+        "validate_explicit_assumption",
+        "load_graph_precomputation",
+        "apply_counterfactual_closures",
+        "calculate_service_continuity",
+        "independent_verification",
+        "persist_artifacts",
+    ),
+    "criticality_analysis": (
+        "load_graph_precomputation",
+        "detect_bridge_candidates",
+        "aggregate_demand_and_services",
+        "selected_removal_verification",
+        "persist_artifacts",
+    ),
+    "outcome_evaluation": (
+        "validate_baseline_and_observed_states",
+        "separate_planned_effect_and_observed_change",
+        "calculate_structured_metrics",
+        "enforce_human_review_boundary",
+        "persist_artifacts",
+    ),
 }
 
 

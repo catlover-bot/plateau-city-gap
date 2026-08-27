@@ -1,0 +1,402 @@
+{
+  "analysis_status": "reviewed_aggregated_real_data",
+  "building_level_demographics_included": false,
+  "cities": {
+    "fujisawa": {
+      "city_name": "藤沢市",
+      "criticality": {
+        "candidate_count": 7897,
+        "claim_boundary": "network criticality candidate; not a dangerous-road designation",
+        "top_candidates": [
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::14a31f729f6e78d14f6f",
+            "isolated_node_count": 190,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_1b54aa45-7e00-47b0-983a-e3cf24a25692:0",
+            "target": "exp::tran_3312d07e-7a18-48a4-959f-7567e38cdf3d:0"
+          },
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::08b1067671618ef00111",
+            "isolated_node_count": 189,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_1b54aa45-7e00-47b0-983a-e3cf24a25692:0",
+            "target": "exp::tran_6e569ef6-c7ea-4a1a-ab99-8a0ab09ef63a:0"
+          },
+          {
+            "affected_buildings": 120,
+            "affected_estimated_elderly_population": 98.0,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::bc468481bc4ad719dead",
+            "isolated_node_count": 188,
+            "service_reachability_change": {
+              "evacuation": 0,
+              "medical": 120,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_3c035be6-66cf-4a6d-876f-e773200ac172:0",
+            "target": "exp::tran_6e569ef6-c7ea-4a1a-ab99-8a0ab09ef63a:0"
+          }
+        ]
+      },
+      "limitations": [
+        "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior."
+      ],
+      "network": {
+        "buildings_with_network_demand": 107557,
+        "edges": 71487,
+        "nodes": 53658,
+        "semantics": "experimental PLATEAU LOD1 road-surface adjacency, not pedestrian network",
+        "version": "exp-0ca779b30e21144b"
+      },
+      "stress_tests": {
+        "flood": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.5m以上3.0m未満",
+              "0.5m未満",
+              "10.0m以上20.0m未満",
+              "3.0m以上5.0m未満",
+              "5.0m以上10.0m未満",
+              "境川水系境川",
+              "境川水系滝川",
+              "境川水系白旗川",
+              "引地川水系一色川",
+              "引地川水系不動川",
+              "引地川水系小糸川",
+              "引地川水系引地川・蓼川",
+              "相模川水系小出川",
+              "相模川水系打戻川"
+            ],
+            "hazard_dataset_version": "fujisawa-plateau-2025-flood",
+            "hazard_type": "flood",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 762.617188,
+          "result": {
+            "baseline_component_count": 18,
+            "closed_edge_count": 17561,
+            "component_fragmentation_increase": 12364,
+            "largest_component_nodes": 12862,
+            "scenario_component_count": 12382,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 81,
+                "estimated_elderly_population_disconnected": 27591.565907,
+                "estimated_population_disconnected": 114405.976589,
+                "maximum_network_distance_increase_m": 2767.232482,
+                "mean_network_distance_increase_m": 78.915965,
+                "newly_unreachable_buildings": 26819,
+                "scenario_reachable_buildings": 80548
+              },
+              "medical": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 326,
+                "estimated_elderly_population_disconnected": 26226.823067,
+                "estimated_population_disconnected": 111512.373631,
+                "maximum_network_distance_increase_m": 2152.672155,
+                "mean_network_distance_increase_m": 53.288373,
+                "newly_unreachable_buildings": 27855,
+                "scenario_reachable_buildings": 79512
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 107367,
+                "critical_facility_seed_count": 423,
+                "estimated_elderly_population_disconnected": 24433.035567,
+                "estimated_population_disconnected": 104422.527656,
+                "maximum_network_distance_increase_m": 943.881588,
+                "mean_network_distance_increase_m": 18.377922,
+                "newly_unreachable_buildings": 25858,
+                "scenario_reachable_buildings": 81509
+              }
+            }
+          },
+          "runtime_seconds": 2.222359
+        }
+      },
+      "urban_state": "fujisawa-2025-observed"
+    },
+    "maizuru": {
+      "city_name": "舞鶴市",
+      "criticality": {
+        "candidate_count": 1412,
+        "claim_boundary": "network criticality candidate; not a dangerous-road designation",
+        "top_candidates": [
+          {
+            "affected_buildings": 196,
+            "affected_estimated_elderly_population": 67.992125,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::5e8ef6fef641bd8d05e2",
+            "isolated_node_count": 76,
+            "service_reachability_change": {
+              "evacuation": 196,
+              "medical": 196,
+              "transport_hub": 196
+            },
+            "source": "exp::tran_7427c33c-8a50-4e43-80bd-9bac318c47a9:0",
+            "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+          },
+          {
+            "affected_buildings": 195,
+            "affected_estimated_elderly_population": 67.778882,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::738e9f8a8f7578ead0fe",
+            "isolated_node_count": 75,
+            "service_reachability_change": {
+              "evacuation": 195,
+              "medical": 195,
+              "transport_hub": 195
+            },
+            "source": "exp::tran_bbcfdba2-3293-47f6-a15e-ed9330ab0adf:0",
+            "target": "exp::tran_bff6c784-461a-442e-b931-864d6fcde93b:0"
+          },
+          {
+            "affected_buildings": 187,
+            "affected_estimated_elderly_population": 138.442279,
+            "algorithm": "tarjan_bridge_subtree_demand_v1",
+            "component_id": 0,
+            "edge_id": "exp::97c2c5b786543d476b7a",
+            "isolated_node_count": 103,
+            "service_reachability_change": {
+              "evacuation": 187,
+              "medical": 187,
+              "transport_hub": 0
+            },
+            "source": "exp::tran_d26321a6-f614-4360-9058-4e04643b3724:0",
+            "target": "exp::tran_fa43dee4-9965-4619-8088-515a5da4fbc4:0"
+          }
+        ]
+      },
+      "limitations": [
+        "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior."
+      ],
+      "network": {
+        "buildings_with_network_demand": 28448,
+        "edges": 23437,
+        "nodes": 15684,
+        "semantics": "experimental PLATEAU LOD1 road-surface adjacency, not pedestrian network",
+        "version": "exp-4fff5849d650a70b"
+      },
+      "stress_tests": {
+        "flood": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.5m以上1.0m未満",
+              "0.5m未満",
+              "1.0m以上2.0m未満",
+              "2.0m以上3.0m未満",
+              "3.0m以上5.0m未満",
+              "5.0m以上",
+              "与保呂川水系与保呂川、椿川、菅坂川洪水浸水想定区域図",
+              "伊佐津川水系伊佐津川洪水浸水想定区域図",
+              "志楽川水系志楽川洪水浸水想定区域図",
+              "朝来川水系朝来川、吉野川洪水浸水想定区域図（吉野川）",
+              "朝来川水系朝来川、吉野川洪水浸水想定区域図（朝来川）",
+              "祖母谷川水系祖母谷川洪水浸水想定区域図",
+              "福井川水系福井川洪水浸水想定区域図",
+              "高野川水系高野川、女布川洪水浸水想定区域図"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-flood",
+            "hazard_type": "flood",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 13632,
+            "component_fragmentation_increase": 8362,
+            "largest_component_nodes": 2946,
+            "scenario_component_count": 8367,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 13356.162868,
+                "estimated_population_disconnected": 45790.789956,
+                "maximum_network_distance_increase_m": 2934.032197,
+                "mean_network_distance_increase_m": 184.833787,
+                "newly_unreachable_buildings": 19399,
+                "scenario_reachable_buildings": 9044
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 13849.998341,
+                "estimated_population_disconnected": 46616.661312,
+                "maximum_network_distance_increase_m": 3932.57062,
+                "mean_network_distance_increase_m": 445.548475,
+                "newly_unreachable_buildings": 20333,
+                "scenario_reachable_buildings": 8102
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 13751.052278,
+                "estimated_population_disconnected": 46295.359755,
+                "maximum_network_distance_increase_m": 1499.1499,
+                "mean_network_distance_increase_m": 141.082493,
+                "newly_unreachable_buildings": 19967,
+                "scenario_reachable_buildings": 8476
+              }
+            }
+          },
+          "runtime_seconds": 0.354193
+        },
+        "landslide": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "土砂災害特別警戒区域（指定済）",
+              "土砂災害警戒区域（指定済）"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-landslide",
+            "hazard_type": "landslide",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 7331,
+            "component_fragmentation_increase": 4850,
+            "largest_component_nodes": 4260,
+            "scenario_component_count": 4855,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 6760.023372,
+                "estimated_population_disconnected": 22169.636949,
+                "maximum_network_distance_increase_m": 3661.023984,
+                "mean_network_distance_increase_m": 79.31865,
+                "newly_unreachable_buildings": 9869,
+                "scenario_reachable_buildings": 18574
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 7307.18435,
+                "estimated_population_disconnected": 23760.796352,
+                "maximum_network_distance_increase_m": 2146.483982,
+                "mean_network_distance_increase_m": 132.091201,
+                "newly_unreachable_buildings": 10730,
+                "scenario_reachable_buildings": 17705
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 6142.467048,
+                "estimated_population_disconnected": 20248.31124,
+                "maximum_network_distance_increase_m": 1072.390778,
+                "mean_network_distance_increase_m": 18.810749,
+                "newly_unreachable_buildings": 8938,
+                "scenario_reachable_buildings": 19505
+              }
+            }
+          },
+          "runtime_seconds": 0.463668
+        },
+        "tsunami": {
+          "assumption": {
+            "assumption_source": "explicit CITY GAP validation exercise rule",
+            "explicitly_confirmed": true,
+            "hazard_classes": [
+              "0.3m以上1.0m未満",
+              "0.3m未満",
+              "1.0m以上2.0m未満",
+              "京都府津波浸水想定図"
+            ],
+            "hazard_dataset_version": "maizuru-plateau-2025-tsunami",
+            "hazard_type": "tsunami",
+            "limitation": "This is a counterfactual stress test, not a prediction of road passability.",
+            "rule": "overlap_edges_unavailable"
+          },
+          "peak_rss_mib": 387.652344,
+          "result": {
+            "baseline_component_count": 5,
+            "closed_edge_count": 719,
+            "component_fragmentation_increase": 358,
+            "largest_component_nodes": 15079,
+            "scenario_component_count": 363,
+            "service_metrics": {
+              "evacuation": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 79,
+                "estimated_elderly_population_disconnected": 642.292011,
+                "estimated_population_disconnected": 1625.144654,
+                "maximum_network_distance_increase_m": 837.060221,
+                "mean_network_distance_increase_m": 2.452276,
+                "newly_unreachable_buildings": 829,
+                "scenario_reachable_buildings": 27614
+              },
+              "medical": {
+                "baseline_reachable_buildings": 28435,
+                "critical_facility_seed_count": 68,
+                "estimated_elderly_population_disconnected": 638.309885,
+                "estimated_population_disconnected": 1614.482719,
+                "maximum_network_distance_increase_m": 980.36732,
+                "mean_network_distance_increase_m": 5.370999,
+                "newly_unreachable_buildings": 821,
+                "scenario_reachable_buildings": 27614
+              },
+              "transport_hub": {
+                "baseline_reachable_buildings": 28443,
+                "critical_facility_seed_count": 119,
+                "estimated_elderly_population_disconnected": 512.605215,
+                "estimated_population_disconnected": 1308.060667,
+                "maximum_network_distance_increase_m": 939.246386,
+                "mean_network_distance_increase_m": 8.433825,
+                "newly_unreachable_buildings": 665,
+                "scenario_reachable_buildings": 27778
+              }
+            }
+          },
+          "runtime_seconds": 0.532302
+        }
+      },
+      "urban_state": "maizuru-2025-observed"
+    }
+  },
+  "limitations": [
+    "Counterfactual stress test on the experimental PLATEAU LOD1 road-surface adjacency graph; this is not a prediction of disaster damage, road passability, pedestrian routing, evacuation movement or crowd behavior.",
+    "Annual added/removed/changed counts require a second registered official PLATEAU version.",
+    "Building demographics are model estimates and are excluded from the public artifact."
+  ],
+  "schema_version": "urban-futures-public-1.0.0",
+  "story": {
+    "prediction_claimed": false,
+    "steps": [
+      "通常時",
+      "災害重複道路を利用不可とする仮定",
+      "到達性変化",
+      "代替案の自治体レビュー"
+    ],
+    "title": "通常時と明示的な道路利用不可仮定を比較"
+  }
+}
