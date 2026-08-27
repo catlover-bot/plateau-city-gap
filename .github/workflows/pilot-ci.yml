@@ -1,0 +1,124 @@
+name: Municipal Pilot CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[platform,dev]"
+      - run: ruff check analysis backend
+      - run: pytest analysis/tests backend/tests -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run build
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[platform,dev]" pip-audit
+      - run: pip-audit --skip-editable
+      - name: Reject tracked secrets and raw municipal data
+        run: |
+          ! git grep -En '(BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16})'
+          test -z "$(git ls-files data/raw)"
+
+  public-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: pytest backend/tests/test_real_inventory_artifact.py analysis/tests/test_web_assets.py analysis/tests/test_municipal_workspace_assets.py -q
+
+  postgis-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgrouting/pgrouting:16-3.5-4.0@sha256:bd277edf6e855db49837314209b0eb8902e8f0fa6f9d6ac6952f7355fdb24465
+        env:
+          POSTGRES_DB: citygap
+          POSTGRES_USER: citygap
+          POSTGRES_PASSWORD: citygap_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U citygap -d citygap"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      CITYGAP_DATABASE_URL: postgresql://citygap:citygap_ci@127.0.0.1:5432/citygap
+      CITYGAP_TEST_DATABASE_URL: postgresql://citygap:citygap_ci@127.0.0.1:5432/citygap
+      PGHOST: 127.0.0.1
+      PGPORT: "5432"
+      PGUSER: citygap
+      PGPASSWORD: citygap_ci
+      CITYGAP_SOURCE_DATABASE: citygap
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[platform,dev]"
+      - name: Install PostgreSQL 16 client tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+      - name: Apply all migrations through checksum runner
+        run: python -m backend.citygap_platform.database.migrations upgrade
+      - name: Exercise real PostGIS, pgRouting, loader, API and transactions
+        run: pytest backend/integration -q
+      - name: Start the real database-backed API process
+        run: |
+          uvicorn backend.citygap_platform.api.app:app --host 127.0.0.1 --port 8000 > /tmp/citygap-api.log 2>&1 &
+          api_pid=$!
+          trap 'kill ${api_pid}' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8000/health >/tmp/health.json; then break; fi
+            sleep 1
+          done
+          python -c 'import json; data=json.load(open("/tmp/health.json")); assert data["database"] is True'
+      - name: Verify pg_dump and pg_restore
+        run: bash infra/scripts/verify_backup_restore.sh
+      - name: Publish PostGIS diagnostics
+        if: always()
+        run: |
+          psql --dbname=citygap --command="SELECT extname, extversion FROM pg_extension WHERE extname IN ('postgis','pgrouting')" || true
+          psql --dbname=citygap --command="SELECT version, applied_at FROM schema_migrations ORDER BY version" || true
