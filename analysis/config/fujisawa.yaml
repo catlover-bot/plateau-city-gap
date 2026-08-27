@@ -3,7 +3,7 @@ city_code: "14205"
 city_name: 藤沢市
 prefecture_code: "14"
 prefecture_name: 神奈川県
-mode: cross_city_validation
+mode: plateau_native_detail_validation
 analysis_crs: EPSG:6677
 map_view:
   longitude: 139.475

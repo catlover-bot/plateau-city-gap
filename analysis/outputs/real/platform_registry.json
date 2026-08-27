@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-26T15:32:15Z",
+  "generated_at": "2026-08-27T08:39:44Z",
   "cities": [
     {
       "city_id": "fujisawa",
@@ -9,7 +9,7 @@
       "prefecture_code": "14",
       "prefecture_name": "神奈川県",
       "analysis_crs": "EPSG:6677",
-      "mode": "cross_city_validation"
+      "mode": "plateau_native_detail_validation"
     },
     {
       "city_id": "maizuru",
@@ -156,9 +156,9 @@
       "source_url": "https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025",
       "license": null,
       "declared_source_crs": null,
-      "archive_file": null,
-      "archive_sha256": null,
-      "verification_status": "metadata_registered"
+      "archive_file": "14205_fujisawa-shi_city_2025_citygml_1_op.zip",
+      "archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+      "verification_status": "checksum_verified"
     },
     {
       "dataset_version_id": "9e152782-0a4f-5ab9-b055-c712e6a35c54",
@@ -296,7 +296,7 @@
         "f058ac43-805d-5b3b-8c13-056496d079ab",
         "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
       ],
-      "config_hash": "f2aeb548562ed87b35b29e72dd9d788af46e3cf61b622b8e9b2cec03c310a67c",
+      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
       "output_artifact": "analysis/outputs/real/fujisawa_summary.json",
       "output_sha256": "51ec2def375db1a31c0930b58080b17800c081467440fe9820ef9909ea03ac47"
     },
@@ -384,54 +384,154 @@
       "config_hash": "e44643a1a777d34a5e18569c83bc648bce2bcc3d183694539096f842b758cf96",
       "output_artifact": "analysis/outputs/real/maizuru_network_scenarios.json",
       "output_sha256": "d8717e5d040ebe611d92bec6f5db10a2d14f9a68cbd56d9a9a6e192cb31c4c5e"
+    },
+    {
+      "analysis_run_id": "10936d7c-1ad6-5976-9af0-6a86c43a79e0",
+      "city_code": "14205",
+      "analysis_type": "building_detail",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "output_artifact": "analysis/outputs/real/fujisawa_building_demographics_summary.json",
+      "output_sha256": "964801db7434c752795f7bd9529a1e0b8b8090870ad0486f8702175af4903085"
+    },
+    {
+      "analysis_run_id": "8a1ddeaa-017a-5089-95aa-4ff588ef7132",
+      "city_code": "14205",
+      "analysis_type": "road_network",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "output_artifact": "analysis/outputs/real/fujisawa_road_network_summary.json",
+      "output_sha256": "748944968d81cd622082d05b0fa26fa5fec6dd3e905cbd14f526bc4447ba744c"
+    },
+    {
+      "analysis_run_id": "b9dc701c-50a1-5240-958d-2f2e7b9cd325",
+      "city_code": "14205",
+      "analysis_type": "terrain",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "output_artifact": "analysis/outputs/real/fujisawa_terrain_network_summary.json",
+      "output_sha256": "955530fbf89e257b7358fd53559dee946ebbc8dc3e898f3324b23c72bf8fc866"
+    },
+    {
+      "analysis_run_id": "e9333a2e-0ee9-551d-bda5-b0d449f7ae21",
+      "city_code": "14205",
+      "analysis_type": "spatial_context",
+      "status": "succeeded",
+      "dataset_version_ids": [
+        "be65e2f0-a406-5513-9d20-8e3360be0fef",
+        "c6bc99f4-f96c-5b85-9663-4f5d2ff052b5",
+        "b15221e8-c2f4-5af7-b055-49bd54e0aeae",
+        "d93744cd-42af-53a2-96d5-0bd0e1cc28e6",
+        "f058ac43-805d-5b3b-8c13-056496d079ab",
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ],
+      "config_hash": "1be6f3c4046f275b34242259745bb1ee65f5e48a0cd072c724e1a068d91c3dbe",
+      "output_artifact": "analysis/outputs/real/fujisawa_plateau_context_summary.json",
+      "output_sha256": "8c1d1b686a86bf44efc7101b5e3588be18351046c88c7ebd2b6f99716c9f4693"
     }
   ],
   "capabilities": [
     {
       "city_code": "14205",
       "capability": "building_detail",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "available",
+      "note": "Actual Fujisawa CityGML buildings drive demographic allocation and accessibility.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_building_demographics_summary.json",
+          "sha256": "964801db7434c752795f7bd9529a1e0b8b8090870ad0486f8702175af4903085",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "14205",
       "capability": "gtfs",
       "status": "unavailable",
-      "note": "No GTFS feed is registered; P11 points are not represented as GTFS.",
+      "note": "No official stable GTFS feed is registered; P11 is not represented as GTFS.",
       "evidence": [],
       "dataset_version_ids": []
     },
     {
       "city_code": "14205",
       "capability": "hazard",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "available",
+      "note": "Official Fujisawa PLATEAU context is parsed and spatially joined for review.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_plateau_context_summary.json",
+          "sha256": "8c1d1b686a86bf44efc7101b5e3588be18351046c88c7ebd2b6f99716c9f4693",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "14205",
       "capability": "land_use",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "available",
+      "note": "Official Fujisawa PLATEAU context is parsed and spatially joined for review.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_plateau_context_summary.json",
+          "sha256": "8c1d1b686a86bf44efc7101b5e3588be18351046c88c7ebd2b6f99716c9f4693",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "14205",
       "capability": "road_network",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "partial",
+      "note": "Experimental LOD1 surface-adjacency graph; not a validated pedestrian network.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_road_network_summary.json",
+          "sha256": "748944968d81cd622082d05b0fa26fa5fec6dd3e905cbd14f526bc4447ba744c",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "14205",
       "capability": "scenario",
       "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
+      "note": "A Fujisawa scenario set has not been optimized or municipally reviewed.",
       "evidence": [],
       "dataset_version_ids": []
     },
@@ -459,18 +559,34 @@
     {
       "city_code": "14205",
       "capability": "terrain",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "partial",
+      "note": "Official DEM observations are attached where covered; no walking penalty is inferred.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_terrain_network_summary.json",
+          "sha256": "955530fbf89e257b7358fd53559dee946ebbc8dc3e898f3324b23c72bf8fc866",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "14205",
       "capability": "urban_planning",
-      "status": "unavailable",
-      "note": "Capability has not been computed from Fujisawa source data in this platform.",
-      "evidence": [],
-      "dataset_version_ids": []
+      "status": "available",
+      "note": "Official Fujisawa PLATEAU context is parsed and spatially joined for review.",
+      "evidence": [
+        {
+          "artifact": "analysis/outputs/real/fujisawa_plateau_context_summary.json",
+          "sha256": "8c1d1b686a86bf44efc7101b5e3588be18351046c88c7ebd2b6f99716c9f4693",
+          "verified_present": true
+        }
+      ],
+      "dataset_version_ids": [
+        "2d17cb2f-cce1-5d38-b5d1-7976da4417c3"
+      ]
     },
     {
       "city_code": "26202",

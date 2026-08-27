@@ -13,8 +13,6 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from analysis.src.plateau_road_network import ANALYSIS_CRS
-
 DEM_ELEVATION_METHOD = "plateau_dem_lod1_tin_barycentric_interpolation"
 GRID_CELL_DEGREES = 0.001
 LOWER_CORNER = re.compile(rb"<gml:lowerCorner>([^<]+)</gml:lowerCorner>")
@@ -99,8 +97,8 @@ def assign_dem_elevations(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Interpolate elevation for road nodes, streaming only relevant DEM members."""
 
-    if nodes.crs is None or nodes.crs.to_string() != ANALYSIS_CRS:
-        raise ValueError(f"Road nodes must use {ANALYSIS_CRS}")
+    if nodes.crs is None or not nodes.crs.is_projected:
+        raise ValueError("Road nodes must use a projected analysis CRS")
     if nodes["node_id"].duplicated().any():
         raise ValueError("Road node IDs must be unique")
     geographic = nodes[["node_id", "geometry"]].to_crs("EPSG:4326").reset_index(drop=True)

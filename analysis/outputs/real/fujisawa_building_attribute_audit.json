@@ -1,0 +1,436 @@
+{
+  "allocation_weight_source_counts": {
+    "not_allocatable": 38467,
+    "total_floor_area": 131389
+  },
+  "buildingFootprintArea": {
+    "invalid_count": 169856,
+    "maximum": null,
+    "median": null,
+    "minimum": null,
+    "negative_count": 0,
+    "null_count": 169856,
+    "numeric_parse_count": 0,
+    "numeric_parse_failure_count": 0,
+    "outlier_examples_high": [
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_ade2b6e9-d782-4417-8263-ea937603cfd5",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_6762209d-4186-4d59-ae53-0c4000e44fdd",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_fa2c031a-d9fc-463f-a129-ae3f48d4056e",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_5ac8d6cd-42c8-47a2-88f8-df87db6c9a02",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_96cf9b40-2096-4eb1-94e9-53e095a8699f",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml"
+      }
+    ],
+    "outlier_examples_low": [
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_c7f0f500-7e4e-4104-a636-d681f64f88a8",
+        "source_gml": "udx/bldg/52397357_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_b70d7d66-2b0a-4153-b15b-2c45ae0401f4",
+        "source_gml": "udx/bldg/52397357_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_471abe75-cbd1-4e3b-a299-73f4b5d471da",
+        "source_gml": "udx/bldg/52397357_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_815dd1ad-e460-4a6d-8231-cab76a78d57d",
+        "source_gml": "udx/bldg/52397357_bldg_6697_op.gml"
+      },
+      {
+        "buildingFootprintArea": null,
+        "gml_id": "bldg_6e6d3a94-87b9-475e-9437-e247378a2e81",
+        "source_gml": "udx/bldg/52397357_bldg_6697_op.gml"
+      }
+    ],
+    "p95": null,
+    "p99": null,
+    "present_count": 0,
+    "raw_maximum": null,
+    "raw_minimum": null,
+    "sentinel_9999_count": 0,
+    "sentinel_minus_9999_count": 0,
+    "source_uom_counts": {},
+    "unit": "m2",
+    "valid_count": 0,
+    "zero_count": 0
+  },
+  "floor_area_validation": {
+    "comparable_count": 0,
+    "policy": "No clamping. Positive non-sentinel totalFloorArea is primary; audited hierarchy is recorded per building.",
+    "total_floor_area_ge_footprint_count": 0,
+    "total_floor_area_lt_footprint_count": 0,
+    "total_floor_area_lt_footprint_examples": [],
+    "total_over_footprint_times_storeys": {
+      "count": 0,
+      "median": null,
+      "p01": null,
+      "p99": null
+    }
+  },
+  "geometry": {
+    "method": "2D projection of actual LOD0 roof-edge; LOD1 solid projection only as fallback",
+    "missing_count": 0,
+    "source_counts": {
+      "lod0_roof_edge_projection": 169856
+    },
+    "valid_count": 169856
+  },
+  "measuredHeight": {
+    "invalid_count": 1781,
+    "maximum": 118.8,
+    "median": 7.1,
+    "minimum": 0.4,
+    "negative_count": 1781,
+    "null_count": 0,
+    "numeric_parse_count": 169856,
+    "numeric_parse_failure_count": 0,
+    "outlier_examples_high": [
+      {
+        "gml_id": "bldg_4fc32e33-92e2-4d9d-ba0f-da6fcdfe05f4",
+        "measuredHeight": "68",
+        "source_gml": "udx/bldg/53390305_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_68acde74-9d2a-4534-8992-d54f2c4468b6",
+        "measuredHeight": "75.4",
+        "source_gml": "udx/bldg/53390357_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_a81c6b76-d3f7-45ce-bbc1-ed5a42dbd04b",
+        "measuredHeight": "82.9",
+        "source_gml": "udx/bldg/53390377_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_48811af7-10e5-4c59-8f64-5dc30623dcc4",
+        "measuredHeight": "99",
+        "source_gml": "udx/bldg/53390308_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_071f5f7d-eb83-4a59-99df-4a65b14de772",
+        "measuredHeight": "118.8",
+        "source_gml": "udx/bldg/53390317_bldg_6697_op.gml"
+      }
+    ],
+    "outlier_examples_low": [
+      {
+        "gml_id": "bldg_3dedd527-fd56-4b27-a348-1b4d72b30c1d",
+        "measuredHeight": "-9999",
+        "source_gml": "udx/bldg/53390372_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_285008c6-2bf0-48a7-9c03-9cc94b8e9696",
+        "measuredHeight": "-9999",
+        "source_gml": "udx/bldg/52397397_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_373c157e-136f-45b6-9e46-fcafc1f522b6",
+        "measuredHeight": "-9999",
+        "source_gml": "udx/bldg/53390345_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_c7fc501b-78f5-49ec-8410-b971aa0ca4b6",
+        "measuredHeight": "-9999",
+        "source_gml": "udx/bldg/52397387_bldg_6697_op.gml"
+      },
+      {
+        "gml_id": "bldg_9548190d-7411-4011-88a9-af7b8b2bfc36",
+        "measuredHeight": "-9999",
+        "source_gml": "udx/bldg/53390317_bldg_6697_op.gml"
+      }
+    ],
+    "p95": 10.0,
+    "p99": 17.0,
+    "present_count": 169856,
+    "raw_maximum": 118.8,
+    "raw_minimum": -9999.0,
+    "sentinel_9999_count": 0,
+    "sentinel_minus_9999_count": 1781,
+    "source_uom_counts": {
+      "m": 169856
+    },
+    "unit": "m",
+    "valid_count": 168075,
+    "zero_count": 0
+  },
+  "provenance": {
+    "ade_schema_version": "3.2",
+    "archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+    "product_specification_version": "5.0",
+    "usage_codelist": "codelists/Building_usage.xml"
+  },
+  "storeysAboveGround": {
+    "invalid_count": 38467,
+    "maximum": 25,
+    "median": 2.0,
+    "minimum": 1,
+    "negative_count": 0,
+    "null_count": 0,
+    "numeric_parse_count": 169856,
+    "numeric_parse_failure_count": 0,
+    "outlier_examples_high": [
+      {
+        "gml_id": "bldg_8cfa09c3-d0d6-4d68-a8f9-66cf57f16005",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "9999"
+      },
+      {
+        "gml_id": "bldg_d7050cad-99b2-4f4f-8dc8-460c512192dc",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "9999"
+      },
+      {
+        "gml_id": "bldg_a411e3eb-5e30-4997-9350-8244fae1d292",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "9999"
+      },
+      {
+        "gml_id": "bldg_7dc08166-26d4-4737-9551-51377adffbd4",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "9999"
+      },
+      {
+        "gml_id": "bldg_6762209d-4186-4d59-ae53-0c4000e44fdd",
+        "source_gml": "udx/bldg/53391317_bldg_6697_op.gml",
+        "storeysAboveGround": "9999"
+      }
+    ],
+    "outlier_examples_low": [
+      {
+        "gml_id": "bldg_a6e83c1c-7161-4fc1-bd30-c751efe2f00c",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "1"
+      },
+      {
+        "gml_id": "bldg_e287311c-f7ce-4e04-969a-4db6355559d9",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "1"
+      },
+      {
+        "gml_id": "bldg_25f5bdc6-7c32-4e7b-ac43-3b2824740ce4",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "1"
+      },
+      {
+        "gml_id": "bldg_7add5391-7de0-4f5d-b2b4-e8f5a5b30d36",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "1"
+      },
+      {
+        "gml_id": "bldg_082cb20b-050c-4bbe-a647-bcb3c14096c0",
+        "source_gml": "udx/bldg/52397358_bldg_6697_op.gml",
+        "storeysAboveGround": "1"
+      }
+    ],
+    "p95": 3.0,
+    "p99": 5.0,
+    "present_count": 169856,
+    "raw_maximum": 9999,
+    "raw_minimum": 1,
+    "sentinel_9999_count": 38467,
+    "sentinel_minus_9999_count": 0,
+    "source_uom_counts": {},
+    "unit": "count",
+    "valid_count": 131389,
+    "zero_count": 0
+  },
+  "storeysBelowGround": {
+    "invalid_count": 38467,
+    "maximum": 0,
+    "median": 0.0,
+    "minimum": 0,
+    "negative_count": 0,
+    "null_count": 0,
+    "numeric_parse_count": 169856,
+    "numeric_parse_failure_count": 0,
+    "outlier_examples_high": [
+      {
+        "gml_id": "bldg_a4180d5e-a870-4c08-b235-2542b126d170",
+        "source_gml": "udx/bldg/53390385_bldg_6697_op.gml",
+        "storeysBelowGround": "9999"
+      },
+      {
+        "gml_id": "bldg_95dd396f-be97-4644-a664-d2f4d54ad45c",
+        "source_gml": "udx/bldg/52397395_bldg_6697_op.gml",
+        "storeysBelowGround": "9999"
+      },
+      {
+        "gml_id": "bldg_32d6dacf-2045-41f2-9110-e09ab3ae7c68",
+        "source_gml": "udx/bldg/53390385_bldg_6697_op.gml",
+        "storeysBelowGround": "9999"
+      },
+      {
+        "gml_id": "bldg_00c139cc-498b-41d3-9b68-93697d04389d",
+        "source_gml": "udx/bldg/53390316_bldg_6697_op.gml",
+        "storeysBelowGround": "9999"
+      },
+      {
+        "gml_id": "bldg_00a893a3-50b2-46ca-9197-776551bff920",
+        "source_gml": "udx/bldg/53390367_bldg_6697_op.gml",
+        "storeysBelowGround": "9999"
+      }
+    ],
+    "outlier_examples_low": [
+      {
+        "gml_id": "bldg_6ad1fd52-35a9-40c0-95e9-82392d20a3b4",
+        "source_gml": "udx/bldg/53390355_bldg_6697_op.gml",
+        "storeysBelowGround": "0"
+      },
+      {
+        "gml_id": "bldg_cb705f94-3416-4c06-befb-ae34d26aa43b",
+        "source_gml": "udx/bldg/53390355_bldg_6697_op.gml",
+        "storeysBelowGround": "0"
+      },
+      {
+        "gml_id": "bldg_07f7a3fc-af3e-4ffe-853a-1d50bd4c4142",
+        "source_gml": "udx/bldg/53390355_bldg_6697_op.gml",
+        "storeysBelowGround": "0"
+      },
+      {
+        "gml_id": "bldg_e05e50f8-adbe-45da-ae03-e266cf224406",
+        "source_gml": "udx/bldg/53390355_bldg_6697_op.gml",
+        "storeysBelowGround": "0"
+      },
+      {
+        "gml_id": "bldg_570f1617-c68f-43f3-bb45-8cea381dea9f",
+        "source_gml": "udx/bldg/53390355_bldg_6697_op.gml",
+        "storeysBelowGround": "0"
+      }
+    ],
+    "p95": 0.0,
+    "p99": 0.0,
+    "present_count": 169856,
+    "raw_maximum": 9999,
+    "raw_minimum": 0,
+    "sentinel_9999_count": 38467,
+    "sentinel_minus_9999_count": 0,
+    "source_uom_counts": {},
+    "unit": "count",
+    "valid_count": 131389,
+    "zero_count": 131389
+  },
+  "totalFloorArea": {
+    "invalid_count": 38467,
+    "maximum": 213002.484,
+    "median": 110.856,
+    "minimum": 9.001,
+    "negative_count": 38467,
+    "null_count": 0,
+    "numeric_parse_count": 169856,
+    "numeric_parse_failure_count": 0,
+    "outlier_examples_high": [
+      {
+        "gml_id": "bldg_6d478b5a-fd29-4fd4-917f-44f79293d2c3",
+        "source_gml": "udx/bldg/53390386_bldg_6697_op.gml",
+        "totalFloorArea": "75017.708"
+      },
+      {
+        "gml_id": "bldg_890e491f-5bc0-4f73-8a10-88b3a5844487",
+        "source_gml": "udx/bldg/53390305_bldg_6697_op.gml",
+        "totalFloorArea": "99878.574"
+      },
+      {
+        "gml_id": "bldg_2135bf7b-9989-4203-9573-069034f51670",
+        "source_gml": "udx/bldg/53390376_bldg_6697_op.gml",
+        "totalFloorArea": "105463.964"
+      },
+      {
+        "gml_id": "bldg_1b32f023-9cc3-4d9a-acf4-5779ba2ae3cb",
+        "source_gml": "udx/bldg/53390376_bldg_6697_op.gml",
+        "totalFloorArea": "172466.886"
+      },
+      {
+        "gml_id": "bldg_9494fdc0-257e-4464-bc96-4ce7294d52db",
+        "source_gml": "udx/bldg/53390385_bldg_6697_op.gml",
+        "totalFloorArea": "213002.484"
+      }
+    ],
+    "outlier_examples_low": [
+      {
+        "gml_id": "bldg_1e18a8b0-ea0c-4428-a181-12eee7ebf6a0",
+        "source_gml": "udx/bldg/53390308_bldg_6697_op.gml",
+        "totalFloorArea": "-9999"
+      },
+      {
+        "gml_id": "bldg_8132d5e3-3fba-470e-bc02-ccdcb1ecaf04",
+        "source_gml": "udx/bldg/53390308_bldg_6697_op.gml",
+        "totalFloorArea": "-9999"
+      },
+      {
+        "gml_id": "bldg_fd85ef6f-e471-43d2-a162-2fb09529fd47",
+        "source_gml": "udx/bldg/53390308_bldg_6697_op.gml",
+        "totalFloorArea": "-9999"
+      },
+      {
+        "gml_id": "bldg_c39ecf4f-69ce-4bbb-b788-7472ba25fd2b",
+        "source_gml": "udx/bldg/52397396_bldg_6697_op.gml",
+        "totalFloorArea": "-9999"
+      },
+      {
+        "gml_id": "bldg_6e1a54b2-cb85-4d32-bd36-66ad1de5491c",
+        "source_gml": "udx/bldg/52397396_bldg_6697_op.gml",
+        "totalFloorArea": "-9999"
+      }
+    ],
+    "p95": 418.5159999999995,
+    "p99": 2109.2260799999995,
+    "present_count": 169856,
+    "raw_maximum": 213002.484,
+    "raw_minimum": -9999.0,
+    "sentinel_9999_count": 0,
+    "sentinel_minus_9999_count": 38467,
+    "source_uom_counts": {
+      "m2": 169856
+    },
+    "unit": "m2",
+    "valid_count": 131389,
+    "zero_count": 0
+  },
+  "usage": {
+    "distinct_count": 16,
+    "null_count": 0,
+    "present_count": 169856,
+    "unit": null,
+    "values": {
+      "401": 1863,
+      "402": 2217,
+      "403": 52,
+      "404": 531,
+      "411": 93530,
+      "412": 14043,
+      "413": 5474,
+      "414": 1315,
+      "415": 203,
+      "421": 244,
+      "422": 4188,
+      "431": 2023,
+      "441": 3271,
+      "451": 2048,
+      "452": 387,
+      "461": 38467
+    }
+  }
+}

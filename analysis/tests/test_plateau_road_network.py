@@ -91,6 +91,13 @@ def test_experimental_graph_reports_tolerance_bridge_and_components() -> None:
     assert set(edges["pedestrian_permission"]) == {"unknown"}
 
 
+def test_experimental_graph_accepts_city_configured_projected_crs() -> None:
+    surfaces = _surface_fixture().to_crs("EPSG:6677")
+    nodes, edges, _ = build_surface_adjacency_graph(surfaces, tolerance_m=0.05)
+    assert nodes.crs == surfaces.crs
+    assert edges.crs == surfaces.crs
+
+
 def _route_fixture() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame]:
     nodes = gpd.GeoDataFrame(
         {"node_id": ["a", "b", "c"]},

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import resource
@@ -15,6 +16,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
+import analysis.scripts.build_building_demographics as demographic_builder
 from analysis.scripts.build_building_demographics import (
     ARCHIVE,
     ARCHIVE_SHA256,
@@ -312,23 +314,79 @@ def _evidence(
 
 
 def main() -> None:
+    global ACCESS_PARQUET, ANALYSIS_CRS, ARCHIVE, ARCHIVE_SHA256, BORDER, BUILDING_DETAIL
+    global BUILDING_PARQUET, BUILDING_SUMMARY, DEEP_DIVE_MESH, EDGE_PARQUET
+    global EVIDENCE_OUTPUT, MEDICAL_LABELS_PARQUET, MESH_OUTPUT, NODE_PARQUET
+    global SUMMARY_OUTPUT, TRANSPORT_LABELS_PARQUET
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--archive", type=Path, default=ARCHIVE)
+    parser.add_argument("--city-id", default="26202")
+    parser.add_argument("--city-name", default="舞鶴市")
+    parser.add_argument("--building-parquet", type=Path, default=BUILDING_PARQUET)
+    parser.add_argument("--building-summary", type=Path, default=BUILDING_SUMMARY)
+    parser.add_argument("--building-detail", type=Path, default=BUILDING_DETAIL)
+    parser.add_argument("--border", type=Path, default=BORDER)
+    parser.add_argument("--stations", type=Path, default=demographic_builder.STATIONS)
+    parser.add_argument("--bus-stops", type=Path, default=demographic_builder.BUS_STOPS)
+    parser.add_argument("--medical", type=Path, default=demographic_builder.MEDICAL)
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "analysis/outputs/real")
+    parser.add_argument("--output-prefix", default="maizuru")
+    parser.add_argument("--analysis-crs", default=ANALYSIS_CRS)
+    parser.add_argument("--archive-sha256")
+    parser.add_argument("--expected-road-count", type=int, default=15_684)
+    parser.add_argument("--deep-dive-mesh", default=DEEP_DIVE_MESH)
+    args = parser.parse_args()
+
+    ARCHIVE = args.archive
+    BORDER = args.border
+    BUILDING_PARQUET = args.building_parquet
+    BUILDING_SUMMARY = args.building_summary
+    BUILDING_DETAIL = args.building_detail
+    ANALYSIS_CRS = args.analysis_crs
+    DEEP_DIVE_MESH = args.deep_dive_mesh
+    prefix = args.output_prefix
+    output = args.output_dir
+    NODE_PARQUET = output / f"{prefix}_road_graph_nodes.parquet"
+    EDGE_PARQUET = output / f"{prefix}_road_graph_edges.parquet"
+    ACCESS_PARQUET = output / f"{prefix}_building_network_accessibility.parquet"
+    TRANSPORT_LABELS_PARQUET = output / f"{prefix}_transport_network_labels.parquet"
+    MEDICAL_LABELS_PARQUET = output / f"{prefix}_medical_network_labels.parquet"
+    MESH_OUTPUT = output / f"{prefix}_network_accessibility_meshes.csv"
+    SUMMARY_OUTPUT = output / f"{prefix}_road_network_summary.json"
+    EVIDENCE_OUTPUT = output / f"{prefix}_network_deep_dive_evidence.json"
+    output.mkdir(parents=True, exist_ok=True)
+
+    demographic_builder.ARCHIVE = ARCHIVE
+    demographic_builder.BORDER = BORDER
+    demographic_builder.STATIONS = args.stations
+    demographic_builder.BUS_STOPS = args.bus_stops
+    demographic_builder.MEDICAL = args.medical
+    demographic_builder.ANALYSIS_CRS = ANALYSIS_CRS
+
     started_total = time.perf_counter()
     timings: dict[str, float] = {}
+    building_summary = json.loads(BUILDING_SUMMARY.read_text(encoding="utf-8"))
+    ARCHIVE_SHA256 = args.archive_sha256 or building_summary["provenance"][
+        "dataset_archive_sha256"
+    ]
     if _sha256(ARCHIVE) != ARCHIVE_SHA256:
-        raise ValueError("PLATEAU archive hash does not match the audited Maizuru dataset")
+        raise ValueError("PLATEAU archive hash does not match the audited dataset")
     if not BUILDING_PARQUET.exists():
         raise FileNotFoundError(
             f"Run analysis.scripts.build_building_demographics first: {BUILDING_PARQUET}"
         )
-    building_summary = json.loads(BUILDING_SUMMARY.read_text(encoding="utf-8"))
     demographics = pd.read_parquet(BUILDING_PARQUET)
     euclidean_detail = pd.read_csv(BUILDING_DETAIL, dtype={"mesh_code": str})
 
     started = time.perf_counter()
     road_surfaces = read_road_surfaces(ARCHIVE).to_crs(ANALYSIS_CRS)
     timings["road_parse_seconds"] = time.perf_counter() - started
-    if len(road_surfaces) != 15_684:
-        raise ValueError(f"Expected 15,684 real LOD1 road surfaces, got {len(road_surfaces)}")
+    if len(road_surfaces) != args.expected_road_count:
+        raise ValueError(
+            f"Expected {args.expected_road_count:,} real LOD1 road surfaces, "
+            f"got {len(road_surfaces):,}"
+        )
 
     started = time.perf_counter()
     nodes, edges, graph_report = build_surface_adjacency_graph(
@@ -347,7 +405,9 @@ def main() -> None:
         origins, road_surfaces, nodes, id_column="gml_id"
     )
     boundary = boundary_from_plateau(
-        gpd.read_file(BORDER).to_crs("EPSG:4326"), city_code="26202", city_name="舞鶴市"
+        gpd.read_file(BORDER).to_crs("EPSG:4326"),
+        city_code=args.city_id,
+        city_name=args.city_name,
     )
     facilities = _facilities(boundary)
     transport = _facility_points(facilities, "transport")

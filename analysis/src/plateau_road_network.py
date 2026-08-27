@@ -188,15 +188,15 @@ def build_surface_adjacency_graph(
 ) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, dict[str, Any]]:
     """Build a deterministic fallback graph from touching LOD1 road surfaces."""
 
-    if surfaces.crs is None or surfaces.crs.to_string() != ANALYSIS_CRS:
-        raise ValueError(f"Road surfaces must use {ANALYSIS_CRS}")
+    if surfaces.crs is None or not surfaces.crs.is_projected:
+        raise ValueError("Road surfaces must use a projected analysis CRS")
     if tolerance_m < 0 or tolerance_m > 1:
         raise ValueError("Surface topology tolerance must be between zero and one metre")
     source = surfaces.sort_values("surface_id").reset_index(drop=True).copy()
     source["node_id"] = source["surface_id"].map(lambda value: f"exp::{value}")
     node_geometry = source.geometry.representative_point()
     nodes = gpd.GeoDataFrame(
-        source.drop(columns="geometry"), geometry=node_geometry, crs=ANALYSIS_CRS
+        source.drop(columns="geometry"), geometry=node_geometry, crs=surfaces.crs
     )
 
     left = source[["surface_id", "geometry"]].rename(columns={"surface_id": "left_id"})
@@ -244,7 +244,7 @@ def build_surface_adjacency_graph(
             }
         )
         union.union(surface_position[left_id], surface_position[right_id])
-    edges = gpd.GeoDataFrame(edge_rows, geometry="geometry", crs=ANALYSIS_CRS)
+    edges = gpd.GeoDataFrame(edge_rows, geometry="geometry", crs=surfaces.crs)
     if edges.empty:
         raise ValueError("Road surface graph contains no edges")
 
@@ -297,6 +297,7 @@ def read_official_generator_output(
     *,
     network_type: Literal["road", "walk"],
     graph_version: str,
+    analysis_crs: str = ANALYSIS_CRS,
 ) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, dict[str, Any]]:
     """Normalize official PLATEAU RoadNetwork Generator GeoJSON/Shapefile output."""
 
@@ -311,12 +312,12 @@ def read_official_generator_output(
         )
     if source_nodes.crs is None or source_edges.crs is None:
         raise ValueError("Official generator output must declare a CRS")
-    nodes = source_nodes.to_crs(ANALYSIS_CRS).rename(columns={"node_id": "node_id"}).copy()
+    nodes = source_nodes.to_crs(analysis_crs).rename(columns={"node_id": "node_id"}).copy()
     nodes["node_id"] = nodes["node_id"].astype(str)
     nodes["graph_method"] = OFFICIAL_GRAPH_METHOD
     nodes["graph_version"] = graph_version
     nodes["pedestrian_permission"] = "generator_walk_output" if network_type == "walk" else "unknown"
-    edges = source_edges.to_crs(ANALYSIS_CRS).rename(
+    edges = source_edges.to_crs(analysis_crs).rename(
         columns={
             "link_id": "edge_id",
             "start_id": "source_node_id",

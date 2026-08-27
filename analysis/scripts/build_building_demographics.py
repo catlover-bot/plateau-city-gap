@@ -259,7 +259,8 @@ def _usage_mapping(buildings: pd.DataFrame) -> pd.DataFrame:
     counts = buildings["usage"].astype(str).value_counts()
     mapping["observed_building_count"] = mapping["usage_code"].map(counts).fillna(0).astype(int)
     mapping["mapping_source"] = (
-        "Maizuru 2025 package codelists/Building_usage.xml; classification follows explicit Japanese label"
+        "dataset package codelists/Building_usage.xml; "
+        "classification follows the explicit official Japanese label"
     )
     mapping["codelist_member"] = USAGE_CODELIST
     mapping["codelist_member_crc32"] = ""
@@ -490,21 +491,66 @@ def _informative_examples(detail: pd.DataFrame) -> dict[str, dict]:
 
 
 def main() -> None:
+    global ANALYSIS_CRS, ARCHIVE, AUDIT_OUTPUT, BORDER, BUS_STOPS, CANDIDATE_OUTPUT
+    global DEEP_DIVE_MESH, DETAIL_OUTPUT, INVENTORY, MEDICAL, MESHES, PARQUET_OUTPUT, STATIONS
+    global SUMMARY_OUTPUT, USAGE_OUTPUT
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, default=ARCHIVE)
+    parser.add_argument("--city-id", default="26202")
+    parser.add_argument("--city-name", default="舞鶴市")
+    parser.add_argument("--meshes", type=Path, default=MESHES)
+    parser.add_argument("--stations", type=Path, default=STATIONS)
+    parser.add_argument("--bus-stops", type=Path, default=BUS_STOPS)
+    parser.add_argument("--medical", type=Path, default=MEDICAL)
+    parser.add_argument("--border", type=Path, default=BORDER)
+    parser.add_argument("--inventory", type=Path, default=INVENTORY)
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "analysis/outputs/real")
+    parser.add_argument("--output-prefix", default="maizuru")
+    parser.add_argument("--analysis-crs", default=ANALYSIS_CRS)
+    parser.add_argument("--archive-sha256")
+    parser.add_argument("--expected-building-count", type=int)
+    parser.add_argument("--deep-dive-mesh", default=DEEP_DIVE_MESH)
+    parser.add_argument("--population-year", type=int, default=2020)
+    parser.add_argument(
+        "--publish-demo",
+        action="store_true",
+        help="update the public Maizuru aggregate demo asset",
+    )
     args = parser.parse_args()
+
+    ARCHIVE = args.archive
+    MESHES = args.meshes
+    STATIONS = args.stations
+    BUS_STOPS = args.bus_stops
+    MEDICAL = args.medical
+    BORDER = args.border
+    INVENTORY = args.inventory
+    ANALYSIS_CRS = args.analysis_crs
+    DEEP_DIVE_MESH = args.deep_dive_mesh
+    AUDIT_OUTPUT = args.output_dir / f"{args.output_prefix}_building_attribute_audit.json"
+    USAGE_OUTPUT = args.output_dir / f"{args.output_prefix}_building_usage_audit.csv"
+    PARQUET_OUTPUT = args.output_dir / f"{args.output_prefix}_building_demographics.parquet"
+    SUMMARY_OUTPUT = args.output_dir / f"{args.output_prefix}_building_demographics_summary.json"
+    DETAIL_OUTPUT = args.output_dir / f"{args.output_prefix}_plateau_detail_meshes.csv"
+    CANDIDATE_OUTPUT = args.output_dir / f"{args.output_prefix}_plateau_detail_candidates.csv"
+
     total_started = time.perf_counter()
     timings: dict[str, float] = {}
 
-    if _sha256(args.archive) != ARCHIVE_SHA256:
-        raise ValueError("CityGML archive SHA-256 does not match audited Maizuru source")
     inventory = json.loads(INVENTORY.read_text(encoding="utf-8"))
+    archive_sha256 = args.archive_sha256 or inventory["archive"]["sha256"]
+    if _sha256(args.archive) != archive_sha256:
+        raise ValueError("CityGML archive SHA-256 does not match the audited inventory")
+    expected_buildings = args.expected_building_count or inventory["themes"]["bldg"][
+        "feature_count"
+    ]
 
     started = time.perf_counter()
     buildings = read_buildings(args.archive)
     timings["building_parse_seconds"] = time.perf_counter() - started
-    if len(buildings) != 44_640 or buildings["gml_id"].duplicated().any():
-        raise ValueError("Expected 44,640 unique Maizuru buildings")
+    if len(buildings) != expected_buildings or buildings["gml_id"].duplicated().any():
+        raise ValueError(f"Expected {expected_buildings:,} unique buildings")
     if buildings.geometry.isna().any() or (~buildings.geometry.is_valid).any():
         raise ValueError("Every building must have a valid analytical footprint")
 
@@ -526,7 +572,7 @@ def main() -> None:
         "method": "2D projection of actual LOD0 roof-edge; LOD1 solid projection only as fallback",
     }
     audit["provenance"] = {
-        "archive_sha256": ARCHIVE_SHA256,
+        "archive_sha256": archive_sha256,
         "product_specification_version": inventory["dataset"]["product_specification_version"],
         "ade_schema_version": inventory["dataset"]["ade_schema_version"],
         "usage_codelist": USAGE_CODELIST,
@@ -563,7 +609,9 @@ def main() -> None:
     ].copy()
     started = time.perf_counter()
     boundary = boundary_from_plateau(
-        gpd.read_file(BORDER).to_crs("EPSG:4326"), city_code="26202", city_name="舞鶴市"
+        gpd.read_file(BORDER).to_crs("EPSG:4326"),
+        city_code=args.city_id,
+        city_name=args.city_name,
     )
     facilities = _facilities(boundary)
     access = _accessibility(access_buildings, facilities)
@@ -659,8 +707,8 @@ def main() -> None:
         "origin_method": demographics["origin_method"],
         "source_gml": demographics["source_gml"],
         "source_member_crc32": demographics["source_member_crc32"],
-        "source_hash": ARCHIVE_SHA256,
-        "source_population_year": 2020,
+        "source_hash": archive_sha256,
+        "source_population_year": args.population_year,
     }
     pd.DataFrame(output_columns).to_parquet(PARQUET_OUTPUT, index=False)
 
@@ -688,15 +736,16 @@ def main() -> None:
         deep_records["nearest_conservative_medical_distance_m"],
         deep_records["estimated_elderly_population"],
     )
-    _publish_aggregated_demo_detail(deep)
+    if args.publish_demo:
+        _publish_aggregated_demo_detail(deep)
 
     timings["total_seconds"] = time.perf_counter() - total_started
     provenance = {
-        "dataset_archive_sha256": ARCHIVE_SHA256,
-        "citygml_specification": "5.0",
-        "ade_schema_version": "3.2",
+        "dataset_archive_sha256": archive_sha256,
+        "citygml_specification": inventory["dataset"]["product_specification_version"],
+        "ade_schema_version": inventory["dataset"]["ade_schema_version"],
         "population_source": "e-Stat 2020 census 500m mesh T001192",
-        "population_year": 2020,
+        "population_year": args.population_year,
         "facility_sources": {
             "station": "PLATEAU related data 2025",
             "bus_stop": "National Land Numerical Information P11 2022",
@@ -769,7 +818,7 @@ def main() -> None:
                 "weighted_medical": conservative_medical,
             },
         },
-        "deep_dive_mesh_533513314": deep,
+        f"deep_dive_mesh_{DEEP_DIVE_MESH}": deep,
         "informative_examples": _informative_examples(strict_detail),
         "performance": {
             **{key: round(value, 3) for key, value in timings.items()},

@@ -1,0 +1,250 @@
+{
+  "coverage": {
+    "building_to_graph_node_connector_m": {
+      "maximum": 340.59241368865247,
+      "median": 16.474066688159276,
+      "p90": 36.42407432536635,
+      "p95": 45.752196485290185
+    },
+    "building_to_surface_snap_m": {
+      "maximum": 115.69713306799939,
+      "median": 7.588339005840676,
+      "p90": 16.388221546046076,
+      "p95": 20.05354971498742
+    },
+    "medical_reachable_buildings": 107367,
+    "mesh_status_counts": {
+      "available": 265,
+      "partial": 36,
+      "unavailable": 1
+    },
+    "strict_demographic_buildings": 107557,
+    "transport_reachable_buildings": 107367
+  },
+  "facilities": {
+    "medical": 436,
+    "policy": "city_baseline_including_uncertain_medical",
+    "transport": 466
+  },
+  "graph": {
+    "components": 81,
+    "edges": 71487,
+    "graph_method": "experimental_citygml_lod1_surface_adjacency",
+    "graph_version": "exp-0ca779b30e21144b",
+    "largest_component_fraction": 0.9968690595996869,
+    "largest_component_nodes": 53490,
+    "nodes": 53658,
+    "pedestrian_network": false,
+    "route_semantics": "PLATEAU LOD1 road-surface adjacency path; mode not validated",
+    "tolerance_bridge_edges": 86,
+    "topology_tolerance_m": 0.05,
+    "zero_length_pairs_dropped": 1
+  },
+  "limitations": [
+    "The experimental graph is not official RoadNetwork Generator output.",
+    "Road-space mode and pedestrian permission are unknown for every fallback edge.",
+    "Representative-point links approximate travel through each LOD1 surface.",
+    "A validated walking route must not be inferred from this result.",
+    "Terrain components are added only after DEM-to-edge coverage validation."
+  ],
+  "official_generator_boundary": {
+    "adapter_implemented": true,
+    "execution_status": "not_run_windows_gui_unavailable",
+    "experimental_graph_claimed_as_official": false,
+    "repository": "https://github.com/Project-PLATEAU/PLATEAU-RoadNetwork-Generator",
+    "reviewed_commit": "5f8d7662a01f58761c98bade02fd065884679b42"
+  },
+  "performance": {
+    "access_parquet_bytes": 18664672,
+    "aggregation_seconds": 12.356,
+    "edge_parquet_bytes": 8215591,
+    "graph_build_seconds": 9.31,
+    "medical_labels_parquet_bytes": 5657290,
+    "mesh_csv_bytes": 170725,
+    "node_parquet_bytes": 6885410,
+    "peak_rss_kib": 947592,
+    "road_parse_seconds": 13.371,
+    "routing_seconds": 24.934,
+    "snap_seconds": 13.519,
+    "total_seconds": 77.479,
+    "transport_labels_parquet_bytes": 5647976
+  },
+  "privacy": {
+    "public_full_building_dataset": false,
+    "statement": "Model-based estimates allocated from 500m census statistics; not residents, registry, households, individuals, or confirmed occupancy.",
+    "suppressed_or_aggregation_affected_disaggregated": false
+  },
+  "provenance": {
+    "analysis_crs": "EPSG:6677",
+    "building_demographics_summary_sha256": "964801db7434c752795f7bd9529a1e0b8b8090870ad0486f8702175af4903085",
+    "generated_at": "2026-08-27T08:19:16.712785+00:00",
+    "graph_config_hash": "0ca779b30e21144becb74886c938a963d9615a911b7bdd8b23534e9b032093e0",
+    "plateau_archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+    "software": {
+      "commit": "05d545acbbc24c1faf81867080e14fd8e7573187",
+      "worktree_dirty": true
+    }
+  },
+  "schema_version": 1,
+  "validation": {
+    "audit_sample_buildings": [
+      {
+        "estimated_elderly_population": 553.0,
+        "gml_id": "bldg_1d41d0dc-6094-4861-ae7e-9746b515b957",
+        "node_id": "exp::tran_8ef953b2-4178-4b97-85af-cedc5b588622:0",
+        "origin_to_node_distance_m": 21.61887682272332
+      },
+      {
+        "estimated_elderly_population": 516.702664870256,
+        "gml_id": "bldg_6203b75d-a02a-4c63-8e0b-6843ab7d5c44",
+        "node_id": "exp::tran_1877e623-5cdc-410d-aff2-5737c6dcba5d:0",
+        "origin_to_node_distance_m": 37.007972935628935
+      },
+      {
+        "estimated_elderly_population": 213.7355660789362,
+        "gml_id": "bldg_071d568d-cc2e-47b3-8190-8756c18150f9",
+        "node_id": "exp::tran_cd1f9166-6750-406f-b47f-10575b6462f6:0",
+        "origin_to_node_distance_m": 23.73845711978398
+      },
+      {
+        "estimated_elderly_population": 192.20167996837807,
+        "gml_id": "bldg_356bee8e-3e38-4ecb-8730-c443dd2f97c3",
+        "node_id": "exp::tran_8d3f8894-d62c-4b67-be71-cfe692aa4016:0",
+        "origin_to_node_distance_m": 22.185361497115924
+      },
+      {
+        "estimated_elderly_population": 150.5115912481106,
+        "gml_id": "bldg_8578d5c3-a795-4628-9f63-b5750c48eb8d",
+        "node_id": "exp::tran_1fe343f9-10b7-414e-bd25-eee4da8509f8:0",
+        "origin_to_node_distance_m": 36.890476726206856
+      }
+    ],
+    "deep_dive_mesh": "533913073",
+    "medical_shortest_path_certificate": {
+      "certified": true,
+      "edge_optimality_conditions_checked": 142782,
+      "finite_to_unreachable_edges": 0,
+      "invalid_predecessors": 0,
+      "maximum_edge_optimality_violation_m": 1.1368683772161603e-13,
+      "maximum_predecessor_residual_m": 1.1368683772161603e-13,
+      "method": "edge_optimality_and_predecessor_realization_certificate",
+      "predecessor_equations_checked": 53172,
+      "production_solver_reused": false,
+      "samples": [
+        {
+          "destination_id": "medical::0407::赤川内科医院",
+          "origin_node_id": "exp::tran_8ef953b2-4178-4b97-85af-cedc5b588622:0",
+          "realization_residual_m": 3.552713678800501e-15,
+          "reported_node_distance_m": 1143.4831435882686,
+          "route_edge_count": 31,
+          "summed_graph_length_m": 1115.0971372916192,
+          "terminal_connector_m": 28.38600629664938
+        },
+        {
+          "destination_id": "medical::0269::宮本内科消化器科クリニック",
+          "origin_node_id": "exp::tran_1877e623-5cdc-410d-aff2-5737c6dcba5d:0",
+          "realization_residual_m": 9.876544027065393e-13,
+          "reported_node_distance_m": 1672.0580326777358,
+          "route_edge_count": 49,
+          "summed_graph_length_m": 1636.5274226007762,
+          "terminal_connector_m": 35.53061007695866
+        },
+        {
+          "destination_id": "medical::0177::山田医院",
+          "origin_node_id": "exp::tran_cd1f9166-6750-406f-b47f-10575b6462f6:0",
+          "realization_residual_m": 7.105427357601002e-14,
+          "reported_node_distance_m": 645.4285626219455,
+          "route_edge_count": 17,
+          "summed_graph_length_m": 599.7793373610131,
+          "terminal_connector_m": 45.64922526093237
+        },
+        {
+          "destination_id": "medical::0002::湘南希望の郷医務室",
+          "origin_node_id": "exp::tran_8d3f8894-d62c-4b67-be71-cfe692aa4016:0",
+          "realization_residual_m": 3.907985046680551e-14,
+          "reported_node_distance_m": 1128.7449657737575,
+          "route_edge_count": 32,
+          "summed_graph_length_m": 1101.6455583410188,
+          "terminal_connector_m": 27.099407432738605
+        },
+        {
+          "destination_id": "medical::0261::アズビル株式会社　藤沢テクノセンター健康管理室",
+          "origin_node_id": "exp::tran_1fe343f9-10b7-414e-bd25-eee4da8509f8:0",
+          "realization_residual_m": 2.1316282072803006e-14,
+          "reported_node_distance_m": 548.9892653775399,
+          "route_edge_count": 11,
+          "summed_graph_length_m": 486.231678048752,
+          "terminal_connector_m": 62.75758732878794
+        }
+      ],
+      "seed_upper_bound_violation_m": 0.0,
+      "terminal_seed_mismatches": 0,
+      "tolerance_m": 1e-07
+    },
+    "network_below_euclidean_medical_records": 0,
+    "network_below_euclidean_transport_records": 0,
+    "positive_edge_lengths": true,
+    "referential_integrity": true,
+    "transport_shortest_path_certificate": {
+      "certified": true,
+      "edge_optimality_conditions_checked": 142782,
+      "finite_to_unreachable_edges": 0,
+      "invalid_predecessors": 0,
+      "maximum_edge_optimality_violation_m": 1.1368683772161603e-13,
+      "maximum_predecessor_residual_m": 1.1368683772161603e-13,
+      "method": "edge_optimality_and_predecessor_realization_certificate",
+      "predecessor_equations_checked": 53074,
+      "production_solver_reused": false,
+      "samples": [
+        {
+          "destination_id": "bus_stop::0022::上谷台",
+          "origin_node_id": "exp::tran_8ef953b2-4178-4b97-85af-cedc5b588622:0",
+          "realization_residual_m": 4.596323321948148e-14,
+          "reported_node_distance_m": 358.3225064897222,
+          "route_edge_count": 7,
+          "summed_graph_length_m": 356.41319504727784,
+          "terminal_connector_m": 1.9093114424443802
+        },
+        {
+          "destination_id": "bus_stop::0033::藤沢・綾瀬ふれあいの杜",
+          "origin_node_id": "exp::tran_1877e623-5cdc-410d-aff2-5737c6dcba5d:0",
+          "realization_residual_m": 1.554312234475219e-14,
+          "reported_node_distance_m": 159.15080561711198,
+          "route_edge_count": 5,
+          "summed_graph_length_m": 155.6871997544734,
+          "terminal_connector_m": 3.463605862638603
+        },
+        {
+          "destination_id": "bus_stop::0428::辻堂西海岸",
+          "origin_node_id": "exp::tran_cd1f9166-6750-406f-b47f-10575b6462f6:0",
+          "realization_residual_m": 1.9984014443252818e-14,
+          "reported_node_distance_m": 193.45359756653258,
+          "route_edge_count": 5,
+          "summed_graph_length_m": 190.8840394345114,
+          "terminal_connector_m": 2.5695581320211915
+        },
+        {
+          "destination_id": "bus_stop::0112::獺郷",
+          "origin_node_id": "exp::tran_8d3f8894-d62c-4b67-be71-cfe692aa4016:0",
+          "realization_residual_m": 2.0317081350640365e-13,
+          "reported_node_distance_m": 722.9665762856746,
+          "route_edge_count": 15,
+          "summed_graph_length_m": 721.6031115961594,
+          "terminal_connector_m": 1.3634646895150369
+        },
+        {
+          "destination_id": "bus_stop::0387::御霊神社前",
+          "origin_node_id": "exp::tran_1fe343f9-10b7-414e-bd25-eee4da8509f8:0",
+          "realization_residual_m": 1.2434497875801753e-13,
+          "reported_node_distance_m": 273.9572119751001,
+          "route_edge_count": 14,
+          "summed_graph_length_m": 270.6573930453298,
+          "terminal_connector_m": 3.2998189297701863
+        }
+      ],
+      "seed_upper_bound_violation_m": 0.0,
+      "terminal_seed_mismatches": 0,
+      "tolerance_m": 1e-07
+    }
+  }
+}

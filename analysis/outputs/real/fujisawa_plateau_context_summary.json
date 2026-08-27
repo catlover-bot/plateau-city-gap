@@ -1,0 +1,455 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-27T08:37:41Z",
+  "algorithm_version": "plateau-context-1.0.0",
+  "city": {
+    "city_id": "14205",
+    "name": "藤沢市"
+  },
+  "dataset": {
+    "plateau_year": 2025,
+    "archive_file": "14205_fujisawa-shi_city_2025_citygml_1_op.zip",
+    "archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+    "source_crs": "EPSG:6697",
+    "analysis_crs": "EPSG:6677"
+  },
+  "feature_counts": {
+    "land_use": 110898,
+    "urban_planning": 1537,
+    "landslide": 1261,
+    "flood": 19070,
+    "tsunami": 4296,
+    "high_tide": 2496,
+    "inland_flood": 36186
+  },
+  "surface_part_counts": {
+    "land_use": 110898,
+    "urban_planning": 1537,
+    "landslide": 1261,
+    "flood": 2642280,
+    "tsunami": 143296,
+    "high_tide": 204738,
+    "inland_flood": 562928
+  },
+  "targets": {
+    "strict_residential_buildings": 107557,
+    "census_meshes": 327,
+    "scenario_candidates": 10,
+    "experimental_road_graph_edges": 71487
+  },
+  "coverage": {
+    "building_landuse": 107486,
+    "building_planning": 107486,
+    "building_hazard": 26996,
+    "mesh_landuse": 326,
+    "mesh_planning": 326,
+    "mesh_hazard": 309,
+    "candidate_landuse": 10,
+    "candidate_planning": 10,
+    "candidate_hazard": 6,
+    "road_edge_hazard": 30073
+  },
+  "landuse_classes": [
+    {
+      "class_code": "201",
+      "class_label": "田（水田）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 350,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "202",
+      "class_label": "畑（畑、樹園地、採草地、養鶏（牛・豚）場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3734,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "203",
+      "class_label": "山林（樹林地）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1289,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "204",
+      "class_label": "水面（河川水面、湖沼、ため池、用水路、濠、運河水面）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 423,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "205",
+      "class_label": "その他自然地（原野・牧野、荒れ地（耕作放棄地等自然的状況のもの）、低湿地、河川敷・河原、海浜、湖岸）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1915,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "211",
+      "class_label": "住宅用地（住宅、共同住宅、店舗等併用住宅、店舗等併用共同住宅、作業所併用住宅）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 22525,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "212",
+      "class_label": "商業用地（業務施設、商業施設、宿泊施設、商業系複合施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 2903,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "213",
+      "class_label": "工業用地（工場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 546,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "214",
+      "class_label": "公益施設用地（官公庁施設、文教厚生施設、供給処理施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 2438,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "215",
+      "class_label": "道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 66022,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "216",
+      "class_label": "交通施設用地（運輸倉庫施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1216,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "217",
+      "class_label": "公共空地（公園・緑地、広場、運動場、墓園）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 504,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "219",
+      "class_label": "農林漁業施設用地（農林漁業用施設）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1084,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "220",
+      "class_label": "その他①（ゴルフ場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 18,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "221",
+      "class_label": "その他②（太陽光発電のシステムを直接整備している土地）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "222",
+      "class_label": "その他③（平面駐車場）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 3275,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "223",
+      "class_label": "その他④（その他①～③以外の用途に供されている都市的土地利用（建物跡地、資材置場、改変工事中の土地）、法面（道路、造成地等の主利用に含まれない法面））",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 968,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "260",
+      "class_label": "農地（田、畑の区分がない）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 227,
+      "source_area_sum_m2": 0
+    },
+    {
+      "class_code": "263",
+      "class_label": "空地（その他①～④の区分が無い）",
+      "class_codelist": "Common_landUseType.xml",
+      "feature_count": 1458,
+      "source_area_sum_m2": 0
+    }
+  ],
+  "planning_feature_types": {
+    "AreaClassification": 14,
+    "DistrictPlan": 44,
+    "FirePreventionDistrict": 30,
+    "HighLevelUseDistrict": 2,
+    "IndustrialParkDevelopmentProject": 1,
+    "LandReadjustmentProject": 17,
+    "LandReadjustmentPromotionArea": 1,
+    "LandscapeZone": 2,
+    "MarketsSlaughterhousesCrematoria": 2,
+    "OpenSpaceForPublicUse": 226,
+    "PortZone": 1,
+    "ProductiveGreenZone": 564,
+    "ScenicDistrict": 9,
+    "SpecialGreenSpaceConservationDistrict": 9,
+    "TrafficFacility": 359,
+    "TreatmentFacility": 15,
+    "UrbanPlanningArea": 3,
+    "UrbanRedevelopmentProject": 2,
+    "UseDistrict": 233,
+    "Waterway": 3
+  },
+  "hazard_rank_counts": [
+    {
+      "hazard_type": "flood",
+      "rank_code": "1",
+      "rank_label": "0.5m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 10346
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "2",
+      "rank_label": "0.5m以上3.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 4269
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "3",
+      "rank_label": "3.0m以上5.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 3274
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "4",
+      "rank_label": "5.0m以上10.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 1179
+    },
+    {
+      "hazard_type": "flood",
+      "rank_code": "5",
+      "rank_label": "10.0m以上20.0m未満",
+      "rank_codelist": "RiverFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 2
+    },
+    {
+      "hazard_type": "high_tide",
+      "rank_code": "1",
+      "rank_label": "0.01m以上0.3m未満",
+      "rank_codelist": "HighTideRiskAttribute_rankOrg.xml",
+      "feature_count": 800
+    },
+    {
+      "hazard_type": "high_tide",
+      "rank_code": "2",
+      "rank_label": "0.3m以上0.5m未満",
+      "rank_codelist": "HighTideRiskAttribute_rankOrg.xml",
+      "feature_count": 990
+    },
+    {
+      "hazard_type": "high_tide",
+      "rank_code": "3",
+      "rank_label": "0.5m以上1.0m未満",
+      "rank_codelist": "HighTideRiskAttribute_rankOrg.xml",
+      "feature_count": 440
+    },
+    {
+      "hazard_type": "high_tide",
+      "rank_code": "4",
+      "rank_label": "1.0m以上3.0m未満",
+      "rank_codelist": "HighTideRiskAttribute_rankOrg.xml",
+      "feature_count": 265
+    },
+    {
+      "hazard_type": "high_tide",
+      "rank_code": "5",
+      "rank_label": "3.0m以上5.0m未満",
+      "rank_codelist": "HighTideRiskAttribute_rankOrg.xml",
+      "feature_count": 1
+    },
+    {
+      "hazard_type": "inland_flood",
+      "rank_code": "1",
+      "rank_label": "0.3m以上0.5m未満",
+      "rank_codelist": "InlandFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 22631
+    },
+    {
+      "hazard_type": "inland_flood",
+      "rank_code": "2",
+      "rank_label": "0.5m以上1.0m未満",
+      "rank_codelist": "InlandFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 10437
+    },
+    {
+      "hazard_type": "inland_flood",
+      "rank_code": "3",
+      "rank_label": "1.0m以上3.0m未満",
+      "rank_codelist": "InlandFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 2998
+    },
+    {
+      "hazard_type": "inland_flood",
+      "rank_code": "4",
+      "rank_label": "3.0m以上5.0m未満",
+      "rank_codelist": "InlandFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 106
+    },
+    {
+      "hazard_type": "inland_flood",
+      "rank_code": "5",
+      "rank_label": "5.0m以上10.0m未満",
+      "rank_codelist": "InlandFloodingRiskAttribute_rankOrg.xml",
+      "feature_count": 14
+    },
+    {
+      "hazard_type": "landslide",
+      "rank_code": "1",
+      "rank_label": "土砂災害警戒区域（指定済）",
+      "rank_codelist": "LandSlideRiskAttribute_areaType.xml",
+      "feature_count": 650
+    },
+    {
+      "hazard_type": "landslide",
+      "rank_code": "2",
+      "rank_label": "土砂災害特別警戒区域（指定済）",
+      "rank_codelist": "LandSlideRiskAttribute_areaType.xml",
+      "feature_count": 611
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "1",
+      "rank_label": "0.15m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 417
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "10",
+      "rank_label": "6.00m以上7.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 235
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "11",
+      "rank_label": "7.00m以上8.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 155
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "12",
+      "rank_label": "8.00m以上9.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 160
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "13",
+      "rank_label": "9.00m以上",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 98
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "2",
+      "rank_label": "0.15m以上0.50m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 525
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "3",
+      "rank_label": "0.50m以上0.80m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 536
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "4",
+      "rank_label": "0.80m以上1.20m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 465
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "5",
+      "rank_label": "1.20m以上2.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 375
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "6",
+      "rank_label": "2.00m以上3.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 363
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "7",
+      "rank_label": "3.00m以上4.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 330
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "8",
+      "rank_label": "4.00m以上5.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 341
+    },
+    {
+      "hazard_type": "tsunami",
+      "rank_code": "9",
+      "rank_label": "5.00m以上6.00m未満",
+      "rank_codelist": "TsunamiRiskAttribute_rankOrg.xml",
+      "feature_count": 296
+    }
+  ],
+  "deep_dive_mesh": {
+    "mesh_code": "533913073",
+    "landuse_context": "[{\"class_code\":\"202\",\"class_label\":\"畑（畑、樹園地、採草地、養鶏（牛・豚）場）\",\"feature_count\":12,\"intersection_area_m2\":12904.807896305916},{\"class_code\":\"205\",\"class_label\":\"その他自然地（原野・牧野、荒れ地（耕作放棄地等自然的状況のもの）、低湿地、河川敷・河原、海浜、湖岸）\",\"feature_count\":1,\"intersection_area_m2\":315.87444703383363},{\"class_code\":\"211\",\"class_label\":\"住宅用地（住宅、共同住宅、店舗等併用住宅、店舗等併用共同住宅、作業所併用住宅）\",\"feature_count\":124,\"intersection_area_m2\":109482.648206469},{\"class_code\":\"212\",\"class_label\":\"商業用地（業務施設、商業施設、宿泊施設、商業系複合施設）\",\"feature_count\":9,\"intersection_area_m2\":11921.948073315209},{\"class_code\":\"213\",\"class_label\":\"工業用地（工場）\",\"feature_count\":8,\"intersection_area_m2\":14774.326294196815},{\"class_code\":\"214\",\"class_label\":\"公益施設用地（官公庁施設、文教厚生施設、供給処理施設）\",\"feature_count\":6,\"intersection_area_m2\":8244.257091232259},{\"class_code\":\"215\",\"class_label\":\"道路用地（道路、駅前広場、私有地内に存在する沿道用途の「私道」または、私有地の一部分であるものの公共の通行に供されている土地の部分）\",\"feature_count\":338,\"intersection_area_m2\":26941.18696370697},{\"class_code\":\"216\",\"class_label\":\"交通施設用地（運輸倉庫施設）\",\"feature_count\":7,\"intersection_area_m2\":6718.031949079752},{\"class_code\":\"217\",\"class_label\":\"公共空地（公園・緑地、広場、運動場、墓園）\",\"feature_count\":2,\"intersection_area_m2\":792.6826742110411},{\"class_code\":\"219\",\"class_label\":\"農林漁業施設用地（農林漁業用施設）\",\"feature_count\":2,\"intersection_area_m2\":4107.653107731457},{\"class_code\":\"222\",\"class_label\":\"その他③（平面駐車場）\",\"feature_count\":22,\"intersection_area_m2\":5775.218329370291},{\"class_code\":\"223\",\"class_label\":\"その他④（その他①～③以外の用途に供されている都市的土地利用（建物跡地、資材置場、改変工事中の土地）、法面（道路、造成地等の主利用に含まれない法面））\",\"feature_count\":4,\"intersection_area_m2\":1914.8222323366085},{\"class_code\":\"263\",\"class_label\":\"空地（その他①～④の区分が無い）\",\"feature_count\":3,\"intersection_area_m2\":600.1771921082692}]",
+    "planning_context": "[{\"gml_id\":\"urf_d18ade9f-170e-4d7a-bd7e-a1b05931afe5\",\"intersection_area_m2\":31847.252534709118,\"name\":null,\"planning_label\":\"準防火地域\",\"planning_type\":\"FirePreventionDistrict\"},{\"gml_id\":\"urf_c635902c-d4bd-4daa-af8f-e6cf3d0bfed7\",\"intersection_area_m2\":268.0184842286858,\"name\":\"藤沢町田線\",\"planning_label\":\"道路\",\"planning_type\":\"TrafficFacility\"},{\"gml_id\":\"urf_fd9a614b-c32d-49cf-a81f-a5fbfecbf11b\",\"intersection_area_m2\":1578.618909805791,\"name\":\"長後北歩行者専用道\",\"planning_label\":\"道路\",\"planning_type\":\"TrafficFacility\"},{\"gml_id\":\"urf_5115e9b2-35a1-49b9-9b1d-9c7cd60c16c4\",\"intersection_area_m2\":2261.9831695126527,\"name\":null,\"planning_label\":\"準住居地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_a0b77eda-c504-4de5-8a2a-eb827c7518bc\",\"intersection_area_m2\":40620.812155512016,\"name\":null,\"planning_label\":\"第1種低層住居専用地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_65a02925-ef39-4f96-a31f-46ef250bc5fe\",\"intersection_area_m2\":1946.1187788292018,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_d121e96f-8a47-45a0-8eff-84f38eda1d81\",\"intersection_area_m2\":1376.035462312354,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_758be575-e515-4e01-9dad-df267c899f35\",\"intersection_area_m2\":326.7938254362578,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_debfea77-b0ed-4c52-9091-5ef94cc51168\",\"intersection_area_m2\":2785.3425810628287,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_9a2c03ee-46a5-419b-85b1-d6cc5d34ba67\",\"intersection_area_m2\":64145.34343120908,\"name\":null,\"planning_label\":\"工業地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_215d6900-4ce9-4cff-ac0d-0582c1a59f9c\",\"intersection_area_m2\":204493.65613592695,\"name\":null,\"planning_label\":\"都市計画区域\",\"planning_type\":\"UrbanPlanningArea\"},{\"gml_id\":\"urf_5fdceb04-055c-4db8-8b69-0e53d439a6c4\",\"intersection_area_m2\":204493.65613592695,\"name\":null,\"planning_label\":\"市街化区域\",\"planning_type\":\"AreaClassification\"},{\"gml_id\":\"urf_cf1842d3-1915-45d4-9398-a3125584b0ed\",\"intersection_area_m2\":204493.65613592695,\"name\":\"弟１号公共下水道\",\"planning_label\":\"下水道\",\"planning_type\":\"TreatmentFacility\"},{\"gml_id\":\"urf_ee2a58eb-9c74-49f6-a83b-315fe4ecad02\",\"intersection_area_m2\":29585.269365196466,\"name\":null,\"planning_label\":\"第1種住居地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_a0e569b2-2cea-4816-a4c8-edd0f187825c\",\"intersection_area_m2\":67880.24801449674,\"name\":null,\"planning_label\":\"第1種低層住居専用地域\",\"planning_type\":\"UseDistrict\"},{\"gml_id\":\"urf_333418e0-ed1a-44a5-9425-135535d5fe7c\",\"intersection_area_m2\":336.42537441994733,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_0d7f6864-750f-41dc-b228-e7a9819db7b2\",\"intersection_area_m2\":3265.8262737255886,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"},{\"gml_id\":\"urf_cae0f9c9-1ba0-4684-baf0-3433c202683a\",\"intersection_area_m2\":2675.625424332892,\"name\":null,\"planning_label\":\"生産緑地地区\",\"planning_type\":\"ProductiveGreenZone\"}]",
+    "hazard_context": "[{\"gml_id\":\"ifld_fba7a5cf-6992-4ca5-860e-0da80de566a7\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236218929937905,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_fdc49f3e-c3cb-47f5-93b2-747252ba079b\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":104.93634412438922,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_bd67ed33-9eb0-42d1-a55a-0d7e2e04d4fd\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23093201530181,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_11fbdd1c-a86e-4cb4-a52e-910f759bda30\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":52.467611082172986,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_0e1bdd4c-d3fe-4a77-a32a-6589df6d0b87\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23689397055363,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_a8988acd-6cf0-4089-bc8f-54814ce800c8\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237169983238076,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_2a8dbc21-ecf5-4d4e-b21f-0ffbaf66f90c\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":157.94933071953594,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_1830d68c-ceea-4ede-9b07-4c9f4fcecd84\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":52.46831389935064,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_81ca7696-2c09-428e-b74a-38a98720eff3\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":472.23227382499965,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_bc6500ae-be11-4574-b9b4-40ea074c7d83\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":104.94244348604839,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_9911d81e-231f-414e-b1b3-44d4c2282e4b\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":52.46794075506873,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_47029a51-9545-436d-9f40-2701eb7baeef\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237005022195042,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_ecd13602-e353-429a-ae42-72bafc1da989\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237156907155157,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_60d5e495-d388-43a5-8035-9d940ffb7af9\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":52.4678969470826,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_83c4b68b-0a76-4a18-a498-3f48fedab571\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":51.25940023612643,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_211625e5-5c34-4af4-87c4-2bb1fdd732c2\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236994275303232,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_c57d3575-85e2-4235-8536-5d9a785cb41a\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.28119819897696596,\"rank_code\":\"3\",\"rank_label\":\"1.0m以上3.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_af4759e0-946b-4db8-90aa-71e12898af27\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.28268401834696966,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_582cdf35-8371-45e2-a366-eec04e570dc3\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.234290464508486,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_4530c988-0d37-4510-9176-22a37baaadeb\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.71214475620833,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_ca544cfe-8f50-4528-abe9-5a2f8e5daae0\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237173576883762,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_f7f4ebb9-c37d-4983-a215-ed64fb435f55\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236638411726926,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_52f700a7-a2ff-4b4c-9669-4cba0e7b94c2\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":131.17979269124254,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_312eef87-156f-4a3c-bd16-4b75e6c9f895\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":157.4169765320902,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_a6a0764b-7423-4bac-82e2-bdce993e4ee0\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237202292192812,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_dfbe5b2a-4c86-45fd-a077-2351821eb2bd\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.70529511160572,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_8fea3cfd-7077-4df5-8814-9c085241fa89\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23708182535732,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_bd754adc-dcf5-47d2-8a37-41a53d365193\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.70488193023135,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_52817077-5c96-429a-bc88-f30d20a1f311\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23073163657565,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_a4af9310-19a3-473b-98e4-0f5046548d29\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236827576410786,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_e21db608-0156-42b6-b564-e5363404c469\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.2368278138934,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_079f92ad-2fe6-4f6c-b6f6-51598929c6d7\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.69782515989824,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_6d371e51-2aea-4c97-9bfd-64a62435a320\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236827094330764,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_ca4a7280-bcc3-4514-9c5f-9c5fb2fe8a48\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23681375360554,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_1cea8f7a-d380-490e-bf5d-8ff8438879d2\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":52.47082239886986,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_8c67ba1c-301a-4ab2-9bef-523866202191\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.7042396452302,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_2e782dc2-a64c-4431-82dd-a257309999f3\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":1311.7293698283684,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_7dc43816-3eeb-49b5-9800-379ac70ae98b\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.234653556405185,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_961a81c4-9915-4afd-9e2f-b8829048e606\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23028267950865,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_a35ef285-093c-4444-bf75-89fc1a960685\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.236788317534415,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_678e1f98-2f15-4390-a835-2171cac5afe4\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.240973119093745,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_a404ada8-52fd-45b5-907d-d1c10f3fe0fd\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":78.7037894725512,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_fd4b3daf-a51d-4c52-833a-fca658997fed\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.006722722343689426,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_46208d91-9003-4ae0-9a0f-d1adcedba6a1\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.29037832856291035,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_2d69877c-6afa-48e3-b3e4-34517e71ec4e\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.6003081237374291,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_aff3cb0b-3a9d-467d-a246-59400b4c2e06\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.237456222334572,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_650410f3-6c61-4e2d-8b09-6fa0ec3231e2\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.6002916625715021,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_d3a7962d-939d-4a7b-bcb3-2798b9efe53c\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":0.600143694868686,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_6167ee6e-af88-489d-bbdb-3715be5b57cc\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.231106430519546,\"rank_code\":\"2\",\"rank_label\":\"0.5m以上1.0m未満\",\"review_status\":\"additional_confirmation_required\"},{\"gml_id\":\"ifld_7f882377-51e6-4929-9d97-4742b04671e4\",\"hazard_type\":\"inland_flood\",\"intersection_area_m2\":26.23402709199839,\"rank_code\":\"1\",\"rank_label\":\"0.3m以上0.5m未満\",\"review_status\":\"additional_confirmation_required\"}]",
+    "hazard_overlap": true,
+    "hazard_review_status": "additional_confirmation_required"
+  },
+  "hazard_interpretation": {
+    "overlap_means": "additional_confirmation_required",
+    "overlap_does_not_mean": "siting_impossible",
+    "depth_source": "official rankOrg codelist labels; geometry Z is not treated as depth",
+    "overlap_measure_note": "Relation tables retain each official feature intersection. Sums across overlapping official features can double-count and are labelled feature-intersection sums."
+  },
+  "lineage": {
+    "feature_key": "PLATEAU gml:id",
+    "source_member_fields": [
+      "source_gml",
+      "source_member_crc32"
+    ],
+    "labels": "package-local official GML codelists only",
+    "geometry": "LOD1 polygons with interior rings preserved",
+    "spatial_relation": "exact intersects/intersection in EPSG:6677"
+  },
+  "runtime_seconds": 1116.126,
+  "detailed_outputs": [
+    "fujisawa_plateau_landuse.parquet",
+    "fujisawa_plateau_urban_planning.parquet",
+    "fujisawa_plateau_hazards.parquet",
+    "fujisawa_building_plateau_context.parquet",
+    "fujisawa_mesh_plateau_context.parquet",
+    "fujisawa_road_hazard_context.parquet",
+    "fujisawa_scenario_candidate_context.parquet"
+  ]
+}

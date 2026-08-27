@@ -12,7 +12,7 @@ from typing import Any
 
 import yaml
 
-from backend.citygap_platform.domain.registry import CAPABILITIES, validate_platform_registry
+from backend.citygap_platform.domain.registry import validate_platform_registry
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "analysis/outputs/real"
@@ -75,7 +75,12 @@ def build() -> dict[str, Any]:
         configurations[slug] = yaml.safe_load(config_path.read_text(encoding="utf-8"))
         summaries[slug] = json.loads(summary_path.read_text(encoding="utf-8"))
 
-    inventory = json.loads((OUTPUT / "maizuru_plateau_inventory.json").read_text(encoding="utf-8"))
+    inventories = {
+        slug: json.loads(
+            (OUTPUT / f"{slug}_plateau_inventory.json").read_text(encoding="utf-8")
+        )
+        for slug in configurations
+    }
     cities = []
     datasets = []
     versions = []
@@ -111,9 +116,9 @@ def build() -> dict[str, Any]:
             version_by_city_key[(city_code, key)] = version_id
             archive_sha256 = None
             archive_file = None
-            if slug == "maizuru" and key == "plateau":
-                archive_sha256 = inventory["archive"]["sha256"]
-                archive_file = inventory["archive"]["file_name"]
+            if key == "plateau":
+                archive_sha256 = inventories[slug]["archive"]["sha256"]
+                archive_file = inventories[slug]["archive"]["file_name"]
             versions.append(
                 {
                     "dataset_version_id": version_id,
@@ -220,15 +225,62 @@ def build() -> dict[str, Any]:
             fujisawa_versions,
         )
     )
-    for name in CAPABILITIES:
-        if name == "screening":
-            continue
-        note = (
-            "No GTFS feed is registered; P11 points are not represented as GTFS."
-            if name == "gtfs"
-            else "Capability has not been computed from Fujisawa source data in this platform."
+    capabilities.extend(
+        [
+            _capability(
+                "14205",
+                "building_detail",
+                "available",
+                "Actual Fujisawa CityGML buildings drive demographic allocation and accessibility.",
+                [_artifact("analysis/outputs/real/fujisawa_building_demographics_summary.json")],
+                [version_by_city_key[("14205", "plateau")]],
+            ),
+            _capability(
+                "14205",
+                "road_network",
+                "partial",
+                "Experimental LOD1 surface-adjacency graph; not a validated pedestrian network.",
+                [_artifact("analysis/outputs/real/fujisawa_road_network_summary.json")],
+                [version_by_city_key[("14205", "plateau")]],
+            ),
+            _capability(
+                "14205",
+                "terrain",
+                "partial",
+                "Official DEM observations are attached where covered; no walking penalty is inferred.",
+                [_artifact("analysis/outputs/real/fujisawa_terrain_network_summary.json")],
+                [version_by_city_key[("14205", "plateau")]],
+            ),
+        ]
+    )
+    fujisawa_context = [_artifact("analysis/outputs/real/fujisawa_plateau_context_summary.json")]
+    for name in ("land_use", "urban_planning", "hazard"):
+        capabilities.append(
+            _capability(
+                "14205",
+                name,
+                "available",
+                "Official Fujisawa PLATEAU context is parsed and spatially joined for review.",
+                fujisawa_context,
+                [version_by_city_key[("14205", "plateau")]],
+            )
         )
-        capabilities.append(_capability("14205", name, "unavailable", note))
+    capabilities.extend(
+        [
+            _capability(
+                "14205",
+                "gtfs",
+                "unavailable",
+                "No official stable GTFS feed is registered; P11 is not represented as GTFS.",
+            ),
+            _capability(
+                "14205",
+                "scenario",
+                "unavailable",
+                "A Fujisawa scenario set has not been optimized or municipally reviewed.",
+            ),
+        ]
+    )
 
     run_specs = (
         ("26202", "screening", "analysis/outputs/real/maizuru_summary.json"),
@@ -250,11 +302,23 @@ def build() -> dict[str, Any]:
             "scenario",
             "analysis/outputs/real/maizuru_network_scenarios.json",
         ),
+        (
+            "14205",
+            "building_detail",
+            "analysis/outputs/real/fujisawa_building_demographics_summary.json",
+        ),
+        ("14205", "road_network", "analysis/outputs/real/fujisawa_road_network_summary.json"),
+        ("14205", "terrain", "analysis/outputs/real/fujisawa_terrain_network_summary.json"),
+        (
+            "14205",
+            "spatial_context",
+            "analysis/outputs/real/fujisawa_plateau_context_summary.json",
+        ),
     )
     analysis_runs = []
     for city_code, analysis_type, artifact_name in run_specs:
         artifact_path = ROOT / artifact_name
-        config_slug = "maizuru" if city_code == "26202" else "fujisawa"
+        config_slug = {"26202": "maizuru", "14205": "fujisawa"}[city_code]
         config_path = ROOT / f"analysis/config/{config_slug}.yaml"
         analysis_runs.append(
             {

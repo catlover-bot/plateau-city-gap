@@ -29,9 +29,20 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def canonical_scenario_files(output: str | Path) -> tuple[dict[str, Any], dict[str, Path]]:
+def canonical_scenario_files(
+    output: str | Path, artifact_prefix: str | None = None
+) -> tuple[dict[str, Any], dict[str, Path]]:
     directory = Path(output)
-    manifest_path = directory / "maizuru_scenario_canonical_manifest.json"
+    if artifact_prefix:
+        manifest_path = directory / f"{artifact_prefix}_scenario_canonical_manifest.json"
+    else:
+        candidates = sorted(directory.glob("*_scenario_canonical_manifest.json"))
+        if len(candidates) != 1:
+            raise FileNotFoundError(
+                f"Expected exactly one canonical scenario manifest in {directory}; "
+                f"found {len(candidates)}. Supply artifact_prefix."
+            )
+        manifest_path = candidates[0]
     if not manifest_path.exists():
         raise FileNotFoundError(manifest_path)
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -69,12 +80,14 @@ def _json_safe(value: Any) -> Any:
     return value
 
 
-def load_scenario_artifacts(database_url: str, output: str | Path) -> dict[str, Any]:
+def load_scenario_artifacts(
+    database_url: str, output: str | Path, artifact_prefix: str | None = None
+) -> dict[str, Any]:
     """Persist the exact canonical run versions; no implicit latest-version selection is used."""
 
     import psycopg
 
-    manifest, paths = canonical_scenario_files(output)
+    manifest, paths = canonical_scenario_files(output, artifact_prefix)
     frames = {name: pd.read_parquet(path) for name, path in paths.items()}
     expected = {name: int(manifest["canonical_tables"][name]["row_count"]) for name in TABLE_NAMES}
     if {name: len(frame) for name, frame in frames.items()} != expected:

@@ -34,17 +34,17 @@ def _copy(connection: Any, table: str, columns: list[str], rows: Any) -> None:
             copy.write_row(row)
 
 
-def _require_files(output: Path) -> dict[str, Path]:
+def _require_files(output: Path, artifact_prefix: str) -> dict[str, Path]:
     files = {
-        "summary": output / "maizuru_plateau_context_summary.json",
-        "landuse": output / "maizuru_plateau_landuse.parquet",
-        "planning": output / "maizuru_plateau_urban_planning.parquet",
-        "hazards": output / "maizuru_plateau_hazards.parquet",
-        "building": output / "maizuru_building_plateau_context.parquet",
-        "mesh": output / "maizuru_mesh_plateau_context.parquet",
-        "candidate": output / "maizuru_scenario_candidate_context.parquet",
-        "road": output / "maizuru_road_hazard_context.parquet",
-        "road_edges": output / "maizuru_road_graph_edges.parquet",
+        "summary": output / f"{artifact_prefix}_plateau_context_summary.json",
+        "landuse": output / f"{artifact_prefix}_plateau_landuse.parquet",
+        "planning": output / f"{artifact_prefix}_plateau_urban_planning.parquet",
+        "hazards": output / f"{artifact_prefix}_plateau_hazards.parquet",
+        "building": output / f"{artifact_prefix}_building_plateau_context.parquet",
+        "mesh": output / f"{artifact_prefix}_mesh_plateau_context.parquet",
+        "candidate": output / f"{artifact_prefix}_scenario_candidate_context.parquet",
+        "road": output / f"{artifact_prefix}_road_hazard_context.parquet",
+        "road_edges": output / f"{artifact_prefix}_road_graph_edges.parquet",
     }
     missing = [str(path) for path in files.values() if not path.exists()]
     if missing:
@@ -54,13 +54,17 @@ def _require_files(output: Path) -> dict[str, Path]:
     return files
 
 
-def load_context_artifacts(database_url: str, output_directory: str | Path) -> dict[str, Any]:
+def load_context_artifacts(
+    database_url: str,
+    output_directory: str | Path,
+    artifact_prefix: str = "maizuru",
+) -> dict[str, Any]:
     """Load a verified context run; this does not claim DB execution until called."""
 
     import psycopg
 
     output = Path(output_directory)
-    files = _require_files(output)
+    files = _require_files(output, artifact_prefix)
     summary = json.loads(files["summary"].read_text(encoding="utf-8"))
     config_hash = context_config_hash(summary)
     landuse = pd.read_parquet(files["landuse"])

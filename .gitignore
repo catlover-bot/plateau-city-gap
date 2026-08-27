@@ -22,6 +22,8 @@ analysis/outputs/**
 !analysis/outputs/real/**
 # Detailed building estimates remain local until municipal/privacy review.
 analysis/outputs/real/*.parquet
+# Large per-mesh context tables remain regenerable municipal artifacts.
+analysis/outputs/real/*_mesh_plateau_context.csv
 
 # Frontend/build artifacts
 node_modules/

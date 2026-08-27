@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import resource
@@ -15,7 +16,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from analysis.scripts.build_building_demographics import ARCHIVE, ARCHIVE_SHA256
+from analysis.scripts.build_building_demographics import ARCHIVE
 from analysis.src.building_demographics import weighted_statistics
 from analysis.src.plateau_terrain import (
     assign_dem_elevations,
@@ -40,6 +41,7 @@ TERRAIN_ACCESS_PARQUET = REAL / "maizuru_building_terrain_accessibility.parquet"
 MESH_OUTPUT = REAL / "maizuru_terrain_accessibility_meshes.csv"
 SUMMARY_OUTPUT = REAL / "maizuru_terrain_network_summary.json"
 EVIDENCE_OUTPUT = REAL / "maizuru_network_deep_dive_terrain.json"
+ARCHIVE_SHA256 = ""
 
 
 def _sha256(path: Path) -> str:
@@ -169,6 +171,37 @@ def _route_evidence(
 
 
 def main() -> None:
+    global ACCESS_PARQUET, ARCHIVE, ARCHIVE_SHA256, DEMOGRAPHICS_PARQUET, EDGE_PARQUET
+    global EVIDENCE_OUTPUT, MEDICAL_LABELS_PARQUET, MESH_OUTPUT, NODE_PARQUET
+    global ROAD_EVIDENCE, ROAD_SUMMARY, SUMMARY_OUTPUT, TERRAIN_ACCESS_PARQUET
+    global TERRAIN_EDGE_PARQUET, TERRAIN_NODE_PARQUET, TRANSPORT_LABELS_PARQUET
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--archive", type=Path, default=ARCHIVE)
+    parser.add_argument("--output-dir", type=Path, default=REAL)
+    parser.add_argument("--output-prefix", default="maizuru")
+    parser.add_argument("--archive-sha256")
+    args = parser.parse_args()
+
+    ARCHIVE = args.archive
+    prefix = args.output_prefix
+    output = args.output_dir
+    NODE_PARQUET = output / f"{prefix}_road_graph_nodes.parquet"
+    EDGE_PARQUET = output / f"{prefix}_road_graph_edges.parquet"
+    ACCESS_PARQUET = output / f"{prefix}_building_network_accessibility.parquet"
+    TRANSPORT_LABELS_PARQUET = output / f"{prefix}_transport_network_labels.parquet"
+    MEDICAL_LABELS_PARQUET = output / f"{prefix}_medical_network_labels.parquet"
+    DEMOGRAPHICS_PARQUET = output / f"{prefix}_building_demographics.parquet"
+    ROAD_SUMMARY = output / f"{prefix}_road_network_summary.json"
+    ROAD_EVIDENCE = output / f"{prefix}_network_deep_dive_evidence.json"
+    TERRAIN_NODE_PARQUET = output / f"{prefix}_road_graph_nodes_terrain.parquet"
+    TERRAIN_EDGE_PARQUET = output / f"{prefix}_road_graph_edges_terrain.parquet"
+    TERRAIN_ACCESS_PARQUET = output / f"{prefix}_building_terrain_accessibility.parquet"
+    MESH_OUTPUT = output / f"{prefix}_terrain_accessibility_meshes.csv"
+    SUMMARY_OUTPUT = output / f"{prefix}_terrain_network_summary.json"
+    EVIDENCE_OUTPUT = output / f"{prefix}_network_deep_dive_terrain.json"
+    output.mkdir(parents=True, exist_ok=True)
+
     started_total = time.perf_counter()
     required = (
         NODE_PARQUET,
@@ -183,9 +216,6 @@ def main() -> None:
     missing = [str(path) for path in required if not path.exists()]
     if missing:
         raise FileNotFoundError(f"Run the road-network pipeline first; missing {missing}")
-    if _sha256(ARCHIVE) != ARCHIVE_SHA256:
-        raise ValueError("PLATEAU archive hash does not match the audited Maizuru dataset")
-
     nodes = gpd.read_parquet(NODE_PARQUET)
     edges = gpd.read_parquet(EDGE_PARQUET)
     access = pd.read_parquet(ACCESS_PARQUET)
@@ -194,6 +224,11 @@ def main() -> None:
     demographics = pd.read_parquet(DEMOGRAPHICS_PARQUET)
     road_summary = json.loads(ROAD_SUMMARY.read_text(encoding="utf-8"))
     road_evidence = json.loads(ROAD_EVIDENCE.read_text(encoding="utf-8"))
+    ARCHIVE_SHA256 = args.archive_sha256 or road_summary["provenance"][
+        "plateau_archive_sha256"
+    ]
+    if _sha256(ARCHIVE) != ARCHIVE_SHA256:
+        raise ValueError("PLATEAU archive hash does not match the audited dataset")
 
     started = time.perf_counter()
     elevations, node_report = assign_dem_elevations(ARCHIVE, nodes)

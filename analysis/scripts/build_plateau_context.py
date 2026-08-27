@@ -1,4 +1,4 @@
-"""Build real PLATEAU land-use, planning and hazard context for Maizuru.
+"""Build real PLATEAU land-use, planning and hazard context for a city.
 
 Detailed feature and relation tables are Parquet working artifacts. Compact
 CSV/JSON outputs provide reviewable evidence without shipping building-level
@@ -49,6 +49,18 @@ ROAD_REVIEW = OUTPUT / "maizuru_road_hazard_summary.csv"
 SUMMARY = OUTPUT / "maizuru_plateau_context_summary.json"
 DEEP_DIVE_MESH = "533513314"
 ALGORITHM_VERSION = "plateau-context-1.0.0"
+CITY_ID = "26202"
+CITY_NAME = "舞鶴市"
+PLATEAU_YEAR = 2025
+CANDIDATES_CSV: Path | None = None
+HAZARD_THEMES: tuple[str, ...] = ("lsld", "fld", "tnm")
+HAZARD_TYPE_BY_THEME = {
+    "lsld": "landslide",
+    "fld": "flood",
+    "tnm": "tsunami",
+    "htd": "high_tide",
+    "ifld": "inland_flood",
+}
 
 
 def _generated_at() -> str:
@@ -153,7 +165,7 @@ def _normalise_planning(source: gpd.GeoDataFrame, codelists: PackageCodelists) -
 def _normalise_hazard(
     source: gpd.GeoDataFrame, theme: str, codelists: PackageCodelists
 ) -> gpd.GeoDataFrame:
-    hazard_type = {"lsld": "landslide", "fld": "flood", "tnm": "tsunami"}[theme]
+    hazard_type = HAZARD_TYPE_BY_THEME[theme]
     rows = []
     for record in source.to_dict("records"):
         if hazard_type == "landslide":
@@ -198,11 +210,9 @@ def _extract(refresh: bool) -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.Geo
     )
     planning = _normalise_planning(read_theme_features(CITYGML_ZIP, "urf"), codelists)
     hazard_parts = []
-    for theme, feature_type, coverage in (
-        ("lsld", "SedimentDisasterProneArea", False),
-        ("fld", "WaterBody", True),
-        ("tnm", "WaterBody", True),
-    ):
+    for theme in HAZARD_THEMES:
+        feature_type = "SedimentDisasterProneArea" if theme == "lsld" else "WaterBody"
+        coverage = theme != "lsld"
         source = read_theme_features(
             CITYGML_ZIP,
             theme,
@@ -273,26 +283,54 @@ def _target_frames() -> tuple[
     ).to_crs(ANALYSIS_CRS)
 
     meshes = gpd.read_file(METRICS_GEOJSON).to_crs(ANALYSIS_CRS)
-    pool, _ = _candidate_pool()
-    candidates = gpd.GeoDataFrame(
-        pool.rename(
+    if CANDIDATES_CSV is None:
+        pool, _ = _candidate_pool()
+        candidate_rows = pool.rename(
             columns={
                 "road_id": "candidate_id",
                 "anchor_lon": "longitude",
                 "anchor_lat": "latitude",
             }
-        )[
-            [
-                "candidate_id",
-                "road_name",
-                "existing_transport_distance_m",
-                "longitude",
-                "latitude",
-            ]
-        ],
-        geometry=gpd.points_from_xy(pool.candidate_x, pool.candidate_y),
-        crs=ANALYSIS_CRS,
-    )
+        )
+        candidates = gpd.GeoDataFrame(
+            candidate_rows[
+                [
+                    "candidate_id",
+                    "road_name",
+                    "existing_transport_distance_m",
+                    "longitude",
+                    "latitude",
+                ]
+            ],
+            geometry=gpd.points_from_xy(pool.candidate_x, pool.candidate_y),
+            crs=ANALYSIS_CRS,
+        )
+    else:
+        candidate_rows = pd.read_csv(CANDIDATES_CSV, dtype={"mesh_code": str})
+        candidate_rows["candidate_id"] = "mesh-" + candidate_rows["mesh_code"]
+        candidate_rows["road_name"] = candidate_rows["nearest_public_transport_name"].fillna(
+            "screening mesh"
+        )
+        candidate_rows["existing_transport_distance_m"] = candidate_rows[
+            "nearest_public_transport_distance_m"
+        ]
+        candidate_rows["longitude"] = candidate_rows["centroid_lon"]
+        candidate_rows["latitude"] = candidate_rows["centroid_lat"]
+        candidates = gpd.GeoDataFrame(
+            candidate_rows[
+                [
+                    "candidate_id",
+                    "road_name",
+                    "existing_transport_distance_m",
+                    "longitude",
+                    "latitude",
+                ]
+            ],
+            geometry=gpd.points_from_xy(
+                candidate_rows["longitude"], candidate_rows["latitude"]
+            ),
+            crs="EPSG:4326",
+        ).to_crs(ANALYSIS_CRS)
     candidates["candidate_x"] = candidates.geometry.x
     candidates["candidate_y"] = candidates.geometry.y
     edge_rows = pd.read_parquet(ROAD_EDGES)
@@ -524,20 +562,17 @@ def build(*, refresh: bool = False) -> dict[str, Any]:
 
     archive_hash = _sha256(CITYGML_ZIP)
     hazard_counts = Counter(hazards.hazard_type)
-    feature_counts = {
-        "land_use": len(landuse),
-        "urban_planning": len(planning),
-        "landslide": int(hazard_counts["landslide"]),
-        "flood": int(hazard_counts["flood"]),
-        "tsunami": int(hazard_counts["tsunami"]),
-    }
+    feature_counts = {"land_use": len(landuse), "urban_planning": len(planning)}
+    feature_counts.update(
+        {kind: int(hazard_counts[kind]) for kind in HAZARD_TYPE_BY_THEME.values()}
+    )
     report = {
         "schema_version": "1.0.0",
         "generated_at": _generated_at(),
         "algorithm_version": ALGORITHM_VERSION,
-        "city": {"city_id": "26202", "name": "舞鶴市"},
+        "city": {"city_id": CITY_ID, "name": CITY_NAME},
         "dataset": {
-            "plateau_year": 2025,
+            "plateau_year": PLATEAU_YEAR,
             "archive_file": CITYGML_ZIP.name,
             "archive_sha256": archive_hash,
             "source_crs": "EPSG:6697",
@@ -549,7 +584,7 @@ def build(*, refresh: bool = False) -> dict[str, Any]:
             "urban_planning": int(planning.surface_part_count.sum()),
             **{
                 kind: int(hazards.loc[hazards.hazard_type.eq(kind), "surface_part_count"].sum())
-                for kind in ("landslide", "flood", "tsunami")
+                for kind in HAZARD_TYPE_BY_THEME.values()
             },
         },
         "targets": {
@@ -617,7 +652,7 @@ def build(*, refresh: bool = False) -> dict[str, Any]:
             "source_member_fields": ["source_gml", "source_member_crc32"],
             "labels": "package-local official GML codelists only",
             "geometry": "LOD1 polygons with interior rings preserved",
-            "spatial_relation": "exact intersects/intersection in EPSG:6674",
+            "spatial_relation": f"exact intersects/intersection in {ANALYSIS_CRS}",
         },
         "runtime_seconds": round(time.perf_counter() - started, 3),
         "detailed_outputs": [
@@ -638,9 +673,66 @@ def build(*, refresh: bool = False) -> dict[str, Any]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    global ANALYSIS_CRS, BUILDINGS, BUILDING_CONTEXT, CANDIDATES_CSV, CANDIDATE_CONTEXT
+    global CANDIDATE_REVIEW, CITYGML_ZIP, CITY_ID, CITY_NAME, DEEP_DIVE_MESH
+    global HAZARD_CACHE, HAZARD_THEMES, LANDUSE_CACHE, MESH_CONTEXT, MESH_CONTEXT_DETAIL
+    global METRICS_GEOJSON, OUTPUT, PLANNING_CACHE, PLATEAU_YEAR, ROAD_EDGES
+    global ROAD_HAZARD_CONTEXT, ROAD_REVIEW, SUMMARY
+
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--refresh", action="store_true", help="Reparse CityGML instead of caches")
+    parser.add_argument("--archive", type=Path, default=CITYGML_ZIP)
+    parser.add_argument("--city-id", default=CITY_ID)
+    parser.add_argument("--city-name", default=CITY_NAME)
+    parser.add_argument("--plateau-year", type=int, default=PLATEAU_YEAR)
+    parser.add_argument("--meshes", type=Path, default=METRICS_GEOJSON)
+    parser.add_argument("--buildings", type=Path, default=BUILDINGS)
+    parser.add_argument("--road-edges", type=Path, default=ROAD_EDGES)
+    parser.add_argument("--candidates", type=Path)
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT)
+    parser.add_argument("--output-prefix", default="maizuru")
+    parser.add_argument("--analysis-crs", default=ANALYSIS_CRS)
+    parser.add_argument("--deep-dive-mesh", default=DEEP_DIVE_MESH)
+    parser.add_argument(
+        "--hazard-themes",
+        default=",".join(HAZARD_THEMES),
+        help="comma-separated PLATEAU hazard themes",
+    )
     arguments = parser.parse_args()
+
+    hazard_themes = tuple(
+        theme.strip() for theme in arguments.hazard_themes.split(",") if theme.strip()
+    )
+    unknown_themes = sorted(set(hazard_themes) - set(HAZARD_TYPE_BY_THEME))
+    if unknown_themes:
+        parser.error(f"unknown hazard themes: {', '.join(unknown_themes)}")
+
+    CITYGML_ZIP = arguments.archive
+    CITY_ID = arguments.city_id
+    CITY_NAME = arguments.city_name
+    PLATEAU_YEAR = arguments.plateau_year
+    METRICS_GEOJSON = arguments.meshes
+    BUILDINGS = arguments.buildings
+    ROAD_EDGES = arguments.road_edges
+    CANDIDATES_CSV = arguments.candidates
+    OUTPUT = arguments.output_dir
+    ANALYSIS_CRS = arguments.analysis_crs
+    DEEP_DIVE_MESH = arguments.deep_dive_mesh
+    HAZARD_THEMES = hazard_themes
+    prefix = arguments.output_prefix
+    LANDUSE_CACHE = OUTPUT / f"{prefix}_plateau_landuse.parquet"
+    PLANNING_CACHE = OUTPUT / f"{prefix}_plateau_urban_planning.parquet"
+    HAZARD_CACHE = OUTPUT / f"{prefix}_plateau_hazards.parquet"
+    BUILDING_CONTEXT = OUTPUT / f"{prefix}_building_plateau_context.parquet"
+    ROAD_HAZARD_CONTEXT = OUTPUT / f"{prefix}_road_hazard_context.parquet"
+    CANDIDATE_CONTEXT = OUTPUT / f"{prefix}_scenario_candidate_context.parquet"
+    MESH_CONTEXT = OUTPUT / f"{prefix}_mesh_plateau_context.csv"
+    MESH_CONTEXT_DETAIL = OUTPUT / f"{prefix}_mesh_plateau_context.parquet"
+    CANDIDATE_REVIEW = OUTPUT / f"{prefix}_scenario_candidate_context.csv"
+    ROAD_REVIEW = OUTPUT / f"{prefix}_road_hazard_summary.csv"
+    SUMMARY = OUTPUT / f"{prefix}_plateau_context_summary.json"
+    OUTPUT.mkdir(parents=True, exist_ok=True)
+
     report = build(refresh=arguments.refresh)
     print(json.dumps(report, ensure_ascii=False, indent=2))
 

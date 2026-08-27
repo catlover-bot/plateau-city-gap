@@ -1,0 +1,19 @@
+usage_code,official_label,classification,observed_building_count,mapping_source,codelist_member,codelist_member_crc32
+401,業務施設,non_residential,1863,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+402,商業施設,non_residential,2217,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+403,宿泊施設,non_residential,52,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+404,商業系複合施設,non_residential,531,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+411,住宅,residential,93530,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+412,共同住宅,residential,14043,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+413,店舗等併用住宅,mixed_residential,5474,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+414,店舗等併用共同住宅,mixed_residential,1315,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+415,作業所併用住宅,mixed_residential,203,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+421,官公庁施設,non_residential,244,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+422,文教厚生施設,non_residential,4188,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+431,運輸倉庫施設,non_residential,2023,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+441,工場,non_residential,3271,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+451,農林漁業用施設,non_residential,2048,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+452,供給処理施設,non_residential,387,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+453,防衛施設,non_residential,0,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+454,その他,non_residential,0,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25
+461,不明,uncertain,38467,dataset package codelists/Building_usage.xml; classification follows the explicit official Japanese label,codelists/Building_usage.xml,85563f25

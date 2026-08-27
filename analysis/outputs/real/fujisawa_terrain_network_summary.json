@@ -1,0 +1,145 @@
+{
+  "building_routes": {
+    "medical_status_counts": {
+      "available": 101212,
+      "network_unreachable": 190,
+      "partial": 6152,
+      "unavailable": 3
+    },
+    "mesh_status_counts": {
+      "available": 177,
+      "partial": 115,
+      "unavailable": 10
+    },
+    "transport_status_counts": {
+      "available": 103811,
+      "network_unreachable": 190,
+      "partial": 3527,
+      "unavailable": 29
+    }
+  },
+  "edge_terrain": {
+    "absolute_grade_percent": {
+      "maximum": 97.79018694016112,
+      "median": 1.304880553529601,
+      "p90": 6.626424945109931,
+      "p99": 20.97518776880616
+    },
+    "edge_terrain_coverage": 0.9915369227971519,
+    "edges_with_endpoint_elevation": 70882,
+    "road_edges": 71487
+  },
+  "graph_version": "exp-0ca779b30e21144b",
+  "limitations": [
+    "Terrain uses DEM interpolation at road representative points, not surveyed road grade.",
+    "Ascent, descent, and grade cover graph edges only; origin/destination connectors are excluded.",
+    "Partial terrain routes retain observed components but do not publish full-route ascent/descent.",
+    "Terrain is not mixed into routing distance or an accessibility score.",
+    "The underlying fallback graph is not a validated pedestrian network."
+  ],
+  "node_terrain": {
+    "dem_members_in_archive": 8,
+    "dem_members_scanned": 8,
+    "interpolation_coordinates": "longitude_latitude_affine_barycentric",
+    "members": [
+      {
+        "assigned_nodes": 11196,
+        "candidate_nodes": 11220,
+        "source_member": "udx/dem/523973_dem_6697_op.gml",
+        "source_member_crc32": "3ce44046",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 923565
+      },
+      {
+        "assigned_nodes": 68,
+        "candidate_nodes": 72,
+        "source_member": "udx/dem/523974_dem_6697_op.gml",
+        "source_member_crc32": "6863d9a2",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 95282
+      },
+      {
+        "assigned_nodes": 545,
+        "candidate_nodes": 545,
+        "source_member": "udx/dem/533903_dem_6697_00_op.gml",
+        "source_member_crc32": "0953e501",
+        "status": "processed_all_candidates_resolved",
+        "triangles_scanned": 259844
+      },
+      {
+        "assigned_nodes": 18693,
+        "candidate_nodes": 18784,
+        "source_member": "udx/dem/533903_dem_6697_05_op.gml",
+        "source_member_crc32": "2dd4bc0c",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 1872104
+      },
+      {
+        "assigned_nodes": 7273,
+        "candidate_nodes": 7293,
+        "source_member": "udx/dem/533903_dem_6697_50_op.gml",
+        "source_member_crc32": "2ebeac2b",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 1378007
+      },
+      {
+        "assigned_nodes": 12047,
+        "candidate_nodes": 12095,
+        "source_member": "udx/dem/533903_dem_6697_55_op.gml",
+        "source_member_crc32": "68523a73",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 1589385
+      },
+      {
+        "assigned_nodes": 1671,
+        "candidate_nodes": 1678,
+        "source_member": "udx/dem/533904_dem_6697_op.gml",
+        "source_member_crc32": "554b36f3",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 408309
+      },
+      {
+        "assigned_nodes": 1974,
+        "candidate_nodes": 1989,
+        "source_member": "udx/dem/533913_dem_6697_op.gml",
+        "source_member_crc32": "1ad223d4",
+        "status": "processed_with_gaps",
+        "triangles_scanned": 739840
+      }
+    ],
+    "method": "plateau_dem_lod1_tin_barycentric_interpolation",
+    "node_terrain_coverage": 0.9964404189496441,
+    "nodes_with_elevation": 53467,
+    "road_nodes": 53658,
+    "source_crs": "EPSG:6697_axis_order_latitude_longitude_height",
+    "triangles_scanned": 7266336
+  },
+  "pedestrian_network": false,
+  "performance": {
+    "dem_interpolation_seconds": 475.9,
+    "peak_rss_kib": 860964,
+    "terrain_access_parquet_bytes": 11692012,
+    "terrain_edge_parquet_bytes": 10485564,
+    "terrain_node_parquet_bytes": 7809954,
+    "terrain_route_seconds": 25.098,
+    "total_seconds": 522.011
+  },
+  "provenance": {
+    "analysis_crs": "{\"$schema\": \"https://proj.org/schemas/v0.7/projjson.schema.json\", \"type\": \"ProjectedCRS\", \"name\": \"JGD2011 / Japan Plane Rectangular CS IX\", \"base_crs\": {\"name\": \"JGD2011\", \"datum\": {\"type\": \"GeodeticReferenceFrame\", \"name\": \"Japanese Geodetic Datum 2011\", \"ellipsoid\": {\"name\": \"GRS 1980\", \"semi_major_axis\": 6378137, \"inverse_flattening\": 298.257222101}}, \"coordinate_system\": {\"subtype\": \"ellipsoidal\", \"axis\": [{\"name\": \"Geodetic latitude\", \"abbreviation\": \"Lat\", \"direction\": \"north\", \"unit\": \"degree\"}, {\"name\": \"Geodetic longitude\", \"abbreviation\": \"Lon\", \"direction\": \"east\", \"unit\": \"degree\"}]}, \"id\": {\"authority\": \"EPSG\", \"code\": 6668}}, \"conversion\": {\"name\": \"Japan Plane Rectangular CS zone IX\", \"method\": {\"name\": \"Transverse Mercator\", \"id\": {\"authority\": \"EPSG\", \"code\": 9807}}, \"parameters\": [{\"name\": \"Latitude of natural origin\", \"value\": 36, \"unit\": \"degree\", \"id\": {\"authority\": \"EPSG\", \"code\": 8801}}, {\"name\": \"Longitude of natural origin\", \"value\": 139.833333333333, \"unit\": \"degree\", \"id\": {\"authority\": \"EPSG\", \"code\": 8802}}, {\"name\": \"Scale factor at natural origin\", \"value\": 0.9999, \"unit\": \"unity\", \"id\": {\"authority\": \"EPSG\", \"code\": 8805}}, {\"name\": \"False easting\", \"value\": 0, \"unit\": \"metre\", \"id\": {\"authority\": \"EPSG\", \"code\": 8806}}, {\"name\": \"False northing\", \"value\": 0, \"unit\": \"metre\", \"id\": {\"authority\": \"EPSG\", \"code\": 8807}}]}, \"coordinate_system\": {\"subtype\": \"Cartesian\", \"axis\": [{\"name\": \"Northing\", \"abbreviation\": \"X\", \"direction\": \"north\", \"unit\": \"metre\"}, {\"name\": \"Easting\", \"abbreviation\": \"Y\", \"direction\": \"east\", \"unit\": \"metre\"}]}, \"scope\": \"Cadastre, engineering survey, topographic mapping (large and medium scale).\", \"area\": \"Japan - onshore - Honshu - Tokyo-to. (Excludes offshore island areas of Tokyo-to covered by Japan Plane Rectangular Coordinate System zones XIV, XVIII and XIX).\", \"bbox\": {\"south_latitude\": 29.31, \"west_longitude\": 138.4, \"north_latitude\": 37.98, \"east_longitude\": 141.11}, \"id\": {\"authority\": \"EPSG\", \"code\": 6677}}",
+    "generated_at": "2026-08-27T08:28:41.412730+00:00",
+    "plateau_archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+    "road_network_summary_sha256": "748944968d81cd622082d05b0fa26fa5fec6dd3e905cbd14f526bc4447ba744c",
+    "software": {
+      "commit": "05d545acbbc24c1faf81867080e14fd8e7573187",
+      "worktree_dirty": true
+    }
+  },
+  "route_semantics": "PLATEAU LOD1 road-surface adjacency path; mode not validated",
+  "schema_version": 1,
+  "validation": {
+    "distance_columns_modified": false,
+    "negative_ascent_records": 0,
+    "negative_descent_records": 0,
+    "routing_penalty_applied": false
+  }
+}
