@@ -135,7 +135,6 @@ def _to_local_enu(
     longitude, latitude, ellipsoid_height = vertical.transform(
         flat[:, 0], flat[:, 1], flat[:, 2]
     )
-    geodetic = np.column_stack((longitude, latitude, ellipsoid_height))
     center_lon = float((longitude.min() + longitude.max()) / 2)
     center_lat = float((latitude.min() + latitude.max()) / 2)
     center_height = float((ellipsoid_height.min() + ellipsoid_height.max()) / 2)
@@ -269,7 +268,7 @@ def _write_glb(path: Path, local: np.ndarray) -> dict[str, Any]:
     return {
         "triangles": len(triangles),
         "vertices": len(positions),
-        "source_vertex_references": int(len(flat_positions)),
+        "source_vertex_references": len(flat_positions),
         "indexed_without_resampling": True,
         "local_min": minimum,
         "local_max": maximum,
