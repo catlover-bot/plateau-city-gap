@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -e ".[dev]"
+      - run: pip install -e ".[platform,dev]"
       - run: pytest backend/tests/test_real_inventory_artifact.py analysis/tests/test_web_assets.py analysis/tests/test_municipal_workspace_assets.py -q
       - run: python -m analysis.scripts.audit_urban_futures_platform
 
