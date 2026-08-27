@@ -1,0 +1,85 @@
+{
+  "algorithm_versions": {
+    "network": "network-cross-validation-v1.0.0",
+    "sensitivity": "citygap-assumption-sensitivity-v1.0.0",
+    "temporal": "citygap-real-citygml-temporal-diff-v1.0.0"
+  },
+  "artifacts": [
+    {
+      "bytes": 291526,
+      "path": "analysis/outputs/real/validation/evidence_package/validation_evidence.json",
+      "sha256": "ef2a1304f21da3253f69e9d6f0dcbe96ed4569d0235ecf37b811a9e49fd9889e"
+    },
+    {
+      "bytes": 56247,
+      "path": "analysis/outputs/real/validation/evidence_package/validation_evidence.csv",
+      "sha256": "c22ff88e6a5eb980ca83e0a14bd4e0d82faa400585b0bc865f7a6fee7c2b997c"
+    },
+    {
+      "bytes": 6189,
+      "path": "analysis/outputs/real/validation/evidence_package/validation_evidence.html",
+      "sha256": "c0570528c25f00890a8287531653081df3796a087979157d8b4101551e264344"
+    },
+    {
+      "bytes": 657,
+      "path": "analysis/outputs/real/validation/evidence_package/manifest.json",
+      "sha256": "76bde84c4bd8129fa7bd5795b57d42074e7e86677b812afedcf81735783181e1"
+    }
+  ],
+  "commands": {
+    "all": "python -m analysis.scripts.build_validation_evidence_package",
+    "fujisawa": "citygap validate reproduce --city fujisawa",
+    "maizuru": "citygap validate reproduce --city maizuru"
+  },
+  "environment": {
+    "definition": "pyproject.toml",
+    "lock_note": "install with pip install -e .",
+    "python": ">=3.10"
+  },
+  "expected_city_metric_sha256": {
+    "fujisawa": "ef733bbfd5d7fa00ab81a827f41ce630cbf71c837ccedbda106fd44049610a11",
+    "maizuru": "bb128c4909952833d5acd960ec06bc9c27db44e18c10dca56c19772baeaf40d5"
+  },
+  "expected_summary_sha256": "bbcbf5dac480cf3aba21143a82d39eb878704c31d6d790f61d94ef5a1dfc78a3",
+  "raw_data_included": false,
+  "schema_version": "citygap-validation-reproducibility-v1.0.0",
+  "sensitivity_algorithm_version": "citygap-assumption-sensitivity-v1.0.0",
+  "source_manifest": [
+    {
+      "included": false,
+      "license": "ODbL",
+      "path": "data/raw/osm_reference/maizuru-20260827-overpass.json",
+      "reason": "large raw source is excluded",
+      "retrieval_date": "2026-08-27",
+      "sha256": "1308277a253ca2cc4fb7b8d5883a78b7430be66a385210307092f0ee6401d71e",
+      "source": "Overpass API historical date query"
+    },
+    {
+      "included": false,
+      "license": "ODbL",
+      "path": "data/raw/osm_reference/fujisawa-20260827-overpass.json",
+      "reason": "large raw source is excluded",
+      "retrieval_date": "2026-08-27",
+      "sha256": "1e5b637e583ca340cc1d29d5a382b4f594b5e42b68db7b6ddf873cd94031f9e2",
+      "source": "Overpass API historical date query"
+    },
+    {
+      "included": false,
+      "license": "PLATEAU catalog terms",
+      "path": "data/raw/temporal_validation/13215_kunitachi_2023_citygml.zip",
+      "reason": "large raw source is excluded",
+      "retrieval_date": "2026-08-27",
+      "sha256": "6d437f8808a136cf278ee230e306120ede5674da105040273ca24408f6890e59",
+      "source": "https://www.geospatial.jp/ckan/dataset/plateau-13215-kunitachi-shi-2023"
+    },
+    {
+      "included": false,
+      "license": "PLATEAU catalog terms",
+      "path": "data/raw/temporal_validation/13215_kunitachi_2025_citygml.zip",
+      "reason": "large raw source is excluded",
+      "retrieval_date": "2026-08-27",
+      "sha256": "bfd34c91a642518d3a8fe7b34f4da23a0c660cfe2bb3968d4f74db28d0c43a51",
+      "source": "https://www.geospatial.jp/ckan/dataset/plateau-13215-kunitachi-shi-2025"
+    }
+  ]
+}

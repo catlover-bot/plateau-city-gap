@@ -20,8 +20,11 @@ analysis/outputs/**
 !analysis/outputs/.gitkeep
 !analysis/outputs/real/
 !analysis/outputs/real/**
+!analysis/outputs/benchmarks/
+!analysis/outputs/benchmarks/validation_cost.json
 # Detailed building estimates remain local until municipal/privacy review.
 analysis/outputs/real/*.parquet
+analysis/outputs/real/validation/internal/
 # Large per-mesh context tables remain regenerable municipal artifacts.
 analysis/outputs/real/*_mesh_plateau_context.csv
 

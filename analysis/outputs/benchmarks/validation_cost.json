@@ -1,0 +1,57 @@
+{
+  "real_city_components": {
+    "fujisawa": {
+      "hazard_and_criticality_sensitivity": {
+        "hazard_model_count": 25,
+        "peak_rss_mb": 1229.48046875,
+        "runtime_seconds": 109.3419181460049
+      },
+      "network_cross_validation": {
+        "peak_rss_mb": 1407.33203125,
+        "runtime_seconds": 146.65060869300214,
+        "sample_count": 126
+      },
+      "pilot_rehearsal": {
+        "peak_rss_mb": 16.12109375,
+        "runtime_seconds": 0.006703377002850175,
+        "shared_public_artifact_rehearsal": true
+      }
+    },
+    "maizuru": {
+      "hazard_and_criticality_sensitivity": {
+        "hazard_model_count": 15,
+        "peak_rss_mb": 719.1171875,
+        "runtime_seconds": 28.290274447004776
+      },
+      "network_cross_validation": {
+        "peak_rss_mb": 822.92578125,
+        "runtime_seconds": 133.8281666010007,
+        "sample_count": 125
+      },
+      "pilot_rehearsal": {
+        "peak_rss_mb": 16.12109375,
+        "runtime_seconds": 0.006703377002850175,
+        "shared_public_artifact_rehearsal": true
+      }
+    }
+  },
+  "schema_version": "citygap-validation-cost-v1.0.0",
+  "synthetic_500k": {
+    "combined_confidence_score_created": false,
+    "evidence_matrix_validated": true,
+    "generated_from_synthetic_data": true,
+    "lexicographic_priority_executed": true,
+    "peak_rss_mb": 15.625,
+    "processed_count": 500000,
+    "purpose": "validation framework scale check only",
+    "real_city_result": false,
+    "records": 500000,
+    "reference_agreement_counts": {
+      "connectivity_disagreement": 5155,
+      "distance_similar": 375041,
+      "large_difference": 26044,
+      "moderate_difference": 93760
+    },
+    "runtime_seconds": 1.1919331919925753
+  }
+}

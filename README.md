@@ -5,9 +5,9 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
 
-このリポジトリには、審査・公開用の静的な **Competition Demo** と、認証された自治体向け **Municipal Pilot Platform** の2系統があります。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンスWorkspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
+このリポジトリは、審査用 **Competition Demo**、業務用 **Municipal Workspace**、モデル検証用 **Validation Workspace** を明確に分離しています。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンス・検証Workspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
@@ -72,6 +72,7 @@ Webデモを開き、地図上の `デモを見る` を押すと次の8ステッ
        ├─ 500m・建物・道路・計画・災害・scenario
        ├─ version diff・incremental recompute
        ├─ official future population・stress test・criticality・outcome
+       ├─ same-OD reference comparison・assumption sensitivity・real temporal validation
        └─ analysis/outputs/real/  ← 分析値のSingle Source of Truth
             ├─ PostGIS / FastAPI / worker / Evidence V3
             └─ privacy review済みWeb asset

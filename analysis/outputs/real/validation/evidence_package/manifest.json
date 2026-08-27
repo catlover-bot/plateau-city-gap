@@ -1,0 +1,21 @@
+{
+  "artifacts": [
+    {
+      "bytes": 291526,
+      "file": "validation_evidence.json",
+      "sha256": "ef2a1304f21da3253f69e9d6f0dcbe96ed4569d0235ecf37b811a9e49fd9889e"
+    },
+    {
+      "bytes": 56247,
+      "file": "validation_evidence.csv",
+      "sha256": "c22ff88e6a5eb980ca83e0a14bd4e0d82faa400585b0bc865f7a6fee7c2b997c"
+    },
+    {
+      "bytes": 6189,
+      "file": "validation_evidence.html",
+      "sha256": "c0570528c25f00890a8287531653081df3796a087979157d8b4101551e264344"
+    }
+  ],
+  "schema_version": "citygap-validation-package-manifest-v1.0.0",
+  "summary_sha256": "bbcbf5dac480cf3aba21143a82d39eb878704c31d6d790f61d94ef5a1dfc78a3"
+}
