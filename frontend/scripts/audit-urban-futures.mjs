@@ -45,7 +45,8 @@ try {
   await page.getByText("これは災害時の実通行可否を予測したものではありません。").waitFor();
   const futuresMap = page.locator('.cesium-map[data-futures-map="ready"]');
   await futuresMap.waitFor({ timeout: 60_000 });
-  await page.waitForTimeout(1_000);
+  // Cesium ground polylines/polygons finish asynchronously after the data source resolves.
+  await page.waitForTimeout(8_000);
   const visibleMapEntities = Number(await futuresMap.getAttribute("data-futures-visible"));
   const panelText = await page.locator(".futures-workspace").innerText();
   const checks = {
