@@ -124,7 +124,7 @@ CREATE TABLE upload_inspections (
 
 COMMENT ON TABLE dataset_version_diffs IS
     'Feature update classification uses gml:id plus geometry and important-attribute hashes.';
-COMMENT ON TABLE impacted_analysis IS
+COMMENT ON VIEW impacted_analysis IS
     'A conservative dependency view; operators decide re-execution, never an automatic policy result.';
 COMMENT ON TABLE accessibility_metric_versions IS
     'Metrics from different network semantics are side-by-side and never overwritten.';
