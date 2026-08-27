@@ -7,7 +7,8 @@ platform is an additive path; it does not make the public demo depend on PostGIS
 
 The implemented boundary now includes full CityGML ingestion, building allocation, an explicitly
 experimental road-surface graph with terrain observations, land-use/planning/hazard context,
-versioned scenarios, and an explicit multi-city capability registry:
+versioned scenarios, time-aware urban states, resilience analysis and an explicit multi-city
+capability registry:
 
 ```text
 Maizuru 2025 CityGML ZIP (Git-ignored)
@@ -17,7 +18,9 @@ Maizuru 2025 CityGML ZIP (Git-ignored)
   -> typed building / road / terrain / land-use / planning / hazard tables
   -> canonical Python + GeoParquet computation
   -> versioned road/network and spatial-context runs
-  -> versioned scenario runs + municipal review lifecycle
+  -> urban state + version diff + dependency-scoped recomputation
+  -> scenario / future population / stress test / portfolio / outcome
+  -> versioned scenario runs + municipal review + selected-site offline lifecycle
   -> bounded FastAPI queries
 
 Existing pre-generated analysis -> existing React/Cesium -> GitHub Pages (unchanged)
@@ -42,11 +45,11 @@ PLATEAU
                           |
                    CITY GAP Engine
                           |
-                discover | verify | propose
+           detect | diagnose | stress test | plan
                           |
-                  compare alternatives
+            compare | field check | implement
                           |
-                   municipal review
+             observe later state | review
 ```
 
 The platform preserves those boundaries: source themes are versioned before analysis; an overlap
@@ -57,6 +60,8 @@ or score is evidence for review, not an automatic municipal decision.
 - PostgreSQL/PostGIS is the municipal system of record; Python + versioned Parquet remains the
   reproducible computation/interchange boundary. Real DB integration is separately verified.
 - `gml:id` is unique within a dataset version, not globally across years.
+- Cross-version identity uses unique `gml:id` first and only unique geometry/important-attribute
+  hashes as fallback. Ambiguous objects are never forcibly matched.
 - `city_dataset_versions` allows 2025 and later releases to coexist. Exactly one version per city
   may be marked current.
 - The platform registry separately models city, dataset, dataset version and analysis run. New
@@ -75,6 +80,11 @@ or score is evidence for review, not an automatic municipal decision.
   version-explicit authenticated MVT with ETag and a bounded LRU cache, not unbounded GeoJSON.
 - Hazard overlap always means `additional_confirmation_required`; feasibility remains
   `not_determined` until municipal review.
+- Hazard overlap closes a road only inside an explicitly confirmed counterfactual assumption. It
+  is not a road-passability or disaster prediction.
+- Future population uses verified official series and exact published years. Building allocation
+  is a spatial model, not a prediction of residents.
+- Planned effect, later observed change and causal interpretation remain separate records.
 
 ## Repository boundaries
 
@@ -84,6 +94,10 @@ or score is evidence for review, not an automatic municipal decision.
 - `backend/citygap_platform/ingestion/adapters.py`: bounded CityGML, GTFS, CSV, GeoJSON and
   GeoPackage source contracts
 - `backend/citygap_platform/api/`: query boundary and FastAPI
+- `backend/citygap_platform/domain/temporal.py`: conservative state diff, dependency graph and
+  incremental/full equivalence contracts
+- `analysis/src/urban_resilience.py`: disruption, multi-source reachability, Tarjan criticality and
+  selected-pair redundancy algorithms
 - `infra/migrations/`: durable schema
 - `infra/docker/`: reproducible local containers
 
@@ -92,10 +106,15 @@ Python's standard-library `platform` module.
 
 ## Scale and evolution
 
-The CI scale benchmark inserts 100,000 synthetic buildings and 100,000 synthetic road edges and
+The CI API scale benchmark inserts 100,000 synthetic buildings and 100,000 synthetic road edges and
 reports API p50/p95 without calling it real municipal data or a production SLA. GiST indexes,
 bulk COPY paths, bounded bbox queries, MVT and an asynchronous PostgreSQL worker establish the
 current scaling boundary. Partitioning/connection pooling remain evidence-driven deployment choices.
+
+The separate algorithm fixture executes 100k, 250k and 500k road/building ring scales. Criticality
+is iterative Tarjan `O(V+E)`, avoiding an edges × citywide-Dijkstra loop. These fixtures are labelled
+synthetic and are not municipal data or an SLA. Real Maizuru/Fujisawa timings are recorded alongside
+their graph versions in `urban_futures_validation.json`.
 
 ## Open formats and official interoperability
 

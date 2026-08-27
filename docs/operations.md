@@ -60,6 +60,11 @@ or host photos. A hazard overlap remains a confirmation flag and never changes s
 automatically. Scenario status and field-check mutations write actor/request/before/after audit
 evidence in the same transaction.
 
+The PWA extension pre-downloads only a selected site package, never a whole city. IndexedDB queues
+notes, checklist status and GPS confirmation. The API validates bounded payloads and timezone-aware
+timestamps. A stale base record version returns an explicit HTTP 409 conflict; server/client/merged
+resolution is audited and silent last-write-wins is prohibited.
+
 Evidence Package V2 compares exactly three selected plans and emits deterministic JSON plus a
 print-friendly HTML review sheet. It includes cover, assumptions/data years, candidate coordinates,
 A/B/C metrics, coordinate map, network caveat, planning/hazard context, field checks, provenance,
@@ -74,6 +79,10 @@ citygap evidence-register \
 Registration rehashes every same-directory artifact, resolves the exact dataset and
 scenario versions, writes `evidence_exports`, and appends `evidence.export` audit rows in
 one transaction. A manifest cannot silently select a latest scenario version.
+
+Evidence V3 adds the urban state, exact source/network versions, future/hazard assumptions,
+stress-test metrics, criticality evidence, limitations and field verification in deterministic
+JSON/CSV/print HTML. See [Urban Futures & Resilience](urban-futures-resilience.md).
 
 The authenticated `運用管理` surface reads `/admin/snapshot` and the pilot-readiness endpoint. It
 shows current cities, datasets/versions/quality state, capabilities, networks, jobs and users/roles.

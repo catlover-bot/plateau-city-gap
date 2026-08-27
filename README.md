@@ -5,13 +5,15 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md) · [v0.x checklist](docs/release-checklist.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
 
-このリポジトリには、審査・公開用の静的な **Competition Demo** と、認証された自治体向け **Municipal Pilot Platform** の2系統があります。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceプレビューまで動作します。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario API、現地確認、Evidence V2、PostgreSQL worker、RBAC/audit、quality/readiness、MVTを実装しています。実PostGIS 3.5 / pgRouting 4.0 integration、API、transaction、migration、dump/restoreはGitHub Actionsで実行検証しています。CI fixtureは全量CityGML DB投入の証明ではありません。
+このリポジトリには、審査・公開用の静的な **Competition Demo** と、認証された自治体向け **Municipal Pilot Platform** の2系統があります。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンスWorkspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
 ![CITY GAP Municipal Workspace](docs/assets/final-v2/municipal-workspace.png)
+
+![CITY GAP Urban Futures & Resilience](docs/assets/urban-futures-workspace.png)
 
 ## Problem
 
@@ -34,6 +36,10 @@ CITY GAPは「都市計画の目標値と現実の差」や「行政が認定し
 - データ年次、計算方法、除外条件、限界をアプリ内で開示
 - 藤沢市327メッシュ、Top 10、WHYを横展開検証モードで表示（3D・What-ifは舞鶴市のみ）
 - 公式藤沢市2025 CityGML 399,271地物を舞鶴市と同じPLATEAU-native 5段pipelineで処理
+- 現在／公式将来人口scenario／明示的災害stress testを最大3 stateで比較
+- flood・landslide・tsunamiのcounterfactual道路利用不可仮定とservice continuityを実データ検証
+- `O(V+E)` bridge分析でnetwork criticality candidateを抽出し、別実装でedge removal検証
+- 選択地点だけをPWAへ保存し、offline更新を409 conflict付きで同期
 
 スコアは政策判断の正解や危険度ではなく、現地確認・ヒアリング・施策検討を始めるための探索用指標です。
 
@@ -56,18 +62,20 @@ Webデモを開き、地図上の `デモを見る` を押すと次の8ステッ
 
 ヘッダーの `自治体Workspace` では、500m → 建物 → 道路network → 計画・災害 → シナリオ → 比較 → 現地確認 → Evidenceの業務フローへ切り替えます。実計算済みのScenario A/B/CをBaselineと切り替え、合計7,684件の改善建物位置（案間重複を含む）を距離帯で表示しますが、建物別人口推計値は公開しません。ガイド付きCompetition DemoはA/Bの物語を維持します。詳細は [自治体scenario workspace](docs/scenario-workspace.md) を参照してください。
 
+`時間・レジリエンス` は City / Data year / Scenario year / Stress test を固定表示し、2025 current、公式2040人口scenario、2040 + intervention等を最大3 stateで比較します。公開assetは集約済みで、建物別人口推計値を含みません。hazard重複を通行不能の予測とは扱わず、ユーザーが選んだcounterfactual仮定として表示します。詳細は [Urban Futures & Resilience](docs/urban-futures-resilience.md) を参照してください。
+
 ## How it works
 
 ```text
-都市別YAML設定 + 公式rawデータ
-  └─ 共通Python / GeoPandas分析（舞鶴 EPSG:6674 / 藤沢 EPSG:6677）
-       ├─ Robustness 9条件 + 11,460道路候補の事前最適化
+都市別YAML設定 + 版付き公式rawデータ
+  └─ Urban state / dependency graph / common Python engine
+       ├─ 500m・建物・道路・計画・災害・scenario
+       ├─ version diff・incremental recompute
+       ├─ official future population・stress test・criticality・outcome
        └─ analysis/outputs/real/  ← 分析値のSingle Source of Truth
-            └─ 検証付きWeb asset生成
-                 └─ frontend/public/data/
-                      └─ React + TypeScript + CesiumJS（静的配信）
-                           ├─ 事前計算済み1/2/3地点案の比較
-                           └─ ブラウザ内の任意1地点What-if再計算
+            ├─ PostGIS / FastAPI / worker / Evidence V3
+            └─ privacy review済みWeb asset
+                 └─ React + TypeScript + CesiumJS + selected-site PWA
 ```
 
 分析値をフロントエンドへ手入力していません。`run_city_analysis.py` は `analysis/config/maizuru.yaml` / `fujisawa.yaml` を読み、同じ処理で成果物を生成します。Web asset builderはTop 10の順位、mesh codeの一意性、人口・距離・座標・geometry、元分析との対応を検証します。詳細は [architecture](docs/architecture.md)、[methodology](docs/methodology.md)、[cross-city validation](docs/cross-city-validation.md) を参照してください。
@@ -158,10 +166,13 @@ after_transport_distance
 - `analysis/scripts/verify_decision_studio.py`: 全9案の距離・Score・Evidenceを独立再計算
 - `analysis/scripts/build_municipal_workspace_assets.py`: 選択済みA/B/Cのprivacy-safe地図packageを実成果物から生成
 - `analysis/scripts/audit_municipal_platform.py`: 実成果物・API・schema・UI監査18項目を再検証
+- `analysis/scripts/build_urban_futures_validation.py`: 舞鶴・藤沢の将来人口、stress test、criticality、避難所、計画比較を実データ検証
+- `analysis/scripts/benchmark_urban_resilience_scale.py`: 100k/250k/500k synthetic graph benchmark
+- `analysis/scripts/build_evidence_v3.py`: Temporal / Resilience Evidence PackageのJSON/CSV/print HTML生成
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
-- `infra/migrations/`: dataset version・provenance・PLATEAU typed table
+- `infra/migrations/`: 13 migration。dataset version、urban state/diff、resilience、future/planning/outcome/fieldを永続化
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 
@@ -235,6 +246,9 @@ python -m analysis.scripts.build_network_scenarios --max-sites 5
 python -m analysis.scripts.verify_network_scenarios
 python -m analysis.scripts.build_scenario_canonical
 python -m analysis.scripts.build_platform_registry
+python -m analysis.scripts.build_urban_futures_validation
+python -m analysis.scripts.benchmark_urban_resilience_scale
+python -m analysis.scripts.build_evidence_v3
 python -m analysis.scripts.export_scenario_evidence --plan-id network-overall-3
 python -m analysis.scripts.build_municipal_workspace_assets
 SOURCE_DATE_EPOCH=1787392800 python -m analysis.scripts.build_city_validation_assets \

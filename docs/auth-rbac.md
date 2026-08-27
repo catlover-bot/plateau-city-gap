@@ -26,15 +26,18 @@ injected signature-verifying adapter and explicitly sets
 | administrator | yes | yes | yes | yes |
 
 City-scoped grants are stored in `platform_user_roles`. The current HTTP boundary
-enforces analyst permission for job creation, planner permission for scenario lifecycle
-and field checks, and administrator permission for platform job transitions and audit
-access. Read routes remain available to authenticated viewers.
+enforces analyst permission for job/stress-test creation, planner permission for scenario
+lifecycle, outcomes and field sync/conflict resolution, and administrator permission for dataset
+state/version control, platform job transitions and audit access. Read routes remain available to
+authenticated viewers.
 
 ## Audit evidence
 
 `audit_log` is append-only application evidence containing actor, action, resource,
 timestamp, before/after state and request ID. Scenario transitions, field checks and job
-creation/transitions write audit rows in the same database transaction as the mutation.
+creation/transitions, stress-test assumptions, future-state creation, implementation status,
+outcome review and field conflicts/resolutions write audit rows in the same database transaction
+as the mutation.
 `GET /admin/audit` is administrator-only. Audit data records human/platform actions; it
 must not be interpreted as a policy recommendation.
 

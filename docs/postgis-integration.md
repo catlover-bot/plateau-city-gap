@@ -14,6 +14,9 @@ runner and then exercises:
 - scenario comparison, guarded lifecycle changes and a field check;
 - constraint failure and transaction rollback;
 - strict dataset/network/context version matching;
+- urban-state lifecycle and exact dataset/network provenance;
+- explicit stress-test assumptions/cache and bounded impact retrieval;
+- future/planning/portfolio/outcome and selected-site conflict-safe field contracts;
 - an actual Uvicorn process connected to the database; and
 - `pg_dump` followed by restore into a fresh database.
 

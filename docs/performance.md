@@ -24,3 +24,33 @@ The municipal API retains bounded GeoJSON endpoints for record inspection and ad
 Cesium 3D Tiles remains the building-volume delivery path. The public competition demo continues to use privacy-reviewed aggregates. Production municipal map clients should request only visible tiles/zoom levels instead of downloading whole-city building, edge or impact GeoJSON.
 
 Real pipeline timings and peak memory are stored in each `*_summary.json`. API timings are synthetic until a pilot database containing a municipally approved full load is benchmarked; they must not be relabelled as Maizuru/Fujisawa API results.
+
+## Urban resilience algorithms
+
+The real-data validation executes state identity diff, explicit hazard disruption, multi-source
+service reachability, iterative Tarjan bridge criticality, selected-pair redundancy and planning
+comparison. The latest tracked combined run completed in 27.672 seconds with peak RSS 978.3 MiB.
+This combined peak covers both cities in one process and is not an API SLA.
+
+| Real graph | nodes | edges | demand buildings | identity diff | criticality |
+|---|---:|---:|---:|---:|---:|
+| Maizuru | 15,684 | 23,437 | 28,448 | 1.152 s | 0.422 s |
+| Fujisawa | 53,658 | 71,487 | 107,557 | 3.143 s | 1.116 s |
+
+The identity diff is a correctness check against the same official version, not an annual-change
+claim. Hazard runtimes and RSS are recorded per scenario in
+`analysis/outputs/real/urban_futures_validation.json`.
+
+The synthetic algorithm fixture is a ring with one demand record per node. It isolates scaling
+behaviour and is never mixed with real-city results:
+
+| synthetic nodes/edges/buildings | stress + criticality | peak RSS |
+|---:|---:|---:|
+| 100,000 | 2.145 s | 186.9 MiB |
+| 250,000 | 7.839 s | 429.3 MiB |
+| 500,000 | 13.783 s | 850.2 MiB |
+
+Criticality uses `O(V+E)` bridge analysis rather than removing each edge and rerunning full-city
+Dijkstra. Selected real candidates are independently verified by actual edge removal. Multi-source
+Dijkstra is rerun once per service category and disruption state. Immutable graph indices and
+result cache keys include city, urban state, network version, assumption hash and algorithm version.

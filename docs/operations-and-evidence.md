@@ -17,7 +17,7 @@ adapterは次の6表を受け取ります。
 
 ## Stage-based jobs
 
-job typeは次の6種です。
+既存6種に時間・レジリエンス6種を加えています。
 
 - `plateau_ingestion`
 - `building_demographics`
@@ -25,6 +25,12 @@ job typeは次の6種です。
 - `terrain_enrichment`
 - `context_generation`
 - `scenario_optimization`
+- `dataset_diff`
+- `incremental_recompute`
+- `future_population`
+- `stress_test`
+- `criticality_analysis`
+- `outcome_evaluation`
 
 stateは`queued / running / succeeded / failed`です。進捗は各typeに定義した実stageの順序だけで表し、架空のpercentageを返しません。例えばscenario jobは次の順です。
 
@@ -42,7 +48,7 @@ stageの飛び越しと、最終stage前の`succeeded`はdomain modelが拒否�
 - `GET /jobs/{job_id}`
 - `POST /jobs/{job_id}/transition`
 
-現行実装はdurable state/API frameworkで、process workerやqueue serviceはまだ接続していません。transition endpointはprototype内部用です。自治体pilotで外部公開する前に認証・権限とworker identityを追加する必要があります。
+PostgreSQL workerは`SKIP LOCKED`、heartbeat、bounded retry、idempotency keyでdurableに実行します。実stage commandはoperatorがtrusted argvとして設定し、job payloadをshell commandとして実行しません。自治体pilotではOIDCとworker identityの本番設定が必要です。
 
 ## Evidence Package
 
@@ -60,3 +66,17 @@ python -m analysis.scripts.export_scenario_evidence \
 実例は`analysis/outputs/real/evidence_packages/network-overall-3/`です。設置可能性は`not_determined`、recommendationは`null`、field checkは`unknown`で開始します。HTMLはPDFを装わず、ブラウザの印刷機能で確認できる静的文書です。個別建物の実人数・推計人数は記載せず、代表建物のGML IDと人口推計method/sourceだけをEvidence Chainに残します。
 
 PostGIS migrationにはexportのformat/path/hashを記録する`evidence_exports`がありますが、この環境ではDBへ登録していません。
+
+## Temporal / Resilience Evidence Package V3
+
+V3はcity、urban state、dataset years/versions、network、明示仮定、stress-test集約、critical
+road候補、scenario alternatives、limitations、field verificationをJSON / CSV / print HTMLで
+出力します。`result -> urban state -> dataset/network versions -> stress test/scenario ->
+algorithm`を辿れます。公開packageは集約済みで建物別人口推計値を含みません。
+
+```bash
+python -m analysis.scripts.build_evidence_v3
+```
+
+実例は`analysis/outputs/evidence-v3/`です。annual reportも同じversioned recordsから構造化
+metricsを決定論的に生成し、生成AI文章を使用しません。

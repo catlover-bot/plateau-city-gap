@@ -65,3 +65,15 @@
 - 人口は利用者・需要・受益者予測と呼ばない。
 - 直線距離を徒歩・経路距離と呼ばない。
 - greedy近似を大域的最適解と呼ばない。追加効果をROIと呼ばない。
+
+## Optional Resilience story（4分本編へ自動追加しない）
+
+操作: ヘッダーの`時間・レジリエンス`を開き、舞鶴・2025 current・floodを選ぶ。
+
+> 通常時のnetworkと、「公式洪水区域に重なる道路を利用不可と仮定する」counterfactualを比較します。この実データ検証では実験的graph 13,632 edgeが対象となり、医療到達性で20,333 building-demand recordが新たに到達不能です。これは災害時の実通行可否や被害の予測ではありません。自治体が仮定、代替経路、重要道路候補をレビューするためのstress testです。
+
+操作: criticalityとField Modeの境界を指す。
+
+> 1本のedge removalで影響が大きい候補を線形時間graph algorithmで抽出し、別実装でも確認します。「危険道路」ではなくnetwork criticality candidateです。現地対象だけをoffline保存し、競合は自動上書きせず自治体が解決します。
+
+禁止: 「洪水で通れない」「被害予測」「避難シミュレーション」「危険道路」「AI未来予測」。

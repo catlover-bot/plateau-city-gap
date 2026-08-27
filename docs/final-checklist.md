@@ -124,3 +124,37 @@
 - [x] PostGIS execution remains explicitly false in all manifests
 - [ ] Approved PostGIS environment, authentication/RBAC and durable worker deployed
 - [ ] Real municipal GTFS, validated pedestrian network and field review acquired
+
+## Urban Futures & Resilience final phase
+
+- [x] Urban state model binds effective date and exact dataset/network/analysis versions
+- [x] Lifecycle and quality gates prevent unverified current/future/stress/outcome states
+- [x] PLATEAU diff classifies added/removed/geometry/attribute/unchanged conservatively
+- [x] Dependency graph chooses bounded recompute scope and falls back to full rebuild
+- [x] Incremental result is compared with full rebuild on independent small fixtures
+- [x] IPSS and Fujisawa official future population series are hash-verified; no fake projection
+- [x] Future accessibility is explicitly fixed-service scenario + CITY GAP allocation
+- [x] Edge/group/area disruption and user-only service change contracts
+- [x] Flood, landslide and tsunami stress tests use explicit counterfactual assumptions
+- [x] Reachability, distance increase, elderly disconnect and fragmentation metrics
+- [x] Iterative `O(V+E)` Tarjan criticality; no edges × citywide-Dijkstra brute force
+- [x] Selected critical candidates independently edge-removal verified
+- [x] Primary/second route review preserves experimental non-pedestrian boundary
+- [x] Official Maizuru/Fujisawa shelters loaded without inferred capacity
+- [x] Shelter result is network reachability, not evacuation/crowd simulation
+- [x] Planning comparison uses review-candidate labels and never legal claims
+- [x] Municipal target and external cost adapters never invent target/cost values
+- [x] Multi-year portfolio, implementation records and non-causal outcome comparison
+- [x] Selected-site PWA cache, IndexedDB queue, timezone/version/actor field records
+- [x] HTTP 409 explicit resolution; silent last-write-wins prohibited
+- [x] Temporal/resilience API, bbox/pagination, jobs, RBAC, audit and provenance
+- [x] Evidence V3 deterministic JSON/CSV/print HTML and annual report model
+- [x] Capability registry has 34 evidence-backed city-capability records
+- [x] Maizuru and Fujisawa run through the same temporal/resilience core
+- [x] Six real-data Maizuru golden cases and selected independent verification
+- [x] 100k / 250k / 500k synthetic scale fixtures clearly separated from real data
+- [x] Public workspace is aggregated and excludes building-level estimated demographics
+- [x] Production build and browser audit: six futures checks, existing workspace, zero console errors
+- [ ] Final PostGIS integration workflow passed for migrations 011–013
+- [ ] Final GitHub Actions suite passed and GitHub Pages deployment verified
+- [ ] Municipality-approved full DB load, OIDC, network/shelter snap and field/outcome review

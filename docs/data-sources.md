@@ -1,6 +1,6 @@
 # Data sources
 
-調査・取得日: 2026-08-22。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
+初回調査・取得日: 2026-08-22、Urban Futures追加検証: 2026-08-27。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
 
 ## Source inventory
 
@@ -106,4 +106,17 @@ LOD2配布コンテナには427 b3dm、46,986 batch instanceがありました�
 | MLIT P04 Kanagawa | <https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P04-2020.html> | 2020 | EPSG:6668 | 12,364 / 718（primary 436） | medical distance |
 | PLATEAU Fujisawa related v5 | <https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025> | 2025 | EPSG:4326 | boundary 1, station raw 21 / 20 points | city extent, station distance |
 
-取得ZIPのSHA-256は人口 `855de51c…75de`、P11 `f7dc1805…65f6`、P04 `505b6303…eb69`、PLATEAU関連 `992a2310…ad19` です。完全値は `analysis/scripts/download_real_data.py` に固定しています。PLATEAU藤沢2025のCityGMLは736MB、3D Tiles/MVTは556MBと公式目録に記載されています。今回は関連データ150KBだけを分析へ使用し、3D packageを使用済みとは扱いません。
+取得ZIPのSHA-256は人口 `855de51c…75de`、P11 `f7dc1805…65f6`、P04 `505b6303…eb69`、PLATEAU関連 `992a2310…ad19` です。完全値は `analysis/scripts/download_real_data.py` に固定しています。PLATEAU藤沢2025 CityGMLも共通pipelineへ投入し、全11テーマ399,271地物、建物169,856、道路53,658をinventory/実分析しました。3D Tiles/MVTは公開demoへ使用済みとは扱いません。
+
+## Official future population and shelters
+
+| Source | Official URL | Published/target years | Verified SHA-256 | Use and boundary |
+|---|---|---|---|---|
+| IPSS Regional Population Projections 2023 | <https://www.ipss.go.jp/pp-shicyoson/j/shicyoson23/t-page.asp> | 2020–2050, 5-year | `dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92` | Maizuru/Fujisawa official totals and 65+; fixed-service spatial allocation, not prediction |
+| Fujisawa future population projection | <https://www.city.fujisawa.kanagawa.jp/kikaku/shise/kekaku/kakushu/kako/jinkosuikei.html> | 2020–2050, 5-year | `f21a46d2eef70c01b7a3d43239cddff4a954c18866a9eb7d094e2376641608c4` | second official Fujisawa scenario; no interpolation to unpublished years |
+| PLATEAU Maizuru designated shelters | <https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025> | 2025 | `faa9e4523f1f268cc833d0a8a78da841d6b6e37be0525bb315a3683750e8bcdd` | 126 facilities, published capacity retained; network reachability only |
+| PLATEAU Fujisawa designated shelters | <https://www.geospatial.jp/ckan/dataset/plateau-14205-fujisawa-shi-2025> | 2025 | `d06294e9a72739a574a21b0b1fd12086d03b279043342f4c86f80dd6b60a6124` | 81 facilities, published capacity/hazard applicability retained |
+
+The adapters reject unverified sources and do not fill missing capacity, targets, service changes
+or costs. Shelter snapping is recorded as model QA. Maizuru’s large snap distances require
+municipal review before operational use. The result is not evacuation or crowd simulation.

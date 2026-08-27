@@ -154,6 +154,328 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
         assert "plateau_city_objects_envelope_idx" in json.dumps(plan)
 
 
+def test_temporal_resilience_and_offline_field_postgis_contract(database_url: str) -> None:
+    import psycopg
+
+    observed_state_id = "60000000-0000-0000-0000-000000000001"
+    future_state_id = "60000000-0000-0000-0000-000000000002"
+    city_dataset_version_id = "20000000-0000-0000-0000-000000000001"
+    registry_version_id = "10000000-0000-0000-0000-000000000002"
+    network_version_id = "40000000-0000-0000-0000-000000000001"
+    with psycopg.connect(database_url) as connection:
+        city_uuid = connection.execute(
+            "SELECT id FROM cities WHERE city_code='26202'"
+        ).fetchone()[0]
+        base_state_id = connection.execute(
+            """SELECT id FROM urban_states
+               WHERE city_id=%s AND lifecycle_status='current'""",
+            (city_uuid,),
+        ).fetchone()[0]
+        scenario_id = connection.execute(
+            "SELECT id FROM scenario_runs ORDER BY id DESC LIMIT 1"
+        ).fetchone()[0]
+
+        connection.execute(
+            """INSERT INTO urban_states (
+                   id, city_id, state_key, label, effective_date, state_type,
+                   lifecycle_status, primary_plateau_dataset_version_id,
+                   source_verified, validation_report, created_by
+               ) VALUES (%s,%s,'observed-2026-ci','舞鶴市 2026 observed','2026-01-01',
+                         'observed','draft',%s,true,'{}','integration-test')
+               ON CONFLICT (id) DO NOTHING""",
+            (observed_state_id, city_uuid, city_dataset_version_id),
+        )
+        connection.execute(
+            """INSERT INTO state_dataset_versions (
+                   urban_state_id, dataset_role, dataset_version_id, source_verified
+               ) VALUES (%s,'plateau',%s,true) ON CONFLICT DO NOTHING""",
+            (observed_state_id, registry_version_id),
+        )
+        connection.execute(
+            """INSERT INTO state_network_versions (
+                   urban_state_id, network_version_id, purpose
+               ) VALUES (%s,%s,'baseline') ON CONFLICT DO NOTHING""",
+            (observed_state_id, network_version_id),
+        )
+        connection.execute(
+            """UPDATE urban_states SET lifecycle_status='validated'
+               WHERE id=%s AND lifecycle_status='draft'""",
+            (observed_state_id,),
+        )
+        connection.execute(
+            """INSERT INTO urban_state_change_sets (
+                   id, city_id, from_urban_state_id, to_urban_state_id, status,
+                   algorithm_version, summary, started_at, completed_at
+               ) VALUES ('61000000-0000-0000-0000-000000000001',%s,%s,%s,'succeeded',
+                         'temporal-diff-v1','{"added": 1}',now(),now())
+               ON CONFLICT (id) DO NOTHING""",
+            (city_uuid, base_state_id, observed_state_id),
+        )
+        connection.execute(
+            """INSERT INTO urban_state_feature_changes (
+                   change_set_id, feature_key, before_gml_id, after_gml_id,
+                   feature_type, change_type, matched_by, affected_envelope,
+                   important_attribute_changes
+               ) VALUES ('61000000-0000-0000-0000-000000000001','building:new',NULL,
+                         'fixture-building-1','building','added','geometry_hash',
+                         ST_MakeEnvelope(135.32,35.46,135.321,35.461,4326),'{}')
+               ON CONFLICT DO NOTHING"""
+        )
+
+        connection.execute(
+            """INSERT INTO urban_states (
+                   id, city_id, state_key, label, effective_date, state_type,
+                   lifecycle_status, base_state_id, primary_plateau_dataset_version_id,
+                   source_verified, population_model, fixed_service_assumption,
+                   validation_report, created_by
+               ) VALUES (%s,%s,'future-2030-ipss-ci','舞鶴市 2030 IPSS','2030-01-01',
+                         'future','draft',%s,%s,true,'ipss-regional-2023',true,
+                         '{"prediction_claimed": false}','integration-test')
+               ON CONFLICT (id) DO NOTHING""",
+            (future_state_id, city_uuid, base_state_id, city_dataset_version_id),
+        )
+        connection.execute(
+            """INSERT INTO state_dataset_versions (
+                   urban_state_id, dataset_role, dataset_version_id, source_verified
+               ) VALUES (%s,'future_population',%s,true) ON CONFLICT DO NOTHING""",
+            (future_state_id, registry_version_id),
+        )
+        connection.execute(
+            """INSERT INTO state_network_versions (
+                   urban_state_id, network_version_id, purpose
+               ) VALUES (%s,%s,'future_fixed_service') ON CONFLICT DO NOTHING""",
+            (future_state_id, network_version_id),
+        )
+        connection.execute(
+            """UPDATE urban_states SET lifecycle_status='validated'
+               WHERE id=%s AND lifecycle_status='draft'""",
+            (future_state_id,),
+        )
+        connection.execute(
+            """INSERT INTO future_population_states (
+                   urban_state_id, official_dataset_version_id, projection_series,
+                   projection_year, total_population, age_0_14, age_15_64,
+                   age_65_plus, age_65_74, age_75_plus, source_verified,
+                   allocation_algorithm_version, allocation_assumption,
+                   fixed_service_assumption
+               ) VALUES (%s,%s,'ipss-regional-2023',2030,71000,8000,42000,21000,
+                         9000,12000,true,'capacity-v1',
+                         'official demographic projection + CITY GAP spatial allocation model',
+                         true) ON CONFLICT (urban_state_id) DO NOTHING""",
+            (future_state_id, registry_version_id),
+        )
+
+        criticality_run_id = connection.execute(
+            """INSERT INTO network_criticality_runs (
+                   city_id, urban_state_id, network_version_id, facility_version_key,
+                   algorithm_version, status, runtime_seconds, peak_rss_kib, completed_at
+               ) VALUES (%s,%s,%s,'ci-facilities','tarjan-v1','succeeded',0.01,1024,now())
+               ON CONFLICT (urban_state_id,network_version_id,facility_version_key,algorithm_version)
+               DO UPDATE SET completed_at=EXCLUDED.completed_at RETURNING id""",
+            (city_uuid, base_state_id, network_version_id),
+        ).fetchone()[0]
+        connection.execute(
+            """INSERT INTO network_criticality_candidates (
+                   criticality_run_id, rank, edge_id, road_gml_ids,
+                   connected_component_id, isolated_node_count, affected_buildings,
+                   affected_estimated_elderly_population, facility_reachability_change,
+                   evidence
+               ) VALUES (%s,1,'ci-edge-1',ARRAY['road-ci-1'],'component-0',4,7,3.5,
+                         '{"medical": 7}','{"independent_removal_verified": true}')
+               ON CONFLICT DO NOTHING""",
+            (criticality_run_id,),
+        )
+
+        portfolio_id = connection.execute(
+            """INSERT INTO policy_portfolios (
+                   city_id, base_urban_state_id, portfolio_key, title, created_by
+               ) VALUES (%s,%s,'ci-portfolio','CI portfolio','planner-ci')
+               ON CONFLICT (city_id,portfolio_key) DO UPDATE SET title=EXCLUDED.title
+               RETURNING id""",
+            (city_uuid, base_state_id),
+        ).fetchone()[0]
+        intervention_id = connection.execute(
+            """INSERT INTO portfolio_interventions (
+                   portfolio_id, intervention_key, intervention_type,
+                   implementation_year, site_id, effect_model, effect_parameters,
+                   source_scenario_run_id, sequence
+               ) VALUES (%s,'ci-transit','transit_support',2027,'ci-site','scenario-v1',
+                         '{}',%s,1)
+               ON CONFLICT (portfolio_id,intervention_key) DO UPDATE SET site_id=EXCLUDED.site_id
+               RETURNING id""",
+            (portfolio_id, scenario_id),
+        ).fetchone()[0]
+        implementation_id = connection.execute(
+            """INSERT INTO implementation_records (
+                   portfolio_intervention_id, status, effective_date, recorded_by
+               ) VALUES (%s,'implemented','2027-04-01','planner-ci') RETURNING id""",
+            (intervention_id,),
+        ).fetchone()[0]
+        connection.execute(
+            """INSERT INTO outcome_evaluations (
+                   implementation_record_id, baseline_urban_state_id,
+                   expected_scenario_run_id, observed_urban_state_id, status,
+                   planned_effect, observed_change, created_by
+               ) VALUES (%s,%s,%s,%s,'under_review',
+                         '{"distance_change_m": -100}',
+                         '{"distance_change_m": -40}','planner-ci')""",
+            (implementation_id, base_state_id, scenario_id, observed_state_id),
+        )
+        connection.commit()
+
+    client = TestClient(create_app(PostGISRepository(database_url)))
+    states = client.get("/cities/26202/states").json()["states"]
+    state_ids = {str(state["urban_state_id"]) for state in states}
+    assert {observed_state_id, future_state_id} <= state_ids
+    comparison = client.get(
+        "/cities/26202/state-comparison",
+        params={"state_ids": f"{base_state_id},{observed_state_id},{future_state_id}"},
+    )
+    assert comparison.status_code == 200
+    assert comparison.json()["comparison_limit"] == 3
+    changes = client.get(
+        "/cities/26202/changes",
+        params={
+            "from_state_id": str(base_state_id),
+            "to_state_id": observed_state_id,
+            "bbox": "135.3,35.4,135.4,35.5",
+        },
+    )
+    assert changes.status_code == 200
+    assert changes.json()["features"][0]["change_type"] == "added"
+
+    analyst = {"X-CITYGAP-Actor": "analyst-ci", "X-CITYGAP-Roles": "analyst"}
+    stress_payload = {
+        "base_urban_state_id": str(base_state_id),
+        "network_version_id": network_version_id,
+        "stress_test_key": "ci-flood-counterfactual-v3",
+        "title": "CI explicit flood overlap assumption",
+        "stress_test_type": "hazard_counterfactual",
+        "algorithm_version": "stress-v1",
+        "route_semantics": "experimental surface adjacency; not pedestrian routing",
+        "assumptions": [
+            {
+                "assumption_type": "hazard_overlap_closure",
+                "hazard_dataset_version_id": registry_version_id,
+                "hazard_type": "flood",
+                "hazard_class": "CI fixture class",
+                "closure_assumption": "overlap edges unavailable for this test only",
+                "assumption_payload": {"prediction": False},
+                "assumption_source": "integration test explicit analyst rule",
+                "explicitly_confirmed": True,
+            }
+        ],
+    }
+    created = client.post(
+        "/cities/26202/stress-tests", headers=analyst, json=stress_payload
+    )
+    assert created.status_code == 202
+    stress_test_id = created.json()["stress_test_id"]
+    assert created.json()["prediction_claimed"] is False
+    assert created.json()["assumptions"][0]["explicitly_confirmed"] is True
+    with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """INSERT INTO stress_test_metrics (
+                   stress_test_run_id, metric_name, service_category, value, unit, definition
+               ) VALUES (%s,'newly_unreachable_buildings','medical',1,'buildings',
+                         'CI persisted result')""",
+            (stress_test_id,),
+        )
+        connection.execute(
+            """INSERT INTO stress_test_building_impacts (
+                   stress_test_run_id, dataset_version_id, building_gml_id,
+                   service_category, baseline_distance_m, scenario_distance_m,
+                   impact_status, estimated_population,
+                   estimated_elderly_population, evidence
+               ) VALUES (%s,%s,'fixture-building-1','medical',100,NULL,'disconnected',
+                         2,1,'{"assumption_explicit": true}')""",
+            (stress_test_id, city_dataset_version_id),
+        )
+        connection.execute(
+            """UPDATE stress_test_runs
+               SET status='succeeded', completed_at=now() WHERE id=%s""",
+            (stress_test_id,),
+        )
+        connection.commit()
+    detail = client.get(f"/stress-tests/{stress_test_id}").json()
+    assert detail["status"] == "succeeded" and detail["impact_counts"]["buildings"] == 1
+    impacts = client.get(
+        f"/stress-tests/{stress_test_id}/impacts",
+        params={"bbox": "135.3,35.4,135.4,35.5", "service_category": "medical"},
+    )
+    assert impacts.status_code == 200
+    assert impacts.json()["features"][0]["impact_status"] == "disconnected"
+    cached = client.post(
+        "/cities/26202/stress-tests", headers=analyst, json=stress_payload
+    )
+    assert cached.status_code == 202 and cached.json()["stress_test_id"] == stress_test_id
+
+    criticality = client.get(
+        "/cities/26202/network/criticality",
+        params={"urban_state_id": str(base_state_id)},
+    ).json()
+    assert criticality["candidates"][0]["candidate_label"] == "network criticality candidate"
+    future = client.get("/cities/26202/future-states").json()
+    assert future["prediction_claimed"] is False
+    assert future["states"][0]["fixed_service_assumption"] is True
+    outcomes = client.get("/cities/26202/outcomes").json()
+    assert outcomes["causal_effect_claimed"] is False
+    assert outcomes["evaluations"][0]["planned_effect"] != outcomes["evaluations"][0][
+        "observed_change"
+    ]
+
+    planner = {"X-CITYGAP-Actor": "planner-ci", "X-CITYGAP-Roles": "planner"}
+    package = client.post(
+        "/cities/26202/field/offline-packages",
+        headers=planner,
+        json={
+            "urban_state_id": str(base_state_id),
+            "scenario_run_id": str(scenario_id),
+            "site_order": 1,
+        },
+    )
+    assert package.status_code == 201
+    assert package.json()["content"]["package_scope"] == "single_selected_site"
+    record_version = package.json()["content"]["field_record"]["record_version"]
+    common_operation = {
+        "offline_package_id": str(package.json()["offline_package_id"]),
+        "scenario_run_id": str(scenario_id),
+        "site_order": 1,
+        "base_record_version": record_version,
+        "client_updated_at": "2026-08-27T10:00:00+09:00",
+        "payload": {"road_safety": "attention", "notes": "CI offline field note"},
+    }
+    applied = client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **common_operation,
+            "client_operation_id": "62000000-0000-0000-0000-000000000001",
+        },
+    )
+    assert applied.status_code == 200
+    conflict = client.post(
+        "/cities/26202/field/sync",
+        headers=planner,
+        json={
+            **common_operation,
+            "client_operation_id": "62000000-0000-0000-0000-000000000002",
+        },
+    )
+    assert conflict.status_code == 409
+    assert conflict.json()["silent_last_write_wins"] is False
+    resolved = client.post(
+        f"/cities/26202/field-conflicts/{conflict.json()['conflict_id']}/resolve",
+        headers=planner,
+        json={
+            "resolution_status": "merged",
+            "resolved_state": {"notes": "CI explicit merged resolution"},
+        },
+    )
+    assert resolved.status_code == 200
+    assert resolved.json()["resolution_status"] == "merged"
+
+
 def test_scenario_transaction_lifecycle_field_check_and_rollback(database_url: str) -> None:
     import psycopg
 

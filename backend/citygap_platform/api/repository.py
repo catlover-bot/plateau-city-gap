@@ -1075,6 +1075,9 @@ class PostGISRepository:
                    FROM cities AS city
                    JOIN urban_states AS state ON state.city_id = city.id
                    JOIN road_network_versions AS network ON network.id = %s
+                   JOIN state_network_versions AS state_network
+                     ON state_network.urban_state_id = state.id
+                    AND state_network.network_version_id = network.id
                    JOIN city_dataset_versions AS dataset
                      ON dataset.id = network.dataset_version_id
                    WHERE (city.city_code = %s OR city.city_key = %s)
@@ -1090,6 +1093,23 @@ class PostGISRepository:
             ).fetchone()
             if city is None:
                 return None
+            hazard_version_ids = {
+                assumption.get("hazard_dataset_version_id")
+                for assumption in assumptions
+                if assumption.get("hazard_dataset_version_id") is not None
+            }
+            if hazard_version_ids:
+                verified_count = connection.execute(
+                    """SELECT count(DISTINCT version.id)
+                       FROM dataset_versions AS version
+                       JOIN datasets AS dataset ON dataset.id = version.dataset_id
+                       WHERE dataset.city_id = %s AND version.id = ANY(%s::uuid[])""",
+                    (city[0], list(hazard_version_ids)),
+                ).fetchone()[0]
+                if int(verified_count) != len(hazard_version_ids):
+                    raise ValueError(
+                        "stress-test hazard datasets must belong to the selected city"
+                    )
             cached = connection.execute(
                 "SELECT stress_test_run_id FROM stress_test_result_cache WHERE cache_key = %s",
                 (cache_key,),
@@ -1332,7 +1352,7 @@ class PostGISRepository:
                        JOIN cities AS city ON city.id = run.city_id
                        WHERE (city.city_code = %s OR city.city_key = %s)
                          AND run.status = 'succeeded'
-                         AND (CAST(%s AS text) IS NULL OR run.urban_state_id = %s)
+                         AND (%s::uuid IS NULL OR run.urban_state_id = %s::uuid)
                        ORDER BY run.completed_at DESC, run.id DESC LIMIT 1
                    )
                    SELECT candidate.rank, candidate.edge_id, candidate.road_gml_ids,
@@ -1789,6 +1809,20 @@ class PostGISRepository:
     ) -> dict[str, Any] | None:
         actor = current_request_context().actor
         with self._connect() as connection:
+            connection.execute(
+                """INSERT INTO scenario_field_checks (
+                       scenario_run_id, site_order, updated_by
+                   )
+                   SELECT site.scenario_run_id, site.site_order, %s
+                   FROM scenario_sites AS site
+                   JOIN scenario_runs AS scenario ON scenario.id = site.scenario_run_id
+                   JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
+                   JOIN cities AS city ON city.id = state.city_id
+                   WHERE (city.city_code = %s OR city.city_key = %s)
+                     AND state.id = %s AND scenario.id = %s AND site.site_order = %s
+                   ON CONFLICT DO NOTHING""",
+                (actor, city_id, city_id, urban_state_id, scenario_run_id, site_order),
+            )
             site = connection.execute(
                 """SELECT scenario.scenario_key, scenario.lifecycle_status,
                           state.state_key, state.effective_date,
@@ -1807,7 +1841,7 @@ class PostGISRepository:
                    JOIN scenario_runs AS scenario ON scenario.id = site.scenario_run_id
                    JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
                    JOIN cities AS city ON city.id = state.city_id
-                   LEFT JOIN scenario_field_checks AS check_row
+                   JOIN scenario_field_checks AS check_row
                      ON check_row.scenario_run_id = site.scenario_run_id
                     AND check_row.site_order = site.site_order
                    WHERE (city.city_code = %s OR city.city_key = %s)
