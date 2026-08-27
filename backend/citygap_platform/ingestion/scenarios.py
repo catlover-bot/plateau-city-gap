@@ -98,7 +98,8 @@ def load_scenario_artifacts(
     counts = {name: 0 for name in TABLE_NAMES}
     with psycopg.connect(database_url) as connection:
         dataset = connection.execute(
-            """SELECT id FROM city_dataset_versions
+            """SELECT id, dataset_year, archive_sha256, is_current, registry_version_id
+               FROM city_dataset_versions
                WHERE city_id = %s AND dataset_year = %s AND archive_sha256 = %s""",
             (
                 manifest["city"]["city_id"],
@@ -131,6 +132,62 @@ def load_scenario_artifacts(
         if context is None:
             raise RuntimeError("Exact succeeded spatial-context version is not loaded")
         context_run_id = context[0]
+        urban_state = connection.execute(
+            """SELECT id FROM urban_states
+               WHERE primary_plateau_dataset_version_id = %s AND state_type = 'observed'
+               ORDER BY (lifecycle_status = 'current') DESC, effective_date DESC, id
+               LIMIT 1""",
+            (dataset_version_id,),
+        ).fetchone()
+        if urban_state is None:
+            urban_state = connection.execute(
+                """INSERT INTO urban_states (
+                       city_id, state_key, label, effective_date, state_type,
+                       lifecycle_status, primary_plateau_dataset_version_id,
+                       source_verified, validation_report, created_by, validated_at
+                   ) SELECT city.id, %s, city.name || ' ' || version.dataset_year || ' observed',
+                       make_date(version.dataset_year, 1, 1), 'observed',
+                       CASE WHEN version.is_current THEN 'current' ELSE 'validated' END,
+                       version.id, true, %s, 'scenario-import', now()
+                   FROM city_dataset_versions AS version
+                   JOIN cities AS city ON city.city_code = version.city_id
+                   WHERE version.id = %s
+                   ON CONFLICT (city_id, state_key) DO UPDATE SET
+                       validation_report = EXCLUDED.validation_report
+                   RETURNING id""",
+                (
+                    f"observed-{int(dataset[1])}-{str(dataset[2])[:12]}",
+                    json.dumps(
+                        {
+                            "source": "canonical scenario import",
+                            "archive_sha256": str(dataset[2]),
+                        }
+                    ),
+                    dataset_version_id,
+                ),
+            ).fetchone()
+        if urban_state is None:
+            raise RuntimeError("Unable to resolve the scenario base urban state")
+        base_urban_state_id = urban_state[0]
+        if dataset[4] is not None:
+            connection.execute(
+                """INSERT INTO state_dataset_versions (
+                       urban_state_id, dataset_role, dataset_version_id,
+                       source_verified, metadata
+                   ) VALUES (%s, 'plateau', %s, true, %s)
+                   ON CONFLICT DO NOTHING""",
+                (
+                    base_urban_state_id,
+                    dataset[4],
+                    json.dumps({"legacy_dataset_version_id": str(dataset_version_id)}),
+                ),
+            )
+        connection.execute(
+            """INSERT INTO state_network_versions (
+                   urban_state_id, network_version_id, purpose
+               ) VALUES (%s, %s, 'baseline') ON CONFLICT DO NOTHING""",
+            (base_urban_state_id, network_version_id),
+        )
 
         for row in frames["scenario_runs"].itertuples(index=False):
             existed = connection.execute(
@@ -142,14 +199,17 @@ def load_scenario_artifacts(
                        context_run_id, plateau_product_specification_version,
                        algorithm_version, objective_mode, objective_definition,
                        site_count, candidate_count, algorithm_kind, config_hash,
-                       generated_at, runtime_seconds, lifecycle_status, metadata
+                       generated_at, runtime_seconds, lifecycle_status, metadata,
+                       base_urban_state_id
                    ) VALUES (
                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, 'draft', %s
+                       %s, %s, 'draft', %s, %s
                    ) ON CONFLICT (id) DO UPDATE SET
                        objective_definition = EXCLUDED.objective_definition,
                        runtime_seconds = EXCLUDED.runtime_seconds,
-                       metadata = EXCLUDED.metadata, updated_at = now()""",
+                       metadata = EXCLUDED.metadata,
+                       base_urban_state_id = EXCLUDED.base_urban_state_id,
+                       updated_at = now()""",
                 (
                     row.scenario_run_id,
                     row.scenario_key,
@@ -167,6 +227,7 @@ def load_scenario_artifacts(
                     row.generated_at,
                     float(row.runtime_seconds),
                     json.dumps(_json(row.metadata_json), ensure_ascii=False),
+                    base_urban_state_id,
                 ),
             )
             if existed is None:
