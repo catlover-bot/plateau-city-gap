@@ -98,27 +98,30 @@ def _ensure_open_data_record(database_url: str) -> dict[str, object]:
                WHERE organization_id = %s AND city_id = %s ORDER BY id LIMIT 1""",
             (ORG_A, city_id),
         ).fetchone()[0]
-        dataset_id = connection.execute(
+        dataset_id = str(uuid.uuid4())
+        connection.execute(
             """INSERT INTO datasets (
-                   organization_id, city_id, dataset_key, title, provider,
+                   id, organization_id, city_id, dataset_key, title, provider,
                    data_classification, dataset_category
-               ) VALUES (%s, %s, %s, 'review loop fixture', 'official fixture',
-                         'public', 'facilities') RETURNING id""",
-            (ORG_A, city_id, f"review-loop-{suffix}"),
-        ).fetchone()[0]
-        version_id = connection.execute(
+               ) VALUES (%s, %s, %s, %s, 'review loop fixture', 'official fixture',
+                         'public', 'facilities')""",
+            (dataset_id, ORG_A, city_id, f"review-loop-{suffix}"),
+        )
+        version_id = str(uuid.uuid4())
+        connection.execute(
             """INSERT INTO dataset_versions (
-                   organization_id, dataset_id, version_key, dataset_year, data_format,
+                   id, organization_id, dataset_id, version_key, dataset_year, data_format,
                    source_url, license, declared_source_crs, data_classification
-               ) VALUES (%s, %s, %s, 2026, 'CSV', %s, 'CC BY 4.0',
-                         'EPSG:4326', 'public') RETURNING id""",
+               ) VALUES (%s, %s, %s, %s, 2026, 'CSV', %s, 'CC BY 4.0',
+                         'EPSG:4326', 'public')""",
             (
+                version_id,
                 ORG_A,
                 dataset_id,
                 f"2026-{suffix}",
                 f"https://data.bodik.jp/dataset/{suffix}",
             ),
-        ).fetchone()[0]
+        )
         blob_id = connection.execute(
             """INSERT INTO open_data_raw_blobs (
                    owner_organization_id, sha256, size_bytes, content_type,
