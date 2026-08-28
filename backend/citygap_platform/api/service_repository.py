@@ -3907,12 +3907,12 @@ class MunicipalServiceRepository(PostGISRepository):
                 connection.execute(
                     """UPDATE local_data_overrides
                        SET review_status = %s, updated_by = %s, updated_at = now(),
-                           reviewed_by = CASE WHEN %s IN ('reviewed','rejected')
-                                              THEN %s ELSE NULL END,
-                           reviewed_at = CASE WHEN %s IN ('reviewed','rejected')
+                           reviewed_by = CASE WHEN %s::text IN ('reviewed','rejected')
+                                              THEN %s::text ELSE NULL END,
+                           reviewed_at = CASE WHEN %s::text IN ('reviewed','rejected')
                                               THEN now() ELSE NULL END,
                            evidence = evidence || jsonb_build_object(
-                               'review_note', %s, 'review_actor', %s)
+                               'review_note', %s::text, 'review_actor', %s::text)
                        WHERE organization_id = %s AND id = %s RETURNING *""",
                     (
                         payload["proposed_status"],
