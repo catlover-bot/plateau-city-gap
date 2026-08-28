@@ -5,9 +5,9 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Spatial Workspace](docs/spatial-workspace.md) · [PLATEAU可視化範囲](docs/plateau-visual-coverage.md) · [3D rendering](docs/3d-rendering.md) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [時間データガバナンス](docs/temporal-data-governance.md) · [自治体PoC計画](docs/municipal-pilot-plan.md) · [導入](docs/deployment.md) · [Pilot readiness](docs/pilot-readiness.md) · [実PostGIS検証](docs/postgis-integration.md) · [2都市PLATEAU検証](docs/multi-city-validation.md) · [性能/MVT](docs/performance.md) · [認証/RBAC](docs/auth-rbac.md) · [運用](docs/operations.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Municipal product](docs/product-vision.md) · [Product domain](docs/product-domain.md) · [Service workflows](docs/service-workflows.md) · [Spatial Workspace](docs/spatial-workspace.md) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [API contract](docs/api-contract.md) · [Tenant security](docs/tenant-security.md) · [Service operations](docs/service-operations.md)
 
-このリポジトリは、審査用 **Competition Demo**、業務用 **Municipal Workspace**、モデル検証用 **Validation Workspace** の責務を保ちながら、同じ選択地点を引き継ぐ **CITY GAP Spatial OS / PLATEAU 3D Decision Twin** として統合しています。GitHub Pagesはバックエンドなしでprivacy-safeなA/B/C Workspaceと、集約済み実データによる時間・レジリエンス・検証Workspaceを動かします。Platform側にはversion付きCityGML取込、実建物への人口配賦、道路network、計画・災害文脈、Scenario APIに加え、都市状態、版差分、増分再計算、公式将来人口、明示仮定stress test、criticality、施策後評価、選択地点offline field sync、Evidence V3を追加しています。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
+このリポジトリは、審査用 **Competition Demo**、認証済み **Municipal Urban Intelligence Service**、モデル検証用 **Validation Workspace** の責務を分離しながら、同じversion付き都市データとEvidence Chainを利用します。GitHub Pagesはバックエンドなしのprivacy-safeな公開Showcaseです。自治体ServiceはOrganization/City tenant、6 Role、Data onboarding、Urban State、Analysis/Finding/Investigation/Review/Field/Decision、selected-site offline sync、restricted attachment、deterministic report、監査・運用を `/api/v1` で提供します。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
 
 ![CITY GAP Decision Studio](docs/assets/final-v2/01-discovery.png)
 
@@ -178,7 +178,7 @@ after_transport_distance
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
-- `infra/migrations/`: 13 migration。dataset version、urban state/diff、resilience、future/planning/outcome/fieldを永続化
+- `infra/migrations/`: 15 migration。dataset version、urban state/diff、resilience、future/planning/outcome/fieldとmunicipal service tenantを永続化
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 
