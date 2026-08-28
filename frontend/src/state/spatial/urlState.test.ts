@@ -42,4 +42,11 @@ describe("spatial URL state", () => {
       mapState: "detail3d",
     });
   });
+
+  it("preserves only the approved deterministic building source fixture", () => {
+    const state = parseSpatialUrl("?city=maizuru&scene=plateau_detail&resolution=building_group");
+    const serialized = spatialStateToSearch(state, new URLSearchParams("buildingSource=verified-local&unknown=discard"));
+    expect(serialized).toContain("buildingSource=verified-local");
+    expect(serialized).not.toContain("unknown");
+  });
 });

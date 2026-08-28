@@ -151,7 +151,7 @@ export function parseSpatialUrl(search: string): SpatialState {
   };
 }
 
-export function spatialStateToSearch(state: SpatialState): string {
+export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearchParams): string {
   const params = new URLSearchParams();
   params.set("city", state.city);
   params.set("task", state.task);
@@ -186,5 +186,6 @@ export function spatialStateToSearch(state: SpatialState): string {
   }
   if (!state.inspectorOpen) params.set("inspector", "closed");
   if (state.savedInvestigationOpen) params.set("saved", "1");
+  if (passthrough?.get("buildingSource") === "verified-local") params.set("buildingSource", "verified-local");
   return `?${params.toString()}`;
 }

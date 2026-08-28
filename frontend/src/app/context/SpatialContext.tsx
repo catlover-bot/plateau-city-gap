@@ -13,14 +13,15 @@ const SpatialContext = createContext<SpatialContextValue | null>(null);
 
 export function SpatialProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(spatialReducer, window.location.search, parseSpatialUrl);
+  const passthrough = useMemo(() => new URLSearchParams(window.location.search), []);
 
   useEffect(() => {
-    const search = spatialStateToSearch(state);
+    const search = spatialStateToSearch(state, passthrough);
     const timer = window.setTimeout(() => {
       window.history.replaceState(null, "", `${window.location.pathname}${search}${window.location.hash}`);
     }, 160);
     return () => window.clearTimeout(timer);
-  }, [state]);
+  }, [passthrough, state]);
 
   useEffect(() => {
     const onPopState = () => dispatch({ type: "hydrate", state: parseSpatialUrl(window.location.search) });
@@ -31,8 +32,8 @@ export function SpatialProvider({ children }: { children: ReactNode }) {
   const value = useMemo(() => ({
     state,
     dispatch,
-    shareUrl: `${window.location.origin}${window.location.pathname}${spatialStateToSearch(state)}`
-  }), [state]);
+    shareUrl: `${window.location.origin}${window.location.pathname}${spatialStateToSearch(state, passthrough)}`
+  }), [passthrough, state]);
   return <SpatialContext.Provider value={value}>{children}</SpatialContext.Provider>;
 }
 
