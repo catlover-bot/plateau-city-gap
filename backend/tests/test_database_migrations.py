@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 16)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 17)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -23,3 +23,14 @@ def test_spatial_delivery_removes_city_specific_network_srid_typmods() -> None:
     assert "ALTER COLUMN geom TYPE geometry(Point) USING geom" in sql
     assert "ALTER COLUMN geom TYPE geometry(LineString) USING geom" in sql
     assert "ST_SRID(geom) > 0" in sql
+
+
+def test_activity_event_extension_preserves_existing_types_and_adds_saved_views() -> None:
+    sql = Path("infra/migrations/016_activity_event_extensions.sql").read_text(encoding="utf-8")
+    for event_type in (
+        "dataset_updated",
+        "decision_recorded",
+        "analysis_started",
+        "saved_view_created",
+    ):
+        assert f"'{event_type}'" in sql

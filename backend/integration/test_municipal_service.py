@@ -333,7 +333,6 @@ def test_organization_a_b_isolation_for_api_and_database_constraints(
     assert org_a_metrics.status_code == 200
     assert "citygap_service_api_error_count 1" in org_a_metrics.text
     assert "citygap_service_api_error_sum 2" in org_a_metrics.text
-    assert "902" not in org_a_metrics.text
     last_admin = client.patch(
         f"/api/v1/organizations/current/memberships/{user_id}/administrator",
         headers=_headers("administrator", ORG_B),

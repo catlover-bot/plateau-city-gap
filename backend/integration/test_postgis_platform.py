@@ -99,9 +99,11 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
     assert pilot.json()["status"] == "NOT_READY"
     assert pilot.json()["facts"]["plateau_registered"] is True
     assert pilot.json()["facts"]["evidence_count"] == 6
-    assert {"population_registered", "facility_registered", "quality_gate", "auth_mode"} <= set(
+    assert pilot.json()["facts"]["quality_gate"] is True
+    assert {"population_registered", "facility_registered", "auth_mode"} <= set(
         pilot.json()["blockers"]
     )
+    assert "quality_gate" not in pilot.json()["blockers"]
     snapshot = client.get("/admin/snapshot")
     assert snapshot.status_code == 200
     assert snapshot.json()["cities"][0]["city_code"] == "26202"

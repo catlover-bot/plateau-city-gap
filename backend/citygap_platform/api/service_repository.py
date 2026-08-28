@@ -295,10 +295,10 @@ class MunicipalServiceRepository(PostGISRepository):
                 raise ValueError("Membership changed; reload before updating it")
             if role == "administrator" and expected_active and not proposed_active:
                 active_administrators = connection.execute(
-                    """SELECT count(*) FROM organization_memberships
+                    """SELECT count(*) AS count FROM organization_memberships
                        WHERE organization_id = %s AND role = 'administrator' AND active""",
                     (organization_id,),
-                ).fetchone()[0]
+                ).fetchone()["count"]
                 if active_administrators <= 1:
                     raise ValueError(
                         "The last active organization administrator cannot be disabled"
@@ -1959,7 +1959,8 @@ class MunicipalServiceRepository(PostGISRepository):
                        FROM review_requests AS review
                        LEFT JOIN investigations AS investigation
                          ON investigation.id = review.investigation_id
-                       WHERE review.organization_id = %s AND review.id = %s FOR UPDATE""",
+                       WHERE review.organization_id = %s AND review.id = %s
+                       FOR UPDATE OF review""",
                     (organization_id, review_id),
                 )
             )
@@ -3897,6 +3898,6 @@ class MunicipalServiceRepository(PostGISRepository):
                     "CITYGAP_APPLICATION_VERSION", "unversioned-development"
                 ),
                 "application_commit": os.getenv("CITYGAP_APPLICATION_COMMIT"),
-                "migration_version": "015_municipal_service.sql",
+                "migration_version": "016_activity_event_extensions.sql",
             },
         }
