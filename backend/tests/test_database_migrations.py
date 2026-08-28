@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 20)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 21)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -83,3 +83,13 @@ def test_static_catalog_extension_is_forward_only_and_keeps_terms_unverified() -
     assert "linked resource licence must be verified independently" in sql
     assert "linked_resource_terms_require_review" in sql
     assert "ARRAY['CSV','GeoJSON','XLSX','ZIP']" in sql
+
+
+def test_demographic_economic_sources_are_added_by_forward_only_migration() -> None:
+    sql = Path("infra/migrations/020_demographic_economic_sources.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "mlit-future-population-250m@2024" in sql
+    assert "estat-economic-census-500m@2021" in sql
+    assert "government-standard-terms-2.0" in sql
+    assert "JGD2011" in sql

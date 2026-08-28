@@ -157,6 +157,64 @@ ADAPTERS = (
         quality_rules=("establishment ID", "service code", "address", "reference date"),
         capabilities_provided=("care",),
     ),
+    OpenDataAdapterDefinition(
+        adapter_id="mlit-future-population-250m@2024",
+        provider="国土交通省 国土政策局",
+        dataset_family="future_population",
+        official_source=(
+            "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html"
+        ),
+        discovery_method=DiscoveryMethod.OFFICIAL_MANIFEST,
+        download_method=DownloadMethod.HTTPS,
+        schema_version="ksj-future-population-250m-r6@2024",
+        license_model="CC BY 4.0",
+        supported_formats=("GeoJSON", "ZIP"),
+        spatial_granularity="250 m standard regional mesh",
+        temporal_granularity="2020 baseline and 2025-2070 five-year projections",
+        crs_handling="JGD2011 geographic coordinates (EPSG:6668)",
+        version_detection=(
+            "production year",
+            "resource filename",
+            "Last-Modified",
+            "ETag",
+            "SHA-256",
+        ),
+        quality_rules=(
+            "mesh identifier",
+            "administrative area code",
+            "projection year coverage",
+            "numeric and suppression semantics",
+            "valid polygon geometry",
+        ),
+        capabilities_provided=("future_population",),
+    ),
+    OpenDataAdapterDefinition(
+        adapter_id="estat-economic-census-500m@2021",
+        provider="総務省・経済産業省 / e-Stat",
+        dataset_family="economic_activity",
+        official_source=(
+            "https://www.e-stat.go.jp/gis/statmap-search?aggregateUnit=H&datum=2011&"
+            "serveyId=H002005112021&statsId=T001162&toukeiCode=00200553&"
+            "toukeiYear=2021&type=1"
+        ),
+        discovery_method=DiscoveryMethod.OFFICIAL_API,
+        download_method=DownloadMethod.API_EXPORT,
+        schema_version="estat-T001162-JGD2011-500m@2021",
+        license_model="政府標準利用規約 第2.0版",
+        supported_formats=("CSV", "ZIP"),
+        spatial_granularity="500 m standard regional mesh",
+        temporal_granularity="2021-06-01 census snapshot",
+        crs_handling="JGD2011 mesh code and JIS X 0410 geometry",
+        version_detection=("statistics ID", "release date", "resource URL", "SHA-256"),
+        quality_rules=(
+            "KEY_CODE",
+            "official statistic field identifiers",
+            "establishment and employee units",
+            "suppression symbols",
+            "500 m mesh identity",
+        ),
+        capabilities_provided=("economic_activity", "daytime_activity_context"),
+    ),
 )
 
 
@@ -217,6 +275,32 @@ SOURCES = (
         official_url="https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
         source_priority=1,
         default_license_id="cc-by-4.0",
+        catalog_scope=CatalogScope.NATIONAL,
+    ),
+    OpenDataSourceDefinition(
+        source_key="mlit-future-population-250m-r6",
+        adapter_id="mlit-future-population-250m@2024",
+        provider="国土交通省 国土政策局",
+        title="250mメッシュ別将来推計人口（R6国政局推計）",
+        official_url=(
+            "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html"
+        ),
+        source_priority=1,
+        default_license_id="cc-by-4.0",
+        catalog_scope=CatalogScope.NATIONAL,
+    ),
+    OpenDataSourceDefinition(
+        source_key="estat-economic-census-2021-500m",
+        adapter_id="estat-economic-census-500m@2021",
+        provider="総務省・経済産業省 / e-Stat",
+        title="令和3年経済センサス－活動調査 500mメッシュ（JGD2011）",
+        official_url=(
+            "https://www.e-stat.go.jp/gis/statmap-search?aggregateUnit=H&datum=2011&"
+            "serveyId=H002005112021&statsId=T001162&toukeiCode=00200553&"
+            "toukeiYear=2021&type=1"
+        ),
+        source_priority=1,
+        default_license_id="government-standard-terms-2.0",
         catalog_scope=CatalogScope.NATIONAL,
     ),
 )

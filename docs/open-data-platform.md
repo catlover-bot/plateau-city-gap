@@ -16,11 +16,14 @@ CITY GAPのオープンデータ基盤は、公式カタログの「発見」と
 | `fujisawa-open-data-library` | [藤沢市オープンデータライブラリ](https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html) | `municipal-standard-ods@2026-08` | CC BY 4.0 | 藤沢市 |
 | `mhlw-medical-information-network` | [厚生労働省 医療情報ネット](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html) | `mhlw-medical@2026-06` | PDL 1.0 | 全国 |
 | `mhlw-care-service` | [厚生労働省 介護サービス情報公表システム](https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html) | `mhlw-care@2026-06` | CC BY 4.0 | 全国 |
+| `mlit-future-population-250m-r6` | [国土交通省 250mメッシュ別将来推計人口（R6国政局推計）](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html) | `mlit-future-population-250m@2024` | CC BY 4.0 | 全国・都道府県別配布 |
+| `estat-economic-census-2021-500m` | [e-Stat 令和3年経済センサス 500mメッシュ](https://www.e-stat.go.jp/gis/statmap-search?aggregateUnit=H&datum=2011&serveyId=H002005112021&statsId=T001162&toukeiCode=00200553&toukeiYear=2021&type=1) | `estat-economic-census-500m@2021` | 政府標準利用規約2.0 | 全国・都道府県別配布 |
 
 コード上のSingle Source of Truthは
 `backend/citygap_platform/open_data/registry.py`、永続化の初期値はforward-only migration
-`018_open_data_foundation.sql`である。将来の定義変更では既存migrationを書き換えず、新しい
-adapter IDとmigrationを追加する。
+`018_open_data_foundation.sql`である。公式static catalog拡張は`019`、人口・経済は`020`で
+forward-onlyに追加した。将来の定義変更では既存migrationを書き換えず、新しいadapter IDと
+migrationを追加する。
 
 ## Adapter contract
 
@@ -140,3 +143,24 @@ PLATEAU 2025、医療2026-06-01、介護2026-06-30を単一年度に見せず、
 `mhlw_medical_identity_comparison.json`、`mhlw_health_summary.json`で相互SHA-256を持つ。
 水平datum未宣言、候補identity、現在availability未検証が残るため、状態は`requires_review`、
 unavailable reasonは`not_verified`である。
+
+## Demographic and economic real canonical run
+
+`python -m analysis.scripts.build_demographic_economic_open_data --observed-at <ISO-8601>`は、国土数値情報の
+R6将来人口GeoJSONとe-Stat `T001162`を京都府・神奈川県について公式入口から再発見し、安全なZIP検査、
+SHA-256保存、schema/CRS/文字コード検査を行う。実スナップショットは将来人口が京都15,174 feature、
+神奈川20,880 feature（EPSG:6668、343属性）、経済センサスが京都4,828 data row、神奈川6,346 data row
+（CP932、KEY_CODE＋46指標）である。e-Statの先頭項目名行は検証後にdata rowから除外する。
+
+行政区域コードで抽出した将来人口は舞鶴1,053件、藤沢963件、監査済み500m meshへ親子規則で全件接続した。
+2020値は観測国勢調査ではなくモデル基準値、2025〜2070値は公式試算であり、予測保証や自動選択した
+best scenarioではない。秘匿前値、公開用集約値、秘匿記号、250m合算先を別々に保持する。舞鶴2件、藤沢4件の
+合算先が行政区域コード抽出外にあるため、公開用の市合計は`unavailable`とし、部分和を市合計として表示しない。
+
+経済センサスは既存500m meshとの`KEY_CODE`完全一致だけを採用し、舞鶴287件、藤沢326件をcanonical化した。
+未掲載は舞鶴208 mesh、藤沢1 meshで、0へ補完しない。46項目は事業所数・従業者数と産業大分類の公式定義を保持し、
+活動文脈としてのみ使う。需要、必要度、収容力、施策scoreには読み替えない。
+
+成果物はsource report、2,629件のcanonical JSONL、822件の統合500m GeoJSON、summaryである。同じ観測時刻の
+再実行で4成果物のSHA-256が一致する。PLATEAU 2025集約は同じ500m keyのモデル文脈として接続するが、
+建物人口の観測値とは扱わない。2020基準、2021経済、2025 PLATEAU、2025〜2070試算は常に`mixed`表示する。

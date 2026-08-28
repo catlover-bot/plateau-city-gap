@@ -147,8 +147,8 @@ def test_source_contract_validates_scope_priority_and_municipality_code() -> Non
 
 
 def test_official_registry_is_unique_and_city_scoped() -> None:
-    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 5
-    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 5
+    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 7
+    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 7
     maizuru = OFFICIAL_SOURCE_REGISTRY.sources_for_city("26202")
     fujisawa = OFFICIAL_SOURCE_REGISTRY.sources_for_city("14205")
     assert "bodik-maizuru" in {item.source_key for item in maizuru}
@@ -157,4 +157,12 @@ def test_official_registry_is_unique_and_city_scoped() -> None:
     assert (
         OFFICIAL_SOURCE_REGISTRY.source("fujisawa-open-data-library").adapter_id
         == "official-static-catalog@1"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.adapter("mlit-future-population-250m@2024").dataset_family
+        == "future_population"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.source("estat-economic-census-2021-500m").default_license_id
+        == "government-standard-terms-2.0"
     )

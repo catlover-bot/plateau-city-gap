@@ -1,0 +1,1170 @@
+{
+  "automatic_best_projection_selected": false,
+  "canonical_artifact": "analysis/outputs/real/open_data/demographic_economic_canonical.jsonl",
+  "canonical_artifact_sha256": "26db8c36899bb204254c6de79d3302afe5f21eb362e7bfa36975ec8840ea14f9",
+  "canonical_record_count": 2629,
+  "cities": {
+    "fujisawa": {
+      "audited_500m_mesh_count": 327,
+      "canonical_record_count": 1289,
+      "city_code": "14205",
+      "city_name": "藤沢市",
+      "economic_activity": {
+        "analysis": {
+          "claim_boundary": "Sums cover rows published in T001162 that match audited city meshes. Missing rows and suppressed cells are not converted to zero, and no need score is inferred.",
+          "published_mesh_row_sums": {
+            "employees_accommodation_food_m": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 16851
+            },
+            "employees_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 180574
+            },
+            "employees_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 191307
+            },
+            "employees_compound_services_q": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 986
+            },
+            "employees_construction_d": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 8859
+            },
+            "employees_education_o": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 12773
+            },
+            "employees_female_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 80246
+            },
+            "employees_female_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 85855
+            },
+            "employees_finance_insurance_j": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 3345
+            },
+            "employees_government_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 3792
+            },
+            "employees_information_g": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 2670
+            },
+            "employees_male_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 98614
+            },
+            "employees_male_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 103738
+            },
+            "employees_manufacturing_e": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 29442
+            },
+            "employees_medical_welfare_p": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 31077
+            },
+            "employees_mining_c": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 0
+            },
+            "employees_other_services_r": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 13217
+            },
+            "employees_personal_services_entertainment_n": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 7951
+            },
+            "employees_professional_technical_l": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 9656
+            },
+            "employees_real_estate_leasing_k": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 8245
+            },
+            "employees_secondary_c_e": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 38301
+            },
+            "employees_tertiary_f_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 152664
+            },
+            "employees_transport_postal_h": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 8888
+            },
+            "employees_utilities_f": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 559
+            },
+            "employees_wholesale_retail_i": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 32654
+            },
+            "establishments_accommodation_food_m": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 1827
+            },
+            "establishments_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 14876
+            },
+            "establishments_all_a_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 15061
+            },
+            "establishments_compound_services_q": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 56
+            },
+            "establishments_construction_d": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 1427
+            },
+            "establishments_education_o": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 732
+            },
+            "establishments_finance_insurance_j": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 222
+            },
+            "establishments_government_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 58
+            },
+            "establishments_information_g": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 192
+            },
+            "establishments_manufacturing_e": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 867
+            },
+            "establishments_medical_welfare_p": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 1812
+            },
+            "establishments_mining_c": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 0
+            },
+            "establishments_other_services_r": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 802
+            },
+            "establishments_personal_services_entertainment_n": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 1288
+            },
+            "establishments_professional_technical_l": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 713
+            },
+            "establishments_real_estate_leasing_k": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 1493
+            },
+            "establishments_secondary_c_e": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 2294
+            },
+            "establishments_tertiary_f_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 12713
+            },
+            "establishments_transport_postal_h": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 256
+            },
+            "establishments_utilities_f": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 19
+            },
+            "establishments_wholesale_retail_i": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 3243
+            }
+          }
+        },
+        "quality": {
+          "audited_500m_mesh_count": 327,
+          "audited_500m_meshes_without_published_row": [
+            "533903763"
+          ],
+          "audited_500m_meshes_without_published_row_count": 1,
+          "city_published_mesh_row_count": 326,
+          "missing_row_semantics": "not_available_from_selected_table; never imputed as zero",
+          "null_reason_counts": {},
+          "prefectural_row_count": 6346
+        }
+      },
+      "future_population": {
+        "analysis": {
+          "aggregation_note": "The before-privacy series sums exact city-code rows. A published privacy-adjusted city total is withheld for any year whose aggregation target leaves that extract; the partial sum remains labeled for audit only.",
+          "change_2025_to_2050": {
+            "absolute_persons": -10501.9998,
+            "rate": -0.023701,
+            "semantics": "difference_between_official_trial_projection_values_before_privacy_aggregation"
+          },
+          "series": [
+            {
+              "population_before_privacy_aggregation": 443101.9998,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 443104.1899,
+              "status": "official_trial_projection_not_observation",
+              "year": 2025
+            },
+            {
+              "population_before_privacy_aggregation": 444889.9998,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 444895.3347,
+              "status": "official_trial_projection_not_observation",
+              "year": 2030
+            },
+            {
+              "population_before_privacy_aggregation": 444491.0,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 444495.7477,
+              "status": "official_trial_projection_not_observation",
+              "year": 2035
+            },
+            {
+              "population_before_privacy_aggregation": 441924.9997,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 441928.6837,
+              "status": "official_trial_projection_not_observation",
+              "year": 2040
+            },
+            {
+              "population_before_privacy_aggregation": 437748.9994,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 437749.2851,
+              "status": "official_trial_projection_not_observation",
+              "year": 2045
+            },
+            {
+              "population_before_privacy_aggregation": 432600.0,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 432597.612,
+              "status": "official_trial_projection_not_observation",
+              "year": 2050
+            },
+            {
+              "population_before_privacy_aggregation": 425758.9992,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 425757.0427,
+              "status": "official_trial_projection_not_observation",
+              "year": 2055
+            },
+            {
+              "population_before_privacy_aggregation": 416743.0009,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 416741.1424,
+              "status": "official_trial_projection_not_observation",
+              "year": 2060
+            },
+            {
+              "population_before_privacy_aggregation": 405328.9998,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 405325.0378,
+              "status": "official_trial_projection_not_observation",
+              "year": 2065
+            },
+            {
+              "population_before_privacy_aggregation": 392747.001,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 392744.1038,
+              "status": "official_trial_projection_not_observation",
+              "year": 2070
+            }
+          ]
+        },
+        "quality": {
+          "audited_500m_meshes_without_official_city_250m_child": [
+            "523973693",
+            "523973794",
+            "523973953",
+            "523974901",
+            "523974904",
+            "533903051",
+            "533903053",
+            "533903151",
+            "533903242",
+            "533903244",
+            "533903342",
+            "533903344",
+            "533903391",
+            "533903393",
+            "533903441",
+            "533903521",
+            "533903533",
+            "533903541",
+            "533903543",
+            "533903612",
+            "533903614",
+            "533903712",
+            "533903823",
+            "533903881",
+            "533903883",
+            "533903924",
+            "533903952",
+            "533903963",
+            "533903981",
+            "533904011",
+            "533904111",
+            "533904202",
+            "533913032",
+            "533913042",
+            "533913083",
+            "533913151",
+            "533913162",
+            "533913171"
+          ],
+          "city_feature_count": 963,
+          "city_published_total_semantics": "unavailable for years with an outside-city privacy aggregation target; the partial city-code extract is never presented as a city total",
+          "maximum_250m_children_per_parent": 4,
+          "parent_500m_mesh_count": 289,
+          "prefectural_feature_count": 20880,
+          "privacy_aggregation_targets_outside_city": [
+            "5339034932",
+            "5339035933",
+            "5339038142",
+            "5339130413"
+          ],
+          "privacy_aggregation_targets_outside_city_by_year": {
+            "2025": [
+              "5339034932"
+            ],
+            "2030": [
+              "5339034932"
+            ],
+            "2035": [
+              "5339034932"
+            ],
+            "2040": [
+              "5339034932"
+            ],
+            "2045": [
+              "5339034932",
+              "5339035933"
+            ],
+            "2050": [
+              "5339034932",
+              "5339035933",
+              "5339130413"
+            ],
+            "2055": [
+              "5339034932",
+              "5339035933",
+              "5339130413"
+            ],
+            "2060": [
+              "5339034932",
+              "5339035933",
+              "5339130413"
+            ],
+            "2065": [
+              "5339034932",
+              "5339035933",
+              "5339038142",
+              "5339130413"
+            ],
+            "2070": [
+              "5339034932",
+              "5339035933",
+              "5339038142",
+              "5339130413"
+            ]
+          },
+          "privacy_aggregation_targets_outside_city_count": 4,
+          "privacy_marker_counts_across_projection_years": {
+            "*": 123,
+            "@": 137,
+            "none": 9370
+          }
+        }
+      },
+      "spatial_links": {
+        "economic_to_500m_exact": 326,
+        "economic_with_plateau_aggregate_context": 302,
+        "future_to_parent_500m": 963,
+        "future_with_plateau_aggregate_context": 957
+      },
+      "temporal_alignment": {
+        "economic_census_reference_date": "2021-06-01",
+        "future_population_baseline": 2020,
+        "hidden_as_single_year": false,
+        "plateau_reference_year": 2025,
+        "projection_years": [
+          2025,
+          2030,
+          2035,
+          2040,
+          2045,
+          2050,
+          2055,
+          2060,
+          2065,
+          2070
+        ],
+        "status": "mixed"
+      }
+    },
+    "maizuru": {
+      "audited_500m_mesh_count": 495,
+      "canonical_record_count": 1340,
+      "city_code": "26202",
+      "city_name": "舞鶴市",
+      "economic_activity": {
+        "analysis": {
+          "claim_boundary": "Sums cover rows published in T001162 that match audited city meshes. Missing rows and suppressed cells are not converted to zero, and no need score is inferred.",
+          "published_mesh_row_sums": {
+            "employees_accommodation_food_m": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 2519
+            },
+            "employees_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 27133
+            },
+            "employees_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 33945
+            },
+            "employees_compound_services_q": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 398
+            },
+            "employees_construction_d": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 2451
+            },
+            "employees_education_o": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 2913
+            },
+            "employees_female_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 12414
+            },
+            "employees_female_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 14148
+            },
+            "employees_finance_insurance_j": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 598
+            },
+            "employees_government_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 4376
+            },
+            "employees_information_g": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 33
+            },
+            "employees_male_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 14651
+            },
+            "employees_male_all_a_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 19729
+            },
+            "employees_manufacturing_e": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 3828
+            },
+            "employees_medical_welfare_p": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 5768
+            },
+            "employees_mining_c": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 8
+            },
+            "employees_other_services_r": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 1785
+            },
+            "employees_personal_services_entertainment_n": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 954
+            },
+            "employees_professional_technical_l": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 518
+            },
+            "employees_real_estate_leasing_k": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 423
+            },
+            "employees_secondary_c_e": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 6287
+            },
+            "employees_tertiary_f_s": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 27391
+            },
+            "employees_transport_postal_h": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 1323
+            },
+            "employees_utilities_f": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 119
+            },
+            "employees_wholesale_retail_i": {
+              "null_row_count": 0,
+              "unit": "persons",
+              "value": 5664
+            },
+            "establishments_accommodation_food_m": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 459
+            },
+            "establishments_all_a_r_private": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 3263
+            },
+            "establishments_all_a_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 3394
+            },
+            "establishments_compound_services_q": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 30
+            },
+            "establishments_construction_d": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 361
+            },
+            "establishments_education_o": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 142
+            },
+            "establishments_finance_insurance_j": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 66
+            },
+            "establishments_government_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 50
+            },
+            "establishments_information_g": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 15
+            },
+            "establishments_manufacturing_e": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 192
+            },
+            "establishments_medical_welfare_p": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 272
+            },
+            "establishments_mining_c": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 2
+            },
+            "establishments_other_services_r": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 295
+            },
+            "establishments_personal_services_entertainment_n": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 336
+            },
+            "establishments_professional_technical_l": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 93
+            },
+            "establishments_real_estate_leasing_k": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 129
+            },
+            "establishments_secondary_c_e": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 555
+            },
+            "establishments_tertiary_f_s": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 2816
+            },
+            "establishments_transport_postal_h": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 68
+            },
+            "establishments_utilities_f": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 10
+            },
+            "establishments_wholesale_retail_i": {
+              "null_row_count": 0,
+              "unit": "establishments",
+              "value": 851
+            }
+          }
+        },
+        "quality": {
+          "audited_500m_mesh_count": 495,
+          "audited_500m_meshes_without_published_row": [
+            "533501791",
+            "533501883",
+            "533501891",
+            "533501963",
+            "533501981",
+            "533501983",
+            "533502544",
+            "533502751",
+            "533502754",
+            "533502872",
+            "533502873",
+            "533502883",
+            "533502904",
+            "533502943",
+            "533502993",
+            "533503811",
+            "533503813",
+            "533511063",
+            "533511071",
+            "533511072",
+            "533511091",
+            "533511093",
+            "533511094",
+            "533511162",
+            "533511172",
+            "533511181",
+            "533511184",
+            "533511193",
+            "533511243",
+            "533511244",
+            "533511253",
+            "533511261",
+            "533511262",
+            "533511263",
+            "533511281",
+            "533511283",
+            "533511292",
+            "533511293",
+            "533511344",
+            "533511351",
+            "533511362",
+            "533511363",
+            "533511372",
+            "533511384",
+            "533511391",
+            "533511392",
+            "533511394",
+            "533511432",
+            "533511441",
+            "533511442",
+            "533511461",
+            "533511463",
+            "533511471",
+            "533511472",
+            "533511474",
+            "533511483",
+            "533511561",
+            "533511571",
+            "533511581",
+            "533511582",
+            "533511584",
+            "533511591",
+            "533511593",
+            "533511682",
+            "533511691",
+            "533511693",
+            "533511771",
+            "533511773",
+            "533511782",
+            "533511784",
+            "533511791",
+            "533511891",
+            "533511893",
+            "533511991",
+            "533512001",
+            "533512003",
+            "533512032",
+            "533512034",
+            "533512041",
+            "533512053",
+            "533512054",
+            "533512072",
+            "533512074",
+            "533512083",
+            "533512094",
+            "533512101",
+            "533512142",
+            "533512172",
+            "533512174",
+            "533512202",
+            "533512211",
+            "533512212",
+            "533512213",
+            "533512221",
+            "533512271",
+            "533512301",
+            "533512302",
+            "533512314",
+            "533512331",
+            "533512384",
+            "533512393",
+            "533512402",
+            "533512403",
+            "533512413",
+            "533512414",
+            "533512421",
+            "533512423",
+            "533512433",
+            "533512443",
+            "533512511",
+            "533512514",
+            "533512522",
+            "533512524",
+            "533512531",
+            "533512563",
+            "533512564",
+            "533512594",
+            "533512623",
+            "533512624",
+            "533512631",
+            "533512633",
+            "533512644",
+            "533512651",
+            "533512653",
+            "533512661",
+            "533512684",
+            "533512703",
+            "533512712",
+            "533512714",
+            "533512721",
+            "533512722",
+            "533512724",
+            "533512781",
+            "533512801",
+            "533512821",
+            "533512833",
+            "533512851",
+            "533512853",
+            "533512931",
+            "533512933",
+            "533512934",
+            "533512962",
+            "533512963",
+            "533513003",
+            "533513011",
+            "533513012",
+            "533513102",
+            "533513111",
+            "533513342",
+            "533513404",
+            "533513411",
+            "533513422",
+            "533513541",
+            "533513544",
+            "533513552",
+            "533513554",
+            "533513561",
+            "533513624",
+            "533513631",
+            "533513633",
+            "533513742",
+            "533513751",
+            "533513814",
+            "533513864",
+            "533513934",
+            "533513974",
+            "533521091",
+            "533521093",
+            "533522031",
+            "533522032",
+            "533522034",
+            "533522094",
+            "533522133",
+            "533522141",
+            "533522143",
+            "533522272",
+            "533522283",
+            "533522474",
+            "533522572",
+            "533522581",
+            "533523023",
+            "533523034",
+            "533523053",
+            "533523063",
+            "533523073",
+            "533523104",
+            "533523152",
+            "533523213",
+            "533523214",
+            "533523224",
+            "533523233",
+            "533523234",
+            "533523303",
+            "533523311",
+            "533523322",
+            "533523331",
+            "533523332",
+            "533523333",
+            "533523334",
+            "533523341",
+            "533523343",
+            "533523344",
+            "533523353",
+            "533523434",
+            "533523561",
+            "533523771",
+            "533523772",
+            "533523954"
+          ],
+          "audited_500m_meshes_without_published_row_count": 208,
+          "city_published_mesh_row_count": 287,
+          "missing_row_semantics": "not_available_from_selected_table; never imputed as zero",
+          "null_reason_counts": {},
+          "prefectural_row_count": 4828
+        }
+      },
+      "future_population": {
+        "analysis": {
+          "aggregation_note": "The before-privacy series sums exact city-code rows. A published privacy-adjusted city total is withheld for any year whose aggregation target leaves that extract; the partial sum remains labeled for audit only.",
+          "change_2025_to_2050": {
+            "absolute_persons": -22058.0009,
+            "rate": -0.29073,
+            "semantics": "difference_between_official_trial_projection_values_before_privacy_aggregation"
+          },
+          "series": [
+            {
+              "population_before_privacy_aggregation": 75871.0015,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 75867.1243,
+              "status": "official_trial_projection_not_observation",
+              "year": 2025
+            },
+            {
+              "population_before_privacy_aggregation": 71361.9999,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 71358.4412,
+              "status": "official_trial_projection_not_observation",
+              "year": 2030
+            },
+            {
+              "population_before_privacy_aggregation": 66864.9994,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 66861.8691,
+              "status": "official_trial_projection_not_observation",
+              "year": 2035
+            },
+            {
+              "population_before_privacy_aggregation": 62425.9988,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 62423.4541,
+              "status": "official_trial_projection_not_observation",
+              "year": 2040
+            },
+            {
+              "population_before_privacy_aggregation": 58027.0001,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 58026.0888,
+              "status": "official_trial_projection_not_observation",
+              "year": 2045
+            },
+            {
+              "population_before_privacy_aggregation": 53813.0006,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 53813.7762,
+              "status": "official_trial_projection_not_observation",
+              "year": 2050
+            },
+            {
+              "population_before_privacy_aggregation": 49779.9991,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 49782.1,
+              "status": "official_trial_projection_not_observation",
+              "year": 2055
+            },
+            {
+              "population_before_privacy_aggregation": 45802.0007,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 45803.9324,
+              "status": "official_trial_projection_not_observation",
+              "year": 2060
+            },
+            {
+              "population_before_privacy_aggregation": 41854.0008,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 41852.5611,
+              "status": "official_trial_projection_not_observation",
+              "year": 2065
+            },
+            {
+              "population_before_privacy_aggregation": 38090.0025,
+              "published_city_total_status": "unavailable_due_to_outside_city_privacy_aggregation_target",
+              "published_privacy_adjusted_age_65_plus": null,
+              "published_privacy_adjusted_age_65_plus_ratio": null,
+              "published_privacy_adjusted_population": null,
+              "published_privacy_adjusted_population_partial_city_code_extract": 38088.4251,
+              "status": "official_trial_projection_not_observation",
+              "year": 2070
+            }
+          ]
+        },
+        "quality": {
+          "audited_500m_meshes_without_official_city_250m_child": [
+            "533501791",
+            "533502544",
+            "533511063",
+            "533512174",
+            "533512924"
+          ],
+          "city_feature_count": 1053,
+          "city_published_total_semantics": "unavailable for years with an outside-city privacy aggregation target; the partial city-code extract is never presented as a city total",
+          "maximum_250m_children_per_parent": 4,
+          "parent_500m_mesh_count": 490,
+          "prefectural_feature_count": 15174,
+          "privacy_aggregation_targets_outside_city": [
+            "5335019633",
+            "5335110611"
+          ],
+          "privacy_aggregation_targets_outside_city_by_year": {
+            "2025": [
+              "5335019633"
+            ],
+            "2030": [
+              "5335019633"
+            ],
+            "2035": [
+              "5335019633"
+            ],
+            "2040": [
+              "5335019633"
+            ],
+            "2045": [
+              "5335019633"
+            ],
+            "2050": [
+              "5335019633"
+            ],
+            "2055": [
+              "5335019633"
+            ],
+            "2060": [
+              "5335019633"
+            ],
+            "2065": [
+              "5335019633",
+              "5335110611"
+            ],
+            "2070": [
+              "5335019633",
+              "5335110611"
+            ]
+          },
+          "privacy_aggregation_targets_outside_city_count": 2,
+          "privacy_marker_counts_across_projection_years": {
+            "*": 2052,
+            "@": 1484,
+            "none": 6994
+          }
+        }
+      },
+      "spatial_links": {
+        "economic_to_500m_exact": 287,
+        "economic_with_plateau_aggregate_context": 133,
+        "future_to_parent_500m": 1053,
+        "future_with_plateau_aggregate_context": 449
+      },
+      "temporal_alignment": {
+        "economic_census_reference_date": "2021-06-01",
+        "future_population_baseline": 2020,
+        "hidden_as_single_year": false,
+        "plateau_reference_year": 2025,
+        "projection_years": [
+          2025,
+          2030,
+          2035,
+          2040,
+          2045,
+          2050,
+          2055,
+          2060,
+          2065,
+          2070
+        ],
+        "status": "mixed"
+      }
+    }
+  },
+  "mesh_context_artifact": "analysis/outputs/real/open_data/demographic_economic_mesh_context.geojson",
+  "mesh_context_artifact_sha256": "1238b258afba17bff90d241e5d711b7aa064652ad51473b2c2bfcfd6e4f0c0a2",
+  "mesh_context_feature_count": 822,
+  "observed_at": "2026-08-28T12:30:00Z",
+  "privacy": "Raw official archives remain outside public assets; canonical data is aggregate mesh data.",
+  "raw_resource_count": 4,
+  "raw_unique_sha256_count": 4,
+  "schema_version": "citygap-demographic-economic-summary@1",
+  "source_report": "analysis/outputs/real/open_data/demographic_economic_source_report.json",
+  "source_report_sha256": "d8fb5d26717600c477890c7e3676fd9607e57e308f4626584ea09fe50e94cd4c",
+  "temporal_alignment": "mixed_and_explicit"
+}
