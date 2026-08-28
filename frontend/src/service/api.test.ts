@@ -53,7 +53,9 @@ describe("municipal service API client", () => {
         "/api/v1/cities/test-city/findings?limit=100": { items: [] },
         "/api/v1/cities/test-city/investigations?limit=100": { items: [] },
         "/api/v1/cities/test-city/scenarios?limit=100": { items: [] },
-        "/api/v1/cities/test-city/scenario-comparisons?limit=100": { items: [] },
+        "/api/v1/cities/test-city/scenario-comparisons?limit=100": {
+          items: [],
+        },
         "/api/v1/cities/test-city/data-hub": {
           city: { id: "city", city_key: "test-city", name: "検証市" },
           datasets: [],
@@ -125,12 +127,14 @@ describe("municipal service API client", () => {
           boundaries: {},
         });
       if (url === "/api/v1/jobs?limit=100") return response({ items: [] });
+      if (url === "/api/v1/audit-events?limit=100")
+        return response({ items: [] });
       return response({}, 404);
     }) as unknown as typeof fetch;
     const result = await loadServiceSnapshot(fetcher);
     expect(result.cities).toEqual([]);
     expect(result.cityHome).toBeNull();
-    expect((fetcher as ReturnType<typeof vi.fn>).mock.calls).toHaveLength(6);
+    expect((fetcher as ReturnType<typeof vi.fn>).mock.calls).toHaveLength(7);
   });
 
   it("preserves request ID and remediation from unified API errors", async () => {

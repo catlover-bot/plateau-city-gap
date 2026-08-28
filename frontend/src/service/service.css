@@ -822,6 +822,90 @@
   margin: 0;
   font-size: 11px;
 }
+.field-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+  gap: 0 16px;
+}
+.field-workspace > .offline-package-form,
+.field-workspace > .field-status {
+  grid-column: 1 / -1;
+}
+.case-form > p,
+.offline-package-form > p,
+.offline-package-form > form,
+.offline-queue-status,
+.service-warning {
+  grid-column: 1 / -1;
+}
+.offline-package-form > p,
+.case-form > p {
+  margin: 0;
+  color: var(--cg-ink-soft);
+  font-size: 9px;
+  line-height: 1.6;
+}
+.offline-package-form > form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  padding: 10px;
+  border: 1px solid var(--cg-line);
+  background: #f7f8f4;
+  gap: 10px;
+}
+.offline-package-form > form strong,
+.offline-package-form > form textarea {
+  grid-column: 1 / -1;
+}
+.offline-queue-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 10px;
+  background: var(--cg-teal-pale);
+  color: var(--cg-teal-dark);
+  font: 700 9px var(--cg-mono);
+}
+.offline-queue-status button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.service-warning,
+.field-status {
+  margin: 0;
+  padding: 10px;
+  border-left: 3px solid #b86a35;
+  background: #fff4e8;
+  color: #69401f;
+  font-size: 9px;
+  line-height: 1.6;
+}
+.service-warning > p {
+  margin: 0 0 8px;
+}
+.service-warning > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.service-warning code {
+  margin-right: auto;
+  font-size: 8px;
+}
+.service-warning button {
+  min-height: 28px;
+  border-color: #b86a35;
+  background: transparent;
+  color: #69401f;
+}
+.field-status {
+  margin-top: 10px;
+  border-color: var(--cg-teal);
+  background: var(--cg-teal-pale);
+  color: var(--cg-teal-dark);
+}
 .case-form.decision label:nth-of-type(3),
 .case-form.decision label:nth-of-type(4) {
   grid-column: 1 / -1;
@@ -1092,6 +1176,13 @@
   }
   .service-form label.wide {
     grid-column: auto;
+  }
+  .field-workspace,
+  .offline-package-form > form {
+    grid-template-columns: 1fr;
+  }
+  .field-workspace > .case-form {
+    grid-column: 1;
   }
   .catalog-grid {
     grid-template-columns: 1fr;

@@ -11,6 +11,7 @@ from typing import Annotated, Any, Literal
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
@@ -25,6 +26,7 @@ from backend.citygap_platform.security.auth import (
     require_permission,
     resolve_identity,
 )
+from backend.citygap_platform.storage import AttachmentStore, attachment_store_from_environment
 
 from .repository import PlatformRepository, PostGISRepository
 from .service import router as municipal_service_router
@@ -279,6 +281,7 @@ def create_app(
     repository: PlatformRepository | None = None,
     auth_settings: AuthSettings | None = None,
     oidc_verifier: OidcVerifier | None = None,
+    attachment_store: AttachmentStore | None = None,
 ) -> FastAPI:
     application = FastAPI(
         title="CITY GAP Municipal Urban Intelligence Platform",
@@ -292,6 +295,7 @@ def create_app(
         "CITYGAP_DATABASE_URL", "postgresql://citygap:citygap_dev@postgres:5432/citygap"
     )
     application.state.repository = repository or MunicipalServiceRepository(database_url)
+    application.state.attachment_store = attachment_store or attachment_store_from_environment()
     application.state.auth_settings = auth_settings or AuthSettings.from_environment()
     api_surface = os.getenv("CITYGAP_API_SURFACE", "combined").lower()
     if api_surface not in {"municipal", "public-showcase", "combined"}:
@@ -1298,6 +1302,39 @@ def create_app(
         from backend.citygap_platform.readiness import PilotReadinessService
 
         return PilotReadinessService(repo).check(city_id)
+
+    def surface_openapi() -> dict[str, Any]:
+        if application.openapi_schema:
+            return application.openapi_schema
+        schema = get_openapi(
+            title=application.title,
+            version=application.version,
+            description=application.description,
+            routes=application.routes,
+        )
+        if api_surface == "municipal":
+            schema["paths"] = {
+                path: operations
+                for path, operations in schema["paths"].items()
+                if path.startswith("/api/v1") or path in {"/health", "/ready"}
+            }
+        elif api_surface == "public-showcase":
+            public_paths: dict[str, Any] = {}
+            for path, operations in schema["paths"].items():
+                if path.startswith("/api/v1"):
+                    continue
+                readable = {
+                    method: operation
+                    for method, operation in operations.items()
+                    if method == "get" or method.startswith("x-")
+                }
+                if readable:
+                    public_paths[path] = readable
+            schema["paths"] = public_paths
+        application.openapi_schema = schema
+        return schema
+
+    application.openapi = surface_openapi
 
     return application
 

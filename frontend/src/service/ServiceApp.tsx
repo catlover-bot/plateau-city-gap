@@ -1,4 +1,12 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  applySyncResponse,
+  cacheSelectedFieldPackage,
+  queueFieldOperation,
+  queuedFieldOperations,
+  saveFieldOperation,
+  type QueuedFieldOperation,
+} from "../lib/fieldOffline";
 import { ServiceApiError, loadServiceSnapshot, serviceApi } from "./api";
 import {
   ServiceEmpty,
@@ -9,6 +17,7 @@ import {
 } from "./components";
 import type {
   Finding,
+  FieldOfflinePackage,
   Investigation,
   ProductRole,
   ServiceSnapshot,
@@ -248,16 +257,21 @@ export function ServiceApp({
   const createCity = useCallback(async (body: Record<string, unknown>) => {
     setMutationMessage(null);
     try {
-      const city = await serviceApi.request<{ city_key: string }>("/api/v1/cities", {
-        method: "POST",
-        body: JSON.stringify(body),
-      });
+      const city = await serviceApi.request<{ city_key: string }>(
+        "/api/v1/cities",
+        {
+          method: "POST",
+          body: JSON.stringify(body),
+        },
+      );
       const updated = await loadServiceSnapshot();
       setSnapshot(updated);
       setSelectedCity(city.city_key);
       updateUrl("data", city.city_key);
       setPageState("data");
-      setMutationMessage("都市を登録しました。Data Hubで実データを登録してください");
+      setMutationMessage(
+        "都市を登録しました。Data Hubで実データを登録してください",
+      );
       return true;
     } catch (reason) {
       const apiError = reason instanceof ServiceApiError ? reason : null;
@@ -705,7 +719,12 @@ function CitiesPage({
         <form className="service-form" onSubmit={(event) => void submit(event)}>
           <label>
             市区町村コード
-            <input name="city_code" required pattern="[0-9]{5}" placeholder="26202" />
+            <input
+              name="city_code"
+              required
+              pattern="[0-9]{5}"
+              placeholder="26202"
+            />
           </label>
           <label>
             City key
@@ -892,9 +911,7 @@ function DataPage({
               <article key={step.key}>
                 <StatusChip value={step.status} />
                 <strong>{step.key.replaceAll("_", " ")}</strong>
-                <small>
-                  {step.promoted_versions ?? step.count ?? 0} ready
-                </small>
+                <small>{step.promoted_versions ?? step.count ?? 0} ready</small>
               </article>
             ))}
           </div>
@@ -932,11 +949,21 @@ function DataPage({
           </label>
           <label>
             年度
-            <input name="dataset_year" type="number" min="1900" max="2200" required />
+            <input
+              name="dataset_year"
+              type="number"
+              min="1900"
+              max="2200"
+              required
+            />
           </label>
           <label>
             形式
-            <input name="data_format" required placeholder="CityGML / CSV / GeoJSON" />
+            <input
+              name="data_format"
+              required
+              placeholder="CityGML / CSV / GeoJSON"
+            />
           </label>
           <label>
             Source URL
@@ -985,7 +1012,8 @@ function DataPage({
                 .filter((dataset) => dataset.service_status === "promoted")
                 .map((dataset) => (
                   <option key={dataset.version_id} value={dataset.version_id}>
-                    {dataset.title} · {dataset.dataset_year} · {dataset.version_key}
+                    {dataset.title} · {dataset.dataset_year} ·{" "}
+                    {dataset.version_key}
                   </option>
                 ))}
             </select>
@@ -1078,7 +1106,9 @@ function DataPage({
             {
               key: "lifecycle_status",
               label: "状態",
-              render: (row) => <StatusChip value={String(row.lifecycle_status)} />,
+              render: (row) => (
+                <StatusChip value={String(row.lifecycle_status)} />
+              ),
             },
             {
               key: "source_verified",
@@ -1266,11 +1296,7 @@ function AnalysisPage({
           ) : undefined
         }
       />
-      <AnalysisRunPanel
-        snapshot={snapshot}
-        canRun={canWrite}
-        mutate={mutate}
-      />
+      <AnalysisRunPanel snapshot={snapshot} canRun={canWrite} mutate={mutate} />
       {formOpen && (
         <form className="service-form" onSubmit={submitFinding}>
           <label>
@@ -1421,7 +1447,9 @@ function AnalysisPage({
         <ServiceTable
           caption="分析実行履歴"
           empty="この都市で実行された分析はありません"
-          rows={snapshot.analysisRuns as unknown as Array<Record<string, unknown>>}
+          rows={
+            snapshot.analysisRuns as unknown as Array<Record<string, unknown>>
+          }
           rowKey={(row) => String(row.id)}
           columns={[
             { key: "analysis_type", label: "分析" },
@@ -1493,7 +1521,9 @@ function AnalysisRunPanel({
     );
     const parameters = Object.fromEntries(
       definition.parameters.map((parameter) => {
-        const raw = String(data.get(`parameter:${parameter.parameter_key}`) ?? "");
+        const raw = String(
+          data.get(`parameter:${parameter.parameter_key}`) ?? "",
+        );
         const value =
           parameter.value_type === "integer"
             ? Number.parseInt(raw, 10)
@@ -1565,7 +1595,8 @@ function AnalysisRunPanel({
             <select name="urban_state_id" required>
               {states.map((state) => (
                 <option key={state.id} value={state.id}>
-                  {state.label} · {state.effective_date} · {state.lifecycle_status}
+                  {state.label} · {state.effective_date} ·{" "}
+                  {state.lifecycle_status}
                 </option>
               ))}
             </select>
@@ -1576,8 +1607,12 @@ function AnalysisRunPanel({
               <select name={`dataset:${role}`} required>
                 <option value="">Versionを選択</option>
                 {promoted.map((dataset) => (
-                  <option key={`${role}-${dataset.version_id}`} value={dataset.version_id}>
-                    {dataset.title} · {dataset.dataset_year} · {dataset.version_key}
+                  <option
+                    key={`${role}-${dataset.version_id}`}
+                    value={dataset.version_id}
+                  >
+                    {dataset.title} · {dataset.dataset_year} ·{" "}
+                    {dataset.version_key}
                   </option>
                 ))}
               </select>
@@ -1597,7 +1632,11 @@ function AnalysisRunPanel({
               ) : (
                 <input
                   name={`parameter:${parameter.parameter_key}`}
-                  type={["integer", "number"].includes(parameter.value_type) ? "number" : "text"}
+                  type={
+                    ["integer", "number"].includes(parameter.value_type)
+                      ? "number"
+                      : "text"
+                  }
                   defaultValue={String(parameter.default_value)}
                   min={parameter.minimum ?? undefined}
                   max={parameter.maximum ?? undefined}
@@ -1741,7 +1780,11 @@ function MeasuresPage({
         <ServiceTable
           caption="保存済みScenario Comparison"
           empty="保存済みの比較はありません"
-          rows={snapshot.scenarioComparisons as unknown as Array<Record<string, unknown>>}
+          rows={
+            snapshot.scenarioComparisons as unknown as Array<
+              Record<string, unknown>
+            >
+          }
           rowKey={(row) => String(row.id)}
           columns={[
             { key: "title", label: "比較" },
@@ -1805,20 +1848,204 @@ function ReviewPage({
   const canField = permits(roles, ["field_staff", "planner"]);
   const investigation = detail?.investigation as Investigation | undefined;
   const reviews = (detail?.reviews ?? []) as Array<Record<string, unknown>>;
-  const fieldSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [offlinePackage, setOfflinePackage] =
+    useState<FieldOfflinePackage | null>(null);
+  const [offlineQueue, setOfflineQueue] = useState<QueuedFieldOperation[]>([]);
+  const [fieldStatus, setFieldStatus] = useState<string | null>(null);
+  const [attachmentIds, setAttachmentIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const city = snapshot.cityHome?.city.city_key;
+    if (!canField || !city || typeof indexedDB === "undefined") return;
+    void queuedFieldOperations(snapshot.profile.organization.id, city)
+      .then(setOfflineQueue)
+      .catch(() => setFieldStatus("端末のoffline queueを読み込めませんでした"));
+  }, [
+    canField,
+    snapshot.cityHome?.city.city_key,
+    snapshot.profile.organization.id,
+  ]);
+
+  const packageSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const city = snapshot.cityHome?.city.city_key;
+    if (!city || !investigation) return;
+    const data = new FormData(event.currentTarget);
+    try {
+      const downloaded = await serviceApi.createOfflinePackage(city, {
+        urban_state_id: investigation.urban_state_id,
+        scenario_run_id: String(data.get("scenario_run_id")),
+        site_order: Number(data.get("site_order")),
+      });
+      await cacheSelectedFieldPackage({
+        offline_package_id: downloaded.offline_package_id,
+        package_version: downloaded.package_version,
+        organization_id: snapshot.profile.organization.id,
+        city_key: city,
+        content: downloaded.content,
+      });
+      setOfflinePackage(downloaded);
+      setFieldStatus("選択地点をこの端末へ保存しました");
+    } catch (error) {
+      setFieldStatus(
+        error instanceof Error
+          ? error.message
+          : "offline packageを保存できませんでした",
+      );
+    }
+  };
+
+  const offlineRecordSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!offlinePackage) return;
+    const city = snapshot.cityHome?.city.city_key;
+    if (!city) return;
+    const data = new FormData(event.currentTarget);
+    const operation: QueuedFieldOperation = {
+      client_operation_id: crypto.randomUUID(),
+      offline_package_id: offlinePackage.offline_package_id,
+      organization_id: snapshot.profile.organization.id,
+      city_key: city,
+      scenario_run_id: offlinePackage.content.scenario_run_id,
+      site_order: offlinePackage.content.site_order,
+      base_record_version: Number(
+        offlinePackage.content.field_record?.record_version ?? 1,
+      ),
+      client_updated_at: new Date().toISOString(),
+      payload: {
+        notes: String(data.get("offline_notes") ?? ""),
+        site_access: String(data.get("site_access") ?? "unknown"),
+      },
+      status: "pending",
+    };
+    try {
+      await queueFieldOperation(operation);
+      setOfflineQueue((current) => [...current, operation]);
+      setFieldStatus(
+        "現地記録を端末queueへ保存しました。通信復帰後に同期できます",
+      );
+    } catch (error) {
+      setFieldStatus(
+        error instanceof Error ? error.message : "端末へ保存できませんでした",
+      );
+    }
+  };
+
+  const syncOfflineQueue = async () => {
+    const city = snapshot.cityHome?.city.city_key;
+    if (!city) return;
+    const updates: QueuedFieldOperation[] = [];
+    for (const operation of offlineQueue) {
+      if (operation.status !== "pending") {
+        updates.push(operation);
+        continue;
+      }
+      try {
+        const response = await serviceApi.syncFieldOperation(city, {
+          client_operation_id: operation.client_operation_id,
+          offline_package_id: operation.offline_package_id,
+          scenario_run_id: operation.scenario_run_id,
+          site_order: operation.site_order,
+          base_record_version: operation.base_record_version,
+          client_updated_at: operation.client_updated_at,
+          payload: operation.payload,
+        });
+        const updated = applySyncResponse(
+          operation,
+          response.httpStatus,
+          response.payload,
+        );
+        await saveFieldOperation(updated);
+        if (updated.status !== "applied") updates.push(updated);
+      } catch (error) {
+        updates.push(operation);
+        setFieldStatus(
+          error instanceof Error ? error.message : "同期に失敗しました",
+        );
+      }
+    }
+    setOfflineQueue(updates);
+    if (updates.some((operation) => operation.status === "conflict")) {
+      setFieldStatus("競合を検出しました。自動上書きせず、明示解決が必要です");
+    } else if (updates.length === 0) {
+      setFieldStatus("offline queueを同期しました");
+    }
+  };
+
+  const resolveOfflineConflict = async (
+    operation: QueuedFieldOperation,
+    resolutionStatus: "use_server" | "use_client",
+  ) => {
+    const city = snapshot.cityHome?.city.city_key;
+    if (!city || !operation.conflict_id) return;
+    try {
+      await serviceApi.resolveFieldConflict(
+        city,
+        operation.conflict_id,
+        resolutionStatus,
+      );
+      await saveFieldOperation({
+        ...operation,
+        status: resolutionStatus === "use_server" ? "rejected" : "applied",
+      });
+      setOfflineQueue((current) =>
+        current.filter(
+          (candidate) =>
+            candidate.client_operation_id !== operation.client_operation_id,
+        ),
+      );
+      setFieldStatus(
+        resolutionStatus === "use_server"
+          ? "サーバー版を採用して競合を解決しました"
+          : "端末版を確認して採用し、競合を解決しました",
+      );
+    } catch (error) {
+      setFieldStatus(
+        error instanceof Error ? error.message : "競合を解決できませんでした",
+      );
+    }
+  };
+
+  const attachmentSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const city = snapshot.cityHome?.city.city_key;
+    const data = new FormData(event.currentTarget);
+    const file = data.get("attachment");
+    if (!city || !(file instanceof File) || file.size === 0) return;
+    try {
+      const metadata = await serviceApi.uploadAttachment(
+        city,
+        file,
+        "restricted",
+      );
+      setAttachmentIds((current) => [...current, metadata.id]);
+      setFieldStatus(
+        `${metadata.original_file_name} をrestricted添付として保存しました`,
+      );
+      event.currentTarget.reset();
+    } catch (error) {
+      setFieldStatus(
+        error instanceof Error ? error.message : "添付を保存できませんでした",
+      );
+    }
+  };
+
+  const fieldSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedId) return;
     const data = new FormData(event.currentTarget);
-    void mutate(
+    const saved = await mutate(
       `/api/v1/investigations/${selectedId}/field-observations`,
       "POST",
       {
         observation_type: data.get("observation_type"),
         notes: data.get("notes"),
         observed_at: new Date().toISOString(),
+        attachment_ids: attachmentIds,
       },
       "現地観察を記録しました",
     );
+    if (saved) setAttachmentIds([]);
   };
   const decisionSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1999,22 +2226,164 @@ function ReviewPage({
                 )}
               </div>
               {canField && (
-                <form className="case-form" onSubmit={fieldSubmit}>
-                  <h3>現地観察</h3>
-                  <label>
-                    観察種別
-                    <input
-                      name="observation_type"
-                      required
-                      defaultValue="access_check"
-                    />
-                  </label>
-                  <label>
-                    記録
-                    <textarea name="notes" required />
-                  </label>
-                  <button type="submit">現地記録を追加</button>
-                </form>
+                <div className="field-workspace">
+                  <section className="case-form offline-package-form">
+                    <h3>選択地点のoffline準備</h3>
+                    <p>
+                      都市全体ではなく、選んだScenario地点の地図文脈・PLATEAU属性・根拠要約だけを端末へ保存します。
+                    </p>
+                    {snapshot.scenarios.length ? (
+                      <form onSubmit={packageSubmit}>
+                        <label>
+                          Scenario
+                          <select name="scenario_run_id" required>
+                            {snapshot.scenarios.map((scenario) => (
+                              <option key={scenario.id} value={scenario.id}>
+                                {scenario.title} · {scenario.site_count}地点
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <label>
+                          地点番号
+                          <input
+                            name="site_order"
+                            type="number"
+                            min="1"
+                            max="20"
+                            defaultValue="1"
+                            required
+                          />
+                        </label>
+                        <button type="submit">この地点を端末へ保存</button>
+                      </form>
+                    ) : (
+                      <p className="service-muted">
+                        保存対象にできる実在Scenarioがありません。Scenario生成・保存後に利用できます。
+                      </p>
+                    )}
+                    {offlinePackage && (
+                      <form onSubmit={offlineRecordSubmit}>
+                        <strong>
+                          package v{offlinePackage.package_version} · site{" "}
+                          {offlinePackage.content.site_order}
+                        </strong>
+                        <label>
+                          現地アクセス
+                          <select name="site_access" defaultValue="unknown">
+                            <option value="unknown">未確認</option>
+                            <option value="confirmed">確認済み</option>
+                            <option value="attention">要注意</option>
+                            <option value="not_applicable">対象外</option>
+                          </select>
+                        </label>
+                        <label>
+                          offline記録
+                          <textarea
+                            name="offline_notes"
+                            maxLength={4000}
+                            required
+                          />
+                        </label>
+                        <button type="submit">端末queueへ保存</button>
+                      </form>
+                    )}
+                    <div className="offline-queue-status" aria-live="polite">
+                      <span>pending / conflict: {offlineQueue.length}</span>
+                      <button
+                        type="button"
+                        disabled={
+                          !offlineQueue.some(
+                            (item) => item.status === "pending",
+                          )
+                        }
+                        onClick={() => void syncOfflineQueue()}
+                      >
+                        通信復帰後に同期
+                      </button>
+                    </div>
+                    {offlineQueue.some(
+                      (item) => item.status === "conflict",
+                    ) && (
+                      <div className="service-warning">
+                        <p>
+                          競合はlast-write-winsで上書きしません。サーバー版と端末版を確認して解決します。
+                        </p>
+                        {offlineQueue
+                          .filter((item) => item.status === "conflict")
+                          .map((item) => (
+                            <div key={item.client_operation_id}>
+                              <code>{item.conflict_id}</code>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  void resolveOfflineConflict(
+                                    item,
+                                    "use_server",
+                                  )
+                                }
+                              >
+                                サーバー版を採用
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  void resolveOfflineConflict(
+                                    item,
+                                    "use_client",
+                                  )
+                                }
+                              >
+                                端末版を採用
+                              </button>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </section>
+
+                  <form className="case-form" onSubmit={attachmentSubmit}>
+                    <h3>現地添付</h3>
+                    <p>
+                      画像・PDF等を最大25 MiB、初期値restrictedで保存します。
+                    </p>
+                    <label>
+                      ファイル
+                      <input
+                        name="attachment"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,application/pdf,text/plain,text/csv,application/json,application/geo+json"
+                        required
+                      />
+                    </label>
+                    <button type="submit">添付を保存</button>
+                    <small>
+                      {attachmentIds.length}件を次の現地観察へ関連付け
+                    </small>
+                  </form>
+
+                  <form className="case-form" onSubmit={fieldSubmit}>
+                    <h3>現地観察</h3>
+                    <label>
+                      観察種別
+                      <input
+                        name="observation_type"
+                        required
+                        defaultValue="access_check"
+                      />
+                    </label>
+                    <label>
+                      記録
+                      <textarea name="notes" required />
+                    </label>
+                    <button type="submit">現地記録を追加</button>
+                  </form>
+                  {fieldStatus && (
+                    <p className="field-status" role="status">
+                      {fieldStatus}
+                    </p>
+                  )}
+                </div>
               )}
               {canReview && investigation?.status === "decision_pending" && (
                 <form className="case-form decision" onSubmit={decisionSubmit}>
@@ -2209,7 +2578,11 @@ function EvidencePage({
         <ServiceTable
           caption="保存済みReport"
           empty="Reportはまだ生成されていません"
-          rows={(snapshot.evidence?.reports ?? []) as unknown as Array<Record<string, unknown>>}
+          rows={
+            (snapshot.evidence?.reports ?? []) as unknown as Array<
+              Record<string, unknown>
+            >
+          }
           rowKey={(row) => String(row.id)}
           columns={[
             { key: "title", label: "Report" },
@@ -2292,7 +2665,8 @@ function EvidencePage({
                 <div>
                   <strong>{item.manifest_sha256.slice(0, 16)}…</strong>
                   <small>
-                    field {item.field_evidence_count} · decision {item.decision_count} · {formatDate(item.created_at)}
+                    field {item.field_evidence_count} · decision{" "}
+                    {item.decision_count} · {formatDate(item.created_at)}
                   </small>
                 </div>
               </article>
@@ -2318,7 +2692,8 @@ function EvidencePage({
                 <div>
                   <strong>{item.claim_key}</strong>
                   <small>
-                    {item.method_key} · {item.algorithm_version} · {formatDate(item.generated_at)}
+                    {item.method_key} · {item.algorithm_version} ·{" "}
+                    {formatDate(item.generated_at)}
                   </small>
                 </div>
               </article>
@@ -2480,6 +2855,38 @@ function OperationsPage({
           ]}
         />
       </section>
+      {canOperate && (
+        <section className="service-panel full">
+          <header>
+            <div>
+              <span>IMMUTABLE AUDIT</span>
+              <h2>監査イベント</h2>
+            </div>
+          </header>
+          <ServiceTable
+            caption="組織スコープの監査イベント"
+            empty="監査イベントはありません"
+            rows={
+              operations.auditEvents as unknown as Array<
+                Record<string, unknown>
+              >
+            }
+            rowKey={(row) => String(row.id)}
+            columns={[
+              { key: "actor", label: "Actor" },
+              { key: "action", label: "Action" },
+              { key: "resource_type", label: "Resource" },
+              { key: "resource_id", label: "Resource ID" },
+              { key: "request_id", label: "Request ID" },
+              {
+                key: "occurred_at",
+                label: "時刻",
+                render: (row) => formatDate(row.occurred_at),
+              },
+            ]}
+          />
+        </section>
+      )}
       <div className="service-two-column operations-records">
         <section className="service-panel">
           <header>
@@ -2518,7 +2925,8 @@ function OperationsPage({
               <div>
                 <strong>{String(release.version)}</strong>
                 <small>
-                  DB {String(release.migration_version)} · Frontend {String(release.frontend_asset_version)}
+                  DB {String(release.migration_version)} · Frontend{" "}
+                  {String(release.frontend_asset_version)}
                 </small>
               </div>
             </article>
@@ -2529,7 +2937,8 @@ function OperationsPage({
         <strong>SLO / cancellation boundary</strong>
         <p>
           測定基盤はSLAを断定しません。APIから安全にcancelできるのはqueued
-          Jobだけです。running processは運用者が実行環境で停止し、監査記録を残します。
+          Jobだけです。running
+          processは運用者が実行環境で停止し、監査記録を残します。
         </p>
       </div>
     </>

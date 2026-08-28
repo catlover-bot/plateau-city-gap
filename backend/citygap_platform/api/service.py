@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import json
 from datetime import date, datetime
+from pathlib import PurePath
 from typing import Annotated, Any, Literal
+from urllib.parse import quote
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from backend.citygap_platform.domain.municipal_service import (
@@ -20,16 +23,31 @@ from backend.citygap_platform.domain.municipal_service import (
     InvestigationStatus,
     ReviewStatus,
 )
+from backend.citygap_platform.domain.scenarios import FieldCheckValue
 from backend.citygap_platform.observability import render_request_metrics
 from backend.citygap_platform.security.auth import (
     Identity,
     require_organization,
     require_permission,
 )
+from backend.citygap_platform.storage import AttachmentStore
 
 from .service_repository import MunicipalServiceRepository
 
 router = APIRouter(prefix="/api/v1", tags=["municipal-service"])
+MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024
+ALLOWED_ATTACHMENT_CONTENT_TYPES = frozenset(
+    {
+        "application/geo+json",
+        "application/json",
+        "application/pdf",
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "text/csv",
+        "text/plain",
+    }
+)
 
 
 def _repository(request: Request) -> MunicipalServiceRepository:
@@ -41,6 +59,10 @@ def _identity(request: Request) -> Identity:
     if identity is None:
         raise HTTPException(status_code=401, detail="Identity unavailable")
     return identity
+
+
+def _attachment_store(request: Request) -> AttachmentStore:
+    return request.app.state.attachment_store
 
 
 def _not_found(resource: str) -> HTTPException:
@@ -206,6 +228,85 @@ class FieldObservationCreateRequest(StrictRequest):
     def paired_coordinates(self) -> FieldObservationCreateRequest:
         if (self.longitude is None) != (self.latitude is None):
             raise ValueError("longitude and latitude must be supplied together")
+        return self
+
+
+FIELD_SYNC_KEYS = frozenset(
+    {
+        "site_access",
+        "road_safety",
+        "land_ownership_unknown",
+        "existing_service",
+        "facility_condition",
+        "hazard_confirmation",
+        "operator_consultation",
+        "notes",
+        "gps_confirmation",
+    }
+)
+FIELD_CHECK_KEYS = FIELD_SYNC_KEYS - {"notes", "gps_confirmation"}
+FIELD_CHECK_VALUES = frozenset(value.value for value in FieldCheckValue)
+
+
+class FieldOfflinePackageCreateRequest(StrictRequest):
+    urban_state_id: UUID
+    scenario_run_id: UUID
+    site_order: int = Field(ge=1, le=20)
+    expires_at: datetime | None = None
+
+    @field_validator("expires_at")
+    @classmethod
+    def timezone_expiry(cls, value: datetime | None) -> datetime | None:
+        if value is not None and (value.tzinfo is None or value.utcoffset() is None):
+            raise ValueError("expires_at must include a timezone")
+        return value
+
+
+class FieldSyncOperationRequest(StrictRequest):
+    client_operation_id: UUID
+    offline_package_id: UUID
+    scenario_run_id: UUID
+    site_order: int = Field(ge=1, le=20)
+    base_record_version: int = Field(ge=1)
+    client_updated_at: datetime
+    payload: dict[str, Any]
+
+    @field_validator("client_updated_at")
+    @classmethod
+    def timezone_client_update(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("client_updated_at must include a timezone")
+        return value
+
+    @field_validator("payload")
+    @classmethod
+    def bounded_field_payload(cls, value: dict[str, Any]) -> dict[str, Any]:
+        if not value or set(value) - FIELD_SYNC_KEYS:
+            raise ValueError("field sync payload contains missing or unsupported fields")
+        if any(
+            key in FIELD_CHECK_KEYS and item not in FIELD_CHECK_VALUES
+            for key, item in value.items()
+        ):
+            raise ValueError("field sync checklist contains an unsupported status")
+        if "notes" in value and (not isinstance(value["notes"], str) or len(value["notes"]) > 4000):
+            raise ValueError("field sync notes must be text of at most 4000 characters")
+        if "gps_confirmation" in value and not isinstance(value["gps_confirmation"], dict):
+            raise ValueError("field sync GPS confirmation must be an object")
+        if len(json.dumps(value, ensure_ascii=False).encode()) > 65536:
+            raise ValueError("field sync payload exceeds 64 KiB")
+        return value
+
+
+class FieldConflictResolutionRequest(StrictRequest):
+    resolution_status: Literal["use_server", "use_client", "merged"]
+    resolved_state: dict[str, Any] | None = None
+
+    @model_validator(mode="after")
+    def explicit_merge(self) -> FieldConflictResolutionRequest:
+        if self.resolution_status == "merged" and not self.resolved_state:
+            raise ValueError("Merged resolution requires resolved_state")
+        if self.resolved_state and set(self.resolved_state) - FIELD_SYNC_KEYS:
+            raise ValueError("resolved_state contains unsupported fields")
         return self
 
 
@@ -693,6 +794,198 @@ def create_field_observation(
 
 
 @router.post(
+    "/cities/{city}/field/offline-packages",
+    status_code=201,
+    dependencies=[Depends(require_permission("field:sync"))],
+    summary="Download a versioned package for one selected scenario site",
+)
+def create_field_offline_package(
+    city: str,
+    body: FieldOfflinePackageCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    del organization_id  # repository reads the verified tenant from request context
+    result = repo.create_field_offline_package(
+        city,
+        str(body.urban_state_id),
+        str(body.scenario_run_id),
+        body.site_order,
+        body.expires_at.isoformat() if body.expires_at else None,
+    )
+    if result is None:
+        raise _not_found("Selected state/scenario site")
+    return result
+
+
+@router.post(
+    "/cities/{city}/field/sync",
+    dependencies=[Depends(require_permission("field:sync"))],
+    summary="Idempotently apply an offline field operation",
+)
+def sync_field_operation(
+    city: str,
+    body: FieldSyncOperationRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> JSONResponse:
+    del organization_id
+    result = repo.sync_field_operation(city, body.model_dump(mode="json"))
+    if result is None:
+        raise _not_found("Offline package or field record")
+    return JSONResponse(
+        status_code=409 if result.get("status") == "conflict" else 200,
+        content=jsonable_encoder(result),
+    )
+
+
+@router.get(
+    "/field-conflicts/{conflict_id}",
+    dependencies=[Depends(require_permission("field:read"))],
+    summary="Read an explicit tenant-scoped field sync conflict",
+)
+def field_sync_conflict(
+    conflict_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    del organization_id
+    result = repo.field_sync_conflict(str(conflict_id))
+    if result is None:
+        raise _not_found("Field sync conflict")
+    return result
+
+
+@router.post(
+    "/cities/{city}/field-conflicts/{conflict_id}/resolve",
+    dependencies=[Depends(require_permission("field:sync"))],
+    summary="Resolve a field conflict without silent last-write-wins",
+)
+def resolve_field_sync_conflict(
+    city: str,
+    conflict_id: UUID,
+    body: FieldConflictResolutionRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    del organization_id
+    try:
+        result = repo.resolve_field_sync_conflict(
+            city, str(conflict_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Field sync conflict")
+    return result
+
+
+@router.post(
+    "/cities/{city}/attachments",
+    status_code=201,
+    dependencies=[Depends(require_permission("field:write"))],
+    summary="Upload a tenant-scoped field attachment",
+)
+async def upload_attachment(
+    city: str,
+    request: Request,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    store: Annotated[AttachmentStore, Depends(_attachment_store)],
+    filename: Annotated[str, Query(min_length=1, max_length=255)],
+    data_classification: Annotated[
+        DataClassification, Query(description="Classification retained with the object metadata")
+    ] = DataClassification.RESTRICTED,
+) -> dict[str, Any]:
+    if filename in {".", ".."} or any(
+        separator in filename for separator in ("/", "\\", "\x00", "\r", "\n")
+    ):
+        raise HTTPException(status_code=422, detail="filename must be a plain file name")
+    if PurePath(filename).name != filename:
+        raise HTTPException(status_code=422, detail="filename must not contain a path")
+    content_type = request.headers.get("content-type", "").split(";", 1)[0].strip().lower()
+    if content_type not in ALLOWED_ATTACHMENT_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=422,
+            detail="Unsupported attachment content type",
+        )
+    if request.headers.get("content-encoding", "identity").lower() != "identity":
+        raise HTTPException(status_code=422, detail="Encoded attachment bodies are not accepted")
+    city_record = repo.attachment_city(organization_id, city)
+    if city_record is None:
+        raise _not_found("City")
+    try:
+        stored = await store.put(
+            request.stream(),
+            organization_id=organization_id,
+            city_id=str(city_record["id"]),
+            max_bytes=MAX_ATTACHMENT_BYTES,
+        )
+    except ValueError as error:
+        status = 413 if "exceeds" in str(error) else 422
+        raise HTTPException(status_code=status, detail=str(error)) from error
+    except RuntimeError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    try:
+        result = repo.create_attachment_metadata(
+            organization_id,
+            city,
+            {
+                "storage_provider": store.provider,
+                "object_key": stored.object_key,
+                "original_file_name": filename,
+                "content_type": content_type,
+                "size_bytes": stored.size_bytes,
+                "sha256": stored.sha256,
+                "data_classification": data_classification.value,
+            },
+        )
+    except Exception:
+        store.delete(stored.object_key)
+        raise
+    if result is None:
+        store.delete(stored.object_key)
+        raise _not_found("City")
+    return {key: value for key, value in result.items() if key != "object_key"}
+
+
+@router.get(
+    "/attachments/{attachment_id}",
+    dependencies=[Depends(require_permission("field:read"))],
+    summary="Download an attachment after tenant metadata authorization",
+)
+def download_attachment(
+    attachment_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    store: Annotated[AttachmentStore, Depends(_attachment_store)],
+) -> StreamingResponse:
+    metadata = repo.attachment_metadata(organization_id, str(attachment_id))
+    if metadata is None:
+        raise _not_found("Attachment")
+    if metadata["storage_provider"] != store.provider:
+        raise HTTPException(status_code=503, detail="Attachment storage provider is unavailable")
+    try:
+        exists = store.exists(metadata["object_key"])
+    except (RuntimeError, ValueError) as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
+    if not exists:
+        raise HTTPException(status_code=503, detail="Attachment bytes are unavailable")
+    safe_name = quote(metadata["original_file_name"], safe="")
+    return StreamingResponse(
+        store.iter_bytes(metadata["object_key"]),
+        media_type=metadata["content_type"],
+        headers={
+            "Content-Disposition": f"attachment; filename*=UTF-8''{safe_name}",
+            "Content-Length": str(metadata["size_bytes"]),
+            "ETag": f'"{metadata["sha256"]}"',
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
+
+
+@router.post(
     "/comments/{resource_type}/{resource_id}",
     status_code=201,
     dependencies=[Depends(require_permission("comment:write"))],
@@ -1062,6 +1355,42 @@ def activity(
     limit: Annotated[int, Query(ge=1, le=100)] = 30,
 ) -> dict[str, Any]:
     return {"items": repo.activity_feed(organization_id, city, limit)}
+
+
+@router.get(
+    "/audit-events",
+    dependencies=[Depends(require_permission("audit:read"))],
+    summary="List immutable tenant audit events with opaque cursor pagination",
+)
+def audit_events(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    city: Annotated[str | None, Query(max_length=100)] = None,
+    action: Annotated[str | None, Query(max_length=200)] = None,
+    actor: Annotated[str | None, Query(max_length=200)] = None,
+    occurred_from: datetime | None = None,
+    occurred_to: datetime | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+    cursor: Annotated[str | None, Query(max_length=1000)] = None,
+) -> dict[str, Any]:
+    for value in (occurred_from, occurred_to):
+        if value is not None and (value.tzinfo is None or value.utcoffset() is None):
+            raise HTTPException(status_code=422, detail="Audit timestamps must include a timezone")
+    if occurred_from and occurred_to and occurred_from > occurred_to:
+        raise HTTPException(status_code=422, detail="occurred_from must not exceed occurred_to")
+    try:
+        return repo.service_audit_events(
+            organization_id,
+            city,
+            action,
+            actor,
+            occurred_from,
+            occurred_to,
+            limit,
+            cursor,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
 
 
 @router.post("/usage-events", status_code=202)

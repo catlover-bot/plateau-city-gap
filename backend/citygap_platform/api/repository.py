@@ -1845,7 +1845,9 @@ class PostGISRepository:
         site_order: int,
         expires_at: str | None,
     ) -> dict[str, Any] | None:
-        actor = current_request_context().actor
+        request_context = current_request_context()
+        actor = request_context.actor
+        organization_id = request_context.organization_id or DEFAULT_ORGANIZATION_ID
         with self._connect() as connection:
             connection.execute(
                 """INSERT INTO scenario_field_checks (
@@ -1856,10 +1858,22 @@ class PostGISRepository:
                    JOIN scenario_runs AS scenario ON scenario.id = site.scenario_run_id
                    JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
                    JOIN cities AS city ON city.id = state.city_id
-                   WHERE (city.city_code = %s OR city.city_key = %s)
+                   WHERE city.organization_id = %s AND scenario.organization_id = %s
+                     AND state.organization_id = %s
+                     AND (city.city_code = %s OR city.city_key = %s)
                      AND state.id = %s AND scenario.id = %s AND site.site_order = %s
                    ON CONFLICT DO NOTHING""",
-                (actor, city_id, city_id, urban_state_id, scenario_run_id, site_order),
+                (
+                    actor,
+                    organization_id,
+                    organization_id,
+                    organization_id,
+                    city_id,
+                    city_id,
+                    urban_state_id,
+                    scenario_run_id,
+                    site_order,
+                ),
             )
             site = connection.execute(
                 """SELECT scenario.scenario_key, scenario.lifecycle_status,
@@ -1882,9 +1896,20 @@ class PostGISRepository:
                    JOIN scenario_field_checks AS check_row
                      ON check_row.scenario_run_id = site.scenario_run_id
                     AND check_row.site_order = site.site_order
-                   WHERE (city.city_code = %s OR city.city_key = %s)
+                   WHERE city.organization_id = %s AND scenario.organization_id = %s
+                     AND state.organization_id = %s
+                     AND (city.city_code = %s OR city.city_key = %s)
                      AND state.id = %s AND scenario.id = %s AND site.site_order = %s""",
-                (city_id, city_id, urban_state_id, scenario_run_id, site_order),
+                (
+                    organization_id,
+                    organization_id,
+                    organization_id,
+                    city_id,
+                    city_id,
+                    urban_state_id,
+                    scenario_run_id,
+                    site_order,
+                ),
             ).fetchone()
             if site is None:
                 return None
@@ -1964,19 +1989,21 @@ class PostGISRepository:
             version = connection.execute(
                 """SELECT COALESCE(max(package_version), 0) + 1
                    FROM field_offline_packages
-                   WHERE scenario_run_id = %s AND site_order = %s""",
-                (scenario_run_id, site_order),
+                   WHERE organization_id = %s AND scenario_run_id = %s AND site_order = %s""",
+                (organization_id, scenario_run_id, site_order),
             ).fetchone()[0]
             package = connection.execute(
                 """INSERT INTO field_offline_packages (
-                       city_id, urban_state_id, scenario_run_id, site_order,
+                       organization_id, city_id, urban_state_id, scenario_run_id, site_order,
                        package_version, content, content_sha256, expires_at, created_by
                    )
-                   SELECT city.id, %s, %s, %s, %s, %s, %s, %s, %s
+                   SELECT %s, city.id, %s, %s, %s, %s, %s, %s, %s, %s
                    FROM cities AS city
-                   WHERE city.city_code = %s OR city.city_key = %s
+                   WHERE city.organization_id = %s
+                     AND (city.city_code = %s OR city.city_key = %s)
                    RETURNING id, package_version, content_sha256, expires_at, created_at""",
                 (
+                    organization_id,
                     urban_state_id,
                     scenario_run_id,
                     site_order,
@@ -1985,6 +2012,7 @@ class PostGISRepository:
                     content_hash,
                     expires_at,
                     actor,
+                    organization_id,
                     city_id,
                     city_id,
                 ),
@@ -2016,7 +2044,9 @@ class PostGISRepository:
     def sync_field_operation(
         self, city_id: str, operation: dict[str, Any]
     ) -> dict[str, Any] | None:
-        actor = current_request_context().actor
+        request_context = current_request_context()
+        actor = request_context.actor
+        organization_id = request_context.organization_id or DEFAULT_ORGANIZATION_ID
         field_names = (
             "site_access",
             "road_safety",
@@ -2033,9 +2063,11 @@ class PostGISRepository:
                 """SELECT operation.status, conflict.id
                    FROM field_sync_operations AS operation
                    LEFT JOIN field_sync_conflicts AS conflict
-                     ON conflict.field_sync_operation_id = operation.id
-                   WHERE operation.client_operation_id = %s""",
-                (operation["client_operation_id"],),
+                     ON conflict.organization_id = operation.organization_id
+                    AND conflict.field_sync_operation_id = operation.id
+                   WHERE operation.organization_id = %s
+                     AND operation.client_operation_id = %s""",
+                (organization_id, operation["client_operation_id"]),
             ).fetchone()
             if prior is not None:
                 return {
@@ -2048,11 +2080,14 @@ class PostGISRepository:
                 """SELECT package.id
                    FROM field_offline_packages AS package
                    JOIN cities AS city ON city.id = package.city_id
-                   WHERE package.id = %s AND package.scenario_run_id = %s
+                   WHERE package.organization_id = %s AND city.organization_id = %s
+                     AND package.id = %s AND package.scenario_run_id = %s
                      AND package.site_order = %s
                      AND (city.city_code = %s OR city.city_key = %s)
                      AND (package.expires_at IS NULL OR package.expires_at > now())""",
                 (
+                    organization_id,
+                    organization_id,
                     operation["offline_package_id"],
                     operation["scenario_run_id"],
                     operation["site_order"],
@@ -2082,10 +2117,11 @@ class PostGISRepository:
             )
             sync_row = connection.execute(
                 """INSERT INTO field_sync_operations (
-                       client_operation_id, offline_package_id, scenario_run_id,
+                       organization_id, client_operation_id, offline_package_id, scenario_run_id,
                        site_order, actor, base_record_version, client_updated_at, payload
-                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                   ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
                 (
+                    organization_id,
                     operation["client_operation_id"],
                     operation["offline_package_id"],
                     operation["scenario_run_id"],
@@ -2098,15 +2134,17 @@ class PostGISRepository:
             ).fetchone()
             if int(current[9]) != int(operation["base_record_version"]):
                 connection.execute(
-                    "UPDATE field_sync_operations SET status = 'conflict' WHERE id = %s",
-                    (sync_row[0],),
+                    """UPDATE field_sync_operations SET status = 'conflict'
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, sync_row[0]),
                 )
                 conflict = connection.execute(
                     """INSERT INTO field_sync_conflicts (
-                           field_sync_operation_id, server_record_version,
+                           organization_id, field_sync_operation_id, server_record_version,
                            server_state, client_state
-                       ) VALUES (%s, %s, %s, %s) RETURNING id, created_at""",
+                       ) VALUES (%s, %s, %s, %s, %s) RETURNING id, created_at""",
                     (
+                        organization_id,
                         sync_row[0],
                         current[9],
                         json.dumps(server_state, ensure_ascii=False, default=str),
@@ -2157,8 +2195,9 @@ class PostGISRepository:
             ).fetchone()
             connection.execute(
                 """UPDATE field_sync_operations
-                   SET status = 'applied', applied_at = now() WHERE id = %s""",
-                (sync_row[0],),
+                   SET status = 'applied', applied_at = now()
+                   WHERE organization_id = %s AND id = %s""",
+                (organization_id, sync_row[0]),
             )
             self._audit(
                 connection,
@@ -2184,6 +2223,7 @@ class PostGISRepository:
         }
 
     def field_sync_conflict(self, conflict_id: str) -> dict[str, Any] | None:
+        organization_id = current_request_context().organization_id or DEFAULT_ORGANIZATION_ID
         with self._connect() as connection:
             row = connection.execute(
                 """SELECT conflict.id, operation.client_operation_id,
@@ -2195,9 +2235,10 @@ class PostGISRepository:
                           conflict.resolved_at, conflict.created_at
                    FROM field_sync_conflicts AS conflict
                    JOIN field_sync_operations AS operation
-                     ON operation.id = conflict.field_sync_operation_id
-                   WHERE conflict.id = %s""",
-                (conflict_id,),
+                     ON operation.organization_id = conflict.organization_id
+                    AND operation.id = conflict.field_sync_operation_id
+                   WHERE conflict.organization_id = %s AND conflict.id = %s""",
+                (organization_id, conflict_id),
             ).fetchone()
         if row is None:
             return None
@@ -2222,7 +2263,9 @@ class PostGISRepository:
     def resolve_field_sync_conflict(
         self, city_id: str, conflict_id: str, resolution: dict[str, Any]
     ) -> dict[str, Any] | None:
-        actor = current_request_context().actor
+        request_context = current_request_context()
+        actor = request_context.actor
+        organization_id = request_context.organization_id or DEFAULT_ORGANIZATION_ID
         field_names = (
             "site_access",
             "road_safety",
@@ -2242,14 +2285,18 @@ class PostGISRepository:
                           operation.scenario_run_id, operation.site_order
                    FROM field_sync_conflicts AS conflict
                    JOIN field_sync_operations AS operation
-                     ON operation.id = conflict.field_sync_operation_id
-                   JOIN scenario_runs AS scenario ON scenario.id = operation.scenario_run_id
+                     ON operation.organization_id = conflict.organization_id
+                    AND operation.id = conflict.field_sync_operation_id
+                   JOIN scenario_runs AS scenario
+                     ON scenario.organization_id = operation.organization_id
+                    AND scenario.id = operation.scenario_run_id
                    JOIN urban_states AS state ON state.id = scenario.base_urban_state_id
                    JOIN cities AS city ON city.id = state.city_id
-                   WHERE conflict.id = %s
+                   WHERE conflict.organization_id = %s AND conflict.id = %s
+                     AND city.organization_id = %s
                      AND (city.city_code = %s OR city.city_key = %s)
                    FOR UPDATE OF conflict""",
-                (conflict_id, city_id, city_id),
+                (organization_id, conflict_id, organization_id, city_id, city_id),
             ).fetchone()
             if conflict is None:
                 return None
@@ -2308,19 +2355,20 @@ class PostGISRepository:
                 """UPDATE field_sync_conflicts SET
                        resolution_status = %s, resolved_state = %s,
                        resolved_by = %s, resolved_at = now()
-                   WHERE id = %s""",
+                   WHERE organization_id = %s AND id = %s""",
                 (
                     status,
                     json.dumps(resolved_state, ensure_ascii=False, default=str),
                     actor,
+                    organization_id,
                     conflict_id,
                 ),
             )
             connection.execute(
                 """UPDATE field_sync_operations SET status = %s,
                        applied_at = CASE WHEN %s = 'applied' THEN now() ELSE NULL END
-                   WHERE id = %s""",
-                (operation_status, operation_status, conflict[0]),
+                   WHERE organization_id = %s AND id = %s""",
+                (operation_status, operation_status, organization_id, conflict[0]),
             )
             self._audit(
                 connection,

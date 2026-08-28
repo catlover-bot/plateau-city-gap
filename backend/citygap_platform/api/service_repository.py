@@ -1518,6 +1518,80 @@ class MunicipalServiceRepository(PostGISRepository):
             )
             return result
 
+    def create_attachment_metadata(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        """Register stored bytes only after resolving their tenant-owned city."""
+
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            context = current_request_context()
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO attachment_objects (
+                           organization_id, city_id, storage_provider, object_key,
+                           original_file_name, content_type, size_bytes, sha256,
+                           data_classification, created_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING id, city_id, storage_provider, object_key,
+                                 original_file_name, content_type, size_bytes, sha256,
+                                 data_classification, retention_class, created_by, created_at""",
+                    (
+                        organization_id,
+                        city["id"],
+                        payload["storage_provider"],
+                        payload["object_key"],
+                        payload["original_file_name"],
+                        payload["content_type"],
+                        payload["size_bytes"],
+                        payload["sha256"],
+                        payload["data_classification"],
+                        context.actor,
+                    ),
+                )
+            )
+            assert result is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "attachment.create",
+                "attachment",
+                str(result["id"]),
+                str(city["id"]),
+                None,
+                {
+                    "content_type": result["content_type"],
+                    "size_bytes": result["size_bytes"],
+                    "sha256": result["sha256"],
+                    "data_classification": result["data_classification"],
+                },
+            )
+            return result
+
+    def attachment_city(self, organization_id: str, city_reference: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._city(connection, organization_id, city_reference)
+
+    def attachment_metadata(
+        self, organization_id: str, attachment_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._one(
+                connection.execute(
+                    """SELECT id, city_id, storage_provider, object_key,
+                              original_file_name, content_type, size_bytes, sha256,
+                              data_classification, retention_class, created_by, created_at
+                       FROM attachment_objects
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, attachment_id),
+                )
+            )
+
     def create_decision_record(
         self, organization_id: str, investigation_id: str, payload: dict[str, Any]
     ) -> dict[str, Any] | None:
@@ -2549,6 +2623,71 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city_id, city_id, limit),
                 )
             )
+
+    def service_audit_events(
+        self,
+        organization_id: str,
+        city_reference: str | None,
+        action: str | None,
+        actor: str | None,
+        occurred_from: datetime | None,
+        occurred_to: datetime | None,
+        limit: int,
+        cursor: str | None,
+    ) -> dict[str, Any]:
+        cursor_values = decode_cursor(cursor)
+        cursor_id: int | None = None
+        if cursor_values is not None:
+            try:
+                cursor_id = int(cursor_values["id"])
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValueError("Invalid pagination cursor") from error
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city_id = None
+            if city_reference:
+                city = self._city(connection, organization_id, city_reference)
+                if city is None:
+                    return {"items": [], "next_cursor": None}
+                city_id = str(city["id"])
+            rows = self._dicts(
+                connection.execute(
+                    """SELECT id, actor, action, resource_type, resource_id, city_id,
+                              request_id, before_state AS before, after_state AS after,
+                              data_classification, occurred_at
+                       FROM audit_log
+                       WHERE organization_id = %s
+                         AND (%s::text IS NULL OR city_id = %s)
+                         AND (%s::text IS NULL OR action = %s)
+                         AND (%s::text IS NULL OR actor = %s)
+                         AND (%s::timestamptz IS NULL OR occurred_at >= %s)
+                         AND (%s::timestamptz IS NULL OR occurred_at <= %s)
+                         AND (%s::bigint IS NULL OR id < %s)
+                       ORDER BY id DESC LIMIT %s""",
+                    (
+                        organization_id,
+                        city_id,
+                        city_id,
+                        action,
+                        action,
+                        actor,
+                        actor,
+                        occurred_from,
+                        occurred_from,
+                        occurred_to,
+                        occurred_to,
+                        cursor_id,
+                        cursor_id,
+                        limit + 1,
+                    ),
+                )
+            )
+        has_more = len(rows) > limit
+        items = rows[:limit]
+        return {
+            "items": items,
+            "next_cursor": encode_cursor({"id": items[-1]["id"]}) if has_more and items else None,
+        }
 
     def record_usage(
         self,

@@ -17,6 +17,7 @@ from fastapi.responses import JSONResponse
 
 LOGGER = logging.getLogger("citygap.request")
 MAX_REQUEST_BODY_BYTES = 1024 * 1024
+MAX_ATTACHMENT_BODY_BYTES = 25 * 1024 * 1024
 
 
 @dataclass(frozen=True, slots=True)
@@ -107,15 +108,21 @@ async def request_observability_middleware(request: Request, call_next):
             response = JSONResponse(status_code=400, content={"detail": "invalid content-length"})
             response.headers["X-Request-ID"] = request_id
             return response
+        request_limit = (
+            MAX_ATTACHMENT_BODY_BYTES
+            if request.url.path.startswith("/api/v1/cities/")
+            and request.url.path.endswith("/attachments")
+            else MAX_REQUEST_BODY_BYTES
+        )
         if (
             request.method in {"POST", "PUT", "PATCH"}
             and content_length is not None
-            and int(content_length) > MAX_REQUEST_BODY_BYTES
+            and int(content_length) > request_limit
         ):
             status = 413
             response = JSONResponse(
                 status_code=413,
-                content={"detail": "request body exceeds the 1 MiB platform limit"},
+                content={"detail": f"request body exceeds the {request_limit} byte limit"},
             )
             response.headers["X-Request-ID"] = request_id
             return response

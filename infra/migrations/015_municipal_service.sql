@@ -299,10 +299,37 @@ ALTER TABLE field_offline_packages
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id);
+ALTER TABLE field_offline_packages ADD CONSTRAINT field_offline_packages_organization_id_id_unique
+    UNIQUE (organization_id, id);
+ALTER TABLE field_offline_packages ADD CONSTRAINT field_offline_packages_organization_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE field_offline_packages ADD CONSTRAINT field_offline_packages_organization_state_fk
+    FOREIGN KEY (organization_id, urban_state_id)
+        REFERENCES urban_states(organization_id, id);
+ALTER TABLE field_offline_packages ADD CONSTRAINT field_offline_packages_organization_scenario_fk
+    FOREIGN KEY (organization_id, scenario_run_id)
+        REFERENCES scenario_runs(organization_id, id);
 ALTER TABLE field_sync_operations
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id);
+ALTER TABLE field_sync_operations ADD CONSTRAINT field_sync_operations_organization_id_id_unique
+    UNIQUE (organization_id, id);
+ALTER TABLE field_sync_operations ADD CONSTRAINT field_sync_operations_organization_package_fk
+    FOREIGN KEY (organization_id, offline_package_id)
+        REFERENCES field_offline_packages(organization_id, id);
+ALTER TABLE field_sync_operations ADD CONSTRAINT field_sync_operations_organization_scenario_fk
+    FOREIGN KEY (organization_id, scenario_run_id)
+        REFERENCES scenario_runs(organization_id, id);
+ALTER TABLE field_sync_conflicts
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE field_sync_conflicts ADD CONSTRAINT field_sync_conflicts_organization_id_id_unique
+    UNIQUE (organization_id, id);
+ALTER TABLE field_sync_conflicts ADD CONSTRAINT field_sync_conflicts_organization_operation_fk
+    FOREIGN KEY (organization_id, field_sync_operation_id)
+        REFERENCES field_sync_operations(organization_id, id);
 ALTER TABLE validation_runs
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
@@ -1186,7 +1213,31 @@ SELECT scenario.organization_id, city.id, 'scenario', scenario.id::text,
        scenario.title, scenario.objective_definition, scenario.updated_at
 FROM scenario_runs AS scenario
 JOIN city_dataset_versions AS version ON version.id = scenario.dataset_version_id
-JOIN cities AS city ON city.city_code = version.city_id;
+JOIN cities AS city
+  ON city.city_code = version.city_id AND city.organization_id = scenario.organization_id
+UNION ALL
+SELECT city.organization_id, city.id, 'facility', facility.id::text,
+       facility.name, facility.facility_type || ' · ' || facility.facility_key,
+       version.created_at
+FROM facility_registry AS facility
+JOIN city_dataset_versions AS version ON version.id = facility.dataset_version_id
+JOIN cities AS city ON city.city_code = version.city_id
+UNION ALL
+SELECT city.organization_id, city.id, 'building', object.id::text,
+       object.gml_id, object.theme || ' · ' || object.feature_type, object.ingested_at
+FROM plateau_city_objects AS object
+JOIN city_dataset_versions AS version ON version.id = object.dataset_version_id
+JOIN cities AS city ON city.city_code = version.city_id
+UNION ALL
+SELECT city.organization_id, city.id, 'mesh',
+       version.id::text || ':' || demographic.mesh_code,
+       demographic.mesh_code, '500m mesh · ' || version.dataset_year::text,
+       max(demographic.created_at)
+FROM building_demographics AS demographic
+JOIN city_dataset_versions AS version ON version.id = demographic.dataset_version_id
+JOIN cities AS city ON city.city_code = version.city_id
+GROUP BY city.organization_id, city.id, version.id,
+         demographic.mesh_code, version.dataset_year;
 
 CREATE VIEW city_service_home AS
 SELECT

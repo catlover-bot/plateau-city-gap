@@ -5,7 +5,9 @@ from typing import Any
 from fastapi.testclient import TestClient
 
 from backend.citygap_platform.api.app import create_app
+from backend.citygap_platform.observability import current_request_context
 from backend.citygap_platform.security.auth import DEFAULT_ORGANIZATION_ID
+from backend.citygap_platform.storage import LocalAttachmentStore
 
 ORG_A = DEFAULT_ORGANIZATION_ID
 ORG_B = "00000000-0000-0000-0000-000000000002"
@@ -20,6 +22,7 @@ SCENARIO_A = "80000000-0000-0000-0000-000000000001"
 SCENARIO_B = "80000000-0000-0000-0000-000000000002"
 REPORT_ID = "90000000-0000-0000-0000-000000000001"
 JOB_ID = "a0000000-0000-0000-0000-000000000001"
+ATTACHMENT_ID = "b0000000-0000-0000-0000-000000000001"
 
 
 def headers(role: str, organization_id: str = ORG_A) -> dict[str, str]:
@@ -33,6 +36,7 @@ def headers(role: str, organization_id: str = ORG_A) -> dict[str, str]:
 class MunicipalRepository:
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
+        self.attachment: dict[str, Any] | None = None
 
     def service_profile(self, organization_id: str, actor: str, issuer: str):
         self.calls.append(("profile", organization_id))
@@ -165,6 +169,80 @@ class MunicipalRepository:
         self.calls.append(("field", organization_id))
         return {"id": FINDING_ID, "investigation_id": investigation_id, **payload}
 
+    def attachment_city(self, organization_id: str, city: str):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {"id": CITY_ID, "city_key": city}
+
+    def create_attachment_metadata(self, organization_id: str, city: str, payload: dict[str, Any]):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        self.attachment = {
+            "id": ATTACHMENT_ID,
+            "city_id": CITY_ID,
+            "created_by": "fixture-field_staff",
+            **payload,
+        }
+        return self.attachment
+
+    def attachment_metadata(self, organization_id: str, attachment_id: str):
+        if organization_id != ORG_A or attachment_id != ATTACHMENT_ID:
+            return None
+        return self.attachment
+
+    def create_field_offline_package(
+        self,
+        city: str,
+        urban_state_id: str,
+        scenario_run_id: str,
+        site_order: int,
+        expires_at: str | None,
+    ):
+        if current_request_context().organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {
+            "offline_package_id": EVIDENCE_ID,
+            "package_version": 1,
+            "content_sha256": "a" * 64,
+            "content": {
+                "package_scope": "single_selected_site",
+                "urban_state_id": urban_state_id,
+                "scenario_run_id": scenario_run_id,
+                "site_order": site_order,
+            },
+            "expires_at": expires_at,
+        }
+
+    def sync_field_operation(self, city: str, operation: dict[str, Any]):
+        if current_request_context().organization_id != ORG_A or city != "fixture-city":
+            return None
+        if operation["base_record_version"] == 2:
+            return {
+                "client_operation_id": operation["client_operation_id"],
+                "status": "conflict",
+                "conflict_id": REVIEW_ID,
+                "silent_last_write_wins": False,
+            }
+        return {
+            "client_operation_id": operation["client_operation_id"],
+            "status": "applied",
+            "record_version": 2,
+        }
+
+    def field_sync_conflict(self, conflict_id: str):
+        if current_request_context().organization_id != ORG_A or conflict_id != REVIEW_ID:
+            return None
+        return {
+            "conflict_id": conflict_id,
+            "resolution_status": "unresolved",
+            "silent_last_write_wins": False,
+        }
+
+    def resolve_field_sync_conflict(self, city: str, conflict_id: str, resolution: dict[str, Any]):
+        if current_request_context().organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {"conflict_id": conflict_id, **resolution, "silent_last_write_wins": False}
+
     def create_decision_record(
         self, organization_id: str, investigation_id: str, payload: dict[str, Any]
     ):
@@ -284,6 +362,31 @@ class MunicipalRepository:
     def activity_feed(self, organization_id: str, city: str | None, limit: int):
         return []
 
+    def service_audit_events(
+        self,
+        organization_id: str,
+        city: str | None,
+        action: str | None,
+        actor: str | None,
+        occurred_from,
+        occurred_to,
+        limit: int,
+        cursor: str | None,
+    ):
+        if organization_id != ORG_A:
+            return {"items": [], "next_cursor": None}
+        return {
+            "items": [
+                {
+                    "id": 1,
+                    "actor": actor or "fixture-administrator",
+                    "action": action or "finding.create",
+                    "city_id": CITY_ID,
+                }
+            ],
+            "next_cursor": None,
+        }
+
     def record_usage(
         self,
         organization_id: str,
@@ -348,6 +451,12 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/investigations/{investigation_id}/reviews",
         "/api/v1/investigations/{investigation_id}/status",
         "/api/v1/investigations/{investigation_id}/field-observations",
+        "/api/v1/cities/{city}/field/offline-packages",
+        "/api/v1/cities/{city}/field/sync",
+        "/api/v1/field-conflicts/{conflict_id}",
+        "/api/v1/cities/{city}/field-conflicts/{conflict_id}/resolve",
+        "/api/v1/cities/{city}/attachments",
+        "/api/v1/attachments/{attachment_id}",
         "/api/v1/investigations/{investigation_id}/decisions",
         "/api/v1/cities/{city}/data-hub",
         "/api/v1/cities/{city}/datasets",
@@ -363,6 +472,7 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/jobs/{job_id}",
         "/api/v1/jobs/{job_id}/operations",
         "/api/v1/metrics",
+        "/api/v1/audit-events",
     ):
         assert path in schema["paths"]
 
@@ -537,6 +647,97 @@ def test_spatial_and_scenario_inputs_are_bounded_and_explicit() -> None:
     assert valid.status_code == 201
 
 
+def test_attachment_bytes_are_hash_verified_and_tenant_authorized(tmp_path) -> None:
+    repository = MunicipalRepository()
+    store = LocalAttachmentStore(tmp_path / "attachments")
+    client = TestClient(create_app(repository, attachment_store=store))  # type: ignore[arg-type]
+    content = b"field evidence"
+    uploaded = client.post(
+        "/api/v1/cities/fixture-city/attachments",
+        headers={**headers("field_staff"), "Content-Type": "text/plain"},
+        params={"filename": "field-note.txt", "data_classification": "restricted"},
+        content=content,
+    )
+    assert uploaded.status_code == 201
+    assert uploaded.json()["id"] == ATTACHMENT_ID
+    assert (
+        uploaded.json()["sha256"]
+        == "986cf303719fc088e1157cdefd2a8a92e0c58fc05f86676756384a6f017dc49a"
+    )
+    assert "object_key" not in uploaded.json()
+
+    downloaded = client.get(f"/api/v1/attachments/{ATTACHMENT_ID}", headers=headers("field_staff"))
+    assert downloaded.status_code == 200
+    assert downloaded.content == content
+    assert downloaded.headers["etag"] == f'"{uploaded.json()["sha256"]}"'
+    assert downloaded.headers["x-content-type-options"] == "nosniff"
+
+    tenant_leak = client.get(
+        f"/api/v1/attachments/{ATTACHMENT_ID}", headers=headers("field_staff", ORG_B)
+    )
+    assert tenant_leak.status_code == 404
+    invalid_name = client.post(
+        "/api/v1/cities/fixture-city/attachments",
+        headers={**headers("field_staff"), "Content-Type": "text/plain"},
+        params={"filename": "../field-note.txt"},
+        content=content,
+    )
+    assert invalid_name.status_code == 422
+
+
+def test_selected_site_offline_sync_requires_explicit_conflict_resolution() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    package = client.post(
+        "/api/v1/cities/fixture-city/field/offline-packages",
+        headers=headers("field_staff"),
+        json={
+            "urban_state_id": STATE_ID,
+            "scenario_run_id": SCENARIO_A,
+            "site_order": 1,
+            "expires_at": "2026-09-01T00:00:00+09:00",
+        },
+    )
+    assert package.status_code == 201
+    assert package.json()["content"]["package_scope"] == "single_selected_site"
+    operation = {
+        "client_operation_id": ATTACHMENT_ID,
+        "offline_package_id": EVIDENCE_ID,
+        "scenario_run_id": SCENARIO_A,
+        "site_order": 1,
+        "base_record_version": 2,
+        "client_updated_at": "2026-08-28T12:00:00+09:00",
+        "payload": {"notes": "現地確認", "site_access": "confirmed"},
+    }
+    conflict = client.post(
+        "/api/v1/cities/fixture-city/field/sync",
+        headers=headers("field_staff"),
+        json=operation,
+    )
+    assert conflict.status_code == 409
+    assert conflict.json()["silent_last_write_wins"] is False
+
+    other_tenant = client.get(
+        f"/api/v1/field-conflicts/{REVIEW_ID}", headers=headers("field_staff", ORG_B)
+    )
+    assert other_tenant.status_code == 404
+    missing_merge = client.post(
+        f"/api/v1/cities/fixture-city/field-conflicts/{REVIEW_ID}/resolve",
+        headers=headers("planner"),
+        json={"resolution_status": "merged"},
+    )
+    assert missing_merge.status_code == 422
+    resolved = client.post(
+        f"/api/v1/cities/fixture-city/field-conflicts/{REVIEW_ID}/resolve",
+        headers=headers("planner"),
+        json={
+            "resolution_status": "merged",
+            "resolved_state": {"notes": "サーバー記録と現地記録を確認して統合"},
+        },
+    )
+    assert resolved.status_code == 200
+    assert resolved.json()["resolution_status"] == "merged"
+
+
 def test_analysis_run_requires_explicit_versions_and_analysis_role() -> None:
     client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
     payload = {
@@ -643,6 +844,24 @@ def test_metrics_are_admin_only_and_use_bounded_service_labels() -> None:
     assert ORG_A not in metrics.text
 
 
+def test_immutable_audit_api_is_admin_only_and_tenant_scoped() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    assert client.get("/api/v1/audit-events", headers=headers("data_manager")).status_code == 403
+    response = client.get(
+        "/api/v1/audit-events?action=finding.create&actor=fixture-administrator",
+        headers=headers("administrator"),
+    )
+    assert response.status_code == 200
+    assert response.json()["items"][0]["action"] == "finding.create"
+    assert (
+        client.get(
+            "/api/v1/audit-events?occurred_from=2026-08-28T12:00:00",
+            headers=headers("administrator"),
+        ).status_code
+        == 422
+    )
+
+
 def test_municipal_deployment_surface_blocks_legacy_tenant_unsafe_paths(
     monkeypatch,
 ) -> None:
@@ -652,6 +871,9 @@ def test_municipal_deployment_surface_blocks_legacy_tenant_unsafe_paths(
     assert client.get("/jobs/00000000-0000-0000-0000-000000000000").status_code == 404
     assert client.get("/api/v1/cities", headers=headers("viewer")).status_code == 200
     assert client.get("/health").status_code == 200
+    schema = client.get("/openapi.json", headers=headers("viewer")).json()
+    assert "/api/v1/cities" in schema["paths"]
+    assert "/cities" not in schema["paths"]
 
 
 def test_admin_and_data_manager_own_explicit_onboarding_lifecycle() -> None:

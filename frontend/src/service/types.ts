@@ -278,6 +278,17 @@ export interface OperationsPayload {
     boundaries: Record<string, string>;
   };
   jobs: ServiceJobSummary[];
+  auditEvents: Array<{
+    id: number;
+    actor: string;
+    action: string;
+    resource_type: string;
+    resource_id: string;
+    city_id: string | null;
+    request_id: string;
+    data_classification: "public" | "internal" | "restricted";
+    occurred_at: string;
+  }>;
 }
 
 export interface ScenarioSummary {
@@ -299,6 +310,32 @@ export interface ScenarioComparisonSummary {
   scenario_run_ids: string[];
   comparison_dimensions: Array<Record<string, unknown>>;
   created_by: string;
+  created_at: string;
+}
+
+export interface FieldOfflinePackage {
+  offline_package_id: string;
+  package_version: number;
+  content_sha256: string;
+  expires_at: string | null;
+  content: {
+    package_scope: "single_selected_site";
+    urban_state_id: string;
+    scenario_run_id: string;
+    site_order: number;
+    field_record?: { record_version?: number };
+    [key: string]: unknown;
+  };
+}
+
+export interface AttachmentMetadata {
+  id: string;
+  city_id: string;
+  original_file_name: string;
+  content_type: string;
+  size_bytes: number;
+  sha256: string;
+  data_classification: "public" | "internal" | "restricted";
   created_at: string;
 }
 

@@ -61,3 +61,17 @@ def test_activity_audit_and_public_internal_exports_are_separate() -> None:
     assert "CREATE TRIGGER audit_log_immutable" in SQL
     assert "CREATE TABLE report_exports" in SQL
     assert "CREATE TABLE evidence_exports" not in SQL
+
+
+def test_offline_field_and_attachment_records_have_composite_tenant_guards() -> None:
+    for constraint in (
+        "field_offline_packages_organization_city_fk",
+        "field_offline_packages_organization_state_fk",
+        "field_offline_packages_organization_scenario_fk",
+        "field_sync_operations_organization_package_fk",
+        "field_sync_operations_organization_scenario_fk",
+        "field_sync_conflicts_organization_operation_fk",
+    ):
+        assert constraint in SQL
+    assert "attachment_objects" in SQL
+    assert "FOREIGN KEY (organization_id, city_id)" in SQL

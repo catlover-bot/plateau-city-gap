@@ -1,5 +1,8 @@
+import inspect
+
 import pytest
 
+from backend.citygap_platform.api.repository import PostGISRepository
 from backend.citygap_platform.api.service_repository import MunicipalServiceRepository
 
 PARAMETERS = [
@@ -52,3 +55,19 @@ def test_report_digest_is_deterministic_and_sensitive_to_content() -> None:
     assert first_digest == reordered_digest
     assert first_digest != changed_digest
     assert len(first_digest) == 64
+
+
+def test_legacy_field_storage_is_tenant_scoped_before_v1_reuse() -> None:
+    source = "\n".join(
+        inspect.getsource(method)
+        for method in (
+            PostGISRepository.create_field_offline_package,
+            PostGISRepository.sync_field_operation,
+            PostGISRepository.field_sync_conflict,
+            PostGISRepository.resolve_field_sync_conflict,
+        )
+    )
+    assert source.count("organization_id") >= 20
+    assert "conflict.organization_id = operation.organization_id" in source
+    assert "package.organization_id = %s" in source
+    assert "city.organization_id = %s" in source

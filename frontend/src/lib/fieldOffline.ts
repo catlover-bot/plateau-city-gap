@@ -3,13 +3,20 @@ export type FieldQueueStatus = "pending" | "applied" | "conflict" | "rejected";
 export interface SelectedFieldPackage {
   offline_package_id: string;
   package_version: number;
+  organization_id: string;
+  city_key: string;
   content: Record<string, unknown>;
 }
 
 export interface QueuedFieldOperation {
   client_operation_id: string;
   offline_package_id: string;
+  organization_id: string;
+  city_key: string;
+  scenario_run_id: string;
+  site_order: number;
   base_record_version: number;
+  client_updated_at: string;
   payload: Record<string, unknown>;
   status: FieldQueueStatus;
   conflict_id?: string;
@@ -23,15 +30,20 @@ function database(): Promise<IDBDatabase> {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
     request.onupgradeneeded = () => {
       const db = request.result;
-      if (!db.objectStoreNames.contains("packages")) db.createObjectStore("packages", { keyPath: "offline_package_id" });
-      if (!db.objectStoreNames.contains("operations")) db.createObjectStore("operations", { keyPath: "client_operation_id" });
+      if (!db.objectStoreNames.contains("packages"))
+        db.createObjectStore("packages", { keyPath: "offline_package_id" });
+      if (!db.objectStoreNames.contains("operations"))
+        db.createObjectStore("operations", { keyPath: "client_operation_id" });
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
 }
 
-async function put(storeName: "packages" | "operations", value: object): Promise<void> {
+async function put(
+  storeName: "packages" | "operations",
+  value: object,
+): Promise<void> {
   const db = await database();
   await new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(storeName, "readwrite");
@@ -42,28 +54,67 @@ async function put(storeName: "packages" | "operations", value: object): Promise
   db.close();
 }
 
-export async function cacheSelectedFieldPackage(value: SelectedFieldPackage): Promise<void> {
+async function getAll<T>(storeName: "packages" | "operations"): Promise<T[]> {
+  const db = await database();
+  const values = await new Promise<T[]>((resolve, reject) => {
+    const transaction = db.transaction(storeName, "readonly");
+    const request = transaction.objectStore(storeName).getAll();
+    request.onsuccess = () => resolve(request.result as T[]);
+    request.onerror = () => reject(request.error);
+  });
+  db.close();
+  return values;
+}
+
+export async function cacheSelectedFieldPackage(
+  value: SelectedFieldPackage,
+): Promise<void> {
   await put("packages", value);
   navigator.serviceWorker.controller?.postMessage({
     type: "CACHE_SELECTED_FIELD_PACKAGE",
     packageId: value.offline_package_id,
-    payload: value
+    payload: value,
   });
 }
 
-export async function queueFieldOperation(value: QueuedFieldOperation): Promise<void> {
-  if (value.status !== "pending") throw new Error("新しいoffline操作はpendingで保存します");
+export async function queueFieldOperation(
+  value: QueuedFieldOperation,
+): Promise<void> {
+  if (value.status !== "pending")
+    throw new Error("新しいoffline操作はpendingで保存します");
   await put("operations", value);
+}
+
+export async function saveFieldOperation(
+  value: QueuedFieldOperation,
+): Promise<void> {
+  await put("operations", value);
+}
+
+export async function queuedFieldOperations(
+  organizationId: string,
+  cityKey: string,
+): Promise<QueuedFieldOperation[]> {
+  const values = await getAll<QueuedFieldOperation>("operations");
+  return values.filter(
+    (value) =>
+      value.organization_id === organizationId &&
+      value.city_key === cityKey &&
+      (value.status === "pending" || value.status === "conflict"),
+  );
 }
 
 export function applySyncResponse(
   operation: QueuedFieldOperation,
   httpStatus: number,
-  response: Record<string, unknown>
+  response: Record<string, unknown>,
 ): QueuedFieldOperation {
   if (httpStatus === 409) {
     const conflictId = response.conflict_id;
-    if (typeof conflictId !== "string" || response.silent_last_write_wins !== false) {
+    if (
+      typeof conflictId !== "string" ||
+      response.silent_last_write_wins !== false
+    ) {
       throw new Error("明示的なconflict応答が必要です");
     }
     return { ...operation, status: "conflict", conflict_id: conflictId };

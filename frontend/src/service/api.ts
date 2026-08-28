@@ -5,6 +5,7 @@ import type {
   CitySummary,
   DataHubPayload,
   EvidenceLibrary,
+  FieldOfflinePackage,
   Finding,
   Investigation,
   OperationsPayload,
@@ -13,6 +14,7 @@ import type {
   ScenarioComparisonSummary,
   ServiceProfile,
   ServiceSnapshot,
+  AttachmentMetadata,
   WorkQueue,
 } from "./types";
 
@@ -99,7 +101,18 @@ export async function loadServiceSnapshot(
           {},
           fetcher,
         ),
-      ]).then(([overview, jobs]) => ({ overview, jobs: jobs.items }))
+        profile.roles.includes("administrator")
+          ? requestJson<{ items: OperationsPayload["auditEvents"] }>(
+              "/api/v1/audit-events?limit=100",
+              {},
+              fetcher,
+            )
+          : Promise.resolve({ items: [] }),
+      ]).then(([overview, jobs, audit]) => ({
+        overview,
+        jobs: jobs.items,
+        auditEvents: audit.items,
+      }))
     : null;
   const selectedCity =
     cities.find((city) => city.service_status === "active") ?? cities[0];
@@ -193,6 +206,96 @@ export const serviceApi = {
   request: requestJson,
   url(path: string) {
     return `${apiBase()}${path}`;
+  },
+  createOfflinePackage(
+    cityKey: string,
+    payload: {
+      urban_state_id: string;
+      scenario_run_id: string;
+      site_order: number;
+      expires_at?: string;
+    },
+    fetcher: typeof fetch = fetch,
+  ) {
+    return requestJson<FieldOfflinePackage>(
+      `/api/v1/cities/${encodeURIComponent(cityKey)}/field/offline-packages`,
+      { method: "POST", body: JSON.stringify(payload) },
+      fetcher,
+    );
+  },
+  async syncFieldOperation(
+    cityKey: string,
+    payload: unknown,
+    fetcher: typeof fetch = fetch,
+  ): Promise<{ httpStatus: number; payload: Record<string, unknown> }> {
+    const response = await fetcher(
+      `${apiBase()}/api/v1/cities/${encodeURIComponent(cityKey)}/field/sync`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+    const body = (await response.json().catch(() => ({}))) as Record<
+      string,
+      unknown
+    > &
+      ServiceErrorShape;
+    if (!response.ok && response.status !== 409) {
+      throw new ServiceApiError(response.status, body);
+    }
+    return { httpStatus: response.status, payload: body };
+  },
+  resolveFieldConflict(
+    cityKey: string,
+    conflictId: string,
+    resolutionStatus: "use_server" | "use_client" | "merged",
+    resolvedState?: Record<string, unknown>,
+    fetcher: typeof fetch = fetch,
+  ) {
+    return requestJson<Record<string, unknown>>(
+      `/api/v1/cities/${encodeURIComponent(cityKey)}/field-conflicts/${encodeURIComponent(conflictId)}/resolve`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          resolution_status: resolutionStatus,
+          resolved_state: resolvedState,
+        }),
+      },
+      fetcher,
+    );
+  },
+  async uploadAttachment(
+    cityKey: string,
+    file: File,
+    dataClassification: "public" | "internal" | "restricted" = "restricted",
+    fetcher: typeof fetch = fetch,
+  ): Promise<AttachmentMetadata> {
+    const query = new URLSearchParams({
+      filename: file.name,
+      data_classification: dataClassification,
+    });
+    const response = await fetcher(
+      `${apiBase()}/api/v1/cities/${encodeURIComponent(cityKey)}/attachments?${query}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": file.type || "application/octet-stream",
+        },
+        body: file,
+      },
+    );
+    const body = (await response
+      .json()
+      .catch(() => ({}))) as AttachmentMetadata & ServiceErrorShape;
+    if (!response.ok) throw new ServiceApiError(response.status, body);
+    return body;
   },
   async loadCity(cityKey: string, fetcher: typeof fetch = fetch) {
     const city = encodeURIComponent(cityKey);
