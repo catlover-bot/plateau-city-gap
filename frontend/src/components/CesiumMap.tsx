@@ -740,7 +740,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           if (fallbackStarted || viewer.isDestroyed()) return;
           fallbackStarted = true;
           const fallback = await loadBundledBuildingTileset(data);
-          if (!fallback || viewer.isDestroyed()) { await startOfficialStream(); return; }
+          if (!fallback || viewer.isDestroyed()) {
+            if (!verifiedLocalOnly) await startOfficialStream();
+            return;
+          }
           applyBuildingStyle(fallback, selectedBuildingIdRef.current, {
             analysisLens: analysisLensRef.current,
             selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
@@ -761,7 +764,11 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         };
 
         const fast = await loadFastStartBuildingTileset(data);
-        if (!fast || viewer.isDestroyed()) { await startBundledFallback(); return; }
+        if (!fast || viewer.isDestroyed()) {
+          if (!verifiedLocalOnly) await startBundledFallback();
+          else containerRef.current?.setAttribute("data-building-source", "verified-fast-start-unavailable");
+          return;
+        }
         applyBuildingStyle(fast, selectedBuildingIdRef.current, {
           analysisLens: analysisLensRef.current,
           selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),

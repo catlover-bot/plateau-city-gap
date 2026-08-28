@@ -62,7 +62,7 @@ for (const specification of scenes) {
   try {
     await page.goto(route, { waitUntil: "domcontentloaded", timeout: 90_000 });
     await page.waitForSelector(".product-app", { timeout: 90_000 });
-    const readinessTimeout = specification.mode === "plateau3d" && !specification.route.includes("buildingSource=verified-local") ? 240_000 : 120_000;
+    const readinessTimeout = specification.mode === "plateau3d" && !specification.route.includes("buildingSource=verified-local") ? 240_000 : 180_000;
     await page.waitForFunction(() => document.documentElement.dataset.visualReady === "true", null, { timeout: readinessTimeout });
     if (specification.requireObjectLens) await page.locator(".object-lens").scrollIntoViewIfNeeded();
     const readiness = await page.evaluate((scene) => {
