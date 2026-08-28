@@ -147,8 +147,8 @@ def test_source_contract_validates_scope_priority_and_municipality_code() -> Non
 
 
 def test_official_registry_is_unique_and_city_scoped() -> None:
-    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 12
-    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 14
+    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 16
+    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 18
     maizuru = OFFICIAL_SOURCE_REGISTRY.sources_for_city("26202")
     fujisawa = OFFICIAL_SOURCE_REGISTRY.sources_for_city("14205")
     assert "bodik-maizuru" in {item.source_key for item in maizuru}
@@ -171,10 +171,15 @@ def test_official_registry_is_unique_and_city_scoped() -> None:
         == "JGD2000 geographic coordinates (EPSG:4612) to EPSG:4326"
     )
     assert (
-        OFFICIAL_SOURCE_REGISTRY.source("npa-traffic-accident-2024").default_license_id
-        == "pdl-1.0"
+        OFFICIAL_SOURCE_REGISTRY.source("npa-traffic-accident-2024").default_license_id == "pdl-1.0"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.adapter("estat-census-500m@2020").dataset_family
+        == "census_population_500m"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.source("plateau-city-model-2025").default_license_id
+        == "plateau-site-policy-2025"
     )
     assert "maizuru-official-gtfs-research" in {item.source_key for item in maizuru}
-    assert "maizuru-official-gtfs-research" not in {
-        item.source_key for item in fujisawa
-    }
+    assert "maizuru-official-gtfs-research" not in {item.source_key for item in fujisawa}

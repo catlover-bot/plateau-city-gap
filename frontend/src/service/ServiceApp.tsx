@@ -36,6 +36,14 @@ import type {
 } from "./types";
 
 type ServicePage = (typeof SERVICE_NAVIGATION)[number]["id"];
+type DataHubView =
+  | "sources"
+  | "datasets"
+  | "coverage"
+  | "quality"
+  | "updates"
+  | "licenses"
+  | "dependencies";
 
 function initialPage(): ServicePage {
   if (typeof window === "undefined") return "home";
@@ -467,7 +475,7 @@ export function ServiceApp({
                 autoFocus
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="都市、Finding、Investigation、Scenario、IDを検索"
+                placeholder="都市、データセット、ソース、Finding、Investigation、Scenario、IDを検索"
               />
               <button type="button" onClick={() => setSearchOpen(false)}>
                 閉じる
@@ -582,6 +590,48 @@ function HomePage({
           <small>現地確認待ち</small>
         </button>
       </div>
+      <section className="service-panel full city-data-readiness">
+        <header>
+          <div>
+            <span>CITY DATA</span>
+            <h2>この都市で使えるデータ</h2>
+          </div>
+          <button className="table-action" type="button" onClick={() => onNavigate("data")}>
+            Data Hubを開く
+          </button>
+        </header>
+        <div>
+          <article>
+            <span>最新の都市状態</span>
+            <strong>{snapshot.cityHome.latest_state?.label ?? "未登録"}</strong>
+            <small>
+              {snapshot.cityHome.latest_state
+                ? `${snapshot.cityHome.latest_state.effective_date} · ${snapshot.cityHome.latest_state.lifecycle_status}`
+                : "観測済みUrban Stateがありません"}
+            </small>
+          </article>
+          <article>
+            <span>利用可能</span>
+            <strong>{summary?.coverage_available ?? 0}</strong>
+            <small>Dataset family</small>
+          </article>
+          <article>
+            <span>部分利用</span>
+            <strong>{summary?.coverage_partial ?? 0}</strong>
+            <small>制約を確認</small>
+          </article>
+          <article>
+            <span>カバレッジ不足</span>
+            <strong>{summary?.coverage_gaps ?? 0}</strong>
+            <small>不足・未確認・要レビュー</small>
+          </article>
+          <article>
+            <span>更新あり</span>
+            <strong>{summary?.update_available ?? 0}</strong>
+            <small>昇格は人が確認</small>
+          </article>
+        </div>
+      </section>
       <div className="service-home-grid">
         <section className="service-panel">
           <header>
@@ -778,6 +828,7 @@ function DataPage({
   const [datasetFormOpen, setDatasetFormOpen] = useState(false);
   const [stateFormOpen, setStateFormOpen] = useState(false);
   const [annualUpdateFormOpen, setAnnualUpdateFormOpen] = useState(false);
+  const [dataView, setDataView] = useState<DataHubView>("sources");
   const hub = snapshot.dataHub;
   if (!hub)
     return (
@@ -1066,6 +1117,246 @@ function DataPage({
           </p>
         </form>
       )}
+      <div className="service-tabs data-hub-tabs" role="tablist" aria-label="Data Hub views">
+        {(
+          [
+            ["sources", "Sources"],
+            ["datasets", "Datasets"],
+            ["coverage", "Coverage"],
+            ["quality", "Quality"],
+            ["updates", "Updates"],
+            ["licenses", "Licenses"],
+            ["dependencies", "Dependencies"],
+          ] as Array<[DataHubView, string]>
+        ).map(([view, label]) => (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={dataView === view}
+            className={dataView === view ? "active" : ""}
+            key={view}
+            onClick={() => setDataView(view)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      {dataView === "sources" && (
+        <>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>SOURCE INVENTORY</span>
+                <h2>公式・自治体データソース</h2>
+              </div>
+              <b>{hub.sources.length}</b>
+            </header>
+            <ServiceTable
+              caption="データソース一覧"
+              empty="確認済みソースはありません"
+              rows={hub.sources as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                {
+                  key: "title",
+                  label: "ソース",
+                  render: (row) => (
+                    <a href={String(row.source_url)} target="_blank" rel="noreferrer">
+                      {String(row.title)}
+                    </a>
+                  ),
+                },
+                { key: "provider", label: "提供者" },
+                { key: "dataset_family", label: "Family" },
+                {
+                  key: "availability",
+                  label: "利用状況",
+                  render: (row) => <StatusChip value={String(row.availability)} />,
+                },
+                { key: "review_status", label: "確認" },
+                {
+                  key: "reference_date",
+                  label: "基準日",
+                  render: (row) => String(row.reference_date ?? "期間表記を参照"),
+                },
+                { key: "license_name", label: "利用条件" },
+              ]}
+            />
+          </section>
+          <div className="service-two-column data-source-detail-grid">
+            <section className="service-panel">
+              <header>
+                <div>
+                  <span>SOURCE TIMELINE</span>
+                  <h2>混在する基準時点</h2>
+                </div>
+              </header>
+              {hub.source_timeline.map((entry) => (
+                <article className="source-timeline-row" key={entry.id}>
+                  <time>{entry.reference_period}</time>
+                  <div>
+                    <strong>{entry.label}</strong>
+                    <small>{entry.temporal_note}</small>
+                  </div>
+                </article>
+              ))}
+            </section>
+            <section className="service-panel">
+              <header>
+                <div>
+                  <span>COMPARISON & CONFLICT</span>
+                  <h2>ソース差分と未解決競合</h2>
+                </div>
+              </header>
+              {hub.comparisons.length === 0 && hub.conflicts.length === 0 ? (
+                <ServiceEmpty
+                  title="比較記録はありません"
+                  detail="比較は総合点や自動勝者を生成しません。"
+                />
+              ) : (
+                <>
+                  {hub.comparisons.map((comparison) => (
+                    <article className="source-comparison" key={comparison.id}>
+                      <StatusChip value="reviewed" />
+                      <div>
+                        <strong>
+                          {comparison.left_source_title} ↔ {comparison.right_source_title}
+                        </strong>
+                        <small>{comparison.conclusion}</small>
+                        <details>
+                          <summary>比較ディメンション</summary>
+                          <pre>{JSON.stringify(comparison.dimensions, null, 2)}</pre>
+                        </details>
+                      </div>
+                    </article>
+                  ))}
+                  {hub.conflicts.map((conflict) => (
+                    <article className="source-comparison" key={conflict.id}>
+                      <StatusChip value={conflict.status} />
+                      <div>
+                        <strong>
+                          {conflict.conflict_key} · {conflict.conflict_count ?? "—"}件
+                        </strong>
+                        <small>{conflict.explanation}</small>
+                      </div>
+                    </article>
+                  ))}
+                </>
+              )}
+            </section>
+          </div>
+        </>
+      )}
+      {dataView === "coverage" && (
+        <>
+          <div className="service-kpis data-coverage-kpis">
+            <button type="button">
+              <span>AVAILABLE</span>
+              <strong>{hub.coverage_summary.available}</strong>
+              <small>検証済み利用可能</small>
+            </button>
+            <button type="button">
+              <span>PARTIAL</span>
+              <strong>{hub.coverage_summary.partial}</strong>
+              <small>制約付き・部分利用</small>
+            </button>
+            <button type="button">
+              <span>GAPS</span>
+              <strong>{hub.coverage_summary.gaps}</strong>
+              <small>不足・未確認・要レビュー</small>
+            </button>
+            <button type="button">
+              <span>MIXED / STALE</span>
+              <strong>{hub.coverage_summary.mixed_or_stale}</strong>
+              <small>年次差を明示</small>
+            </button>
+          </div>
+          <ServiceTable
+            caption="都市データカバレッジ"
+            empty="カバレッジ評価はありません"
+            rows={hub.coverage as unknown as Array<Record<string, unknown>>}
+            rowKey={(row) => String(row.dataset_family)}
+            columns={[
+              { key: "dataset_family", label: "Dataset family" },
+              {
+                key: "status",
+                label: "状態",
+                render: (row) => <StatusChip value={String(row.status)} />,
+              },
+              { key: "temporal_alignment", label: "時点整合" },
+              { key: "source_title", label: "根拠ソース" },
+              { key: "explanation", label: "説明" },
+              { key: "unavailable_reason", label: "不足理由" },
+            ]}
+          />
+        </>
+      )}
+      {dataView === "licenses" && (
+        <ServiceTable
+          caption="利用条件"
+          empty="利用条件は登録されていません"
+          rows={hub.licenses as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.license_id)}
+          columns={[
+            {
+              key: "license_name",
+              label: "利用条件",
+              render: (row) => (
+                <a href={String(row.license_url)} target="_blank" rel="noreferrer">
+                  {String(row.license_name)}
+                </a>
+              ),
+            },
+            { key: "license_id", label: "ID" },
+            {
+              key: "commercial_use",
+              label: "商用",
+              render: (row) => row.commercial_use == null ? "要確認" : row.commercial_use ? "可" : "不可",
+            },
+            {
+              key: "redistribution",
+              label: "再配布",
+              render: (row) => row.redistribution == null ? "要確認" : row.redistribution ? "可" : "不可",
+            },
+            {
+              key: "attribution_required",
+              label: "帰属表示",
+              render: (row) => row.attribution_required == null ? "要確認" : row.attribution_required ? "必要" : "不要",
+            },
+            {
+              key: "unknown_terms",
+              label: "未確認条件",
+              render: (row) => row.unknown_terms ? "あり" : "なし",
+            },
+          ]}
+        />
+      )}
+      {dataView === "dependencies" && (
+        <ServiceTable
+          caption="分析とデータ依存関係"
+          empty="分析依存関係はありません"
+          rows={hub.dependencies as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => `${String(row.analysis_id)}:${String(row.analysis_version)}:${String(row.dataset_family)}`}
+          columns={[
+            { key: "analysis_name", label: "分析" },
+            { key: "dataset_family", label: "Dataset family" },
+            { key: "requirement_level", label: "要件" },
+            {
+              key: "coverage_status",
+              label: "カバレッジ",
+              render: (row) => <StatusChip value={String(row.coverage_status ?? "unknown")} />,
+            },
+            {
+              key: "effect",
+              label: "実行Tierへの影響",
+              render: (row) => <StatusChip value={String(row.effect)} />,
+            },
+            { key: "rule_version", label: "選定方針" },
+          ]}
+        />
+      )}
+      {dataView === "datasets" && (
+        <>
       <section className="service-panel full">
         <header>
           <div>
@@ -1130,6 +1421,42 @@ function DataPage({
           ]}
         />
       </section>
+        </>
+      )}
+      {dataView === "updates" && (
+        <>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>SOURCE UPDATES</span>
+                <h2>メタデータ更新確認</h2>
+              </div>
+            </header>
+            <ServiceTable
+              caption="ソース更新確認"
+              empty="更新確認履歴はまだありません"
+              rows={hub.updates as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => `${String(row.city_source_id)}:${String(row.checked_at)}`}
+              columns={[
+                { key: "source_title", label: "ソース" },
+                {
+                  key: "result",
+                  label: "結果",
+                  render: (row) => <StatusChip value={String(row.result)} />,
+                },
+                {
+                  key: "checked_at",
+                  label: "確認日時",
+                  render: (row) => formatDate(row.checked_at),
+                },
+                {
+                  key: "next_check_after",
+                  label: "次回以降",
+                  render: (row) => formatDate(row.next_check_after),
+                },
+              ]}
+            />
+          </section>
       <section className="service-panel full">
         <header>
           <div>
@@ -1227,6 +1554,32 @@ function DataPage({
           ]}
         />
       </section>
+        </>
+      )}
+      {dataView === "quality" && (
+        <>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>FAMILY GATES</span>
+                <h2>データ種別ごとの品質ルール</h2>
+              </div>
+            </header>
+            <ServiceTable
+              caption="データファミリー品質ゲート"
+              empty="品質ゲート方針はありません"
+              rows={hub.quality_gate_policies as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => `${String(row.dataset_family)}:${String(row.gate_key)}:${String(row.policy_version)}`}
+              columns={[
+                { key: "dataset_family", label: "Dataset family" },
+                { key: "dimension", label: "Dimension" },
+                { key: "gate_key", label: "Gate" },
+                { key: "requirement", label: "要件" },
+                { key: "failure_action", label: "失敗時" },
+                { key: "policy_version", label: "Version" },
+              ]}
+            />
+          </section>
       <div className="service-two-column">
         <section className="service-panel">
           <header>
@@ -1286,6 +1639,8 @@ function DataPage({
           )}
         </section>
       </div>
+        </>
+      )}
     </>
   );
 }
@@ -1376,6 +1731,40 @@ function AnalysisPage({
         }
       />
       <AnalysisRunPanel snapshot={snapshot} canRun={canWrite} mutate={mutate} />
+      {(snapshot.dataHub?.missing_data.length ?? 0) > 0 && (
+        <section className="service-panel full missing-data-panel">
+          <header>
+            <div>
+              <span>MISSING DATA BESIDE FINDINGS</span>
+              <h2>分析候補の解釈に必要な不足データ</h2>
+            </div>
+            <b>{snapshot.dataHub?.missing_data.length ?? 0}</b>
+          </header>
+          <div>
+            {snapshot.dataHub?.missing_data.map((dependency) => (
+              <article
+                key={`${dependency.analysis_id}:${dependency.analysis_version}:${dependency.dataset_family}`}
+              >
+                <StatusChip value={dependency.coverage_status ?? "unknown"} />
+                <div>
+                  <strong>
+                    {dependency.analysis_name} · {dependency.dataset_family}
+                  </strong>
+                  <small>
+                    {dependency.requirement_level} → {dependency.effect}
+                    {dependency.unavailable_reason
+                      ? ` · ${dependency.unavailable_reason}`
+                      : ""}
+                  </small>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="service-panel-note">
+            不足はFindingの深刻度や政策優先順位を意味しません。required不足は分析をUNAVAILABLE、enhancement不足はBASEとして明示します。
+          </p>
+        </section>
+      )}
       {formOpen && (
         <form className="service-form" onSubmit={submitFinding}>
           <label>
@@ -1989,6 +2378,7 @@ function ReviewPage({
     zoom: 12,
   });
   const [visibleEntityTypes, setVisibleEntityTypes] = useState<string[]>([]);
+  const [selectedEntityId, setSelectedEntityId] = useState<string | null>(null);
   const entities = useMemo(
     () => (detail?.entities ?? []) as MunicipalSpatialEntity[],
     [detail],
@@ -1996,6 +2386,18 @@ function ReviewPage({
   const savedViews = useMemo(
     () => (detail?.saved_views ?? []) as Array<Record<string, unknown>>,
     [detail],
+  );
+  const sourceContributions = useMemo(
+    () =>
+      (detail?.source_contributions ?? []) as Array<Record<string, unknown>>,
+    [detail],
+  );
+  const investigationSourceTimeline = useMemo(
+    () => (detail?.source_timeline ?? []) as Array<Record<string, unknown>>,
+    [detail],
+  );
+  const selectedContributions = sourceContributions.filter(
+    (contribution) => contribution.entity_id === selectedEntityId,
   );
 
   useEffect(() => {
@@ -2031,6 +2433,11 @@ function ReviewPage({
       : available;
     setVisibleEntityTypes(
       storedTypes.filter((entityType) => available.includes(entityType)),
+    );
+    setSelectedEntityId((current) =>
+      current && entities.some((entity) => entity.entity_id === current)
+        ? current
+        : null,
     );
   }, [entities, investigation, savedViews]);
 
@@ -2385,10 +2792,77 @@ function ReviewPage({
                 visibleEntityTypes={visibleEntityTypes}
                 onViewportChange={setSpatialViewport}
                 onVisibleEntityTypesChange={setVisibleEntityTypes}
-                onEntitySelect={(entityId) =>
-                  setFieldStatus(`空間entity ${entityId} を選択しました`)
-                }
+                onEntitySelect={(entityId) => {
+                  setSelectedEntityId(entityId);
+                  setFieldStatus(`空間entity ${entityId} を選択しました`);
+                }}
               />
+              <div className="service-two-column investigation-source-context">
+                <section className="service-panel">
+                  <header>
+                    <div>
+                      <span>SELECTED FEATURE LINEAGE</span>
+                      <h2>選択地物へ寄与したソース</h2>
+                    </div>
+                  </header>
+                  {!selectedEntityId ? (
+                    <ServiceEmpty
+                      title="地図上の地物を選択してください"
+                      detail="保存済みentityの明示出典とcanonical spatial linkだけを表示します。"
+                    />
+                  ) : selectedContributions.length === 0 ? (
+                    <ServiceEmpty
+                      title="紐づく出典記録はありません"
+                      detail="一致を推測せず、linkageが保存された場合だけ表示します。"
+                    />
+                  ) : (
+                    selectedContributions.map((contribution, index) => (
+                      <article
+                        className="source-comparison"
+                        key={`${String(contribution.entity_id)}:${String(contribution.contribution_role)}:${String(contribution.source_title)}:${index}`}
+                      >
+                        <StatusChip value={String(contribution.match_method ?? "source")} />
+                        <div>
+                          <strong>{String(contribution.source_title)}</strong>
+                          <small>
+                            {String(contribution.reference_period ?? "基準時点未記載")} · {String(contribution.contribution_role)}
+                          </small>
+                          <small>{String(contribution.explanation)}</small>
+                        </div>
+                      </article>
+                    ))
+                  )}
+                </section>
+                <section className="service-panel">
+                  <header>
+                    <div>
+                      <span>INVESTIGATION SOURCE TIMELINE</span>
+                      <h2>この調査が参照する時点</h2>
+                    </div>
+                  </header>
+                  {investigationSourceTimeline.length === 0 ? (
+                    <ServiceEmpty
+                      title="時点付きソースはありません"
+                      detail="出典年を推定せず、Urban Stateとentityに記録された値だけを表示します。"
+                    />
+                  ) : (
+                    investigationSourceTimeline.map((entry, index) => (
+                      <article
+                        className="source-timeline-row"
+                        key={`${String(entry.source_role)}:${String(entry.source_title)}:${String(entry.reference_period)}:${index}`}
+                      >
+                        <time>{String(entry.reference_period)}</time>
+                        <div>
+                          <strong>{String(entry.source_title)}</strong>
+                          <small>
+                            {String(entry.source_role)} · {String(entry.contribution_count)}件
+                          </small>
+                        </div>
+                      </article>
+                    ))
+                  )}
+                </section>
+              </div>
               <section className="case-form saved-view-workspace">
                 <h3>空間ビューを保存・共有</h3>
                 {permits(roles, ["analyst", "planner"]) && (

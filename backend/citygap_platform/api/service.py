@@ -1346,6 +1346,92 @@ def data_hub(
     return result
 
 
+@router.get(
+    "/cities/{city}/data-coverage",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def city_data_coverage(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.city_data_coverage(organization_id, city)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/sources",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def city_open_data_sources(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.city_open_data_sources(organization_id, city)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/source-timeline",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def city_source_timeline(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.city_source_timeline(organization_id, city)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get("/datasets", dependencies=[Depends(require_permission("dataset:read"))])
+def datasets(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    city: str | None = None,
+    q: Annotated[str | None, Query(min_length=1, max_length=200)] = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> dict[str, Any]:
+    return {"items": repo.service_datasets(organization_id, city, q, limit)}
+
+
+@router.get(
+    "/datasets/{dataset_id}",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def dataset_detail(
+    dataset_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.service_dataset(organization_id, str(dataset_id))
+    if result is None:
+        raise _not_found("Dataset")
+    return result
+
+
+@router.get(
+    "/datasets/{dataset_id}/lineage",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def dataset_lineage(
+    dataset_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.service_dataset_lineage(organization_id, str(dataset_id))
+    if result is None:
+        raise _not_found("Dataset")
+    return result
+
+
 @router.post(
     "/cities/{city}/datasets",
     status_code=201,

@@ -89,9 +89,7 @@ def test_role_based_finding_to_human_decision_acceptance(
     monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
     client = TestClient(create_app(MunicipalServiceRepository(database_url)))
 
-    catalog_response = client.get(
-        "/api/v1/analysis-definitions", headers=_headers("analyst")
-    )
+    catalog_response = client.get("/api/v1/analysis-definitions", headers=_headers("analyst"))
     assert catalog_response.status_code == 200, catalog_response.text
     catalog = {item["id"]: item for item in catalog_response.json()["items"]}
     assert len(catalog) == 12
@@ -135,6 +133,22 @@ def test_role_based_finding_to_human_decision_acceptance(
     )
     assert investigation_response.status_code == 201, investigation_response.text
     investigation_id = investigation_response.json()["id"]
+
+    import psycopg
+
+    with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """INSERT INTO investigation_entities (
+                   organization_id, investigation_id, entity_type, entity_id, label,
+                   geometry, source, source_year, attributes, evidence, added_by
+               ) VALUES (
+                   %s, %s, 'mesh', '533513381', '検証500mメッシュ',
+                   ST_SetSRID(ST_MakePoint(135.32, 35.46), 4326),
+                   'e-Stat T001192', 2020, '{"fixture":true}',
+                   '[{"statistics_id":"T001192"}]', 'acceptance-analyst'
+               )""",
+            (ORG_A, investigation_id),
+        )
 
     assert (
         client.post(
@@ -240,6 +254,98 @@ def test_role_based_finding_to_human_decision_acceptance(
     assert case.json()["investigation"]["status"] == "closed"
     assert len(case.json()["field_observations"]) == 1
     assert len(case.json()["decisions"]) == 1
+    assert any(
+        item["source_title"] == "e-Stat T001192" and item["reference_period"] == "2020"
+        for item in case.json()["source_timeline"]
+    )
+    assert case.json()["source_contributions"][0]["entity_id"] == "533513381"
+    assert case.json()["source_contributions"][0]["contribution_role"] == (
+        "investigation_entity_source"
+    )
+
+
+def test_data_hub_v2_exposes_coverage_lineage_without_automatic_truth_selection(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _prepare_service_fixture(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+
+    hub_response = client.get("/api/v1/cities/maizuru/data-hub", headers=_headers("viewer"))
+    assert hub_response.status_code == 200, hub_response.text
+    hub = hub_response.json()
+    assert hub["coverage_summary"]["total"] >= 20
+    assert hub["coverage_summary"]["gaps"] >= 3
+    coverage = {item["dataset_family"]: item for item in hub["coverage"]}
+    assert coverage["plateau_buildings"]["status"] == "available"
+    assert coverage["mhlw_medical"]["status"] == "partial"
+    assert coverage["official_pedestrian_network"] == {
+        **coverage["official_pedestrian_network"],
+        "status": "unavailable",
+        "unavailable_reason": "outside_coverage",
+    }
+    assert coverage["gtfs"]["unavailable_reason"] == "not_published"
+    assert any(
+        item["dataset_family"] == "mhlw_medical" and item["effect"] == "BASE"
+        for item in hub["missing_data"]
+    )
+    assert any(
+        item["dataset_family"] == "official_pedestrian_network" and item["effect"] == "BASE"
+        for item in hub["missing_data"]
+    )
+    assert [item["reference_period"] for item in hub["source_timeline"]] == [
+        "2020-10-01",
+        "2020 model",
+        "2021-06-01",
+        "2022",
+        "2023/2024 occurrence dates in 2024 annual file",
+        "2025 release",
+        "2025 / 2050 / 2070 projections (R6 2024 production)",
+        "2026-06-01",
+        "2026-06-30",
+    ]
+    comparison = hub["comparisons"][0]
+    assert comparison["automatic_selection"] is False
+    assert comparison["dimensions"]["record_counts"] == {"p04_2020": 105, "mhlw_2026": 83}
+    assert comparison["dimensions"]["identity"]["ambiguous"] == 18
+    assert hub["conflicts"][0]["automatic_truth_selection"] is False
+    assert hub["conflicts"][0]["status"] == "unresolved"
+    assert all("score" not in item for item in hub["coverage"])
+
+    sources = client.get("/api/v1/cities/maizuru/sources", headers=_headers("viewer"))
+    assert sources.status_code == 200
+    assert any(item["title"].startswith("医療情報ネット") for item in sources.json()["items"])
+    timeline = client.get("/api/v1/cities/maizuru/source-timeline", headers=_headers("viewer"))
+    assert timeline.status_code == 200
+    assert len(timeline.json()["items"]) == 9
+    assert (
+        client.get(
+            "/api/v1/cities/maizuru/data-coverage", headers=_headers("viewer", ORG_B)
+        ).status_code
+        == 404
+    )
+
+    search = client.get(
+        "/api/v1/search?q=%E5%8C%BB%E7%99%82%E6%83%85%E5%A0%B1%E3%83%8D%E3%83%83%E3%83%88",
+        headers=_headers("viewer"),
+    )
+    assert search.status_code == 200
+    assert any(item["entity_type"] == "source" for item in search.json()["items"])
+
+    datasets_response = client.get(
+        "/api/v1/datasets?city=maizuru&q=PLATEAU", headers=_headers("viewer")
+    )
+    assert datasets_response.status_code == 200
+    datasets = datasets_response.json()["items"]
+    assert datasets
+    dataset_id = datasets[0]["id"]
+    detail = client.get(f"/api/v1/datasets/{dataset_id}", headers=_headers("viewer"))
+    assert detail.status_code == 200
+    assert detail.json()["versions"]
+    lineage = client.get(f"/api/v1/datasets/{dataset_id}/lineage", headers=_headers("viewer"))
+    assert lineage.status_code == 200
+    assert lineage.json()["automatic_latest_substitution"] is False
+    assert lineage.json()["chain"].startswith("raw_blob -> resource -> adapter")
 
 
 def test_organization_a_b_isolation_for_api_and_database_constraints(

@@ -16,7 +16,9 @@
 ## Resource groups
 
 - identity and setup: `/me`, `/cities`, `/cities/{city}/onboarding`
-- data: `/cities/{city}/datasets`, `/dataset-versions/{id}/status`, Urban States and
+- data: city Data Hub, `/cities/{city}/data-coverage`, `/cities/{city}/sources`,
+  `/cities/{city}/source-timeline`, searchable `/datasets`, dataset detail/lineage,
+  `/cities/{city}/datasets`, `/dataset-versions/{id}/status`, Urban States and
   `/cities/{city}/annual-updates`
 - work: Findings, Investigations, saved spatial views, Reviews, Assignments and Decision
   Records
@@ -48,3 +50,9 @@ Organization configuration accepts only an API allow-list of non-secret keys, re
 secret-bearing nested keys, caps JSON values at 16 KiB and uses `expected_updated_at`
 for optimistic concurrency. Retention endpoints record a reviewed policy; they do not
 claim deletion enforcement or legal-hold support.
+
+Coverage and source responses are tenant-scoped and dimensioned; they never emit a
+single quality score or an automatically selected source. Dataset lineage is version
+pinned and reports `automatic_latest_substitution: false`. Investigation detail exposes
+only recorded entity sources and persisted canonical spatial links; missing linkage is
+returned as missing rather than inferred from proximity.

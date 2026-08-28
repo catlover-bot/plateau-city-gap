@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 23)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 24)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -128,3 +128,27 @@ def test_municipal_open_data_analyses_are_added_by_forward_only_migration() -> N
     assert "analysis_dataset_requirements" in sql
     for level in ("required", "optional", "enhancement"):
         assert f"'{level}'" in sql
+
+
+def test_city_data_coverage_and_lineage_are_forward_only_and_non_ranking() -> None:
+    sql = Path("infra/migrations/023_city_data_coverage_lineage.sql").read_text(encoding="utf-8")
+    for table in (
+        "city_source_timeline_entries",
+        "open_data_dataset_comparisons",
+        "open_data_source_conflicts",
+        "analysis_source_selection_policies",
+        "dataset_family_quality_gate_policies",
+    ):
+        assert f"CREATE TABLE {table}" in sql
+    assert "CREATE VIEW service_search_documents_v2" in sql
+    assert "automatic_newer_wins boolean NOT NULL DEFAULT false" in sql
+    assert "automatic_truth_selection boolean NOT NULL DEFAULT false" in sql
+    assert "automatic_selection boolean NOT NULL DEFAULT false" in sql
+    assert "aggregate quality score" in sql
+    assert "reference_period text NOT NULL" in sql
+    assert "CREATE TRIGGER city_seed_pilot_data_hub" in sql
+    assert "never registers a city" in sql
+    assert "2025-01-01" not in sql
+    assert "2022-01-01" not in sql
+    assert "PLATEAU roads are not substituted" in sql
+    assert '"p11_conversion":false' in sql

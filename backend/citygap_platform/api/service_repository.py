@@ -1193,12 +1193,59 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            coverage_rows = self._dicts(
+                connection.execute(
+                    """SELECT status, count(*) AS count
+                       FROM city_data_coverage
+                       WHERE organization_id = %s AND city_id = %s
+                       GROUP BY status""",
+                    (organization_id, city["id"]),
+                )
+            )
+            latest_state = self._one(
+                connection.execute(
+                    """SELECT id, state_key, label, effective_date, lifecycle_status
+                       FROM urban_states
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY (lifecycle_status = 'current') DESC,
+                                effective_date DESC, created_at DESC
+                       LIMIT 1""",
+                    (organization_id, city["id"]),
+                )
+            )
+            update_available = connection.execute(
+                """SELECT count(DISTINCT update.city_source_id) AS count
+                   FROM open_data_update_checks AS update
+                   JOIN city_open_data_sources AS source
+                     ON source.organization_id = update.organization_id
+                    AND source.id = update.city_source_id
+                   WHERE update.organization_id = %s AND source.city_id = %s
+                     AND update.result = 'update_available'
+                     AND NOT EXISTS (
+                         SELECT 1 FROM open_data_update_checks AS newer
+                         WHERE newer.organization_id = update.organization_id
+                           AND newer.city_source_id = update.city_source_id
+                           AND (newer.checked_at, newer.id) > (update.checked_at, update.id)
+                     )""",
+                (organization_id, city["id"]),
+            ).fetchone()["count"]
+            coverage_counts = {row["status"]: row["count"] for row in coverage_rows}
+            if home is not None:
+                home["coverage_available"] = coverage_counts.get("available", 0)
+                home["coverage_partial"] = coverage_counts.get("partial", 0)
+                home["coverage_gaps"] = sum(
+                    coverage_counts.get(status, 0)
+                    for status in ("unavailable", "unknown", "requires_review")
+                )
+                home["update_available"] = update_available
             return {
                 "city": city,
                 "summary": home,
                 "capabilities": capabilities,
                 "datasets": datasets,
                 "recent_activity": recent_activity,
+                "latest_state": latest_state,
+                "data_coverage": coverage_counts,
             }
 
     def findings(
@@ -1539,6 +1586,103 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, investigation_id),
                 )
             )
+            source_timeline = self._dicts(
+                connection.execute(
+                    """SELECT 'urban_state_dataset'::text AS source_role,
+                              dataset.title AS source_title,
+                              version.dataset_year::text AS reference_period,
+                              version.source_url, count(*) AS contribution_count
+                       FROM state_dataset_versions AS state_version
+                       JOIN dataset_versions AS version
+                         ON version.organization_id = state_version.organization_id
+                        AND version.id = state_version.dataset_version_id
+                       JOIN datasets AS dataset
+                         ON dataset.organization_id = version.organization_id
+                        AND dataset.id = version.dataset_id
+                       WHERE state_version.organization_id = %s
+                         AND state_version.urban_state_id = %s
+                       GROUP BY dataset.title, version.dataset_year, version.source_url
+                       UNION ALL
+                       SELECT 'investigation_entity'::text AS source_role,
+                              entity.source AS source_title,
+                              entity.source_year::text AS reference_period,
+                              NULL::text AS source_url, count(*) AS contribution_count
+                       FROM investigation_entities AS entity
+                       WHERE entity.organization_id = %s
+                         AND entity.investigation_id = %s
+                         AND entity.source IS NOT NULL
+                         AND entity.source_year IS NOT NULL
+                       GROUP BY entity.source, entity.source_year
+                       ORDER BY reference_period, source_title""",
+                    (
+                        organization_id,
+                        investigation["urban_state_id"],
+                        organization_id,
+                        investigation_id,
+                    ),
+                )
+            )
+            source_contributions = self._dicts(
+                connection.execute(
+                    """SELECT entity.entity_type, entity.entity_id, entity.label,
+                              entity.source AS source_title,
+                              entity.source_year::text AS reference_period,
+                              'investigation_entity_source'::text AS contribution_role,
+                              NULL::text AS match_method, NULL::numeric AS distance_m,
+                              'Investigationへ保存されたentityの明示出典'::text AS explanation,
+                              entity.evidence, entity.attributes
+                       FROM investigation_entities AS entity
+                       WHERE entity.organization_id = %s
+                         AND entity.investigation_id = %s
+                         AND entity.source IS NOT NULL
+                       ORDER BY entity.entity_type, entity.entity_id""",
+                    (organization_id, investigation_id),
+                )
+            )
+            source_contributions.extend(
+                self._dicts(
+                    connection.execute(
+                        """SELECT entity.entity_type, entity.entity_id, entity.label,
+                                  source.title AS source_title,
+                                  coalesce(record.reference_date::text,
+                                           resource.reference_date::text) AS reference_period,
+                                  'canonical_spatial_link'::text AS contribution_role,
+                                  link.match_method, link.distance_m, link.explanation,
+                                  jsonb_build_object(
+                                      'source_row_locator', record.source_row_locator,
+                                      'external_record_id', record.external_record_id,
+                                      'resource_id', resource.id,
+                                      'raw_checksum', resource.raw_checksum,
+                                      'adapter_version', resource.adapter_version,
+                                      'rule_version', link.rule_version
+                                  ) AS evidence,
+                                  record.attributes
+                           FROM investigation_entities AS entity
+                           JOIN open_data_spatial_links AS link
+                             ON link.organization_id = entity.organization_id
+                            AND link.target_id = entity.entity_id
+                            AND (
+                                link.link_type = entity.entity_type
+                                OR (link.link_type = 'plateau_building'
+                                    AND entity.entity_type = 'building')
+                            )
+                           JOIN canonical_open_data_records AS record
+                             ON record.organization_id = link.organization_id
+                            AND record.id = link.canonical_record_id
+                           JOIN open_data_resources AS resource
+                             ON resource.organization_id = record.organization_id
+                            AND resource.id = record.source_resource_id
+                           JOIN city_open_data_sources AS source
+                             ON source.organization_id = resource.organization_id
+                            AND source.id = resource.city_source_id
+                           WHERE entity.organization_id = %s
+                             AND entity.investigation_id = %s
+                           ORDER BY entity.entity_type, entity.entity_id,
+                                    source.title, record.external_record_id""",
+                        (organization_id, investigation_id),
+                    )
+                )
+            )
             return {
                 "investigation": investigation,
                 "findings": findings,
@@ -1547,6 +1691,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 "field_observations": field_observations,
                 "decisions": decisions,
                 "saved_views": saved_views,
+                "source_timeline": source_timeline,
+                "source_contributions": source_contributions,
             }
 
     def investigations(
@@ -2337,6 +2483,181 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            coverage = self._dicts(
+                connection.execute(
+                    """SELECT coverage.dataset_family, coverage.status,
+                              coverage.unavailable_reason, coverage.temporal_alignment,
+                              coverage.explanation, coverage.assessed_at,
+                              source.id AS city_source_id, source.title AS source_title,
+                              source.source_url
+                       FROM city_data_coverage AS coverage
+                       LEFT JOIN city_open_data_sources AS source
+                         ON source.organization_id = coverage.organization_id
+                        AND source.id = coverage.city_source_id
+                       WHERE coverage.organization_id = %s AND coverage.city_id = %s
+                       ORDER BY coverage.dataset_family""",
+                    (organization_id, city["id"]),
+                )
+            )
+            sources = self._dicts(
+                connection.execute(
+                    """SELECT source.id, source.source_key, source.external_dataset_id,
+                              source.dataset_family, source.title, source.source_url,
+                              source.availability, source.unavailable_reason,
+                              source.review_status, source.metadata, source.reference_date,
+                              source.update_frequency, source.discovered_at,
+                              catalog.provider, catalog.official_url,
+                              license.license_id, license.license_name,
+                              license.license_url, license.commercial_use,
+                              license.redistribution, license.attribution_required,
+                              license.derivative_allowed, license.unknown_terms,
+                              update.result AS latest_update_result,
+                              update.checked_at AS latest_update_checked_at,
+                              update.next_check_after
+                       FROM city_open_data_sources AS source
+                       JOIN open_data_source_catalog AS catalog
+                         ON catalog.source_key = source.source_key
+                       JOIN open_data_license_policies AS license
+                         ON license.license_id = source.license_id
+                       LEFT JOIN LATERAL (
+                           SELECT check_result.result, check_result.checked_at,
+                                  check_result.next_check_after
+                           FROM open_data_update_checks AS check_result
+                           WHERE check_result.organization_id = source.organization_id
+                             AND check_result.city_source_id = source.id
+                           ORDER BY check_result.checked_at DESC, check_result.id DESC
+                           LIMIT 1
+                       ) AS update ON true
+                       WHERE source.organization_id = %s AND source.city_id = %s
+                       ORDER BY source.dataset_family, source.title""",
+                    (organization_id, city["id"]),
+                )
+            )
+            source_timeline = self._dicts(
+                connection.execute(
+                    """SELECT timeline.id, timeline.dataset_family,
+                              timeline.reference_period, timeline.temporal_kind,
+                              timeline.label, timeline.temporal_note,
+                              timeline.display_order, source.title AS source_title,
+                              source.source_url
+                       FROM city_source_timeline_entries AS timeline
+                       LEFT JOIN city_open_data_sources AS source
+                         ON source.organization_id = timeline.organization_id
+                        AND source.id = timeline.city_source_id
+                       WHERE timeline.organization_id = %s AND timeline.city_id = %s
+                       ORDER BY timeline.display_order, timeline.id""",
+                    (organization_id, city["id"]),
+                )
+            )
+            comparisons = self._dicts(
+                connection.execute(
+                    """SELECT comparison.id, comparison.comparison_key,
+                              comparison.comparison_version, comparison.dimensions,
+                              comparison.conclusion, comparison.automatic_selection,
+                              comparison.compared_at, left_source.title AS left_source_title,
+                              right_source.title AS right_source_title
+                       FROM open_data_dataset_comparisons AS comparison
+                       JOIN city_open_data_sources AS left_source
+                         ON left_source.organization_id = comparison.organization_id
+                        AND left_source.id = comparison.left_city_source_id
+                       JOIN city_open_data_sources AS right_source
+                         ON right_source.organization_id = comparison.organization_id
+                        AND right_source.id = comparison.right_city_source_id
+                       WHERE comparison.organization_id = %s AND comparison.city_id = %s
+                       ORDER BY comparison.compared_at DESC""",
+                    (organization_id, city["id"]),
+                )
+            )
+            conflicts = self._dicts(
+                connection.execute(
+                    """SELECT id, dataset_family, conflict_key, source_ids, status,
+                              conflict_count, explanation, resolution,
+                              automatic_truth_selection, detected_at, reviewed_at
+                       FROM open_data_source_conflicts
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY detected_at DESC, conflict_key""",
+                    (organization_id, city["id"]),
+                )
+            )
+            dependencies = self._dicts(
+                connection.execute(
+                    """SELECT requirement.analysis_id, requirement.analysis_version,
+                              definition.name AS analysis_name,
+                              requirement.dataset_family, requirement.requirement_level,
+                              requirement.rule_version,
+                              requirement.source_selection_rule,
+                              coverage.status AS coverage_status,
+                              coverage.unavailable_reason,
+                              coverage.temporal_alignment,
+                              CASE
+                                WHEN requirement.requirement_level = 'required'
+                                 AND coalesce(coverage.status, 'unknown') IN (
+                                     'unavailable', 'unknown', 'requires_review'
+                                 )
+                                  THEN 'UNAVAILABLE'
+                                WHEN requirement.requirement_level = 'required'
+                                 AND coverage.status = 'partial'
+                                  THEN 'BASE'
+                                WHEN requirement.requirement_level = 'enhancement'
+                                 AND coalesce(coverage.status, 'unknown') <> 'available'
+                                  THEN 'BASE'
+                                WHEN requirement.requirement_level = 'optional'
+                                 AND coalesce(coverage.status, 'unknown') <> 'available'
+                                  THEN 'CONTEXT_ABSENT'
+                                ELSE 'AVAILABLE'
+                              END AS effect
+                       FROM analysis_dataset_requirements AS requirement
+                       JOIN analysis_definitions AS definition
+                         ON definition.id = requirement.analysis_id
+                        AND definition.version = requirement.analysis_version
+                       LEFT JOIN city_data_coverage AS coverage
+                         ON coverage.organization_id = %s
+                        AND coverage.city_id = %s
+                        AND coverage.dataset_family = requirement.dataset_family
+                       WHERE definition.active
+                       ORDER BY definition.name, requirement.requirement_level,
+                                requirement.dataset_family""",
+                    (organization_id, city["id"]),
+                )
+            )
+            quality_gate_policies = self._dicts(
+                connection.execute(
+                    """SELECT policy.dataset_family, policy.gate_key,
+                              policy.policy_version, policy.dimension,
+                              policy.requirement, policy.failure_action,
+                              policy.effective_at
+                       FROM dataset_family_quality_gate_policies AS policy
+                       WHERE EXISTS (
+                           SELECT 1 FROM city_data_coverage AS coverage
+                           WHERE coverage.organization_id = %s
+                             AND coverage.city_id = %s
+                             AND coverage.dataset_family = policy.dataset_family
+                       )
+                       ORDER BY policy.dataset_family, policy.dimension, policy.gate_key""",
+                    (organization_id, city["id"]),
+                )
+            )
+            licenses_by_id = {
+                source["license_id"]: {
+                    key: source[key]
+                    for key in (
+                        "license_id",
+                        "license_name",
+                        "license_url",
+                        "commercial_use",
+                        "redistribution",
+                        "attribution_required",
+                        "derivative_allowed",
+                        "unknown_terms",
+                    )
+                }
+                for source in sources
+            }
+            missing_data = [
+                dependency
+                for dependency in dependencies
+                if dependency["coverage_status"] != "available"
+            ]
             return {
                 "city": city,
                 "datasets": datasets,
@@ -2344,6 +2665,209 @@ class MunicipalServiceRepository(PostGISRepository):
                 "plateau_model": plateau_model,
                 "urban_states": urban_states,
                 "annual_updates": annual_updates,
+                "sources": sources,
+                "coverage": coverage,
+                "licenses": list(licenses_by_id.values()),
+                "updates": [
+                    {
+                        "city_source_id": source["id"],
+                        "source_title": source["title"],
+                        "result": source["latest_update_result"],
+                        "checked_at": source["latest_update_checked_at"],
+                        "next_check_after": source["next_check_after"],
+                    }
+                    for source in sources
+                    if source["latest_update_result"] is not None
+                ],
+                "dependencies": dependencies,
+                "source_timeline": source_timeline,
+                "comparisons": comparisons,
+                "conflicts": conflicts,
+                "quality_gate_policies": quality_gate_policies,
+                "missing_data": missing_data,
+                "coverage_summary": {
+                    "total": len(coverage),
+                    "available": sum(item["status"] == "available" for item in coverage),
+                    "partial": sum(item["status"] == "partial" for item in coverage),
+                    "gaps": sum(
+                        item["status"] in {"unavailable", "unknown", "requires_review"}
+                        for item in coverage
+                    ),
+                    "mixed_or_stale": sum(
+                        item["temporal_alignment"] in {"mixed", "stale"} for item in coverage
+                    ),
+                },
+            }
+
+    def city_data_coverage(
+        self, organization_id: str, city_reference: str
+    ) -> dict[str, Any] | None:
+        hub = self.data_hub(organization_id, city_reference)
+        if hub is None:
+            return None
+        return {
+            "city": hub["city"],
+            "summary": hub["coverage_summary"],
+            "items": hub["coverage"],
+            "missing_data": hub["missing_data"],
+        }
+
+    def city_open_data_sources(
+        self, organization_id: str, city_reference: str
+    ) -> dict[str, Any] | None:
+        hub = self.data_hub(organization_id, city_reference)
+        if hub is None:
+            return None
+        return {
+            "city": hub["city"],
+            "items": hub["sources"],
+            "comparisons": hub["comparisons"],
+            "conflicts": hub["conflicts"],
+        }
+
+    def city_source_timeline(
+        self, organization_id: str, city_reference: str
+    ) -> dict[str, Any] | None:
+        hub = self.data_hub(organization_id, city_reference)
+        if hub is None:
+            return None
+        return {"city": hub["city"], "items": hub["source_timeline"]}
+
+    def service_datasets(
+        self, organization_id: str, city_reference: str | None, query: str | None, limit: int
+    ) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city_id = None
+            if city_reference:
+                city = self._city(connection, organization_id, city_reference)
+                if city is None:
+                    return []
+                city_id = city["id"]
+            return self._dicts(
+                connection.execute(
+                    """SELECT dataset.id, dataset.city_id, city.city_key, city.name AS city_name,
+                              dataset.dataset_key, dataset.dataset_category, dataset.title,
+                              dataset.provider, dataset.data_classification,
+                              count(version.id) AS version_count,
+                              max(version.registered_at) AS latest_registered_at
+                       FROM datasets AS dataset
+                       JOIN cities AS city
+                         ON city.organization_id = dataset.organization_id
+                        AND city.id = dataset.city_id
+                       LEFT JOIN dataset_versions AS version
+                         ON version.organization_id = dataset.organization_id
+                        AND version.dataset_id = dataset.id
+                       WHERE dataset.organization_id = %s
+                         AND (%s::uuid IS NULL OR dataset.city_id = %s)
+                         AND (%s::text IS NULL OR dataset.title ILIKE '%%' || %s || '%%'
+                              OR dataset.provider ILIKE '%%' || %s || '%%'
+                              OR dataset.dataset_key ILIKE '%%' || %s || '%%')
+                       GROUP BY dataset.id, city.city_key, city.name
+                       ORDER BY dataset.title, dataset.id
+                       LIMIT %s""",
+                    (
+                        organization_id,
+                        city_id,
+                        city_id,
+                        query,
+                        query,
+                        query,
+                        query,
+                        limit,
+                    ),
+                )
+            )
+
+    def service_dataset(self, organization_id: str, dataset_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            dataset = self._one(
+                connection.execute(
+                    """SELECT dataset.*, city.city_key, city.name AS city_name
+                       FROM datasets AS dataset
+                       JOIN cities AS city
+                         ON city.organization_id = dataset.organization_id
+                        AND city.id = dataset.city_id
+                       WHERE dataset.organization_id = %s AND dataset.id = %s""",
+                    (organization_id, dataset_id),
+                )
+            )
+            if dataset is None:
+                return None
+            dataset["versions"] = self._dicts(
+                connection.execute(
+                    """SELECT id, version_key, dataset_year, data_format, source_url,
+                              license, declared_source_crs, archive_sha256,
+                              verification_status, lifecycle_status, quality_status,
+                              service_status, analysis_ready, registered_at
+                       FROM dataset_versions
+                       WHERE organization_id = %s AND dataset_id = %s
+                       ORDER BY dataset_year DESC, registered_at DESC""",
+                    (organization_id, dataset_id),
+                )
+            )
+            return dataset
+
+    def service_dataset_lineage(
+        self, organization_id: str, dataset_id: str
+    ) -> dict[str, Any] | None:
+        dataset = self.service_dataset(organization_id, dataset_id)
+        if dataset is None:
+            return None
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            resources = self._dicts(
+                connection.execute(
+                    """SELECT resource.id, resource.dataset_version_id,
+                              resource.external_resource_id, resource.resource_title,
+                              resource.resource_url, resource.format,
+                              resource.raw_checksum, resource.retrieved_at,
+                              resource.reference_date, resource.source_crs,
+                              resource.horizontal_datum, resource.transformation_method,
+                              resource.source_schema_version, resource.adapter_version,
+                              processing.state AS processing_state,
+                              processing.status_reason, processing.row_count,
+                              processing.feature_count, blob.sha256 AS blob_sha256,
+                              blob.storage_provider, blob.reuse_scope
+                       FROM open_data_resources AS resource
+                       JOIN dataset_versions AS version
+                         ON version.organization_id = resource.organization_id
+                        AND version.id = resource.dataset_version_id
+                       LEFT JOIN open_data_resource_processing AS processing
+                         ON processing.organization_id = resource.organization_id
+                        AND processing.resource_id = resource.id
+                       LEFT JOIN open_data_raw_blobs AS blob ON blob.id = resource.raw_blob_id
+                       WHERE resource.organization_id = %s AND version.dataset_id = %s
+                       ORDER BY resource.created_at, resource.id""",
+                    (organization_id, dataset_id),
+                )
+            )
+            transformations = self._dicts(
+                connection.execute(
+                    """SELECT run.id, run.resource_id, run.adapter_id,
+                              run.adapter_version, run.transformation_version,
+                              run.canonical_version, run.status, run.input_row_count,
+                              run.output_record_count, run.started_at, run.completed_at,
+                              run.error_message, run.metadata
+                       FROM open_data_transformation_runs AS run
+                       JOIN open_data_resources AS resource
+                         ON resource.organization_id = run.organization_id
+                        AND resource.id = run.resource_id
+                       JOIN dataset_versions AS version
+                         ON version.organization_id = resource.organization_id
+                        AND version.id = resource.dataset_version_id
+                       WHERE run.organization_id = %s AND version.dataset_id = %s
+                       ORDER BY run.started_at, run.id""",
+                    (organization_id, dataset_id),
+                )
+            )
+            return {
+                "dataset": dataset,
+                "resources": resources,
+                "transformations": transformations,
+                "chain": "raw_blob -> resource -> adapter -> canonical -> spatial_link -> analysis_run",
+                "automatic_latest_substitution": False,
             }
 
     def transition_dataset_version(
@@ -3357,7 +3881,7 @@ class MunicipalServiceRepository(PostGISRepository):
             return self._dicts(
                 connection.execute(
                     """SELECT city_id, entity_type, entity_id, title, subtitle, updated_at
-                       FROM service_search_documents
+                       FROM service_search_documents_v2
                        WHERE organization_id = %s
                          AND (%s::uuid IS NULL OR city_id = %s)
                          AND (title ILIKE '%%' || %s || '%%'

@@ -36,6 +36,10 @@ export interface CitySummary {
   latest_activity_at: string | null;
   available_capabilities?: number;
   capability_count?: number;
+  coverage_available?: number;
+  coverage_partial?: number;
+  coverage_gaps?: number;
+  update_available?: number;
 }
 
 export interface Capability {
@@ -105,6 +109,14 @@ export interface CityHomePayload {
   capabilities: Capability[];
   datasets: DatasetSummary[];
   recent_activity: ActivityEvent[];
+  latest_state?: {
+    id: string;
+    state_key: string;
+    label: string;
+    effective_date: string;
+    lifecycle_status: string;
+  } | null;
+  data_coverage?: Record<string, number>;
 }
 
 export interface Finding {
@@ -369,6 +381,20 @@ export interface AttachmentMetadata {
   created_at: string;
 }
 
+export interface DataHubDependency {
+  analysis_id: string;
+  analysis_version: string;
+  analysis_name: string;
+  dataset_family: string;
+  requirement_level: "required" | "optional" | "enhancement";
+  rule_version: string;
+  source_selection_rule: Record<string, unknown>;
+  coverage_status: string | null;
+  unavailable_reason: string | null;
+  temporal_alignment: string | null;
+  effect: "AVAILABLE" | "UNAVAILABLE" | "BASE" | "CONTEXT_ABSENT";
+}
+
 export interface DataHubPayload {
   city: CityHomePayload["city"];
   datasets: DatasetSummary[];
@@ -401,6 +427,107 @@ export interface DataHubPayload {
     job_state: string | null;
     job_stage: string | null;
     created_at: string;
+  }>;
+  coverage: Array<{
+    dataset_family: string;
+    status: "available" | "partial" | "unavailable" | "unknown" | "requires_review";
+    unavailable_reason: string | null;
+    temporal_alignment: "aligned" | "mixed" | "stale" | "unknown";
+    explanation: string;
+    assessed_at: string;
+    city_source_id: string | null;
+    source_title: string | null;
+    source_url: string | null;
+  }>;
+  coverage_summary: {
+    total: number;
+    available: number;
+    partial: number;
+    gaps: number;
+    mixed_or_stale: number;
+  };
+  sources: Array<{
+    id: string;
+    source_key: string;
+    external_dataset_id: string;
+    dataset_family: string;
+    title: string;
+    source_url: string;
+    availability: string;
+    unavailable_reason: string | null;
+    review_status: string;
+    metadata: Record<string, unknown>;
+    reference_date: string | null;
+    update_frequency: string | null;
+    provider: string;
+    official_url: string;
+    license_id: string;
+    license_name: string;
+    license_url: string;
+    unknown_terms: boolean;
+    latest_update_result: string | null;
+    latest_update_checked_at: string | null;
+    next_check_after: string | null;
+  }>;
+  licenses: Array<{
+    license_id: string;
+    license_name: string;
+    license_url: string;
+    commercial_use: boolean | null;
+    redistribution: boolean | null;
+    attribution_required: boolean | null;
+    derivative_allowed: boolean | null;
+    unknown_terms: boolean;
+  }>;
+  updates: Array<{
+    city_source_id: string;
+    source_title: string;
+    result: string;
+    checked_at: string;
+    next_check_after: string;
+  }>;
+  dependencies: DataHubDependency[];
+  missing_data: DataHubDependency[];
+  source_timeline: Array<{
+    id: number;
+    dataset_family: string;
+    reference_period: string;
+    temporal_kind: string;
+    label: string;
+    temporal_note: string;
+    display_order: number;
+    source_title: string | null;
+    source_url: string | null;
+  }>;
+  comparisons: Array<{
+    id: string;
+    comparison_key: string;
+    comparison_version: string;
+    dimensions: Record<string, unknown>;
+    conclusion: string;
+    automatic_selection: false;
+    compared_at: string;
+    left_source_title: string;
+    right_source_title: string;
+  }>;
+  conflicts: Array<{
+    id: string;
+    dataset_family: string;
+    conflict_key: string;
+    status: string;
+    conflict_count: number | null;
+    explanation: string;
+    automatic_truth_selection: false;
+    detected_at: string;
+  }>;
+  quality_gate_policies: Array<{
+    dataset_family: string;
+    gate_key: string;
+    policy_version: string;
+    dimension: string;
+    requirement: string;
+    failure_action: string;
+    effective_at: string;
   }>;
 }
 
