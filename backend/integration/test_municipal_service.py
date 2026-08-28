@@ -420,8 +420,7 @@ def test_annual_data_update_preserves_previous_investigation_and_versions(
         connection.execute(
             """UPDATE dataset_versions
                SET lifecycle_status = 'available', quality_status = 'passed',
-                   analysis_ready = true, service_status = 'analysis_ready',
-                   verification_status = 'fixture_worker_verified'
+                   analysis_ready = true, service_status = 'analysis_ready'
                WHERE organization_id = %s AND id = %s""",
             (ORG_A, version_id),
         )

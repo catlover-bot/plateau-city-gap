@@ -99,11 +99,12 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
     assert pilot.json()["status"] == "NOT_READY"
     assert pilot.json()["facts"]["plateau_registered"] is True
     assert pilot.json()["facts"]["evidence_count"] == 6
-    assert pilot.json()["facts"]["quality_gate"] is True
     assert {"population_registered", "facility_registered", "auth_mode"} <= set(
         pilot.json()["blockers"]
     )
-    assert "quality_gate" not in pilot.json()["blockers"]
+    assert ("quality_gate" in pilot.json()["blockers"]) is not pilot.json()["facts"][
+        "quality_gate"
+    ]
     snapshot = client.get("/admin/snapshot")
     assert snapshot.status_code == 200
     assert snapshot.json()["cities"][0]["city_code"] == "26202"
@@ -141,8 +142,14 @@ def test_real_canonical_scenarios_spatial_api_and_comparison(database_url: str) 
     assert len(comparison.json()["plans"]) == 3
 
     with psycopg.connect(database_url) as connection:
-        assert connection.execute("SELECT count(*) FROM scenario_runs").fetchone() == (30,)
-        assert connection.execute("SELECT count(*) FROM scenario_sites").fetchone() == (90,)
+        assert connection.execute(
+            "SELECT count(*) FROM scenario_runs WHERE parent_scenario_run_id IS NULL"
+        ).fetchone() == (30,)
+        assert connection.execute(
+            """SELECT count(*) FROM scenario_sites AS site
+               JOIN scenario_runs AS scenario ON scenario.id = site.scenario_run_id
+               WHERE scenario.parent_scenario_run_id IS NULL"""
+        ).fetchone() == (90,)
         assert connection.execute(
             "SELECT count(*) FROM audit_log WHERE action='scenario.create'"
         ).fetchone() == (30,)

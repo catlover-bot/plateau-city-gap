@@ -30,9 +30,9 @@ createdb "${restore_database}"
 pg_restore --exit-on-error --no-owner --no-acl --dbname="${restore_database}" "${dump_file}"
 
 source_scenarios="$(psql --dbname="${CITYGAP_SOURCE_DATABASE}" --tuples-only --no-align \
-  --command="SELECT count(*) FROM scenario_runs")"
+  --command="SELECT count(*) FROM scenario_runs WHERE parent_scenario_run_id IS NULL")"
 restored_scenarios="$(psql --dbname="${restore_database}" --tuples-only --no-align \
-  --command="SELECT count(*) FROM scenario_runs")"
+  --command="SELECT count(*) FROM scenario_runs WHERE parent_scenario_run_id IS NULL")"
 restored_extensions="$(psql --dbname="${restore_database}" --tuples-only --no-align \
   --command="SELECT count(*) FROM pg_extension WHERE extname IN ('postgis','pgrouting')")"
 

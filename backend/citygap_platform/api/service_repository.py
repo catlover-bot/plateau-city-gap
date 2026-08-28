@@ -1625,8 +1625,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 connection.execute(
                     """UPDATE investigations
                        SET status = %s,
-                           notes = CASE WHEN %s = '' THEN notes
-                                       ELSE concat_ws(E'\\n', NULLIF(notes, ''), %s) END
+                           notes = CASE WHEN %s::text = '' THEN notes
+                                       ELSE concat_ws(E'\\n', NULLIF(notes, ''), %s::text) END
                        WHERE organization_id = %s AND id = %s RETURNING *""",
                     (proposed_status, note, note, organization_id, investigation_id),
                 )
