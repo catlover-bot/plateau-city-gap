@@ -2448,14 +2448,30 @@ class MunicipalServiceRepository(PostGISRepository):
                        ORDER BY analysis_id, analysis_version, parameter_key"""
                 )
             )
+            requirements = self._dicts(
+                connection.execute(
+                    """SELECT analysis_id, analysis_version, dataset_family,
+                              requirement_level, source_selection_rule, rule_version
+                       FROM analysis_dataset_requirements
+                       ORDER BY analysis_id, analysis_version, requirement_level,
+                                dataset_family"""
+                )
+            )
             by_definition: dict[tuple[str, str], list[dict[str, Any]]] = {}
             for parameter in parameters:
                 key = (parameter.pop("analysis_id"), parameter.pop("analysis_version"))
                 by_definition.setdefault(key, []).append(parameter)
-            for definition in definitions:
-                definition["parameters"] = by_definition.get(
-                    (definition["id"], definition["version"]), []
+            requirements_by_definition: dict[tuple[str, str], list[dict[str, Any]]] = {}
+            for requirement in requirements:
+                key = (
+                    requirement.pop("analysis_id"),
+                    requirement.pop("analysis_version"),
                 )
+                requirements_by_definition.setdefault(key, []).append(requirement)
+            for definition in definitions:
+                key = (definition["id"], definition["version"])
+                definition["parameters"] = by_definition.get(key, [])
+                definition["dataset_requirements"] = requirements_by_definition.get(key, [])
             return definitions
 
     def service_analysis_runs(

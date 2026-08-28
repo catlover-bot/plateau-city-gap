@@ -1,0 +1,269 @@
+{
+  "algorithm_version": "municipal-open-data-analysis-1.0.0",
+  "analysis_availability": [
+    {
+      "algorithm_version": "medical-access-v2.0.0",
+      "analysis_id": "medical-access-v2",
+      "claim_boundary": "直線距離は到達時間、診療可否、受入能力、医療不足、政策優先順位ではない。",
+      "missing_enhancement": [
+        "official_pedestrian_network"
+      ],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    },
+    {
+      "algorithm_version": "care-access-1.0.0",
+      "analysis_id": "care-access",
+      "claim_boundary": "候補は介護不足、需要、利用資格、空床、政策優先順位の認定ではない。",
+      "missing_enhancement": [
+        "official_pedestrian_network",
+        "social_participation"
+      ],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    },
+    {
+      "algorithm_version": "future-population-spatial-1.0.0",
+      "analysis_id": "future-population-spatial",
+      "claim_boundary": "公式試算は観測値や保証された予測ではなく、最良シナリオを自動選択しない。",
+      "missing_enhancement": [],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    },
+    {
+      "algorithm_version": "daytime-activity-context-1.0.0",
+      "analysis_id": "daytime-activity-context",
+      "claim_boundary": "従業者数は昼間人口、サービス需要、混雑、政策上の不足を意味しない。",
+      "missing_enhancement": [
+        "official_pedestrian_network"
+      ],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    },
+    {
+      "algorithm_version": "earthquake-ground-context-1.0.0",
+      "analysis_id": "earthquake-ground-context",
+      "claim_boundary": "地盤モデル値は地震確率、被害予測、危険度、政策リスクスコアではない。",
+      "missing_enhancement": [],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    },
+    {
+      "algorithm_version": "historical-traffic-safety-context-1.0.0",
+      "analysis_id": "historical-traffic-safety-context",
+      "claim_boundary": "事故件数は交通量で正規化しておらず、現在の危険度、原因、確率、予測ではない。",
+      "missing_enhancement": [
+        "traffic_volume"
+      ],
+      "missing_optional": [],
+      "missing_required": [],
+      "tier": "BASE"
+    }
+  ],
+  "artifacts": {
+    "analysis/outputs/real/open_data/municipal_open_data_analysis.geojson": "7fe5cb7657f12eee7fa74e16bdc20fbcbd929e88d2069b342003eca20f5e55a7",
+    "analysis/outputs/real/open_data/municipal_open_data_evidence.csv": "aaebc94f8602a12197a5d1fe5550abde37e1c582cd4a49b7d0c00764b299f93e",
+    "analysis/outputs/real/open_data/municipal_open_data_evidence.html": "6997fc3e7a1647e839a71aa1a09c4e01dc402aa9bfa1e39589452b2fe9e28d60",
+    "analysis/outputs/real/open_data/municipal_open_data_evidence.json": "9ebb6a1ad20c6717b601d1eaf547641bfbec8ef0d575a4ecd6ec723f9a2475b6",
+    "analysis/outputs/real/open_data/municipal_open_data_findings.json": "055c933cab562a3a7435c8177a96bc2aaf08070444616f2e202122f0a1b42688"
+  },
+  "cities": {
+    "fujisawa": {
+      "accident_coverage": {
+        "linked_to_audited_mesh_count": 978,
+        "municipality_filtered_record_count": 982,
+        "unmatched_record_ids": [
+          "npa-accident:b1d91bb65daaa355:2024-45-260-0155",
+          "npa-accident:b1d91bb65daaa355:2024-45-260-0609",
+          "npa-accident:b1d91bb65daaa355:2024-45-266-0036",
+          "npa-accident:b1d91bb65daaa355:2024-45-266-0111"
+        ],
+        "unmatched_to_audited_mesh_count": 4
+      },
+      "analysis_crs": "EPSG:6677",
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "city_name": "藤沢市",
+      "context_only_no_finding_types": [
+        "earthquake_ground_context",
+        "historical_traffic_safety_context",
+        "future_population_spatial"
+      ],
+      "facility_counts": {
+        "care_deduplicated_establishments": 560,
+        "medical": 835
+      },
+      "finding_counts": {
+        "activity_service_gap_candidate": 15,
+        "care_access_review_candidate": 2,
+        "medical_access_review_candidate": 17
+      },
+      "mesh_count": 327,
+      "plateau_link_coverage": {
+        "care": {
+          "ambiguous": 599,
+          "facility_count": 601,
+          "identity_claimed": false,
+          "method": "nearest footprint candidate; proximity is not official identity",
+          "unmatched": 2
+        },
+        "medical": {
+          "ambiguous": 792,
+          "facility_count": 835,
+          "identity_claimed": false,
+          "method": "nearest footprint candidate; proximity is not official identity",
+          "unmatched": 43
+        }
+      },
+      "thresholds": {
+        "activity": {
+          "employees_p75": 553.75,
+          "medical_distance_p75_m": 708.548,
+          "transport_distance_p75_m": 363.398
+        },
+        "care": {
+          "distance_p65_m": 405.367,
+          "elderly_p65": 531.2,
+          "network_transport_median_m": 276.191
+        },
+        "medical": {
+          "distance_p75_m": 702.426,
+          "population_median": 1481.0
+        }
+      },
+      "urban_state": "fujisawa-2025-observed"
+    },
+    "maizuru": {
+      "accident_coverage": {
+        "linked_to_audited_mesh_count": 58,
+        "municipality_filtered_record_count": 59,
+        "unmatched_record_ids": [
+          "npa-accident:b1d91bb65daaa355:2024-61-059-0007"
+        ],
+        "unmatched_to_audited_mesh_count": 1
+      },
+      "analysis_crs": "EPSG:6674",
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "city_name": "舞鶴市",
+      "context_only_no_finding_types": [
+        "earthquake_ground_context",
+        "historical_traffic_safety_context",
+        "future_population_spatial"
+      ],
+      "facility_counts": {
+        "care_deduplicated_establishments": 103,
+        "medical": 83
+      },
+      "finding_counts": {
+        "activity_service_gap_candidate": 5,
+        "care_access_review_candidate": 1,
+        "medical_access_review_candidate": 10
+      },
+      "mesh_count": 495,
+      "plateau_link_coverage": {
+        "care": {
+          "ambiguous": 115,
+          "facility_count": 131,
+          "identity_claimed": false,
+          "method": "nearest footprint candidate; proximity is not official identity",
+          "unmatched": 16
+        },
+        "medical": {
+          "ambiguous": 76,
+          "facility_count": 83,
+          "identity_claimed": false,
+          "method": "nearest footprint candidate; proximity is not official identity",
+          "unmatched": 7
+        }
+      },
+      "thresholds": {
+        "activity": {
+          "employees_p75": 106.0,
+          "medical_distance_p75_m": 3403.783,
+          "transport_distance_p75_m": 828.65
+        },
+        "care": {
+          "distance_p65_m": 1586.039,
+          "elderly_p65": 66.25,
+          "network_transport_median_m": 363.069
+        },
+        "medical": {
+          "distance_p75_m": 3409.787,
+          "population_median": 69.0
+        }
+      },
+      "urban_state": "maizuru-2025-observed"
+    }
+  },
+  "finding_count": 50,
+  "generated_from_synthetic_data": false,
+  "mesh_count": 822,
+  "public_distribution": false,
+  "quality_model": {
+    "dimensions": [
+      "source authority",
+      "temporal fitness",
+      "spatial linkage",
+      "schema validity",
+      "claim boundary"
+    ],
+    "single_quality_score": false
+  },
+  "schema_version": "municipal-open-data-analysis-summary-1.0.0",
+  "source_contributions": [
+    {
+      "analysis_id": "medical-access-v2",
+      "sources": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025",
+        "experimental graph/P04 2020 shown separately"
+      ]
+    },
+    {
+      "analysis_id": "care-access",
+      "sources": [
+        "e-Stat census 2020",
+        "MHLW care 2026",
+        "PLATEAU 2025",
+        "experimental transport graph context"
+      ]
+    },
+    {
+      "analysis_id": "future-population-spatial",
+      "sources": [
+        "MLIT R6 official trial projection 250m",
+        "audited 500m mesh",
+        "PLATEAU spatial context"
+      ]
+    },
+    {
+      "analysis_id": "daytime-activity-context",
+      "sources": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ]
+    },
+    {
+      "analysis_id": "earthquake-ground-context",
+      "sources": [
+        "J-SHIS V4 2020",
+        "audited 500m mesh"
+      ]
+    },
+    {
+      "analysis_id": "historical-traffic-safety-context",
+      "sources": [
+        "NPA 2024 annual file",
+        "audited 500m mesh"
+      ]
+    }
+  ]
+}

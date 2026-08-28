@@ -61,6 +61,8 @@ class DataClassification(str, Enum):
 
 class FindingType(str, Enum):
     ACCESSIBILITY_GAP = "accessibility_gap"
+    CARE_ACCESS_REVIEW_CANDIDATE = "care_access_review_candidate"
+    ACTIVITY_SERVICE_GAP_CANDIDATE = "activity_service_gap_candidate"
     NETWORK_CRITICALITY = "network_criticality"
     PLANNING_CONTEXT = "planning_context"
     TEMPORAL_CHANGE = "temporal_change"
@@ -241,6 +243,33 @@ class ParameterDefinition:
     maximum: int | float | None = None
 
 
+class DatasetRequirementLevel(str, Enum):
+    REQUIRED = "required"
+    OPTIONAL = "optional"
+    ENHANCEMENT = "enhancement"
+
+
+class AnalysisTier(str, Enum):
+    UNAVAILABLE = "UNAVAILABLE"
+    BASE = "BASE"
+    ENHANCED = "ENHANCED"
+
+
+@dataclass(frozen=True, slots=True)
+class DatasetRequirement:
+    dataset_family: str
+    level: DatasetRequirementLevel
+    selection_rule: str
+
+
+@dataclass(frozen=True, slots=True)
+class AnalysisTierEvaluation:
+    tier: AnalysisTier
+    missing_required: tuple[str, ...]
+    missing_optional: tuple[str, ...]
+    missing_enhancement: tuple[str, ...]
+
+
 @dataclass(frozen=True, slots=True)
 class AnalysisDefinition:
     analysis_id: str
@@ -252,6 +281,39 @@ class AnalysisDefinition:
     outputs: tuple[str, ...]
     parameters: tuple[ParameterDefinition, ...]
     claim_boundary: str
+    dataset_requirements: tuple[DatasetRequirement, ...] = ()
+
+
+def evaluate_analysis_tier(
+    definition: AnalysisDefinition, available_dataset_families: set[str] | frozenset[str]
+) -> AnalysisTierEvaluation:
+    """Evaluate availability without converting optional context into a hard dependency."""
+
+    missing = {
+        level: tuple(
+            requirement.dataset_family
+            for requirement in definition.dataset_requirements
+            if requirement.level is level
+            and requirement.dataset_family not in available_dataset_families
+        )
+        for level in DatasetRequirementLevel
+    }
+    has_enhancement = any(
+        requirement.level is DatasetRequirementLevel.ENHANCEMENT
+        for requirement in definition.dataset_requirements
+    )
+    if missing[DatasetRequirementLevel.REQUIRED]:
+        tier = AnalysisTier.UNAVAILABLE
+    elif has_enhancement and not missing[DatasetRequirementLevel.ENHANCEMENT]:
+        tier = AnalysisTier.ENHANCED
+    else:
+        tier = AnalysisTier.BASE
+    return AnalysisTierEvaluation(
+        tier=tier,
+        missing_required=missing[DatasetRequirementLevel.REQUIRED],
+        missing_optional=missing[DatasetRequirementLevel.OPTIONAL],
+        missing_enhancement=missing[DatasetRequirementLevel.ENHANCEMENT],
+    )
 
 
 ANALYSIS_CATALOG = (
@@ -320,6 +382,199 @@ ANALYSIS_CATALOG = (
         ("change_set", "impacted_analyses"),
         (),
         "source仕様変更が都市変化として現れる可能性をEvidenceへ残す。",
+    ),
+    AnalysisDefinition(
+        "medical-access-v2",
+        "Medical Access V2",
+        "公式医療機関点と500mメッシュの距離文脈を追加調査候補として確認する",
+        ("screening", "medical"),
+        "medical-access-v2.0.0",
+        ("urban_state", "population_500m", "mhlw_medical_facilities"),
+        ("medical_access_context", "findings"),
+        (),
+        "直線距離は到達時間、診療可否、受入能力、医療不足、政策優先順位ではない。",
+        (
+            DatasetRequirement(
+                "census_population_500m",
+                DatasetRequirementLevel.REQUIRED,
+                "latest promoted official 500m census mesh",
+            ),
+            DatasetRequirement(
+                "mhlw_medical",
+                DatasetRequirementLevel.REQUIRED,
+                "latest promoted official medical-facility release",
+            ),
+            DatasetRequirement(
+                "plateau_buildings",
+                DatasetRequirementLevel.OPTIONAL,
+                "current validated PLATEAU building version",
+            ),
+            DatasetRequirement(
+                "road_network",
+                DatasetRequirementLevel.OPTIONAL,
+                "current experimental graph kept as a separate metric",
+            ),
+            DatasetRequirement(
+                "official_pedestrian_network",
+                DatasetRequirementLevel.ENHANCEMENT,
+                "official pedestrian network covering the audited city",
+            ),
+        ),
+    ),
+    AnalysisDefinition(
+        "care-access",
+        "Care Access",
+        "高齢者人口、公式介護事業所、PLATEAU空間文脈から現地確認候補を抽出する",
+        ("screening", "building_detail", "care"),
+        "care-access-1.0.0",
+        ("urban_state", "elderly_population_500m", "mhlw_care_facilities", "plateau_buildings"),
+        ("care_access_context", "care_access_review_candidate"),
+        (),
+        "候補は介護不足、需要、利用資格、空床、政策優先順位の認定ではない。",
+        (
+            DatasetRequirement(
+                "census_elderly_population_500m",
+                DatasetRequirementLevel.REQUIRED,
+                "official disclosed 2020 elderly population mesh",
+            ),
+            DatasetRequirement(
+                "mhlw_care",
+                DatasetRequirementLevel.REQUIRED,
+                "latest promoted official care-establishment release",
+            ),
+            DatasetRequirement(
+                "plateau_buildings",
+                DatasetRequirementLevel.REQUIRED,
+                "current validated PLATEAU building version",
+            ),
+            DatasetRequirement(
+                "road_network",
+                DatasetRequirementLevel.OPTIONAL,
+                "current experimental graph kept as a separate metric",
+            ),
+            DatasetRequirement(
+                "official_pedestrian_network",
+                DatasetRequirementLevel.ENHANCEMENT,
+                "official pedestrian network covering the audited city",
+            ),
+            DatasetRequirement(
+                "social_participation",
+                DatasetRequirementLevel.ENHANCEMENT,
+                "official participation data with documented spatial and temporal coverage",
+            ),
+        ),
+    ),
+    AnalysisDefinition(
+        "future-population-spatial",
+        "将来公式人口の空間比較",
+        "公式250m将来人口系列を500mメッシュへ決定論的に集約して年度間を比較する",
+        ("screening", "future_population"),
+        "future-population-spatial-1.0.0",
+        ("urban_state", "mlit_future_population_250m"),
+        ("future_population_mesh_context",),
+        (),
+        "公式試算は観測値や保証された予測ではなく、最良シナリオを自動選択しない。",
+        (
+            DatasetRequirement(
+                "mlit_future_population_250m",
+                DatasetRequirementLevel.REQUIRED,
+                "official R6 trial projection series",
+            ),
+            DatasetRequirement(
+                "census_population_500m",
+                DatasetRequirementLevel.REQUIRED,
+                "official observed mesh context kept temporally separate",
+            ),
+            DatasetRequirement(
+                "plateau_buildings",
+                DatasetRequirementLevel.OPTIONAL,
+                "current validated PLATEAU building version",
+            ),
+        ),
+    ),
+    AnalysisDefinition(
+        "daytime-activity-context",
+        "Daytime Activity Context",
+        "事業所・従業者集積をサービス到達文脈と別々の指標で確認する",
+        ("screening", "economic_activity"),
+        "daytime-activity-context-1.0.0",
+        ("economic_census_500m", "urban_state"),
+        ("activity_service_context", "activity_service_gap_candidate"),
+        (),
+        "従業者数は昼間人口、サービス需要、混雑、政策上の不足を意味しない。",
+        (
+            DatasetRequirement(
+                "economic_census_500m",
+                DatasetRequirementLevel.REQUIRED,
+                "latest promoted official economic-census mesh",
+            ),
+            DatasetRequirement(
+                "mhlw_medical",
+                DatasetRequirementLevel.OPTIONAL,
+                "latest promoted medical-facility release",
+            ),
+            DatasetRequirement(
+                "transport_points",
+                DatasetRequirementLevel.OPTIONAL,
+                "promoted official transport-point dataset",
+            ),
+            DatasetRequirement(
+                "official_pedestrian_network",
+                DatasetRequirementLevel.ENHANCEMENT,
+                "official pedestrian network covering the audited city",
+            ),
+        ),
+    ),
+    AnalysisDefinition(
+        "earthquake-ground-context",
+        "Earthquake / Ground Context",
+        "J-SHIS表層地盤モデルを監査対象500mメッシュへ集約する",
+        ("screening", "ground"),
+        "earthquake-ground-context-1.0.0",
+        ("jshis_ground_250m", "urban_state"),
+        ("ground_context",),
+        (),
+        "地盤モデル値は地震確率、被害予測、危険度、政策リスクスコアではない。",
+        (
+            DatasetRequirement(
+                "jshis_surface_ground",
+                DatasetRequirementLevel.REQUIRED,
+                "published V4 250m surface-ground model",
+            ),
+            DatasetRequirement(
+                "plateau_buildings",
+                DatasetRequirementLevel.OPTIONAL,
+                "current validated PLATEAU building version",
+            ),
+        ),
+    ),
+    AnalysisDefinition(
+        "historical-traffic-safety-context",
+        "Historical Traffic Safety Context",
+        "人身事故履歴を500mメッシュで集計し現地調査の文脈として表示する",
+        ("screening", "traffic_accident"),
+        "historical-traffic-safety-context-1.0.0",
+        ("npa_historical_accidents", "urban_state"),
+        ("historical_accident_context",),
+        (),
+        "事故件数は交通量で正規化しておらず、現在の危険度、原因、確率、予測ではない。",
+        (
+            DatasetRequirement(
+                "npa_traffic_accident",
+                DatasetRequirementLevel.REQUIRED,
+                "latest promoted complete official annual injury/fatal accident file",
+            ),
+            DatasetRequirement(
+                "road_network",
+                DatasetRequirementLevel.OPTIONAL,
+                "current experimental graph, without identity conflation",
+            ),
+            DatasetRequirement(
+                "traffic_volume",
+                DatasetRequirementLevel.ENHANCEMENT,
+                "official stable traffic-volume denominator with matching coverage",
+            ),
+        ),
     ),
 )
 

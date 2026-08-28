@@ -27,7 +27,7 @@ CITY GAPのオープンデータ基盤は、公式カタログの「発見」と
 コード上のSingle Source of Truthは
 `backend/citygap_platform/open_data/registry.py`、永続化の初期値はforward-only migration
 `018_open_data_foundation.sql`である。公式static catalog拡張は`019`、人口・経済は`020`、
-地理空間・レジリエンスは`021`で
+地理空間・レジリエンスは`021`、6つの自治体open-data分析と3段階dataset requirementは`022`で
 forward-onlyに追加した。将来の定義変更では既存migrationを書き換えず、新しいadapter IDと
 migrationを追加する。
 
@@ -67,6 +67,10 @@ reviewed local overrideとして別層に保存し、新しい公式版とのrec
 license不許可、未対応schema、取得失敗、認証必須、時点不一致、未検証のいずれかを必須とする。
 利用できないデータを0件や推定値へ置き換えない。分析はversion付きrequirementsを満たす場合だけ
 有効化する。
+
+実データを既存Urban Stateへ接続する6分析、`BASE` / `ENHANCED`降格、レビュー候補、混在時点、
+Contribution/lineage、内部Evidenceの境界は[Municipal open-data analysis](municipal-open-data-analysis.md)
+に記録する。
 
 ## Licence and tenant boundary
 

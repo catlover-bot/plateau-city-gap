@@ -1,0 +1,1614 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CITY GAP Municipal Open Data Evidence</title><style>body{font-family:sans-serif;margin:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bbb;padding:6px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{width:35%}@media print{body{margin:8mm}}</style></head><body><h1>CITY GAP Municipal Open Data Evidence</h1><table><tr><th>analyses[0].algorithm_version</th><td>medical-access-v2.0.0</td></tr>
+<tr><th>analyses[0].analysis_id</th><td>medical-access-v2</td></tr>
+<tr><th>analyses[0].claim_boundary</th><td>直線距離は到達時間、診療可否、受入能力、医療不足、政策優先順位ではない。</td></tr>
+<tr><th>analyses[0].missing_enhancement[0]</th><td>official_pedestrian_network</td></tr>
+<tr><th>analyses[0].tier</th><td>BASE</td></tr>
+<tr><th>analyses[1].algorithm_version</th><td>care-access-1.0.0</td></tr>
+<tr><th>analyses[1].analysis_id</th><td>care-access</td></tr>
+<tr><th>analyses[1].claim_boundary</th><td>候補は介護不足、需要、利用資格、空床、政策優先順位の認定ではない。</td></tr>
+<tr><th>analyses[1].missing_enhancement[0]</th><td>official_pedestrian_network</td></tr>
+<tr><th>analyses[1].missing_enhancement[1]</th><td>social_participation</td></tr>
+<tr><th>analyses[1].tier</th><td>BASE</td></tr>
+<tr><th>analyses[2].algorithm_version</th><td>future-population-spatial-1.0.0</td></tr>
+<tr><th>analyses[2].analysis_id</th><td>future-population-spatial</td></tr>
+<tr><th>analyses[2].claim_boundary</th><td>公式試算は観測値や保証された予測ではなく、最良シナリオを自動選択しない。</td></tr>
+<tr><th>analyses[2].tier</th><td>BASE</td></tr>
+<tr><th>analyses[3].algorithm_version</th><td>daytime-activity-context-1.0.0</td></tr>
+<tr><th>analyses[3].analysis_id</th><td>daytime-activity-context</td></tr>
+<tr><th>analyses[3].claim_boundary</th><td>従業者数は昼間人口、サービス需要、混雑、政策上の不足を意味しない。</td></tr>
+<tr><th>analyses[3].missing_enhancement[0]</th><td>official_pedestrian_network</td></tr>
+<tr><th>analyses[3].tier</th><td>BASE</td></tr>
+<tr><th>analyses[4].algorithm_version</th><td>earthquake-ground-context-1.0.0</td></tr>
+<tr><th>analyses[4].analysis_id</th><td>earthquake-ground-context</td></tr>
+<tr><th>analyses[4].claim_boundary</th><td>地盤モデル値は地震確率、被害予測、危険度、政策リスクスコアではない。</td></tr>
+<tr><th>analyses[4].tier</th><td>BASE</td></tr>
+<tr><th>analyses[5].algorithm_version</th><td>historical-traffic-safety-context-1.0.0</td></tr>
+<tr><th>analyses[5].analysis_id</th><td>historical-traffic-safety-context</td></tr>
+<tr><th>analyses[5].claim_boundary</th><td>事故件数は交通量で正規化しておらず、現在の危険度、原因、確率、予測ではない。</td></tr>
+<tr><th>analyses[5].missing_enhancement[0]</th><td>traffic_volume</td></tr>
+<tr><th>analyses[5].tier</th><td>BASE</td></tr>
+<tr><th>cities[0].city_code</th><td>26202</td></tr>
+<tr><th>cities[0].city_id</th><td>maizuru</td></tr>
+<tr><th>cities[0].city_name</th><td>舞鶴市</td></tr>
+<tr><th>cities[1].city_code</th><td>14205</td></tr>
+<tr><th>cities[1].city_id</th><td>fujisawa</td></tr>
+<tr><th>cities[1].city_name</th><td>藤沢市</td></tr>
+<tr><th>findings[0].city_code</th><td>26202</td></tr>
+<tr><th>findings[0].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[0].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[0].combined_score</th><td></td></tr>
+<tr><th>findings[0].decision_id</th><td></td></tr>
+<tr><th>findings[0].finding_id</th><td>finding-0ce0dd4935e26ce0d846bd55</td></tr>
+<tr><th>findings[0].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[0].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[0].investigation_id</th><td></td></tr>
+<tr><th>findings[0].mesh_code</th><td>533502971</td></tr>
+<tr><th>findings[0].metrics.medical_straight_line_distance_m</th><td>2180.222</td></tr>
+<tr><th>findings[0].metrics.published_employees</th><td>271</td></tr>
+<tr><th>findings[0].metrics.transport_straight_line_distance_m</th><td>1388.318</td></tr>
+<tr><th>findings[0].priority_rank</th><td></td></tr>
+<tr><th>findings[0].related_feature_id</th><td>maizuru:533502971</td></tr>
+<tr><th>findings[0].review_required</th><td>True</td></tr>
+<tr><th>findings[0].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[0].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[0].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[0].status</th><td>new</td></tr>
+<tr><th>findings[0].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[0].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[0].thresholds.employees_p75</th><td>106.0</td></tr>
+<tr><th>findings[0].thresholds.medical_distance_p75_m</th><td>3403.783</td></tr>
+<tr><th>findings[0].thresholds.transport_distance_p75_m</th><td>828.65</td></tr>
+<tr><th>findings[0].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[0].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[0].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[1].city_code</th><td>26202</td></tr>
+<tr><th>findings[1].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[1].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[1].combined_score</th><td></td></tr>
+<tr><th>findings[1].decision_id</th><td></td></tr>
+<tr><th>findings[1].finding_id</th><td>finding-2bf32b39e9b95dad49ade60c</td></tr>
+<tr><th>findings[1].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[1].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[1].investigation_id</th><td></td></tr>
+<tr><th>findings[1].mesh_code</th><td>533513551</td></tr>
+<tr><th>findings[1].metrics.population</th><td>75</td></tr>
+<tr><th>findings[1].metrics.straight_line_distance_m</th><td>3476.397</td></tr>
+<tr><th>findings[1].priority_rank</th><td></td></tr>
+<tr><th>findings[1].related_feature_id</th><td>maizuru:533513551</td></tr>
+<tr><th>findings[1].review_required</th><td>True</td></tr>
+<tr><th>findings[1].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[1].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[1].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[1].status</th><td>new</td></tr>
+<tr><th>findings[1].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[1].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[1].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[1].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[1].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[1].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[1].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[2].city_code</th><td>26202</td></tr>
+<tr><th>findings[2].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[2].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[2].combined_score</th><td></td></tr>
+<tr><th>findings[2].decision_id</th><td></td></tr>
+<tr><th>findings[2].finding_id</th><td>finding-34be237d5e460bdeec9fcec6</td></tr>
+<tr><th>findings[2].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[2].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[2].investigation_id</th><td></td></tr>
+<tr><th>findings[2].mesh_code</th><td>533512753</td></tr>
+<tr><th>findings[2].metrics.population</th><td>91</td></tr>
+<tr><th>findings[2].metrics.straight_line_distance_m</th><td>3595.783</td></tr>
+<tr><th>findings[2].priority_rank</th><td></td></tr>
+<tr><th>findings[2].related_feature_id</th><td>maizuru:533512753</td></tr>
+<tr><th>findings[2].review_required</th><td>True</td></tr>
+<tr><th>findings[2].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[2].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[2].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[2].status</th><td>new</td></tr>
+<tr><th>findings[2].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[2].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[2].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[2].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[2].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[2].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[2].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[3].city_code</th><td>26202</td></tr>
+<tr><th>findings[3].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[3].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[3].combined_score</th><td></td></tr>
+<tr><th>findings[3].decision_id</th><td></td></tr>
+<tr><th>findings[3].finding_id</th><td>finding-3609bea6ccee8252f5422c22</td></tr>
+<tr><th>findings[3].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[3].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[3].investigation_id</th><td></td></tr>
+<tr><th>findings[3].mesh_code</th><td>533523721</td></tr>
+<tr><th>findings[3].metrics.population</th><td>123</td></tr>
+<tr><th>findings[3].metrics.straight_line_distance_m</th><td>6422.007</td></tr>
+<tr><th>findings[3].priority_rank</th><td></td></tr>
+<tr><th>findings[3].related_feature_id</th><td>maizuru:533523721</td></tr>
+<tr><th>findings[3].review_required</th><td>True</td></tr>
+<tr><th>findings[3].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[3].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[3].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[3].status</th><td>new</td></tr>
+<tr><th>findings[3].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[3].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[3].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[3].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[3].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[3].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[3].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[4].city_code</th><td>26202</td></tr>
+<tr><th>findings[4].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[4].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[4].combined_score</th><td></td></tr>
+<tr><th>findings[4].decision_id</th><td></td></tr>
+<tr><th>findings[4].finding_id</th><td>finding-396b9c2cbf069c528e289625</td></tr>
+<tr><th>findings[4].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[4].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[4].investigation_id</th><td></td></tr>
+<tr><th>findings[4].mesh_code</th><td>533502982</td></tr>
+<tr><th>findings[4].metrics.population</th><td>134</td></tr>
+<tr><th>findings[4].metrics.straight_line_distance_m</th><td>3438.401</td></tr>
+<tr><th>findings[4].priority_rank</th><td></td></tr>
+<tr><th>findings[4].related_feature_id</th><td>maizuru:533502982</td></tr>
+<tr><th>findings[4].review_required</th><td>True</td></tr>
+<tr><th>findings[4].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[4].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[4].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[4].status</th><td>new</td></tr>
+<tr><th>findings[4].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[4].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[4].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[4].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[4].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[4].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[4].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[5].city_code</th><td>26202</td></tr>
+<tr><th>findings[5].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[5].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[5].combined_score</th><td></td></tr>
+<tr><th>findings[5].decision_id</th><td></td></tr>
+<tr><th>findings[5].finding_id</th><td>finding-3c88fd71f8e6d1760064d520</td></tr>
+<tr><th>findings[5].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[5].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[5].investigation_id</th><td></td></tr>
+<tr><th>findings[5].mesh_code</th><td>533512883</td></tr>
+<tr><th>findings[5].metrics.medical_straight_line_distance_m</th><td>4141.887</td></tr>
+<tr><th>findings[5].metrics.published_employees</th><td>734</td></tr>
+<tr><th>findings[5].metrics.transport_straight_line_distance_m</th><td>287.132</td></tr>
+<tr><th>findings[5].priority_rank</th><td></td></tr>
+<tr><th>findings[5].related_feature_id</th><td>maizuru:533512883</td></tr>
+<tr><th>findings[5].review_required</th><td>True</td></tr>
+<tr><th>findings[5].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[5].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[5].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[5].status</th><td>new</td></tr>
+<tr><th>findings[5].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[5].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[5].thresholds.employees_p75</th><td>106.0</td></tr>
+<tr><th>findings[5].thresholds.medical_distance_p75_m</th><td>3403.783</td></tr>
+<tr><th>findings[5].thresholds.transport_distance_p75_m</th><td>828.65</td></tr>
+<tr><th>findings[5].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[5].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[5].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[6].city_code</th><td>26202</td></tr>
+<tr><th>findings[6].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[6].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[6].combined_score</th><td></td></tr>
+<tr><th>findings[6].decision_id</th><td></td></tr>
+<tr><th>findings[6].finding_id</th><td>finding-6333afb2eb491a8db309d182</td></tr>
+<tr><th>findings[6].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[6].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[6].investigation_id</th><td></td></tr>
+<tr><th>findings[6].mesh_code</th><td>533513853</td></tr>
+<tr><th>findings[6].metrics.medical_straight_line_distance_m</th><td>3787.968</td></tr>
+<tr><th>findings[6].metrics.published_employees</th><td>167</td></tr>
+<tr><th>findings[6].metrics.transport_straight_line_distance_m</th><td>475.968</td></tr>
+<tr><th>findings[6].priority_rank</th><td></td></tr>
+<tr><th>findings[6].related_feature_id</th><td>maizuru:533513853</td></tr>
+<tr><th>findings[6].review_required</th><td>True</td></tr>
+<tr><th>findings[6].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[6].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[6].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[6].status</th><td>new</td></tr>
+<tr><th>findings[6].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[6].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[6].thresholds.employees_p75</th><td>106.0</td></tr>
+<tr><th>findings[6].thresholds.medical_distance_p75_m</th><td>3403.783</td></tr>
+<tr><th>findings[6].thresholds.transport_distance_p75_m</th><td>828.65</td></tr>
+<tr><th>findings[6].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[6].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[6].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[7].city_code</th><td>26202</td></tr>
+<tr><th>findings[7].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[7].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[7].combined_score</th><td></td></tr>
+<tr><th>findings[7].decision_id</th><td></td></tr>
+<tr><th>findings[7].finding_id</th><td>finding-681cbd4532a42707569e8317</td></tr>
+<tr><th>findings[7].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[7].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[7].investigation_id</th><td></td></tr>
+<tr><th>findings[7].mesh_code</th><td>533512883</td></tr>
+<tr><th>findings[7].metrics.population</th><td>418</td></tr>
+<tr><th>findings[7].metrics.straight_line_distance_m</th><td>4141.887</td></tr>
+<tr><th>findings[7].priority_rank</th><td></td></tr>
+<tr><th>findings[7].related_feature_id</th><td>maizuru:533512883</td></tr>
+<tr><th>findings[7].review_required</th><td>True</td></tr>
+<tr><th>findings[7].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[7].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[7].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[7].status</th><td>new</td></tr>
+<tr><th>findings[7].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[7].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[7].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[7].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[7].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[7].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[7].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[8].city_code</th><td>26202</td></tr>
+<tr><th>findings[8].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[8].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[8].combined_score</th><td></td></tr>
+<tr><th>findings[8].decision_id</th><td></td></tr>
+<tr><th>findings[8].finding_id</th><td>finding-694a082cb96381ac668aef85</td></tr>
+<tr><th>findings[8].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[8].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[8].investigation_id</th><td></td></tr>
+<tr><th>findings[8].mesh_code</th><td>533523614</td></tr>
+<tr><th>findings[8].metrics.population</th><td>87</td></tr>
+<tr><th>findings[8].metrics.straight_line_distance_m</th><td>5949.865</td></tr>
+<tr><th>findings[8].priority_rank</th><td></td></tr>
+<tr><th>findings[8].related_feature_id</th><td>maizuru:533523614</td></tr>
+<tr><th>findings[8].review_required</th><td>True</td></tr>
+<tr><th>findings[8].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[8].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[8].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[8].status</th><td>new</td></tr>
+<tr><th>findings[8].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[8].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[8].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[8].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[8].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[8].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[8].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[9].city_code</th><td>26202</td></tr>
+<tr><th>findings[9].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[9].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[9].combined_score</th><td></td></tr>
+<tr><th>findings[9].decision_id</th><td></td></tr>
+<tr><th>findings[9].finding_id</th><td>finding-7725800c516aa5fa3e6f6685</td></tr>
+<tr><th>findings[9].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[9].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[9].investigation_id</th><td></td></tr>
+<tr><th>findings[9].mesh_code</th><td>533513753</td></tr>
+<tr><th>findings[9].metrics.medical_straight_line_distance_m</th><td>3534.621</td></tr>
+<tr><th>findings[9].metrics.published_employees</th><td>120</td></tr>
+<tr><th>findings[9].metrics.transport_straight_line_distance_m</th><td>23.374</td></tr>
+<tr><th>findings[9].priority_rank</th><td></td></tr>
+<tr><th>findings[9].related_feature_id</th><td>maizuru:533513753</td></tr>
+<tr><th>findings[9].review_required</th><td>True</td></tr>
+<tr><th>findings[9].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[9].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[9].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[9].status</th><td>new</td></tr>
+<tr><th>findings[9].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[9].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[9].thresholds.employees_p75</th><td>106.0</td></tr>
+<tr><th>findings[9].thresholds.medical_distance_p75_m</th><td>3403.783</td></tr>
+<tr><th>findings[9].thresholds.transport_distance_p75_m</th><td>828.65</td></tr>
+<tr><th>findings[9].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[9].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[9].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[10].city_code</th><td>26202</td></tr>
+<tr><th>findings[10].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[10].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[10].combined_score</th><td></td></tr>
+<tr><th>findings[10].decision_id</th><td></td></tr>
+<tr><th>findings[10].finding_id</th><td>finding-7941acbdf38ae115203ee902</td></tr>
+<tr><th>findings[10].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[10].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[10].investigation_id</th><td></td></tr>
+<tr><th>findings[10].mesh_code</th><td>533513953</td></tr>
+<tr><th>findings[10].metrics.medical_straight_line_distance_m</th><td>3835.479</td></tr>
+<tr><th>findings[10].metrics.published_employees</th><td>195</td></tr>
+<tr><th>findings[10].metrics.transport_straight_line_distance_m</th><td>413.952</td></tr>
+<tr><th>findings[10].priority_rank</th><td></td></tr>
+<tr><th>findings[10].related_feature_id</th><td>maizuru:533513953</td></tr>
+<tr><th>findings[10].review_required</th><td>True</td></tr>
+<tr><th>findings[10].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[10].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[10].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[10].status</th><td>new</td></tr>
+<tr><th>findings[10].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[10].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[10].thresholds.employees_p75</th><td>106.0</td></tr>
+<tr><th>findings[10].thresholds.medical_distance_p75_m</th><td>3403.783</td></tr>
+<tr><th>findings[10].thresholds.transport_distance_p75_m</th><td>828.65</td></tr>
+<tr><th>findings[10].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[10].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[10].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[11].city_code</th><td>26202</td></tr>
+<tr><th>findings[11].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[11].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[11].combined_score</th><td></td></tr>
+<tr><th>findings[11].decision_id</th><td></td></tr>
+<tr><th>findings[11].finding_id</th><td>finding-cbf1e69772ba9081b226a029</td></tr>
+<tr><th>findings[11].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[11].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[11].investigation_id</th><td></td></tr>
+<tr><th>findings[11].mesh_code</th><td>533523841</td></tr>
+<tr><th>findings[11].metrics.population</th><td>153</td></tr>
+<tr><th>findings[11].metrics.straight_line_distance_m</th><td>7803.162</td></tr>
+<tr><th>findings[11].priority_rank</th><td></td></tr>
+<tr><th>findings[11].related_feature_id</th><td>maizuru:533523841</td></tr>
+<tr><th>findings[11].review_required</th><td>True</td></tr>
+<tr><th>findings[11].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[11].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[11].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[11].status</th><td>new</td></tr>
+<tr><th>findings[11].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[11].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[11].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[11].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[11].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[11].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[11].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[12].city_code</th><td>26202</td></tr>
+<tr><th>findings[12].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[12].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[12].combined_score</th><td></td></tr>
+<tr><th>findings[12].decision_id</th><td></td></tr>
+<tr><th>findings[12].finding_id</th><td>finding-e31d1d4812e1d7d8238b4032</td></tr>
+<tr><th>findings[12].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[12].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[12].investigation_id</th><td></td></tr>
+<tr><th>findings[12].mesh_code</th><td>533512783</td></tr>
+<tr><th>findings[12].metrics.population</th><td>204</td></tr>
+<tr><th>findings[12].metrics.straight_line_distance_m</th><td>3634.886</td></tr>
+<tr><th>findings[12].priority_rank</th><td></td></tr>
+<tr><th>findings[12].related_feature_id</th><td>maizuru:533512783</td></tr>
+<tr><th>findings[12].review_required</th><td>True</td></tr>
+<tr><th>findings[12].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[12].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[12].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[12].status</th><td>new</td></tr>
+<tr><th>findings[12].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[12].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[12].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[12].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[12].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[12].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[12].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[13].city_code</th><td>26202</td></tr>
+<tr><th>findings[13].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[13].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[13].combined_score</th><td></td></tr>
+<tr><th>findings[13].decision_id</th><td></td></tr>
+<tr><th>findings[13].finding_id</th><td>finding-e87a20a4e8f4907b9b462063</td></tr>
+<tr><th>findings[13].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[13].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[13].investigation_id</th><td></td></tr>
+<tr><th>findings[13].mesh_code</th><td>533513853</td></tr>
+<tr><th>findings[13].metrics.population</th><td>116</td></tr>
+<tr><th>findings[13].metrics.straight_line_distance_m</th><td>3787.968</td></tr>
+<tr><th>findings[13].priority_rank</th><td></td></tr>
+<tr><th>findings[13].related_feature_id</th><td>maizuru:533513853</td></tr>
+<tr><th>findings[13].review_required</th><td>True</td></tr>
+<tr><th>findings[13].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[13].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[13].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[13].status</th><td>new</td></tr>
+<tr><th>findings[13].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[13].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[13].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[13].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[13].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[13].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[13].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[14].city_code</th><td>26202</td></tr>
+<tr><th>findings[14].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[14].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[14].combined_score</th><td></td></tr>
+<tr><th>findings[14].decision_id</th><td></td></tr>
+<tr><th>findings[14].finding_id</th><td>finding-e98635ba03ba93cf313fb51b</td></tr>
+<tr><th>findings[14].finding_subtype</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[14].finding_type</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[14].investigation_id</th><td></td></tr>
+<tr><th>findings[14].mesh_code</th><td>533523032</td></tr>
+<tr><th>findings[14].metrics.elderly_population</th><td>110.0</td></tr>
+<tr><th>findings[14].metrics.experimental_transport_network_distance_m</th><td>368.254</td></tr>
+<tr><th>findings[14].metrics.straight_line_distance_m</th><td>1706.515</td></tr>
+<tr><th>findings[14].priority_rank</th><td></td></tr>
+<tr><th>findings[14].related_feature_id</th><td>maizuru:533523032</td></tr>
+<tr><th>findings[14].review_required</th><td>True</td></tr>
+<tr><th>findings[14].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[14].source_contributions[1]</th><td>MHLW care 2026</td></tr>
+<tr><th>findings[14].source_contributions[2]</th><td>PLATEAU 2025 experimental graph</td></tr>
+<tr><th>findings[14].status</th><td>new</td></tr>
+<tr><th>findings[14].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[14].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[14].thresholds.distance_p65_m</th><td>1586.039</td></tr>
+<tr><th>findings[14].thresholds.elderly_p65</th><td>66.25</td></tr>
+<tr><th>findings[14].thresholds.network_transport_median_m</th><td>363.069</td></tr>
+<tr><th>findings[14].title</th><td>介護アクセス現地確認候補</td></tr>
+<tr><th>findings[14].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[14].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[15].city_code</th><td>26202</td></tr>
+<tr><th>findings[15].city_id</th><td>maizuru</td></tr>
+<tr><th>findings[15].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[15].combined_score</th><td></td></tr>
+<tr><th>findings[15].decision_id</th><td></td></tr>
+<tr><th>findings[15].finding_id</th><td>finding-f75c799eae223f22ae095b8a</td></tr>
+<tr><th>findings[15].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[15].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[15].investigation_id</th><td></td></tr>
+<tr><th>findings[15].mesh_code</th><td>533522084</td></tr>
+<tr><th>findings[15].metrics.population</th><td>74</td></tr>
+<tr><th>findings[15].metrics.straight_line_distance_m</th><td>3593.962</td></tr>
+<tr><th>findings[15].priority_rank</th><td></td></tr>
+<tr><th>findings[15].related_feature_id</th><td>maizuru:533522084</td></tr>
+<tr><th>findings[15].review_required</th><td>True</td></tr>
+<tr><th>findings[15].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[15].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[15].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[15].status</th><td>new</td></tr>
+<tr><th>findings[15].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[15].threshold_scope</th><td>within maizuru; not comparable across cities</td></tr>
+<tr><th>findings[15].thresholds.distance_p75_m</th><td>3409.787</td></tr>
+<tr><th>findings[15].thresholds.population_median</th><td>69.0</td></tr>
+<tr><th>findings[15].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[15].urban_state</th><td>maizuru-2025-observed</td></tr>
+<tr><th>findings[15].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[16].city_code</th><td>14205</td></tr>
+<tr><th>findings[16].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[16].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[16].combined_score</th><td></td></tr>
+<tr><th>findings[16].decision_id</th><td></td></tr>
+<tr><th>findings[16].finding_id</th><td>finding-0015958f75939076ccb5f3ac</td></tr>
+<tr><th>findings[16].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[16].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[16].investigation_id</th><td></td></tr>
+<tr><th>findings[16].mesh_code</th><td>533904102</td></tr>
+<tr><th>findings[16].metrics.population</th><td>1707</td></tr>
+<tr><th>findings[16].metrics.straight_line_distance_m</th><td>711.053</td></tr>
+<tr><th>findings[16].priority_rank</th><td></td></tr>
+<tr><th>findings[16].related_feature_id</th><td>fujisawa:533904102</td></tr>
+<tr><th>findings[16].review_required</th><td>True</td></tr>
+<tr><th>findings[16].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[16].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[16].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[16].status</th><td>new</td></tr>
+<tr><th>findings[16].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[16].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[16].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[16].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[16].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[16].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[16].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[17].city_code</th><td>14205</td></tr>
+<tr><th>findings[17].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[17].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[17].combined_score</th><td></td></tr>
+<tr><th>findings[17].decision_id</th><td></td></tr>
+<tr><th>findings[17].finding_id</th><td>finding-0140c0327a8f9fd6a3601e4d</td></tr>
+<tr><th>findings[17].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[17].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[17].investigation_id</th><td></td></tr>
+<tr><th>findings[17].mesh_code</th><td>533913073</td></tr>
+<tr><th>findings[17].metrics.population</th><td>3590</td></tr>
+<tr><th>findings[17].metrics.straight_line_distance_m</th><td>737.119</td></tr>
+<tr><th>findings[17].priority_rank</th><td></td></tr>
+<tr><th>findings[17].related_feature_id</th><td>fujisawa:533913073</td></tr>
+<tr><th>findings[17].review_required</th><td>True</td></tr>
+<tr><th>findings[17].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[17].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[17].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[17].status</th><td>new</td></tr>
+<tr><th>findings[17].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[17].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[17].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[17].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[17].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[17].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[17].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[18].city_code</th><td>14205</td></tr>
+<tr><th>findings[18].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[18].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[18].combined_score</th><td></td></tr>
+<tr><th>findings[18].decision_id</th><td></td></tr>
+<tr><th>findings[18].finding_id</th><td>finding-019e81b1ddcacb9f154454e4</td></tr>
+<tr><th>findings[18].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[18].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[18].investigation_id</th><td></td></tr>
+<tr><th>findings[18].mesh_code</th><td>533903832</td></tr>
+<tr><th>findings[18].metrics.medical_straight_line_distance_m</th><td>1063.609</td></tr>
+<tr><th>findings[18].metrics.published_employees</th><td>828</td></tr>
+<tr><th>findings[18].metrics.transport_straight_line_distance_m</th><td>128.834</td></tr>
+<tr><th>findings[18].priority_rank</th><td></td></tr>
+<tr><th>findings[18].related_feature_id</th><td>fujisawa:533903832</td></tr>
+<tr><th>findings[18].review_required</th><td>True</td></tr>
+<tr><th>findings[18].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[18].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[18].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[18].status</th><td>new</td></tr>
+<tr><th>findings[18].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[18].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[18].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[18].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[18].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[18].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[18].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[18].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[19].city_code</th><td>14205</td></tr>
+<tr><th>findings[19].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[19].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[19].combined_score</th><td></td></tr>
+<tr><th>findings[19].decision_id</th><td></td></tr>
+<tr><th>findings[19].finding_id</th><td>finding-0ed8085e476de40cb187b999</td></tr>
+<tr><th>findings[19].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[19].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[19].investigation_id</th><td></td></tr>
+<tr><th>findings[19].mesh_code</th><td>533904004</td></tr>
+<tr><th>findings[19].metrics.medical_straight_line_distance_m</th><td>710.589</td></tr>
+<tr><th>findings[19].metrics.published_employees</th><td>610</td></tr>
+<tr><th>findings[19].metrics.transport_straight_line_distance_m</th><td>108.524</td></tr>
+<tr><th>findings[19].priority_rank</th><td></td></tr>
+<tr><th>findings[19].related_feature_id</th><td>fujisawa:533904004</td></tr>
+<tr><th>findings[19].review_required</th><td>True</td></tr>
+<tr><th>findings[19].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[19].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[19].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[19].status</th><td>new</td></tr>
+<tr><th>findings[19].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[19].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[19].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[19].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[19].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[19].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[19].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[19].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[20].city_code</th><td>14205</td></tr>
+<tr><th>findings[20].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[20].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[20].combined_score</th><td></td></tr>
+<tr><th>findings[20].decision_id</th><td></td></tr>
+<tr><th>findings[20].finding_id</th><td>finding-183966c714139fa8617909d4</td></tr>
+<tr><th>findings[20].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[20].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[20].investigation_id</th><td></td></tr>
+<tr><th>findings[20].mesh_code</th><td>533913162</td></tr>
+<tr><th>findings[20].metrics.population</th><td>1670</td></tr>
+<tr><th>findings[20].metrics.straight_line_distance_m</th><td>1438.871</td></tr>
+<tr><th>findings[20].priority_rank</th><td></td></tr>
+<tr><th>findings[20].related_feature_id</th><td>fujisawa:533913162</td></tr>
+<tr><th>findings[20].review_required</th><td>True</td></tr>
+<tr><th>findings[20].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[20].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[20].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[20].status</th><td>new</td></tr>
+<tr><th>findings[20].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[20].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[20].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[20].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[20].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[20].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[20].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[21].city_code</th><td>14205</td></tr>
+<tr><th>findings[21].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[21].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[21].combined_score</th><td></td></tr>
+<tr><th>findings[21].decision_id</th><td></td></tr>
+<tr><th>findings[21].finding_id</th><td>finding-1d1b0e0c6cf47ab0daab50ae</td></tr>
+<tr><th>findings[21].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[21].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[21].investigation_id</th><td></td></tr>
+<tr><th>findings[21].mesh_code</th><td>523973994</td></tr>
+<tr><th>findings[21].metrics.population</th><td>3349</td></tr>
+<tr><th>findings[21].metrics.straight_line_distance_m</th><td>787.951</td></tr>
+<tr><th>findings[21].priority_rank</th><td></td></tr>
+<tr><th>findings[21].related_feature_id</th><td>fujisawa:523973994</td></tr>
+<tr><th>findings[21].review_required</th><td>True</td></tr>
+<tr><th>findings[21].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[21].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[21].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[21].status</th><td>new</td></tr>
+<tr><th>findings[21].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[21].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[21].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[21].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[21].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[21].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[21].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[22].city_code</th><td>14205</td></tr>
+<tr><th>findings[22].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[22].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[22].combined_score</th><td></td></tr>
+<tr><th>findings[22].decision_id</th><td></td></tr>
+<tr><th>findings[22].finding_id</th><td>finding-1e6bd89c261c46960c4e6558</td></tr>
+<tr><th>findings[22].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[22].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[22].investigation_id</th><td></td></tr>
+<tr><th>findings[22].mesh_code</th><td>533903053</td></tr>
+<tr><th>findings[22].metrics.medical_straight_line_distance_m</th><td>427.386</td></tr>
+<tr><th>findings[22].metrics.published_employees</th><td>690</td></tr>
+<tr><th>findings[22].metrics.transport_straight_line_distance_m</th><td>567.709</td></tr>
+<tr><th>findings[22].priority_rank</th><td></td></tr>
+<tr><th>findings[22].related_feature_id</th><td>fujisawa:533903053</td></tr>
+<tr><th>findings[22].review_required</th><td>True</td></tr>
+<tr><th>findings[22].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[22].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[22].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[22].status</th><td>new</td></tr>
+<tr><th>findings[22].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[22].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[22].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[22].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[22].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[22].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[22].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[22].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[23].city_code</th><td>14205</td></tr>
+<tr><th>findings[23].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[23].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[23].combined_score</th><td></td></tr>
+<tr><th>findings[23].decision_id</th><td></td></tr>
+<tr><th>findings[23].finding_id</th><td>finding-3058721a9a73f4c12eebc7b1</td></tr>
+<tr><th>findings[23].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[23].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[23].investigation_id</th><td></td></tr>
+<tr><th>findings[23].mesh_code</th><td>533903961</td></tr>
+<tr><th>findings[23].metrics.population</th><td>1882</td></tr>
+<tr><th>findings[23].metrics.straight_line_distance_m</th><td>966.12</td></tr>
+<tr><th>findings[23].priority_rank</th><td></td></tr>
+<tr><th>findings[23].related_feature_id</th><td>fujisawa:533903961</td></tr>
+<tr><th>findings[23].review_required</th><td>True</td></tr>
+<tr><th>findings[23].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[23].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[23].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[23].status</th><td>new</td></tr>
+<tr><th>findings[23].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[23].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[23].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[23].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[23].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[23].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[23].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[24].city_code</th><td>14205</td></tr>
+<tr><th>findings[24].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[24].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[24].combined_score</th><td></td></tr>
+<tr><th>findings[24].decision_id</th><td></td></tr>
+<tr><th>findings[24].finding_id</th><td>finding-385bbcca5c0d9497640d2813</td></tr>
+<tr><th>findings[24].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[24].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[24].investigation_id</th><td></td></tr>
+<tr><th>findings[24].mesh_code</th><td>533913171</td></tr>
+<tr><th>findings[24].metrics.population</th><td>2746</td></tr>
+<tr><th>findings[24].metrics.straight_line_distance_m</th><td>1155.315</td></tr>
+<tr><th>findings[24].priority_rank</th><td></td></tr>
+<tr><th>findings[24].related_feature_id</th><td>fujisawa:533913171</td></tr>
+<tr><th>findings[24].review_required</th><td>True</td></tr>
+<tr><th>findings[24].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[24].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[24].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[24].status</th><td>new</td></tr>
+<tr><th>findings[24].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[24].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[24].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[24].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[24].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[24].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[24].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[25].city_code</th><td>14205</td></tr>
+<tr><th>findings[25].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[25].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[25].combined_score</th><td></td></tr>
+<tr><th>findings[25].decision_id</th><td></td></tr>
+<tr><th>findings[25].finding_id</th><td>finding-477e91457b301f9dbf81985a</td></tr>
+<tr><th>findings[25].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[25].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[25].investigation_id</th><td></td></tr>
+<tr><th>findings[25].mesh_code</th><td>533904013</td></tr>
+<tr><th>findings[25].metrics.medical_straight_line_distance_m</th><td>1149.649</td></tr>
+<tr><th>findings[25].metrics.published_employees</th><td>2869</td></tr>
+<tr><th>findings[25].metrics.transport_straight_line_distance_m</th><td>97.061</td></tr>
+<tr><th>findings[25].priority_rank</th><td></td></tr>
+<tr><th>findings[25].related_feature_id</th><td>fujisawa:533904013</td></tr>
+<tr><th>findings[25].review_required</th><td>True</td></tr>
+<tr><th>findings[25].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[25].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[25].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[25].status</th><td>new</td></tr>
+<tr><th>findings[25].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[25].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[25].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[25].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[25].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[25].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[25].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[25].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[26].city_code</th><td>14205</td></tr>
+<tr><th>findings[26].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[26].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[26].combined_score</th><td></td></tr>
+<tr><th>findings[26].decision_id</th><td></td></tr>
+<tr><th>findings[26].finding_id</th><td>finding-4d987916316d316b48c905b0</td></tr>
+<tr><th>findings[26].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[26].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[26].investigation_id</th><td></td></tr>
+<tr><th>findings[26].mesh_code</th><td>533913064</td></tr>
+<tr><th>findings[26].metrics.population</th><td>1579</td></tr>
+<tr><th>findings[26].metrics.straight_line_distance_m</th><td>1015.429</td></tr>
+<tr><th>findings[26].priority_rank</th><td></td></tr>
+<tr><th>findings[26].related_feature_id</th><td>fujisawa:533913064</td></tr>
+<tr><th>findings[26].review_required</th><td>True</td></tr>
+<tr><th>findings[26].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[26].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[26].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[26].status</th><td>new</td></tr>
+<tr><th>findings[26].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[26].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[26].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[26].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[26].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[26].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[26].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[27].city_code</th><td>14205</td></tr>
+<tr><th>findings[27].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[27].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[27].combined_score</th><td></td></tr>
+<tr><th>findings[27].decision_id</th><td></td></tr>
+<tr><th>findings[27].finding_id</th><td>finding-67f3e781c7fb85f85e55c560</td></tr>
+<tr><th>findings[27].finding_subtype</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[27].finding_type</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[27].investigation_id</th><td></td></tr>
+<tr><th>findings[27].mesh_code</th><td>533903952</td></tr>
+<tr><th>findings[27].metrics.elderly_population</th><td>715.0</td></tr>
+<tr><th>findings[27].metrics.experimental_transport_network_distance_m</th><td>406.103</td></tr>
+<tr><th>findings[27].metrics.straight_line_distance_m</th><td>465.226</td></tr>
+<tr><th>findings[27].priority_rank</th><td></td></tr>
+<tr><th>findings[27].related_feature_id</th><td>fujisawa:533903952</td></tr>
+<tr><th>findings[27].review_required</th><td>True</td></tr>
+<tr><th>findings[27].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[27].source_contributions[1]</th><td>MHLW care 2026</td></tr>
+<tr><th>findings[27].source_contributions[2]</th><td>PLATEAU 2025 experimental graph</td></tr>
+<tr><th>findings[27].status</th><td>new</td></tr>
+<tr><th>findings[27].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[27].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[27].thresholds.distance_p65_m</th><td>405.367</td></tr>
+<tr><th>findings[27].thresholds.elderly_p65</th><td>531.2</td></tr>
+<tr><th>findings[27].thresholds.network_transport_median_m</th><td>276.191</td></tr>
+<tr><th>findings[27].title</th><td>介護アクセス現地確認候補</td></tr>
+<tr><th>findings[27].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[27].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[28].city_code</th><td>14205</td></tr>
+<tr><th>findings[28].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[28].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[28].combined_score</th><td></td></tr>
+<tr><th>findings[28].decision_id</th><td></td></tr>
+<tr><th>findings[28].finding_id</th><td>finding-6af0eda13364bc8780284828</td></tr>
+<tr><th>findings[28].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[28].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[28].investigation_id</th><td></td></tr>
+<tr><th>findings[28].mesh_code</th><td>533903264</td></tr>
+<tr><th>findings[28].metrics.medical_straight_line_distance_m</th><td>663.831</td></tr>
+<tr><th>findings[28].metrics.published_employees</th><td>2590</td></tr>
+<tr><th>findings[28].metrics.transport_straight_line_distance_m</th><td>364.663</td></tr>
+<tr><th>findings[28].priority_rank</th><td></td></tr>
+<tr><th>findings[28].related_feature_id</th><td>fujisawa:533903264</td></tr>
+<tr><th>findings[28].review_required</th><td>True</td></tr>
+<tr><th>findings[28].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[28].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[28].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[28].status</th><td>new</td></tr>
+<tr><th>findings[28].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[28].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[28].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[28].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[28].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[28].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[28].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[28].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[29].city_code</th><td>14205</td></tr>
+<tr><th>findings[29].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[29].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[29].combined_score</th><td></td></tr>
+<tr><th>findings[29].decision_id</th><td></td></tr>
+<tr><th>findings[29].finding_id</th><td>finding-70cfa9356add01460efc531f</td></tr>
+<tr><th>findings[29].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[29].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[29].investigation_id</th><td></td></tr>
+<tr><th>findings[29].mesh_code</th><td>533904102</td></tr>
+<tr><th>findings[29].metrics.medical_straight_line_distance_m</th><td>711.053</td></tr>
+<tr><th>findings[29].metrics.published_employees</th><td>2105</td></tr>
+<tr><th>findings[29].metrics.transport_straight_line_distance_m</th><td>279.144</td></tr>
+<tr><th>findings[29].priority_rank</th><td></td></tr>
+<tr><th>findings[29].related_feature_id</th><td>fujisawa:533904102</td></tr>
+<tr><th>findings[29].review_required</th><td>True</td></tr>
+<tr><th>findings[29].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[29].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[29].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[29].status</th><td>new</td></tr>
+<tr><th>findings[29].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[29].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[29].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[29].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[29].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[29].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[29].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[29].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[30].city_code</th><td>14205</td></tr>
+<tr><th>findings[30].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[30].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[30].combined_score</th><td></td></tr>
+<tr><th>findings[30].decision_id</th><td></td></tr>
+<tr><th>findings[30].finding_id</th><td>finding-70de4161221b8f0d4dc49284</td></tr>
+<tr><th>findings[30].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[30].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[30].investigation_id</th><td></td></tr>
+<tr><th>findings[30].mesh_code</th><td>533903963</td></tr>
+<tr><th>findings[30].metrics.medical_straight_line_distance_m</th><td>872.261</td></tr>
+<tr><th>findings[30].metrics.published_employees</th><td>977</td></tr>
+<tr><th>findings[30].metrics.transport_straight_line_distance_m</th><td>537.47</td></tr>
+<tr><th>findings[30].priority_rank</th><td></td></tr>
+<tr><th>findings[30].related_feature_id</th><td>fujisawa:533903963</td></tr>
+<tr><th>findings[30].review_required</th><td>True</td></tr>
+<tr><th>findings[30].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[30].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[30].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[30].status</th><td>new</td></tr>
+<tr><th>findings[30].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[30].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[30].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[30].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[30].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[30].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[30].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[30].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[31].city_code</th><td>14205</td></tr>
+<tr><th>findings[31].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[31].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[31].combined_score</th><td></td></tr>
+<tr><th>findings[31].decision_id</th><td></td></tr>
+<tr><th>findings[31].finding_id</th><td>finding-761287fd89b91b42b0803cbe</td></tr>
+<tr><th>findings[31].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[31].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[31].investigation_id</th><td></td></tr>
+<tr><th>findings[31].mesh_code</th><td>523974903</td></tr>
+<tr><th>findings[31].metrics.medical_straight_line_distance_m</th><td>373.852</td></tr>
+<tr><th>findings[31].metrics.published_employees</th><td>979</td></tr>
+<tr><th>findings[31].metrics.transport_straight_line_distance_m</th><td>402.807</td></tr>
+<tr><th>findings[31].priority_rank</th><td></td></tr>
+<tr><th>findings[31].related_feature_id</th><td>fujisawa:523974903</td></tr>
+<tr><th>findings[31].review_required</th><td>True</td></tr>
+<tr><th>findings[31].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[31].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[31].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[31].status</th><td>new</td></tr>
+<tr><th>findings[31].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[31].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[31].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[31].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[31].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[31].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[31].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[31].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[32].city_code</th><td>14205</td></tr>
+<tr><th>findings[32].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[32].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[32].combined_score</th><td></td></tr>
+<tr><th>findings[32].decision_id</th><td></td></tr>
+<tr><th>findings[32].finding_id</th><td>finding-7daa95103dbc2f01a8f68838</td></tr>
+<tr><th>findings[32].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[32].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[32].investigation_id</th><td></td></tr>
+<tr><th>findings[32].mesh_code</th><td>523973951</td></tr>
+<tr><th>findings[32].metrics.population</th><td>3121</td></tr>
+<tr><th>findings[32].metrics.straight_line_distance_m</th><td>732.521</td></tr>
+<tr><th>findings[32].priority_rank</th><td></td></tr>
+<tr><th>findings[32].related_feature_id</th><td>fujisawa:523973951</td></tr>
+<tr><th>findings[32].review_required</th><td>True</td></tr>
+<tr><th>findings[32].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[32].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[32].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[32].status</th><td>new</td></tr>
+<tr><th>findings[32].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[32].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[32].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[32].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[32].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[32].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[32].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[33].city_code</th><td>14205</td></tr>
+<tr><th>findings[33].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[33].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[33].combined_score</th><td></td></tr>
+<tr><th>findings[33].decision_id</th><td></td></tr>
+<tr><th>findings[33].finding_id</th><td>finding-83ab43f78075610193d39a01</td></tr>
+<tr><th>findings[33].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[33].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[33].investigation_id</th><td></td></tr>
+<tr><th>findings[33].mesh_code</th><td>533903553</td></tr>
+<tr><th>findings[33].metrics.medical_straight_line_distance_m</th><td>826.193</td></tr>
+<tr><th>findings[33].metrics.published_employees</th><td>1010</td></tr>
+<tr><th>findings[33].metrics.transport_straight_line_distance_m</th><td>275.672</td></tr>
+<tr><th>findings[33].priority_rank</th><td></td></tr>
+<tr><th>findings[33].related_feature_id</th><td>fujisawa:533903553</td></tr>
+<tr><th>findings[33].review_required</th><td>True</td></tr>
+<tr><th>findings[33].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[33].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[33].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[33].status</th><td>new</td></tr>
+<tr><th>findings[33].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[33].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[33].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[33].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[33].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[33].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[33].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[33].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[34].city_code</th><td>14205</td></tr>
+<tr><th>findings[34].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[34].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[34].combined_score</th><td></td></tr>
+<tr><th>findings[34].decision_id</th><td></td></tr>
+<tr><th>findings[34].finding_id</th><td>finding-989e54ca0e2b6aa13a2e781f</td></tr>
+<tr><th>findings[34].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[34].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[34].investigation_id</th><td></td></tr>
+<tr><th>findings[34].mesh_code</th><td>533903952</td></tr>
+<tr><th>findings[34].metrics.population</th><td>2019</td></tr>
+<tr><th>findings[34].metrics.straight_line_distance_m</th><td>1218.973</td></tr>
+<tr><th>findings[34].priority_rank</th><td></td></tr>
+<tr><th>findings[34].related_feature_id</th><td>fujisawa:533903952</td></tr>
+<tr><th>findings[34].review_required</th><td>True</td></tr>
+<tr><th>findings[34].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[34].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[34].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[34].status</th><td>new</td></tr>
+<tr><th>findings[34].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[34].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[34].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[34].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[34].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[34].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[34].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[35].city_code</th><td>14205</td></tr>
+<tr><th>findings[35].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[35].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[35].combined_score</th><td></td></tr>
+<tr><th>findings[35].decision_id</th><td></td></tr>
+<tr><th>findings[35].finding_id</th><td>finding-9e8e43426c86c1ebd68cff20</td></tr>
+<tr><th>findings[35].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[35].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[35].investigation_id</th><td></td></tr>
+<tr><th>findings[35].mesh_code</th><td>533913073</td></tr>
+<tr><th>findings[35].metrics.medical_straight_line_distance_m</th><td>737.119</td></tr>
+<tr><th>findings[35].metrics.published_employees</th><td>760</td></tr>
+<tr><th>findings[35].metrics.transport_straight_line_distance_m</th><td>592.578</td></tr>
+<tr><th>findings[35].priority_rank</th><td></td></tr>
+<tr><th>findings[35].related_feature_id</th><td>fujisawa:533913073</td></tr>
+<tr><th>findings[35].review_required</th><td>True</td></tr>
+<tr><th>findings[35].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[35].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[35].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[35].status</th><td>new</td></tr>
+<tr><th>findings[35].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[35].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[35].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[35].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[35].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[35].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[35].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[35].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[36].city_code</th><td>14205</td></tr>
+<tr><th>findings[36].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[36].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[36].combined_score</th><td></td></tr>
+<tr><th>findings[36].decision_id</th><td></td></tr>
+<tr><th>findings[36].finding_id</th><td>finding-a6acff96ab78ac45ac7ad10e</td></tr>
+<tr><th>findings[36].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[36].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[36].investigation_id</th><td></td></tr>
+<tr><th>findings[36].mesh_code</th><td>533903271</td></tr>
+<tr><th>findings[36].metrics.population</th><td>3146</td></tr>
+<tr><th>findings[36].metrics.straight_line_distance_m</th><td>733.777</td></tr>
+<tr><th>findings[36].priority_rank</th><td></td></tr>
+<tr><th>findings[36].related_feature_id</th><td>fujisawa:533903271</td></tr>
+<tr><th>findings[36].review_required</th><td>True</td></tr>
+<tr><th>findings[36].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[36].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[36].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[36].status</th><td>new</td></tr>
+<tr><th>findings[36].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[36].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[36].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[36].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[36].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[36].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[36].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[37].city_code</th><td>14205</td></tr>
+<tr><th>findings[37].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[37].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[37].combined_score</th><td></td></tr>
+<tr><th>findings[37].decision_id</th><td></td></tr>
+<tr><th>findings[37].finding_id</th><td>finding-aab4713c6d4b51c8d837ea75</td></tr>
+<tr><th>findings[37].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[37].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[37].investigation_id</th><td></td></tr>
+<tr><th>findings[37].mesh_code</th><td>533903953</td></tr>
+<tr><th>findings[37].metrics.population</th><td>1731</td></tr>
+<tr><th>findings[37].metrics.straight_line_distance_m</th><td>1384.496</td></tr>
+<tr><th>findings[37].priority_rank</th><td></td></tr>
+<tr><th>findings[37].related_feature_id</th><td>fujisawa:533903953</td></tr>
+<tr><th>findings[37].review_required</th><td>True</td></tr>
+<tr><th>findings[37].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[37].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[37].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[37].status</th><td>new</td></tr>
+<tr><th>findings[37].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[37].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[37].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[37].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[37].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[37].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[37].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[38].city_code</th><td>14205</td></tr>
+<tr><th>findings[38].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[38].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[38].combined_score</th><td></td></tr>
+<tr><th>findings[38].decision_id</th><td></td></tr>
+<tr><th>findings[38].finding_id</th><td>finding-ae367807a897f2d35d959484</td></tr>
+<tr><th>findings[38].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[38].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[38].investigation_id</th><td></td></tr>
+<tr><th>findings[38].mesh_code</th><td>533913081</td></tr>
+<tr><th>findings[38].metrics.population</th><td>1483</td></tr>
+<tr><th>findings[38].metrics.straight_line_distance_m</th><td>727.141</td></tr>
+<tr><th>findings[38].priority_rank</th><td></td></tr>
+<tr><th>findings[38].related_feature_id</th><td>fujisawa:533913081</td></tr>
+<tr><th>findings[38].review_required</th><td>True</td></tr>
+<tr><th>findings[38].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[38].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[38].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[38].status</th><td>new</td></tr>
+<tr><th>findings[38].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[38].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[38].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[38].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[38].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[38].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[38].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[39].city_code</th><td>14205</td></tr>
+<tr><th>findings[39].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[39].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[39].combined_score</th><td></td></tr>
+<tr><th>findings[39].decision_id</th><td></td></tr>
+<tr><th>findings[39].finding_id</th><td>finding-b079306047ad2d9622839ead</td></tr>
+<tr><th>findings[39].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[39].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[39].investigation_id</th><td></td></tr>
+<tr><th>findings[39].mesh_code</th><td>533913054</td></tr>
+<tr><th>findings[39].metrics.population</th><td>2368</td></tr>
+<tr><th>findings[39].metrics.straight_line_distance_m</th><td>1734.57</td></tr>
+<tr><th>findings[39].priority_rank</th><td></td></tr>
+<tr><th>findings[39].related_feature_id</th><td>fujisawa:533913054</td></tr>
+<tr><th>findings[39].review_required</th><td>True</td></tr>
+<tr><th>findings[39].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[39].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[39].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[39].status</th><td>new</td></tr>
+<tr><th>findings[39].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[39].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[39].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[39].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[39].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[39].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[39].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[40].city_code</th><td>14205</td></tr>
+<tr><th>findings[40].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[40].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[40].combined_score</th><td></td></tr>
+<tr><th>findings[40].decision_id</th><td></td></tr>
+<tr><th>findings[40].finding_id</th><td>finding-b7f22a1bbccda49aa05d738d</td></tr>
+<tr><th>findings[40].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[40].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[40].investigation_id</th><td></td></tr>
+<tr><th>findings[40].mesh_code</th><td>533913061</td></tr>
+<tr><th>findings[40].metrics.medical_straight_line_distance_m</th><td>1007.786</td></tr>
+<tr><th>findings[40].metrics.published_employees</th><td>790</td></tr>
+<tr><th>findings[40].metrics.transport_straight_line_distance_m</th><td>473.323</td></tr>
+<tr><th>findings[40].priority_rank</th><td></td></tr>
+<tr><th>findings[40].related_feature_id</th><td>fujisawa:533913061</td></tr>
+<tr><th>findings[40].review_required</th><td>True</td></tr>
+<tr><th>findings[40].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[40].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[40].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[40].status</th><td>new</td></tr>
+<tr><th>findings[40].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[40].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[40].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[40].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[40].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[40].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[40].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[40].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[41].city_code</th><td>14205</td></tr>
+<tr><th>findings[41].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[41].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[41].combined_score</th><td></td></tr>
+<tr><th>findings[41].decision_id</th><td></td></tr>
+<tr><th>findings[41].finding_id</th><td>finding-c5df05c682d60aa1e5a782c5</td></tr>
+<tr><th>findings[41].finding_subtype</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[41].finding_type</th><td>care_access_review_candidate</td></tr>
+<tr><th>findings[41].investigation_id</th><td></td></tr>
+<tr><th>findings[41].mesh_code</th><td>533903961</td></tr>
+<tr><th>findings[41].metrics.elderly_population</th><td>646.0</td></tr>
+<tr><th>findings[41].metrics.experimental_transport_network_distance_m</th><td>308.51</td></tr>
+<tr><th>findings[41].metrics.straight_line_distance_m</th><td>419.515</td></tr>
+<tr><th>findings[41].priority_rank</th><td></td></tr>
+<tr><th>findings[41].related_feature_id</th><td>fujisawa:533903961</td></tr>
+<tr><th>findings[41].review_required</th><td>True</td></tr>
+<tr><th>findings[41].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[41].source_contributions[1]</th><td>MHLW care 2026</td></tr>
+<tr><th>findings[41].source_contributions[2]</th><td>PLATEAU 2025 experimental graph</td></tr>
+<tr><th>findings[41].status</th><td>new</td></tr>
+<tr><th>findings[41].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[41].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[41].thresholds.distance_p65_m</th><td>405.367</td></tr>
+<tr><th>findings[41].thresholds.elderly_p65</th><td>531.2</td></tr>
+<tr><th>findings[41].thresholds.network_transport_median_m</th><td>276.191</td></tr>
+<tr><th>findings[41].title</th><td>介護アクセス現地確認候補</td></tr>
+<tr><th>findings[41].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[41].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[42].city_code</th><td>14205</td></tr>
+<tr><th>findings[42].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[42].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[42].combined_score</th><td></td></tr>
+<tr><th>findings[42].decision_id</th><td></td></tr>
+<tr><th>findings[42].finding_id</th><td>finding-cb7a03419c4779ddd32cece0</td></tr>
+<tr><th>findings[42].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[42].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[42].investigation_id</th><td></td></tr>
+<tr><th>findings[42].mesh_code</th><td>533904111</td></tr>
+<tr><th>findings[42].metrics.medical_straight_line_distance_m</th><td>1032.042</td></tr>
+<tr><th>findings[42].metrics.published_employees</th><td>1633</td></tr>
+<tr><th>findings[42].metrics.transport_straight_line_distance_m</th><td>427.276</td></tr>
+<tr><th>findings[42].priority_rank</th><td></td></tr>
+<tr><th>findings[42].related_feature_id</th><td>fujisawa:533904111</td></tr>
+<tr><th>findings[42].review_required</th><td>True</td></tr>
+<tr><th>findings[42].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[42].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[42].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[42].status</th><td>new</td></tr>
+<tr><th>findings[42].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[42].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[42].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[42].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[42].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[42].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[42].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[42].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[43].city_code</th><td>14205</td></tr>
+<tr><th>findings[43].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[43].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[43].combined_score</th><td></td></tr>
+<tr><th>findings[43].decision_id</th><td></td></tr>
+<tr><th>findings[43].finding_id</th><td>finding-cd727a0baf81895dbc3349b9</td></tr>
+<tr><th>findings[43].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[43].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[43].investigation_id</th><td></td></tr>
+<tr><th>findings[43].mesh_code</th><td>533913083</td></tr>
+<tr><th>findings[43].metrics.population</th><td>1908</td></tr>
+<tr><th>findings[43].metrics.straight_line_distance_m</th><td>938.802</td></tr>
+<tr><th>findings[43].priority_rank</th><td></td></tr>
+<tr><th>findings[43].related_feature_id</th><td>fujisawa:533913083</td></tr>
+<tr><th>findings[43].review_required</th><td>True</td></tr>
+<tr><th>findings[43].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[43].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[43].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[43].status</th><td>new</td></tr>
+<tr><th>findings[43].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[43].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[43].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[43].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[43].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[43].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[43].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[44].city_code</th><td>14205</td></tr>
+<tr><th>findings[44].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[44].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[44].combined_score</th><td></td></tr>
+<tr><th>findings[44].decision_id</th><td></td></tr>
+<tr><th>findings[44].finding_id</th><td>finding-cf6b67e0999804fd697974ae</td></tr>
+<tr><th>findings[44].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[44].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[44].investigation_id</th><td></td></tr>
+<tr><th>findings[44].mesh_code</th><td>533903051</td></tr>
+<tr><th>findings[44].metrics.medical_straight_line_distance_m</th><td>291.596</td></tr>
+<tr><th>findings[44].metrics.published_employees</th><td>743</td></tr>
+<tr><th>findings[44].metrics.transport_straight_line_distance_m</th><td>505.427</td></tr>
+<tr><th>findings[44].priority_rank</th><td></td></tr>
+<tr><th>findings[44].related_feature_id</th><td>fujisawa:533903051</td></tr>
+<tr><th>findings[44].review_required</th><td>True</td></tr>
+<tr><th>findings[44].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[44].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[44].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[44].status</th><td>new</td></tr>
+<tr><th>findings[44].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[44].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[44].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[44].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[44].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[44].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[44].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[44].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[45].city_code</th><td>14205</td></tr>
+<tr><th>findings[45].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[45].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[45].combined_score</th><td></td></tr>
+<tr><th>findings[45].decision_id</th><td></td></tr>
+<tr><th>findings[45].finding_id</th><td>finding-d3392f55df2d561a1a419353</td></tr>
+<tr><th>findings[45].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[45].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[45].investigation_id</th><td></td></tr>
+<tr><th>findings[45].mesh_code</th><td>533903872</td></tr>
+<tr><th>findings[45].metrics.medical_straight_line_distance_m</th><td>341.638</td></tr>
+<tr><th>findings[45].metrics.published_employees</th><td>621</td></tr>
+<tr><th>findings[45].metrics.transport_straight_line_distance_m</th><td>387.906</td></tr>
+<tr><th>findings[45].priority_rank</th><td></td></tr>
+<tr><th>findings[45].related_feature_id</th><td>fujisawa:533903872</td></tr>
+<tr><th>findings[45].review_required</th><td>True</td></tr>
+<tr><th>findings[45].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[45].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[45].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[45].status</th><td>new</td></tr>
+<tr><th>findings[45].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[45].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[45].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[45].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[45].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[45].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[45].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[45].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[46].city_code</th><td>14205</td></tr>
+<tr><th>findings[46].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[46].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[46].combined_score</th><td></td></tr>
+<tr><th>findings[46].decision_id</th><td></td></tr>
+<tr><th>findings[46].finding_id</th><td>finding-edb7de1e25f81cdf18ed91bc</td></tr>
+<tr><th>findings[46].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[46].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[46].investigation_id</th><td></td></tr>
+<tr><th>findings[46].mesh_code</th><td>533904111</td></tr>
+<tr><th>findings[46].metrics.population</th><td>2220</td></tr>
+<tr><th>findings[46].metrics.straight_line_distance_m</th><td>1032.042</td></tr>
+<tr><th>findings[46].priority_rank</th><td></td></tr>
+<tr><th>findings[46].related_feature_id</th><td>fujisawa:533904111</td></tr>
+<tr><th>findings[46].review_required</th><td>True</td></tr>
+<tr><th>findings[46].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[46].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[46].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[46].status</th><td>new</td></tr>
+<tr><th>findings[46].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[46].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[46].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[46].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[46].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[46].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[46].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[47].city_code</th><td>14205</td></tr>
+<tr><th>findings[47].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[47].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[47].combined_score</th><td></td></tr>
+<tr><th>findings[47].decision_id</th><td></td></tr>
+<tr><th>findings[47].finding_id</th><td>finding-ef456f0017899f0d8374b3a9</td></tr>
+<tr><th>findings[47].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[47].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[47].investigation_id</th><td></td></tr>
+<tr><th>findings[47].mesh_code</th><td>533903963</td></tr>
+<tr><th>findings[47].metrics.population</th><td>1739</td></tr>
+<tr><th>findings[47].metrics.straight_line_distance_m</th><td>872.261</td></tr>
+<tr><th>findings[47].priority_rank</th><td></td></tr>
+<tr><th>findings[47].related_feature_id</th><td>fujisawa:533903963</td></tr>
+<tr><th>findings[47].review_required</th><td>True</td></tr>
+<tr><th>findings[47].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[47].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[47].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[47].status</th><td>new</td></tr>
+<tr><th>findings[47].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[47].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[47].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[47].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[47].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[47].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[47].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[48].city_code</th><td>14205</td></tr>
+<tr><th>findings[48].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[48].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[48].combined_score</th><td></td></tr>
+<tr><th>findings[48].decision_id</th><td></td></tr>
+<tr><th>findings[48].finding_id</th><td>finding-f1966d60eda4fe3a43feafee</td></tr>
+<tr><th>findings[48].finding_subtype</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[48].finding_type</th><td>activity_service_gap_candidate</td></tr>
+<tr><th>findings[48].investigation_id</th><td></td></tr>
+<tr><th>findings[48].mesh_code</th><td>533903871</td></tr>
+<tr><th>findings[48].metrics.medical_straight_line_distance_m</th><td>224.095</td></tr>
+<tr><th>findings[48].metrics.published_employees</th><td>568</td></tr>
+<tr><th>findings[48].metrics.transport_straight_line_distance_m</th><td>380.327</td></tr>
+<tr><th>findings[48].priority_rank</th><td></td></tr>
+<tr><th>findings[48].related_feature_id</th><td>fujisawa:533903871</td></tr>
+<tr><th>findings[48].review_required</th><td>True</td></tr>
+<tr><th>findings[48].source_contributions[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>findings[48].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[48].source_contributions[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>findings[48].status</th><td>new</td></tr>
+<tr><th>findings[48].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[48].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[48].thresholds.employees_p75</th><td>553.75</td></tr>
+<tr><th>findings[48].thresholds.medical_distance_p75_m</th><td>708.548</td></tr>
+<tr><th>findings[48].thresholds.transport_distance_p75_m</th><td>363.398</td></tr>
+<tr><th>findings[48].title</th><td>活動・サービス文脈確認候補</td></tr>
+<tr><th>findings[48].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[48].validation_status</th><td>unvalidated</td></tr>
+<tr><th>findings[49].city_code</th><td>14205</td></tr>
+<tr><th>findings[49].city_id</th><td>fujisawa</td></tr>
+<tr><th>findings[49].claim_boundary</th><td>review candidate only; not a shortage, risk, recommendation, or administrative priority</td></tr>
+<tr><th>findings[49].combined_score</th><td></td></tr>
+<tr><th>findings[49].decision_id</th><td></td></tr>
+<tr><th>findings[49].finding_id</th><td>finding-f1fa8ff31f6096794e803de4</td></tr>
+<tr><th>findings[49].finding_subtype</th><td>medical_access_review_candidate</td></tr>
+<tr><th>findings[49].finding_type</th><td>accessibility_gap</td></tr>
+<tr><th>findings[49].investigation_id</th><td></td></tr>
+<tr><th>findings[49].mesh_code</th><td>523973853</td></tr>
+<tr><th>findings[49].metrics.population</th><td>2048</td></tr>
+<tr><th>findings[49].metrics.straight_line_distance_m</th><td>1056.476</td></tr>
+<tr><th>findings[49].priority_rank</th><td></td></tr>
+<tr><th>findings[49].related_feature_id</th><td>fujisawa:523973853</td></tr>
+<tr><th>findings[49].review_required</th><td>True</td></tr>
+<tr><th>findings[49].source_contributions[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>findings[49].source_contributions[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>findings[49].source_contributions[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>findings[49].status</th><td>new</td></tr>
+<tr><th>findings[49].summary</th><td>独立した閾値条件に該当した未検証の追加調査候補です。</td></tr>
+<tr><th>findings[49].threshold_scope</th><td>within fujisawa; not comparable across cities</td></tr>
+<tr><th>findings[49].thresholds.distance_p75_m</th><td>702.426</td></tr>
+<tr><th>findings[49].thresholds.population_median</th><td>1481.0</td></tr>
+<tr><th>findings[49].title</th><td>医療アクセス現地確認候補</td></tr>
+<tr><th>findings[49].urban_state</th><td>fujisawa-2025-observed</td></tr>
+<tr><th>findings[49].validation_status</th><td>unvalidated</td></tr>
+<tr><th>generation_method</th><td>deterministic structured export</td></tr>
+<tr><th>human_workflow.decisions_created</th><td>False</td></tr>
+<tr><th>human_workflow.investigation_templates[0].city_id</th><td>maizuru</td></tr>
+<tr><th>human_workflow.investigation_templates[0].creation_status</th><td>not_created_requires_human</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[0]</th><td>finding-0ce0dd4935e26ce0d846bd55</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[1]</th><td>finding-2bf32b39e9b95dad49ade60c</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[2]</th><td>finding-34be237d5e460bdeec9fcec6</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[3]</th><td>finding-3609bea6ccee8252f5422c22</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[4]</th><td>finding-396b9c2cbf069c528e289625</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[5]</th><td>finding-3c88fd71f8e6d1760064d520</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[6]</th><td>finding-6333afb2eb491a8db309d182</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[7]</th><td>finding-681cbd4532a42707569e8317</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[8]</th><td>finding-694a082cb96381ac668aef85</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[9]</th><td>finding-7725800c516aa5fa3e6f6685</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[10]</th><td>finding-7941acbdf38ae115203ee902</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[11]</th><td>finding-cbf1e69772ba9081b226a029</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[12]</th><td>finding-e31d1d4812e1d7d8238b4032</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[13]</th><td>finding-e87a20a4e8f4907b9b462063</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[14]</th><td>finding-e98635ba03ba93cf313fb51b</td></tr>
+<tr><th>human_workflow.investigation_templates[0].related_finding_ids[15]</th><td>finding-f75c799eae223f22ae095b8a</td></tr>
+<tr><th>human_workflow.investigation_templates[0].source_timeline_included</th><td>True</td></tr>
+<tr><th>human_workflow.investigation_templates[1].city_id</th><td>fujisawa</td></tr>
+<tr><th>human_workflow.investigation_templates[1].creation_status</th><td>not_created_requires_human</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[0]</th><td>finding-0015958f75939076ccb5f3ac</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[1]</th><td>finding-0140c0327a8f9fd6a3601e4d</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[2]</th><td>finding-019e81b1ddcacb9f154454e4</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[3]</th><td>finding-0ed8085e476de40cb187b999</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[4]</th><td>finding-183966c714139fa8617909d4</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[5]</th><td>finding-1d1b0e0c6cf47ab0daab50ae</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[6]</th><td>finding-1e6bd89c261c46960c4e6558</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[7]</th><td>finding-3058721a9a73f4c12eebc7b1</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[8]</th><td>finding-385bbcca5c0d9497640d2813</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[9]</th><td>finding-477e91457b301f9dbf81985a</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[10]</th><td>finding-4d987916316d316b48c905b0</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[11]</th><td>finding-67f3e781c7fb85f85e55c560</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[12]</th><td>finding-6af0eda13364bc8780284828</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[13]</th><td>finding-70cfa9356add01460efc531f</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[14]</th><td>finding-70de4161221b8f0d4dc49284</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[15]</th><td>finding-761287fd89b91b42b0803cbe</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[16]</th><td>finding-7daa95103dbc2f01a8f68838</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[17]</th><td>finding-83ab43f78075610193d39a01</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[18]</th><td>finding-989e54ca0e2b6aa13a2e781f</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[19]</th><td>finding-9e8e43426c86c1ebd68cff20</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[20]</th><td>finding-a6acff96ab78ac45ac7ad10e</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[21]</th><td>finding-aab4713c6d4b51c8d837ea75</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[22]</th><td>finding-ae367807a897f2d35d959484</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[23]</th><td>finding-b079306047ad2d9622839ead</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[24]</th><td>finding-b7f22a1bbccda49aa05d738d</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[25]</th><td>finding-c5df05c682d60aa1e5a782c5</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[26]</th><td>finding-cb7a03419c4779ddd32cece0</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[27]</th><td>finding-cd727a0baf81895dbc3349b9</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[28]</th><td>finding-cf6b67e0999804fd697974ae</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[29]</th><td>finding-d3392f55df2d561a1a419353</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[30]</th><td>finding-edb7de1e25f81cdf18ed91bc</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[31]</th><td>finding-ef456f0017899f0d8374b3a9</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[32]</th><td>finding-f1966d60eda4fe3a43feafee</td></tr>
+<tr><th>human_workflow.investigation_templates[1].related_finding_ids[33]</th><td>finding-f1fa8ff31f6096794e803de4</td></tr>
+<tr><th>human_workflow.investigation_templates[1].source_timeline_included</th><td>True</td></tr>
+<tr><th>human_workflow.investigations_created</th><td>False</td></tr>
+<tr><th>human_workflow.next_action</th><td>authorized municipal user explicitly triages a finding before creating an investigation</td></tr>
+<tr><th>limitations[0]</th><td>No universal quality, need, risk, or priority score is calculated.</td></tr>
+<tr><th>limitations[1]</th><td>MHLW point coordinates do not declare their horizontal datum; straight-line results require review.</td></tr>
+<tr><th>limitations[2]</th><td>The PLATEAU road graph is experimental and is not an official pedestrian network.</td></tr>
+<tr><th>limitations[3]</th><td>Employees are not treated as daytime population.</td></tr>
+<tr><th>limitations[4]</th><td>J-SHIS model values and historical accident counts do not create risk findings.</td></tr>
+<tr><th>limitations[5]</th><td>Mixed reference years remain visible and are not interpolated into a common date.</td></tr>
+<tr><th>lineage.algorithm_version</th><td>municipal-open-data-analysis-1.0.0</td></tr>
+<tr><th>lineage.analysis_artifact_sha256</th><td>7fe5cb7657f12eee7fa74e16bdc20fbcbd929e88d2069b342003eca20f5e55a7</td></tr>
+<tr><th>lineage.canonical_raw_sha256[0]</th><td>016fac4a1ba0a6df67c4cc0a2854d57a2c9dd8c22cb80fb1733b65d48988290e</td></tr>
+<tr><th>lineage.canonical_raw_sha256[1]</th><td>01efb5874e461cd2c67345d3064bfc4c050f85a7996f8fd67ed872d473f903e4</td></tr>
+<tr><th>lineage.canonical_raw_sha256[2]</th><td>0c7efe1ce8d7f6b41ab5fcb651870a8d8f55dfc8ffb19a6987286b412be1eb00</td></tr>
+<tr><th>lineage.canonical_raw_sha256[3]</th><td>0d9f62a4bfa3a225c4a5b02821edb0ca3353eb7fa895ccd6775eccf58db93981</td></tr>
+<tr><th>lineage.canonical_raw_sha256[4]</th><td>0dbf11775353782cb26164c62e504750a9766afe8e1b1b5f4c442b2ca4d0111d</td></tr>
+<tr><th>lineage.canonical_raw_sha256[5]</th><td>1261bcbfa567e3ca32522af4d73ec40e9860ff6a9460b2a11bb17fb2417ad1da</td></tr>
+<tr><th>lineage.canonical_raw_sha256[6]</th><td>139e6bf5ed47cc2ea5e3d8e85956fce52ffd0e9679b185f3ac801a07821c5117</td></tr>
+<tr><th>lineage.canonical_raw_sha256[7]</th><td>1585ea00b981df8c32d93850b2321a27053b8a9af3d46afc18df11af1f022727</td></tr>
+<tr><th>lineage.canonical_raw_sha256[8]</th><td>19ed2778131c86f8e824e1ade115cec53c42a9a2a21eb0c5e0dcc68474c5581b</td></tr>
+<tr><th>lineage.canonical_raw_sha256[9]</th><td>1fb8cb14f8eee8dacce3b26521abdd09b5175f31cb929efb8573a11487222cce</td></tr>
+<tr><th>lineage.canonical_raw_sha256[10]</th><td>227d83539c9711ac2e16a5996a4db20c90d2e84589605b5cd2572441e69112a2</td></tr>
+<tr><th>lineage.canonical_raw_sha256[11]</th><td>272dce70436267076b7ae7f0d66a43683675c058c5b6943597d1cdfc09da2dd9</td></tr>
+<tr><th>lineage.canonical_raw_sha256[12]</th><td>27cc63ed72913f95d8da48cef2287246bbfc6f25f414caa94fc226524d6eb87a</td></tr>
+<tr><th>lineage.canonical_raw_sha256[13]</th><td>2d90fa696319e3d1181636806fb723bc1d2a9d1c7c24e39903641a5ce5759441</td></tr>
+<tr><th>lineage.canonical_raw_sha256[14]</th><td>31b22939eee3b5cbc13003e71425a76791a9b48fdabeb1ee2b4f82d6d15d09b3</td></tr>
+<tr><th>lineage.canonical_raw_sha256[15]</th><td>37ba1e33312a6febb9998172e16006047b19afcca5961d34e85f59945878a507</td></tr>
+<tr><th>lineage.canonical_raw_sha256[16]</th><td>396d86dc90c82f2e9e8cbd7ea5b0a14f907464fe79183778f613f72f48b761ea</td></tr>
+<tr><th>lineage.canonical_raw_sha256[17]</th><td>3e76b83ba67379540830e7bd5adaa799c47d033a2c34b30390562602dc2be378</td></tr>
+<tr><th>lineage.canonical_raw_sha256[18]</th><td>4fa54cb485f6303c6b3f3cf2f38d37736997d3b4a4da9943b97d59fd8c5171bb</td></tr>
+<tr><th>lineage.canonical_raw_sha256[19]</th><td>584bf963fd615e08a787202cf531a794898ccc2f4ba883f75758da0022c58ac4</td></tr>
+<tr><th>lineage.canonical_raw_sha256[20]</th><td>602be1310990fc557cfca8cda0e84494304e4df8581c1aca218b68327ebea2cf</td></tr>
+<tr><th>lineage.canonical_raw_sha256[21]</th><td>630bbbec80f9f2cafeb02a31727a6185e4617f20526a00d1f0580fefdbf841fc</td></tr>
+<tr><th>lineage.canonical_raw_sha256[22]</th><td>7c883bf5dde5a86c02e313f3814fd844201bbf7a8ddff1bfdb26881ea115b376</td></tr>
+<tr><th>lineage.canonical_raw_sha256[23]</th><td>8a774f25ea895bb51404cbf2a51cacd4b1c92d250cfd7556235dfc57e4a21f90</td></tr>
+<tr><th>lineage.canonical_raw_sha256[24]</th><td>9b873f66f9450cf29846c217ced56b902ce03b0d750a008e7d4911d353712d5c</td></tr>
+<tr><th>lineage.canonical_raw_sha256[25]</th><td>b1d91bb65daaa3554026fcdc6426f7440356018fc0e6e18042c40ff9f54ac2f5</td></tr>
+<tr><th>lineage.canonical_raw_sha256[26]</th><td>b416472ec52a151455e1c91438e0dec5b471e19eafe70e3e2ee1bb22544efe87</td></tr>
+<tr><th>lineage.canonical_raw_sha256[27]</th><td>b5ea71189da2276417c9bd2cbaa816ba7f0a305277ebc7d0e34df0166da5c7e1</td></tr>
+<tr><th>lineage.canonical_raw_sha256[28]</th><td>c16bda40f40c1f2083b04a123e051d9e55bc193d60cfeb2781efd08d3488e943</td></tr>
+<tr><th>lineage.canonical_raw_sha256[29]</th><td>caad416d9249b278fee64472ea073a8c2b31d7fff3a6d8267915f18803e756c0</td></tr>
+<tr><th>lineage.canonical_raw_sha256[30]</th><td>cbfbf417e98035d650c9aa1eb554e640e536b18c33dc19c79574cec52d76251a</td></tr>
+<tr><th>lineage.canonical_raw_sha256[31]</th><td>cd968b1c55938083bb2cb93862521995071c3f6a877f4d19efb7ac3cf658bd0b</td></tr>
+<tr><th>lineage.canonical_raw_sha256[32]</th><td>d961b7f7af045452b6c10e3a84117a760dcc1792f282f6c2c188b7502fc4c9be</td></tr>
+<tr><th>lineage.canonical_raw_sha256[33]</th><td>e2158d949e846068ad761be630269f46bec24718334fdf29dc6b65a1032c5340</td></tr>
+<tr><th>lineage.canonical_raw_sha256[34]</th><td>e53eacdbd9b4a11593cfe89f9a8b57a62f62a1e066751d42c73591b6818f9bf4</td></tr>
+<tr><th>lineage.canonical_raw_sha256[35]</th><td>e553e7c03d4cc5e2bf323952a56849362d76d72b0bc3d14479f3dcbda635dd57</td></tr>
+<tr><th>lineage.canonical_raw_sha256[36]</th><td>e5d137f29745065c7e3928210b8b6051058904a09a1ff4a29b10f63129e14717</td></tr>
+<tr><th>lineage.canonical_raw_sha256[37]</th><td>eeed6bed114791f42572fbb50429238100c581d115b23fee21a201589160abfb</td></tr>
+<tr><th>lineage.canonical_raw_sha256[38]</th><td>f36cf235d918a18ba8d5819909c7719dd9ab3e93948a739b86ebffff0070f659</td></tr>
+<tr><th>lineage.canonical_raw_sha256[39]</th><td>f795cbe93f5f25aecc2fccea7be872a2581085bd780c2edb4f045a948b3ebeb7</td></tr>
+<tr><th>lineage.canonical_raw_sha256[40]</th><td>f7c350410b0c1125ce973d25f6eb939107c8dc3920559976796a98f1a9830a59</td></tr>
+<tr><th>lineage.canonical_raw_sha256[41]</th><td>ffa6feeb9b7f37608fadb8f55b73a5fd9a67ad70b031d1df2d3fb35739a3d197</td></tr>
+<tr><th>lineage.findings_artifact_sha256</th><td>055c933cab562a3a7435c8177a96bc2aaf08070444616f2e202122f0a1b42688</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/fujisawa_city_gap.geojson</th><td>4ba1fa7b76581c94579df3b59c64c3d85f69c98dbbe20445bb080b06680592a8</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/fujisawa_network_accessibility_meshes.csv</th><td>e9201e6a90450136454fef68f2b7321beec01c38accfc50856199dd6bf0f8385</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/fujisawa_plateau_detail_meshes.csv</th><td>6f1285ea4d7c7fa82337518c1c25ed7f8d61ad87107d60bc81944a13a8a53dae</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/maizuru_city_gap.geojson</th><td>c3d675fd1b92c4728cd09cfa2a9f003a5d02c6a85eca3fd53db9446fee2b722c</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/maizuru_network_accessibility_meshes.csv</th><td>1c0479bb3aaf17d6766fd4e12383176b57a3bb5a81e490078ef3daec2585fb38</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/maizuru_plateau_detail_meshes.csv</th><td>88704b37db89b1a3065b8522bb1cfac6ad27b1605dc880981908ca3dbfc97696</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/demographic_economic_canonical.jsonl</th><td>26db8c36899bb204254c6de79d3302afe5f21eb362e7bfa36975ec8840ea14f9</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/demographic_economic_source_report.json</th><td>d8fb5d26717600c477890c7e3676fd9607e57e308f4626584ea09fe50e94cd4c</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/geospatial_resilience_canonical.jsonl</th><td>575eb3db51b1399ca4727ccbabec369c5f3c0df15d4a0db1d920775af262539c</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/geospatial_resilience_source_report.json</th><td>92e201e8db56d1e93fec77fb4ca1bf4c7e9dfe8988e00264619b44bebf36cdd4</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/mhlw_health_canonical.jsonl</th><td>a739cd36ff43941f6731f35669c6a6d55c18c5d1526aa55e6d4a116e0333574e</td></tr>
+<tr><th>lineage.input_artifact_sha256.analysis/outputs/real/open_data/mhlw_health_source_report.json</th><td>78f259b0b58beb090918a892f731953ecd4af75931248eebb8cc613ee019bdb8</td></tr>
+<tr><th>missing_data[0].cities[0]</th><td>maizuru</td></tr>
+<tr><th>missing_data[0].cities[1]</th><td>fujisawa</td></tr>
+<tr><th>missing_data[0].dataset_family</th><td>official_pedestrian_network</td></tr>
+<tr><th>missing_data[0].reason</th><td>outside_coverage</td></tr>
+<tr><th>missing_data[0].status</th><td>unavailable</td></tr>
+<tr><th>missing_data[1].cities[0]</th><td>maizuru</td></tr>
+<tr><th>missing_data[1].cities[1]</th><td>fujisawa</td></tr>
+<tr><th>missing_data[1].dataset_family</th><td>social_participation</td></tr>
+<tr><th>missing_data[1].reason</th><td>no_qualified_official_source</td></tr>
+<tr><th>missing_data[1].status</th><td>unavailable</td></tr>
+<tr><th>missing_data[2].cities[0]</th><td>maizuru</td></tr>
+<tr><th>missing_data[2].cities[1]</th><td>fujisawa</td></tr>
+<tr><th>missing_data[2].dataset_family</th><td>traffic_volume</td></tr>
+<tr><th>missing_data[2].reason</th><td>no_stable_matching_snapshot</td></tr>
+<tr><th>missing_data[2].status</th><td>unavailable</td></tr>
+<tr><th>missing_data[3].cities[0]</th><td>maizuru</td></tr>
+<tr><th>missing_data[3].cities[1]</th><td>fujisawa</td></tr>
+<tr><th>missing_data[3].dataset_family</th><td>gtfs</td></tr>
+<tr><th>missing_data[3].reason</th><td>not_published</td></tr>
+<tr><th>missing_data[3].status</th><td>unavailable</td></tr>
+<tr><th>missing_data[4].cities[0]</th><td>maizuru</td></tr>
+<tr><th>missing_data[4].cities[1]</th><td>fujisawa</td></tr>
+<tr><th>missing_data[4].dataset_family</th><td>gsi_foundation_map</td></tr>
+<tr><th>missing_data[4].reason</th><td>credentials_and_survey_act_review</td></tr>
+<tr><th>missing_data[4].status</th><td>requires_review</td></tr>
+<tr><th>public_distribution</th><td>False</td></tr>
+<tr><th>review_status</th><td>unvalidated_review_candidates</td></tr>
+<tr><th>schema_version</th><td>municipal-open-data-evidence-1.0.0</td></tr>
+<tr><th>source_contributions[0].analysis_id</th><td>medical-access-v2</td></tr>
+<tr><th>source_contributions[0].sources[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>source_contributions[0].sources[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>source_contributions[0].sources[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>source_contributions[0].sources[3]</th><td>experimental graph/P04 2020 shown separately</td></tr>
+<tr><th>source_contributions[1].analysis_id</th><td>care-access</td></tr>
+<tr><th>source_contributions[1].sources[0]</th><td>e-Stat census 2020</td></tr>
+<tr><th>source_contributions[1].sources[1]</th><td>MHLW care 2026</td></tr>
+<tr><th>source_contributions[1].sources[2]</th><td>PLATEAU 2025</td></tr>
+<tr><th>source_contributions[1].sources[3]</th><td>experimental transport graph context</td></tr>
+<tr><th>source_contributions[2].analysis_id</th><td>future-population-spatial</td></tr>
+<tr><th>source_contributions[2].sources[0]</th><td>MLIT R6 official trial projection 250m</td></tr>
+<tr><th>source_contributions[2].sources[1]</th><td>audited 500m mesh</td></tr>
+<tr><th>source_contributions[2].sources[2]</th><td>PLATEAU spatial context</td></tr>
+<tr><th>source_contributions[3].analysis_id</th><td>daytime-activity-context</td></tr>
+<tr><th>source_contributions[3].sources[0]</th><td>Economic Census 2021</td></tr>
+<tr><th>source_contributions[3].sources[1]</th><td>MHLW medical 2026</td></tr>
+<tr><th>source_contributions[3].sources[2]</th><td>MLIT P11 2022</td></tr>
+<tr><th>source_contributions[4].analysis_id</th><td>earthquake-ground-context</td></tr>
+<tr><th>source_contributions[4].sources[0]</th><td>J-SHIS V4 2020</td></tr>
+<tr><th>source_contributions[4].sources[1]</th><td>audited 500m mesh</td></tr>
+<tr><th>source_contributions[5].analysis_id</th><td>historical-traffic-safety-context</td></tr>
+<tr><th>source_contributions[5].sources[0]</th><td>NPA 2024 annual file</td></tr>
+<tr><th>source_contributions[5].sources[1]</th><td>audited 500m mesh</td></tr>
+<tr><th>source_timeline.fujisawa[0].reference_period</th><td>2020</td></tr>
+<tr><th>source_timeline.fujisawa[0].role</th><td>observed mesh population and disclosure controls</td></tr>
+<tr><th>source_timeline.fujisawa[0].source_family</th><td>census_population</td></tr>
+<tr><th>source_timeline.fujisawa[1].reference_period</th><td>2020</td></tr>
+<tr><th>source_timeline.fujisawa[1].role</th><td>modeled ground context</td></tr>
+<tr><th>source_timeline.fujisawa[1].source_family</th><td>jshis_surface_ground</td></tr>
+<tr><th>source_timeline.fujisawa[2].reference_period</th><td>2021</td></tr>
+<tr><th>source_timeline.fujisawa[2].role</th><td>establishment and employee observations; employees are not daytime population</td></tr>
+<tr><th>source_timeline.fujisawa[2].source_family</th><td>economic_census</td></tr>
+<tr><th>source_timeline.fujisawa[3].reference_period</th><td>2022</td></tr>
+<tr><th>source_timeline.fujisawa[3].role</th><td>straight-line transport-point context</td></tr>
+<tr><th>source_timeline.fujisawa[3].source_family</th><td>mlit_p11_transport_points</td></tr>
+<tr><th>source_timeline.fujisawa[4].reference_period</th><td>2023/2024 occurrence dates in 2024 annual file</td></tr>
+<tr><th>source_timeline.fujisawa[4].role</th><td>historical injury/fatal accident context</td></tr>
+<tr><th>source_timeline.fujisawa[4].source_family</th><td>npa_traffic_accident</td></tr>
+<tr><th>source_timeline.fujisawa[4].unmatched_records</th><td>4</td></tr>
+<tr><th>source_timeline.fujisawa[5].reference_period</th><td>2025</td></tr>
+<tr><th>source_timeline.fujisawa[5].role</th><td>primary spatial model and experimental graph context</td></tr>
+<tr><th>source_timeline.fujisawa[5].source_family</th><td>plateau</td></tr>
+<tr><th>source_timeline.fujisawa[6].reference_period</th><td>2025/2050/2070 official trial projection years</td></tr>
+<tr><th>source_timeline.fujisawa[6].role</th><td>internal 250m-to-500m spatial comparison</td></tr>
+<tr><th>source_timeline.fujisawa[6].source_family</th><td>mlit_future_population</td></tr>
+<tr><th>source_timeline.fujisawa[7].reference_period</th><td>2026-06-01</td></tr>
+<tr><th>source_timeline.fujisawa[7].role</th><td>published facility and department snapshot; current acceptance unknown</td></tr>
+<tr><th>source_timeline.fujisawa[7].source_family</th><td>mhlw_medical</td></tr>
+<tr><th>source_timeline.fujisawa[8].reference_period</th><td>2026-06-30</td></tr>
+<tr><th>source_timeline.fujisawa[8].role</th><td>published establishment snapshot; current capacity and eligibility unknown</td></tr>
+<tr><th>source_timeline.fujisawa[8].source_family</th><td>mhlw_care</td></tr>
+<tr><th>source_timeline.maizuru[0].reference_period</th><td>2020</td></tr>
+<tr><th>source_timeline.maizuru[0].role</th><td>observed mesh population and disclosure controls</td></tr>
+<tr><th>source_timeline.maizuru[0].source_family</th><td>census_population</td></tr>
+<tr><th>source_timeline.maizuru[1].reference_period</th><td>2020</td></tr>
+<tr><th>source_timeline.maizuru[1].role</th><td>modeled ground context</td></tr>
+<tr><th>source_timeline.maizuru[1].source_family</th><td>jshis_surface_ground</td></tr>
+<tr><th>source_timeline.maizuru[2].reference_period</th><td>2021</td></tr>
+<tr><th>source_timeline.maizuru[2].role</th><td>establishment and employee observations; employees are not daytime population</td></tr>
+<tr><th>source_timeline.maizuru[2].source_family</th><td>economic_census</td></tr>
+<tr><th>source_timeline.maizuru[3].reference_period</th><td>2022</td></tr>
+<tr><th>source_timeline.maizuru[3].role</th><td>straight-line transport-point context</td></tr>
+<tr><th>source_timeline.maizuru[3].source_family</th><td>mlit_p11_transport_points</td></tr>
+<tr><th>source_timeline.maizuru[4].reference_period</th><td>2023/2024 occurrence dates in 2024 annual file</td></tr>
+<tr><th>source_timeline.maizuru[4].role</th><td>historical injury/fatal accident context</td></tr>
+<tr><th>source_timeline.maizuru[4].source_family</th><td>npa_traffic_accident</td></tr>
+<tr><th>source_timeline.maizuru[4].unmatched_records</th><td>1</td></tr>
+<tr><th>source_timeline.maizuru[5].reference_period</th><td>2025</td></tr>
+<tr><th>source_timeline.maizuru[5].role</th><td>primary spatial model and experimental graph context</td></tr>
+<tr><th>source_timeline.maizuru[5].source_family</th><td>plateau</td></tr>
+<tr><th>source_timeline.maizuru[6].reference_period</th><td>2025/2050/2070 official trial projection years</td></tr>
+<tr><th>source_timeline.maizuru[6].role</th><td>internal 250m-to-500m spatial comparison</td></tr>
+<tr><th>source_timeline.maizuru[6].source_family</th><td>mlit_future_population</td></tr>
+<tr><th>source_timeline.maizuru[7].reference_period</th><td>2026-06-01</td></tr>
+<tr><th>source_timeline.maizuru[7].role</th><td>published facility and department snapshot; current acceptance unknown</td></tr>
+<tr><th>source_timeline.maizuru[7].source_family</th><td>mhlw_medical</td></tr>
+<tr><th>source_timeline.maizuru[8].reference_period</th><td>2026-06-30</td></tr>
+<tr><th>source_timeline.maizuru[8].role</th><td>published establishment snapshot; current capacity and eligibility unknown</td></tr>
+<tr><th>source_timeline.maizuru[8].source_family</th><td>mhlw_care</td></tr>
+<tr><th>urban_states[0]</th><td>maizuru-2025-observed</td></tr>
+<tr><th>urban_states[1]</th><td>fujisawa-2025-observed</td></tr></table></body></html>

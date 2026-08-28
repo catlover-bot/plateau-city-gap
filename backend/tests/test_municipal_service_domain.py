@@ -5,6 +5,7 @@ import pytest
 from backend.citygap_platform.domain.municipal_service import (
     ANALYSIS_CATALOG,
     SERVICE_ENTITIES,
+    AnalysisTier,
     DataClassification,
     DatasetReleaseStatus,
     DecisionRecordDraft,
@@ -15,6 +16,7 @@ from backend.citygap_platform.domain.municipal_service import (
     ReviewStatus,
     decode_cursor,
     encode_cursor,
+    evaluate_analysis_tier,
     validate_dataset_transition,
     validate_finding_transition,
     validate_investigation_transition,
@@ -91,7 +93,7 @@ def test_decision_record_is_human_reviewed_and_evidence_backed() -> None:
 
 
 def test_analysis_catalog_has_versioned_parameters_and_claim_boundaries() -> None:
-    assert len(ANALYSIS_CATALOG) == 6
+    assert len(ANALYSIS_CATALOG) == 12
     assert len({definition.analysis_id for definition in ANALYSIS_CATALOG}) == len(ANALYSIS_CATALOG)
     assert all(
         definition.algorithm_version and definition.claim_boundary
@@ -99,6 +101,58 @@ def test_analysis_catalog_has_versioned_parameters_and_claim_boundaries() -> Non
     )
     candidate_limit = ANALYSIS_CATALOG[0].parameters[0]
     assert candidate_limit.minimum == 1 and candidate_limit.maximum == 100
+    v2 = {definition.analysis_id: definition for definition in ANALYSIS_CATALOG}
+    assert {
+        "medical-access-v2",
+        "care-access",
+        "future-population-spatial",
+        "daytime-activity-context",
+        "earthquake-ground-context",
+        "historical-traffic-safety-context",
+    } <= set(v2)
+    assert all(
+        v2[key].dataset_requirements
+        for key in v2
+        if key
+        in {
+            "medical-access-v2",
+            "care-access",
+            "future-population-spatial",
+            "daytime-activity-context",
+            "earthquake-ground-context",
+            "historical-traffic-safety-context",
+        }
+    )
+
+
+def test_analysis_tiers_degrade_without_hiding_missing_datasets() -> None:
+    medical = next(
+        definition
+        for definition in ANALYSIS_CATALOG
+        if definition.analysis_id == "medical-access-v2"
+    )
+    unavailable = evaluate_analysis_tier(medical, {"mhlw_medical"})
+    assert unavailable.tier is AnalysisTier.UNAVAILABLE
+    assert unavailable.missing_required == ("census_population_500m",)
+
+    base = evaluate_analysis_tier(
+        medical, {"census_population_500m", "mhlw_medical", "plateau_buildings"}
+    )
+    assert base.tier is AnalysisTier.BASE
+    assert base.missing_optional == ("road_network",)
+    assert base.missing_enhancement == ("official_pedestrian_network",)
+
+    enhanced = evaluate_analysis_tier(
+        medical,
+        {
+            "census_population_500m",
+            "mhlw_medical",
+            "plateau_buildings",
+            "road_network",
+            "official_pedestrian_network",
+        },
+    )
+    assert enhanced.tier is AnalysisTier.ENHANCED
 
 
 def test_cursor_round_trip_and_invalid_payload() -> None:

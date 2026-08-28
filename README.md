@@ -180,13 +180,14 @@ after_transport_distance
 - `analysis/scripts/build_maizuru_open_data_canonical.py`: 舞鶴P0実CSVをchecksum検証し、3,546 canonical recordと500m / PLATEAU候補linkを生成
 - `analysis/scripts/build_demographic_economic_open_data.py`: 公式250m将来人口と500m経済センサスを検証し、2都市2,629 canonical recordと822 mesh contextを生成
 - `analysis/scripts/build_geospatial_resilience_open_data.py`: J-SHIS表層地盤と警察庁事故履歴を検証し、4,105 canonical recordとGSI・歩行空間・xROAD・GTFS coverage監査を生成
+- `analysis/scripts/build_municipal_open_data_analysis.py`: 2都市822メッシュへ医療・介護・将来人口・活動・地盤・事故の6分析を接続し、未検証レビュー候補と決定論的Evidenceを生成
 - `analysis/scripts/build_urban_futures_validation.py`: 舞鶴・藤沢の将来人口、stress test、criticality、避難所、計画比較を実データ検証
 - `analysis/scripts/benchmark_urban_resilience_scale.py`: 100k/250k/500k synthetic graph benchmark
 - `analysis/scripts/build_evidence_v3.py`: Temporal / Resilience Evidence PackageのJSON/CSV/print HTML生成
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
-- `infra/migrations/`: 21 migration。dataset version、urban state/diff、resilience、future/planning/outcome/field、municipal service tenant、公式open-data registryとcanonical lineageを永続化
+- `infra/migrations/`: 22 migration。dataset version、urban state/diff、resilience、future/planning/outcome/field、municipal service tenant、公式open-data registry、canonical lineage、Analysis Catalog V2を永続化
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 

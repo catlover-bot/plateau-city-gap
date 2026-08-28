@@ -170,6 +170,12 @@ export interface AnalysisDefinition {
   output_contract: Record<string, unknown>;
   algorithm_description: string;
   claim_boundary: string;
+  dataset_requirements: Array<{
+    dataset_family: string;
+    requirement_level: "required" | "optional" | "enhancement";
+    source_selection_rule: Record<string, unknown>;
+    rule_version: string;
+  }>;
   parameters: Array<{
     parameter_key: string;
     value_type: string;

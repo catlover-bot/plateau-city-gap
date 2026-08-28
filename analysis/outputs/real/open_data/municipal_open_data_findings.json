@@ -1,0 +1,1756 @@
+{
+  "algorithm_version": "municipal-open-data-analysis-1.0.0",
+  "automatic_decision_creation": false,
+  "automatic_investigation_creation": false,
+  "finding_count": 50,
+  "findings": [
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-0015958f75939076ccb5f3ac",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533904102",
+      "metrics": {
+        "population": 1707,
+        "straight_line_distance_m": 711.053
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904102",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-0140c0327a8f9fd6a3601e4d",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913073",
+      "metrics": {
+        "population": 3590,
+        "straight_line_distance_m": 737.119
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913073",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-019e81b1ddcacb9f154454e4",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903832",
+      "metrics": {
+        "medical_straight_line_distance_m": 1063.609,
+        "published_employees": 828,
+        "transport_straight_line_distance_m": 128.834
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903832",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-0ce0dd4935e26ce0d846bd55",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533502971",
+      "metrics": {
+        "medical_straight_line_distance_m": 2180.222,
+        "published_employees": 271,
+        "transport_straight_line_distance_m": 1388.318
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533502971",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 106.0,
+        "medical_distance_p75_m": 3403.783,
+        "transport_distance_p75_m": 828.65
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-0ed8085e476de40cb187b999",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533904004",
+      "metrics": {
+        "medical_straight_line_distance_m": 710.589,
+        "published_employees": 610,
+        "transport_straight_line_distance_m": 108.524
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904004",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-183966c714139fa8617909d4",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913162",
+      "metrics": {
+        "population": 1670,
+        "straight_line_distance_m": 1438.871
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913162",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-1d1b0e0c6cf47ab0daab50ae",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "523973994",
+      "metrics": {
+        "population": 3349,
+        "straight_line_distance_m": 787.951
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:523973994",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-1e6bd89c261c46960c4e6558",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903053",
+      "metrics": {
+        "medical_straight_line_distance_m": 427.386,
+        "published_employees": 690,
+        "transport_straight_line_distance_m": 567.709
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903053",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-2bf32b39e9b95dad49ade60c",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533513551",
+      "metrics": {
+        "population": 75,
+        "straight_line_distance_m": 3476.397
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533513551",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-3058721a9a73f4c12eebc7b1",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533903961",
+      "metrics": {
+        "population": 1882,
+        "straight_line_distance_m": 966.12
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903961",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-34be237d5e460bdeec9fcec6",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533512753",
+      "metrics": {
+        "population": 91,
+        "straight_line_distance_m": 3595.783
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533512753",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-3609bea6ccee8252f5422c22",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533523721",
+      "metrics": {
+        "population": 123,
+        "straight_line_distance_m": 6422.007
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533523721",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-385bbcca5c0d9497640d2813",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913171",
+      "metrics": {
+        "population": 2746,
+        "straight_line_distance_m": 1155.315
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913171",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-396b9c2cbf069c528e289625",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533502982",
+      "metrics": {
+        "population": 134,
+        "straight_line_distance_m": 3438.401
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533502982",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-3c88fd71f8e6d1760064d520",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533512883",
+      "metrics": {
+        "medical_straight_line_distance_m": 4141.887,
+        "published_employees": 734,
+        "transport_straight_line_distance_m": 287.132
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533512883",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 106.0,
+        "medical_distance_p75_m": 3403.783,
+        "transport_distance_p75_m": 828.65
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-477e91457b301f9dbf81985a",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533904013",
+      "metrics": {
+        "medical_straight_line_distance_m": 1149.649,
+        "published_employees": 2869,
+        "transport_straight_line_distance_m": 97.061
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904013",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-4d987916316d316b48c905b0",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913064",
+      "metrics": {
+        "population": 1579,
+        "straight_line_distance_m": 1015.429
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913064",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-6333afb2eb491a8db309d182",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533513853",
+      "metrics": {
+        "medical_straight_line_distance_m": 3787.968,
+        "published_employees": 167,
+        "transport_straight_line_distance_m": 475.968
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533513853",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 106.0,
+        "medical_distance_p75_m": 3403.783,
+        "transport_distance_p75_m": 828.65
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-67f3e781c7fb85f85e55c560",
+      "finding_subtype": "care_access_review_candidate",
+      "finding_type": "care_access_review_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903952",
+      "metrics": {
+        "elderly_population": 715.0,
+        "experimental_transport_network_distance_m": 406.103,
+        "straight_line_distance_m": 465.226
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903952",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW care 2026",
+        "PLATEAU 2025 experimental graph"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p65_m": 405.367,
+        "elderly_p65": 531.2,
+        "network_transport_median_m": 276.191
+      },
+      "title": "介護アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-681cbd4532a42707569e8317",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533512883",
+      "metrics": {
+        "population": 418,
+        "straight_line_distance_m": 4141.887
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533512883",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-694a082cb96381ac668aef85",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533523614",
+      "metrics": {
+        "population": 87,
+        "straight_line_distance_m": 5949.865
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533523614",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-6af0eda13364bc8780284828",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903264",
+      "metrics": {
+        "medical_straight_line_distance_m": 663.831,
+        "published_employees": 2590,
+        "transport_straight_line_distance_m": 364.663
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903264",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-70cfa9356add01460efc531f",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533904102",
+      "metrics": {
+        "medical_straight_line_distance_m": 711.053,
+        "published_employees": 2105,
+        "transport_straight_line_distance_m": 279.144
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904102",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-70de4161221b8f0d4dc49284",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903963",
+      "metrics": {
+        "medical_straight_line_distance_m": 872.261,
+        "published_employees": 977,
+        "transport_straight_line_distance_m": 537.47
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903963",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-761287fd89b91b42b0803cbe",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "523974903",
+      "metrics": {
+        "medical_straight_line_distance_m": 373.852,
+        "published_employees": 979,
+        "transport_straight_line_distance_m": 402.807
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:523974903",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-7725800c516aa5fa3e6f6685",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533513753",
+      "metrics": {
+        "medical_straight_line_distance_m": 3534.621,
+        "published_employees": 120,
+        "transport_straight_line_distance_m": 23.374
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533513753",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 106.0,
+        "medical_distance_p75_m": 3403.783,
+        "transport_distance_p75_m": 828.65
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-7941acbdf38ae115203ee902",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533513953",
+      "metrics": {
+        "medical_straight_line_distance_m": 3835.479,
+        "published_employees": 195,
+        "transport_straight_line_distance_m": 413.952
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533513953",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 106.0,
+        "medical_distance_p75_m": 3403.783,
+        "transport_distance_p75_m": 828.65
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-7daa95103dbc2f01a8f68838",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "523973951",
+      "metrics": {
+        "population": 3121,
+        "straight_line_distance_m": 732.521
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:523973951",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-83ab43f78075610193d39a01",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903553",
+      "metrics": {
+        "medical_straight_line_distance_m": 826.193,
+        "published_employees": 1010,
+        "transport_straight_line_distance_m": 275.672
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903553",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-989e54ca0e2b6aa13a2e781f",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533903952",
+      "metrics": {
+        "population": 2019,
+        "straight_line_distance_m": 1218.973
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903952",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-9e8e43426c86c1ebd68cff20",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533913073",
+      "metrics": {
+        "medical_straight_line_distance_m": 737.119,
+        "published_employees": 760,
+        "transport_straight_line_distance_m": 592.578
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913073",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-a6acff96ab78ac45ac7ad10e",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533903271",
+      "metrics": {
+        "population": 3146,
+        "straight_line_distance_m": 733.777
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903271",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-aab4713c6d4b51c8d837ea75",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533903953",
+      "metrics": {
+        "population": 1731,
+        "straight_line_distance_m": 1384.496
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903953",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-ae367807a897f2d35d959484",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913081",
+      "metrics": {
+        "population": 1483,
+        "straight_line_distance_m": 727.141
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913081",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-b079306047ad2d9622839ead",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913054",
+      "metrics": {
+        "population": 2368,
+        "straight_line_distance_m": 1734.57
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913054",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-b7f22a1bbccda49aa05d738d",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533913061",
+      "metrics": {
+        "medical_straight_line_distance_m": 1007.786,
+        "published_employees": 790,
+        "transport_straight_line_distance_m": 473.323
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913061",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-c5df05c682d60aa1e5a782c5",
+      "finding_subtype": "care_access_review_candidate",
+      "finding_type": "care_access_review_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903961",
+      "metrics": {
+        "elderly_population": 646.0,
+        "experimental_transport_network_distance_m": 308.51,
+        "straight_line_distance_m": 419.515
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903961",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW care 2026",
+        "PLATEAU 2025 experimental graph"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p65_m": 405.367,
+        "elderly_p65": 531.2,
+        "network_transport_median_m": 276.191
+      },
+      "title": "介護アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-cb7a03419c4779ddd32cece0",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533904111",
+      "metrics": {
+        "medical_straight_line_distance_m": 1032.042,
+        "published_employees": 1633,
+        "transport_straight_line_distance_m": 427.276
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904111",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-cbf1e69772ba9081b226a029",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533523841",
+      "metrics": {
+        "population": 153,
+        "straight_line_distance_m": 7803.162
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533523841",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-cd727a0baf81895dbc3349b9",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533913083",
+      "metrics": {
+        "population": 1908,
+        "straight_line_distance_m": 938.802
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533913083",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-cf6b67e0999804fd697974ae",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903051",
+      "metrics": {
+        "medical_straight_line_distance_m": 291.596,
+        "published_employees": 743,
+        "transport_straight_line_distance_m": 505.427
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903051",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-d3392f55df2d561a1a419353",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903872",
+      "metrics": {
+        "medical_straight_line_distance_m": 341.638,
+        "published_employees": 621,
+        "transport_straight_line_distance_m": 387.906
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903872",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-e31d1d4812e1d7d8238b4032",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533512783",
+      "metrics": {
+        "population": 204,
+        "straight_line_distance_m": 3634.886
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533512783",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-e87a20a4e8f4907b9b462063",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533513853",
+      "metrics": {
+        "population": 116,
+        "straight_line_distance_m": 3787.968
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533513853",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-e98635ba03ba93cf313fb51b",
+      "finding_subtype": "care_access_review_candidate",
+      "finding_type": "care_access_review_candidate",
+      "investigation_id": null,
+      "mesh_code": "533523032",
+      "metrics": {
+        "elderly_population": 110.0,
+        "experimental_transport_network_distance_m": 368.254,
+        "straight_line_distance_m": 1706.515
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533523032",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW care 2026",
+        "PLATEAU 2025 experimental graph"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p65_m": 1586.039,
+        "elderly_p65": 66.25,
+        "network_transport_median_m": 363.069
+      },
+      "title": "介護アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-edb7de1e25f81cdf18ed91bc",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533904111",
+      "metrics": {
+        "population": 2220,
+        "straight_line_distance_m": 1032.042
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533904111",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-ef456f0017899f0d8374b3a9",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533903963",
+      "metrics": {
+        "population": 1739,
+        "straight_line_distance_m": 872.261
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903963",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-f1966d60eda4fe3a43feafee",
+      "finding_subtype": "activity_service_gap_candidate",
+      "finding_type": "activity_service_gap_candidate",
+      "investigation_id": null,
+      "mesh_code": "533903871",
+      "metrics": {
+        "medical_straight_line_distance_m": 224.095,
+        "published_employees": 568,
+        "transport_straight_line_distance_m": 380.327
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:533903871",
+      "review_required": true,
+      "source_contributions": [
+        "Economic Census 2021",
+        "MHLW medical 2026",
+        "MLIT P11 2022"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "employees_p75": 553.75,
+        "medical_distance_p75_m": 708.548,
+        "transport_distance_p75_m": 363.398
+      },
+      "title": "活動・サービス文脈確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "14205",
+      "city_id": "fujisawa",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-f1fa8ff31f6096794e803de4",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "523973853",
+      "metrics": {
+        "population": 2048,
+        "straight_line_distance_m": 1056.476
+      },
+      "priority_rank": null,
+      "related_feature_id": "fujisawa:523973853",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within fujisawa; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 702.426,
+        "population_median": 1481.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "fujisawa-2025-observed",
+      "validation_status": "unvalidated"
+    },
+    {
+      "city_code": "26202",
+      "city_id": "maizuru",
+      "claim_boundary": "review candidate only; not a shortage, risk, recommendation, or administrative priority",
+      "combined_score": null,
+      "decision_id": null,
+      "finding_id": "finding-f75c799eae223f22ae095b8a",
+      "finding_subtype": "medical_access_review_candidate",
+      "finding_type": "accessibility_gap",
+      "investigation_id": null,
+      "mesh_code": "533522084",
+      "metrics": {
+        "population": 74,
+        "straight_line_distance_m": 3593.962
+      },
+      "priority_rank": null,
+      "related_feature_id": "maizuru:533522084",
+      "review_required": true,
+      "source_contributions": [
+        "e-Stat census 2020",
+        "MHLW medical 2026",
+        "PLATEAU 2025"
+      ],
+      "status": "new",
+      "summary": "独立した閾値条件に該当した未検証の追加調査候補です。",
+      "threshold_scope": "within maizuru; not comparable across cities",
+      "thresholds": {
+        "distance_p75_m": 3409.787,
+        "population_median": 69.0
+      },
+      "title": "医療アクセス現地確認候補",
+      "urban_state": "maizuru-2025-observed",
+      "validation_status": "unvalidated"
+    }
+  ],
+  "generated_from_synthetic_data": false,
+  "schema_version": "municipal-open-data-findings-1.0.0"
+}

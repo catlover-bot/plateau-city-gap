@@ -1,6 +1,6 @@
 # Data sources
 
-初回調査・取得日: 2026-08-22、Urban Futures追加検証: 2026-08-27、地理空間・レジリエンス追加検証: 2026-08-28。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
+初回調査・取得日: 2026-08-22、Urban Futures追加検証: 2026-08-27、地理空間・レジリエンスおよびMunicipal Open Data分析追加検証: 2026-08-28。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
 
 ## Source inventory
 

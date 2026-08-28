@@ -89,10 +89,21 @@ def test_role_based_finding_to_human_decision_acceptance(
     monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
     client = TestClient(create_app(MunicipalServiceRepository(database_url)))
 
+    catalog_response = client.get(
+        "/api/v1/analysis-definitions", headers=_headers("analyst")
+    )
+    assert catalog_response.status_code == 200, catalog_response.text
+    catalog = {item["id"]: item for item in catalog_response.json()["items"]}
+    assert len(catalog) == 12
+    assert {
+        requirement["requirement_level"]
+        for requirement in catalog["care-access"]["dataset_requirements"]
+    } == {"required", "optional", "enhancement"}
+
     finding_payload = {
-        "finding_type": "accessibility_gap",
-        "title": "実データに基づく追加調査候補",
-        "summary": "政策判断ではなく、庁内確認へ進める候補",
+        "finding_type": "care_access_review_candidate",
+        "title": "実データに基づく介護アクセス追加調査候補",
+        "summary": "介護不足の認定や政策判断ではなく、庁内確認へ進める候補",
         "urban_state_id": state_id,
     }
     finding_response = client.post(

@@ -1382,6 +1382,12 @@ function AnalysisPage({
             種類
             <select name="finding_type" required>
               <option value="accessibility_gap">Accessibility Gap</option>
+              <option value="care_access_review_candidate">
+                Care Access Review Candidate
+              </option>
+              <option value="activity_service_gap_candidate">
+                Activity Service Gap Candidate
+              </option>
               <option value="network_criticality">Network Criticality</option>
               <option value="planning_context">Planning Context</option>
               <option value="temporal_change">Temporal Change</option>
@@ -1508,6 +1514,26 @@ function AnalysisPage({
               </div>
               <h3>{analysis.name}</h3>
               <p>{analysis.purpose}</p>
+              {analysis.dataset_requirements.length > 0 && (
+                <dl className="catalog-requirements">
+                  {(["required", "optional", "enhancement"] as const).map(
+                    (level) => {
+                      const families = analysis.dataset_requirements
+                        .filter(
+                          (requirement) =>
+                            requirement.requirement_level === level,
+                        )
+                        .map((requirement) => requirement.dataset_family);
+                      return families.length > 0 ? (
+                        <div key={level}>
+                          <dt>{level}</dt>
+                          <dd>{families.join(" · ")}</dd>
+                        </div>
+                      ) : null;
+                    },
+                  )}
+                </dl>
+              )}
               <footer>
                 <strong>断定しない範囲</strong>
                 <span>{analysis.claim_boundary}</span>

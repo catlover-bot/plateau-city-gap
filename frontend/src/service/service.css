@@ -742,6 +742,31 @@
   font-size: 9px;
   line-height: 1.6;
 }
+
+.catalog-requirements {
+  display: grid;
+  margin: 12px 0 0;
+  gap: 5px;
+}
+
+.catalog-requirements div {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.catalog-requirements dt {
+  color: var(--cg-teal);
+  font: 8px var(--cg-mono);
+  text-transform: uppercase;
+}
+
+.catalog-requirements dd {
+  margin: 0;
+  color: var(--cg-ink-soft);
+  font: 8px/1.45 var(--cg-mono);
+  overflow-wrap: anywhere;
+}
 .catalog-grid footer {
   display: flex;
   flex-direction: column;
