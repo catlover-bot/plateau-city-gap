@@ -40,6 +40,9 @@ export interface CitySummary {
   coverage_partial?: number;
   coverage_gaps?: number;
   update_available?: number;
+  latest_reference_date?: string | null;
+  failed_jobs?: number;
+  data_review_backlog?: number;
 }
 
 export interface Capability {
@@ -528,6 +531,34 @@ export interface DataHubPayload {
     requirement: string;
     failure_action: string;
     effective_at: string;
+  }>;
+  data_tasks: Array<{
+    id: string;
+    task_type:
+      | "new_source"
+      | "update_available"
+      | "schema_changed"
+      | "quality_failed"
+      | "license_review"
+      | "ingestion_completed"
+      | "field_verification"
+      | "reconciliation_review";
+    status: "open" | "in_progress" | "resolved" | "dismissed";
+    title: string;
+    detail: Record<string, unknown>;
+    city_source_id: string | null;
+    resource_id: string | null;
+    dataset_version_id: string | null;
+    job_run_id: string | null;
+    created_by: string;
+    assigned_to: string | null;
+    resolution_note: string | null;
+    created_at: string;
+    updated_at: string;
+    resolved_at: string | null;
+    source_title: string | null;
+    dataset_title: string | null;
+    dataset_year: number | null;
   }>;
 }
 

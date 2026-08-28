@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 24)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 25)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -152,3 +152,25 @@ def test_city_data_coverage_and_lineage_are_forward_only_and_non_ranking() -> No
     assert "2022-01-01" not in sql
     assert "PLATEAU roads are not substituted" in sql
     assert '"p11_conversion":false' in sql
+
+
+def test_open_data_operations_are_append_only_tenant_scoped_and_analysis_blocking() -> None:
+    sql = Path("infra/migrations/024_open_data_operations.sql").read_text(encoding="utf-8")
+    for table in (
+        "open_data_operator_tasks",
+        "open_data_source_refresh_policies",
+        "open_data_quarantine_events",
+        "open_data_reprocessing_requests",
+        "analysis_run_open_data_inputs",
+        "open_data_source_feedback",
+    ):
+        assert f"CREATE TABLE {table}" in sql
+    assert "preserve_previous_canonical boolean NOT NULL DEFAULT true" in sql
+    assert "blocks_analysis boolean NOT NULL DEFAULT true CHECK (blocks_analysis)" in sql
+    assert "scheduled_interval_hours >= minimum_interval_hours" in sql
+    assert "minimum_interval_hours BETWEEN 6 AND 8760" in sql
+    assert "automatic_acceptance', false" in sql
+    assert "automatic promotion" not in sql.lower()
+    assert "REFERENCES open_data_resources(organization_id, id)" in sql
+    assert "REFERENCES analysis_runs(organization_id, id)" in sql
+    assert "CREATE INDEX open_data_spatial_links_record_method_idx" in sql

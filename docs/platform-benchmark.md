@@ -39,3 +39,18 @@ uncompressed DEM theme (501.774 s). The exact per-member and per-theme timings r
   sampling rules.
 - A benchmark is evidence, not an SLA. The design targets in architecture documentation must not
   be relabelled as measured capacity.
+
+## Spatial delivery and concurrency protocol
+
+`python -m analysis.scripts.benchmark_pilot_api` reports cold and warm vector-tile
+measurements separately. The in-process cache key includes the exact dataset version and,
+when supplied, the Urban State ID in addition to network/scenario/algorithm versions and
+tile coordinates. Responses are private and immutable and expose the pinned version in
+headers.
+
+The same report executes bounded request bursts at concurrency 1, 10, 25 and 50 for a
+bbox query and a warm vector tile. It reports request count, p50, p95, maximum latency and
+observed throughput. Those database/API rows are explicitly `SYNTHETIC_SCALE`; the report
+sets `concurrency_result_is_sla` and `production_sla_claimed` to false. Maizuru and
+Fujisawa ingestion/runtime/RSS entries are loaded separately from checked-in real-pipeline
+artifacts and must never be merged with the synthetic workload classification.

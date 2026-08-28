@@ -30,6 +30,7 @@ from backend.citygap_platform.ingestion.citygml import (
 SourceFormat = Literal["citygml", "gtfs", "csv", "geojson", "geopackage"]
 DEFAULT_FILE_LIMIT = 512 * 1024 * 1024
 DEFAULT_ROW_LIMIT = 1_000_000
+DEFAULT_GEOMETRY_BYTE_LIMIT = 16 * 1024 * 1024
 
 
 @dataclass(frozen=True)
@@ -93,6 +94,30 @@ def _require_columns(frame: pd.DataFrame, required_columns: Sequence[str]) -> No
         raise ValueError(f"Municipal source is missing columns: {sorted(missing)}")
 
 
+def _is_formula_like(value: object) -> bool:
+    """Detect spreadsheet execution prefixes without misclassifying negative numbers."""
+
+    text = str(value)
+    if not text:
+        return False
+    stripped = text.lstrip(" ")
+    if not stripped:
+        return False
+    if stripped[0] in {"=", "+", "@", "\t", "\r"}:
+        return True
+    return (
+        stripped.startswith("-")
+        and len(stripped) > 1
+        and not (stripped[1].isdigit() or stripped[1] == ".")
+    )
+
+
+def _reject_formula_like_cells(frame: pd.DataFrame, source_name: str) -> None:
+    for value in frame.to_numpy(copy=False).flat:
+        if _is_formula_like(value):
+            raise ValueError(f"{source_name} contains a formula-like cell and requires review")
+
+
 class CsvSourceAdapter:
     """Read a bounded CSV while preserving identifiers such as zero-padded mesh codes."""
 
@@ -135,6 +160,7 @@ class CsvSourceAdapter:
             if len(frame) > self.max_rows:
                 raise ValueError(f"CSV exceeds the {self.max_rows}-row inspection limit")
             _require_columns(frame, self.required_columns)
+            _reject_formula_like_cells(frame, "CSV")
             self._frame = frame
         return self._frame.copy()
 
@@ -165,6 +191,7 @@ class VectorSourceAdapter:
         bbox: tuple[float, float, float, float] | None = None,
         max_bytes: int = DEFAULT_FILE_LIMIT,
         max_rows: int = DEFAULT_ROW_LIMIT,
+        max_geometry_bytes: int = DEFAULT_GEOMETRY_BYTE_LIMIT,
     ) -> None:
         suffixes = (".geojson", ".json") if source_format == "geojson" else (".gpkg",)
         self.path = _checked_path(path, suffixes=suffixes, max_bytes=max_bytes)
@@ -174,6 +201,7 @@ class VectorSourceAdapter:
         self.declared_crs = declared_crs
         self.bbox = bbox
         self.max_rows = max_rows
+        self.max_geometry_bytes = max_geometry_bytes
         self._frame: gpd.GeoDataFrame | None = None
 
     def _resolved_layer(self) -> str | None:
@@ -218,6 +246,8 @@ class VectorSourceAdapter:
                 raise ValueError("Vector source has no geometry column")
             if frame.geometry.isna().any() or (~frame.geometry.is_valid).any():
                 raise ValueError("Vector source contains missing or invalid geometry")
+            if any(len(geometry.wkb) > self.max_geometry_bytes for geometry in frame.geometry):
+                raise ValueError("Vector source contains an oversized geometry")
             self.layer = selected_layer
             self._frame = frame
         return self._frame.copy()
@@ -313,6 +343,7 @@ class GtfsZipSourceAdapter:
                 raise ValueError(
                     f"GTFS {name} exceeds the {self.max_rows_per_table}-row inspection limit"
                 )
+            _reject_formula_like_cells(frame, f"GTFS {name}")
             self._tables[name] = frame
         return self._tables[name].copy()
 

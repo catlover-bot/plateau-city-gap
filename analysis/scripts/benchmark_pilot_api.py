@@ -9,12 +9,13 @@ import os
 import platform
 import time
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from backend.citygap_platform.api.app import create_app
-from backend.citygap_platform.api.repository import PostGISRepository
+from backend.citygap_platform.api.service_repository import MunicipalServiceRepository
 from backend.citygap_platform.api.tile_cache import VersionedTileCache
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -46,6 +47,40 @@ def _measure(operation: Callable[[], None], *, samples: int = 30) -> dict[str, f
         "p95_ms": round(_percentile(durations, 0.95), 3),
         "maximum_ms": round(max(durations), 3),
     }
+
+
+def _measure_concurrency(
+    operation: Callable[[], None],
+    *,
+    levels: tuple[int, ...] = (1, 10, 25, 50),
+    bursts: int = 2,
+) -> dict[str, dict[str, float | int]]:
+    measurements: dict[str, dict[str, float | int]] = {}
+    for workers in levels:
+        durations: list[float] = []
+
+        def timed_operation(measured: list[float]) -> None:
+            started = time.perf_counter()
+            operation()
+            measured.append((time.perf_counter() - started) * 1000)
+
+        started = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [
+                executor.submit(timed_operation, durations) for _ in range(workers * bursts)
+            ]
+            for future in futures:
+                future.result()
+        wall_seconds = time.perf_counter() - started
+        measurements[str(workers)] = {
+            "concurrency": workers,
+            "requests": len(durations),
+            "p50_ms": round(_percentile(durations, 0.50), 3),
+            "p95_ms": round(_percentile(durations, 0.95), 3),
+            "maximum_ms": round(max(durations), 3),
+            "throughput_requests_per_second": round(len(durations) / wall_seconds, 3),
+        }
+    return measurements
 
 
 def _seed(database_url: str, building_count: int, edge_count: int) -> None:
@@ -208,7 +243,7 @@ def _real_pipeline_measurements() -> dict[str, object]:
 def benchmark(database_url: str, building_count: int, edge_count: int) -> dict[str, object]:
     try:
         _seed(database_url, building_count, edge_count)
-        repository = PostGISRepository(database_url)
+        repository = MunicipalServiceRepository(database_url)
         app = create_app(repository)
         client = TestClient(app)
 
@@ -247,6 +282,12 @@ def benchmark(database_url: str, building_count: int, edge_count: int) -> dict[s
                 )
             ),
             "tile_cached": _measure(lambda: request(tile_path, params=tile_params)),
+            "municipal_city_home": _measure(
+                lambda: request("/api/v1/cities/maizuru/home"), samples=10
+            ),
+            "municipal_data_hub": _measure(
+                lambda: request("/api/v1/cities/maizuru/data-hub"), samples=10
+            ),
         }
 
         def uncached_tile() -> None:
@@ -254,17 +295,32 @@ def benchmark(database_url: str, building_count: int, edge_count: int) -> dict[s
             request(tile_path, params=tile_params)
 
         results["tile_uncached"] = _measure(uncached_tile, samples=10)
+        results["tile_warm"] = results["tile_cached"]
+        results["tile_cold"] = results["tile_uncached"]
+        concurrency = {
+            "bbox_buildings": _measure_concurrency(
+                lambda: request(
+                    f"/cities/{SYNTHETIC_CITY}/buildings",
+                    params={"bbox": "139.0,35.0,139.01,35.01", "limit": 1000},
+                )
+            ),
+            "warm_vector_tile": _measure_concurrency(
+                lambda: request(tile_path, params=tile_params)
+            ),
+        }
         return {
             "schema_version": 1,
             "classification": {
                 "api_database": "SYNTHETIC_SCALE",
                 "real_pipeline": "REAL_MUNICIPAL_DATA",
                 "production_sla_claimed": False,
+                "concurrency_result_is_sla": False,
             },
             "synthetic_scale": {
                 "buildings": building_count,
                 "road_edges": edge_count,
                 "api_p50_p95": results,
+                "concurrency_1_10_25_50": concurrency,
             },
             "real_pipeline": _real_pipeline_measurements(),
             "environment": {

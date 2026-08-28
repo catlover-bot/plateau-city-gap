@@ -18,6 +18,7 @@ class VectorTileKey:
     z: int
     x: int
     y: int
+    urban_state_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

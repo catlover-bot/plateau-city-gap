@@ -2,6 +2,13 @@ import { useMemo, useState, type ReactNode } from "react";
 
 export function StatusChip({ value }: { value: string | null | undefined }) {
   const normalized = value ?? "unknown";
+  const label =
+    {
+      canonicalization: "標準形式への変換",
+      promoted: "分析に使用中",
+      quarantine: "要確認",
+      quarantined: "要確認",
+    }[normalized] ?? normalized.replaceAll("_", " ");
   const tone = [
     "available",
     "active",
@@ -21,9 +28,7 @@ export function StatusChip({ value }: { value: string | null | undefined }) {
         ? "warning"
         : "neutral";
   return (
-    <span className={`service-status ${tone}`}>
-      {normalized.replaceAll("_", " ")}
-    </span>
+    <span className={`service-status ${tone}`}>{label}</span>
   );
 }
 

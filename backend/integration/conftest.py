@@ -130,7 +130,7 @@ def _seed(database_url: str) -> dict[str, object]:
 @pytest.fixture(scope="session")
 def database_url() -> str:
     if not DATABASE_URL:
-        pytest.skip("CITYGAP_TEST_DATABASE_URL is required")
+        pytest.skip("ENVIRONMENT_SPECIFIC: CITYGAP_TEST_DATABASE_URL is required")
     apply_migrations(DATABASE_URL, ROOT / "infra/migrations")
     result = _seed(DATABASE_URL)
     assert result["loaded_rows"]["scenario_runs"] == 30

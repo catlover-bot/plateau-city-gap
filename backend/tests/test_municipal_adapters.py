@@ -64,6 +64,18 @@ def test_csv_adapter_preserves_identifiers_and_enforces_declared_columns(tmp_pat
         CsvSourceAdapter(path, required_columns=("unknown",)).inspect()
 
 
+def test_csv_adapter_rejects_formula_cells_and_invalid_encoding(tmp_path: Path) -> None:
+    formula = tmp_path / "formula.csv"
+    formula.write_text('id,name\n1,=WEBSERVICE("https://example.invalid")\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="formula-like"):
+        CsvSourceAdapter(formula).inspect()
+
+    invalid = tmp_path / "invalid.csv"
+    invalid.write_bytes(b"id,name\n1,\xff\n")
+    with pytest.raises(UnicodeDecodeError):
+        CsvSourceAdapter(invalid).inspect()
+
+
 def test_geojson_and_geopackage_adapters_keep_crs_geometry_and_layer(tmp_path: Path) -> None:
     frame = gpd.GeoDataFrame(
         {"facility_id": ["f-1", "f-2"]},
@@ -83,6 +95,8 @@ def test_geojson_and_geopackage_adapters_keep_crs_geometry_and_layer(tmp_path: P
     assert geojson.geometry_types == geopackage.geometry_types == ("Point",)
     assert geojson.crs == geopackage.crs == "EPSG:4326"
     assert geopackage.layer == "facilities"
+    with pytest.raises(ValueError, match="oversized geometry"):
+        GeoJsonSourceAdapter(geojson_path, max_geometry_bytes=8).inspect()
 
 
 def test_gtfs_zip_adapter_validates_real_tables_without_filling_gaps(tmp_path: Path) -> None:
@@ -100,6 +114,16 @@ def test_gtfs_zip_adapter_validates_real_tables_without_filling_gaps(tmp_path: P
         archive.writestr("../stops.txt", GTFS["stops.txt"])
     with pytest.raises(ValueError, match="unsafe member path"):
         GtfsZipSourceAdapter(unsafe)
+
+    formula = tmp_path / "formula.zip"
+    with zipfile.ZipFile(formula, "w") as archive:
+        for name, content in GTFS.items():
+            archive.writestr(
+                name,
+                content.replace("s1,A,", "s1,=WEBSERVICE,", 1) if name == "stops.txt" else content,
+            )
+    with pytest.raises(ValueError, match="formula-like"):
+        GtfsZipSourceAdapter(formula).inspect()
 
 
 def test_citygml_adapter_reuses_stream_events_and_reports_provenance(tmp_path: Path) -> None:

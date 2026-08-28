@@ -18,7 +18,9 @@
 - identity and setup: `/me`, `/cities`, `/cities/{city}/onboarding`
 - data: city Data Hub, `/cities/{city}/data-coverage`, `/cities/{city}/sources`,
   `/cities/{city}/source-timeline`, searchable `/datasets`, dataset detail/lineage,
-  `/cities/{city}/datasets`, `/dataset-versions/{id}/status`, Urban States and
+  source discovery/metadata checks, `/cities/{city}/datasets`, explicit
+  `/datasets/{id}/validate` and `/datasets/{id}/promote`, immutable-resource
+  `/resources/{id}/reprocess`, `/cities/{city}/data-tasks`, Urban States and
   `/cities/{city}/annual-updates`
 - work: Findings, Investigations, saved spatial views, Reviews, Assignments and Decision
   Records
@@ -56,3 +58,10 @@ single quality score or an automatically selected source. Dataset lineage is ver
 pinned and reports `automatic_latest_substitution: false`. Investigation detail exposes
 only recorded entity sources and persisted canonical spatial links; missing linkage is
 returned as missing rather than inferred from proximity.
+
+`POST /sources/discover` queues official-catalog discovery and always returns
+`automatic_acceptance: false`. Metadata-check endpoints are rate bounded and do not
+download or promote a changed resource. Validation and promotion require an exact Dataset
+and Version pair; promotion queues capability refresh only after persisted quality and
+ingestion gates pass. Reprocessing requires an existing checksum-addressed raw blob and
+records that the previous canonical output is retained.

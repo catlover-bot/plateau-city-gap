@@ -37,7 +37,7 @@ def test_real_official_shelter_sources_are_bounded_and_never_infer_capacity(
 ) -> None:
     source = Path(path)
     if not source.exists():
-        pytest.skip("ignored official shelter source is not present")
+        pytest.skip("EXPECTED_EXTERNAL: ignored official shelter source is not present")
     adapter = OfficialShelterAdapter(
         source,
         city_code=city_code,

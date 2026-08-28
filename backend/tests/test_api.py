@@ -589,6 +589,15 @@ def test_versioned_vector_tiles_are_bounded_cached_and_private() -> None:
     )
     assert cached.status_code == 304
     assert repository.tile_calls == 1
+    urban_state = "20000000-0000-0000-0000-000000000099"
+    state_variant = tile_client.get(
+        f"{url}&urban_state_id={urban_state}",
+        headers={"X-CITYGAP-Roles": "viewer"},
+    )
+    assert state_variant.status_code == 200
+    assert state_variant.headers["x-citygap-urban-state"] == urban_state
+    assert state_variant.headers["etag"] != etag
+    assert repository.tile_calls == 2
     assert tile_client.get(
         f"/cities/26202/tiles/buildings/2/4/0.mvt?dataset_version_id={version}"
     ).status_code == 422

@@ -348,6 +348,260 @@ def test_data_hub_v2_exposes_coverage_lineage_without_automatic_truth_selection(
     assert lineage.json()["chain"].startswith("raw_blob -> resource -> adapter")
 
 
+def test_open_data_operator_workflows_are_explicit_versioned_and_tenant_scoped(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _prepare_service_fixture(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+    manager = _headers("data_manager")
+
+    discovery = client.post(
+        "/api/v1/sources/discover",
+        headers=manager,
+        json={"city": "maizuru", "source_keys": ["bodik-maizuru"]},
+    )
+    assert discovery.status_code == 202, discovery.text
+    assert discovery.json()["discovery_only"] is True
+    assert discovery.json()["automatic_acceptance"] is False
+    assert discovery.json()["job"]["job_type"] == "source_discovery"
+
+    hub = client.get("/api/v1/cities/maizuru/data-hub", headers=manager).json()
+    source = next(item for item in hub["sources"] if item["source_key"] == "bodik-maizuru")
+    metadata = client.post(
+        f"/api/v1/sources/{source['id']}/metadata-checks",
+        headers=manager,
+        json={"reason": "acceptance test approved metadata-only check"},
+    )
+    assert metadata.status_code == 202, metadata.text
+    assert metadata.json()["metadata_only"] is True
+    assert metadata.json()["current_promoted_data_retained"] is True
+    assert metadata.json()["job"]["job_type"] == "metadata_refresh"
+
+    suffix = uuid.uuid4().hex[:8]
+    registered = client.post(
+        "/api/v1/cities/maizuru/datasets",
+        headers=manager,
+        json={
+            "dataset_key": f"operator-flow-{suffix}",
+            "title": f"更新運用受入検証 {suffix}",
+            "provider": "official source acceptance fixture",
+            "dataset_category": "facilities",
+            "data_classification": "internal",
+            "version_key": f"2026-{suffix}",
+            "dataset_year": 2026,
+            "data_format": "CSV",
+            "source_url": "https://data.bodik.jp/",
+            "license": "CC BY 4.0",
+            "declared_source_crs": "EPSG:4326",
+        },
+    )
+    assert registered.status_code == 201, registered.text
+    dataset_id = registered.json()["dataset"]["id"]
+    version_id = registered.json()["version"]["id"]
+    validation = client.post(
+        f"/api/v1/datasets/{dataset_id}/validate",
+        headers=manager,
+        json={
+            "version_id": version_id,
+            "expected_status": "registered",
+            "note": "schema, CRS, checksum and licence gates must run",
+        },
+    )
+    assert validation.status_code == 202, validation.text
+    assert validation.json()["service_status"] == "validating"
+    assert validation.json()["workflow_job"]["job_type"] == "source_validation"
+    assert (
+        client.post(
+            f"/api/v1/datasets/{dataset_id}/validate",
+            headers=_headers("data_manager", ORG_B),
+            json={
+                "version_id": version_id,
+                "expected_status": "registered",
+                "note": "cross-tenant attempt",
+            },
+        ).status_code
+        == 404
+    )
+
+    import psycopg
+
+    raw_sha = (uuid.uuid4().hex * 2)[:64]
+    with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """UPDATE dataset_versions
+               SET lifecycle_status = 'available', quality_status = 'passed',
+                   analysis_ready = true, service_status = 'analysis_ready'
+               WHERE organization_id = %s AND id = %s""",
+            (ORG_A, version_id),
+        )
+        city_id = connection.execute(
+            "SELECT id FROM cities WHERE organization_id = %s AND city_key = 'maizuru'",
+            (ORG_A,),
+        ).fetchone()[0]
+        blob_id = connection.execute(
+            """INSERT INTO open_data_raw_blobs (
+                   owner_organization_id, sha256, size_bytes, content_type,
+                   storage_provider, object_key, reuse_scope, first_retrieved_at
+               ) VALUES (%s, %s, 18, 'text/csv', 'local', %s, 'tenant_only', now())
+               RETURNING id""",
+            (ORG_A, raw_sha, f"sha256/{raw_sha[:2]}/{raw_sha}"),
+        ).fetchone()[0]
+        resource_id = connection.execute(
+            """INSERT INTO open_data_resources (
+                   organization_id, city_source_id, dataset_version_id, raw_blob_id,
+                   external_resource_id, resource_title, resource_url, format,
+                   content_length, raw_checksum, retrieved_at, source_crs,
+                   source_schema_version, adapter_version
+               ) VALUES (%s, %s, %s, %s, %s, 'acceptance resource',
+                         'https://data.bodik.jp/dataset/acceptance.csv', 'CSV', 18,
+                         %s, now(), 'EPSG:4326', 'acceptance-v1', 'ckan-v3@1')
+               RETURNING id""",
+            (ORG_A, source["id"], version_id, blob_id, f"resource-{suffix}", raw_sha),
+        ).fetchone()[0]
+        connection.execute(
+            """INSERT INTO open_data_resource_processing (
+                   organization_id, resource_id, state, status_reason
+               ) VALUES (%s, %s, 'canonicalized', 'acceptance fixture')""",
+            (ORG_A, resource_id),
+        )
+        transformation_id = connection.execute(
+            """INSERT INTO open_data_transformation_runs (
+                   organization_id, resource_id, adapter_id, adapter_version,
+                   transformation_version, canonical_version, status,
+                   input_row_count, output_record_count, completed_at, metadata
+               ) VALUES (%s, %s, 'ckan-v3@1', '1', 'acceptance-transform@1',
+                         'canonical@1', 'succeeded', 1, 1, now(), '{}')
+               RETURNING id""",
+            (ORG_A, resource_id),
+        ).fetchone()[0]
+        connection.execute(
+            """INSERT INTO canonical_open_data_records (
+                   organization_id, city_id, dataset_version_id, source_resource_id,
+                   transformation_run_id, record_type, external_record_id,
+                   display_name, source_row_locator, reference_date, attributes, geom
+               ) VALUES (%s, %s, %s, %s, %s, 'facility', %s,
+                         'acceptance facility', 'row:1', '2026-01-01',
+                         '{"acceptance_fixture":true}',
+                         ST_SetSRID(ST_MakePoint(135.32, 35.46), 4326))""",
+            (ORG_A, city_id, version_id, resource_id, transformation_id, f"facility-{suffix}"),
+        )
+        promoted_before = connection.execute(
+            """SELECT id FROM dataset_versions
+               WHERE organization_id = %s AND service_status = 'promoted'
+               ORDER BY promoted_at DESC NULLS LAST, id LIMIT 1""",
+            (ORG_A,),
+        ).fetchone()[0]
+        connection.execute(
+            """INSERT INTO open_data_update_checks (
+                   organization_id, city_source_id, result, next_check_after, detail
+               ) VALUES (%s, %s, 'failed', now() + interval '7 days',
+                         'provider unavailable; keep current promoted version')""",
+            (ORG_A, source["id"]),
+        )
+        promoted_after = connection.execute(
+            """SELECT id FROM dataset_versions
+               WHERE organization_id = %s AND service_status = 'promoted'
+               ORDER BY promoted_at DESC NULLS LAST, id LIMIT 1""",
+            (ORG_A,),
+        ).fetchone()[0]
+        assert promoted_after == promoted_before
+        connection.execute(
+            """INSERT INTO open_data_update_checks (
+                   organization_id, city_source_id, result, observed_checksum,
+                   next_check_after, detail
+               ) VALUES (%s, %s, 'update_available', %s,
+                         now() + interval '7 days', 'new bytes require human review')""",
+            (ORG_A, source["id"], (uuid.uuid4().hex * 2)[:64]),
+        )
+
+    promoted = client.post(
+        f"/api/v1/datasets/{dataset_id}/promote",
+        headers=manager,
+        json={
+            "version_id": version_id,
+            "expected_status": "analysis_ready",
+            "note": "quality and licence gates explicitly reviewed",
+        },
+    )
+    assert promoted.status_code == 202, promoted.text
+    assert promoted.json()["service_status"] == "promoted"
+    assert promoted.json()["workflow_job"]["job_type"] == "capability_refresh"
+
+    reprocessed = client.post(
+        f"/api/v1/resources/{resource_id}/reprocess",
+        headers=manager,
+        json={
+            "adapter_id": "ckan-v3@1",
+            "adapter_version": "2",
+            "transformation_version": "acceptance-transform@2",
+            "canonical_version": "canonical@2",
+            "previous_transformation_run_id": str(transformation_id),
+            "reason": "known schema adapter update",
+        },
+    )
+    assert reprocessed.status_code == 202, reprocessed.text
+    assert reprocessed.json()["previous_canonical_retained"] is True
+    assert reprocessed.json()["job"]["job_type"] == "schema_normalization"
+
+    quarantined = client.post(
+        f"/api/v1/resources/{resource_id}/quarantine",
+        headers=manager,
+        json={
+            "category": "schema_changed",
+            "reason": "required field semantics changed and need human mapping review",
+            "transformation_run_id": str(transformation_id),
+            "evidence": {"field": "facility_type", "automatic_mapping": False},
+        },
+    )
+    assert quarantined.status_code == 201, quarantined.text
+    assert quarantined.json()["analysis_blocked"] is True
+    assert quarantined.json()["promoted_dataset_automatically_replaced"] is False
+
+    tasks = client.get("/api/v1/cities/maizuru/data-tasks", headers=manager)
+    assert tasks.status_code == 200, tasks.text
+    update_task = next(
+        item for item in tasks.json()["items"] if item["task_type"] == "update_available"
+    )
+    started = client.patch(
+        f"/api/v1/data-tasks/{update_task['id']}",
+        headers=manager,
+        json={
+            "expected_status": "open",
+            "proposed_status": "in_progress",
+            "resolution_note": None,
+        },
+    )
+    assert started.status_code == 200, started.text
+    assert started.json()["status"] == "in_progress"
+    assert (
+        client.get(
+            "/api/v1/cities/maizuru/data-tasks", headers=_headers("viewer", ORG_B)
+        ).status_code
+        == 404
+    )
+
+    with psycopg.connect(database_url) as connection:
+        assert connection.execute(
+            """SELECT count(*) FROM canonical_open_data_records
+               WHERE organization_id = %s AND source_resource_id = %s""",
+            (ORG_A, resource_id),
+        ).fetchone()[0] == 1
+        request_row = connection.execute(
+            """SELECT preserve_previous_canonical, target_adapter_version
+               FROM open_data_reprocessing_requests
+               WHERE organization_id = %s AND resource_id = %s""",
+            (ORG_A, resource_id),
+        ).fetchone()
+        assert request_row == (True, "2")
+        processing = connection.execute(
+            """SELECT state FROM open_data_resource_processing
+               WHERE organization_id = %s AND resource_id = %s""",
+            (ORG_A, resource_id),
+        ).fetchone()[0]
+        assert processing == "quarantined"
+
+
 def test_organization_a_b_isolation_for_api_and_database_constraints(
     database_url: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:

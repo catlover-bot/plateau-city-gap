@@ -126,6 +126,58 @@ class MunicipalServiceRepository(PostGISRepository):
             ),
         )
 
+    @classmethod
+    def _queue_open_data_job(
+        cls,
+        connection,
+        organization_id: str,
+        city_id: str,
+        job_type: str,
+        parameters: dict[str, Any],
+        idempotency_subject: str,
+        message: str,
+    ) -> dict[str, Any]:
+        """Queue a versioned open-data job without executing provider calls in the API."""
+
+        algorithm_version = "open-data-operations@1.0.0"
+        encoded = json.dumps(parameters, sort_keys=True, separators=(",", ":"), default=str)
+        config_hash = hashlib.sha256(encoded.encode()).hexdigest()
+        idempotency_key = hashlib.sha256(
+            f"{organization_id}:{job_type}:{idempotency_subject}".encode()
+        ).hexdigest()
+        job = cls._one(
+            connection.execute(
+                """INSERT INTO job_runs (
+                       organization_id, city_id, job_type, state, config_hash,
+                       algorithm_version, idempotency_key, parameters
+                   ) VALUES (%s, %s, %s, 'queued', %s, %s, %s, %s)
+                   ON CONFLICT (idempotency_key) WHERE idempotency_key IS NOT NULL
+                   DO UPDATE SET idempotency_key = EXCLUDED.idempotency_key
+                   RETURNING id, city_id, job_type, state, current_stage,
+                             config_hash, algorithm_version, queued_at""",
+                (
+                    organization_id,
+                    city_id,
+                    job_type,
+                    config_hash,
+                    algorithm_version,
+                    idempotency_key,
+                    encoded,
+                ),
+            )
+        )
+        assert job is not None
+        connection.execute(
+            """INSERT INTO job_events (job_run_id, state, message)
+               SELECT %s, 'queued', %s
+               WHERE NOT EXISTS (
+                   SELECT 1 FROM job_events
+                   WHERE job_run_id = %s AND state = 'queued' AND message = %s
+               )""",
+            (job["id"], message, job["id"], message),
+        )
+        return job
+
     def authorize_identity(
         self,
         organization_id: str,
@@ -463,13 +515,36 @@ class MunicipalServiceRepository(PostGISRepository):
                 connection.execute(
                     """SELECT home.*,
                               COALESCE(capabilities.available, 0) AS available_capabilities,
-                              COALESCE(capabilities.total, 0) AS capability_count
+                              COALESCE(capabilities.total, 0) AS capability_count,
+                              source_freshness.latest_reference_date,
+                              COALESCE(operations.failed_jobs, 0) AS failed_jobs,
+                              COALESCE(operations.data_review_backlog, 0)
+                                  AS data_review_backlog
                        FROM city_service_home AS home
                        LEFT JOIN LATERAL (
                            SELECT count(*) FILTER (WHERE status = 'available') AS available,
                                   count(*) AS total
                            FROM city_capabilities WHERE city_id = home.city_id
                        ) AS capabilities ON true
+                       LEFT JOIN LATERAL (
+                           SELECT max(source.reference_date) AS latest_reference_date
+                           FROM city_open_data_sources AS source
+                           WHERE source.organization_id = home.organization_id
+                             AND source.city_id = home.city_id
+                             AND source.review_status = 'selected'
+                       ) AS source_freshness ON true
+                       LEFT JOIN LATERAL (
+                           SELECT
+                               (SELECT count(*) FROM job_runs AS job
+                                WHERE job.organization_id = home.organization_id
+                                  AND job.city_id = home.city_id
+                                  AND job.state = 'failed') AS failed_jobs,
+                               (SELECT count(*) FROM open_data_operator_tasks AS task
+                                WHERE task.organization_id = home.organization_id
+                                  AND task.city_id = home.city_id
+                                  AND task.status IN ('open','in_progress'))
+                                  AS data_review_backlog
+                       ) AS operations ON true
                        WHERE home.organization_id = %s
                        ORDER BY home.name""",
                     (organization_id,),
@@ -556,23 +631,6 @@ class MunicipalServiceRepository(PostGISRepository):
             city = self._city(connection, organization_id, city_reference)
             if city is None:
                 return None
-            categories = self._dicts(
-                connection.execute(
-                    """SELECT dataset.dataset_category,
-                              count(version.id) AS registered_versions,
-                              count(version.id) FILTER (
-                                  WHERE version.service_status = 'promoted'
-                              ) AS promoted_versions
-                       FROM datasets AS dataset
-                       LEFT JOIN dataset_versions AS version
-                         ON version.organization_id = dataset.organization_id
-                        AND version.dataset_id = dataset.id
-                       WHERE dataset.organization_id = %s AND dataset.city_id = %s
-                       GROUP BY dataset.dataset_category""",
-                    (organization_id, city["id"]),
-                )
-            )
-            by_category = {row["dataset_category"]: row for row in categories}
             state_count = connection.execute(
                 """SELECT count(*) FROM urban_states
                    WHERE organization_id = %s AND city_id = %s
@@ -591,37 +649,92 @@ class MunicipalServiceRepository(PostGISRepository):
                     (city["id"],),
                 )
             )
+            source_progress = self._one(
+                connection.execute(
+                    """SELECT count(*) AS discovered,
+                              count(*) FILTER (
+                                  WHERE source.review_status IN ('reviewed','selected')
+                                    AND NOT license.unknown_terms
+                              ) AS license_reviewed,
+                              count(*) FILTER (
+                                  WHERE source.review_status = 'selected'
+                              ) AS selected
+                       FROM city_open_data_sources AS source
+                       JOIN open_data_license_policies AS license
+                         ON license.license_id = source.license_id
+                       WHERE source.organization_id = %s AND source.city_id = %s""",
+                    (organization_id, city["id"]),
+                )
+            ) or {"discovered": 0, "license_reviewed": 0, "selected": 0}
+            version_progress = self._one(
+                connection.execute(
+                    """SELECT count(version.id) AS registered,
+                              count(version.id) FILTER (
+                                  WHERE version.service_status IN (
+                                      'validated','accepted','ingesting','analysis_ready','promoted'
+                                  )
+                              ) AS validated,
+                              count(version.id) FILTER (
+                                  WHERE version.service_status IN ('analysis_ready','promoted')
+                              ) AS ingested,
+                              count(version.id) FILTER (
+                                  WHERE version.service_status = 'promoted'
+                              ) AS promoted
+                       FROM datasets AS dataset
+                       LEFT JOIN dataset_versions AS version
+                         ON version.organization_id = dataset.organization_id
+                        AND version.dataset_id = dataset.id
+                       WHERE dataset.organization_id = %s AND dataset.city_id = %s""",
+                    (organization_id, city["id"]),
+                )
+            ) or {"registered": 0, "validated": 0, "ingested": 0, "promoted": 0}
+            available_capabilities = sum(
+                row["status"] in {"available", "partial"} for row in capability_rows
+            )
 
-            def dataset_step(category: str) -> dict[str, Any]:
-                row = by_category.get(category, {})
-                promoted = int(row.get("promoted_versions", 0))
-                registered = int(row.get("registered_versions", 0))
+            def progress_step(key: str, count: int, prior_count: int = 0) -> dict[str, Any]:
                 return {
-                    "key": category,
-                    "status": "complete"
-                    if promoted
-                    else "in_progress"
-                    if registered
-                    else "missing",
-                    "registered_versions": registered,
-                    "promoted_versions": promoted,
+                    "key": key,
+                    "status": "complete" if count else "in_progress" if prior_count else "missing",
+                    "count": count,
                 }
 
-            steps = [dataset_step(key) for key in ("plateau", "population", "facilities")]
-            steps.extend(
-                [
-                    {
-                        "key": "first_urban_state",
-                        "status": "complete" if state_count else "missing",
-                        "count": state_count,
-                    },
-                    {
-                        "key": "first_analysis",
-                        "status": "complete" if analysis_count else "missing",
-                        "count": analysis_count,
-                    },
-                ]
-            )
+            steps = [
+                {"key": "city_registration", "status": "complete", "count": 1},
+                progress_step("official_source_discovery", int(source_progress["discovered"])),
+                progress_step(
+                    "license_review",
+                    int(source_progress["license_reviewed"]),
+                    int(source_progress["discovered"]),
+                ),
+                progress_step(
+                    "source_selection",
+                    int(source_progress["selected"]),
+                    int(source_progress["license_reviewed"]),
+                ),
+                progress_step(
+                    "dataset_validation",
+                    int(version_progress["validated"]),
+                    int(version_progress["registered"]),
+                ),
+                progress_step(
+                    "immutable_ingestion",
+                    int(version_progress["ingested"]),
+                    int(version_progress["validated"]),
+                ),
+                progress_step(
+                    "capability_activation",
+                    available_capabilities,
+                    int(version_progress["ingested"]),
+                ),
+                progress_step("first_urban_state", int(state_count), available_capabilities),
+                progress_step(
+                    "catalog_ready",
+                    int(version_progress["promoted"]),
+                    int(version_progress["ingested"]),
+                ),
+                progress_step("first_analysis", int(analysis_count), int(state_count)),
+            ]
             return {"city": city, "steps": steps, "capabilities": capability_rows}
 
     def register_service_dataset(
@@ -2637,6 +2750,34 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            data_tasks = self._dicts(
+                connection.execute(
+                    """SELECT task.id, task.task_type, task.status, task.title,
+                              task.detail, task.city_source_id, task.resource_id,
+                              task.dataset_version_id, task.job_run_id,
+                              task.created_by, task.assigned_to, task.resolution_note,
+                              task.created_at, task.updated_at, task.resolved_at,
+                              source.title AS source_title,
+                              dataset.title AS dataset_title,
+                              version.dataset_year
+                       FROM open_data_operator_tasks AS task
+                       LEFT JOIN city_open_data_sources AS source
+                         ON source.organization_id = task.organization_id
+                        AND source.id = task.city_source_id
+                       LEFT JOIN dataset_versions AS version
+                         ON version.organization_id = task.organization_id
+                        AND version.id = task.dataset_version_id
+                       LEFT JOIN datasets AS dataset
+                         ON dataset.organization_id = version.organization_id
+                        AND dataset.id = version.dataset_id
+                       WHERE task.organization_id = %s AND task.city_id = %s
+                       ORDER BY
+                         CASE task.status WHEN 'open' THEN 0 WHEN 'in_progress' THEN 1 ELSE 2 END,
+                         task.created_at DESC, task.id
+                       LIMIT 100""",
+                    (organization_id, city["id"]),
+                )
+            )
             licenses_by_id = {
                 source["license_id"]: {
                     key: source[key]
@@ -2684,6 +2825,7 @@ class MunicipalServiceRepository(PostGISRepository):
                 "comparisons": comparisons,
                 "conflicts": conflicts,
                 "quality_gate_policies": quality_gate_policies,
+                "data_tasks": data_tasks,
                 "missing_data": missing_data,
                 "coverage_summary": {
                     "total": len(coverage),
@@ -2732,6 +2874,565 @@ class MunicipalServiceRepository(PostGISRepository):
         if hub is None:
             return None
         return {"city": hub["city"], "items": hub["source_timeline"]}
+
+    def queue_source_discovery(
+        self,
+        organization_id: str,
+        city_reference: str,
+        source_keys: list[str],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            requested_keys = sorted(set(source_keys))
+            if requested_keys:
+                known = {
+                    row["source_key"]
+                    for row in self._dicts(
+                        connection.execute(
+                            """SELECT source_key FROM open_data_source_catalog
+                               WHERE source_key = ANY(%s)""",
+                            (requested_keys,),
+                        )
+                    )
+                }
+                unknown = sorted(set(requested_keys) - known)
+                if unknown:
+                    raise ValueError(f"Unknown official source keys: {', '.join(unknown)}")
+            else:
+                requested_keys = [
+                    row["source_key"]
+                    for row in self._dicts(
+                        connection.execute(
+                            """SELECT source_key FROM open_data_source_catalog
+                               WHERE municipality_code IS NULL OR municipality_code = %s
+                               ORDER BY source_priority, source_key""",
+                            (city["city_code"],),
+                        )
+                    )
+                ]
+            parameters = {
+                "organization_id": organization_id,
+                "city_id": str(city["id"]),
+                "city_code": city["city_code"],
+                "source_keys": requested_keys,
+                "discovery_only": True,
+                "automatic_acceptance": False,
+                "requested_by": context.actor,
+            }
+            cycle = datetime.now(UTC).date().isoformat()
+            job = self._queue_open_data_job(
+                connection,
+                organization_id,
+                str(city["id"]),
+                "source_discovery",
+                parameters,
+                f"{city['id']}:{cycle}:{','.join(requested_keys)}",
+                "official source discovery requested; acceptance remains a human decision",
+            )
+            result = {
+                "city": city,
+                "job": job,
+                "candidate_source_keys": requested_keys,
+                "discovery_only": True,
+                "automatic_acceptance": False,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.source_discovery.queued",
+                "job_run",
+                str(job["id"]),
+                str(city["id"]),
+                None,
+                result,
+            )
+            return result
+
+    def queue_source_metadata_check(
+        self,
+        organization_id: str,
+        source_id: str,
+        reason: str,
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            source = self._one(
+                connection.execute(
+                    """SELECT source.id, source.city_id, source.source_key,
+                              source.title, source.source_url, source.etag,
+                              source.last_modified, source.update_frequency,
+                              city.city_key, city.city_code
+                       FROM city_open_data_sources AS source
+                       JOIN cities AS city
+                         ON city.organization_id = source.organization_id
+                        AND city.id = source.city_id
+                       WHERE source.organization_id = %s AND source.id = %s""",
+                    (organization_id, source_id),
+                )
+            )
+            if source is None:
+                return None
+            connection.execute(
+                """INSERT INTO open_data_source_refresh_policies (
+                       organization_id, city_source_id, configured_by
+                   ) VALUES (%s, %s, %s)
+                   ON CONFLICT (organization_id, city_source_id) DO NOTHING""",
+                (organization_id, source_id, context.actor),
+            )
+            policy = self._one(
+                connection.execute(
+                    """SELECT * FROM open_data_source_refresh_policies
+                       WHERE organization_id = %s AND city_source_id = %s""",
+                    (organization_id, source_id),
+                )
+            )
+            assert policy is not None
+            too_soon = self._one(
+                connection.execute(
+                    """SELECT last_checked_at
+                       FROM open_data_source_refresh_policies
+                       WHERE organization_id = %s AND city_source_id = %s
+                         AND last_checked_at IS NOT NULL
+                         AND last_checked_at
+                             + make_interval(hours => minimum_interval_hours) > now()""",
+                    (organization_id, source_id),
+                )
+            )
+            if too_soon is not None:
+                raise ValueError(
+                    "Provider metadata was checked inside the configured minimum interval"
+                )
+            parameters = {
+                "organization_id": organization_id,
+                "city_source_id": source_id,
+                "source_key": source["source_key"],
+                "source_url": source["source_url"],
+                "known_etag": source["etag"],
+                "known_last_modified": source["last_modified"],
+                "metadata_only": True,
+                "automatic_download": False,
+                "automatic_promotion": False,
+                "reason": reason,
+                "requested_by": context.actor,
+            }
+            job = self._queue_open_data_job(
+                connection,
+                organization_id,
+                str(source["city_id"]),
+                "metadata_refresh",
+                parameters,
+                f"{source_id}:{policy['next_check_after'].isoformat()}",
+                "rate-bounded source metadata check queued; current promoted data is retained",
+            )
+            result = {
+                "source": source,
+                "policy": policy,
+                "job": job,
+                "metadata_only": True,
+                "current_promoted_data_retained": True,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.metadata_check.queued",
+                "city_open_data_source",
+                source_id,
+                str(source["city_id"]),
+                None,
+                result,
+            )
+            return result
+
+    def schedule_due_metadata_checks(
+        self,
+        organization_id: str,
+        city_reference: str | None,
+        limit: int,
+    ) -> dict[str, Any]:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city_id = None
+            if city_reference is not None:
+                city = self._city(connection, organization_id, city_reference)
+                if city is None:
+                    return {"items": [], "queued": 0, "city_not_found": True}
+                city_id = city["id"]
+            connection.execute(
+                """INSERT INTO open_data_source_refresh_policies (
+                       organization_id, city_source_id, configured_by
+                   )
+                   SELECT source.organization_id, source.id, %s
+                   FROM city_open_data_sources AS source
+                   WHERE source.organization_id = %s
+                     AND (%s::uuid IS NULL OR source.city_id = %s)
+                     AND source.review_status <> 'disabled'
+                   ON CONFLICT (organization_id, city_source_id) DO NOTHING""",
+                (context.actor, organization_id, city_id, city_id),
+            )
+            due = self._dicts(
+                connection.execute(
+                    """SELECT source.id, source.city_id, source.source_key,
+                              source.title, source.source_url, source.etag,
+                              source.last_modified, policy.next_check_after
+                       FROM open_data_source_refresh_policies AS policy
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = policy.organization_id
+                        AND source.id = policy.city_source_id
+                       WHERE policy.organization_id = %s AND policy.enabled
+                         AND policy.next_check_after <= now()
+                         AND (%s::uuid IS NULL OR source.city_id = %s)
+                         AND NOT EXISTS (
+                             SELECT 1 FROM job_runs AS job
+                             WHERE job.organization_id = policy.organization_id
+                               AND job.city_id = source.city_id
+                               AND job.job_type = 'metadata_refresh'
+                               AND job.state IN ('queued','running')
+                               AND job.parameters ->> 'city_source_id' = source.id::text
+                         )
+                       ORDER BY policy.next_check_after, source.id
+                       LIMIT %s""",
+                    (organization_id, city_id, city_id, limit),
+                )
+            )
+            jobs: list[dict[str, Any]] = []
+            for source in due:
+                parameters = {
+                    "organization_id": organization_id,
+                    "city_source_id": str(source["id"]),
+                    "source_key": source["source_key"],
+                    "source_url": source["source_url"],
+                    "known_etag": source["etag"],
+                    "known_last_modified": source["last_modified"],
+                    "metadata_only": True,
+                    "automatic_download": False,
+                    "automatic_promotion": False,
+                    "reason": "approved schedule",
+                    "requested_by": context.actor,
+                }
+                jobs.append(
+                    self._queue_open_data_job(
+                        connection,
+                        organization_id,
+                        str(source["city_id"]),
+                        "metadata_refresh",
+                        parameters,
+                        f"{source['id']}:{source['next_check_after'].isoformat()}",
+                        "scheduled metadata check queued within provider rate policy",
+                    )
+                )
+            return {
+                "items": jobs,
+                "queued": len(jobs),
+                "metadata_only": True,
+                "automatic_download": False,
+                "automatic_promotion": False,
+            }
+
+    def data_manager_tasks(
+        self,
+        organization_id: str,
+        city_reference: str,
+        status: str | None,
+        limit: int,
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            items = self._dicts(
+                connection.execute(
+                    """SELECT task.*, source.title AS source_title,
+                              dataset.title AS dataset_title, version.dataset_year
+                       FROM open_data_operator_tasks AS task
+                       LEFT JOIN city_open_data_sources AS source
+                         ON source.organization_id = task.organization_id
+                        AND source.id = task.city_source_id
+                       LEFT JOIN dataset_versions AS version
+                         ON version.organization_id = task.organization_id
+                        AND version.id = task.dataset_version_id
+                       LEFT JOIN datasets AS dataset
+                         ON dataset.organization_id = version.organization_id
+                        AND dataset.id = version.dataset_id
+                       WHERE task.organization_id = %s AND task.city_id = %s
+                         AND (%s::text IS NULL OR task.status = %s)
+                       ORDER BY
+                         CASE task.status WHEN 'open' THEN 0 WHEN 'in_progress' THEN 1 ELSE 2 END,
+                         task.created_at DESC, task.id
+                       LIMIT %s""",
+                    (organization_id, city["id"], status, status, limit),
+                )
+            )
+            return {"city": city, "items": items}
+
+    def transition_data_manager_task(
+        self,
+        organization_id: str,
+        task_id: str,
+        expected_status: str,
+        proposed_status: str,
+        resolution_note: str | None,
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        if expected_status == proposed_status:
+            raise ValueError("Data task status must change")
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT * FROM open_data_operator_tasks
+                       WHERE organization_id = %s AND id = %s FOR UPDATE""",
+                    (organization_id, task_id),
+                )
+            )
+            if before is None:
+                return None
+            if before["status"] != expected_status:
+                raise ValueError(f"Data task status changed: expected {expected_status}")
+            if expected_status == "in_progress" and proposed_status == "in_progress":
+                raise ValueError("Data task is already in progress")
+            after = self._one(
+                connection.execute(
+                    """UPDATE open_data_operator_tasks
+                       SET status = %s,
+                           assigned_to = CASE WHEN %s = 'in_progress' THEN %s ELSE assigned_to END,
+                           resolution_note = %s,
+                           resolved_at = CASE WHEN %s IN ('resolved','dismissed')
+                                              THEN now() ELSE NULL END,
+                           updated_at = now()
+                       WHERE organization_id = %s AND id = %s
+                       RETURNING *""",
+                    (
+                        proposed_status,
+                        proposed_status,
+                        context.actor,
+                        resolution_note,
+                        proposed_status,
+                        organization_id,
+                        task_id,
+                    ),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.task.transition",
+                "open_data_operator_task",
+                task_id,
+                str(before["city_id"]),
+                before,
+                after,
+            )
+            return after
+
+    def queue_open_data_reprocessing(
+        self,
+        organization_id: str,
+        resource_id: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            resource = self._one(
+                connection.execute(
+                    """SELECT resource.*, source.city_id, source.title AS source_title,
+                              blob.sha256 AS stored_sha256
+                       FROM open_data_resources AS resource
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = resource.organization_id
+                        AND source.id = resource.city_source_id
+                       LEFT JOIN open_data_raw_blobs AS blob ON blob.id = resource.raw_blob_id
+                       WHERE resource.organization_id = %s AND resource.id = %s
+                       FOR UPDATE OF resource""",
+                    (organization_id, resource_id),
+                )
+            )
+            if resource is None:
+                return None
+            if resource["raw_blob_id"] is None or resource["raw_checksum"] is None:
+                raise ValueError("Reprocessing requires an immutable checksum-addressed raw blob")
+            adapter = self._one(
+                connection.execute(
+                    """SELECT adapter_id, active FROM open_data_adapters
+                       WHERE adapter_id = %s""",
+                    (payload["adapter_id"],),
+                )
+            )
+            if adapter is None or not adapter["active"]:
+                raise ValueError("Target adapter is not an active registered adapter")
+            previous_id = payload.get("previous_transformation_run_id")
+            if previous_id is None:
+                previous = self._one(
+                    connection.execute(
+                        """SELECT id FROM open_data_transformation_runs
+                           WHERE organization_id = %s AND resource_id = %s
+                           ORDER BY started_at DESC, id DESC LIMIT 1""",
+                        (organization_id, resource_id),
+                    )
+                )
+                previous_id = str(previous["id"]) if previous else None
+            elif (
+                self._one(
+                    connection.execute(
+                        """SELECT id FROM open_data_transformation_runs
+                       WHERE organization_id = %s AND resource_id = %s AND id = %s""",
+                        (organization_id, resource_id, previous_id),
+                    )
+                )
+                is None
+            ):
+                raise ValueError("Previous transformation does not belong to this resource")
+            request_row = self._one(
+                connection.execute(
+                    """INSERT INTO open_data_reprocessing_requests (
+                           organization_id, resource_id, previous_transformation_run_id,
+                           target_adapter_id, target_adapter_version,
+                           target_transformation_version, target_canonical_version,
+                           reason, requested_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        resource_id,
+                        previous_id,
+                        payload["adapter_id"],
+                        payload["adapter_version"],
+                        payload["transformation_version"],
+                        payload["canonical_version"],
+                        payload["reason"],
+                        context.actor,
+                    ),
+                )
+            )
+            assert request_row is not None
+            parameters = {
+                "organization_id": organization_id,
+                "resource_id": resource_id,
+                "raw_blob_id": str(resource["raw_blob_id"]),
+                "raw_sha256": resource["raw_checksum"].strip(),
+                "reprocessing_request_id": str(request_row["id"]),
+                "previous_transformation_run_id": previous_id,
+                "target_adapter_id": payload["adapter_id"],
+                "target_adapter_version": payload["adapter_version"],
+                "target_transformation_version": payload["transformation_version"],
+                "target_canonical_version": payload["canonical_version"],
+                "preserve_previous_canonical": True,
+                "requested_by": context.actor,
+            }
+            job = self._queue_open_data_job(
+                connection,
+                organization_id,
+                str(resource["city_id"]),
+                "schema_normalization",
+                parameters,
+                str(request_row["id"]),
+                "immutable raw resource queued for a new adapter; prior canonical data retained",
+            )
+            connection.execute(
+                """UPDATE open_data_reprocessing_requests SET job_run_id = %s
+                   WHERE organization_id = %s AND id = %s""",
+                (job["id"], organization_id, request_row["id"]),
+            )
+            if resource["dataset_version_id"] is not None:
+                connection.execute(
+                    """INSERT INTO job_dataset_versions (
+                           organization_id, job_run_id, dataset_version_id
+                       ) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING""",
+                    (organization_id, job["id"], resource["dataset_version_id"]),
+                )
+            result = {
+                "request": {**request_row, "job_run_id": job["id"]},
+                "job": job,
+                "raw_sha256": resource["raw_checksum"].strip(),
+                "previous_canonical_retained": True,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.resource.reprocess.queued",
+                "open_data_resource",
+                resource_id,
+                str(resource["city_id"]),
+                None,
+                result,
+            )
+            return result
+
+    def quarantine_open_data_resource(
+        self,
+        organization_id: str,
+        resource_id: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            resource = self._one(
+                connection.execute(
+                    """SELECT resource.id, resource.dataset_version_id, source.city_id
+                       FROM open_data_resources AS resource
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = resource.organization_id
+                        AND source.id = resource.city_source_id
+                       WHERE resource.organization_id = %s AND resource.id = %s
+                       FOR UPDATE OF resource""",
+                    (organization_id, resource_id),
+                )
+            )
+            if resource is None:
+                return None
+            transformation_id = payload.get("transformation_run_id")
+            if transformation_id is not None and self._one(
+                connection.execute(
+                    """SELECT id FROM open_data_transformation_runs
+                       WHERE organization_id = %s AND resource_id = %s AND id = %s""",
+                    (organization_id, resource_id, transformation_id),
+                )
+            ) is None:
+                raise ValueError("Transformation does not belong to this resource")
+            quarantine = self._one(
+                connection.execute(
+                    """INSERT INTO open_data_quarantine_events (
+                           organization_id, resource_id, transformation_run_id,
+                           category, reason, evidence, quarantined_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        resource_id,
+                        transformation_id,
+                        payload["category"],
+                        payload["reason"],
+                        json.dumps(payload.get("evidence", {}), ensure_ascii=False),
+                        context.actor,
+                    ),
+                )
+            )
+            assert quarantine is not None
+            result = {
+                **quarantine,
+                "analysis_blocked": True,
+                "promoted_dataset_automatically_replaced": False,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.resource.quarantine",
+                "open_data_resource",
+                resource_id,
+                str(resource["city_id"]),
+                None,
+                result,
+            )
+            return result
 
     def service_datasets(
         self, organization_id: str, city_reference: str | None, query: str | None, limit: int
@@ -2862,10 +3563,37 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, dataset_id),
                 )
             )
+            analysis_inputs = self._dicts(
+                connection.execute(
+                    """SELECT input.analysis_run_id, input.input_role,
+                              input.resource_id, input.transformation_run_id,
+                              input.raw_sha256, input.adapter_id,
+                              input.adapter_version, input.transformation_version,
+                              input.canonical_version, input.algorithm_version,
+                              input.parameters_sha256, input.recorded_at,
+                              run.status AS analysis_status,
+                              run.config_hash AS analysis_config_hash
+                       FROM analysis_run_open_data_inputs AS input
+                       JOIN analysis_runs AS run
+                         ON run.organization_id = input.organization_id
+                        AND run.id = input.analysis_run_id
+                       JOIN open_data_resources AS resource
+                         ON resource.organization_id = input.organization_id
+                        AND resource.id = input.resource_id
+                       JOIN dataset_versions AS version
+                         ON version.organization_id = resource.organization_id
+                        AND version.id = resource.dataset_version_id
+                       WHERE input.organization_id = %s AND version.dataset_id = %s
+                       ORDER BY input.recorded_at DESC, input.analysis_run_id,
+                                input.input_role, input.transformation_run_id""",
+                    (organization_id, dataset_id),
+                )
+            )
             return {
                 "dataset": dataset,
                 "resources": resources,
                 "transformations": transformations,
+                "analysis_inputs": analysis_inputs,
                 "chain": "raw_blob -> resource -> adapter -> canonical -> spatial_link -> analysis_run",
                 "automatic_latest_substitution": False,
             }
@@ -2877,6 +3605,7 @@ class MunicipalServiceRepository(PostGISRepository):
         expected_status: str,
         proposed_status: str,
         note: str,
+        dataset_id: str | None = None,
     ) -> dict[str, Any] | None:
         validate_dataset_transition(
             DatasetReleaseStatus(expected_status), DatasetReleaseStatus(proposed_status)
@@ -2886,11 +3615,13 @@ class MunicipalServiceRepository(PostGISRepository):
             connection.row_factory = dict_row
             before = self._one(
                 connection.execute(
-                    """SELECT version.*, dataset.city_id
+                    """SELECT version.*, dataset.city_id, dataset.id AS owning_dataset_id
                        FROM dataset_versions AS version
                        JOIN datasets AS dataset ON dataset.id = version.dataset_id
-                       WHERE version.organization_id = %s AND version.id = %s FOR UPDATE""",
-                    (organization_id, version_id),
+                       WHERE version.organization_id = %s AND version.id = %s
+                         AND (%s::uuid IS NULL OR dataset.id = %s)
+                       FOR UPDATE""",
+                    (organization_id, version_id, dataset_id, dataset_id),
                 )
             )
             if before is None:
@@ -2905,6 +3636,41 @@ class MunicipalServiceRepository(PostGISRepository):
                 raise ValueError(
                     "Dataset cannot be promoted before quality and ingestion gates pass"
                 )
+            if proposed_status == "promoted":
+                open_data_block = connection.execute(
+                    """SELECT EXISTS (
+                           SELECT 1
+                           FROM open_data_resources AS resource
+                           JOIN city_open_data_sources AS source
+                             ON source.organization_id = resource.organization_id
+                            AND source.id = resource.city_source_id
+                           JOIN open_data_license_policies AS license
+                             ON license.license_id = source.license_id
+                           WHERE resource.organization_id = %s
+                             AND resource.dataset_version_id = %s
+                             AND (
+                                 license.unknown_terms
+                                 OR EXISTS (
+                                     SELECT 1 FROM open_data_quarantine_events AS quarantine
+                                     WHERE quarantine.organization_id = resource.organization_id
+                                       AND quarantine.resource_id = resource.id
+                                       AND quarantine.status = 'open'
+                                 )
+                                 OR EXISTS (
+                                     SELECT 1 FROM open_data_quality_results AS quality
+                                     WHERE quality.organization_id = resource.organization_id
+                                       AND quality.resource_id = resource.id
+                                       AND quality.status IN ('failed','requires_review')
+                                 )
+                             )
+                       )""",
+                    (organization_id, version_id),
+                ).fetchone()[0]
+                if open_data_block:
+                    raise ValueError(
+                        "Dataset cannot be promoted while an open-data quality, CRS, "
+                        "checksum, schema or licence review blocks analysis"
+                    )
             after = self._one(
                 connection.execute(
                     """UPDATE dataset_versions
@@ -2927,20 +3693,59 @@ class MunicipalServiceRepository(PostGISRepository):
                     ),
                 )
             )
-            connection.execute(
-                """INSERT INTO dataset_onboarding_events (
+            event = self._one(
+                connection.execute(
+                    """INSERT INTO dataset_onboarding_events (
                        organization_id, dataset_version_id, from_status, to_status, note, actor
-                   ) VALUES (%s, %s, %s, %s, %s, %s)""",
-                (
-                    organization_id,
-                    version_id,
-                    expected_status,
-                    proposed_status,
-                    note,
-                    context.actor,
-                ),
+                   ) VALUES (%s, %s, %s, %s, %s, %s)
+                   RETURNING id, occurred_at""",
+                    (
+                        organization_id,
+                        version_id,
+                        expected_status,
+                        proposed_status,
+                        note,
+                        context.actor,
+                    ),
+                )
             )
+            assert event is not None
+            workflow_job = None
+            workflow_job_type = {
+                "validating": "source_validation",
+                "promoted": "capability_refresh",
+            }.get(proposed_status)
+            if workflow_job_type is not None:
+                workflow_job = self._queue_open_data_job(
+                    connection,
+                    organization_id,
+                    str(before["city_id"]),
+                    workflow_job_type,
+                    {
+                        "organization_id": organization_id,
+                        "city_id": str(before["city_id"]),
+                        "dataset_id": str(before["owning_dataset_id"]),
+                        "dataset_version_id": version_id,
+                        "lifecycle_event_id": event["id"],
+                        "requested_by": context.actor,
+                        "automatic_publication": False,
+                    },
+                    f"dataset-lifecycle:{event['id']}",
+                    (
+                        "dataset validation queued; promotion remains blocked by quality gates"
+                        if proposed_status == "validating"
+                        else "promoted dataset queued for capability refresh; analyses remain version-pinned"
+                    ),
+                )
+                connection.execute(
+                    """INSERT INTO job_dataset_versions (
+                           organization_id, job_run_id, dataset_version_id
+                       ) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING""",
+                    (organization_id, workflow_job["id"], version_id),
+                )
             assert after is not None
+            response = dict(after)
+            response["workflow_job"] = workflow_job
             self._service_audit(
                 connection,
                 organization_id,
@@ -2949,9 +3754,9 @@ class MunicipalServiceRepository(PostGISRepository):
                 version_id,
                 str(before["city_id"]),
                 before,
-                after,
+                response,
             )
-            return after
+            return response
 
     def analysis_catalog(self) -> list[dict[str, Any]]:
         with self._connect() as connection:
@@ -3141,7 +3946,35 @@ class MunicipalServiceRepository(PostGISRepository):
             version_ids = list(dict.fromkeys(input_versions.values()))
             versions = self._dicts(
                 connection.execute(
-                    """SELECT version.id, dataset.dataset_key, version.service_status
+                    """SELECT version.id, dataset.dataset_key, version.service_status,
+                              EXISTS (
+                                  SELECT 1
+                                  FROM open_data_resources AS resource
+                                  JOIN city_open_data_sources AS source
+                                    ON source.organization_id = resource.organization_id
+                                   AND source.id = resource.city_source_id
+                                  JOIN open_data_license_policies AS license
+                                    ON license.license_id = source.license_id
+                                  WHERE resource.organization_id = version.organization_id
+                                    AND resource.dataset_version_id = version.id
+                                    AND (
+                                        license.unknown_terms
+                                        OR EXISTS (
+                                            SELECT 1
+                                            FROM open_data_quarantine_events AS quarantine
+                                            WHERE quarantine.organization_id = resource.organization_id
+                                              AND quarantine.resource_id = resource.id
+                                              AND quarantine.status = 'open'
+                                        )
+                                        OR EXISTS (
+                                            SELECT 1
+                                            FROM open_data_quality_results AS quality
+                                            WHERE quality.organization_id = resource.organization_id
+                                              AND quality.resource_id = resource.id
+                                              AND quality.status IN ('failed','requires_review')
+                                        )
+                                    )
+                              ) AS open_data_blocked
                        FROM dataset_versions AS version
                        JOIN datasets AS dataset ON dataset.id = version.dataset_id
                        WHERE version.organization_id = %s AND dataset.city_id = %s
@@ -3155,6 +3988,12 @@ class MunicipalServiceRepository(PostGISRepository):
             if unpromoted:
                 raise ValueError(
                     "Analysis inputs must be promoted dataset versions: " + ", ".join(unpromoted)
+                )
+            blocked = [str(row["id"]) for row in versions if row["open_data_blocked"]]
+            if blocked:
+                raise ValueError(
+                    "Analysis inputs have unresolved open-data quarantine or licence gates: "
+                    + ", ".join(blocked)
                 )
             algorithm_version = f"{definition['id']}@{definition['version']}"
             reproducibility = {
@@ -3206,12 +4045,58 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             )
             assert run is not None
+            parameters_sha256 = hashlib.sha256(
+                json.dumps(
+                    parameters,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode()
+            ).hexdigest()
             for role, version_id in sorted(input_versions.items()):
                 connection.execute(
                     """INSERT INTO analysis_run_dataset_versions (
                            organization_id, analysis_run_id, dataset_version_id, input_role
                        ) VALUES (%s, %s, %s, %s)""",
                     (organization_id, run["id"], version_id, role),
+                )
+                connection.execute(
+                    """INSERT INTO analysis_run_open_data_inputs (
+                           organization_id, analysis_run_id, input_role,
+                           resource_id, transformation_run_id, raw_blob_id,
+                           raw_sha256, adapter_id, adapter_version,
+                           transformation_version, canonical_version,
+                           algorithm_version, parameters_sha256
+                       )
+                       SELECT DISTINCT
+                           %s, %s, %s, resource.id, transformation.id, blob.id,
+                           blob.sha256, transformation.adapter_id,
+                           transformation.adapter_version,
+                           transformation.transformation_version,
+                           transformation.canonical_version, %s, %s
+                       FROM canonical_open_data_records AS canonical
+                       JOIN open_data_transformation_runs AS transformation
+                         ON transformation.organization_id = canonical.organization_id
+                        AND transformation.id = canonical.transformation_run_id
+                        AND transformation.resource_id = canonical.source_resource_id
+                       JOIN open_data_resources AS resource
+                         ON resource.organization_id = canonical.organization_id
+                        AND resource.id = canonical.source_resource_id
+                       JOIN open_data_raw_blobs AS blob ON blob.id = resource.raw_blob_id
+                       WHERE canonical.organization_id = %s
+                         AND canonical.dataset_version_id = %s
+                         AND transformation.status = 'succeeded'
+                         AND blob.sha256 = resource.raw_checksum
+                       ON CONFLICT DO NOTHING""",
+                    (
+                        organization_id,
+                        run["id"],
+                        role,
+                        algorithm_version,
+                        parameters_sha256,
+                        organization_id,
+                        version_id,
+                    ),
                 )
             connection.execute(
                 """INSERT INTO state_analysis_runs (

@@ -47,6 +47,15 @@ Authenticated tenant-scoped reads are available at:
 - `GET /api/v1/datasets?city={city}&q={human-name}`
 - `GET /api/v1/datasets/{dataset_id}`
 - `GET /api/v1/datasets/{dataset_id}/lineage`
+- `POST /api/v1/sources/discover`
+- `POST /api/v1/sources/{source_id}/metadata-checks`
+- `POST /api/v1/sources/metadata-checks/schedule`
+- `POST /api/v1/datasets/{dataset_id}/validate`
+- `POST /api/v1/datasets/{dataset_id}/promote`
+- `POST /api/v1/resources/{resource_id}/reprocess`
+- `POST /api/v1/resources/{resource_id}/quarantine`
+- `GET /api/v1/cities/{city}/data-tasks`
+- `PATCH /api/v1/data-tasks/{task_id}`
 
 Dataset lineage returns the recorded raw blob → resource → adapter → canonical record →
 spatial link → analysis boundary. It explicitly reports that no latest-version
@@ -71,3 +80,16 @@ Forward migration `023_city_data_coverage_lineage.sql` adds:
 
 Existing immutable resources, dataset versions, promotion gates, tenant foreign keys,
 quarantine states and public/internal classifications remain unchanged.
+
+Forward migration `024_open_data_operations.sql` adds the human Data Manager queue,
+rate-bounded metadata schedules, structured analysis-blocking quarantine events,
+same-raw/new-adapter reprocessing records, exact open-data inputs for analysis runs and
+source-feedback records. Update discovery never replaces a currently promoted version.
+Provider failure is recorded while existing analysis remains version pinned.
+
+Raw bytes use SHA-256 object keys; a changed URL cannot create a distinct identity for
+identical bytes. Development uses a local store. Production can select an HTTPS
+S3-compatible store with a local inspection cache; the remote object's length and
+SHA-256 metadata are verified before use. Generic uploads reject traversal, unsafe ZIP
+expansion, XML entity declarations, formula-like CSV/GTFS cells, invalid encoding,
+malformed geometry and oversized single geometries.

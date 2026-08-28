@@ -18,6 +18,7 @@ GML_ID = "{http://www.opengis.net/gml}id"
 LOD_PATTERN = re.compile(r"^lod([0-4])", re.IGNORECASE)
 COORDINATE_TAGS = frozenset({"coordinates", "pos", "posList"})
 UNSAFE_XML_DECLARATIONS = (b"<!DOCTYPE", b"<!ENTITY")
+MAX_COORDINATE_TEXT_BYTES = 32 * 1024 * 1024
 
 
 def ensure_safe_xml_stream(stream: BinaryIO, inspection_bytes: int = 64 * 1024) -> None:
@@ -69,6 +70,8 @@ CityGMLEvent = FeatureStart | GeometryPart | FeatureEnd
 
 
 def _coordinates(text: str, dimension: int) -> list[tuple[float, float, float | None]]:
+    if len(text.encode("utf-8")) > MAX_COORDINATE_TEXT_BYTES:
+        raise ValueError("CityGML contains an oversized geometry coordinate sequence")
     values = [float(value) for value in text.replace(",", " ").split()]
     if dimension not in (2, 3) or len(values) < dimension or len(values) % dimension:
         return []

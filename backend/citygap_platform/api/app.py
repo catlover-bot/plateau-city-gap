@@ -638,6 +638,7 @@ def create_app(
         network_version_id: Annotated[str | None, Query(min_length=36, max_length=36)] = None,
         scenario_id: Annotated[str | None, Query(min_length=36, max_length=36)] = None,
         algorithm_version: Annotated[str | None, Query(max_length=200)] = None,
+        urban_state_id: Annotated[str | None, Query(min_length=36, max_length=36)] = None,
     ) -> Response:
         tile_count = 1 << z if 0 <= z <= 22 else 0
         if tile_count == 0 or not (0 <= x < tile_count and 0 <= y < tile_count):
@@ -661,6 +662,7 @@ def create_app(
             z=z,
             x=x,
             y=y,
+            urban_state_id=urban_state_id,
         )
         cache: VersionedTileCache = request.app.state.tile_cache
         cached = cache.get(key)
@@ -687,6 +689,8 @@ def create_app(
             "Cache-Control": "private, max-age=31536000, immutable",
             "X-CITYGAP-Dataset-Version": dataset_version_id,
         }
+        if urban_state_id is not None:
+            headers["X-CITYGAP-Urban-State"] = urban_state_id
         if request.headers.get("If-None-Match") == cached.etag:
             return Response(status_code=304, headers=headers)
         return Response(

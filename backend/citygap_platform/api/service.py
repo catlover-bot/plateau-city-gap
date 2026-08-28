@@ -417,6 +417,86 @@ class DatasetTransitionRequest(StrictRequest):
     note: str = Field(min_length=1, max_length=4000)
 
 
+class SourceDiscoveryRequest(StrictRequest):
+    city: str = Field(min_length=1, max_length=100)
+    source_keys: list[str] = Field(default_factory=list, max_length=50)
+
+    @field_validator("source_keys")
+    @classmethod
+    def safe_source_keys(cls, value: list[str]) -> list[str]:
+        if len(value) != len(set(value)):
+            raise ValueError("source_keys must be unique")
+        if any(
+            len(key) > 150 or not key.replace("-", "").replace("_", "").isalnum() for key in value
+        ):
+            raise ValueError("source_keys must be bounded identifiers")
+        return value
+
+
+class DatasetValidationRequest(StrictRequest):
+    version_id: UUID
+    expected_status: Literal["registered", "rejected", "failed"]
+    note: str = Field(min_length=1, max_length=4000)
+
+
+class DatasetPromotionRequest(StrictRequest):
+    version_id: UUID
+    expected_status: Literal["analysis_ready"] = "analysis_ready"
+    note: str = Field(min_length=1, max_length=4000)
+
+
+class MetadataCheckRequest(StrictRequest):
+    reason: str = Field(min_length=1, max_length=1000)
+
+
+class MetadataScheduleRequest(StrictRequest):
+    city: str | None = Field(default=None, min_length=1, max_length=100)
+    limit: int = Field(default=25, ge=1, le=100)
+
+
+class ResourceReprocessRequest(StrictRequest):
+    adapter_id: str = Field(min_length=1, max_length=150)
+    adapter_version: str = Field(min_length=1, max_length=100)
+    transformation_version: str = Field(min_length=1, max_length=100)
+    canonical_version: str = Field(min_length=1, max_length=100)
+    previous_transformation_run_id: UUID | None = None
+    reason: str = Field(min_length=1, max_length=4000)
+
+
+class ResourceQuarantineRequest(StrictRequest):
+    category: Literal[
+        "schema_invalid",
+        "schema_changed",
+        "checksum_mismatch",
+        "crs_unknown",
+        "license_unknown",
+        "archive_unsafe",
+        "xml_unsafe",
+        "formula_unsafe",
+        "geometry_oversized",
+        "encoding_invalid",
+        "malformed_content",
+        "other",
+    ]
+    reason: str = Field(min_length=1, max_length=4000)
+    transformation_run_id: UUID | None = None
+    evidence: dict[str, Any] = Field(default_factory=dict, max_length=100)
+
+
+class DataTaskTransitionRequest(StrictRequest):
+    expected_status: Literal["open", "in_progress"]
+    proposed_status: Literal["in_progress", "resolved", "dismissed"]
+    resolution_note: str | None = Field(default=None, max_length=4000)
+
+    @model_validator(mode="after")
+    def closed_task_has_reason(self) -> DataTaskTransitionRequest:
+        if self.proposed_status in {"resolved", "dismissed"} and not (
+            self.resolution_note and self.resolution_note.strip()
+        ):
+            raise ValueError("Resolving or dismissing a data task requires a note")
+        return self
+
+
 class AnalysisRunCreateRequest(StrictRequest):
     analysis_id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,99}$")
     analysis_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
@@ -1391,6 +1471,58 @@ def city_source_timeline(
     return result
 
 
+@router.post(
+    "/sources/discover",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:register"))],
+)
+def discover_open_data_sources(
+    body: SourceDiscoveryRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.queue_source_discovery(organization_id, body.city, body.source_keys)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.post(
+    "/sources/metadata-checks/schedule",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def schedule_open_data_metadata_checks(
+    body: MetadataScheduleRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    return repo.schedule_due_metadata_checks(organization_id, body.city, body.limit)
+
+
+@router.post(
+    "/sources/{source_id}/metadata-checks",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def check_open_data_source_metadata(
+    source_id: UUID,
+    body: MetadataCheckRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.queue_source_metadata_check(organization_id, str(source_id), body.reason)
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Source")
+    return result
+
+
 @router.get("/datasets", dependencies=[Depends(require_permission("dataset:read"))])
 def datasets(
     organization_id: Annotated[str, Depends(require_organization)],
@@ -1429,6 +1561,149 @@ def dataset_lineage(
     result = repo.service_dataset_lineage(organization_id, str(dataset_id))
     if result is None:
         raise _not_found("Dataset")
+    return result
+
+
+@router.post(
+    "/datasets/{dataset_id}/validate",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def validate_dataset(
+    dataset_id: UUID,
+    body: DatasetValidationRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_dataset_version(
+            organization_id,
+            str(body.version_id),
+            body.expected_status,
+            "validating",
+            body.note,
+            dataset_id=str(dataset_id),
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Dataset version")
+    return result
+
+
+@router.post(
+    "/datasets/{dataset_id}/promote",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:promote"))],
+)
+def promote_dataset(
+    dataset_id: UUID,
+    body: DatasetPromotionRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_dataset_version(
+            organization_id,
+            str(body.version_id),
+            body.expected_status,
+            "promoted",
+            body.note,
+            dataset_id=str(dataset_id),
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Dataset version")
+    return result
+
+
+@router.post(
+    "/resources/{resource_id}/reprocess",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def reprocess_open_data_resource(
+    resource_id: UUID,
+    body: ResourceReprocessRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.queue_open_data_reprocessing(
+            organization_id, str(resource_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Open data resource")
+    return result
+
+
+@router.post(
+    "/resources/{resource_id}/quarantine",
+    status_code=201,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def quarantine_open_data_resource(
+    resource_id: UUID,
+    body: ResourceQuarantineRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.quarantine_open_data_resource(
+            organization_id, str(resource_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Open data resource")
+    return result
+
+
+@router.get(
+    "/cities/{city}/data-tasks",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def data_manager_tasks(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    status: Annotated[
+        Literal["open", "in_progress", "resolved", "dismissed"] | None,
+        Query(),
+    ] = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> dict[str, Any]:
+    result = repo.data_manager_tasks(organization_id, city, status, limit)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.patch(
+    "/data-tasks/{task_id}",
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def transition_data_manager_task(
+    task_id: UUID,
+    body: DataTaskTransitionRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_data_manager_task(
+            organization_id,
+            str(task_id),
+            body.expected_status,
+            body.proposed_status,
+            body.resolution_note,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Data task")
     return result
 
 

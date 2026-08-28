@@ -30,7 +30,7 @@ def test_tracked_official_projection_has_only_published_years_and_conserves_age_
 def test_ipss_workbook_adapter_matches_normalized_official_rows_when_raw_source_exists() -> None:
     workbook = Path("data/raw/future_population/ipss_shicyoson_2023_projection.xlsx")
     if not workbook.exists():
-        pytest.skip("ignored official IPSS workbook is not present")
+        pytest.skip("EXPECTED_EXTERNAL: ignored official IPSS workbook is not present")
     extracted = IpssWorkbookAdapter(
         workbook,
         "dc503ef87559db7f45d6baa754c8920de0be0d6073d00cef84705219ea9b2b92",

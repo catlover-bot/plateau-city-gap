@@ -8,7 +8,10 @@ import pytest
 from backend.citygap_platform.domain.open_data import DiscoveryRequest
 from backend.citygap_platform.open_data.ckan import CkanCatalogAdapter
 from backend.citygap_platform.open_data.http import DownloadResult, validate_public_https_url
-from backend.citygap_platform.open_data.storage import ContentAddressedObjectStore
+from backend.citygap_platform.open_data.storage import (
+    ContentAddressedObjectStore,
+    S3CompatibleContentAddressedObjectStore,
+)
 
 
 def public_resolver(*args: Any, **kwargs: Any) -> list[tuple[Any, ...]]:
@@ -143,3 +146,67 @@ def test_object_store_deduplicates_by_sha_and_rejects_path_escape(tmp_path: Path
     assert store.path_for_key(first.object_key).read_bytes() == b"official-resource"
     with pytest.raises(ValueError, match="escapes"):
         store.path_for_key("../outside")
+
+
+class MissingS3Object(Exception):
+    def __init__(self) -> None:
+        self.response = {"Error": {"Code": "NoSuchKey"}}
+        super().__init__("missing")
+
+
+class FakeS3Client:
+    def __init__(self) -> None:
+        self.objects: dict[str, tuple[bytes, dict[str, str], str]] = {}
+        self.upload_count = 0
+
+    def head_object(self, *, Bucket: str, Key: str) -> dict[str, object]:
+        assert Bucket == "official-data"
+        if Key not in self.objects:
+            raise MissingS3Object
+        payload, metadata, _content_type = self.objects[Key]
+        return {"ContentLength": len(payload), "Metadata": metadata}
+
+    def upload_file(
+        self,
+        filename: str,
+        bucket: str,
+        key: str,
+        *,
+        ExtraArgs: dict[str, object],
+    ) -> None:
+        self.upload_count += 1
+        self.objects[key] = (
+            Path(filename).read_bytes(),
+            dict(ExtraArgs["Metadata"]),  # type: ignore[arg-type]
+            str(ExtraArgs["ContentType"]),
+        )
+
+    def download_file(self, bucket: str, key: str, filename: str) -> None:
+        assert bucket == "official-data"
+        Path(filename).write_bytes(self.objects[key][0])
+
+
+def test_s3_compatible_store_uses_checksum_identity_and_hydrates_cache(tmp_path: Path) -> None:
+    client = FakeS3Client()
+    store = S3CompatibleContentAddressedObjectStore(
+        tmp_path,
+        endpoint_url="https://objects.example.test",
+        bucket="official-data",
+        client=client,
+    )
+    first = store.fetch(
+        FakeDownloadClient(),  # type: ignore[arg-type]
+        "https://data.example.test/first-url.csv",
+        max_bytes=1024,
+    )
+    second = store.fetch(
+        FakeDownloadClient(),  # type: ignore[arg-type]
+        "https://data.example.test/different-url.csv",
+        max_bytes=1024,
+    )
+    assert first.object_key == second.object_key
+    assert client.upload_count == 1
+
+    store.path_for_key_local(first.object_key).unlink()
+    hydrated = store.path_for_key(first.object_key)
+    assert hydrated.read_bytes() == b"official-resource"

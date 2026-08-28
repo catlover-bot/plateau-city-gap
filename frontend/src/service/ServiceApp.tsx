@@ -802,9 +802,11 @@ function CitiesPage({
           { key: "active_investigations", label: "Investigation" },
           {
             key: "latest_activity_at",
-            label: "最終更新",
-            render: (row) => formatDate(row.latest_activity_at),
+            label: "データ基準日",
+            render: (row) => String(row.latest_reference_date ?? "未確認"),
           },
+          { key: "failed_jobs", label: "失敗Job" },
+          { key: "data_review_backlog", label: "要確認" },
         ]}
       />
     </>
@@ -829,6 +831,7 @@ function DataPage({
   const [stateFormOpen, setStateFormOpen] = useState(false);
   const [annualUpdateFormOpen, setAnnualUpdateFormOpen] = useState(false);
   const [dataView, setDataView] = useState<DataHubView>("sources");
+  const [taskNotes, setTaskNotes] = useState<Record<string, string>>({});
   const hub = snapshot.dataHub;
   if (!hub)
     return (
@@ -916,6 +919,18 @@ function DataPage({
     draft: "validated",
     validated: "current",
   };
+  const onboardingLabels: Record<string, string> = {
+    city_registration: "都市を登録",
+    official_source_discovery: "公式ソースを探索",
+    license_review: "利用条件を確認",
+    source_selection: "利用候補を選択",
+    dataset_validation: "品質を検証",
+    immutable_ingestion: "原本を保存・取込",
+    capability_activation: "分析機能を有効化",
+    first_urban_state: "最初のUrban State",
+    catalog_ready: "データカタログ準備完了",
+    first_analysis: "最初の分析",
+  };
   return (
     <>
       <PageHeader
@@ -946,6 +961,34 @@ function DataPage({
               >
                 年次更新を開始
               </button>
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() =>
+                  void mutate(
+                    "/api/v1/sources/discover",
+                    "POST",
+                    { city, source_keys: [] },
+                    "公式カタログの候補探索を登録しました。採用はまだ行っていません",
+                  )
+                }
+              >
+                公式ソースを探す
+              </button>
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() =>
+                  void mutate(
+                    "/api/v1/sources/metadata-checks/schedule",
+                    "POST",
+                    { city, limit: 25 },
+                    "提供元への負荷を抑えた更新確認を予約しました",
+                  )
+                }
+              >
+                更新確認を予約
+              </button>
             </div>
           ) : undefined
         }
@@ -962,7 +1005,7 @@ function DataPage({
             {snapshot.onboarding.steps.map((step) => (
               <article key={step.key}>
                 <StatusChip value={step.status} />
-                <strong>{step.key.replaceAll("_", " ")}</strong>
+                <strong>{onboardingLabels[step.key] ?? step.key.replaceAll("_", " ")}</strong>
                 <small>{step.promoted_versions ?? step.count ?? 0} ready</small>
               </article>
             ))}
@@ -1180,6 +1223,29 @@ function DataPage({
                   render: (row) => String(row.reference_date ?? "期間表記を参照"),
                 },
                 { key: "license_name", label: "利用条件" },
+                {
+                  key: "action",
+                  label: "更新確認",
+                  render: (row) =>
+                    canManage ? (
+                      <button
+                        className="table-action"
+                        type="button"
+                        onClick={() =>
+                          void mutate(
+                            `/api/v1/sources/${String(row.id)}/metadata-checks`,
+                            "POST",
+                            { reason: "Data Hubで担当者が更新確認を承認" },
+                            "メタデータだけを確認するJobを登録しました",
+                          )
+                        }
+                      >
+                        確認を予約
+                      </button>
+                    ) : (
+                      <span>—</span>
+                    ),
+                },
               ]}
             />
           </section>
@@ -1400,19 +1466,53 @@ function DataPage({
                     onClick={(event) => {
                       event.stopPropagation();
                       const proposed = nextStatus[String(row.service_status)];
+                      const explicitAction =
+                        proposed === "validating"
+                          ? {
+                              path: `/api/v1/datasets/${String(row.dataset_id)}/validate`,
+                              method: "POST" as const,
+                              body: {
+                                version_id: row.version_id,
+                                expected_status: row.service_status,
+                                note: "Data Hubで担当者が品質検証を開始",
+                              },
+                            }
+                          : proposed === "promoted"
+                            ? {
+                                path: `/api/v1/datasets/${String(row.dataset_id)}/promote`,
+                                method: "POST" as const,
+                                body: {
+                                  version_id: row.version_id,
+                                  expected_status: "analysis_ready",
+                                  note: "出典・品質・利用条件を確認して分析利用を承認",
+                                },
+                              }
+                            : {
+                                path: `/api/v1/dataset-versions/${String(row.version_id)}/status`,
+                                method: "PATCH" as const,
+                                body: {
+                                  expected_status: row.service_status,
+                                  proposed_status: proposed,
+                                  note: "Data Hubで人がライフサイクルを確認",
+                                },
+                              };
                       void mutate(
-                        `/api/v1/dataset-versions/${String(row.version_id)}/status`,
-                        "PATCH",
-                        {
-                          expected_status: row.service_status,
-                          proposed_status: proposed,
-                          note: "Data Hubで人がライフサイクルを確認",
-                        },
-                        `${proposed}へ更新しました`,
+                        explicitAction.path,
+                        explicitAction.method,
+                        explicitAction.body,
+                        proposed === "promoted"
+                          ? "分析に使用中へ更新し、Capability再評価を予約しました"
+                          : proposed === "validating"
+                            ? "品質検証を予約しました"
+                            : `${proposed}へ更新しました`,
                       );
                     }}
                   >
-                    {nextStatus[String(row.service_status)]}
+                    {nextStatus[String(row.service_status)] === "promoted"
+                      ? "分析に使用する"
+                      : nextStatus[String(row.service_status)] === "validating"
+                        ? "品質を検証"
+                        : nextStatus[String(row.service_status)]}
                   </button>
                 ) : (
                   <span>—</span>
@@ -1453,6 +1553,107 @@ function DataPage({
                   key: "next_check_after",
                   label: "次回以降",
                   render: (row) => formatDate(row.next_check_after),
+                },
+              ]}
+            />
+          </section>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>DATA MANAGER TASKS</span>
+                <h2>更新・品質・利用条件の対応</h2>
+              </div>
+              <b>
+                {
+                  (hub.data_tasks ?? []).filter((task) =>
+                    ["open", "in_progress"].includes(task.status),
+                  ).length
+                }
+              </b>
+            </header>
+            <ServiceTable
+              caption="データ管理タスク"
+              empty="対応が必要なデータタスクはありません"
+              rows={(hub.data_tasks ?? []) as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                { key: "title", label: "タスク" },
+                { key: "task_type", label: "種別" },
+                { key: "source_title", label: "ソース" },
+                { key: "dataset_year", label: "年度" },
+                {
+                  key: "status",
+                  label: "状態",
+                  render: (row) => <StatusChip value={String(row.status)} />,
+                },
+                {
+                  key: "created_at",
+                  label: "登録",
+                  render: (row) => formatDate(row.created_at),
+                },
+                {
+                  key: "action",
+                  label: "担当者の判断",
+                  render: (row) => {
+                    if (!canManage || ["resolved", "dismissed"].includes(String(row.status)))
+                      return <span>—</span>;
+                    if (row.status === "open")
+                      return (
+                        <button
+                          className="table-action"
+                          type="button"
+                          onClick={() =>
+                            void mutate(
+                              `/api/v1/data-tasks/${String(row.id)}`,
+                              "PATCH",
+                              {
+                                expected_status: "open",
+                                proposed_status: "in_progress",
+                                resolution_note: null,
+                              },
+                              "データタスクの対応を開始しました",
+                            )
+                          }
+                        >
+                          対応を開始
+                        </button>
+                      );
+                    const note = taskNotes[String(row.id)] ?? "";
+                    return (
+                      <div className="table-inline-action">
+                        <input
+                          aria-label={`${String(row.title)}の対応記録`}
+                          value={note}
+                          placeholder="確認内容を記録"
+                          onChange={(event) =>
+                            setTaskNotes((current) => ({
+                              ...current,
+                              [String(row.id)]: event.target.value,
+                            }))
+                          }
+                        />
+                        <button
+                          className="table-action"
+                          type="button"
+                          disabled={!note.trim()}
+                          onClick={() =>
+                            void mutate(
+                              `/api/v1/data-tasks/${String(row.id)}`,
+                              "PATCH",
+                              {
+                                expected_status: "in_progress",
+                                proposed_status: "resolved",
+                                resolution_note: note.trim(),
+                              },
+                              "判断根拠を残してタスクを完了しました",
+                            )
+                          }
+                        >
+                          対応済み
+                        </button>
+                      </div>
+                    );
+                  },
                 },
               ]}
             />
