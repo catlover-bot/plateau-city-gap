@@ -2,22 +2,29 @@
 
 No production SLA is claimed. Measurements are labelled either `REAL_MUNICIPAL_DATA` (offline pipeline timings from Maizuru/Fujisawa) or `SYNTHETIC_SCALE` (database/API scale fixture).
 
-`python -m analysis.scripts.benchmark_pilot_api --output pilot-performance.json` creates 100,000 synthetic buildings and 100,000 synthetic road edges in migrated PostGIS, takes 30 samples (10 for uncached MVT), reports p50/p95/max, then removes the fixture. It measures `/cities`, bounded buildings, mesh detail, scenario detail, A/B/C comparison, route detail, cached tile and uncached tile. CI publishes the JSON as the `pilot-performance` artifact.
+`python -m analysis.scripts.benchmark_pilot_api --output pilot-performance.json` creates 100,000 synthetic buildings and 100,000 synthetic road edges in migrated PostGIS, takes 30 samples (10 for cold MVT and municipal home views), reports p50/p95/max, then removes the fixture. It measures `/cities`, bounded buildings, mesh detail, scenario detail, A/B/C comparison, route detail, City Home, Data Hub, and cold/warm tiles. CI publishes the JSON as the `pilot-performance` artifact.
 
-The 2026-08-27 GitHub Actions Linux run (`33055835395`, Python 3.12.14) produced the following database/API timings. These are synthetic-scale CI measurements, not Maizuru/Fujisawa API timings and not an SLA.
+The 2026-08-29 GitHub Actions Linux run (`33185736512`, Python 3.12.14) produced the following database/API timings. These are synthetic-scale CI measurements, not Maizuru/Fujisawa API timings and not an SLA.
 
 | Operation | p50 ms | p95 ms | Samples |
 |---|---:|---:|---:|
-| cities | 10.647 | 11.113 | 30 |
-| bbox buildings (up to 1,000 records) | 61.694 | 63.532 | 30 |
-| mesh detail | 12.587 | 12.919 | 30 |
-| scenario detail | 24.902 | 25.683 | 30 |
-| A/B/C comparison | 68.387 | 70.594 | 30 |
-| route detail | 12.329 | 12.772 | 30 |
-| cached building MVT | 2.559 | 3.357 | 30 |
-| uncached 50k-feature building MVT | 803.776 | 842.642 | 10 |
+| cities | 10.257 | 10.770 | 30 |
+| bbox buildings (up to 1,000 records) | 61.436 | 63.439 | 30 |
+| mesh detail | 12.219 | 15.987 | 30 |
+| scenario detail | 22.711 | 24.548 | 30 |
+| A/B/C comparison | 61.186 | 63.477 | 30 |
+| route detail | 11.841 | 12.882 | 30 |
+| City Home | 18.688 | 19.181 | 10 |
+| Data Hub | 96.093 | 113.280 | 10 |
+| warm building MVT | 3.145 | 4.038 | 30 |
+| cold 50k-feature building MVT | 803.901 | 828.663 | 10 |
 
-The immutable cache reduced median tile response from about 804 ms to 2.6 ms in this fixture. The exact machine metadata, maxima and real offline pipeline timings are tracked in `analysis/outputs/real/pilot_performance.json`.
+The immutable cache reduced median tile response from about 804 ms to 3.1 ms in this fixture. The exact machine metadata, maxima and real offline pipeline timings are tracked in `analysis/outputs/real/pilot_performance.json`.
+
+The same run executed bounded bursts at concurrency 1, 10, 25 and 50. At concurrency 50,
+bbox p95 was 1,974.314 ms at 31.458 requests/s; warm-tile p95 was 156.260 ms at
+224.897 requests/s. These short synthetic bursts characterize this CI runner only and are explicitly
+marked `concurrency_result_is_sla=false`.
 
 The municipal API retains bounded GeoJSON endpoints for record inspection and adds version-explicit MVT for `buildings`, `road_edges`, `hazards`, and `scenario_impacts`. Tile requests require city, immutable dataset version and z/x/y; network/scenario layers additionally require their exact versions and algorithm. A bounded in-process LRU cache uses all of those values as its key and returns ETag/304 plus private immutable cache headers. Detailed tiles require authenticated `platform:read` and are not copied to GitHub Pages.
 

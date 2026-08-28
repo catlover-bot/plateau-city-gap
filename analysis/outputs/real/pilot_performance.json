@@ -1,6 +1,7 @@
 {
   "classification": {
     "api_database": "SYNTHETIC_SCALE",
+    "concurrency_result_is_sla": false,
     "production_sla_claimed": false,
     "real_pipeline": "REAL_MUNICIPAL_DATA"
   },
@@ -95,55 +96,149 @@
   "synthetic_scale": {
     "api_p50_p95": {
       "bbox_buildings": {
-        "maximum_ms": 86.573,
-        "p50_ms": 61.694,
-        "p95_ms": 63.532,
+        "maximum_ms": 88.868,
+        "p50_ms": 61.436,
+        "p95_ms": 63.439,
         "samples": 30
       },
       "cities": {
-        "maximum_ms": 12.017,
-        "p50_ms": 10.647,
-        "p95_ms": 11.113,
+        "maximum_ms": 11.533,
+        "p50_ms": 10.257,
+        "p95_ms": 10.77,
         "samples": 30
       },
       "mesh_detail": {
-        "maximum_ms": 13.445,
-        "p50_ms": 12.587,
-        "p95_ms": 12.919,
+        "maximum_ms": 19.147,
+        "p50_ms": 12.219,
+        "p95_ms": 15.987,
         "samples": 30
       },
+      "municipal_city_home": {
+        "maximum_ms": 19.181,
+        "p50_ms": 18.688,
+        "p95_ms": 19.181,
+        "samples": 10
+      },
+      "municipal_data_hub": {
+        "maximum_ms": 113.28,
+        "p50_ms": 96.093,
+        "p95_ms": 113.28,
+        "samples": 10
+      },
       "route_detail": {
-        "maximum_ms": 12.956,
-        "p50_ms": 12.329,
-        "p95_ms": 12.772,
+        "maximum_ms": 12.96,
+        "p50_ms": 11.841,
+        "p95_ms": 12.882,
         "samples": 30
       },
       "scenario_comparison": {
-        "maximum_ms": 80.624,
-        "p50_ms": 68.387,
-        "p95_ms": 70.594,
+        "maximum_ms": 90.975,
+        "p50_ms": 61.186,
+        "p95_ms": 63.477,
         "samples": 30
       },
       "scenario_detail": {
-        "maximum_ms": 26.406,
-        "p50_ms": 24.902,
-        "p95_ms": 25.683,
+        "maximum_ms": 24.646,
+        "p50_ms": 22.711,
+        "p95_ms": 24.548,
         "samples": 30
       },
       "tile_cached": {
-        "maximum_ms": 3.564,
-        "p50_ms": 2.559,
-        "p95_ms": 3.357,
+        "maximum_ms": 4.181,
+        "p50_ms": 3.145,
+        "p95_ms": 4.038,
         "samples": 30
       },
-      "tile_uncached": {
-        "maximum_ms": 842.642,
-        "p50_ms": 803.776,
-        "p95_ms": 842.642,
+      "tile_cold": {
+        "maximum_ms": 828.663,
+        "p50_ms": 803.901,
+        "p95_ms": 828.663,
         "samples": 10
+      },
+      "tile_uncached": {
+        "maximum_ms": 828.663,
+        "p50_ms": 803.901,
+        "p95_ms": 828.663,
+        "samples": 10
+      },
+      "tile_warm": {
+        "maximum_ms": 4.181,
+        "p50_ms": 3.145,
+        "p95_ms": 4.038,
+        "samples": 30
       }
     },
     "buildings": 100000,
+    "concurrency_1_10_25_50": {
+      "bbox_buildings": {
+        "1": {
+          "concurrency": 1,
+          "maximum_ms": 61.548,
+          "p50_ms": 60.555,
+          "p95_ms": 61.548,
+          "requests": 2,
+          "throughput_requests_per_second": 16.337
+        },
+        "10": {
+          "concurrency": 10,
+          "maximum_ms": 458.214,
+          "p50_ms": 284.094,
+          "p95_ms": 442.447,
+          "requests": 20,
+          "throughput_requests_per_second": 29.123
+        },
+        "25": {
+          "concurrency": 25,
+          "maximum_ms": 1172.055,
+          "p50_ms": 664.661,
+          "p95_ms": 1083.29,
+          "requests": 50,
+          "throughput_requests_per_second": 29.769
+        },
+        "50": {
+          "concurrency": 50,
+          "maximum_ms": 2119.992,
+          "p50_ms": 1222.91,
+          "p95_ms": 1974.314,
+          "requests": 100,
+          "throughput_requests_per_second": 31.458
+        }
+      },
+      "warm_vector_tile": {
+        "1": {
+          "concurrency": 1,
+          "maximum_ms": 5.233,
+          "p50_ms": 4.491,
+          "p95_ms": 5.233,
+          "requests": 2,
+          "throughput_requests_per_second": 200.705
+        },
+        "10": {
+          "concurrency": 10,
+          "maximum_ms": 97.459,
+          "p50_ms": 47.668,
+          "p95_ms": 89.364,
+          "requests": 20,
+          "throughput_requests_per_second": 139.889
+        },
+        "25": {
+          "concurrency": 25,
+          "maximum_ms": 149.736,
+          "p50_ms": 91.751,
+          "p95_ms": 128.858,
+          "requests": 50,
+          "throughput_requests_per_second": 206.254
+        },
+        "50": {
+          "concurrency": 50,
+          "maximum_ms": 199.603,
+          "p50_ms": 94.371,
+          "p95_ms": 156.26,
+          "requests": 100,
+          "throughput_requests_per_second": 224.897
+        }
+      }
+    },
     "road_edges": 100000
   }
 }

@@ -1,0 +1,1222 @@
+{
+  "schema_version": "citygap.municipal-open-data-platform-final-audit@1",
+  "audit_date": "2026-08-29",
+  "baseline_commit": "47f7de7886591b1c87c50fbf192ea6105598c666",
+  "passed": true,
+  "status_semantics": {
+    "verified": "Implemented and backed by the named code, migration, test, or real artifact.",
+    "verified_boundary": "Official availability was checked and the safe unavailable/review/degraded boundary is implemented; this is not an analysis-ready claim.",
+    "failed": "The required evidence check did not pass."
+  },
+  "check_count": 42,
+  "checks": {
+    "registry": true,
+    "official_sources": true,
+    "provenance": true,
+    "licence_public": true,
+    "discovery_coverage": true,
+    "standard_ods": true,
+    "ckan_inventory": true,
+    "mhlw_health": true,
+    "medical_identity": true,
+    "secondary_capabilities": true,
+    "demographic_economic": true,
+    "service_activity_findings": true,
+    "traffic_ground": true,
+    "gsi_boundary": true,
+    "datum_contract": true,
+    "hazard_semantics": true,
+    "pedestrian_boundary": true,
+    "xroad_boundary": true,
+    "transport_semantics": true,
+    "canonical_lineage": true,
+    "temporal_contract": true,
+    "updates_dependency": true,
+    "data_hub": true,
+    "analyses": true,
+    "plateau_spatial": true,
+    "source_governance": true,
+    "quality_operations": true,
+    "storage": true,
+    "security": true,
+    "provider_resilience": true,
+    "performance": true,
+    "postgis_indexes": true,
+    "skip_audit": true,
+    "migration_safety": true,
+    "api_v1": true,
+    "tenancy_cache": true,
+    "search_home_onboarding": true,
+    "product_ux": true,
+    "field_feedback": true,
+    "override_governance": true,
+    "evidence_reports": true,
+    "public_transparency": true
+  },
+  "goal_count": 120,
+  "status_counts": {
+    "verified": 107,
+    "verified_boundary": 13,
+    "failed": 0
+  },
+  "goals": [
+    {
+      "goal": 1,
+      "title": "OPEN DATA ADAPTER REGISTRY",
+      "status": "verified",
+      "check": "registry",
+      "evidence": [
+        "backend/citygap_platform/open_data/registry.py"
+      ]
+    },
+    {
+      "goal": 2,
+      "title": "SOURCE REGISTRY",
+      "status": "verified",
+      "check": "registry",
+      "evidence": [
+        "backend/citygap_platform/open_data/registry.py"
+      ]
+    },
+    {
+      "goal": 3,
+      "title": "OFFICIAL SOURCE FIRST",
+      "status": "verified",
+      "check": "official_sources",
+      "evidence": [
+        "backend/citygap_platform/open_data/registry.py"
+      ]
+    },
+    {
+      "goal": 4,
+      "title": "SOURCE PROVENANCE CONTRACT",
+      "status": "verified",
+      "check": "provenance",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 5,
+      "title": "LICENSE MACHINE-READABLE MODEL",
+      "status": "verified",
+      "check": "licence_public",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql",
+        "analysis/outputs/real/open_data/official_capability_audit.json"
+      ]
+    },
+    {
+      "goal": 6,
+      "title": "NO UNSAFE REDISTRIBUTION",
+      "status": "verified",
+      "check": "licence_public",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql",
+        "analysis/outputs/real/open_data/official_capability_audit.json"
+      ]
+    },
+    {
+      "goal": 7,
+      "title": "DATA DISCOVERY",
+      "status": "verified",
+      "check": "discovery_coverage",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json",
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 8,
+      "title": "DATA COVERAGE MATRIX",
+      "status": "verified",
+      "check": "discovery_coverage",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json",
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 9,
+      "title": "WHY UNAVAILABLE",
+      "status": "verified",
+      "check": "discovery_coverage",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json",
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 10,
+      "title": "MUNICIPAL STANDARD ODS ADAPTER",
+      "status": "verified",
+      "check": "standard_ods",
+      "evidence": [
+        "backend/citygap_platform/open_data/standard_ods.py"
+      ]
+    },
+    {
+      "goal": 11,
+      "title": "STANDARD ODS SCHEMA MAPPING",
+      "status": "verified",
+      "check": "standard_ods",
+      "evidence": [
+        "backend/citygap_platform/open_data/standard_ods.py"
+      ]
+    },
+    {
+      "goal": 12,
+      "title": "SCHEMA DRIFT",
+      "status": "verified",
+      "check": "standard_ods",
+      "evidence": [
+        "backend/citygap_platform/open_data/standard_ods.py"
+      ]
+    },
+    {
+      "goal": 13,
+      "title": "MUNICIPAL CKAN/BODIK ADAPTER",
+      "status": "verified",
+      "check": "ckan_inventory",
+      "evidence": [
+        "backend/citygap_platform/open_data/ckan.py",
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json"
+      ]
+    },
+    {
+      "goal": 14,
+      "title": "MAIZURU OPEN DATA INVENTORY",
+      "status": "verified",
+      "check": "ckan_inventory",
+      "evidence": [
+        "backend/citygap_platform/open_data/ckan.py",
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json"
+      ]
+    },
+    {
+      "goal": 15,
+      "title": "FUJISAWA OPEN DATA INVENTORY",
+      "status": "verified",
+      "check": "ckan_inventory",
+      "evidence": [
+        "backend/citygap_platform/open_data/ckan.py",
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json"
+      ]
+    },
+    {
+      "goal": 16,
+      "title": "MHLW MEDICAL ADAPTER",
+      "status": "verified",
+      "check": "mhlw_health",
+      "evidence": [
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 17,
+      "title": "MEDICAL FACILITY IDENTITY",
+      "status": "verified",
+      "check": "medical_identity",
+      "evidence": [
+        "analysis/outputs/real/open_data/mhlw_medical_identity_comparison.json"
+      ]
+    },
+    {
+      "goal": 18,
+      "title": "NO FALSE MEDICAL AVAILABILITY",
+      "status": "verified",
+      "check": "mhlw_health",
+      "evidence": [
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 19,
+      "title": "CARE SERVICE ADAPTER",
+      "status": "verified",
+      "check": "mhlw_health",
+      "evidence": [
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 20,
+      "title": "KAYOI-NO-BA / SOCIAL PARTICIPATION",
+      "status": "verified_boundary",
+      "check": "secondary_capabilities",
+      "evidence": [
+        "analysis/outputs/real/open_data/official_capability_audit.json",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 21,
+      "title": "WELFARE ADAPTER",
+      "status": "verified_boundary",
+      "check": "secondary_capabilities",
+      "evidence": [
+        "analysis/outputs/real/open_data/official_capability_audit.json",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 22,
+      "title": "FUTURE 250M POPULATION",
+      "status": "verified",
+      "check": "demographic_economic",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json"
+      ]
+    },
+    {
+      "goal": 23,
+      "title": "FUTURE POPULATION SCENARIO MODEL",
+      "status": "verified",
+      "check": "demographic_economic",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json"
+      ]
+    },
+    {
+      "goal": 24,
+      "title": "NO BEST FUTURE MODEL",
+      "status": "verified",
+      "check": "demographic_economic",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json"
+      ]
+    },
+    {
+      "goal": 25,
+      "title": "ECONOMIC CENSUS",
+      "status": "verified",
+      "check": "demographic_economic",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json"
+      ]
+    },
+    {
+      "goal": 26,
+      "title": "DAYTIME ACTIVITY",
+      "status": "verified",
+      "check": "demographic_economic",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json"
+      ]
+    },
+    {
+      "goal": 27,
+      "title": "NEW FINDING: SERVICE / ACTIVITY MISMATCH",
+      "status": "verified",
+      "check": "service_activity_findings",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 28,
+      "title": "NPA TRAFFIC ACCIDENT ADAPTER",
+      "status": "verified",
+      "check": "traffic_ground",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 29,
+      "title": "ACCIDENT HISTORICAL CONTEXT",
+      "status": "verified",
+      "check": "traffic_ground",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 30,
+      "title": "GSI FOUNDATION MAP",
+      "status": "verified_boundary",
+      "check": "gsi_boundary",
+      "evidence": [
+        "infra/migrations/021_geospatial_resilience_sources.sql"
+      ]
+    },
+    {
+      "goal": 31,
+      "title": "JGD2024",
+      "status": "verified",
+      "check": "datum_contract",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 32,
+      "title": "PLATEAU VS GSI VALIDATION",
+      "status": "verified_boundary",
+      "check": "gsi_boundary",
+      "evidence": [
+        "infra/migrations/021_geospatial_resilience_sources.sql"
+      ]
+    },
+    {
+      "goal": 33,
+      "title": "J-SHIS ADAPTER",
+      "status": "verified",
+      "check": "traffic_ground",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 34,
+      "title": "EARTHQUAKE CONTEXT",
+      "status": "verified",
+      "check": "traffic_ground",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 35,
+      "title": "HAZARD TYPE MODEL",
+      "status": "verified",
+      "check": "hazard_semantics",
+      "evidence": [
+        "infra/migrations/012_network_resilience.sql",
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 36,
+      "title": "NO UNIVERSAL HAZARD SCORE",
+      "status": "verified",
+      "check": "hazard_semantics",
+      "evidence": [
+        "infra/migrations/012_network_resilience.sql",
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 37,
+      "title": "PEDESTRIAN NETWORK RESEARCH",
+      "status": "verified_boundary",
+      "check": "pedestrian_boundary",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 38,
+      "title": "PEDESTRIAN CAPABILITY",
+      "status": "verified_boundary",
+      "check": "pedestrian_boundary",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 39,
+      "title": "ACCESSIBILITY MODEL V2",
+      "status": "verified",
+      "check": "pedestrian_boundary",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 40,
+      "title": "PEDESTRIAN ATTRIBUTES",
+      "status": "verified_boundary",
+      "check": "pedestrian_boundary",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 41,
+      "title": "XROAD RESEARCH",
+      "status": "verified_boundary",
+      "check": "xroad_boundary",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 42,
+      "title": "TRAFFIC VOLUME CONTEXT",
+      "status": "verified_boundary",
+      "check": "xroad_boundary",
+      "evidence": [
+        "analysis/outputs/real/open_data/geospatial_resilience_summary.json"
+      ]
+    },
+    {
+      "goal": 43,
+      "title": "TRAFFIC VOLUME != CAPACITY",
+      "status": "verified",
+      "check": "transport_semantics",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 44,
+      "title": "STATION USAGE",
+      "status": "verified_boundary",
+      "check": "secondary_capabilities",
+      "evidence": [
+        "analysis/outputs/real/open_data/official_capability_audit.json",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 45,
+      "title": "GTFS RESEARCH AGAIN",
+      "status": "verified_boundary",
+      "check": "transport_semantics",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 46,
+      "title": "PERSON TRIP",
+      "status": "verified_boundary",
+      "check": "secondary_capabilities",
+      "evidence": [
+        "analysis/outputs/real/open_data/official_capability_audit.json",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 47,
+      "title": "MOBILITY != INDIVIDUAL TRACKING",
+      "status": "verified",
+      "check": "transport_semantics",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 48,
+      "title": "OPEN DATA CANONICAL MODEL",
+      "status": "verified",
+      "check": "canonical_lineage",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 49,
+      "title": "RAW + CANONICAL",
+      "status": "verified",
+      "check": "canonical_lineage",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 50,
+      "title": "TRANSFORMATION LINEAGE",
+      "status": "verified",
+      "check": "canonical_lineage",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 51,
+      "title": "SPATIAL LINKAGE",
+      "status": "verified",
+      "check": "canonical_lineage",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 52,
+      "title": "TEMPORAL ALIGNMENT",
+      "status": "verified",
+      "check": "temporal_contract",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json",
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 53,
+      "title": "TEMPORAL MISMATCH",
+      "status": "verified",
+      "check": "temporal_contract",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json",
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 54,
+      "title": "DATA FRESHNESS",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 55,
+      "title": "UPDATE DETECTION",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 56,
+      "title": "DATA UPDATE JOBS",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 57,
+      "title": "DEPENDENCY GRAPH V2",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 58,
+      "title": "NO AUTOMATIC FINDING INVALIDATION",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 59,
+      "title": "DATA HUB V2",
+      "status": "verified",
+      "check": "data_hub",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 60,
+      "title": "CITY DATA COVERAGE UI",
+      "status": "verified",
+      "check": "data_hub",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 61,
+      "title": "MISSING DATA AS PRODUCT FEATURE",
+      "status": "verified",
+      "check": "data_hub",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 62,
+      "title": "CAPABILITY AUTO-REFRESH",
+      "status": "verified",
+      "check": "data_hub",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 63,
+      "title": "ANALYSIS CATALOG V2",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 64,
+      "title": "ANALYSIS DEGRADATION",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 65,
+      "title": "SERVICE NEED DOMAINS",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 66,
+      "title": "MEDICAL ACCESS V2",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 67,
+      "title": "CARE ACCESS",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 68,
+      "title": "SOCIAL PARTICIPATION ACCESS",
+      "status": "verified_boundary",
+      "check": "secondary_capabilities",
+      "evidence": [
+        "analysis/outputs/real/open_data/official_capability_audit.json",
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 69,
+      "title": "DAYTIME SERVICE CONTEXT",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 70,
+      "title": "RESILIENCE V2",
+      "status": "verified",
+      "check": "analyses",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 71,
+      "title": "PLATEAU REMAINS PRIMARY SPATIAL MODEL",
+      "status": "verified",
+      "check": "plateau_spatial",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 72,
+      "title": "PLATEAU LINK COVERAGE",
+      "status": "verified",
+      "check": "plateau_spatial",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_open_data_analysis_summary.json"
+      ]
+    },
+    {
+      "goal": 73,
+      "title": "PROVENANCE IN SPATIAL WORKSPACE",
+      "status": "verified",
+      "check": "product_ux",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 74,
+      "title": "DATA TIMELINE",
+      "status": "verified",
+      "check": "data_hub",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 75,
+      "title": "DO NOT HIDE MIXED YEARS",
+      "status": "verified",
+      "check": "temporal_contract",
+      "evidence": [
+        "analysis/outputs/real/open_data/demographic_economic_summary.json",
+        "analysis/outputs/real/open_data/mhlw_health_summary.json"
+      ]
+    },
+    {
+      "goal": 76,
+      "title": "DATASET COMPARISON",
+      "status": "verified",
+      "check": "source_governance",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 77,
+      "title": "CONFLICT MODEL",
+      "status": "verified",
+      "check": "source_governance",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 78,
+      "title": "SOURCE PREFERENCE POLICY",
+      "status": "verified",
+      "check": "source_governance",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 79,
+      "title": "DATA QUALITY SCOREは禁止",
+      "status": "verified",
+      "check": "quality_operations",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 80,
+      "title": "QUALITY GATE POLICIES",
+      "status": "verified",
+      "check": "quality_operations",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 81,
+      "title": "QUARANTINE",
+      "status": "verified",
+      "check": "quality_operations",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 82,
+      "title": "REPROCESSING",
+      "status": "verified",
+      "check": "quality_operations",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 83,
+      "title": "REPRODUCIBILITY",
+      "status": "verified",
+      "check": "quality_operations",
+      "evidence": [
+        "infra/migrations/023_city_data_coverage_lineage.sql",
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 84,
+      "title": "OPEN DATA OPERATIONS UI",
+      "status": "verified",
+      "check": "product_ux",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 85,
+      "title": "NO DEVELOPER REQUIRED FOR NORMAL UPDATE",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 86,
+      "title": "SCHEDULED METADATA CHECK",
+      "status": "verified",
+      "check": "updates_dependency",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 87,
+      "title": "NO AGGRESSIVE SCRAPING",
+      "status": "verified",
+      "check": "provider_resilience",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 88,
+      "title": "OBJECT STORAGE PREPARATION",
+      "status": "verified",
+      "check": "storage",
+      "evidence": [
+        "backend/citygap_platform/open_data/storage.py"
+      ]
+    },
+    {
+      "goal": 89,
+      "title": "CONTENT-ADDRESSED RAW STORAGE",
+      "status": "verified",
+      "check": "storage",
+      "evidence": [
+        "backend/citygap_platform/open_data/storage.py"
+      ]
+    },
+    {
+      "goal": 90,
+      "title": "SECURITY",
+      "status": "verified",
+      "check": "security",
+      "evidence": [
+        "backend/citygap_platform/ingestion/adapters.py",
+        "backend/citygap_platform/ingestion/citygml.py"
+      ]
+    },
+    {
+      "goal": 91,
+      "title": "CSV FORMULA INJECTION",
+      "status": "verified",
+      "check": "security",
+      "evidence": [
+        "backend/citygap_platform/ingestion/adapters.py",
+        "backend/citygap_platform/ingestion/citygml.py"
+      ]
+    },
+    {
+      "goal": 92,
+      "title": "XML / GML SAFETY",
+      "status": "verified",
+      "check": "security",
+      "evidence": [
+        "backend/citygap_platform/ingestion/adapters.py",
+        "backend/citygap_platform/ingestion/citygml.py"
+      ]
+    },
+    {
+      "goal": 93,
+      "title": "PROVIDER FAILURE",
+      "status": "verified",
+      "check": "provider_resilience",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 94,
+      "title": "NO LIVE API HARD DEPENDENCY",
+      "status": "verified",
+      "check": "provider_resilience",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 95,
+      "title": "PERFORMANCE",
+      "status": "verified",
+      "check": "performance",
+      "evidence": [
+        "analysis/outputs/real/pilot_performance.json"
+      ]
+    },
+    {
+      "goal": 96,
+      "title": "POSTGIS INDEXING",
+      "status": "verified",
+      "check": "postgis_indexes",
+      "evidence": [
+        "infra/migrations/024_open_data_operations.sql"
+      ]
+    },
+    {
+      "goal": 97,
+      "title": "REAL CITY BENCHMARK",
+      "status": "verified",
+      "check": "performance",
+      "evidence": [
+        "analysis/outputs/real/pilot_performance.json"
+      ]
+    },
+    {
+      "goal": 98,
+      "title": "COLD/WARM TILE",
+      "status": "verified",
+      "check": "performance",
+      "evidence": [
+        "analysis/outputs/real/pilot_performance.json"
+      ]
+    },
+    {
+      "goal": 99,
+      "title": "CONCURRENCY",
+      "status": "verified",
+      "check": "performance",
+      "evidence": [
+        "analysis/outputs/real/pilot_performance.json"
+      ]
+    },
+    {
+      "goal": 100,
+      "title": "SKIP TEST AUDIT",
+      "status": "verified",
+      "check": "skip_audit",
+      "evidence": [
+        "backend/tests/test_skip_classification.py"
+      ]
+    },
+    {
+      "goal": 101,
+      "title": "MIGRATION SAFETY",
+      "status": "verified",
+      "check": "migration_safety",
+      "evidence": [
+        "infra/migrations/026_secondary_official_capability_boundaries.sql"
+      ]
+    },
+    {
+      "goal": 102,
+      "title": "API V1 EXTENSION",
+      "status": "verified",
+      "check": "api_v1",
+      "evidence": [
+        "backend/citygap_platform/api/service.py"
+      ]
+    },
+    {
+      "goal": 103,
+      "title": "TENANT BOUNDARY",
+      "status": "verified",
+      "check": "tenancy_cache",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 104,
+      "title": "SHARED PUBLIC SOURCE CACHE",
+      "status": "verified",
+      "check": "tenancy_cache",
+      "evidence": [
+        "infra/migrations/018_open_data_foundation.sql"
+      ]
+    },
+    {
+      "goal": 105,
+      "title": "SEARCH V2",
+      "status": "verified",
+      "check": "search_home_onboarding",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 106,
+      "title": "CITY HOME V2",
+      "status": "verified",
+      "check": "search_home_onboarding",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 107,
+      "title": "ORGANIZATION HOME V2",
+      "status": "verified",
+      "check": "search_home_onboarding",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 108,
+      "title": "OPEN DATA ONBOARDING",
+      "status": "verified",
+      "check": "search_home_onboarding",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 109,
+      "title": "AUTO-DISCOVERY != AUTO-ACCEPT",
+      "status": "verified",
+      "check": "discovery_coverage",
+      "evidence": [
+        "analysis/outputs/real/open_data/municipal_catalog_inventory.json",
+        "infra/migrations/023_city_data_coverage_lineage.sql"
+      ]
+    },
+    {
+      "goal": 110,
+      "title": "PRODUCT UX",
+      "status": "verified",
+      "check": "product_ux",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 111,
+      "title": "ADVANCED TECH DETAILS",
+      "status": "verified",
+      "check": "product_ux",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 112,
+      "title": "MUNICIPAL JAPANESE COPY",
+      "status": "verified",
+      "check": "product_ux",
+      "evidence": [
+        "frontend/src/service/ServiceApp.tsx"
+      ]
+    },
+    {
+      "goal": 113,
+      "title": "FIELD VALIDATION CONNECTION",
+      "status": "verified",
+      "check": "field_feedback",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    },
+    {
+      "goal": 114,
+      "title": "SOURCE FEEDBACK",
+      "status": "verified",
+      "check": "field_feedback",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    },
+    {
+      "goal": 115,
+      "title": "LOCAL OVERRIDE MODEL",
+      "status": "verified",
+      "check": "override_governance",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    },
+    {
+      "goal": 116,
+      "title": "OVERRIDE GOVERNANCE",
+      "status": "verified",
+      "check": "override_governance",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    },
+    {
+      "goal": 117,
+      "title": "OFFICIAL UPDATE RECONCILIATION",
+      "status": "verified",
+      "check": "override_governance",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    },
+    {
+      "goal": 118,
+      "title": "EVIDENCE CENTER V2",
+      "status": "verified",
+      "check": "evidence_reports",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql",
+        "backend/citygap_platform/api/service_repository.py"
+      ]
+    },
+    {
+      "goal": 119,
+      "title": "REPORTS V2",
+      "status": "verified",
+      "check": "evidence_reports",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql",
+        "backend/citygap_platform/api/service_repository.py"
+      ]
+    },
+    {
+      "goal": 120,
+      "title": "PUBLIC TRANSPARENCY",
+      "status": "verified",
+      "check": "public_transparency",
+      "evidence": [
+        "infra/migrations/025_open_data_review_evidence.sql"
+      ]
+    }
+  ],
+  "real_data_metrics": {
+    "municipal_catalog_datasets": {
+      "maizuru": 30,
+      "fujisawa": 9
+    },
+    "raw_resources": {
+      "maizuru_priority": 9,
+      "mhlw_health_care": 43,
+      "demographic_economic": 4,
+      "geospatial_resilience_primary": 3
+    },
+    "canonical_records": {
+      "maizuru_priority": 3546,
+      "mhlw_health_care": 7923,
+      "demographic_economic": 2629,
+      "geospatial_resilience": 4105,
+      "total": 18203
+    },
+    "analysis_meshes": 822,
+    "new_findings": 50
+  },
+  "implementation_ci": {
+    "run_id": 33185736512,
+    "verified_commit": "980c843deccbeafb7cd3fa7742f001b8510088e3",
+    "conclusion": "success",
+    "required_gates": {
+      "frontend": "success",
+      "security": "success",
+      "validation-gates": "success",
+      "python-unit": "success",
+      "api-integration": "success",
+      "postgis-integration": "success",
+      "migration": "success",
+      "public-assets": "success",
+      "build": "success"
+    },
+    "note": "Recorded external evidence; this deterministic local audit does not query GitHub."
+  },
+  "remaining_external_boundaries": [
+    "WAM NET pilot rows, schema and resource redistribution terms require human review.",
+    "GSI Foundation Map download requires credentials and Survey Act/terms review.",
+    "No official city-covering pedestrian network or official GTFS was verified for either pilot city.",
+    "xROAD has no stable, version-pinned pilot traffic snapshot in canonical storage.",
+    "Station usage and person-trip sources remain non-promoted historical/catalog context.",
+    "Municipal production OIDC, retention, backup, publication and legal approvals remain deployment work."
+  ]
+}

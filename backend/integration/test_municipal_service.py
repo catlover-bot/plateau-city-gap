@@ -1096,6 +1096,17 @@ def test_feedback_override_evidence_report_and_transparency_review_loop(
     assert report_a.json()["artifact_sha256"] == report_b.json()["artifact_sha256"]
     assert report_a.json()["deterministic"] is True
     assert report_a.json()["content_schema_version"] == "2.0.0"
+    report_artifact = client.get(
+        f"/api/v1/reports/{report_a.json()['id']}/artifact",
+        headers=_headers("viewer"),
+    )
+    assert report_artifact.status_code == 200, report_artifact.text
+    assert set(report_artifact.json()["reports_v2"]) == {
+        "data_coverage_report",
+        "data_quality_report",
+        "urban_state_source_report",
+        "analysis_source_report",
+    }
 
     transparency = client.post(
         "/api/v1/cities/maizuru/public-transparency",

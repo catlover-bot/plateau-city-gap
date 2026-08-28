@@ -5263,6 +5263,30 @@ class MunicipalServiceRepository(PostGISRepository):
                     "行政承認、政策推奨、因果効果を自動認定しません。"
                 ),
             }
+            if report_type == "data_quality":
+                structured_content["reports_v2"] = {
+                    "data_coverage_report": {
+                        "coverage_summary": subject.get("coverage_summary", {}),
+                        "coverage": subject.get("coverage", []),
+                        "missing_data": subject.get("missing_data", []),
+                    },
+                    "data_quality_report": {
+                        "quality_checks": subject.get("quality_checks", []),
+                        "quality_gate_policies": subject.get("quality_gate_policies", []),
+                        "licenses": subject.get("licenses", []),
+                    },
+                    "urban_state_source_report": {
+                        "urban_states": subject.get("urban_states", []),
+                        "datasets": subject.get("datasets", []),
+                        "source_timeline": subject.get("source_timeline", []),
+                    },
+                    "analysis_source_report": {
+                        "dependencies": subject.get("dependencies", []),
+                        "sources": subject.get("sources", []),
+                        "comparisons": subject.get("comparisons", []),
+                        "conflicts": subject.get("conflicts", []),
+                    },
+                }
             _, digest = self._report_digest(structured_content)
             public_summary = {
                 "schema_version": "citygap-public-summary-1.0.0",

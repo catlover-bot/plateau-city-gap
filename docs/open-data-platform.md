@@ -208,3 +208,6 @@ version-pinned raw/canonicalを未取込で、利用者数を駅容量・混雑�
 機械可読な観測receiptと境界は
 `analysis/outputs/real/open_data/official_capability_audit.json`に保存する。raw CSV/ZIPや個人情報になり得る
 項目はrepositoryおよびPublic Showcaseへ配布しない。
+
+Goal 1〜120の最終対応、実データ件数、CI証跡、外部作業境界は
+[Municipal Open Data Platform final audit](open-data-platform-final-audit.md)を参照する。
