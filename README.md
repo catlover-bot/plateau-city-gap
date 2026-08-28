@@ -173,6 +173,7 @@ after_transport_distance
 - `analysis/scripts/build_municipal_workspace_assets.py`: 選択済みA/B/Cのprivacy-safe地図packageを実成果物から生成
 - `analysis/scripts/audit_municipal_platform.py`: 実成果物・API・schema・UI監査18項目を再検証
 - `analysis/scripts/build_municipal_open_data_inventory.py`: 舞鶴BODIKと藤沢公式ライブラリを安全に再発見し、license・欠損理由付きinventoryを生成
+- `analysis/scripts/build_maizuru_open_data_canonical.py`: 舞鶴P0実CSVをchecksum検証し、3,546 canonical recordと500m / PLATEAU候補linkを生成
 - `analysis/scripts/build_urban_futures_validation.py`: 舞鶴・藤沢の将来人口、stress test、criticality、避難所、計画比較を実データ検証
 - `analysis/scripts/benchmark_urban_resilience_scale.py`: 100k/250k/500k synthetic graph benchmark
 - `analysis/scripts/build_evidence_v3.py`: Temporal / Resilience Evidence PackageのJSON/CSV/print HTML生成

@@ -90,3 +90,23 @@ canonicalization、spatial linkage、capability refresh、dependency-based recom
 取得clientはHTTPS、明示host allowlist、credential URL拒否、標準443 port、DNSのglobal IP、
 redirect先再検査、Content-Lengthと実byte上限を強制する。raw取得後はSHA-256 object keyへ
 原子的に移動し、既存objectを再利用する際もhashとsizeを再検証する。
+
+## Maizuru P0 real canonical run
+
+`python -m analysis.scripts.build_maizuru_open_data_canonical --observed-at <ISO-8601>`
+は、舞鶴市の医療、介護、人口、AED、公共施設、教育機関、児童生徒数、子育て施設、
+指定緊急避難場所の9 resourceを実取得する。2026-08-28 runでは合計3,546 source rowを
+すべてcanonical化し、rejectは0件だった。AEDのCP932と他8件のUTF-8 BOMを別々に検出している。
+
+Canonical内訳は、facility 1,076、行政区人口時系列2,120、学校活動観測350である。人口identityは
+公式の行政区コードと調査年月日の複合keyであり、年度違いを重複として捨てない。facilityのうち
+1,012件には公開緯度経度があり、973件を既存の監査済み500m meshへ接続した。
+
+公式PLATEAU 2025 archiveのSHA-256を再検証して44,640棟を再読込し、全1,076 facilityへ
+建物link結果を付けた。675件は30m以内の最寄りfootprint候補、401件はunmatchedである。
+住所や座標が近くても同一建物の公式確認ではないため、候補675件はすべて`ambiguous`とし、
+自動同定や施設能力の推定には使わない。
+
+成果物はsource report、canonical JSONL、canonical summaryの3点で、相互SHA-256を持つ。
+canonical attributesから電話、email、contact form、画像、備考を除き、建物別人口推計も含めない。
+datum、reference date、建物identityのreviewが残るためpromotion状態は`requires_review`のままである。

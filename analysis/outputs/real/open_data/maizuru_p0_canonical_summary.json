@@ -1,0 +1,43 @@
+{
+  "analysis_readiness": "requires_review",
+  "canonical_artifact": "analysis/outputs/real/open_data/maizuru_p0_canonical.jsonl",
+  "canonical_artifact_sha256": "c459709a71cdec3d988a0584e6bcb81a97c8ff1d03a51c2965ab81e2bdf0168e",
+  "canonical_record_count": 3546,
+  "canonical_version": "citygap-canonical-open-data@1",
+  "city_code": "26202",
+  "entity_kind_counts": {
+    "administrative_area_population": 2120,
+    "aed": 134,
+    "care_service": 147,
+    "childcare_facility": 38,
+    "educational_institution": 25,
+    "emergency_shelter": 205,
+    "medical_institution": 85,
+    "public_facility": 442,
+    "school_enrollment": 350
+  },
+  "geometry_record_count": 1012,
+  "observed_at": "2026-08-28T09:30:00+09:00",
+  "plateau": {
+    "archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+    "building_count": 44640,
+    "product_specification_version": "5.0"
+  },
+  "privacy": "Canonical attributes exclude phone, email, contact form, image and free-form notes. No building-level population estimate is included.",
+  "record_type_counts": {
+    "activity_observation": 350,
+    "facility": 1076,
+    "population_observation": 2120
+  },
+  "schema_version": "citygap-canonical-open-data-summary@1",
+  "source_report": "analysis/outputs/real/open_data/maizuru_p0_source_report.json",
+  "source_report_sha256": "d4439c8acb19d653e1b9736c0a96c5a505913ffca55c6f6ca6fc4da12f5f1429",
+  "spatial_link_counts": {
+    "city_exact": 3546,
+    "mesh_linked": 973,
+    "mesh_unmatched": 2573,
+    "plateau_building_candidate": 675,
+    "plateau_building_unmatched": 401
+  },
+  "unavailable_reason": "not_verified"
+}

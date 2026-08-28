@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
@@ -20,6 +21,17 @@ from backend.citygap_platform.open_data.registry import OFFICIAL_SOURCE_REGISTRY
 from backend.citygap_platform.open_data.storage import ContentAddressedObjectStore
 
 CKAN_LICENSE_MAP = {"cc-by-40-intl": "cc-by-4.0"}
+
+
+def _detect_csv_encoding(path: Path) -> str:
+    payload = path.read_bytes()
+    for encoding in ("utf-8-sig", "cp932"):
+        try:
+            payload.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+        return encoding
+    raise ValueError("CSV encoding is neither UTF-8 with optional BOM nor CP932")
 
 
 class CkanCatalogAdapter:
@@ -123,13 +135,13 @@ class CkanCatalogAdapter:
     ) -> SchemaInspection:
         if resource.format != "CSV":
             raise ValueError(f"CKAN schema inspection is not implemented for {resource.format}")
-        inspection = CsvSourceAdapter(
-            self.object_store.path_for_key(receipt.object_key), allow_extensionless=True
-        ).inspect()
+        path = self.object_store.path_for_key(receipt.object_key)
+        encoding = _detect_csv_encoding(path)
+        inspection = CsvSourceAdapter(path, encoding=encoding, allow_extensionless=True).inspect()
         return SchemaInspection(
             schema_version=f"columns:{','.join(inspection.columns)}",
             field_names=inspection.columns,
-            encoding="utf-8-sig",
+            encoding=encoding,
             source_crs=None,
             row_count=inspection.row_count,
             quality_results=(
@@ -147,7 +159,9 @@ class CkanCatalogAdapter:
         if resource.format != "CSV" or not inspection.field_names:
             raise ValueError("Only inspected CSV resources can be normalized")
         frame = CsvSourceAdapter(
-            self.object_store.path_for_key(receipt.object_key), allow_extensionless=True
+            self.object_store.path_for_key(receipt.object_key),
+            encoding=inspection.encoding,
+            allow_extensionless=True,
         ).dataframe()
         for index, row in frame.iterrows():
             yield {
