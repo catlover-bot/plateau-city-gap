@@ -7,7 +7,7 @@ CITY GAPのオープンデータ基盤は、公式カタログの「発見」と
 
 ## 公式ソースレジストリ
 
-2026-08-28時点で、次の入口を版付きで登録している。
+2026-08-29時点で、次の入口を版付きで登録している。
 
 | source key | 公式提供主体・入口 | adapter | 初期license policy | 範囲 |
 |---|---|---|---|---|
@@ -23,6 +23,10 @@ CITY GAPのオープンデータ基盤は、公式カタログの「発見」と
 | `npa-traffic-accident-2024` | [警察庁 交通事故統計オープンデータ](https://www.npa.go.jp/publications/statistics/koutsuu/opendata/2024/opendata_2024.html) | `npa-traffic-accident@2024` | PDL 1.0 | 全国年次本票 |
 | `mlit-pedestrian-network-catalog` | [国交省 歩行空間ネットワーク](https://ckan.hokonavi.go.jp/dataset/) | `mlit-pedestrian-ckan@2024` | PDL 1.0 | 公開範囲のみ |
 | `xroad-open-traffic-api` | [xROAD/JARTIC道路交通情報API](https://www.jartic-open-traffic.org/) | `xroad-traffic-api@2026-01` | 個別API規約 | rolling参照値 |
+| `mhlw-kayoi-no-ba` | [厚生労働省 通いの場のオープンデータ](https://www.mhlw.go.jp/stf/kayoinoba_opendata_00002.html) | `mhlw-kayoi-no-ba@2026-06` | 利用規約review | 全国公開、対象2市は行なし |
+| `wam-disability-welfare-open-data` | [WAM NET 障害福祉オープンデータ](https://www.wam.go.jp/content/wamnet/pcpub/top/sfkopendata/) | `wam-disability-welfare@2026-03` | resource条件review | 全国catalog、未取込 |
+| `mlit-station-passenger-count-s12` | [国土数値情報 駅別乗降客数S12](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S12-v3_1.html) | `mlit-station-passenger-s12@2021` | 国土数値情報利用約款review | 全国、2021観測 |
+| `mlit-person-trip-study-catalog` | [国土交通省 パーソントリップ調査](https://www.mlit.go.jp/toshi/tosiko/toshi_tosiko_tk_000031.html) | `mlit-person-trip-catalog@2026-03` | 公開単位・survey条件review | 実施都市圏catalog |
 
 コード上のSingle Source of Truthは
 `backend/citygap_platform/open_data/registry.py`、永続化の初期値はforward-only migration
@@ -185,3 +189,22 @@ JGD2000からEPSG:4326への変換、年次ファイル年と発生時刻、監�
 GSI基盤地図情報、歩行空間ネットワーク、xROAD、GTFSは、取得・許諾・都市coverageの確認結果だけを
 記録し、利用できないsourceの架空行を生成しない。詳細、公式URL、都市別状態、ライセンス境界は
 [geospatial resilience sources](open-data-geospatial-resilience.md)を参照する。
+
+## 2026-08-29 secondary official capability audit
+
+追加調査した4入口は、発見可能性と分析採用を分離してmigration `026`へ登録した。厚労省「通いの場」
+2026-06 CSVは6,195,590 byte、15,486 data row、SHA-256
+`d909b5a013756ed09cb0635e75acf9c65628588f26f2702ab2e6cbea6bcd31f1`を検証したが、公開自治体名の
+完全一致では舞鶴市・藤沢市とも0行だった。これは活動量0ではなく`outside_coverage`であり、canonical
+行を生成しない。
+
+WAM NETは2026-03の29 package linkを公式ページで確認したが、pilot city行、schema、resourceごとの
+再配布条件をまだ検証していない。S12はproduct specification 3.1と2021年乗降客数を確認したが、
+version-pinned raw/canonicalを未取込で、利用者数を駅容量・混雑・live需要へ読み替えない。PT調査は
+2026-03時点の実施都市圏catalogまでを確認し、対象2市のlicensed spatial aggregateを未確認とした。
+個人軌跡の取込は許可しない。3入口はいずれも`requires_review / not_verified`であり、分析capabilityを
+自動有効化しない。
+
+機械可読な観測receiptと境界は
+`analysis/outputs/real/open_data/official_capability_audit.json`に保存する。raw CSV/ZIPや個人情報になり得る
+項目はrepositoryおよびPublic Showcaseへ配布しない。

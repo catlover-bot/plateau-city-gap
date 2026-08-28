@@ -391,6 +391,11 @@ def test_data_hub_v2_exposes_coverage_lineage_without_automatic_truth_selection(
         "unavailable_reason": "outside_coverage",
     }
     assert coverage["gtfs"]["unavailable_reason"] == "not_published"
+    assert coverage["social_participation"]["status"] == "unavailable"
+    assert coverage["social_participation"]["unavailable_reason"] == "outside_coverage"
+    assert coverage["welfare"]["status"] == "requires_review"
+    assert coverage["station_usage"]["temporal_alignment"] == "stale"
+    assert coverage["mobility"]["unavailable_reason"] == "not_verified"
     assert any(
         item["dataset_family"] == "mhlw_medical" and item["effect"] == "BASE"
         for item in hub["missing_data"]
@@ -403,11 +408,15 @@ def test_data_hub_v2_exposes_coverage_lineage_without_automatic_truth_selection(
         "2020-10-01",
         "2020 model",
         "2021-06-01",
+        "2021",
         "2022",
         "2023/2024 occurrence dates in 2024 annual file",
         "2025 release",
         "2025 / 2050 / 2070 projections (R6 2024 production)",
+        "2026-03 catalog",
+        "2026-03 catalog",
         "2026-06-01",
+        "2026-06-30",
         "2026-06-30",
     ]
     comparison = hub["comparisons"][0]
@@ -423,7 +432,7 @@ def test_data_hub_v2_exposes_coverage_lineage_without_automatic_truth_selection(
     assert any(item["title"].startswith("医療情報ネット") for item in sources.json()["items"])
     timeline = client.get("/api/v1/cities/maizuru/source-timeline", headers=_headers("viewer"))
     assert timeline.status_code == 200
-    assert len(timeline.json()["items"]) == 9
+    assert len(timeline.json()["items"]) == 13
     assert (
         client.get(
             "/api/v1/cities/maizuru/data-coverage", headers=_headers("viewer", ORG_B)

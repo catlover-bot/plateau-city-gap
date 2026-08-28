@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 26)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 27)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -199,3 +199,24 @@ def test_open_data_review_evidence_and_transparency_are_separate_reviewed_layers
     assert "deterministic boolean NOT NULL DEFAULT true CHECK (deterministic)" in sql
     assert "CREATE TABLE public_transparency_records" in sql
     assert "public transparency requires a public report" in sql
+
+
+def test_secondary_official_sources_record_capability_boundaries_without_synthetic_rows() -> None:
+    sql = Path("infra/migrations/026_secondary_official_capability_boundaries.sql").read_text(
+        encoding="utf-8"
+    )
+    for adapter_id in (
+        "mhlw-kayoi-no-ba@2026-06",
+        "wam-disability-welfare@2026-03",
+        "mlit-station-passenger-s12@2021",
+        "mlit-person-trip-catalog@2026-03",
+    ):
+        assert adapter_id in sql
+    assert '"pilot_city_row_count":0' in sql
+    assert '"missing_rows_are_not_zero":true' in sql
+    assert '"raw_snapshot_ingested":false' in sql
+    assert '"canonical_snapshot_ingested":false' in sql
+    assert '"individual_tracking":false' in sql
+    assert "'unavailable','outside_coverage'" in sql
+    assert "'requires_review','not_verified'" in sql
+    assert "never fabricates city data" in sql

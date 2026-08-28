@@ -147,8 +147,8 @@ def test_source_contract_validates_scope_priority_and_municipality_code() -> Non
 
 
 def test_official_registry_is_unique_and_city_scoped() -> None:
-    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 16
-    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 18
+    assert len(OFFICIAL_SOURCE_REGISTRY.adapters) == 20
+    assert len(OFFICIAL_SOURCE_REGISTRY.sources) == 22
     maizuru = OFFICIAL_SOURCE_REGISTRY.sources_for_city("26202")
     fujisawa = OFFICIAL_SOURCE_REGISTRY.sources_for_city("14205")
     assert "bodik-maizuru" in {item.source_key for item in maizuru}
@@ -180,6 +180,22 @@ def test_official_registry_is_unique_and_city_scoped() -> None:
     assert (
         OFFICIAL_SOURCE_REGISTRY.source("plateau-city-model-2025").default_license_id
         == "plateau-site-policy-2025"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.adapter("mhlw-kayoi-no-ba@2026-06").dataset_family
+        == "social_participation"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.source("wam-disability-welfare-open-data").default_license_id
+        == "unknown"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.adapter("mlit-station-passenger-s12@2021").dataset_family
+        == "station_usage"
+    )
+    assert (
+        OFFICIAL_SOURCE_REGISTRY.source("mlit-person-trip-study-catalog").catalog_scope
+        == CatalogScope.NATIONAL
     )
     assert "maizuru-official-gtfs-research" in {item.source_key for item in maizuru}
     assert "maizuru-official-gtfs-research" not in {item.source_key for item in fujisawa}

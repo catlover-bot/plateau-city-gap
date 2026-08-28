@@ -1,0 +1,105 @@
+{
+  "schema_version": "citygap.official-capability-audit@1",
+  "observed_at": "2026-08-29T00:23:00+09:00",
+  "audit_scope": {
+    "pilot_cities": [
+      {
+        "city_code": "26202",
+        "name": "舞鶴市"
+      },
+      {
+        "city_code": "14205",
+        "name": "藤沢市"
+      }
+    ],
+    "rule": "Official discoverability is recorded separately from analysis readiness; missing rows are never converted to zero or synthetic features."
+  },
+  "sources": [
+    {
+      "source_key": "mhlw-kayoi-no-ba",
+      "provider": "厚生労働省",
+      "dataset_family": "social_participation",
+      "official_page": "https://www.mhlw.go.jp/stf/kayoinoba_opendata_00002.html",
+      "observed_resource": "https://www.mhlw.go.jp/content/12300000/202606.csv",
+      "official_manifest_verified": true,
+      "reference_date": "2026-06-30",
+      "output_date": "2026-07-09",
+      "raw_receipt": {
+        "size_bytes": 6195590,
+        "line_count_including_header": 15487,
+        "data_row_count": 15486,
+        "sha256": "d909b5a013756ed09cb0635e75acf9c65628588f26f2702ab2e6cbea6bcd31f1",
+        "committed_to_repository": false,
+        "published_to_public_assets": false
+      },
+      "pilot_city_match": {
+        "method": "exact published municipality-name match",
+        "names": [
+          "舞鶴市",
+          "藤沢市"
+        ],
+        "matching_rows": 0,
+        "absence_interpretation": "outside_coverage; not a zero-valued observation"
+      },
+      "canonical_snapshot_ingested": false,
+      "coverage_status": "unavailable",
+      "unavailable_reason": "outside_coverage"
+    },
+    {
+      "source_key": "wam-disability-welfare-open-data",
+      "provider": "独立行政法人福祉医療機構 WAM NET",
+      "dataset_family": "welfare",
+      "official_page": "https://www.wam.go.jp/content/wamnet/pcpub/top/sfkopendata/",
+      "official_manifest_verified": true,
+      "advertised_release_month": "2026-03",
+      "unique_package_link_count": 29,
+      "package_pattern": "sfkopendata_202603_*.zip",
+      "raw_snapshot_ingested": false,
+      "schema_verified": false,
+      "pilot_city_rows_verified": false,
+      "redistribution_terms_verified": false,
+      "coverage_status": "requires_review",
+      "unavailable_reason": "not_verified",
+      "interpretation_boundary": "Published establishments do not establish current personal eligibility or service availability."
+    },
+    {
+      "source_key": "mlit-station-passenger-count-s12",
+      "provider": "国土交通省 国土数値情報",
+      "dataset_family": "station_usage",
+      "official_page": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-S12-v3_1.html",
+      "official_resource": "https://nlftp.mlit.go.jp/ksj/gml/data/S12/S12-22/S12-22_GML.zip",
+      "official_manifest_verified": true,
+      "product_specification": "3.1",
+      "passenger_observation_year": 2021,
+      "raw_snapshot_ingested": false,
+      "canonical_snapshot_ingested": false,
+      "pilot_station_rows_verified": false,
+      "coverage_status": "requires_review",
+      "unavailable_reason": "not_verified",
+      "temporal_alignment": "stale",
+      "interpretation_boundary": "Station passenger counts are historical usage context, not capacity, congestion, or live demand."
+    },
+    {
+      "source_key": "mlit-person-trip-study-catalog",
+      "provider": "国土交通省 都市局",
+      "dataset_family": "mobility",
+      "official_page": "https://www.mlit.go.jp/toshi/tosiko/toshi_tosiko_tk_000031.html",
+      "observed_catalog_resource": "https://www.mlit.go.jp/toshi/tosiko/content/001759611.xlsx",
+      "official_catalog_verified": true,
+      "catalog_as_of": "2026-03",
+      "pilot_public_spatial_package_verified": false,
+      "raw_snapshot_ingested": false,
+      "coverage_status": "requires_review",
+      "unavailable_reason": "not_verified",
+      "privacy_boundary": "Only licensed aggregate study outputs may be used; individual trajectories are prohibited."
+    }
+  ],
+  "result": {
+    "status": "passed",
+    "registered_source_count": 4,
+    "promoted_canonical_source_count": 0,
+    "synthetic_record_count": 0,
+    "public_raw_resource_count": 0,
+    "meaning": "The official capability boundary audit passed. It does not claim that the four sources are analysis-ready."
+  }
+}
