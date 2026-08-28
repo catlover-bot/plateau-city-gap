@@ -322,12 +322,18 @@ DECLARE
     source_row city_open_data_sources%ROWTYPE;
     version_id uuid;
 BEGIN
-    SELECT source, resource.dataset_version_id
-      INTO source_row, version_id
+    SELECT source.*
+      INTO source_row
     FROM open_data_resources AS resource
     JOIN city_open_data_sources AS source
       ON source.organization_id = resource.organization_id
      AND source.id = resource.city_source_id
+    WHERE resource.organization_id = NEW.organization_id
+      AND resource.id = NEW.resource_id;
+
+    SELECT resource.dataset_version_id
+      INTO version_id
+    FROM open_data_resources AS resource
     WHERE resource.organization_id = NEW.organization_id
       AND resource.id = NEW.resource_id;
 
@@ -373,12 +379,18 @@ BEGIN
     ON CONFLICT (organization_id, resource_id) DO UPDATE SET
         state = 'quarantined', status_reason = EXCLUDED.status_reason, updated_at = now();
 
-    SELECT source, resource.dataset_version_id
-      INTO source_row, version_id
+    SELECT source.*
+      INTO source_row
     FROM open_data_resources AS resource
     JOIN city_open_data_sources AS source
       ON source.organization_id = resource.organization_id
      AND source.id = resource.city_source_id
+    WHERE resource.organization_id = NEW.organization_id
+      AND resource.id = NEW.resource_id;
+
+    SELECT resource.dataset_version_id
+      INTO version_id
+    FROM open_data_resources AS resource
     WHERE resource.organization_id = NEW.organization_id
       AND resource.id = NEW.resource_id;
 
