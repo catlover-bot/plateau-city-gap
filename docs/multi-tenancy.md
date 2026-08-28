@@ -20,6 +20,11 @@ Cross-tenant object IDs return the same not-found response as nonexistent resour
 Offline IndexedDB entries also include organization and city keys and are filtered
 before display.
 
+Opaque saved-view tokens, annual state-change sets, state/dataset/run associations and
+Job input associations are also tenant-scoped. Tokens never bypass membership checks,
+and composite foreign keys prevent a tenant-owned change set or Job from linking an
+Urban State or Dataset Version owned by another organization.
+
 ## Database isolation decision
 
 The current pilot uses application-enforced tenant predicates plus composite foreign

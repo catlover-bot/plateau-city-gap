@@ -370,6 +370,19 @@ export interface DataHubPayload {
     geometry_count: number;
   }>;
   urban_states: UrbanStateSummary[];
+  annual_updates?: Array<{
+    id: string;
+    status: string;
+    algorithm_version: string;
+    from_label: string;
+    from_effective_date: string;
+    to_label: string;
+    to_effective_date: string;
+    job_id: string | null;
+    job_state: string | null;
+    job_stage: string | null;
+    created_at: string;
+  }>;
 }
 
 export interface ServiceSnapshot {

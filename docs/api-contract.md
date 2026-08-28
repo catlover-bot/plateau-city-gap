@@ -16,9 +16,12 @@
 ## Resource groups
 
 - identity and setup: `/me`, `/cities`, `/cities/{city}/onboarding`
-- data: `/cities/{city}/datasets`, `/dataset-versions/{id}/status`, Urban States
-- work: Findings, Investigations, Reviews, Assignments and Decision Records
-- compute: analysis definitions/runs, scenarios and comparisons
+- data: `/cities/{city}/datasets`, `/dataset-versions/{id}/status`, Urban States and
+  `/cities/{city}/annual-updates`
+- work: Findings, Investigations, saved spatial views, Reviews, Assignments and Decision
+  Records
+- compute: analysis definitions/runs, scenarios, immutable-result scenario clones and
+  comparisons
 - field: selected-site offline packages, sync/conflicts and attachments
 - evidence: evidence centers, reports, artifacts and classified exports
 - operations: jobs, health, metrics and immutable audit events
@@ -32,3 +35,9 @@ cache headers.
 
 Public and municipal OpenAPI documents are generated from their actual runtime surface.
 The public document cannot be used to discover blocked municipal operations.
+
+Saved-view share tokens are opaque locators, not bearer authorization. Resolving
+`/saved-views/{share_token}` still requires an authenticated, active membership in the
+owning organization and `investigation:read`. Annual-update creation is idempotent for
+the organization, state pair and algorithm version and returns the durable dataset-diff
+Job plus an explicit statement that prior version references were not mutated.

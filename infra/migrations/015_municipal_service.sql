@@ -168,10 +168,26 @@ ALTER TABLE urban_state_change_sets
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id);
+ALTER TABLE urban_state_change_sets ADD CONSTRAINT urban_state_change_sets_org_id_unique
+    UNIQUE (organization_id, id);
+ALTER TABLE urban_state_change_sets ADD CONSTRAINT urban_state_change_sets_org_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE urban_state_change_sets ADD CONSTRAINT urban_state_change_sets_org_from_state_fk
+    FOREIGN KEY (organization_id, from_urban_state_id)
+        REFERENCES urban_states(organization_id, id);
+ALTER TABLE urban_state_change_sets ADD CONSTRAINT urban_state_change_sets_org_to_state_fk
+    FOREIGN KEY (organization_id, to_urban_state_id)
+        REFERENCES urban_states(organization_id, id);
 ALTER TABLE recomputation_plans
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id);
+ALTER TABLE recomputation_plans ADD CONSTRAINT recomputation_plans_org_change_set_fk
+    FOREIGN KEY (organization_id, change_set_id)
+        REFERENCES urban_state_change_sets(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE recomputation_plans ADD CONSTRAINT recomputation_plans_org_target_state_fk
+    FOREIGN KEY (organization_id, target_urban_state_id)
+        REFERENCES urban_states(organization_id, id);
 
 ALTER TABLE road_network_versions
     ADD COLUMN organization_id uuid NOT NULL
@@ -179,6 +195,16 @@ ALTER TABLE road_network_versions
         REFERENCES organizations(id);
 ALTER TABLE road_network_versions ADD CONSTRAINT road_network_versions_org_id_unique
     UNIQUE (organization_id, id);
+ALTER TABLE state_network_versions
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE state_network_versions ADD CONSTRAINT state_network_versions_org_state_fk
+    FOREIGN KEY (organization_id, urban_state_id)
+        REFERENCES urban_states(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE state_network_versions ADD CONSTRAINT state_network_versions_org_network_fk
+    FOREIGN KEY (organization_id, network_version_id)
+        REFERENCES road_network_versions(organization_id, id);
 
 ALTER TABLE stress_test_runs
     ADD COLUMN organization_id uuid NOT NULL
@@ -220,6 +246,38 @@ ALTER TABLE analysis_runs ADD CONSTRAINT analysis_runs_organization_id_id_unique
     UNIQUE (organization_id, id);
 ALTER TABLE analysis_runs ADD CONSTRAINT analysis_runs_organization_city_fk
     FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE analysis_run_dataset_versions
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE analysis_run_dataset_versions
+    ADD CONSTRAINT analysis_run_dataset_versions_organization_run_fk
+    FOREIGN KEY (organization_id, analysis_run_id)
+        REFERENCES analysis_runs(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE analysis_run_dataset_versions
+    ADD CONSTRAINT analysis_run_dataset_versions_organization_version_fk
+    FOREIGN KEY (organization_id, dataset_version_id)
+        REFERENCES dataset_versions(organization_id, id);
+ALTER TABLE state_dataset_versions
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE state_dataset_versions ADD CONSTRAINT state_dataset_versions_organization_state_fk
+    FOREIGN KEY (organization_id, urban_state_id)
+        REFERENCES urban_states(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE state_dataset_versions ADD CONSTRAINT state_dataset_versions_organization_version_fk
+    FOREIGN KEY (organization_id, dataset_version_id)
+        REFERENCES dataset_versions(organization_id, id);
+ALTER TABLE state_analysis_runs
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE state_analysis_runs ADD CONSTRAINT state_analysis_runs_organization_state_fk
+    FOREIGN KEY (organization_id, urban_state_id)
+        REFERENCES urban_states(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE state_analysis_runs ADD CONSTRAINT state_analysis_runs_organization_run_fk
+    FOREIGN KEY (organization_id, analysis_run_id)
+        REFERENCES analysis_runs(organization_id, id) ON DELETE CASCADE;
 ALTER TABLE job_runs
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
@@ -244,6 +302,16 @@ ALTER TABLE job_runs ADD CONSTRAINT job_runs_organization_id_id_unique
     UNIQUE (organization_id, id);
 ALTER TABLE job_runs ADD CONSTRAINT job_runs_organization_city_fk
     FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE job_dataset_versions
+    ADD COLUMN organization_id uuid NOT NULL
+        DEFAULT '00000000-0000-0000-0000-000000000001'
+        REFERENCES organizations(id);
+ALTER TABLE job_dataset_versions ADD CONSTRAINT job_dataset_versions_organization_job_fk
+    FOREIGN KEY (organization_id, job_run_id)
+        REFERENCES job_runs(organization_id, id) ON DELETE CASCADE;
+ALTER TABLE job_dataset_versions ADD CONSTRAINT job_dataset_versions_organization_version_fk
+    FOREIGN KEY (organization_id, dataset_version_id)
+        REFERENCES dataset_versions(organization_id, id);
 
 CREATE TABLE job_cancellation_requests (
     organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,

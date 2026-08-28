@@ -154,6 +154,21 @@ class UrbanStateTransitionRequest(StrictRequest):
     note: str = Field(min_length=1, max_length=4000)
 
 
+class AnnualUpdateCreateRequest(StrictRequest):
+    from_urban_state_id: UUID
+    to_urban_state_id: UUID
+    algorithm_version: str = Field(
+        default="citygap-state-diff@1.0.0",
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._@+-]{1,99}$",
+    )
+
+    @model_validator(mode="after")
+    def distinct_states(self) -> AnnualUpdateCreateRequest:
+        if self.from_urban_state_id == self.to_urban_state_id:
+            raise ValueError("Annual update states must be different")
+        return self
+
+
 class FindingTransitionRequest(StrictRequest):
     expected_status: FindingStatus
     proposed_status: FindingStatus
@@ -182,6 +197,14 @@ class SavedViewCreateRequest(StrictRequest):
     title: str = Field(min_length=1, max_length=500)
     spatial_state: dict[str, Any]
     data_classification: DataClassification = DataClassification.INTERNAL
+
+    @field_validator("spatial_state")
+    @classmethod
+    def bounded_spatial_state(cls, value: dict[str, Any]) -> dict[str, Any]:
+        encoded = json.dumps(value, ensure_ascii=False).encode()
+        if len(encoded) > 65536:
+            raise ValueError("spatial_state exceeds 64 KiB")
+        return value
 
 
 class ReviewCreateRequest(StrictRequest):
@@ -367,6 +390,10 @@ class ScenarioComparisonCreateRequest(StrictRequest):
         if len(value) != len(set(value)):
             raise ValueError("scenario_run_ids must be unique")
         return value
+
+
+class ScenarioCloneRequest(StrictRequest):
+    title: str = Field(min_length=1, max_length=500)
 
 
 class EvidenceCenterCreateRequest(StrictRequest):
@@ -624,6 +651,42 @@ def transition_urban_state(
 
 
 @router.get(
+    "/cities/{city}/annual-updates",
+    dependencies=[Depends(require_permission("platform:read"))],
+)
+def annual_updates(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    items = repo.annual_updates(organization_id, city, limit)
+    if items is None:
+        raise _not_found("City")
+    return {"items": items}
+
+
+@router.post(
+    "/cities/{city}/annual-updates",
+    status_code=202,
+    dependencies=[Depends(require_permission("dataset:promote"))],
+)
+def create_annual_update(
+    city: str,
+    body: AnnualUpdateCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_annual_update(organization_id, city, body.model_dump(mode="json"))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
     "/cities/{city}/findings",
     dependencies=[Depends(require_permission("finding:read"))],
 )
@@ -790,6 +853,26 @@ def create_saved_view(
     )
     if result is None:
         raise _not_found("Investigation")
+    return result
+
+
+@router.get(
+    "/saved-views/{share_token}",
+    dependencies=[Depends(require_permission("investigation:read"))],
+    summary="Open a tenant-authenticated saved spatial view by opaque share token",
+)
+def saved_view(
+    share_token: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    if len(share_token) != 48 or any(
+        character not in "0123456789abcdef" for character in share_token
+    ):
+        raise _not_found("Saved view")
+    result = repo.saved_view(organization_id, share_token)
+    if result is None:
+        raise _not_found("Saved view")
     return result
 
 
@@ -1261,6 +1344,23 @@ def scenario_library(
     if items is None:
         raise _not_found("City")
     return {"items": items}
+
+
+@router.post(
+    "/scenarios/{scenario_id}/clone",
+    status_code=201,
+    dependencies=[Depends(require_permission("scenario:draft"))],
+)
+def clone_scenario(
+    scenario_id: UUID,
+    body: ScenarioCloneRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.clone_scenario(organization_id, str(scenario_id), body.title)
+    if result is None:
+        raise _not_found("Scenario")
+    return result
 
 
 @router.get(

@@ -77,6 +77,27 @@ def test_offline_field_and_attachment_records_have_composite_tenant_guards() -> 
     assert "FOREIGN KEY (organization_id, city_id)" in SQL
 
 
+def test_derived_state_associations_have_composite_tenant_guards() -> None:
+    for constraint in (
+        "urban_state_change_sets_org_city_fk",
+        "urban_state_change_sets_org_from_state_fk",
+        "urban_state_change_sets_org_to_state_fk",
+        "recomputation_plans_org_change_set_fk",
+        "recomputation_plans_org_target_state_fk",
+        "state_network_versions_org_state_fk",
+        "state_network_versions_org_network_fk",
+        "analysis_run_dataset_versions_organization_run_fk",
+        "analysis_run_dataset_versions_organization_version_fk",
+        "state_dataset_versions_organization_state_fk",
+        "state_dataset_versions_organization_version_fk",
+        "state_analysis_runs_organization_state_fk",
+        "state_analysis_runs_organization_run_fk",
+        "job_dataset_versions_organization_job_fk",
+        "job_dataset_versions_organization_version_fk",
+    ):
+        assert constraint in SQL
+
+
 def test_service_search_includes_real_spatial_identifiers() -> None:
     for entity_type in ("'facility'", "'building'", "'mesh'"):
         assert entity_type in SQL

@@ -57,11 +57,11 @@ def _prepare_service_fixture(database_url: str) -> str:
         ).fetchone()[0]
         connection.execute(
             """INSERT INTO state_dataset_versions (
-                   urban_state_id, dataset_role, dataset_version_id,
+                   organization_id, urban_state_id, dataset_role, dataset_version_id,
                    source_verified, metadata
-               ) VALUES (%s, 'plateau', %s, true, '{"acceptance_fixture":true}')
+               ) VALUES (%s, %s, 'plateau', %s, true, '{"acceptance_fixture":true}')
                ON CONFLICT DO NOTHING""",
-            (state_id, registry_version_id),
+            (ORG_A, state_id, registry_version_id),
         )
         connection.execute(
             """INSERT INTO organizations (
@@ -304,3 +304,222 @@ def test_organization_a_b_isolation_for_api_and_database_constraints(
         },
     )
     assert last_admin.status_code == 409
+
+
+def test_annual_data_update_preserves_previous_investigation_and_versions(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    previous_state_id = _prepare_service_fixture(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+    suffix = uuid.uuid4().hex[:10]
+
+    investigation = client.post(
+        "/api/v1/cities/maizuru/investigations",
+        headers=_headers("analyst"),
+        json={
+            "urban_state_id": previous_state_id,
+            "title": f"年次更新前の再現性記録 {suffix}",
+            "objective": "新年度データ登録後も旧Urban State参照を保持する",
+            "spatial_state": {"urban_state_id": previous_state_id},
+        },
+    )
+    assert investigation.status_code == 201, investigation.text
+    investigation_id = investigation.json()["id"]
+    saved_view = client.post(
+        f"/api/v1/investigations/{investigation_id}/saved-views",
+        headers=_headers("analyst"),
+        json={
+            "title": f"年次更新前の空間状態 {suffix}",
+            "spatial_state": {
+                "urban_state_id": previous_state_id,
+                "viewport": {"longitude": 135.33, "latitude": 35.47, "zoom": 13},
+                "layers": ["investigation_entities"],
+            },
+            "data_classification": "internal",
+        },
+    )
+    assert saved_view.status_code == 201, saved_view.text
+    share_token = saved_view.json()["share_token"]
+    assert (
+        client.get(f"/api/v1/saved-views/{share_token}", headers=_headers("viewer")).status_code
+        == 200
+    )
+    assert (
+        client.get(
+            f"/api/v1/saved-views/{share_token}", headers=_headers("viewer", ORG_B)
+        ).status_code
+        == 404
+    )
+
+    registered = client.post(
+        "/api/v1/cities/maizuru/datasets",
+        headers=_headers("data_manager"),
+        json={
+            "dataset_key": f"annual-plateau-{suffix}",
+            "title": f"年次更新検証 PLATEAU {suffix}",
+            "provider": "Project PLATEAU public source metadata",
+            "dataset_category": "plateau",
+            "data_classification": "public",
+            "version_key": f"2027-{suffix}",
+            "dataset_year": 2027,
+            "data_format": "CityGML",
+            "source_url": "https://www.geospatial.jp/ckan/dataset/plateau",
+            "license": "source metadata only; fixture bytes are not substituted",
+            "declared_source_crs": "EPSG:6697",
+        },
+    )
+    assert registered.status_code == 201, registered.text
+    version_id = registered.json()["version"]["id"]
+
+    # Actual ingestion and quality checks are worker/operator responsibilities.  The
+    # integration fixture marks their verified outcome explicitly, then exercises
+    # the service promotion gate rather than pretending the upload itself promoted.
+    import psycopg
+
+    with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """UPDATE dataset_versions
+               SET lifecycle_status = 'available', quality_status = 'passed',
+                   analysis_ready = true, service_status = 'analysis_ready',
+                   verification_status = 'fixture_worker_verified'
+               WHERE organization_id = %s AND id = %s""",
+            (ORG_A, version_id),
+        )
+        connection.execute(
+            """INSERT INTO dataset_quality_checks (
+                   organization_id, dataset_version_id, check_key, status,
+                   observed_value, explanation
+               ) VALUES (%s, %s, 'feature_count', 'passed',
+                         '{"fixture":true}',
+                         'PostGIS integration fixture explicitly completed the worker gate')""",
+            (ORG_A, version_id),
+        )
+
+    promoted = client.patch(
+        f"/api/v1/dataset-versions/{version_id}/status",
+        headers=_headers("data_manager"),
+        json={
+            "expected_status": "analysis_ready",
+            "proposed_status": "promoted",
+            "note": "PostGIS品質ゲート結果を確認",
+        },
+    )
+    assert promoted.status_code == 200, promoted.text
+
+    state = client.post(
+        "/api/v1/cities/maizuru/urban-states",
+        headers=_headers("data_manager"),
+        json={
+            "state_key": f"annual-observed-2027-{suffix}",
+            "label": f"舞鶴市 2027 年次更新 {suffix}",
+            "effective_date": "2027-01-01",
+            "state_type": "observed",
+            "primary_dataset_version_id": version_id,
+            "source_verified": True,
+        },
+    )
+    assert state.status_code == 201, state.text
+    next_state_id = state.json()["id"]
+    assert (
+        client.patch(
+            f"/api/v1/urban-states/{next_state_id}/status",
+            headers=_headers("data_manager"),
+            json={
+                "expected_status": "draft",
+                "proposed_status": "validated",
+                "note": "公開出典と品質ゲートを確認",
+            },
+        ).status_code
+        == 200
+    )
+
+    update_payload = {
+        "from_urban_state_id": previous_state_id,
+        "to_urban_state_id": next_state_id,
+        "algorithm_version": "citygap-state-diff@1.0.0",
+    }
+    annual = client.post(
+        "/api/v1/cities/maizuru/annual-updates",
+        headers=_headers("data_manager"),
+        json=update_payload,
+    )
+    assert annual.status_code == 202, annual.text
+    result = annual.json()
+    assert result["created"] is True
+    assert result["job"]["state"] == "queued"
+    assert result["previous_records"]["investigations"] >= 1
+    assert result["previous_records"]["changed_by_this_request"] is False
+    assert version_id in result["contract"]["dataset_version_ids"]
+
+    repeated = client.post(
+        "/api/v1/cities/maizuru/annual-updates",
+        headers=_headers("data_manager"),
+        json=update_payload,
+    )
+    assert repeated.status_code == 202
+    assert repeated.json()["created"] is False
+    assert repeated.json()["job"]["id"] == result["job"]["id"]
+
+    previous = client.get(f"/api/v1/investigations/{investigation_id}", headers=_headers("viewer"))
+    assert previous.status_code == 200
+    assert str(previous.json()["investigation"]["urban_state_id"]) == previous_state_id
+    assert (
+        client.get(
+            "/api/v1/cities/maizuru/annual-updates",
+            headers=_headers("viewer", ORG_B),
+        ).status_code
+        == 404
+    )
+
+
+def test_scenario_clone_preserves_computed_result_and_resets_human_checks(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _prepare_service_fixture(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+    import psycopg
+
+    with psycopg.connect(database_url) as connection:
+        parent_id, parent_sites = connection.execute(
+            """SELECT scenario.id, count(site.site_order)
+               FROM scenario_runs AS scenario
+               JOIN scenario_sites AS site ON site.scenario_run_id = scenario.id
+               WHERE scenario.organization_id = %s
+               GROUP BY scenario.id ORDER BY scenario.id LIMIT 1""",
+            (ORG_A,),
+        ).fetchone()
+
+    clone = client.post(
+        f"/api/v1/scenarios/{parent_id}/clone",
+        headers=_headers("analyst"),
+        json={"title": "自治体比較用clone"},
+    )
+    assert clone.status_code == 201, clone.text
+    cloned_id = clone.json()["id"]
+    assert str(clone.json()["parent_scenario_run_id"]) == str(parent_id)
+    assert clone.json()["lifecycle_status"] == "draft"
+    assert clone.json()["review_status"] == "not_requested"
+    assert (
+        client.post(
+            f"/api/v1/scenarios/{parent_id}/clone",
+            headers=_headers("analyst", ORG_B),
+            json={"title": "越境clone"},
+        ).status_code
+        == 404
+    )
+
+    with psycopg.connect(database_url) as connection:
+        cloned_sites = connection.execute(
+            "SELECT count(*) FROM scenario_sites WHERE scenario_run_id = %s", (cloned_id,)
+        ).fetchone()[0]
+        checks = connection.execute(
+            """SELECT count(*), bool_and(
+                   site_access = 'unknown' AND road_safety = 'unknown'
+                   AND hazard_confirmation = 'unknown' AND notes = ''
+               ) FROM scenario_field_checks WHERE scenario_run_id = %s""",
+            (cloned_id,),
+        ).fetchone()
+    assert cloned_sites == parent_sites
+    assert checks == (parent_sites, True)

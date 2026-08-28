@@ -15,7 +15,9 @@
 1. Analyst runs a catalogued analysis against a validated/current Urban State and named
    promoted versions.
 2. Output may become a Finding; the analyst triages or dismisses it with a reason.
-3. Analyst opens an Investigation and links the relevant findings and spatial view.
+3. Analyst opens an Investigation and links the relevant findings and spatial view. A
+   saved view retains viewport, visible entity types and Urban State; its share URL
+   remains tenant-authenticated.
 4. Planner requests and performs a review. Changed evidence creates a visible request
    for changes.
 5. Planner or Field Staff downloads only a selected scenario site, records notes and
@@ -29,7 +31,17 @@
 
 ## Annual update
 
-Register the new source versions, validate and promote them, create the new observed
-Urban State, run the same versioned analyses, compare old and new states, review
-observed change separately from expected scenario effect, then generate the
-deterministic annual report. Causality remains a municipal evaluation.
+Register the new source versions, complete external ingestion and quality gates,
+promote them, and create and validate the new observed Urban State. Data Manager then
+registers an annual update between two observed states. The service queues one
+idempotent `dataset_diff` Job with both states, all attached Dataset Versions and an
+algorithm version. Existing Investigations, Analysis Runs and Reports retain their old
+Urban State references. After the worker persists real differences and any verified
+recomputation, staff review observed change separately from expected scenario effect
+and generate the deterministic annual report. Causality remains a municipal
+evaluation.
+
+Scenario clone copies an immutable computed result into a new draft with a parent
+reference. It does not rerun or alter the algorithm, and all human field checks are
+reset to unknown. Changed assumptions require a new versioned computation rather than
+editing copied metrics.

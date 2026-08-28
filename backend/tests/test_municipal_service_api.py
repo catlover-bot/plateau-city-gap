@@ -13,6 +13,7 @@ ORG_A = DEFAULT_ORGANIZATION_ID
 ORG_B = "00000000-0000-0000-0000-000000000002"
 CITY_ID = "10000000-0000-0000-0000-000000000001"
 STATE_ID = "20000000-0000-0000-0000-000000000001"
+NEXT_STATE_ID = "20000000-0000-0000-0000-000000000002"
 FINDING_ID = "30000000-0000-0000-0000-000000000001"
 INVESTIGATION_ID = "40000000-0000-0000-0000-000000000001"
 REVIEW_ID = "50000000-0000-0000-0000-000000000001"
@@ -24,6 +25,7 @@ REPORT_ID = "90000000-0000-0000-0000-000000000001"
 JOB_ID = "a0000000-0000-0000-0000-000000000001"
 ATTACHMENT_ID = "b0000000-0000-0000-0000-000000000001"
 USER_ID = "c0000000-0000-0000-0000-000000000001"
+SHARE_TOKEN = "d" * 48
 
 
 def headers(role: str, organization_id: str = ORG_A) -> dict[str, str]:
@@ -114,6 +116,34 @@ class MunicipalRepository:
     ):
         return {"id": state_id, "lifecycle_status": proposed_status}
 
+    def annual_updates(self, organization_id: str, city: str, limit: int):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return [
+            {
+                "id": EVIDENCE_ID,
+                "from_urban_state_id": STATE_ID,
+                "to_urban_state_id": NEXT_STATE_ID,
+                "job_state": "queued",
+            }
+        ]
+
+    def create_annual_update(self, organization_id: str, city: str, payload: dict[str, Any]):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {
+            "change_set": {"id": EVIDENCE_ID, "status": "pending"},
+            "job": {"id": JOB_ID, "state": "queued"},
+            "contract": payload,
+            "previous_records": {
+                "investigations": 1,
+                "analysis_runs": 1,
+                "reports": 1,
+                "changed_by_this_request": False,
+            },
+            "created": True,
+        }
+
     def city_service_home(self, organization_id: str, city: str):
         self.calls.append(("home", organization_id))
         if organization_id != ORG_A or city != "fixture-city":
@@ -182,6 +212,16 @@ class MunicipalRepository:
         self, organization_id: str, investigation_id: str, payload: dict[str, Any]
     ):
         return {"id": FINDING_ID, "investigation_id": investigation_id, **payload}
+
+    def saved_view(self, organization_id: str, share_token: str):
+        if organization_id != ORG_A or share_token != SHARE_TOKEN:
+            return None
+        return {
+            "id": FINDING_ID,
+            "investigation_id": INVESTIGATION_ID,
+            "title": "庁内確認ビュー",
+            "spatial_state": {"viewport": {"longitude": 135.3, "latitude": 35.4, "zoom": 14}},
+        }
 
     def create_review(self, organization_id: str, investigation_id: str, payload: dict[str, Any]):
         self.calls.append(("create_review", organization_id))
@@ -342,6 +382,16 @@ class MunicipalRepository:
     def scenario_library(self, organization_id: str, city: str, limit: int):
         return []
 
+    def clone_scenario(self, organization_id: str, scenario_id: str, title: str):
+        if organization_id != ORG_A:
+            return None
+        return {
+            "id": SCENARIO_B,
+            "parent_scenario_run_id": scenario_id,
+            "title": title,
+            "lifecycle_status": "draft",
+        }
+
     def scenario_comparisons(self, organization_id: str, city: str, limit: int):
         return []
 
@@ -481,8 +531,10 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/cities/{city}/onboarding",
         "/api/v1/cities/{city}/urban-states",
         "/api/v1/urban-states/{state_id}/status",
+        "/api/v1/cities/{city}/annual-updates",
         "/api/v1/cities/{city}/findings",
         "/api/v1/cities/{city}/investigations",
+        "/api/v1/saved-views/{share_token}",
         "/api/v1/investigations/{investigation_id}/reviews",
         "/api/v1/investigations/{investigation_id}/status",
         "/api/v1/investigations/{investigation_id}/field-observations",
@@ -498,6 +550,7 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/analysis-definitions",
         "/api/v1/cities/{city}/analysis-runs",
         "/api/v1/cities/{city}/scenario-comparisons",
+        "/api/v1/scenarios/{scenario_id}/clone",
         "/api/v1/cities/{city}/evidence",
         "/api/v1/cities/{city}/reports",
         "/api/v1/reports/{report_id}/artifact",
@@ -1020,3 +1073,54 @@ def test_admin_and_data_manager_own_explicit_onboarding_lifecycle() -> None:
     )
     assert transition.status_code == 200
     assert transition.json()["lifecycle_status"] == "validated"
+
+
+def test_annual_update_queues_version_diff_without_mutating_previous_records() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    url = "/api/v1/cities/fixture-city/annual-updates"
+    payload = {
+        "from_urban_state_id": STATE_ID,
+        "to_urban_state_id": NEXT_STATE_ID,
+        "algorithm_version": "citygap-state-diff@1.0.0",
+    }
+    assert client.post(url, headers=headers("analyst"), json=payload).status_code == 403
+    response = client.post(url, headers=headers("data_manager"), json=payload)
+    assert response.status_code == 202
+    assert response.json()["job"]["state"] == "queued"
+    assert response.json()["previous_records"]["changed_by_this_request"] is False
+    listed = client.get(url, headers=headers("viewer"))
+    assert listed.status_code == 200
+    assert listed.json()["items"][0]["to_urban_state_id"] == NEXT_STATE_ID
+
+    same_state = client.post(
+        url,
+        headers=headers("data_manager"),
+        json={**payload, "to_urban_state_id": STATE_ID},
+    )
+    assert same_state.status_code == 422
+
+
+def test_saved_view_share_token_still_requires_tenant_membership() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    url = f"/api/v1/saved-views/{SHARE_TOKEN}"
+    shared = client.get(url, headers=headers("viewer"))
+    assert shared.status_code == 200
+    assert shared.json()["investigation_id"] == INVESTIGATION_ID
+    assert client.get(url, headers=headers("viewer", ORG_B)).status_code == 404
+    assert (
+        client.get("/api/v1/saved-views/not-a-token", headers=headers("viewer")).status_code == 404
+    )
+
+
+def test_scenario_clone_is_a_draft_action_and_remains_tenant_scoped() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    url = f"/api/v1/scenarios/{SCENARIO_A}/clone"
+    assert client.post(url, headers=headers("viewer"), json={"title": "複製"}).status_code == 403
+    cloned = client.post(url, headers=headers("analyst"), json={"title": "比較用の複製"})
+    assert cloned.status_code == 201
+    assert cloned.json()["parent_scenario_run_id"] == SCENARIO_A
+    assert cloned.json()["lifecycle_status"] == "draft"
+    assert (
+        client.post(url, headers=headers("analyst", ORG_B), json={"title": "越境"}).status_code
+        == 404
+    )

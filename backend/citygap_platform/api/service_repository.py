@@ -612,7 +612,7 @@ class MunicipalServiceRepository(PostGISRepository):
             primary = self._one(
                 connection.execute(
                     """SELECT version.id, version.service_status, version.quality_status,
-                              version.analysis_ready
+                              version.analysis_ready, dataset.dataset_category
                        FROM dataset_versions AS version
                        JOIN datasets AS dataset ON dataset.id = version.dataset_id
                        WHERE version.organization_id = %s AND dataset.city_id = %s
@@ -666,6 +666,28 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             )
             assert result is not None
+            dataset_role = {
+                "plateau": "plateau",
+                "population": "population",
+                "facilities": "facility",
+                "transport": "transport",
+                "hazard": "hazard",
+                "planning": "planning",
+            }.get(primary["dataset_category"], "other")
+            connection.execute(
+                """INSERT INTO state_dataset_versions (
+                       organization_id, urban_state_id, dataset_role, dataset_version_id,
+                       source_verified, metadata
+                   ) VALUES (%s, %s, %s, %s, %s, %s)""",
+                (
+                    organization_id,
+                    result["id"],
+                    dataset_role,
+                    payload["primary_dataset_version_id"],
+                    payload["source_verified"],
+                    json.dumps({"registered_by": "municipal-v1"}),
+                ),
+            )
             self._service_audit(
                 connection,
                 organization_id,
@@ -754,6 +776,246 @@ class MunicipalServiceRepository(PostGISRepository):
                 after,
             )
             return after
+
+    def annual_updates(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> list[dict[str, Any]] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            return self._dicts(
+                connection.execute(
+                    """SELECT change.id, change.status, change.algorithm_version,
+                              change.summary, change.created_at, change.started_at,
+                              change.completed_at,
+                              before_state.id AS from_urban_state_id,
+                              before_state.label AS from_label,
+                              before_state.effective_date AS from_effective_date,
+                              after_state.id AS to_urban_state_id,
+                              after_state.label AS to_label,
+                              after_state.effective_date AS to_effective_date,
+                              job.id AS job_id, job.state AS job_state,
+                              job.current_stage AS job_stage, job.error_message
+                       FROM urban_state_change_sets AS change
+                       JOIN urban_states AS before_state
+                         ON before_state.organization_id = change.organization_id
+                        AND before_state.id = change.from_urban_state_id
+                       JOIN urban_states AS after_state
+                         ON after_state.organization_id = change.organization_id
+                        AND after_state.id = change.to_urban_state_id
+                       LEFT JOIN job_runs AS job
+                         ON job.organization_id = change.organization_id
+                        AND job.parameters ->> 'change_set_id' = change.id::text
+                       WHERE change.organization_id = %s AND change.city_id = %s
+                       ORDER BY change.created_at DESC, change.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+
+    def create_annual_update(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        from_state_id = payload["from_urban_state_id"]
+        to_state_id = payload["to_urban_state_id"]
+        algorithm_version = payload["algorithm_version"]
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            states = self._dicts(
+                connection.execute(
+                    """SELECT id, state_key, label, effective_date, state_type,
+                              lifecycle_status, source_verified
+                       FROM urban_states
+                       WHERE organization_id = %s AND city_id = %s
+                         AND id = ANY(%s::uuid[])
+                       ORDER BY effective_date, id""",
+                    (organization_id, city["id"], [from_state_id, to_state_id]),
+                )
+            )
+            by_id = {str(state["id"]): state for state in states}
+            before_state = by_id.get(str(from_state_id))
+            after_state = by_id.get(str(to_state_id))
+            if before_state is None or after_state is None:
+                raise ValueError("Annual update states must belong to the selected city")
+            if before_state["state_type"] != "observed" or after_state["state_type"] != "observed":
+                raise ValueError("Annual updates compare observed Urban States only")
+            if before_state["lifecycle_status"] not in {"validated", "current", "superseded"}:
+                raise ValueError("Previous Urban State must be validated")
+            if after_state["lifecycle_status"] not in {"validated", "current"}:
+                raise ValueError("New Urban State must be validated before change detection")
+            if not before_state["source_verified"] or not after_state["source_verified"]:
+                raise ValueError("Annual update states require verified sources")
+            if after_state["effective_date"] <= before_state["effective_date"]:
+                raise ValueError("New Urban State must have a later effective date")
+
+            version_rows = self._dicts(
+                connection.execute(
+                    """SELECT DISTINCT dataset_version_id
+                       FROM state_dataset_versions
+                       WHERE organization_id = %s
+                         AND urban_state_id = ANY(%s::uuid[])
+                       ORDER BY dataset_version_id""",
+                    (organization_id, [from_state_id, to_state_id]),
+                )
+            )
+            version_ids = [str(row["dataset_version_id"]) for row in version_rows]
+            if not version_ids:
+                raise ValueError("Annual update states have no versioned dataset inputs")
+
+            preserved = self._one(
+                connection.execute(
+                    """SELECT
+                           (SELECT count(*) FROM investigations
+                            WHERE organization_id = %s AND urban_state_id = %s)
+                               AS investigations,
+                           (SELECT count(*) FROM state_analysis_runs
+                            WHERE organization_id = %s AND urban_state_id = %s)
+                               AS analysis_runs,
+                           (SELECT count(*) FROM report_records AS report
+                            JOIN investigations AS investigation
+                              ON investigation.organization_id = report.organization_id
+                             AND investigation.id = report.investigation_id
+                            WHERE report.organization_id = %s
+                              AND investigation.urban_state_id = %s)
+                               AS reports""",
+                    (
+                        organization_id,
+                        from_state_id,
+                        organization_id,
+                        from_state_id,
+                        organization_id,
+                        from_state_id,
+                    ),
+                )
+            ) or {"investigations": 0, "analysis_runs": 0, "reports": 0}
+            contract = {
+                "organization_id": organization_id,
+                "city_id": str(city["id"]),
+                "from_urban_state_id": str(from_state_id),
+                "to_urban_state_id": str(to_state_id),
+                "dataset_version_ids": version_ids,
+                "algorithm_version": algorithm_version,
+            }
+            config_hash = hashlib.sha256(
+                json.dumps(contract, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
+            change_set = self._one(
+                connection.execute(
+                    """INSERT INTO urban_state_change_sets (
+                           organization_id, city_id, from_urban_state_id,
+                           to_urban_state_id, algorithm_version, summary
+                       ) VALUES (%s, %s, %s, %s, %s, %s)
+                       ON CONFLICT (from_urban_state_id, to_urban_state_id, algorithm_version)
+                       DO NOTHING RETURNING *""",
+                    (
+                        organization_id,
+                        city["id"],
+                        from_state_id,
+                        to_state_id,
+                        algorithm_version,
+                        json.dumps(
+                            {
+                                "contract": contract,
+                                "status_boundary": "queued_for_version_diff",
+                            }
+                        ),
+                    ),
+                )
+            )
+            created = change_set is not None
+            if change_set is None:
+                change_set = self._one(
+                    connection.execute(
+                        """SELECT * FROM urban_state_change_sets
+                           WHERE organization_id = %s AND city_id = %s
+                             AND from_urban_state_id = %s AND to_urban_state_id = %s
+                             AND algorithm_version = %s""",
+                        (
+                            organization_id,
+                            city["id"],
+                            from_state_id,
+                            to_state_id,
+                            algorithm_version,
+                        ),
+                    )
+                )
+            assert change_set is not None
+            idempotency_key = hashlib.sha256(
+                f"{organization_id}:annual-update:{change_set['id']}:{config_hash}".encode()
+            ).hexdigest()
+            job = self._one(
+                connection.execute(
+                    """INSERT INTO job_runs (
+                           organization_id, city_id, job_type, state, config_hash,
+                           algorithm_version, idempotency_key, parameters
+                       ) VALUES (%s, %s, 'dataset_diff', 'queued', %s, %s, %s, %s)
+                       ON CONFLICT (idempotency_key) WHERE idempotency_key IS NOT NULL
+                       DO UPDATE SET idempotency_key = EXCLUDED.idempotency_key
+                       RETURNING id, state, current_stage, queued_at, config_hash,
+                                 algorithm_version""",
+                    (
+                        organization_id,
+                        city["id"],
+                        config_hash,
+                        algorithm_version,
+                        idempotency_key,
+                        json.dumps({**contract, "change_set_id": str(change_set["id"])}),
+                    ),
+                )
+            )
+            assert job is not None
+            for version_id in version_ids:
+                connection.execute(
+                    """INSERT INTO job_dataset_versions (
+                           organization_id, job_run_id, dataset_version_id
+                       ) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING""",
+                    (organization_id, job["id"], version_id),
+                )
+            connection.execute(
+                """INSERT INTO job_events (job_run_id, state, message)
+                   SELECT %s, 'queued', 'annual Urban State difference contract accepted'
+                   WHERE NOT EXISTS (
+                       SELECT 1 FROM job_events
+                       WHERE job_run_id = %s AND state = 'queued'
+                         AND message = 'annual Urban State difference contract accepted'
+                   )""",
+                (job["id"], job["id"]),
+            )
+            if created:
+                self._activity(
+                    connection,
+                    organization_id,
+                    str(city["id"]),
+                    "annual_update.queued",
+                    "urban_state_change_set",
+                    str(change_set["id"]),
+                    f"年次更新「{before_state['label']} → {after_state['label']}」を登録",
+                )
+                self._service_audit(
+                    connection,
+                    organization_id,
+                    "annual_update.create",
+                    "urban_state_change_set",
+                    str(change_set["id"]),
+                    str(city["id"]),
+                    None,
+                    {"change_set": change_set, "job": job, "contract": contract},
+                )
+            return {
+                "change_set": change_set,
+                "job": job,
+                "contract": contract,
+                "previous_records": {
+                    **preserved,
+                    "mutation_policy": "immutable_version_references",
+                    "changed_by_this_request": False,
+                },
+                "created": created,
+            }
 
     def city_service_home(self, organization_id: str, city_reference: str) -> dict[str, Any] | None:
         with self._connect() as connection:
@@ -1082,11 +1344,6 @@ class MunicipalServiceRepository(PostGISRepository):
             )
             if investigation is None:
                 return None
-            if investigation["status"] != "in_review":
-                validate_investigation_transition(
-                    InvestigationStatus(investigation["status"]),
-                    InvestigationStatus.IN_REVIEW,
-                )
             findings = self._dicts(
                 connection.execute(
                     """SELECT finding.id, finding.finding_type, finding.title, finding.summary,
@@ -1140,6 +1397,16 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, investigation_id),
                 )
             )
+            saved_views = self._dicts(
+                connection.execute(
+                    """SELECT id, title, spatial_state, share_token,
+                              data_classification, created_by, created_at, updated_at
+                       FROM saved_views
+                       WHERE organization_id = %s AND investigation_id = %s
+                       ORDER BY updated_at DESC, id DESC""",
+                    (organization_id, investigation_id),
+                )
+            )
             return {
                 "investigation": investigation,
                 "findings": findings,
@@ -1147,6 +1414,7 @@ class MunicipalServiceRepository(PostGISRepository):
                 "reviews": reviews,
                 "field_observations": field_observations,
                 "decisions": decisions,
+                "saved_views": saved_views,
             }
 
     def investigations(
@@ -1429,7 +1697,7 @@ class MunicipalServiceRepository(PostGISRepository):
             if investigation is None:
                 return None
             context = current_request_context()
-            return self._one(
+            result = self._one(
                 connection.execute(
                     """INSERT INTO saved_views (
                            organization_id, city_id, investigation_id, title, spatial_state,
@@ -1446,6 +1714,49 @@ class MunicipalServiceRepository(PostGISRepository):
                         payload.get("data_classification", "internal"),
                         context.actor,
                     ),
+                )
+            )
+            assert result is not None
+            self._activity(
+                connection,
+                organization_id,
+                str(investigation["city_id"]),
+                "saved_view.created",
+                "saved_view",
+                str(result["id"]),
+                f"空間ビュー「{payload['title']}」を保存",
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "saved_view.create",
+                "saved_view",
+                str(result["id"]),
+                str(investigation["city_id"]),
+                None,
+                result,
+            )
+            return result
+
+    def saved_view(self, organization_id: str, share_token: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._one(
+                connection.execute(
+                    """SELECT view.id, view.investigation_id, view.title,
+                              view.spatial_state, view.data_classification,
+                              view.created_by, view.created_at, view.updated_at,
+                              investigation.title AS investigation_title,
+                              investigation.urban_state_id, city.city_key, city.name AS city_name
+                       FROM saved_views AS view
+                       JOIN investigations AS investigation
+                         ON investigation.organization_id = view.organization_id
+                        AND investigation.id = view.investigation_id
+                       JOIN cities AS city
+                         ON city.organization_id = view.organization_id
+                        AND city.id = view.city_id
+                       WHERE view.organization_id = %s AND view.share_token = %s""",
+                    (organization_id, share_token),
                 )
             )
 
@@ -1869,12 +2180,37 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            annual_updates = self._dicts(
+                connection.execute(
+                    """SELECT change.id, change.status, change.algorithm_version,
+                              before_state.label AS from_label,
+                              before_state.effective_date AS from_effective_date,
+                              after_state.label AS to_label,
+                              after_state.effective_date AS to_effective_date,
+                              job.id AS job_id, job.state AS job_state,
+                              job.current_stage AS job_stage, change.created_at
+                       FROM urban_state_change_sets AS change
+                       JOIN urban_states AS before_state
+                         ON before_state.organization_id = change.organization_id
+                        AND before_state.id = change.from_urban_state_id
+                       JOIN urban_states AS after_state
+                         ON after_state.organization_id = change.organization_id
+                        AND after_state.id = change.to_urban_state_id
+                       LEFT JOIN job_runs AS job
+                         ON job.organization_id = change.organization_id
+                        AND job.parameters ->> 'change_set_id' = change.id::text
+                       WHERE change.organization_id = %s AND change.city_id = %s
+                       ORDER BY change.created_at DESC, change.id DESC LIMIT 30""",
+                    (organization_id, city["id"]),
+                )
+            )
             return {
                 "city": city,
                 "datasets": datasets,
                 "quality_checks": quality,
                 "plateau_model": plateau_model,
                 "urban_states": urban_states,
+                "annual_updates": annual_updates,
             }
 
     def transition_dataset_version(
@@ -2200,15 +2536,15 @@ class MunicipalServiceRepository(PostGISRepository):
             for role, version_id in sorted(input_versions.items()):
                 connection.execute(
                     """INSERT INTO analysis_run_dataset_versions (
-                           analysis_run_id, dataset_version_id, input_role
-                       ) VALUES (%s, %s, %s)""",
-                    (run["id"], version_id, role),
+                           organization_id, analysis_run_id, dataset_version_id, input_role
+                       ) VALUES (%s, %s, %s, %s)""",
+                    (organization_id, run["id"], version_id, role),
                 )
             connection.execute(
                 """INSERT INTO state_analysis_runs (
-                       urban_state_id, analysis_run_id, result_role
-                   ) VALUES (%s, %s, 'derived')""",
-                (payload["urban_state_id"], run["id"]),
+                       organization_id, urban_state_id, analysis_run_id, result_role
+                   ) VALUES (%s, %s, %s, 'derived')""",
+                (organization_id, payload["urban_state_id"], run["id"]),
             )
             idempotency_key = hashlib.sha256(
                 f"{organization_id}:analysis_run:{run['id']}:{config_hash}".encode()
@@ -2241,9 +2577,10 @@ class MunicipalServiceRepository(PostGISRepository):
             assert job is not None
             for version_id in sorted(set(version_ids)):
                 connection.execute(
-                    """INSERT INTO job_dataset_versions (job_run_id, dataset_version_id)
-                       VALUES (%s, %s) ON CONFLICT DO NOTHING""",
-                    (job["id"], version_id),
+                    """INSERT INTO job_dataset_versions (
+                           organization_id, job_run_id, dataset_version_id
+                       ) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING""",
+                    (organization_id, job["id"], version_id),
                 )
             connection.execute(
                 """INSERT INTO job_events (job_run_id, state, message)
@@ -2296,6 +2633,152 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["city_code"], limit),
                 )
             )
+
+    def clone_scenario(
+        self, organization_id: str, scenario_id: str, title: str
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        new_id = str(uuid.uuid4())
+        scenario_key = f"clone-{new_id}"
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO scenario_runs (
+                           id, scenario_key, dataset_version_id, network_version_id,
+                           context_run_id, plateau_product_specification_version,
+                           algorithm_version, objective_mode, objective_definition,
+                           site_count, candidate_count, algorithm_kind, config_hash,
+                           generated_at, runtime_seconds, lifecycle_status, reviewed_at,
+                           metadata, base_urban_state_id, organization_id, title,
+                           parent_scenario_run_id, assumptions, review_status
+                       )
+                       SELECT %s, %s, scenario.dataset_version_id,
+                              scenario.network_version_id, scenario.context_run_id,
+                              scenario.plateau_product_specification_version,
+                              scenario.algorithm_version, scenario.objective_mode,
+                              scenario.objective_definition, scenario.site_count,
+                              scenario.candidate_count, scenario.algorithm_kind,
+                              scenario.config_hash, scenario.generated_at,
+                              scenario.runtime_seconds, 'draft', NULL,
+                              scenario.metadata || %s::jsonb,
+                              scenario.base_urban_state_id, scenario.organization_id,
+                              %s, scenario.id, scenario.assumptions, 'not_requested'
+                       FROM scenario_runs AS scenario
+                       WHERE scenario.organization_id = %s AND scenario.id = %s
+                       RETURNING *""",
+                    (
+                        new_id,
+                        scenario_key,
+                        json.dumps(
+                            {
+                                "clone_boundary": "identical immutable computed result",
+                                "cloned_from": scenario_id,
+                                "cloned_by": context.actor,
+                            },
+                            ensure_ascii=False,
+                        ),
+                        title,
+                        organization_id,
+                        scenario_id,
+                    ),
+                )
+            )
+            if result is None:
+                return None
+            connection.execute(
+                """INSERT INTO scenario_sites (
+                       scenario_run_id, site_order, candidate_id, network_node_id,
+                       road_gml_id, road_surface_id, road_name,
+                       existing_transport_distance_m, component_id,
+                       candidate_to_graph_connector_m, siting_feasibility, geom
+                   )
+                   SELECT %s, site_order, candidate_id, network_node_id,
+                          road_gml_id, road_surface_id, road_name,
+                          existing_transport_distance_m, component_id,
+                          candidate_to_graph_connector_m, siting_feasibility, geom
+                   FROM scenario_sites WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_objectives (
+                       scenario_run_id, objective_name, objective_role, value,
+                       unit, definition, metadata
+                   )
+                   SELECT %s, objective_name, objective_role, value,
+                          unit, definition, metadata
+                   FROM scenario_objectives WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_constraints (
+                       scenario_run_id, site_order, constraint_name, threshold,
+                       observed, satisfied, interpretation
+                   )
+                   SELECT %s, site_order, constraint_name, threshold,
+                          observed, satisfied, interpretation
+                   FROM scenario_constraints WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_impacts (
+                       scenario_run_id, metric_name, value, unit, interpretation
+                   )
+                   SELECT %s, metric_name, value, unit, interpretation
+                   FROM scenario_impacts WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_context (
+                       scenario_run_id, site_order, context_type, label,
+                       feature_count, review_status, siting_feasibility, source_payload
+                   )
+                   SELECT %s, site_order, context_type, label, feature_count,
+                          review_status, siting_feasibility, source_payload
+                   FROM scenario_context WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_evidence (
+                       scenario_run_id, representative_building_gml_id,
+                       virtual_candidate_id, route_semantics, evidence, created_at
+                   )
+                   SELECT %s, representative_building_gml_id, virtual_candidate_id,
+                          route_semantics, evidence, created_at
+                   FROM scenario_evidence WHERE scenario_run_id = %s""",
+                (new_id, scenario_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_field_checks (scenario_run_id, site_order)
+                   SELECT %s, site_order FROM scenario_sites WHERE scenario_run_id = %s""",
+                (new_id, new_id),
+            )
+            connection.execute(
+                """INSERT INTO scenario_lifecycle_events (
+                       scenario_run_id, from_status, to_status, note
+                   ) VALUES (%s, NULL, 'draft', %s)""",
+                (new_id, f"cloned from {scenario_id}; field checks reset"),
+            )
+            city = self._one(
+                connection.execute(
+                    """SELECT city.id FROM cities AS city
+                       JOIN city_dataset_versions AS version
+                         ON version.city_id = city.city_code
+                       WHERE city.organization_id = %s AND version.id = %s""",
+                    (organization_id, result["dataset_version_id"]),
+                )
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "scenario.clone",
+                "scenario",
+                new_id,
+                str(city["id"]) if city else None,
+                {"parent_scenario_run_id": scenario_id},
+                result,
+            )
+            return result
 
     def scenario_comparisons(
         self, organization_id: str, city_reference: str, limit: int

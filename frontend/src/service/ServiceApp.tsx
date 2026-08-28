@@ -1,4 +1,10 @@
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import {
+  type FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   applySyncResponse,
   cacheSelectedFieldPackage,
@@ -8,6 +14,12 @@ import {
   type QueuedFieldOperation,
 } from "../lib/fieldOffline";
 import { ServiceApiError, loadServiceSnapshot, serviceApi } from "./api";
+import { ROLE_HOME_LEAD, ROLE_LABELS, SERVICE_NAVIGATION } from "./copy";
+import {
+  MunicipalSpatialWorkspace,
+  type MunicipalSpatialEntity,
+  type MunicipalViewport,
+} from "./MunicipalSpatialWorkspace";
 import {
   ServiceEmpty,
   ServiceError,
@@ -23,46 +35,14 @@ import type {
   ServiceSnapshot,
 } from "./types";
 
-type ServicePage =
-  | "home"
-  | "cities"
-  | "data"
-  | "analysis"
-  | "measures"
-  | "review"
-  | "evidence"
-  | "operations";
-
-const NAVIGATION: Array<{
-  id: ServicePage;
-  label: string;
-  description: string;
-}> = [
-  { id: "home", label: "Home", description: "担当と都市状況" },
-  { id: "cities", label: "Cities", description: "都市ワークスペース" },
-  { id: "data", label: "Data", description: "登録・品質・年度" },
-  { id: "analysis", label: "Analysis", description: "Findingと分析" },
-  { id: "measures", label: "Measures", description: "Scenario比較" },
-  { id: "review", label: "Review", description: "調査・現地・判断" },
-  { id: "evidence", label: "Evidence", description: "根拠とReport" },
-  { id: "operations", label: "Operations", description: "Job・更新・Release" },
-];
-
-const ROLE_LABELS: Record<ProductRole, string> = {
-  viewer: "閲覧者",
-  analyst: "分析担当",
-  planner: "企画・計画担当",
-  field_staff: "現地確認担当",
-  data_manager: "データ管理担当",
-  administrator: "管理者",
-};
+type ServicePage = (typeof SERVICE_NAVIGATION)[number]["id"];
 
 function initialPage(): ServicePage {
   if (typeof window === "undefined") return "home";
   const value = new URLSearchParams(window.location.search).get(
     "servicePage",
   ) as ServicePage | null;
-  return NAVIGATION.some((item) => item.id === value) ? value! : "home";
+  return SERVICE_NAVIGATION.some((item) => item.id === value) ? value! : "home";
 }
 
 function formatDate(value: unknown): string {
@@ -115,7 +95,11 @@ export function ServiceApp({
   const [reload, setReload] = useState(0);
   const [findingFilter, setFindingFilter] = useState("open");
   const [findingFormOpen, setFindingFormOpen] = useState(false);
-  const [caseId, setCaseId] = useState<string | null>(null);
+  const [caseId, setCaseId] = useState<string | null>(() =>
+    typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.search).get("investigation"),
+  );
   const [caseDetail, setCaseDetail] = useState<Record<string, unknown> | null>(
     null,
   );
@@ -229,6 +213,10 @@ export function ServiceApp({
     }
   }, []);
 
+  useEffect(() => {
+    if (caseId && !caseDetail) void openCase(caseId);
+  }, [caseDetail, caseId, openCase]);
+
   const mutate = useCallback(
     async (
       path: string,
@@ -315,7 +303,7 @@ export function ServiceApp({
   if (!snapshot) return null;
 
   const roles = snapshot.profile.roles;
-  const visibleNavigation = NAVIGATION.filter(
+  const visibleNavigation = SERVICE_NAVIGATION.filter(
     (item) =>
       item.id !== "operations" ||
       permits(roles, ["data_manager", "administrator"]),
@@ -551,23 +539,13 @@ function HomePage({
   onNavigate(page: ServicePage): void;
 }) {
   const summary = snapshot.cityHome?.summary;
-  const roleLead: Record<ProductRole, string> = {
-    viewer: "都市の更新状況とレビュー済み記録を確認できます。",
-    analyst: "未整理のFindingから調査を開始し、再現可能な分析を実行します。",
-    planner:
-      "レビュー待ちの調査を確認し、人の判断をDecision Recordへ記録します。",
-    field_staff: "割り当てられた現地確認をオフライン対応の記録へ残します。",
-    data_manager: "データの品質検証、受入、分析可能化、昇格を管理します。",
-    administrator:
-      "テナント、利用者、ジョブ、データ更新とサービス状態を管理します。",
-  };
   if (!snapshot.cityHome)
     return (
       <>
         <PageHeader
           eyebrow="SERVICE HOME"
           title="自治体サービスを開始"
-          description={roleLead[primaryRole]}
+          description={ROLE_HOME_LEAD[primaryRole]}
         />
         <ServiceEmpty
           title="都市がまだ登録されていません"
@@ -580,7 +558,7 @@ function HomePage({
       <PageHeader
         eyebrow={`${ROLE_LABELS[primaryRole]} HOME`}
         title={`${snapshot.cityHome.city.name}の業務状況`}
-        description={roleLead[primaryRole]}
+        description={ROLE_HOME_LEAD[primaryRole]}
       />
       <div className="service-kpis">
         <button type="button" onClick={() => onNavigate("analysis")}>
@@ -799,6 +777,7 @@ function DataPage({
 }) {
   const [datasetFormOpen, setDatasetFormOpen] = useState(false);
   const [stateFormOpen, setStateFormOpen] = useState(false);
+  const [annualUpdateFormOpen, setAnnualUpdateFormOpen] = useState(false);
   const hub = snapshot.dataHub;
   if (!hub)
     return (
@@ -857,6 +836,21 @@ function DataPage({
     );
     setStateFormOpen(false);
   };
+  const createAnnualUpdate = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/annual-updates`,
+      "POST",
+      {
+        from_urban_state_id: data.get("from_urban_state_id"),
+        to_urban_state_id: data.get("to_urban_state_id"),
+        algorithm_version: "citygap-state-diff@1.0.0",
+      },
+      "旧年度記録を保持したまま年次差分Jobを登録しました",
+    );
+    setAnnualUpdateFormOpen(false);
+  };
   const nextStatus: Record<string, string> = {
     registered: "validating",
     validating: "validated",
@@ -893,6 +887,13 @@ function DataPage({
                 onClick={() => setStateFormOpen((value) => !value)}
               >
                 Urban Stateを作成
+              </button>
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() => setAnnualUpdateFormOpen((value) => !value)}
+              >
+                年次更新を開始
               </button>
             </div>
           ) : undefined
@@ -1023,6 +1024,48 @@ function DataPage({
           </button>
         </form>
       )}
+      {annualUpdateFormOpen && (
+        <form className="service-form" onSubmit={createAnnualUpdate}>
+          <label>
+            更新前のUrban State
+            <select name="from_urban_state_id" required>
+              <option value="">validated/current/supersededを選択</option>
+              {hub.urban_states
+                .filter((state) =>
+                  ["validated", "current", "superseded"].includes(
+                    state.lifecycle_status,
+                  ),
+                )
+                .map((state) => (
+                  <option key={`from-${state.id}`} value={state.id}>
+                    {state.label} · {state.effective_date}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <label>
+            更新後のUrban State
+            <select name="to_urban_state_id" required>
+              <option value="">validated/currentを選択</option>
+              {hub.urban_states
+                .filter((state) =>
+                  ["validated", "current"].includes(state.lifecycle_status),
+                )
+                .map((state) => (
+                  <option key={`to-${state.id}`} value={state.id}>
+                    {state.label} · {state.effective_date}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <button className="primary-action" type="submit">
+            差分Jobを登録
+          </button>
+          <p className="form-boundary">
+            更新後Stateは検証済みで、更新前より新しい基準日が必要です。旧年度のInvestigation・分析・Report参照は変更しません。
+          </p>
+        </form>
+      )}
       <section className="service-panel full">
         <header>
           <div>
@@ -1144,6 +1187,42 @@ function DataPage({
                   <span>—</span>
                 );
               },
+            },
+          ]}
+        />
+      </section>
+      <section className="service-panel full">
+        <header>
+          <div>
+            <span>ANNUAL UPDATE</span>
+            <h2>年次差分と再計算Job</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="年次更新履歴"
+          empty="年次更新はまだ登録されていません"
+          rows={
+            (hub.annual_updates ?? []) as unknown as Array<
+              Record<string, unknown>
+            >
+          }
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "from_label", label: "更新前" },
+            { key: "to_label", label: "更新後" },
+            { key: "algorithm_version", label: "差分Version" },
+            {
+              key: "job_state",
+              label: "Job",
+              render: (row) => (
+                <StatusChip value={String(row.job_state ?? row.status)} />
+              ),
+            },
+            { key: "job_stage", label: "Stage" },
+            {
+              key: "created_at",
+              label: "登録",
+              render: (row) => formatDate(row.created_at),
             },
           ]}
         />
@@ -1754,6 +1833,30 @@ function MeasuresPage({
             label: "生成",
             render: (row) => formatDate(row.generated_at),
           },
+          {
+            key: "action",
+            label: "再利用",
+            render: (row) =>
+              canCompare ? (
+                <button
+                  className="table-action"
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void mutate(
+                      `/api/v1/scenarios/${String(row.id)}/clone`,
+                      "POST",
+                      { title: `${String(row.title)} の複製` },
+                      "計算結果を変えず、現地確認をリセットしたdraftとして複製しました",
+                    );
+                  }}
+                >
+                  Clone
+                </button>
+              ) : (
+                <span>—</span>
+              ),
+          },
         ]}
       />
       {canCompare && selected.length >= 2 && (
@@ -1853,6 +1956,57 @@ function ReviewPage({
   const [offlineQueue, setOfflineQueue] = useState<QueuedFieldOperation[]>([]);
   const [fieldStatus, setFieldStatus] = useState<string | null>(null);
   const [attachmentIds, setAttachmentIds] = useState<string[]>([]);
+  const [spatialViewport, setSpatialViewport] = useState<MunicipalViewport>({
+    longitude:
+      snapshot.cityHome?.city.city_key === "fujisawa" ? 139.49 : 135.33,
+    latitude: snapshot.cityHome?.city.city_key === "fujisawa" ? 35.34 : 35.47,
+    zoom: 12,
+  });
+  const [visibleEntityTypes, setVisibleEntityTypes] = useState<string[]>([]);
+  const entities = useMemo(
+    () => (detail?.entities ?? []) as MunicipalSpatialEntity[],
+    [detail],
+  );
+  const savedViews = useMemo(
+    () => (detail?.saved_views ?? []) as Array<Record<string, unknown>>,
+    [detail],
+  );
+
+  useEffect(() => {
+    if (!investigation) return;
+    const requestedToken =
+      typeof window === "undefined"
+        ? null
+        : new URLSearchParams(window.location.search).get("savedView");
+    const requested = savedViews.find(
+      (view) => view.share_token === requestedToken,
+    );
+    const state = (requested?.spatial_state ??
+      (investigation as unknown as Record<string, unknown>).spatial_state ??
+      {}) as Record<string, unknown>;
+    const viewport = state.viewport as Record<string, unknown> | undefined;
+    if (
+      viewport &&
+      Number.isFinite(Number(viewport.longitude)) &&
+      Number.isFinite(Number(viewport.latitude)) &&
+      Number.isFinite(Number(viewport.zoom))
+    ) {
+      setSpatialViewport({
+        longitude: Number(viewport.longitude),
+        latitude: Number(viewport.latitude),
+        zoom: Number(viewport.zoom),
+      });
+    }
+    const available = [
+      ...new Set(entities.map((entity) => entity.entity_type)),
+    ];
+    const storedTypes = Array.isArray(state.visible_entity_types)
+      ? state.visible_entity_types.map(String)
+      : available;
+    setVisibleEntityTypes(
+      storedTypes.filter((entityType) => available.includes(entityType)),
+    );
+  }, [entities, investigation, savedViews]);
 
   useEffect(() => {
     const city = snapshot.cityHome?.city.city_key;
@@ -2047,6 +2201,58 @@ function ReviewPage({
     );
     if (saved) setAttachmentIds([]);
   };
+  const savedViewSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedId || !investigation) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/investigations/${selectedId}/saved-views`,
+      "POST",
+      {
+        title: data.get("title"),
+        data_classification: data.get("data_classification"),
+        spatial_state: {
+          schema_version: "citygap-saved-spatial-view-1.0.0",
+          investigation_id: selectedId,
+          urban_state_id: investigation.urban_state_id,
+          viewport: spatialViewport,
+          visible_entity_types: visibleEntityTypes,
+        },
+      },
+      "現在の空間状態を保存しました",
+    );
+    event.currentTarget.reset();
+  };
+  const restoreSavedView = (view: Record<string, unknown>) => {
+    const state = view.spatial_state as Record<string, unknown> | undefined;
+    const viewport = state?.viewport as Record<string, unknown> | undefined;
+    if (viewport) {
+      setSpatialViewport({
+        longitude: Number(viewport.longitude),
+        latitude: Number(viewport.latitude),
+        zoom: Number(viewport.zoom),
+      });
+    }
+    if (Array.isArray(state?.visible_entity_types)) {
+      setVisibleEntityTypes(state.visible_entity_types.map(String));
+    }
+    setFieldStatus(`保存ビュー「${String(view.title)}」を復元しました`);
+  };
+  const shareSavedView = async (view: Record<string, unknown>) => {
+    if (typeof window === "undefined" || !selectedId) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("servicePage", "review");
+    url.searchParams.set("investigation", selectedId);
+    url.searchParams.set("savedView", String(view.share_token));
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setFieldStatus(
+        "認証済みの同一Organizationメンバー向け共有URLをコピーしました",
+      );
+    } catch {
+      setFieldStatus(url.toString());
+    }
+  };
   const decisionSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!selectedId) return;
@@ -2147,6 +2353,71 @@ function ReviewPage({
                 </li>
               </ol>
               <p>{investigation?.objective}</p>
+              <MunicipalSpatialWorkspace
+                entities={entities}
+                viewport={spatialViewport}
+                visibleEntityTypes={visibleEntityTypes}
+                onViewportChange={setSpatialViewport}
+                onVisibleEntityTypesChange={setVisibleEntityTypes}
+                onEntitySelect={(entityId) =>
+                  setFieldStatus(`空間entity ${entityId} を選択しました`)
+                }
+              />
+              <section className="case-form saved-view-workspace">
+                <h3>空間ビューを保存・共有</h3>
+                {permits(roles, ["analyst", "planner"]) && (
+                  <form onSubmit={savedViewSubmit}>
+                    <label>
+                      ビュー名
+                      <input name="title" required maxLength={500} />
+                    </label>
+                    <label>
+                      データ分類
+                      <select
+                        name="data_classification"
+                        defaultValue="internal"
+                      >
+                        <option value="public">public</option>
+                        <option value="internal">internal</option>
+                        <option value="restricted">restricted</option>
+                      </select>
+                    </label>
+                    <button type="submit">現在の地図状態を保存</button>
+                  </form>
+                )}
+                {savedViews.length === 0 ? (
+                  <p className="service-muted">保存済みビューはありません。</p>
+                ) : (
+                  <div className="saved-view-list">
+                    {savedViews.map((view) => (
+                      <article key={String(view.id)}>
+                        <div>
+                          <strong>{String(view.title)}</strong>
+                          <small>
+                            {String(view.data_classification)} ·{" "}
+                            {formatDate(view.updated_at)}
+                          </small>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => restoreSavedView(view)}
+                        >
+                          復元
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => void shareSavedView(view)}
+                        >
+                          共有URL
+                        </button>
+                      </article>
+                    ))}
+                  </div>
+                )}
+                <p className="form-boundary">
+                  共有tokenは認可の代わりではありません。同一Organizationでログインし、Investigation閲覧権限が必要です。
+                </p>
+              </section>
               <div className="case-actions">
                 {canReview && investigation?.status !== "closed" && (
                   <button
