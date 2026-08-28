@@ -550,17 +550,21 @@ def test_database_worker_idempotency_success_retry_and_audit(database_url: str) 
     assert first is not None and duplicate is not None
     assert first["job_id"] == duplicate["job_id"]
 
-    completed: list[str] = []
+    completed: list[tuple[str, str]] = []
 
     class RecordingExecutor:
         def execute(self, job: ClaimedJob, stage: str) -> None:
-            completed.append(stage)
+            completed.append((job.job_id, stage))
 
     worker = PostgresWorker(database_url, "integration-worker")
-    assert worker.run_once(RecordingExecutor()) is True
+    for _ in range(10):
+        succeeded = repository.job_detail(str(first["job_id"]))
+        if succeeded is not None and succeeded["state"] == "succeeded":
+            break
+        assert worker.run_once(RecordingExecutor()) is True
     succeeded = repository.job_detail(str(first["job_id"]))
     assert succeeded is not None and succeeded["state"] == "succeeded"
-    assert completed[-1] == "persist_artifacts"
+    assert completed[-1] == (str(first["job_id"]), "persist_artifacts")
 
     failing = repository.create_job(
         "26202", "evidence_export", [version_id], "b" * 64, "evidence-v2", {"scenario": "B"}
