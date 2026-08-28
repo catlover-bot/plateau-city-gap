@@ -2778,6 +2778,76 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            source_feedback = self._dicts(
+                connection.execute(
+                    """SELECT feedback.id, feedback.feedback_type, feedback.statement,
+                              feedback.status, feedback.submitted_by, feedback.submitted_at,
+                              feedback.raw_mutation_permitted,
+                              feedback.canonical_mutation_permitted,
+                              source.title AS source_title,
+                              task.id AS field_task_id, task.status AS field_task_status
+                       FROM open_data_source_feedback AS feedback
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = feedback.organization_id
+                        AND source.id = feedback.city_source_id
+                       LEFT JOIN open_data_field_tasks AS task
+                         ON task.organization_id = feedback.organization_id
+                        AND task.source_feedback_id = feedback.id
+                       WHERE feedback.organization_id = %s AND feedback.city_id = %s
+                       ORDER BY feedback.submitted_at DESC, feedback.id DESC LIMIT 50""",
+                    (organization_id, city["id"]),
+                )
+            )
+            field_tasks = self._dicts(
+                connection.execute(
+                    """SELECT task.id, task.title, task.status, task.assigned_to,
+                              task.due_date, task.resolution_note, task.created_at,
+                              feedback.feedback_type, source.title AS source_title
+                       FROM open_data_field_tasks AS task
+                       JOIN open_data_source_feedback AS feedback
+                         ON feedback.organization_id = task.organization_id
+                        AND feedback.id = task.source_feedback_id
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = feedback.organization_id
+                        AND source.id = feedback.city_source_id
+                       WHERE task.organization_id = %s AND task.city_id = %s
+                       ORDER BY task.created_at DESC, task.id DESC LIMIT 50""",
+                    (organization_id, city["id"]),
+                )
+            )
+            local_overrides = self._dicts(
+                connection.execute(
+                    """SELECT override.id, override.reason, override.effective_date,
+                              override.expires_at, override.review_status,
+                              override.created_by, override.reviewed_by,
+                              record.display_name, record.record_type,
+                              COALESCE(reconciliation.candidate_count, 0) AS candidate_count
+                       FROM local_data_overrides AS override
+                       JOIN canonical_open_data_records AS record
+                         ON record.organization_id = override.organization_id
+                        AND record.id = override.canonical_record_id
+                       LEFT JOIN LATERAL (
+                           SELECT count(*) AS candidate_count
+                           FROM open_data_override_reconciliations AS candidate
+                           WHERE candidate.organization_id = override.organization_id
+                             AND candidate.override_id = override.id
+                             AND candidate.status = 'candidate'
+                       ) AS reconciliation ON true
+                       WHERE override.organization_id = %s AND record.city_id = %s
+                       ORDER BY override.effective_date DESC, override.id DESC LIMIT 50""",
+                    (organization_id, city["id"]),
+                )
+            )
+            public_transparency = self._dicts(
+                connection.execute(
+                    """SELECT id, title, summary, source_citations, limitations, published_at
+                       FROM public_transparency_records
+                       WHERE organization_id = %s AND city_id = %s
+                         AND publication_status = 'published'
+                       ORDER BY published_at DESC, id DESC LIMIT 30""",
+                    (organization_id, city["id"]),
+                )
+            )
             licenses_by_id = {
                 source["license_id"]: {
                     key: source[key]
@@ -2826,6 +2896,10 @@ class MunicipalServiceRepository(PostGISRepository):
                 "conflicts": conflicts,
                 "quality_gate_policies": quality_gate_policies,
                 "data_tasks": data_tasks,
+                "source_feedback": source_feedback,
+                "field_tasks": field_tasks,
+                "local_overrides": local_overrides,
+                "public_transparency": public_transparency,
                 "missing_data": missing_data,
                 "coverage_summary": {
                     "total": len(coverage),
@@ -3433,6 +3507,438 @@ class MunicipalServiceRepository(PostGISRepository):
                 result,
             )
             return result
+
+    def create_source_feedback(
+        self,
+        organization_id: str,
+        city_reference: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            source = self._one(
+                connection.execute(
+                    """SELECT id, title FROM city_open_data_sources
+                       WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                    (organization_id, city["id"], payload["city_source_id"]),
+                )
+            )
+            if source is None:
+                return None
+            canonical_record_id = payload.get("canonical_record_id")
+            if canonical_record_id is not None and self._one(
+                connection.execute(
+                    """SELECT record.id
+                       FROM canonical_open_data_records AS record
+                       JOIN open_data_resources AS resource
+                         ON resource.organization_id = record.organization_id
+                        AND resource.id = record.source_resource_id
+                       WHERE record.organization_id = %s AND record.city_id = %s
+                         AND record.id = %s AND resource.city_source_id = %s""",
+                    (
+                        organization_id,
+                        city["id"],
+                        canonical_record_id,
+                        payload["city_source_id"],
+                    ),
+                )
+            ) is None:
+                raise ValueError("Canonical record does not belong to the selected source and city")
+            feedback = self._one(
+                connection.execute(
+                    """INSERT INTO open_data_source_feedback (
+                           organization_id, city_id, city_source_id, canonical_record_id,
+                           feedback_type, statement, evidence, submitted_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        city["id"],
+                        payload["city_source_id"],
+                        canonical_record_id,
+                        payload["feedback_type"],
+                        payload["statement"],
+                        json.dumps(payload.get("evidence", {}), ensure_ascii=False),
+                        context.actor,
+                    ),
+                )
+            )
+            assert feedback is not None
+            result = {
+                **feedback,
+                "source_title": source["title"],
+                "official_raw_mutated": False,
+                "official_canonical_mutated": False,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.feedback.create",
+                "open_data_source_feedback",
+                str(feedback["id"]),
+                str(city["id"]),
+                None,
+                result,
+            )
+            return result
+
+    def source_feedback(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            items = self._dicts(
+                connection.execute(
+                    """SELECT feedback.*, source.title AS source_title,
+                              task.id AS field_task_id, task.status AS field_task_status
+                       FROM open_data_source_feedback AS feedback
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = feedback.organization_id
+                        AND source.id = feedback.city_source_id
+                       LEFT JOIN open_data_field_tasks AS task
+                         ON task.organization_id = feedback.organization_id
+                        AND task.source_feedback_id = feedback.id
+                       WHERE feedback.organization_id = %s AND feedback.city_id = %s
+                       ORDER BY feedback.submitted_at DESC, feedback.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            return {"city": city, "items": items, "official_records_mutated": False}
+
+    def create_feedback_field_task(
+        self,
+        organization_id: str,
+        feedback_id: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            feedback = self._one(
+                connection.execute(
+                    """SELECT * FROM open_data_source_feedback
+                       WHERE organization_id = %s AND id = %s FOR UPDATE""",
+                    (organization_id, feedback_id),
+                )
+            )
+            if feedback is None:
+                return None
+            if feedback["status"] != payload["expected_feedback_status"]:
+                raise ValueError(
+                    f"Feedback status changed: expected {payload['expected_feedback_status']}"
+                )
+            assigned_to = payload.get("assigned_to")
+            task = self._one(
+                connection.execute(
+                    """INSERT INTO open_data_field_tasks (
+                           organization_id, city_id, source_feedback_id,
+                           canonical_record_id, title, checklist, status,
+                           assigned_to, due_date, created_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s,
+                                 CASE WHEN %s::text IS NULL THEN 'open' ELSE 'assigned' END,
+                                 %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        feedback["city_id"],
+                        feedback_id,
+                        feedback["canonical_record_id"],
+                        payload["title"],
+                        json.dumps(payload["checklist"], ensure_ascii=False),
+                        assigned_to,
+                        assigned_to,
+                        payload.get("due_date"),
+                        context.actor,
+                    ),
+                )
+            )
+            assert task is not None
+            connection.execute(
+                """UPDATE open_data_source_feedback
+                   SET status = 'field_check_required', reviewed_by = %s, reviewed_at = now()
+                   WHERE organization_id = %s AND id = %s""",
+                (context.actor, organization_id, feedback_id),
+            )
+            result = {**task, "official_records_mutated": False}
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.feedback.field_task.create",
+                "open_data_field_task",
+                str(task["id"]),
+                str(feedback["city_id"]),
+                feedback,
+                result,
+            )
+            return result
+
+    def open_data_field_tasks(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            items = self._dicts(
+                connection.execute(
+                    """SELECT task.*, feedback.feedback_type, feedback.statement,
+                              feedback.evidence, source.title AS source_title
+                       FROM open_data_field_tasks AS task
+                       JOIN open_data_source_feedback AS feedback
+                         ON feedback.organization_id = task.organization_id
+                        AND feedback.id = task.source_feedback_id
+                       JOIN city_open_data_sources AS source
+                         ON source.organization_id = feedback.organization_id
+                        AND source.id = feedback.city_source_id
+                       WHERE task.organization_id = %s AND task.city_id = %s
+                       ORDER BY
+                         CASE task.status WHEN 'open' THEN 0 WHEN 'assigned' THEN 1
+                                          WHEN 'in_progress' THEN 2 ELSE 3 END,
+                         task.created_at DESC, task.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            return {"city": city, "items": items}
+
+    def transition_open_data_field_task(
+        self, organization_id: str, task_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT * FROM open_data_field_tasks
+                       WHERE organization_id = %s AND id = %s FOR UPDATE""",
+                    (organization_id, task_id),
+                )
+            )
+            if before is None:
+                return None
+            if before["status"] != payload["expected_status"]:
+                raise ValueError(f"Field task status changed: expected {payload['expected_status']}")
+            if before["status"] == payload["proposed_status"]:
+                raise ValueError("Field task status must change")
+            after = self._one(
+                connection.execute(
+                    """UPDATE open_data_field_tasks
+                       SET status = %s,
+                           assigned_to = COALESCE(%s, assigned_to),
+                           resolution_note = %s,
+                           completed_by = CASE WHEN %s = 'completed' THEN %s ELSE NULL END,
+                           completed_at = CASE WHEN %s = 'completed' THEN now() ELSE NULL END
+                       WHERE organization_id = %s AND id = %s
+                       RETURNING *""",
+                    (
+                        payload["proposed_status"],
+                        payload.get("assigned_to"),
+                        payload.get("resolution_note"),
+                        payload["proposed_status"],
+                        context.actor,
+                        payload["proposed_status"],
+                        organization_id,
+                        task_id,
+                    ),
+                )
+            )
+            assert after is not None
+            if payload["proposed_status"] == "completed":
+                connection.execute(
+                    """UPDATE open_data_source_feedback
+                       SET status = 'reconciled', reviewed_by = %s, reviewed_at = now(),
+                           resolution_note = %s
+                       WHERE organization_id = %s AND id = %s""",
+                    (
+                        context.actor,
+                        payload["resolution_note"],
+                        organization_id,
+                        before["source_feedback_id"],
+                    ),
+                )
+            elif payload["proposed_status"] == "cancelled":
+                connection.execute(
+                    """UPDATE open_data_source_feedback SET status = 'triaged'
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, before["source_feedback_id"]),
+                )
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.field_task.transition",
+                "open_data_field_task",
+                task_id,
+                str(before["city_id"]),
+                before,
+                after,
+            )
+            return after
+
+    def create_local_override(
+        self,
+        organization_id: str,
+        city_reference: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            record = self._one(
+                connection.execute(
+                    """SELECT id, display_name FROM canonical_open_data_records
+                       WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                    (organization_id, city["id"], payload["canonical_record_id"]),
+                )
+            )
+            if record is None:
+                return None
+            override = self._one(
+                connection.execute(
+                    """INSERT INTO local_data_overrides (
+                           organization_id, canonical_record_id, override_patch,
+                           reason, evidence, effective_date, review_status,
+                           expires_at, created_by, updated_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        payload["canonical_record_id"],
+                        json.dumps(payload["override_patch"], ensure_ascii=False),
+                        payload["reason"],
+                        json.dumps(payload["evidence"], ensure_ascii=False),
+                        payload["effective_date"],
+                        payload["review_status"],
+                        payload["expires_at"],
+                        context.actor,
+                        context.actor,
+                    ),
+                )
+            )
+            assert override is not None
+            result = {
+                **override,
+                "canonical_display_name": record["display_name"],
+                "official_record_mutated": False,
+            }
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.override.create",
+                "local_data_override",
+                str(override["id"]),
+                str(city["id"]),
+                None,
+                result,
+            )
+            return result
+
+    def local_overrides(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            items = self._dicts(
+                connection.execute(
+                    """SELECT override.*, record.display_name, record.record_type,
+                              record.external_record_id,
+                              COALESCE(reconciliation.candidate_count, 0) AS candidate_count
+                       FROM local_data_overrides AS override
+                       JOIN canonical_open_data_records AS record
+                         ON record.organization_id = override.organization_id
+                        AND record.id = override.canonical_record_id
+                       LEFT JOIN LATERAL (
+                           SELECT count(*) AS candidate_count
+                           FROM open_data_override_reconciliations AS candidate
+                           WHERE candidate.organization_id = override.organization_id
+                             AND candidate.override_id = override.id
+                             AND candidate.status = 'candidate'
+                       ) AS reconciliation ON true
+                       WHERE override.organization_id = %s AND record.city_id = %s
+                       ORDER BY override.effective_date DESC, override.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            return {"city": city, "items": items, "official_records_mutated": False}
+
+    def review_local_override(
+        self, organization_id: str, override_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        transitions = {
+            "draft": {"in_review", "rejected"},
+            "in_review": {"reviewed", "rejected"},
+        }
+        if payload["proposed_status"] not in transitions[payload["expected_status"]]:
+            raise ValueError("Unsupported local override review transition")
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT override.*, record.city_id
+                       FROM local_data_overrides AS override
+                       JOIN canonical_open_data_records AS record
+                         ON record.organization_id = override.organization_id
+                        AND record.id = override.canonical_record_id
+                       WHERE override.organization_id = %s AND override.id = %s
+                       FOR UPDATE OF override""",
+                    (organization_id, override_id),
+                )
+            )
+            if before is None:
+                return None
+            if before["review_status"] != payload["expected_status"]:
+                raise ValueError(
+                    f"Override review status changed: expected {payload['expected_status']}"
+                )
+            after = self._one(
+                connection.execute(
+                    """UPDATE local_data_overrides
+                       SET review_status = %s, updated_by = %s, updated_at = now(),
+                           reviewed_by = CASE WHEN %s IN ('reviewed','rejected')
+                                              THEN %s ELSE NULL END,
+                           reviewed_at = CASE WHEN %s IN ('reviewed','rejected')
+                                              THEN now() ELSE NULL END,
+                           evidence = evidence || jsonb_build_object(
+                               'review_note', %s, 'review_actor', %s)
+                       WHERE organization_id = %s AND id = %s RETURNING *""",
+                    (
+                        payload["proposed_status"],
+                        context.actor,
+                        payload["proposed_status"],
+                        context.actor,
+                        payload["proposed_status"],
+                        payload["review_note"],
+                        context.actor,
+                        organization_id,
+                        override_id,
+                    ),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "open_data.override.review",
+                "local_data_override",
+                override_id,
+                str(before["city_id"]),
+                before,
+                after,
+            )
+            return after
 
     def service_datasets(
         self, organization_id: str, city_reference: str | None, query: str | None, limit: int
@@ -4442,9 +4948,13 @@ class MunicipalServiceRepository(PostGISRepository):
             ):
                 raise ValueError("Evidence scenario does not belong to the tenant and city")
             manifest = {
+                "schema_version": payload.get("schema_version", "2.0.0"),
                 "source_manifest": payload["source_manifest"],
                 "algorithm_manifest": payload["algorithm_manifest"],
                 "validation_manifest": payload["validation_manifest"],
+                "open_data_lineage_manifest": payload.get("open_data_lineage_manifest", {}),
+                "report_manifest": payload.get("report_manifest", {}),
+                "claim_boundary": payload["claim_boundary"],
                 "field_evidence_manifest": payload.get("field_evidence_manifest", []),
                 "decision_manifest": payload.get("decision_manifest", []),
             }
@@ -4459,9 +4969,11 @@ class MunicipalServiceRepository(PostGISRepository):
                     """INSERT INTO evidence_centers (
                            organization_id, city_id, investigation_id, scenario_run_id,
                            source_manifest, algorithm_manifest, validation_manifest,
+                           open_data_lineage_manifest, report_manifest, claim_boundary,
                            field_evidence_manifest, decision_manifest, manifest_sha256,
-                           data_classification, created_by
-                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                           data_classification, created_by, schema_version
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                                 %s, %s, %s, %s, %s, %s)
                        RETURNING *""",
                     (
                         organization_id,
@@ -4471,11 +4983,15 @@ class MunicipalServiceRepository(PostGISRepository):
                         json.dumps(manifest["source_manifest"], ensure_ascii=False),
                         json.dumps(manifest["algorithm_manifest"], ensure_ascii=False),
                         json.dumps(manifest["validation_manifest"], ensure_ascii=False),
+                        json.dumps(manifest["open_data_lineage_manifest"], ensure_ascii=False),
+                        json.dumps(manifest["report_manifest"], ensure_ascii=False),
+                        manifest["claim_boundary"],
                         json.dumps(manifest["field_evidence_manifest"], ensure_ascii=False),
                         json.dumps(manifest["decision_manifest"], ensure_ascii=False),
                         digest,
                         payload.get("data_classification", "internal"),
                         context.actor,
+                        manifest["schema_version"],
                     ),
                 )
             )
@@ -4490,7 +5006,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 return None
             evidence = self._dicts(
                 connection.execute(
-                    """SELECT id, investigation_id, scenario_run_id, manifest_sha256,
+                    """SELECT id, investigation_id, scenario_run_id, schema_version,
+                              manifest_sha256, reproducibility_status,
                               data_classification, created_by, created_at,
                               jsonb_array_length(field_evidence_manifest) AS field_evidence_count,
                               jsonb_array_length(decision_manifest) AS decision_count
@@ -4529,6 +5046,88 @@ class MunicipalServiceRepository(PostGISRepository):
                 "validation_runs": validations,
             }
 
+    def evidence_center_detail(
+        self, organization_id: str, evidence_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            evidence = self._one(
+                connection.execute(
+                    """SELECT evidence.*, city.city_key, city.name AS city_name
+                       FROM evidence_centers AS evidence
+                       JOIN cities AS city
+                         ON city.organization_id = evidence.organization_id
+                        AND city.id = evidence.city_id
+                       WHERE evidence.organization_id = %s AND evidence.id = %s""",
+                    (organization_id, evidence_id),
+                )
+            )
+            if evidence is None:
+                return None
+            if evidence["schema_version"] == "1.0.0":
+                hashed_manifest = {
+                    "source_manifest": evidence["source_manifest"],
+                    "algorithm_manifest": evidence["algorithm_manifest"],
+                    "validation_manifest": evidence["validation_manifest"],
+                    "field_evidence_manifest": evidence["field_evidence_manifest"],
+                    "decision_manifest": evidence["decision_manifest"],
+                }
+            else:
+                hashed_manifest = {
+                    "schema_version": evidence["schema_version"],
+                    "source_manifest": evidence["source_manifest"],
+                    "algorithm_manifest": evidence["algorithm_manifest"],
+                    "validation_manifest": evidence["validation_manifest"],
+                    "open_data_lineage_manifest": evidence["open_data_lineage_manifest"],
+                    "report_manifest": evidence["report_manifest"],
+                    "claim_boundary": evidence["claim_boundary"],
+                    "field_evidence_manifest": evidence["field_evidence_manifest"],
+                    "decision_manifest": evidence["decision_manifest"],
+                }
+            calculated = hashlib.sha256(
+                json.dumps(
+                    hashed_manifest,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ).encode()
+            ).hexdigest()
+            if calculated != evidence["manifest_sha256"]:
+                raise ValueError("Stored Evidence Center manifest does not match its hash")
+            reports = self._dicts(
+                connection.execute(
+                    """SELECT id, report_type, title, content_schema_version,
+                              generator_version, artifact_sha256, data_classification,
+                              deterministic, created_at
+                       FROM report_records
+                       WHERE organization_id = %s AND city_id = %s
+                         AND (%s::uuid IS NULL OR investigation_id = %s)
+                       ORDER BY created_at DESC, id DESC""",
+                    (
+                        organization_id,
+                        evidence["city_id"],
+                        evidence["investigation_id"],
+                        evidence["investigation_id"],
+                    ),
+                )
+            )
+            transparency = self._dicts(
+                connection.execute(
+                    """SELECT id, title, publication_status, published_at
+                       FROM public_transparency_records
+                       WHERE organization_id = %s AND evidence_center_id = %s
+                       ORDER BY created_at DESC, id DESC""",
+                    (organization_id, evidence_id),
+                )
+            )
+            return {
+                "evidence_center": evidence,
+                "integrity_verified": True,
+                "calculated_manifest_sha256": calculated,
+                "reports": reports,
+                "public_transparency": transparency,
+            }
+
     @staticmethod
     def _report_digest(content: dict[str, Any]) -> tuple[str, str]:
         serialized = json.dumps(
@@ -4544,7 +5143,7 @@ class MunicipalServiceRepository(PostGISRepository):
         self, organization_id: str, city_reference: str, payload: dict[str, Any]
     ) -> dict[str, Any] | None:
         context = current_request_context()
-        generator_version = "municipal-report-v1.0.0"
+        generator_version = "municipal-report-v2.0.0"
         with self._connect() as connection:
             connection.row_factory = dict_row
             city = self._city(connection, organization_id, city_reference)
@@ -4618,7 +5217,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 raise ValueError("Unsupported report type")
             evidence = self._dicts(
                 connection.execute(
-                    """SELECT id, manifest_sha256, data_classification, created_at
+                    """SELECT id, schema_version, manifest_sha256,
+                              reproducibility_status, data_classification, created_at
                        FROM evidence_centers
                        WHERE organization_id = %s AND city_id = %s
                          AND (%s::uuid IS NULL OR investigation_id = %s)
@@ -4642,7 +5242,7 @@ class MunicipalServiceRepository(PostGISRepository):
                 ):
                     raise ValueError("Public reports require public-classified inputs and evidence")
             structured_content = {
-                "schema_version": "citygap-municipal-report-1.0.0",
+                "schema_version": "citygap-municipal-report-2.0.0",
                 "generator_version": generator_version,
                 "organization": {
                     "id": organization_id,
@@ -4659,11 +5259,19 @@ class MunicipalServiceRepository(PostGISRepository):
                 "subject": subject,
                 "evidence": evidence,
                 "claim_boundary": (
-                    "This report records versioned model outputs, reviews and human decisions; "
-                    "it does not create an administrative approval or policy recommendation."
+                    "このレポートはversion付きモデル結果・review・人の判断を記録します。"
+                    "行政承認、政策推奨、因果効果を自動認定しません。"
                 ),
             }
             _, digest = self._report_digest(structured_content)
+            public_summary = {
+                "schema_version": "citygap-public-summary-1.0.0",
+                "city": city["name"],
+                "report_type": report_type,
+                "title": payload["title"],
+                "evidence_sha256": [item["manifest_sha256"] for item in evidence],
+                "claim_boundary": structured_content["claim_boundary"],
+            }
             report_id = str(uuid.uuid4())
             artifact_uri = f"citygap-report://{report_id}/report.json"
             result = self._one(
@@ -4672,10 +5280,13 @@ class MunicipalServiceRepository(PostGISRepository):
                            id, organization_id, city_id, investigation_id,
                            scenario_comparison_id, report_type, title, structured_content,
                            generator_version, artifact_uri, artifact_sha256,
-                           data_classification, created_by
-                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                           data_classification, created_by, content_schema_version,
+                           deterministic, public_summary
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                                 %s, %s, %s, true, %s)
                        RETURNING id, report_type, title, generator_version, artifact_uri,
-                                 artifact_sha256, data_classification, created_by, created_at""",
+                                 artifact_sha256, data_classification, created_by, created_at,
+                                 content_schema_version, deterministic, public_summary""",
                     (
                         report_id,
                         organization_id,
@@ -4690,6 +5301,8 @@ class MunicipalServiceRepository(PostGISRepository):
                         digest,
                         requested_classification,
                         context.actor,
+                        "2.0.0",
+                        json.dumps(public_summary, ensure_ascii=False),
                     ),
                 )
             )
@@ -4712,7 +5325,8 @@ class MunicipalServiceRepository(PostGISRepository):
             report = self._one(
                 connection.execute(
                     """SELECT id, title, structured_content, artifact_sha256,
-                              data_classification, generator_version, created_at
+                              data_classification, generator_version, created_at,
+                              content_schema_version, deterministic, public_summary
                        FROM report_records WHERE organization_id = %s AND id = %s""",
                     (organization_id, report_id),
                 )
@@ -4753,6 +5367,120 @@ class MunicipalServiceRepository(PostGISRepository):
                     ),
                 )
             )
+
+    def create_public_transparency_record(
+        self,
+        organization_id: str,
+        city_reference: str,
+        payload: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            report_id = payload.get("report_id")
+            evidence_id = payload.get("evidence_center_id")
+            if report_id is not None:
+                report = self._one(
+                    connection.execute(
+                        """SELECT id, data_classification FROM report_records
+                           WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                        (organization_id, city["id"], report_id),
+                    )
+                )
+                if report is None or report["data_classification"] != "public":
+                    raise ValueError("Transparency publication requires a public city report")
+            if evidence_id is not None:
+                evidence = self._one(
+                    connection.execute(
+                        """SELECT id, data_classification FROM evidence_centers
+                           WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                        (organization_id, city["id"], evidence_id),
+                    )
+                )
+                if evidence is None or evidence["data_classification"] != "public":
+                    raise ValueError("Transparency publication requires public city evidence")
+            status = "published" if payload.get("publish") else "draft"
+            record = self._one(
+                connection.execute(
+                    """INSERT INTO public_transparency_records (
+                           organization_id, city_id, report_id, evidence_center_id,
+                           title, summary, source_citations, limitations,
+                           publication_status, created_by, published_by, published_at
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                                 CASE WHEN %s = 'published' THEN %s ELSE NULL END,
+                                 CASE WHEN %s = 'published' THEN now() ELSE NULL END)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        city["id"],
+                        report_id,
+                        evidence_id,
+                        payload["title"],
+                        json.dumps(payload["summary"], ensure_ascii=False),
+                        json.dumps(payload["source_citations"], ensure_ascii=False),
+                        json.dumps(payload["limitations"], ensure_ascii=False),
+                        status,
+                        context.actor,
+                        status,
+                        context.actor,
+                        status,
+                    ),
+                )
+            )
+            assert record is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "public_transparency.create",
+                "public_transparency_record",
+                str(record["id"]),
+                str(city["id"]),
+                None,
+                record,
+            )
+            return record
+
+    def public_transparency_records(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            items = self._dicts(
+                connection.execute(
+                    """SELECT transparency.id, transparency.report_id,
+                              transparency.evidence_center_id, transparency.title,
+                              transparency.summary, transparency.source_citations,
+                              transparency.limitations, transparency.published_at,
+                              report.artifact_sha256 AS report_sha256,
+                              evidence.manifest_sha256 AS evidence_sha256
+                       FROM public_transparency_records AS transparency
+                       LEFT JOIN report_records AS report
+                         ON report.organization_id = transparency.organization_id
+                        AND report.id = transparency.report_id
+                       LEFT JOIN evidence_centers AS evidence
+                         ON evidence.organization_id = transparency.organization_id
+                        AND evidence.id = transparency.evidence_center_id
+                       WHERE transparency.organization_id = %s
+                         AND transparency.city_id = %s
+                         AND transparency.publication_status = 'published'
+                       ORDER BY transparency.published_at DESC, transparency.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            return {
+                "city": city,
+                "items": items,
+                "boundary": (
+                    "公開済み・非機微・review済みの集約情報のみ。"
+                    "建物単位推計人口、field記録、行政判断は含めません。"
+                ),
+            }
 
     def service_search(
         self, organization_id: str, query: str, city_reference: str | None, limit: int

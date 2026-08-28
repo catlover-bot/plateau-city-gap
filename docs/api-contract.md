@@ -27,7 +27,10 @@
 - compute: analysis definitions/runs, scenarios, immutable-result scenario clones and
   comparisons
 - field: selected-site offline packages, sync/conflicts and attachments
-- evidence: evidence centers, reports, artifacts and classified exports
+- field/source review: source feedback, feedback-derived field tasks and separately
+  reviewed, expiring local overrides
+- evidence: Evidence Center V2 detail/integrity, deterministic reports, artifacts,
+  classified exports and public-transparency records
 - operations: jobs, health, metrics and immutable audit events
 - organization operations: non-secret configuration and retention-policy records under
   `/organizations/current`; only Administrator mutates them
@@ -65,3 +68,10 @@ download or promote a changed resource. Validation and promotion require an exac
 and Version pair; promotion queues capability refresh only after persisted quality and
 ingestion gates pass. Reprocessing requires an existing checksum-addressed raw blob and
 records that the previous canonical output is retained.
+
+Feedback endpoints never update official raw blobs or canonical records. Field-task and
+override transitions use expected state. A new official canonical version may create an
+override reconciliation candidate, but cannot delete or silently supersede the municipal
+override. Evidence Center detail recalculates and verifies its manifest SHA-256. Public
+transparency creation is rejected unless every referenced report/Evidence Center is
+public-classified for the same tenant and city.

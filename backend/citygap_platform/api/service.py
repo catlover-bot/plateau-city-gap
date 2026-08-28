@@ -497,6 +497,93 @@ class DataTaskTransitionRequest(StrictRequest):
         return self
 
 
+class SourceFeedbackCreateRequest(StrictRequest):
+    city_source_id: UUID
+    canonical_record_id: int | None = Field(default=None, ge=1)
+    feedback_type: Literal[
+        "facility_closed",
+        "service_changed",
+        "timetable_mismatch",
+        "geometry_issue",
+        "attribute_issue",
+        "other",
+    ]
+    statement: str = Field(min_length=1, max_length=4000)
+    evidence: dict[str, Any] = Field(default_factory=dict, max_length=100)
+
+
+class FeedbackFieldTaskCreateRequest(StrictRequest):
+    expected_feedback_status: Literal["submitted", "triaged"]
+    title: str = Field(min_length=1, max_length=500)
+    checklist: list[str] = Field(min_length=1, max_length=30)
+    assigned_to: str | None = Field(default=None, min_length=1, max_length=200)
+    due_date: date | None = None
+
+    @field_validator("checklist")
+    @classmethod
+    def bounded_checklist(cls, value: list[str]) -> list[str]:
+        if any(not item.strip() or len(item) > 500 for item in value):
+            raise ValueError("checklist items must be non-empty and at most 500 characters")
+        return value
+
+
+class OpenDataFieldTaskTransitionRequest(StrictRequest):
+    expected_status: Literal["open", "assigned", "in_progress"]
+    proposed_status: Literal["assigned", "in_progress", "completed", "cancelled"]
+    assigned_to: str | None = Field(default=None, min_length=1, max_length=200)
+    resolution_note: str | None = Field(default=None, max_length=4000)
+
+    @model_validator(mode="after")
+    def completed_task_has_result(self) -> OpenDataFieldTaskTransitionRequest:
+        if self.proposed_status == "completed" and not (
+            self.resolution_note and self.resolution_note.strip()
+        ):
+            raise ValueError("Completing a field task requires a resolution note")
+        if self.proposed_status == "assigned" and not self.assigned_to:
+            raise ValueError("Assigning a field task requires assigned_to")
+        return self
+
+
+class LocalOverrideCreateRequest(StrictRequest):
+    canonical_record_id: int = Field(ge=1)
+    override_patch: dict[str, Any] = Field(min_length=1, max_length=100)
+    reason: str = Field(min_length=1, max_length=4000)
+    evidence: dict[str, Any] | list[dict[str, Any]]
+    effective_date: date
+    expires_at: date
+    review_status: Literal["draft", "in_review"] = "draft"
+
+    @model_validator(mode="after")
+    def valid_review_horizon(self) -> LocalOverrideCreateRequest:
+        if self.expires_at < self.effective_date:
+            raise ValueError("Override expiry cannot precede its effective date")
+        return self
+
+
+class LocalOverrideReviewRequest(StrictRequest):
+    expected_status: Literal["draft", "in_review"]
+    proposed_status: Literal["in_review", "reviewed", "rejected"]
+    review_note: str = Field(min_length=1, max_length=4000)
+
+
+class PublicTransparencyCreateRequest(StrictRequest):
+    report_id: UUID | None = None
+    evidence_center_id: UUID | None = None
+    title: str = Field(min_length=1, max_length=500)
+    summary: dict[str, Any] = Field(min_length=1, max_length=100)
+    source_citations: list[dict[str, Any]] = Field(min_length=1, max_length=100)
+    limitations: list[str] = Field(min_length=1, max_length=100)
+    publish: bool = False
+
+    @model_validator(mode="after")
+    def has_public_subject(self) -> PublicTransparencyCreateRequest:
+        if self.report_id is None and self.evidence_center_id is None:
+            raise ValueError("A transparency record requires a report or Evidence Center")
+        if any(not item.strip() or len(item) > 2000 for item in self.limitations):
+            raise ValueError("limitations must be bounded non-empty statements")
+        return self
+
+
 class AnalysisRunCreateRequest(StrictRequest):
     analysis_id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,99}$")
     analysis_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
@@ -531,11 +618,22 @@ class ScenarioCloneRequest(StrictRequest):
 
 
 class EvidenceCenterCreateRequest(StrictRequest):
+    schema_version: Literal["2.0.0"] = "2.0.0"
     investigation_id: UUID | None = None
     scenario_run_id: UUID | None = None
     source_manifest: dict[str, Any]
     algorithm_manifest: dict[str, Any]
     validation_manifest: dict[str, Any]
+    open_data_lineage_manifest: dict[str, Any] = Field(default_factory=dict, max_length=100)
+    report_manifest: dict[str, Any] = Field(default_factory=dict, max_length=100)
+    claim_boundary: str = Field(
+        default=(
+            "公開データとモデル結果の出典・仮定・限界を記録し、"
+            "行政判断や政策効果を自動認定しません。"
+        ),
+        min_length=1,
+        max_length=4000,
+    )
     field_evidence_manifest: list[dict[str, Any]] = Field(default_factory=list)
     decision_manifest: list[dict[str, Any]] = Field(default_factory=list)
     data_classification: DataClassification = DataClassification.INTERNAL
@@ -1708,6 +1806,162 @@ def transition_data_manager_task(
 
 
 @router.post(
+    "/cities/{city}/source-feedback",
+    status_code=201,
+    dependencies=[Depends(require_permission("field:write"))],
+)
+def create_source_feedback(
+    city: str,
+    body: SourceFeedbackCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_source_feedback(
+            organization_id, city, body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("City or source")
+    return result
+
+
+@router.get(
+    "/cities/{city}/source-feedback",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def source_feedback(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> dict[str, Any]:
+    result = repo.source_feedback(organization_id, city, limit)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.post(
+    "/source-feedback/{feedback_id}/field-task",
+    status_code=201,
+    dependencies=[Depends(require_permission("field:write"))],
+)
+def create_feedback_field_task(
+    feedback_id: UUID,
+    body: FeedbackFieldTaskCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_feedback_field_task(
+            organization_id, str(feedback_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Source feedback")
+    return result
+
+
+@router.get(
+    "/cities/{city}/open-data-field-tasks",
+    dependencies=[Depends(require_permission("field:read"))],
+)
+def open_data_field_tasks(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> dict[str, Any]:
+    result = repo.open_data_field_tasks(organization_id, city, limit)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.patch(
+    "/open-data-field-tasks/{task_id}",
+    dependencies=[Depends(require_permission("field:write"))],
+)
+def transition_open_data_field_task(
+    task_id: UUID,
+    body: OpenDataFieldTaskTransitionRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_open_data_field_task(
+            organization_id, str(task_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Open-data field task")
+    return result
+
+
+@router.post(
+    "/cities/{city}/local-overrides",
+    status_code=201,
+    dependencies=[Depends(require_permission("dataset:validate"))],
+)
+def create_local_override(
+    city: str,
+    body: LocalOverrideCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_local_override(
+            organization_id, city, body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("City or canonical record")
+    return result
+
+
+@router.get(
+    "/cities/{city}/local-overrides",
+    dependencies=[Depends(require_permission("dataset:read"))],
+)
+def local_overrides(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+) -> dict[str, Any]:
+    result = repo.local_overrides(organization_id, city, limit)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.patch(
+    "/local-overrides/{override_id}/review",
+    dependencies=[Depends(require_permission("dataset:accept"))],
+)
+def review_local_override(
+    override_id: UUID,
+    body: LocalOverrideReviewRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.review_local_override(
+            organization_id, str(override_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Local override")
+    return result
+
+
+@router.post(
     "/cities/{city}/datasets",
     status_code=201,
     dependencies=[Depends(require_permission("dataset:register"))],
@@ -1920,6 +2174,24 @@ def evidence_library(
     return result
 
 
+@router.get(
+    "/evidence-centers/{evidence_id}",
+    dependencies=[Depends(require_permission("evidence:read"))],
+)
+def evidence_center_detail(
+    evidence_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.evidence_center_detail(organization_id, str(evidence_id))
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Evidence Center")
+    return result
+
+
 @router.post(
     "/cities/{city}/reports",
     status_code=201,
@@ -1982,6 +2254,44 @@ def export_report(
         raise HTTPException(status_code=422, detail=str(error)) from error
     if result is None:
         raise _not_found("Report")
+    return result
+
+
+@router.post(
+    "/cities/{city}/public-transparency",
+    status_code=201,
+    dependencies=[Depends(require_permission("evidence:export"))],
+)
+def create_public_transparency_record(
+    city: str,
+    body: PublicTransparencyCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_public_transparency_record(
+            organization_id, city, body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/public-transparency",
+    dependencies=[Depends(require_permission("platform:read"))],
+)
+def public_transparency_records(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    result = repo.public_transparency_records(organization_id, city, limit)
+    if result is None:
+        raise _not_found("City")
     return result
 
 

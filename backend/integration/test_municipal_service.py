@@ -82,6 +82,108 @@ def _prepare_service_fixture(database_url: str) -> str:
     return str(state_id)
 
 
+def _ensure_open_data_record(database_url: str) -> dict[str, object]:
+    import psycopg
+
+    _prepare_service_fixture(database_url)
+    suffix = uuid.uuid4().hex
+    raw_sha = (suffix * 2)[:64]
+    with psycopg.connect(database_url) as connection:
+        city_id = connection.execute(
+            "SELECT id FROM cities WHERE organization_id = %s AND city_key = 'maizuru'",
+            (ORG_A,),
+        ).fetchone()[0]
+        source_id = connection.execute(
+            """SELECT id FROM city_open_data_sources
+               WHERE organization_id = %s AND city_id = %s ORDER BY id LIMIT 1""",
+            (ORG_A, city_id),
+        ).fetchone()[0]
+        dataset_id = connection.execute(
+            """INSERT INTO datasets (
+                   organization_id, city_id, dataset_key, title, provider,
+                   data_classification, dataset_category
+               ) VALUES (%s, %s, %s, 'review loop fixture', 'official fixture',
+                         'public', 'facilities') RETURNING id""",
+            (ORG_A, city_id, f"review-loop-{suffix}"),
+        ).fetchone()[0]
+        version_id = connection.execute(
+            """INSERT INTO dataset_versions (
+                   organization_id, dataset_id, version_key, dataset_year, data_format,
+                   source_url, license, declared_source_crs, data_classification
+               ) VALUES (%s, %s, %s, 2026, 'CSV', %s, 'CC BY 4.0',
+                         'EPSG:4326', 'public') RETURNING id""",
+            (
+                ORG_A,
+                dataset_id,
+                f"2026-{suffix}",
+                f"https://data.bodik.jp/dataset/{suffix}",
+            ),
+        ).fetchone()[0]
+        blob_id = connection.execute(
+            """INSERT INTO open_data_raw_blobs (
+                   owner_organization_id, sha256, size_bytes, content_type,
+                   storage_provider, object_key, reuse_scope, first_retrieved_at
+               ) VALUES (NULL, %s, 32, 'text/csv', 'local', %s,
+                         'public_verified', now()) RETURNING id""",
+            (raw_sha, f"sha256/{raw_sha[:2]}/{raw_sha}"),
+        ).fetchone()[0]
+        resource_id = connection.execute(
+            """INSERT INTO open_data_resources (
+                   organization_id, city_source_id, dataset_version_id, raw_blob_id,
+                   external_resource_id, resource_title, resource_url, format,
+                   content_length, raw_checksum, retrieved_at, adapter_version
+               ) VALUES (%s, %s, %s, %s, %s, 'review loop resource', %s,
+                         'CSV', 32, %s, now(), 'ckan-v3@1') RETURNING id""",
+            (
+                ORG_A,
+                source_id,
+                version_id,
+                blob_id,
+                f"review-loop-{suffix}",
+                f"https://data.bodik.jp/resource/{suffix}.csv",
+                raw_sha,
+            ),
+        ).fetchone()[0]
+        transformation_id = connection.execute(
+            """INSERT INTO open_data_transformation_runs (
+                   organization_id, resource_id, adapter_id, adapter_version,
+                   transformation_version, canonical_version, status,
+                   input_row_count, output_record_count, completed_at, metadata
+               ) VALUES (%s, %s, 'ckan-v3@1', '1', 'review-loop@1',
+                         'canonical@1', 'succeeded', 1, 1, now(), '{}') RETURNING id""",
+            (ORG_A, resource_id),
+        ).fetchone()[0]
+        external_record_id = f"facility-{suffix}"
+        record_id = connection.execute(
+            """INSERT INTO canonical_open_data_records (
+                   organization_id, city_id, dataset_version_id, source_resource_id,
+                   transformation_run_id, record_type, external_record_id,
+                   display_name, source_row_locator, reference_date, attributes, geom
+               ) VALUES (%s, %s, %s, %s, %s, 'facility', %s,
+                         'review loop facility', 'row:1', '2026-01-01',
+                         '{"official":true}',
+                         ST_SetSRID(ST_MakePoint(135.32, 35.46), 4326)) RETURNING id""",
+            (
+                ORG_A,
+                city_id,
+                version_id,
+                resource_id,
+                transformation_id,
+                external_record_id,
+            ),
+        ).fetchone()[0]
+    return {
+        "city_id": city_id,
+        "source_id": source_id,
+        "dataset_version_id": version_id,
+        "blob_id": blob_id,
+        "resource_id": resource_id,
+        "record_id": record_id,
+        "external_record_id": external_record_id,
+        "raw_sha": raw_sha,
+    }
+
+
 def test_role_based_finding_to_human_decision_acceptance(
     database_url: str, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -767,6 +869,243 @@ def test_public_raw_blob_dedup_keeps_tenant_source_metadata_separate(
                                  'cross-tenant source feedback attempt', 'acceptance-test')""",
                 (ORG_B, CITY_B, source_a),
             )
+
+
+def test_feedback_override_evidence_report_and_transparency_review_loop(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fixture = _ensure_open_data_record(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+
+    import psycopg
+
+    with psycopg.connect(database_url) as connection:
+        before_counts = connection.execute(
+            """SELECT
+                   (SELECT count(*) FROM open_data_raw_blobs WHERE id = %s),
+                   (SELECT count(*) FROM canonical_open_data_records
+                    WHERE organization_id = %s AND id = %s),
+                   (SELECT sha256 FROM open_data_raw_blobs WHERE id = %s)""",
+            (fixture["blob_id"], ORG_A, fixture["record_id"], fixture["blob_id"]),
+        ).fetchone()
+
+    feedback = client.post(
+        "/api/v1/cities/maizuru/source-feedback",
+        headers=_headers("field_staff"),
+        json={
+            "city_source_id": str(fixture["source_id"]),
+            "canonical_record_id": fixture["record_id"],
+            "feedback_type": "facility_closed",
+            "statement": "現地掲示では利用停止中。公式source更新まではfeedbackとして分離保存する。",
+            "evidence": {"observation": "posted notice", "raw_mutation": False},
+        },
+    )
+    assert feedback.status_code == 201, feedback.text
+    assert feedback.json()["official_raw_mutated"] is False
+    assert feedback.json()["official_canonical_mutated"] is False
+    feedback_id = feedback.json()["id"]
+    assert (
+        client.post(
+            "/api/v1/cities/maizuru/source-feedback",
+            headers=_headers("field_staff", ORG_B),
+            json={
+                "city_source_id": str(fixture["source_id"]),
+                "canonical_record_id": fixture["record_id"],
+                "feedback_type": "attribute_issue",
+                "statement": "cross-tenant attempt",
+            },
+        ).status_code
+        == 404
+    )
+
+    task = client.post(
+        f"/api/v1/source-feedback/{feedback_id}/field-task",
+        headers=_headers("field_staff"),
+        json={
+            "expected_feedback_status": "submitted",
+            "title": "施設利用状況の現地確認",
+            "checklist": ["掲示内容を確認", "位置と確認日時を記録"],
+            "due_date": "2026-09-30",
+        },
+    )
+    assert task.status_code == 201, task.text
+    assert task.json()["official_records_mutated"] is False
+    task_id = task.json()["id"]
+    completed = client.patch(
+        f"/api/v1/open-data-field-tasks/{task_id}",
+        headers=_headers("field_staff"),
+        json={
+            "expected_status": "open",
+            "proposed_status": "completed",
+            "resolution_note": "2026-08-29に現地掲示と位置を確認。公式sourceは変更していない。",
+        },
+    )
+    assert completed.status_code == 200, completed.text
+    feedback_list = client.get(
+        "/api/v1/cities/maizuru/source-feedback", headers=_headers("viewer")
+    )
+    assert feedback_list.status_code == 200
+    saved_feedback = next(item for item in feedback_list.json()["items"] if item["id"] == feedback_id)
+    assert saved_feedback["status"] == "reconciled"
+    assert saved_feedback["raw_mutation_permitted"] is False
+    assert saved_feedback["canonical_mutation_permitted"] is False
+
+    override = client.post(
+        "/api/v1/cities/maizuru/local-overrides",
+        headers=_headers("data_manager"),
+        json={
+            "canonical_record_id": fixture["record_id"],
+            "override_patch": {"local_operating_status": "temporary_unavailable"},
+            "reason": "現地確認結果を庁内分析layerで期限付き反映",
+            "evidence": {"source_feedback_id": feedback_id, "field_task_id": task_id},
+            "effective_date": "2026-08-29",
+            "expires_at": "2027-02-28",
+            "review_status": "in_review",
+        },
+    )
+    assert override.status_code == 201, override.text
+    assert override.json()["official_record_mutated"] is False
+    override_id = override.json()["id"]
+    reviewed = client.patch(
+        f"/api/v1/local-overrides/{override_id}/review",
+        headers=_headers("data_manager"),
+        json={
+            "expected_status": "in_review",
+            "proposed_status": "reviewed",
+            "review_note": "根拠、適用日、見直し期限を確認",
+        },
+    )
+    assert reviewed.status_code == 200, reviewed.text
+    assert reviewed.json()["reviewed_by"] == "acceptance-data_manager"
+
+    with psycopg.connect(database_url) as connection:
+        next_transform = connection.execute(
+            """INSERT INTO open_data_transformation_runs (
+                   organization_id, resource_id, adapter_id, adapter_version,
+                   transformation_version, canonical_version, status,
+                   input_row_count, output_record_count, completed_at, metadata
+               ) VALUES (%s, %s, 'ckan-v3@1', '2', 'review-loop@2',
+                         'canonical@2', 'succeeded', 1, 1, now(), '{}') RETURNING id""",
+            (ORG_A, fixture["resource_id"]),
+        ).fetchone()[0]
+        candidate_record_id = connection.execute(
+            """INSERT INTO canonical_open_data_records (
+                   organization_id, city_id, dataset_version_id, source_resource_id,
+                   transformation_run_id, record_type, external_record_id,
+                   display_name, source_row_locator, reference_date, attributes
+               ) VALUES (%s, %s, %s, %s, %s, 'facility', %s,
+                         'review loop facility updated', 'row:1', '2026-08-01',
+                         '{"official_update":true}') RETURNING id""",
+            (
+                ORG_A,
+                fixture["city_id"],
+                fixture["dataset_version_id"],
+                fixture["resource_id"],
+                next_transform,
+                fixture["external_record_id"],
+            ),
+        ).fetchone()[0]
+        reconciliation = connection.execute(
+            """SELECT status FROM open_data_override_reconciliations
+               WHERE organization_id = %s AND override_id = %s
+                 AND candidate_canonical_record_id = %s""",
+            (ORG_A, override_id, candidate_record_id),
+        ).fetchone()
+        assert reconciliation == ("candidate",)
+        assert connection.execute(
+            """SELECT count(*) FROM local_data_overrides
+               WHERE organization_id = %s AND id = %s""",
+            (ORG_A, override_id),
+        ).fetchone()[0] == 1
+        after_counts = connection.execute(
+            """SELECT
+                   (SELECT count(*) FROM open_data_raw_blobs WHERE id = %s),
+                   (SELECT count(*) FROM canonical_open_data_records
+                    WHERE organization_id = %s AND id = %s),
+                   (SELECT sha256 FROM open_data_raw_blobs WHERE id = %s)""",
+            (fixture["blob_id"], ORG_A, fixture["record_id"], fixture["blob_id"]),
+        ).fetchone()
+        assert after_counts == before_counts
+
+    evidence = client.post(
+        "/api/v1/cities/maizuru/evidence-centers",
+        headers=_headers("planner"),
+        json={
+            "schema_version": "2.0.0",
+            "source_manifest": {
+                "sources": [
+                    {
+                        "title": "official review-loop fixture",
+                        "data_classification": "public",
+                        "raw_sha256": fixture["raw_sha"],
+                    }
+                ]
+            },
+            "algorithm_manifest": {"adapter": "ckan-v3@1", "canonical": "canonical@2"},
+            "validation_manifest": {"feedback_reviewed": True, "override_reviewed": True},
+            "open_data_lineage_manifest": {
+                "resource_id": str(fixture["resource_id"]),
+                "raw_sha256": fixture["raw_sha"],
+                "adapter_version": "2",
+                "canonical_version": "canonical@2",
+            },
+            "report_manifest": {"deterministic": True},
+            "data_classification": "public",
+        },
+    )
+    assert evidence.status_code == 201, evidence.text
+    evidence_id = evidence.json()["id"]
+    detail = client.get(
+        f"/api/v1/evidence-centers/{evidence_id}", headers=_headers("viewer")
+    )
+    assert detail.status_code == 200, detail.text
+    assert detail.json()["integrity_verified"] is True
+    assert detail.json()["evidence_center"]["schema_version"] == "2.0.0"
+
+    report_payload = {
+        "report_type": "data_quality",
+        "title": "舞鶴市 公開データ品質レポート",
+        "data_classification": "internal",
+    }
+    report_a = client.post(
+        "/api/v1/cities/maizuru/reports",
+        headers=_headers("planner"),
+        json=report_payload,
+    )
+    report_b = client.post(
+        "/api/v1/cities/maizuru/reports",
+        headers=_headers("planner"),
+        json=report_payload,
+    )
+    assert report_a.status_code == 201, report_a.text
+    assert report_b.status_code == 201, report_b.text
+    assert report_a.json()["artifact_sha256"] == report_b.json()["artifact_sha256"]
+    assert report_a.json()["deterministic"] is True
+    assert report_a.json()["content_schema_version"] == "2.0.0"
+
+    transparency = client.post(
+        "/api/v1/cities/maizuru/public-transparency",
+        headers=_headers("planner"),
+        json={
+            "evidence_center_id": evidence_id,
+            "title": "舞鶴市 公開データ確認記録",
+            "summary": {"review_scope": "source, field feedback, local override boundary"},
+            "source_citations": [
+                {"title": "official review-loop fixture", "raw_sha256": fixture["raw_sha"]}
+            ],
+            "limitations": ["現地確認は公式sourceの内容を直接変更しません"],
+            "publish": True,
+        },
+    )
+    assert transparency.status_code == 201, transparency.text
+    assert transparency.json()["publication_status"] == "published"
+    public_list = client.get(
+        "/api/v1/cities/maizuru/public-transparency", headers=_headers("viewer")
+    )
+    assert public_list.status_code == 200
+    assert any(item["id"] == transparency.json()["id"] for item in public_list.json()["items"])
+    assert "建物単位推計人口" in public_list.json()["boundary"]
 
 
 def test_organization_a_b_isolation_for_api_and_database_constraints(

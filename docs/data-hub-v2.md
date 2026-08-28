@@ -56,6 +56,14 @@ Authenticated tenant-scoped reads are available at:
 - `POST /api/v1/resources/{resource_id}/quarantine`
 - `GET /api/v1/cities/{city}/data-tasks`
 - `PATCH /api/v1/data-tasks/{task_id}`
+- `POST|GET /api/v1/cities/{city}/source-feedback`
+- `POST /api/v1/source-feedback/{feedback_id}/field-task`
+- `GET /api/v1/cities/{city}/open-data-field-tasks`
+- `PATCH /api/v1/open-data-field-tasks/{task_id}`
+- `POST|GET /api/v1/cities/{city}/local-overrides`
+- `PATCH /api/v1/local-overrides/{override_id}/review`
+- `GET /api/v1/evidence-centers/{evidence_id}`
+- `POST|GET /api/v1/cities/{city}/public-transparency`
 
 Dataset lineage returns the recorded raw blob → resource → adapter → canonical record →
 spatial link → analysis boundary. It explicitly reports that no latest-version
@@ -93,3 +101,16 @@ S3-compatible store with a local inspection cache; the remote object's length an
 SHA-256 metadata are verified before use. Generic uploads reject traversal, unsafe ZIP
 expansion, XML entity declarations, formula-like CSV/GTFS cells, invalid encoding,
 malformed geometry and oversized single geometries.
+
+Forward migration `025_open_data_review_evidence.sql` closes the municipal review loop.
+Source feedback is stored with database-enforced `raw_mutation_permitted=false` and
+`canonical_mutation_permitted=false`, then may create a tenant-scoped field verification
+task. A reviewed local override always records actor, reason, evidence, effective date,
+review status and expiry. When a later official canonical record has the same external
+identity, the database creates a reconciliation candidate and never removes the override.
+
+Evidence Center V2 hashes source, algorithm, validation, open-data lineage, report and
+claim-boundary manifests. Deterministic report V2 emits the same artifact SHA-256 for the
+same version-pinned content. Public transparency records accept only public-classified
+reports/evidence and expose reviewed citations and limitations; raw field observations,
+decisions and building-level estimated demographics remain outside the public boundary.

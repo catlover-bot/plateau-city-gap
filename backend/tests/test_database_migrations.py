@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 25)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 26)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -182,3 +182,20 @@ def test_open_data_operations_are_append_only_tenant_scoped_and_analysis_blockin
     assert "reuse_scope = 'tenant_only' AND owner_organization_id IS NOT NULL" in foundation_sql
     assert "REFERENCES city_open_data_sources(organization_id, id)" in sql
     assert "REFERENCES canonical_open_data_records(organization_id, id)" in sql
+
+
+def test_open_data_review_evidence_and_transparency_are_separate_reviewed_layers() -> None:
+    sql = Path("infra/migrations/025_open_data_review_evidence.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE open_data_field_tasks" in sql
+    assert "CHECK (NOT raw_mutation_permitted)" in sql
+    assert "CHECK (NOT canonical_mutation_permitted)" in sql
+    assert "ALTER TABLE local_data_overrides" in sql
+    assert "reviewed_by text" in sql
+    assert "expires_at" in sql
+    assert "CREATE TRIGGER open_data_override_reconciliation_candidate" in sql
+    assert "never deletes local overrides" in sql
+    assert "ADD COLUMN schema_version text" in sql
+    assert "open_data_lineage_manifest" in sql
+    assert "deterministic boolean NOT NULL DEFAULT true CHECK (deterministic)" in sql
+    assert "CREATE TABLE public_transparency_records" in sql
+    assert "public transparency requires a public report" in sql

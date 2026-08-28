@@ -233,9 +233,11 @@ export interface EvidenceLibrary {
   city: CityHomePayload["city"];
   evidence_centers: Array<{
     id: string;
+    schema_version?: string;
     investigation_id: string | null;
     scenario_run_id: string | null;
     manifest_sha256: string;
+    reproducibility_status?: string;
     data_classification: "public" | "internal" | "restricted";
     created_by: string;
     created_at: string;
@@ -559,6 +561,50 @@ export interface DataHubPayload {
     source_title: string | null;
     dataset_title: string | null;
     dataset_year: number | null;
+  }>;
+  source_feedback?: Array<{
+    id: string;
+    feedback_type: string;
+    statement: string;
+    status: string;
+    submitted_by: string;
+    submitted_at: string;
+    raw_mutation_permitted: false;
+    canonical_mutation_permitted: false;
+    source_title: string;
+    field_task_id: string | null;
+    field_task_status: string | null;
+  }>;
+  field_tasks?: Array<{
+    id: string;
+    title: string;
+    status: string;
+    assigned_to: string | null;
+    due_date: string | null;
+    resolution_note: string | null;
+    created_at: string;
+    feedback_type: string;
+    source_title: string;
+  }>;
+  local_overrides?: Array<{
+    id: string;
+    reason: string;
+    effective_date: string;
+    expires_at: string;
+    review_status: string;
+    created_by: string;
+    reviewed_by: string | null;
+    display_name: string | null;
+    record_type: string;
+    candidate_count: number;
+  }>;
+  public_transparency?: Array<{
+    id: string;
+    title: string;
+    summary: Record<string, unknown>;
+    source_citations: Array<Record<string, unknown>>;
+    limitations: string[];
+    published_at: string;
   }>;
 }
 

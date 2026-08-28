@@ -42,6 +42,7 @@ type DataHubView =
   | "coverage"
   | "quality"
   | "updates"
+  | "review"
   | "licenses"
   | "dependencies";
 
@@ -848,6 +849,7 @@ function DataPage({
       </>
     );
   const canManage = permits(roles, ["data_manager"]);
+  const canField = permits(roles, ["field_staff", "planner"]);
   const city = hub.city.city_key;
   const registerDataset = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -1168,6 +1170,7 @@ function DataPage({
             ["coverage", "Coverage"],
             ["quality", "Quality"],
             ["updates", "Updates"],
+            ["review", "Feedback / Overrides"],
             ["licenses", "Licenses"],
             ["dependencies", "Dependencies"],
           ] as Array<[DataHubView, string]>
@@ -1355,6 +1358,163 @@ function DataPage({
               { key: "unavailable_reason", label: "不足理由" },
             ]}
           />
+        </>
+      )}
+      {dataView === "review" && (
+        <>
+          <div className="claim-boundary">
+            Feedbackとlocal overrideは自治体のreview layerです。公式raw・標準化済みrecordを直接変更せず、
+            公式更新が届いた場合もoverrideを自動削除せず照合候補を作ります。
+          </div>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>SOURCE FEEDBACK</span>
+                <h2>現地・庁内からの確認情報</h2>
+              </div>
+              <b>{(hub.source_feedback ?? []).length}</b>
+            </header>
+            <ServiceTable
+              caption="公開データへのfeedback"
+              empty="Feedbackはありません"
+              rows={(hub.source_feedback ?? []) as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                { key: "source_title", label: "公式ソース" },
+                { key: "feedback_type", label: "種別" },
+                { key: "statement", label: "確認内容" },
+                {
+                  key: "status",
+                  label: "状態",
+                  render: (row) => <StatusChip value={String(row.status)} />,
+                },
+                {
+                  key: "field_task_status",
+                  label: "現地確認",
+                  render: (row) => String(row.field_task_status ?? "未作成"),
+                },
+                {
+                  key: "action",
+                  label: "次の操作",
+                  render: (row) =>
+                    canField &&
+                    !row.field_task_id &&
+                    ["submitted", "triaged"].includes(String(row.status)) ? (
+                      <button
+                        type="button"
+                        className="table-action"
+                        onClick={() =>
+                          void mutate(
+                            `/api/v1/source-feedback/${String(row.id)}/field-task`,
+                            "POST",
+                            {
+                              expected_feedback_status: row.status,
+                              title: `${String(row.source_title)}の現地確認`,
+                              checklist: ["対象と位置を確認", "確認日時と根拠を記録"],
+                            },
+                            "公式データを変更せず、現地確認タスクを作成しました",
+                          )
+                        }
+                      >
+                        現地確認へ
+                      </button>
+                    ) : (
+                      <span>—</span>
+                    ),
+                },
+              ]}
+            />
+          </section>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>FIELD VERIFICATION</span>
+                <h2>公開データ確認タスク</h2>
+              </div>
+            </header>
+            <ServiceTable
+              caption="Feedbackから作成した現地確認タスク"
+              empty="現地確認タスクはありません"
+              rows={(hub.field_tasks ?? []) as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                { key: "title", label: "タスク" },
+                { key: "source_title", label: "ソース" },
+                {
+                  key: "status",
+                  label: "状態",
+                  render: (row) => <StatusChip value={String(row.status)} />,
+                },
+                { key: "assigned_to", label: "担当" },
+                { key: "due_date", label: "期限" },
+                { key: "resolution_note", label: "確認結果" },
+              ]}
+            />
+          </section>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>LOCAL OVERRIDES</span>
+                <h2>期限付き自治体補正layer</h2>
+              </div>
+            </header>
+            <ServiceTable
+              caption="Local overrideと公式更新の照合候補"
+              empty="Local overrideはありません"
+              rows={(hub.local_overrides ?? []) as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                { key: "display_name", label: "対象" },
+                { key: "reason", label: "理由" },
+                { key: "effective_date", label: "適用日" },
+                { key: "expires_at", label: "見直し期限" },
+                {
+                  key: "review_status",
+                  label: "Review",
+                  render: (row) => <StatusChip value={String(row.review_status)} />,
+                },
+                {
+                  key: "candidate_count",
+                  label: "公式更新候補",
+                  render: (row) => `${Number(row.candidate_count ?? 0)}件`,
+                },
+              ]}
+            />
+          </section>
+          <section className="service-panel full">
+            <header>
+              <div>
+                <span>PUBLIC TRANSPARENCY</span>
+                <h2>公開済みの出典・限界</h2>
+              </div>
+            </header>
+            <ServiceTable
+              caption="公開透明性記録"
+              empty="公開済み記録はありません"
+              rows={(hub.public_transparency ?? []) as unknown as Array<Record<string, unknown>>}
+              rowKey={(row) => String(row.id)}
+              columns={[
+                { key: "title", label: "公開項目" },
+                {
+                  key: "source_citations",
+                  label: "出典",
+                  render: (row) =>
+                    `${Array.isArray(row.source_citations) ? row.source_citations.length : 0}件`,
+                },
+                {
+                  key: "limitations",
+                  label: "限界",
+                  render: (row) =>
+                    `${Array.isArray(row.limitations) ? row.limitations.length : 0}件`,
+                },
+                {
+                  key: "published_at",
+                  label: "公開日時",
+                  render: (row) => formatDate(row.published_at),
+                },
+              ]}
+            />
+          </section>
         </>
       )}
       {dataView === "licenses" && (
@@ -3622,7 +3782,7 @@ function EvidencePage({
           <header>
             <div>
               <span>MANIFESTS</span>
-              <h2>Evidence Manifest</h2>
+              <h2>Evidence Center V2</h2>
             </div>
           </header>
           {(snapshot.evidence?.evidence_centers ?? []).length === 0 ? (
@@ -3637,9 +3797,18 @@ function EvidencePage({
                 <div>
                   <strong>{item.manifest_sha256.slice(0, 16)}…</strong>
                   <small>
-                    field {item.field_evidence_count} · decision{" "}
-                    {item.decision_count} · {formatDate(item.created_at)}
+                    schema {item.schema_version ?? "1.0.0"} · integrity{" "}
+                    {item.reproducibility_status ?? "recorded"} · field{" "}
+                    {item.field_evidence_count} · decision {item.decision_count} ·{" "}
+                    {formatDate(item.created_at)}
                   </small>
+                  <a
+                    href={serviceApi.url(`/api/v1/evidence-centers/${item.id}`)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    manifest詳細
+                  </a>
                 </div>
               </article>
             ))
