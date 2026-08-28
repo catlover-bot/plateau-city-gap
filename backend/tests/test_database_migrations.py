@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 21)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 22)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -93,3 +93,24 @@ def test_demographic_economic_sources_are_added_by_forward_only_migration() -> N
     assert "estat-economic-census-500m@2021" in sql
     assert "government-standard-terms-2.0" in sql
     assert "JGD2011" in sql
+
+
+def test_geospatial_resilience_sources_are_added_by_forward_only_migration() -> None:
+    sql = Path("infra/migrations/021_geospatial_resilience_sources.sql").read_text(
+        encoding="utf-8"
+    )
+    for adapter_id in (
+        "gsi-foundation-map@5.3",
+        "jshis-surface-ground-v4@2020",
+        "npa-traffic-accident@2024",
+        "mlit-pedestrian-ckan@2024",
+        "xroad-traffic-api@2026-01",
+    ):
+        assert adapter_id in sql
+    assert "jshis-terms-2025-03" in sql
+    assert "gsi-survey-act-review" in sql
+    assert "xroad-api-terms-2025-05" in sql
+    assert '"raw_redistribution":false' in sql
+    assert '"property_only_excluded":true' in sql
+    assert '"pilot_city_network_coverage":false' in sql
+    assert '"p11_conversion":false' in sql

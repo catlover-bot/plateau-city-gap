@@ -156,6 +156,8 @@ after_transport_distance
 | PLATEAU 藤沢市 CityGML | 2025 | 全11テーマ399,271地物、建物169,856、道路53,658、土地利用110,898、都市計画1,537、災害63,309 | 共通pipeline、建物人口、network・DEM、計画・災害文脈 |
 | 国土数値情報 R6 250m将来推計人口 | 2020基準 / 2025–2070試算 | 舞鶴1,053、藤沢963 | 公式試算系列、秘匿合算境界、500m親mesh文脈 |
 | e-Stat 令和3年経済センサス `T001162` | 2021-06-01 | 舞鶴287、藤沢326 published mesh | 産業別事業所・従業者の活動文脈。未掲載を0補完しない |
+| J-SHIS V4 250m表層地盤 | 2020 model / JGD2000 | 舞鶴1,980、藤沢1,084 published cell | 微地形・表層地盤model文脈。現地観測・地震確率ではない |
+| 警察庁 交通事故統計2024年本票 | 発生年2023–2024 / EPSG:4326 | 舞鶴59、藤沢982 injury/fatal accident | 履歴文脈。物損のみを含まず、risk・予測を生成しない |
 
 出典URL、チェックサム、加工内容、属性実装率は [data-sources](docs/data-sources.md) に記録しています。大容量rawデータはGit管理外です。
 
@@ -177,13 +179,14 @@ after_transport_distance
 - `analysis/scripts/build_municipal_open_data_inventory.py`: 舞鶴BODIKと藤沢公式ライブラリを安全に再発見し、license・欠損理由付きinventoryを生成
 - `analysis/scripts/build_maizuru_open_data_canonical.py`: 舞鶴P0実CSVをchecksum検証し、3,546 canonical recordと500m / PLATEAU候補linkを生成
 - `analysis/scripts/build_demographic_economic_open_data.py`: 公式250m将来人口と500m経済センサスを検証し、2都市2,629 canonical recordと822 mesh contextを生成
+- `analysis/scripts/build_geospatial_resilience_open_data.py`: J-SHIS表層地盤と警察庁事故履歴を検証し、4,105 canonical recordとGSI・歩行空間・xROAD・GTFS coverage監査を生成
 - `analysis/scripts/build_urban_futures_validation.py`: 舞鶴・藤沢の将来人口、stress test、criticality、避難所、計画比較を実データ検証
 - `analysis/scripts/benchmark_urban_resilience_scale.py`: 100k/250k/500k synthetic graph benchmark
 - `analysis/scripts/build_evidence_v3.py`: Temporal / Resilience Evidence PackageのJSON/CSV/print HTML生成
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
-- `infra/migrations/`: 20 migration。dataset version、urban state/diff、resilience、future/planning/outcome/field、municipal service tenant、公式open-data registryとcanonical lineageを永続化
+- `infra/migrations/`: 21 migration。dataset version、urban state/diff、resilience、future/planning/outcome/field、municipal service tenant、公式open-data registryとcanonical lineageを永続化
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 

@@ -62,6 +62,44 @@ def mesh_polygon(mesh_code: str | int) -> Polygon:
     )
 
 
+def decode_250m_mesh(mesh_code: str | int) -> MeshBounds:
+    """Decode a ten-digit quarter (250 m) regional mesh code.
+
+    The first nine digits identify the parent 500 m mesh.  The final digit uses
+    the same south-west/south-east/north-west/north-east quadrant convention.
+    Datum interpretation belongs to the source contract (for example J-SHIS V4
+    publishes JGD2000); this helper only decodes the mesh grid.
+    """
+
+    code = str(mesh_code).strip()
+    if len(code) != 10 or not code.isdigit() or code[-1] not in "1234":
+        raise ValueError(f"Invalid 250 m mesh code: {mesh_code!r}")
+    parent = decode_500m_mesh(code[:9])
+    latitude_step = (parent.north - parent.south) / 2
+    longitude_step = (parent.east - parent.west) / 2
+    south = parent.south + (latitude_step if code[-1] in "34" else 0)
+    west = parent.west + (longitude_step if code[-1] in "24" else 0)
+    return MeshBounds(
+        south=south,
+        west=west,
+        north=south + latitude_step,
+        east=west + longitude_step,
+    )
+
+
+def mesh_polygon_250m(mesh_code: str | int) -> Polygon:
+    bounds = decode_250m_mesh(mesh_code)
+    return Polygon(
+        [
+            (bounds.west, bounds.south),
+            (bounds.east, bounds.south),
+            (bounds.east, bounds.north),
+            (bounds.west, bounds.north),
+            (bounds.west, bounds.south),
+        ]
+    )
+
+
 def population_to_geodataframe(frame: pd.DataFrame) -> gpd.GeoDataFrame:
     """Build 500 m polygons and representative longitude/latitude columns."""
     if "mesh_code" not in frame:

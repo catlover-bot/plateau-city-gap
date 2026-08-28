@@ -1,13 +1,13 @@
 # GTFS / GTFS-JP source status
 
-Official-source discovery was repeated on 2026-08-27. The evidence snapshot is
+Official-source discovery was repeated on 2026-08-28. The evidence snapshot is
 `analysis/outputs/real/gtfs_official_source_audit.json`.
 
 ## Result
 
 | City | Capability | Feed ingested | Reason |
 |---|---|---:|---|
-| Maizuru | unavailable | no | No downloadable official GTFS/GTFS-JP feed was found on the checked municipal/operator pages. A plan to promote GTFS is not a feed. |
+| Maizuru | unavailable | no | The current 30-dataset BODIK organization catalog and checked municipal/operator pages exposed no downloadable official GTFS/GTFS-JP feed. A plan to promote GTFS is not a feed. |
 | Fujisawa | unavailable | no | No stable public feed was found. Kanachu appears as a 2026 ODPT Challenge cooperating operator, but no unrestricted, stable feed was obtained or licensed. |
 
 Primary checked sources include the [Maizuru open-data entry](https://www.city.maizuru.kyoto.jp/shisei/0000004879.html),

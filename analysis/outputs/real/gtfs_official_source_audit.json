@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "checked_at": "2026-08-27T00:00:00+09:00",
+  "checked_at": "2026-08-28T21:00:00+09:00",
   "policy": "Only an official or operator-authorized GTFS/GTFS-JP feed may be ingested. P11 is never converted or represented as GTFS.",
   "cities": [
     {
@@ -9,11 +9,12 @@
       "status": "unavailable",
       "feed_ingested": false,
       "findings": [
-        "The municipal open-data entry and current bus information pages did not expose a downloadable GTFS/GTFS-JP feed.",
+        "The current BODIK municipal organization catalog (30 datasets at recheck) and current bus information pages did not expose a downloadable GTFS/GTFS-JP feed.",
         "The regional plan states that GTFS conversion should be promoted; that planning statement is not a feed.",
         "Operator timetable and bus-location web services are not treated as licensed GTFS downloads."
       ],
       "sources": [
+        "https://data.bodik.jp/organization/262021",
         "https://www.city.maizuru.kyoto.jp/shisei/0000004879.html",
         "https://www.city.maizuru.kyoto.jp/kurashi/0000015340.html",
         "https://www.city.maizuru.kyoto.jp/kurashi/cmsfiles/contents/0000011/11975/tantetsuplan.pdf",

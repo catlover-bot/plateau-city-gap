@@ -13,15 +13,21 @@ CITY GAPのオープンデータ基盤は、公式カタログの「発見」と
 |---|---|---|---|---|
 | `digital-agency-municipal-standard-ods` | [デジタル庁 自治体標準オープンデータセット](https://www.digital.go.jp/resources/open_data/municipal-standard-data-set-test) | `municipal-standard-ods@2026-08` | unknown（resourceごとの確認が必要） | 全国schema |
 | `bodik-maizuru` | [舞鶴市 / BODIK](https://data.bodik.jp/organization/262021) | `ckan-v3@1` | CC BY 4.0 | 舞鶴市 |
-| `fujisawa-open-data-library` | [藤沢市オープンデータライブラリ](https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html) | `municipal-standard-ods@2026-08` | CC BY 4.0 | 藤沢市 |
+| `fujisawa-open-data-library` | [藤沢市オープンデータライブラリ](https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html) | `official-static-catalog@1` | CC BY 4.0 | 藤沢市 |
 | `mhlw-medical-information-network` | [厚生労働省 医療情報ネット](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html) | `mhlw-medical@2026-06` | PDL 1.0 | 全国 |
 | `mhlw-care-service` | [厚生労働省 介護サービス情報公表システム](https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html) | `mhlw-care@2026-06` | CC BY 4.0 | 全国 |
 | `mlit-future-population-250m-r6` | [国土交通省 250mメッシュ別将来推計人口（R6国政局推計）](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html) | `mlit-future-population-250m@2024` | CC BY 4.0 | 全国・都道府県別配布 |
 | `estat-economic-census-2021-500m` | [e-Stat 令和3年経済センサス 500mメッシュ](https://www.e-stat.go.jp/gis/statmap-search?aggregateUnit=H&datum=2011&serveyId=H002005112021&statsId=T001162&toukeiCode=00200553&toukeiYear=2021&type=1) | `estat-economic-census-500m@2021` | 政府標準利用規約2.0 | 全国・都道府県別配布 |
+| `gsi-fundamental-geospatial-data` | [国土地理院 基盤地図情報](https://service.gsi.go.jp/kiban/app/help/) | `gsi-foundation-map@5.3` | 認証・測量法review | 全国・要認証 |
+| `jshis-surface-ground-v4` | [J-SHIS 250m表層地盤](https://www.j-shis.bosai.go.jp/api-sstruct-meshinfo) | `jshis-surface-ground-v4@2020` | J-SHIS利用規約 | 全国・1次mesh別配布 |
+| `npa-traffic-accident-2024` | [警察庁 交通事故統計オープンデータ](https://www.npa.go.jp/publications/statistics/koutsuu/opendata/2024/opendata_2024.html) | `npa-traffic-accident@2024` | PDL 1.0 | 全国年次本票 |
+| `mlit-pedestrian-network-catalog` | [国交省 歩行空間ネットワーク](https://ckan.hokonavi.go.jp/dataset/) | `mlit-pedestrian-ckan@2024` | PDL 1.0 | 公開範囲のみ |
+| `xroad-open-traffic-api` | [xROAD/JARTIC道路交通情報API](https://www.jartic-open-traffic.org/) | `xroad-traffic-api@2026-01` | 個別API規約 | rolling参照値 |
 
 コード上のSingle Source of Truthは
 `backend/citygap_platform/open_data/registry.py`、永続化の初期値はforward-only migration
-`018_open_data_foundation.sql`である。公式static catalog拡張は`019`、人口・経済は`020`で
+`018_open_data_foundation.sql`である。公式static catalog拡張は`019`、人口・経済は`020`、
+地理空間・レジリエンスは`021`で
 forward-onlyに追加した。将来の定義変更では既存migrationを書き換えず、新しいadapter IDと
 migrationを追加する。
 
@@ -164,3 +170,14 @@ best scenarioではない。秘匿前値、公開用集約値、秘匿記号、2
 成果物はsource report、2,629件のcanonical JSONL、822件の統合500m GeoJSON、summaryである。同じ観測時刻の
 再実行で4成果物のSHA-256が一致する。PLATEAU 2025集約は同じ500m keyのモデル文脈として接続するが、
 建物人口の観測値とは扱わない。2020基準、2021経済、2025 PLATEAU、2025〜2070試算は常に`mixed`表示する。
+
+## Geospatial resilience and safety real canonical run
+
+`python -m analysis.scripts.build_geospatial_resilience_open_data --observed-at <ISO-8601>`は、
+J-SHIS V4 250m表層地盤と警察庁2024年交通事故本票を公式入口から取得し、計4,105件をcanonical化する。
+J-SHISは舞鶴1,980、藤沢1,084、事故履歴は舞鶴59、藤沢982である。海域のencoded zero、
+JGD2000からEPSG:4326への変換、年次ファイル年と発生時刻、監査mesh外5件を失わず保持する。
+
+GSI基盤地図情報、歩行空間ネットワーク、xROAD、GTFSは、取得・許諾・都市coverageの確認結果だけを
+記録し、利用できないsourceの架空行を生成しない。詳細、公式URL、都市別状態、ライセンス境界は
+[geospatial resilience sources](open-data-geospatial-resilience.md)を参照する。

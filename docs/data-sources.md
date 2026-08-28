@@ -1,6 +1,6 @@
 # Data sources
 
-初回調査・取得日: 2026-08-22、Urban Futures追加検証: 2026-08-27。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
+初回調査・取得日: 2026-08-22、Urban Futures追加検証: 2026-08-27、地理空間・レジリエンス追加検証: 2026-08-28。公式配布ファイルを取得し、checksum、schema、CRS、実record数を確認しました。rawファイルはGit管理外です。人口・交通・医療・PLATEAU関連データは `python -m analysis.scripts.download_real_data` で再取得できます。
 
 ## Source inventory
 
@@ -14,6 +14,8 @@
 | Project PLATEAU 舞鶴市2025 CityGML | 2025 / CityGML 2.0・標高付きJGD2011 | [CKAN](https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025) / `data/raw/plateau_citygml/` | 914,222,089 B ZIP | 8テーマ97,140地物。建物44,640、道路15,684、DEM 23、土地利用31,067、都市計画394、土砂4,643、洪水666、津波23 | 建物人口、実験道路network、DEM、公式コード表付き土地利用・計画・災害文脈。歩行networkとは扱わない |
 | 国土交通省「250mメッシュ別将来推計人口（R6国政局推計）」 | 2020基準、2025–2070試算 / EPSG:6668 | [公式ページ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-mesh250r6.html) / `data/raw/open_data/` | 京都16,805,431 B、神奈川30,757,702 B | 15,174 → 舞鶴1,053、20,880 → 藤沢963 | 公式試算。秘匿前・公開用集約値と合算先を分離し、市外合算がある公開用市合計は利用不可 |
 | e-Stat「令和3年経済センサス‐活動調査 500mメッシュ」`T001162` | 2021-06-01 / JGD2011 | [公式検索](https://www.e-stat.go.jp/gis/statmap-search?aggregateUnit=H&datum=2011&serveyId=H002005112021&statsId=T001162&toukeiCode=00200553&toukeiYear=2021&type=1)、[定義書](https://www.e-stat.go.jp/help/data-definition-information/downloaddata/T001162.pdf) / `data/raw/open_data/` | 京都133,517 B、神奈川249,155 B | 4,828 → 舞鶴287、6,346 → 藤沢326 | 46の事業所・従業者指標。活動文脈のみ。未掲載mesh・秘匿値を0へ補完しない |
+| 防災科研 J-SHIS V4 表層地盤250m | 2020 model / EPSG:4612 | [公式仕様](https://www.j-shis.bosai.go.jp/api-sstruct-meshinfo) / `data/raw/open_data/` | 5335: 166,684 B、5339: 871,840 B | 44,747 → 舞鶴1,980、93,474 → 藤沢1,084 | 微地形、AVS、ARVのmodel文脈。海域0をground値にせず、地震確率・riskを生成しない |
+| 警察庁 交通事故統計2024年本票 | annual file 2024 / world-geodetic DMS | [公式年次ページ](https://www.npa.go.jp/publications/statistics/koutsuu/opendata/2024/opendata_2024.html) / `data/raw/open_data/` | CSV 62,252,803 B | 290,895 → 舞鶴59、藤沢982 | 人身・死亡事故履歴。物損のみを含まず、発生時刻と年次fileを分離。予測ではない |
 
 ## Checksums and lineage
 

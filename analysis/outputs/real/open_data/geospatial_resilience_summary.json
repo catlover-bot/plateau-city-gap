@@ -1,0 +1,135 @@
+{
+  "canonical_artifact": "analysis/outputs/real/open_data/geospatial_resilience_canonical.jsonl",
+  "canonical_artifact_sha256": "575eb3db51b1399ca4727ccbabec369c5f3c0df15d4a0db1d920775af262539c",
+  "canonical_record_count": 4105,
+  "cities": {
+    "fujisawa": {
+      "audited_500m_mesh_count": 327,
+      "city_code": "14205",
+      "city_name": "藤沢市",
+      "historical_traffic_accidents": {
+        "claim_boundary": "historical context only; no prediction or risk probability",
+        "fatalities_sum": 6,
+        "injuries_sum": 1127,
+        "linked_to_audited_mesh_count": 978,
+        "occurrence_year_counts": {
+          "2023": 8,
+          "2024": 974
+        },
+        "outside_audited_mesh_context_count": 4,
+        "record_count": 982
+      },
+      "jshis_surface_ground": {
+        "audited_parent_meshes_without_published_cell_count": 56,
+        "linked_parent_500m_mesh_count": 271,
+        "microtopography_counts": {
+          "10": 99,
+          "13": 116,
+          "14": 1,
+          "15": 14,
+          "16": 32,
+          "17": 71,
+          "3": 13,
+          "8": 1,
+          "9": 737
+        },
+        "published_250m_cell_count": 1084,
+        "scope": "published 250m cells inside audited 500m mesh context"
+      },
+      "researched_capabilities": {
+        "gsi_foundation_map": {
+          "status": "requires_review",
+          "unavailable_reason": "requires_credentials"
+        },
+        "gtfs": {
+          "status": "unavailable",
+          "unavailable_reason": "not_published"
+        },
+        "pedestrian_network": {
+          "status": "unavailable",
+          "unavailable_reason": "outside_coverage"
+        },
+        "xroad_traffic": {
+          "cctv_points_within_context": 0,
+          "constant_traffic_points_within_context": 0,
+          "note": "one timestamp with no in-context points is not proof of no coverage",
+          "stable_snapshot_ingested": false,
+          "status": "unknown"
+        }
+      }
+    },
+    "maizuru": {
+      "audited_500m_mesh_count": 495,
+      "city_code": "26202",
+      "city_name": "舞鶴市",
+      "historical_traffic_accidents": {
+        "claim_boundary": "historical context only; no prediction or risk probability",
+        "fatalities_sum": 2,
+        "injuries_sum": 66,
+        "linked_to_audited_mesh_count": 58,
+        "occurrence_year_counts": {
+          "2023": 9,
+          "2024": 50
+        },
+        "outside_audited_mesh_context_count": 1,
+        "record_count": 59
+      },
+      "jshis_surface_ground": {
+        "audited_parent_meshes_without_published_cell_count": 0,
+        "linked_parent_500m_mesh_count": 495,
+        "microtopography_counts": {
+          "0": 16,
+          "1": 1027,
+          "10": 410,
+          "11": 15,
+          "12": 30,
+          "15": 172,
+          "16": 42,
+          "19": 3,
+          "2": 64,
+          "20": 55,
+          "21": 1,
+          "3": 129,
+          "8": 16
+        },
+        "published_250m_cell_count": 1980,
+        "scope": "published 250m cells inside audited 500m mesh context"
+      },
+      "researched_capabilities": {
+        "gsi_foundation_map": {
+          "status": "requires_review",
+          "unavailable_reason": "requires_credentials"
+        },
+        "gtfs": {
+          "status": "unavailable",
+          "unavailable_reason": "not_published"
+        },
+        "pedestrian_network": {
+          "status": "unavailable",
+          "unavailable_reason": "outside_coverage"
+        },
+        "xroad_traffic": {
+          "cctv_points_within_context": 3,
+          "cctv_station_codes": [
+            "6810660",
+            "6810667",
+            "6810670"
+          ],
+          "constant_traffic_points_within_context": 0,
+          "stable_snapshot_ingested": false,
+          "status": "partial"
+        }
+      }
+    }
+  },
+  "observed_at": "2026-08-28T21:00:00+09:00",
+  "prediction_generated": false,
+  "raw_primary_resource_count": 3,
+  "raw_supporting_resource_count": 2,
+  "raw_unique_sha256_count": 5,
+  "risk_probability_generated": false,
+  "schema_version": "citygap-geospatial-resilience-summary@1",
+  "source_report": "analysis/outputs/real/open_data/geospatial_resilience_source_report.json",
+  "source_report_sha256": "92e201e8db56d1e93fec77fb4ca1bf4c7e9dfe8988e00264619b44bebf36cdd4",
+  "unavailable_sources_fabricated_as_rows": false
+}
