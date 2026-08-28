@@ -23,10 +23,18 @@ from backend.citygap_platform.domain.municipal_service import (
 
 
 def test_required_municipal_entities_and_roles_are_explicit() -> None:
-    assert len(SERVICE_ENTITIES) == 23
-    assert {"Organization", "Finding", "Investigation", "DecisionRecord", "AuditEvent"} <= set(
-        SERVICE_ENTITIES
-    )
+    assert len(SERVICE_ENTITIES) == 27
+    assert {
+        "Organization",
+        "OpenDataAdapter",
+        "OpenDataSource",
+        "DataCoverage",
+        "CanonicalOpenDataRecord",
+        "Finding",
+        "Investigation",
+        "DecisionRecord",
+        "AuditEvent",
+    } <= set(SERVICE_ENTITIES)
     assert set(ProductRole) == {
         ProductRole.VIEWER,
         ProductRole.ANALYST,

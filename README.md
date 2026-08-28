@@ -5,7 +5,7 @@
 **Team まちスコープ — Project PLATEAU CityHack Challenge 2026**
 最終発表: 2026-09-05
 
-[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Municipal product](docs/product-vision.md) · [Product domain](docs/product-domain.md) · [Service workflows](docs/service-workflows.md) · [Spatial Workspace](docs/spatial-workspace.md) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [API contract](docs/api-contract.md) · [Tenant security](docs/tenant-security.md) · [Service operations](docs/service-operations.md)
+[Webデモ](https://catlover-bot.github.io/plateau-city-gap/) · [Municipal product](docs/product-vision.md) · [Municipal Open Data](docs/open-data-platform.md) · [Product domain](docs/product-domain.md) · [Service workflows](docs/service-workflows.md) · [Spatial Workspace](docs/spatial-workspace.md) · [Validation & Evidence](docs/validation-evidence.md) · [Urban Futures & Resilience](docs/urban-futures-resilience.md) · [API contract](docs/api-contract.md) · [Tenant security](docs/tenant-security.md) · [Service operations](docs/service-operations.md)
 
 このリポジトリは、審査用 **Competition Demo**、認証済み **Municipal Urban Intelligence Service**、モデル検証用 **Validation Workspace** の責務を分離しながら、同じversion付き都市データとEvidence Chainを利用します。GitHub Pagesはバックエンドなしのprivacy-safeな公開Showcaseです。自治体ServiceはOrganization/City tenant、6 Role、Data onboarding、Urban State、Analysis/Finding/Investigation/Review/Field/Decision、selected-site offline sync、restricted attachment、deterministic report、監査・運用を `/api/v1` で提供します。実PostGIS / pgRouting integration、API、transaction、migration、dump/restoreはGitHub Actionsで検証します。CI fixtureは全量CityGML DB投入の証明ではありません。
 
@@ -178,7 +178,7 @@ after_transport_distance
 - `frontend/public/data/`: 軽量化した静的GeoJSON/JSONとPLATEAU subset
 - `frontend/src/`: React UI、Cesium地図、決定論的説明、What-if
 - `backend/citygap_platform/`: CityGML/GTFS/CSV/GeoJSON/GeoPackage adapter、PostGIS loader、FastAPI
-- `infra/migrations/`: 15 migration。dataset version、urban state/diff、resilience、future/planning/outcome/fieldとmunicipal service tenantを永続化
+- `infra/migrations/`: 18 migration。dataset version、urban state/diff、resilience、future/planning/outcome/field、municipal service tenant、公式open-data registryとcanonical lineageを永続化
 - `docker-compose.yml`: pinned PostGIS / pgRouting、migration、API、DB worker、frontendのone-command構成
 - `.github/workflows/deploy-pages.yml`: GitHub Pages build/deploy
 

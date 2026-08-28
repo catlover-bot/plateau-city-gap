@@ -154,6 +154,61 @@ JOB_STAGES = {
         "hash_artifacts",
         "persist_artifacts",
     ),
+    "source_discovery": (
+        "load_official_catalog",
+        "match_city_aliases",
+        "classify_availability",
+        "persist_candidates",
+    ),
+    "metadata_refresh": (
+        "respect_provider_schedule",
+        "fetch_metadata",
+        "compare_version_signals",
+        "persist_update_check",
+    ),
+    "resource_download": (
+        "validate_resource_url",
+        "stream_bounded_bytes",
+        "verify_content",
+        "persist_content_addressed_blob",
+    ),
+    "source_validation": (
+        "verify_provenance",
+        "verify_license",
+        "validate_schema_and_crs",
+        "persist_quality_gates",
+    ),
+    "schema_normalization": (
+        "inspect_schema_drift",
+        "apply_known_aliases",
+        "quarantine_ambiguous_fields",
+        "persist_normalized_rows",
+    ),
+    "canonicalization": (
+        "load_validated_normalized_rows",
+        "map_canonical_types",
+        "persist_lineage",
+        "verify_record_counts",
+    ),
+    "spatial_linkage": (
+        "load_canonical_geometry",
+        "apply_versioned_link_rules",
+        "classify_ambiguous_and_unmatched",
+        "persist_linkage_report",
+    ),
+    "capability_refresh": (
+        "load_promoted_sources",
+        "evaluate_dataset_requirements",
+        "persist_coverage_and_capabilities",
+        "notify_data_manager",
+    ),
+    "dependent_analysis_recompute": (
+        "load_dependency_graph",
+        "compare_urban_states",
+        "execute_versioned_analyses",
+        "classify_finding_reproduction",
+        "persist_artifacts",
+    ),
 }
 
 

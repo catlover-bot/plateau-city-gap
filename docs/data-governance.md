@@ -37,3 +37,7 @@ rules before production deletion jobs are enabled.
 Unavailable official future population, shelter capacity, cost, target or approval data
 remains unavailable. CITY GAP may accept a versioned municipal adapter, but it does not
 generate a replacement value.
+
+Official source discovery, machine-readable licence decisions, canonical lineage,
+coverage reasons and annual update stages are specified in
+[Municipal Open Data Platform](open-data-platform.md).

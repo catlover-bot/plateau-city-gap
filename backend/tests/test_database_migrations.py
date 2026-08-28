@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 18)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 19)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -45,3 +45,33 @@ def test_annual_update_activity_extension_preserves_existing_types() -> None:
         "annual_update_queued",
     ):
         assert f"'{event_type}'" in sql
+
+
+def test_open_data_foundation_is_tenant_scoped_and_forward_only() -> None:
+    sql = Path("infra/migrations/018_open_data_foundation.sql").read_text(encoding="utf-8")
+    for table in (
+        "open_data_adapters",
+        "open_data_source_catalog",
+        "city_open_data_sources",
+        "open_data_raw_blobs",
+        "open_data_resources",
+        "canonical_open_data_records",
+        "open_data_spatial_links",
+        "city_data_coverage",
+        "local_data_overrides",
+    ):
+        assert f"CREATE TABLE {table}" in sql
+    assert "REFERENCES cities(organization_id, id)" in sql
+    assert "REFERENCES dataset_versions(organization_id, id)" in sql
+    assert "UNIQUE NULLS NOT DISTINCT (sha256, owner_organization_id)" in sql
+    assert "redistribution boolean" in sql
+    assert "unknown_terms boolean NOT NULL" in sql
+    for preserved_capability in (
+        "hazard_stress_test",
+        "criticality",
+        "field_mode",
+        "outcome_monitoring",
+        "evacuation_reachability",
+        "planning_monitoring",
+    ):
+        assert f"'{preserved_capability}'" in sql

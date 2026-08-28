@@ -3898,6 +3898,6 @@ class MunicipalServiceRepository(PostGISRepository):
                     "CITYGAP_APPLICATION_VERSION", "unversioned-development"
                 ),
                 "application_commit": os.getenv("CITYGAP_APPLICATION_COMMIT"),
-                "migration_version": "017_annual_update_activity.sql",
+                "migration_version": "018_open_data_foundation.sql",
             },
         }
