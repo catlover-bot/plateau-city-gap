@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "city-gap-analysis"
-version = "0.1.0"
-description = "Reproducible, city-independent spatial gap analysis"
+version = "0.2.0"
+description = "Tenant-aware municipal urban intelligence and reproducible spatial gap analysis"
 requires-python = ">=3.10"
 dependencies = [
   "geopandas>=0.14,<2",

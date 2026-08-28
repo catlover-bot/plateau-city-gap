@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from typing import Any, Protocol
 
 from backend.citygap_platform.domain.jobs import JOB_STAGES
+from backend.citygap_platform.security.auth import DEFAULT_ORGANIZATION_ID
 
 
 @dataclass(frozen=True, slots=True)
@@ -22,6 +23,7 @@ class ClaimedJob:
     parameters: dict[str, Any]
     attempt_number: int
     city_id: str
+    organization_id: str = DEFAULT_ORGANIZATION_ID
 
 
 class StageExecutor(Protocol):
@@ -43,6 +45,7 @@ class ConfiguredCommandExecutor:
                 "CITYGAP_JOB_TYPE": job.job_type,
                 "CITYGAP_JOB_STAGE": stage,
                 "CITYGAP_JOB_ATTEMPT": str(job.attempt_number),
+                "CITYGAP_ORGANIZATION_ID": job.organization_id,
             }
         )
         timeout = int(os.getenv("CITYGAP_JOB_STAGE_TIMEOUT_SECONDS", "3600"))
@@ -87,7 +90,7 @@ class PostgresWorker:
 
         rows = connection.execute(
             """SELECT job.id, job.retry_count, job.max_retries, job.current_stage,
-                      job.locked_by, city.city_code
+                      job.locked_by, city.city_code, job.organization_id
                FROM job_runs AS job JOIN cities AS city ON city.id=job.city_id
                WHERE job.state = 'running'
                  AND COALESCE(job.last_heartbeat_at, job.started_at, job.queued_at)
@@ -96,7 +99,15 @@ class PostgresWorker:
                FOR UPDATE OF job SKIP LOCKED""",
             (self.stale_after_seconds,),
         ).fetchall()
-        for job_id, retry_count, max_retries, current_stage, previous_worker, city_id in rows:
+        for (
+            job_id,
+            retry_count,
+            max_retries,
+            current_stage,
+            previous_worker,
+            city_id,
+            organization_id,
+        ) in rows:
             retry = int(retry_count) < int(max_retries)
             state = "queued" if retry else "failed"
             attempt_result = "requeued" if retry else "failed"
@@ -112,7 +123,7 @@ class PostgresWorker:
                           completed_at=CASE WHEN %s THEN NULL ELSE now() END,
                           finished_at=CASE WHEN %s THEN NULL ELSE now() END,
                           locked_by=NULL, last_heartbeat_at=now(), error_message=%s
-                   WHERE id=%s""",
+                   WHERE id=%s AND organization_id=%s""",
                 (
                     state,
                     next_retry_count,
@@ -122,6 +133,7 @@ class PostgresWorker:
                     retry,
                     message,
                     job_id,
+                    organization_id,
                 ),
             )
             connection.execute(
@@ -136,10 +148,11 @@ class PostgresWorker:
             )
             connection.execute(
                 """INSERT INTO audit_log (
-                       actor, action, resource_type, resource_id, city_id, request_id,
-                       before_state, after_state
-                   ) VALUES (%s, 'job.stale.recover', 'job', %s, %s, %s, %s, %s)""",
+                       organization_id, actor, action, resource_type, resource_id,
+                       city_id, request_id, before_state, after_state
+                   ) VALUES (%s, %s, 'job.stale.recover', 'job', %s, %s, %s, %s, %s)""",
                 (
+                    organization_id,
                     f"worker:{self.worker_id}"[:200],
                     str(job_id),
                     str(city_id),
@@ -173,10 +186,11 @@ class PostgresWorker:
     ) -> None:
         connection.execute(
             """INSERT INTO audit_log (
-                   actor, action, resource_type, resource_id, city_id, request_id,
-                   before_state, after_state
-               ) VALUES (%s,%s,'job',%s,%s,%s,%s,%s)""",
+                   organization_id, actor, action, resource_type, resource_id,
+                   city_id, request_id, before_state, after_state
+               ) VALUES (%s,%s,%s,'job',%s,%s,%s,%s,%s)""",
             (
+                job.organization_id,
                 f"worker:{self.worker_id}"[:200],
                 action,
                 job.job_id,
@@ -198,7 +212,7 @@ class PostgresWorker:
             self._recover_stale(connection)
             row = connection.execute(
                 """SELECT job.id, job.job_type, job.parameters, job.retry_count,
-                          city.city_code
+                          city.city_code, job.organization_id
                    FROM job_runs AS job JOIN cities AS city ON city.id=job.city_id
                    WHERE job.state = 'queued'
                    ORDER BY job.queued_at, job.id
@@ -211,8 +225,8 @@ class PostgresWorker:
                 """UPDATE job_runs SET state = 'running', current_stage = %s,
                           started_at = now(), completed_at = NULL, finished_at = NULL,
                           last_heartbeat_at = now(), locked_by = %s, error_message = NULL
-                   WHERE id = %s""",
-                (JOB_STAGES[str(row[1])][0], self.worker_id, row[0]),
+                   WHERE id = %s AND organization_id = %s""",
+                (JOB_STAGES[str(row[1])][0], self.worker_id, row[0], row[5]),
             )
             connection.execute(
                 """INSERT INTO job_attempts (job_run_id, attempt_number, worker_id)
@@ -225,7 +239,12 @@ class PostgresWorker:
                 (row[0], JOB_STAGES[str(row[1])][0], f"claimed by {self.worker_id}"),
             )
             claimed = ClaimedJob(
-                str(row[0]), str(row[1]), dict(row[2]), attempt, str(row[4])
+                str(row[0]),
+                str(row[1]),
+                dict(row[2]),
+                attempt,
+                str(row[4]),
+                str(row[5]),
             )
             self._audit_job(
                 connection,
@@ -244,8 +263,9 @@ class PostgresWorker:
     def _stage_complete(self, job: ClaimedJob, stage: str, next_stage: str | None) -> None:
         with self._connect() as connection:
             row = connection.execute(
-                "SELECT state, current_stage, locked_by FROM job_runs WHERE id=%s FOR UPDATE",
-                (job.job_id,),
+                """SELECT state, current_stage, locked_by FROM job_runs
+                   WHERE id=%s AND organization_id=%s FOR UPDATE""",
+                (job.job_id, job.organization_id),
             ).fetchone()
             if row != ("running", stage, self.worker_id):
                 raise RuntimeError("Job claim or stage changed while worker was executing")
@@ -253,8 +273,9 @@ class PostgresWorker:
                 connection.execute(
                     """UPDATE job_runs SET state='succeeded', current_stage=NULL,
                               completed_at=now(), finished_at=now(), last_heartbeat_at=now(),
-                              locked_by=NULL, error_message=NULL WHERE id=%s""",
-                    (job.job_id,),
+                              locked_by=NULL, error_message=NULL
+                       WHERE id=%s AND organization_id=%s""",
+                    (job.job_id, job.organization_id),
                 )
                 state = "succeeded"
                 message = "all declared stages completed"
@@ -273,8 +294,8 @@ class PostgresWorker:
             else:
                 connection.execute(
                     """UPDATE job_runs SET current_stage=%s, last_heartbeat_at=now()
-                       WHERE id=%s""",
-                    (next_stage, job.job_id),
+                       WHERE id=%s AND organization_id=%s""",
+                    (next_stage, job.job_id, job.organization_id),
                 )
                 state = "running"
                 message = f"completed {stage}"
@@ -290,8 +311,8 @@ class PostgresWorker:
         with self._connect() as connection:
             row = connection.execute(
                 """SELECT retry_count, max_retries FROM job_runs
-                   WHERE id=%s AND locked_by=%s FOR UPDATE""",
-                (job.job_id, self.worker_id),
+                   WHERE id=%s AND organization_id=%s AND locked_by=%s FOR UPDATE""",
+                (job.job_id, job.organization_id, self.worker_id),
             ).fetchone()
             if row is None:
                 raise RuntimeError("Failed job is no longer owned by this worker")
@@ -305,7 +326,7 @@ class PostgresWorker:
                           completed_at=CASE WHEN %s THEN NULL ELSE now() END,
                           finished_at=CASE WHEN %s THEN NULL ELSE now() END,
                           locked_by=NULL, last_heartbeat_at=now(), error_message=%s
-                   WHERE id=%s""",
+                   WHERE id=%s AND organization_id=%s""",
                 (
                     state,
                     retry_count + (1 if retry else 0),
@@ -314,6 +335,7 @@ class PostgresWorker:
                     retry,
                     message,
                     job.job_id,
+                    job.organization_id,
                 ),
             )
             connection.execute(

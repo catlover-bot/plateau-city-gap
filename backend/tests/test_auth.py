@@ -2,7 +2,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.citygap_platform.api.app import create_app
-from backend.citygap_platform.security.auth import AuthSettings, Identity
+from backend.citygap_platform.security.auth import (
+    DEFAULT_ORGANIZATION_ID,
+    AuthSettings,
+    Identity,
+)
 
 
 class OidcRepo:
@@ -27,7 +31,10 @@ def test_oidc_mode_requires_issuer_and_audience_and_never_decodes_unverified_tok
     )
     settings.validate()
     client = TestClient(create_app(OidcRepo(), auth_settings=settings))  # type: ignore[arg-type]
-    assert client.get("/cities", headers={"Authorization": "Bearer unsigned.jwt.value"}).status_code == 401
+    assert (
+        client.get("/cities", headers={"Authorization": "Bearer unsigned.jwt.value"}).status_code
+        == 401
+    )
 
 
 def test_injected_oidc_verifier_receives_issuer_audience_and_supplies_rbac_identity() -> None:
@@ -48,9 +55,16 @@ def test_injected_oidc_verifier_receives_issuer_audience_and_supplies_rbac_ident
     )
     response = client.get("/cities", headers={"Authorization": "Bearer signed-token"})
     assert response.status_code == 200
-    assert calls == [
-        ("signed-token", "https://identity.example.invalid", "citygap-pilot")
-    ]
+    assert calls == [("signed-token", "https://identity.example.invalid", "citygap-pilot")]
+
+    service_response = client.get(
+        "/api/v1/cities",
+        headers={"Authorization": "Bearer signed-token", "X-Request-ID": "tenant-claim"},
+    )
+    assert service_response.status_code == 403
+    assert service_response.json()["error"]["message"] == (
+        "Active organization membership is required"
+    )
 
 
 def test_temporal_resilience_permissions_follow_municipal_roles() -> None:
@@ -76,3 +90,23 @@ def test_validation_permissions_follow_evidence_governance_roles() -> None:
     assert planner.permits("validation:review")
     assert not planner.permits("validation:reference:register")
     assert admin.permits("validation:reference:register")
+
+
+def test_six_product_roles_have_bounded_workflow_permissions() -> None:
+    field_staff = Identity("f", "test", frozenset({"field_staff"}))
+    data_manager = Identity("d", "test", frozenset({"data_manager"}))
+    planner = Identity("p", "test", frozenset({"planner"}))
+    assert field_staff.permits("field:write")
+    assert not field_staff.permits("decision:write")
+    assert data_manager.permits("dataset:promote")
+    assert not data_manager.permits("decision:write")
+    assert planner.permits("decision:write")
+
+
+def test_development_identity_carries_an_explicit_tenant() -> None:
+    client = TestClient(create_app(OidcRepo()))  # type: ignore[arg-type]
+    response = client.get("/cities")
+    assert response.status_code == 200
+    assert DEFAULT_ORGANIZATION_ID == "00000000-0000-0000-0000-000000000001"
+    invalid = client.get("/cities", headers={"X-CITYGAP-Organization": "not-a-uuid"})
+    assert invalid.status_code == 401

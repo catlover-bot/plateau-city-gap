@@ -62,7 +62,11 @@ def build_audit() -> dict[str, Any]:
     workspace_story = _load("frontend/public/data/municipal_workspace_story.json")
     validate_platform_registry(registry)
 
-    routes = {route.path for route in create_app(repository=object()).routes}
+    routes = {
+        path
+        for route in create_app(repository=object()).routes
+        if (path := getattr(route, "path", None)) is not None
+    }
     required_routes = {
         "/cities",
         "/cities/{city_id}/buildings",

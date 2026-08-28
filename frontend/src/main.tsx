@@ -7,6 +7,7 @@ import "./design-system/tokens.css";
 import "./app/product-shell.css";
 import "./map/map.css";
 import "./features/inspector/inspector.css";
+import "./service/service.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

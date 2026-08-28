@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 15)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 16)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 

@@ -10,6 +10,7 @@ from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 
@@ -26,6 +27,8 @@ from backend.citygap_platform.security.auth import (
 )
 
 from .repository import PlatformRepository, PostGISRepository
+from .service import router as municipal_service_router
+from .service_repository import MunicipalServiceRepository
 from .tile_cache import CachedVectorTile, VectorTileKey, VersionedTileCache
 
 
@@ -278,24 +281,104 @@ def create_app(
     oidc_verifier: OidcVerifier | None = None,
 ) -> FastAPI:
     application = FastAPI(
-        title="CITY GAP Urban Digital Twin Platform",
-        version="0.1.0",
-        description="Version-aware PLATEAU/PostGIS API. Large layers require bbox queries.",
+        title="CITY GAP Municipal Urban Intelligence Platform",
+        version="0.2.0",
+        description=(
+            "Tenant-aware municipal workflow and version-aware PLATEAU/PostGIS API. "
+            "Large layers require bounded queries."
+        ),
     )
     database_url = os.getenv(
         "CITYGAP_DATABASE_URL", "postgresql://citygap:citygap_dev@postgres:5432/citygap"
     )
-    application.state.repository = repository or PostGISRepository(database_url)
+    application.state.repository = repository or MunicipalServiceRepository(database_url)
     application.state.auth_settings = auth_settings or AuthSettings.from_environment()
     application.state.tile_cache = VersionedTileCache(
         int(os.getenv("CITYGAP_TILE_CACHE_ITEMS", "512"))
     )
+    application.include_router(municipal_service_router)
+
+    def service_error_content(
+        request: Request,
+        status_code: int,
+        detail: Any,
+        validation: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
+        code = {
+            400: "invalid_request",
+            401: "authentication_required",
+            403: "permission_denied",
+            404: "resource_not_found",
+            409: "state_conflict",
+            413: "request_too_large",
+            422: "validation_error",
+            429: "rate_limited",
+            503: "service_unavailable",
+        }.get(status_code, "service_error")
+        message = detail if isinstance(detail, str) else "Request could not be processed"
+        remediation = {
+            401: "Supply a verified identity.",
+            403: "Confirm organization membership and the required role.",
+            404: "Confirm the resource belongs to the selected organization and city.",
+            409: "Reload the resource and retry from its current lifecycle state.",
+            422: "Correct the indicated fields and submit again.",
+            503: "Check service-health and retry after the dependency recovers.",
+        }.get(status_code, "Use the request ID when contacting support.")
+        payload: dict[str, Any] = {
+            "error": {
+                "code": code,
+                "message": message,
+                "request_id": getattr(request.state, "request_id", None)
+                or request.headers.get("X-Request-ID"),
+                "remediation": remediation,
+            }
+        }
+        if validation:
+            payload["error"]["fields"] = validation
+        return payload
+
+    @application.exception_handler(HTTPException)
+    async def http_exception_handler(request: Request, error: HTTPException):
+        if request.url.path.startswith("/api/v1"):
+            return JSONResponse(
+                status_code=error.status_code,
+                content=jsonable_encoder(
+                    service_error_content(request, error.status_code, error.detail)
+                ),
+                headers=error.headers,
+            )
+        return JSONResponse(
+            status_code=error.status_code,
+            content=jsonable_encoder({"detail": error.detail}),
+            headers=error.headers,
+        )
+
+    @application.exception_handler(RequestValidationError)
+    async def request_validation_handler(request: Request, error: RequestValidationError):
+        if request.url.path.startswith("/api/v1"):
+            return JSONResponse(
+                status_code=422,
+                content=jsonable_encoder(
+                    service_error_content(
+                        request,
+                        422,
+                        "Request validation failed",
+                        validation=error.errors(),
+                    )
+                ),
+            )
+        return JSONResponse(
+            status_code=422,
+            content=jsonable_encoder({"detail": error.errors()}),
+        )
 
     @application.middleware("http")
     async def authentication_and_observability(request: Request, call_next):
         if request.url.path in {"/health", "/ready"}:
             request.state.identity = Identity(
-                actor="health-probe", issuer="citygap-internal", roles=frozenset({"viewer"})
+                actor="health-probe",
+                issuer="citygap-internal",
+                roles=frozenset({"viewer"}),
             )
         else:
             try:
@@ -303,14 +386,51 @@ def create_app(
                     request, application.state.auth_settings, oidc_verifier
                 )
             except HTTPException as error:
+                content = (
+                    service_error_content(request, error.status_code, error.detail)
+                    if request.url.path.startswith("/api/v1")
+                    else {"detail": error.detail}
+                )
                 failure = JSONResponse(
-                    status_code=error.status_code, content={"detail": error.detail}
+                    status_code=error.status_code, content=jsonable_encoder(content)
                 )
 
                 async def unauthorized(_request: Request):
                     return failure
 
                 return await request_observability_middleware(request, unauthorized)
+            identity = request.state.identity
+            if (
+                request.url.path.startswith("/api/v1")
+                and application.state.auth_settings.mode == "oidc"
+            ):
+                authorize = getattr(application.state.repository, "authorize_identity", None)
+                authorized = bool(
+                    identity.organization_id
+                    and authorize
+                    and authorize(
+                        identity.organization_id,
+                        identity.actor,
+                        identity.issuer,
+                        identity.roles,
+                    )
+                )
+                if not authorized:
+                    failure = JSONResponse(
+                        status_code=403,
+                        content=jsonable_encoder(
+                            service_error_content(
+                                request,
+                                403,
+                                "Active organization membership is required",
+                            )
+                        ),
+                    )
+
+                    async def membership_denied(_request: Request):
+                        return failure
+
+                    return await request_observability_middleware(request, membership_denied)
         return await request_observability_middleware(request, call_next)
 
     @application.get("/health")
@@ -340,9 +460,7 @@ def create_app(
     def urban_states(
         city_id: str,
         repo: Annotated[PlatformRepository, Depends(_repository)],
-        lifecycle_status: Literal[
-            "draft", "validated", "current", "superseded", "archived"
-        ]
+        lifecycle_status: Literal["draft", "validated", "current", "superseded", "archived"]
         | None = None,
         limit: Annotated[int, Query(ge=1, le=100)] = 30,
     ) -> dict:
@@ -390,9 +508,7 @@ def create_app(
         offset: Annotated[int, Query(ge=0)] = 0,
     ) -> dict:
         parsed_bbox = _parse_bbox(bbox)
-        return repo.state_changes(
-            city_id, from_state_id, to_state_id, parsed_bbox, limit, offset
-        )
+        return repo.state_changes(city_id, from_state_id, to_state_id, parsed_bbox, limit, offset)
 
     @application.get("/cities/{city_id}/buildings")
     def buildings(
@@ -1114,9 +1230,7 @@ def create_app(
         request_body: ValidationReferenceRequest,
         repo: Annotated[PlatformRepository, Depends(_repository)],
     ) -> dict:
-        result = repo.register_validation_reference(
-            city_id, request_body.model_dump(mode="json")
-        )
+        result = repo.register_validation_reference(city_id, request_body.model_dump(mode="json"))
         if result is None:
             raise HTTPException(status_code=404, detail="City not found")
         return result

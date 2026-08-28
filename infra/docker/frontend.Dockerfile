@@ -4,6 +4,10 @@ COPY frontend/package.json frontend/package-lock.json ./
 COPY frontend/scripts ./scripts
 RUN npm ci
 COPY frontend ./
+ARG VITE_CITYGAP_SURFACE=municipal
+ARG VITE_CITYGAP_API_BASE_URL=
+ENV VITE_CITYGAP_SURFACE=${VITE_CITYGAP_SURFACE} \
+    VITE_CITYGAP_API_BASE_URL=${VITE_CITYGAP_API_BASE_URL}
 RUN npm run build
 
 FROM nginx:1.28-alpine@sha256:a8b39bd9cf0f83869a2162827a0caf6137ddf759d50a171451b335cecc87d236 AS runtime

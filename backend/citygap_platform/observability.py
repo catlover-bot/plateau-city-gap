@@ -21,6 +21,7 @@ MAX_REQUEST_BODY_BYTES = 1024 * 1024
 class RequestContext:
     request_id: str = "system"
     actor: str = "system"
+    organization_id: str | None = None
 
 
 _CONTEXT: ContextVar[RequestContext | None] = ContextVar("citygap_request_context", default=None)
@@ -31,8 +32,14 @@ def current_request_context() -> RequestContext:
 
 
 @contextmanager
-def operation_context(actor: str, request_id: str):
-    token = _CONTEXT.set(RequestContext(request_id=request_id[:200], actor=actor[:200]))
+def operation_context(actor: str, request_id: str, organization_id: str | None = None):
+    token = _CONTEXT.set(
+        RequestContext(
+            request_id=request_id[:200],
+            actor=actor[:200],
+            organization_id=organization_id,
+        )
+    )
     try:
         yield
     finally:
@@ -41,9 +48,17 @@ def operation_context(actor: str, request_id: str):
 
 async def request_observability_middleware(request: Request, call_next):
     request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))[:200]
+    request.state.request_id = request_id
     identity = getattr(request.state, "identity", None)
     actor = identity.actor if identity else "anonymous"
-    token = _CONTEXT.set(RequestContext(request_id=request_id, actor=actor))
+    organization_id = identity.organization_id if identity else None
+    token = _CONTEXT.set(
+        RequestContext(
+            request_id=request_id,
+            actor=actor,
+            organization_id=organization_id,
+        )
+    )
     started = time.perf_counter()
     status = 500
     try:
@@ -79,6 +94,7 @@ async def request_observability_middleware(request: Request, call_next):
                     "event": "http_request",
                     "request_id": request_id,
                     "actor": actor,
+                    "organization_id": organization_id,
                     "method": request.method,
                     "path": request.url.path,
                     "city": city,

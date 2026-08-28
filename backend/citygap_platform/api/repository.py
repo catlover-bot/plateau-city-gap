@@ -17,6 +17,7 @@ from backend.citygap_platform.domain.jobs import (
 )
 from backend.citygap_platform.domain.scenarios import validate_status_transition
 from backend.citygap_platform.observability import current_request_context
+from backend.citygap_platform.security.auth import DEFAULT_ORGANIZATION_ID
 
 
 class PlatformRepository(Protocol):
@@ -259,10 +260,11 @@ class PostGISRepository:
         context = current_request_context()
         connection.execute(
             """INSERT INTO audit_log (
-                   actor, action, resource_type, resource_id, city_id, request_id,
-                   before_state, after_state
-               ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                   organization_id, actor, action, resource_type, resource_id,
+                   city_id, request_id, before_state, after_state
+               ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (
+                context.organization_id or DEFAULT_ORGANIZATION_ID,
                 context.actor,
                 action,
                 resource_type,
@@ -1087,9 +1089,7 @@ class PostGISRepository:
             ).fetchall()
         return self._context_rows(rows)
 
-    def create_stress_test(
-        self, city_id: str, request: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    def create_stress_test(self, city_id: str, request: dict[str, Any]) -> dict[str, Any] | None:
         assumptions = sorted(
             request["assumptions"],
             key=lambda row: json.dumps(row, ensure_ascii=False, sort_keys=True),
@@ -1149,9 +1149,7 @@ class PostGISRepository:
                     (city[0], list(hazard_version_ids)),
                 ).fetchone()[0]
                 if int(verified_count) != len(hazard_version_ids):
-                    raise ValueError(
-                        "stress-test hazard datasets must belong to the selected city"
-                    )
+                    raise ValueError("stress-test hazard datasets must belong to the selected city")
             cached = connection.execute(
                 "SELECT stress_test_run_id FROM stress_test_result_cache WHERE cache_key = %s",
                 (cache_key,),
@@ -1318,9 +1316,7 @@ class PostGISRepository:
         metric_keys = ("metric_name", "service_category", "value", "unit", "definition")
         return {
             **dict(zip(run_keys, row, strict=True)),
-            "assumptions": [
-                dict(zip(assumption_keys, item, strict=True)) for item in assumptions
-            ],
+            "assumptions": [dict(zip(assumption_keys, item, strict=True)) for item in assumptions],
             "metrics": [dict(zip(metric_keys, item, strict=True)) for item in metrics],
             "impact_counts": dict(
                 zip(("edges", "buildings", "facilities"), impact_counts, strict=True)
@@ -2942,19 +2938,31 @@ class PostGISRepository:
                 (city[0], limit, offset),
             ).fetchall()
         keys = (
-            "validation_id", "run_key", "claim_key", "method_key", "urban_state_id",
-            "dataset_versions", "network_version_id", "algorithm_version",
-            "reference_source", "sample_rule", "metrics", "result", "limitations",
-            "validation_status", "run_status", "generated_at",
+            "validation_id",
+            "run_key",
+            "claim_key",
+            "method_key",
+            "urban_state_id",
+            "dataset_versions",
+            "network_version_id",
+            "algorithm_version",
+            "reference_source",
+            "sample_rule",
+            "metrics",
+            "result",
+            "limitations",
+            "validation_status",
+            "run_status",
+            "generated_at",
         )
         return [dict(zip(keys, row, strict=True)) for row in rows]
 
-    def create_validation_run(
-        self, city_id: str, request: dict[str, Any]
-    ) -> dict[str, Any] | None:
+    def create_validation_run(self, city_id: str, request: dict[str, Any]) -> dict[str, Any] | None:
         serialized = json.dumps(request, ensure_ascii=False, sort_keys=True, default=str)
         if "ground_truth" in serialized.lower() or "confidence_percentage" in serialized.lower():
-            raise ValueError("Validation references cannot claim ground truth or confidence percentages")
+            raise ValueError(
+                "Validation references cannot claim ground truth or confidence percentages"
+            )
         context = current_request_context()
         with self._connect() as connection:
             city = self._validation_city(connection, city_id)
@@ -3029,11 +3037,27 @@ class PostGISRepository:
         if row is None:
             return None
         keys = (
-            "validation_id", "run_key", "city_code", "city_id", "claim_key",
-            "what_it_means", "what_it_does_not_mean", "method_key", "urban_state_id",
-            "dataset_versions", "network_version_id", "algorithm_version",
-            "reference_source", "sample_rule", "metrics", "result", "limitations",
-            "validation_status", "run_status", "generated_at", "sample_count",
+            "validation_id",
+            "run_key",
+            "city_code",
+            "city_id",
+            "claim_key",
+            "what_it_means",
+            "what_it_does_not_mean",
+            "method_key",
+            "urban_state_id",
+            "dataset_versions",
+            "network_version_id",
+            "algorithm_version",
+            "reference_source",
+            "sample_rule",
+            "metrics",
+            "result",
+            "limitations",
+            "validation_status",
+            "run_status",
+            "generated_at",
+            "sample_count",
             "disagreement_count",
         )
         return dict(zip(keys, row, strict=True))
@@ -3057,9 +3081,16 @@ class PostGISRepository:
                 (validation_id, *bbox, limit, offset),
             ).fetchall()
         keys = (
-            "validation_sample_id", "sample_key", "strata", "origin_reference",
-            "destination_reference", "origin_snap", "destination_snap", "sampling_rank",
-            "metadata", "geometry",
+            "validation_sample_id",
+            "sample_key",
+            "strata",
+            "origin_reference",
+            "destination_reference",
+            "origin_snap",
+            "destination_snap",
+            "sampling_rank",
+            "metadata",
+            "geometry",
         )
         return {
             "validation_id": validation_id,
@@ -3097,8 +3128,15 @@ class PostGISRepository:
                 (validation_id, *bbox, limit, offset),
             ).fetchall()
         keys = (
-            "disagreement_id", "sample_key", "disagreement_class", "primary_value",
-            "reference_value", "cause_candidate", "cause_rule", "priority_rank", "geometry",
+            "disagreement_id",
+            "sample_key",
+            "disagreement_class",
+            "primary_value",
+            "reference_value",
+            "cause_candidate",
+            "cause_rule",
+            "priority_rank",
+            "geometry",
         )
         return {
             "validation_id": validation_id,
@@ -3108,9 +3146,7 @@ class PostGISRepository:
             "features": [dict(zip(keys, row, strict=True)) for row in rows],
         }
 
-    def validation_sensitivity(
-        self, validation_id: str, limit: int, offset: int
-    ) -> dict[str, Any]:
+    def validation_sensitivity(self, validation_id: str, limit: int, offset: int) -> dict[str, Any]:
         with self._connect() as connection:
             rows = connection.execute(
                 """SELECT id, category, known_limitation, sensitivity_evidence,
@@ -3120,8 +3156,14 @@ class PostGISRepository:
                 (validation_id, limit, offset),
             ).fetchall()
         keys = (
-            "uncertainty_id", "category", "known_limitation", "sensitivity_evidence",
-            "reference_agreement", "coverage", "validation_status", "created_at",
+            "uncertainty_id",
+            "category",
+            "known_limitation",
+            "sensitivity_evidence",
+            "reference_agreement",
+            "coverage",
+            "validation_status",
+            "created_at",
         )
         return {
             "validation_id": validation_id,
@@ -3148,11 +3190,7 @@ class PostGISRepository:
             ).fetchone()
             if result is None:
                 return None
-            status = (
-                "submitted"
-                if request["municipal_feedback"] == "not_reviewed"
-                else "reviewed"
-            )
+            status = "submitted" if request["municipal_feedback"] == "not_reviewed" else "reviewed"
             row = connection.execute(
                 """INSERT INTO field_validation (
                        validation_result_id, observation_type,
@@ -3167,12 +3205,20 @@ class PostGISRepository:
                        %s,%s,%s,%s,%s,%s
                    ) RETURNING id, municipal_feedback, status, created_at""",
                 (
-                    result[0], request["observation_type"],
+                    result[0],
+                    request["observation_type"],
                     request.get("observed_accessibility_issue"),
-                    request.get("road_passability"), request.get("facility_availability"),
-                    longitude, longitude, latitude, request["observed_at"], context.actor,
+                    request.get("road_passability"),
+                    request.get("facility_availability"),
+                    longitude,
+                    longitude,
+                    latitude,
+                    request["observed_at"],
+                    context.actor,
                     request.get("evidence_attachment_reference"),
-                    request["municipal_feedback"], request.get("review_note", ""), status,
+                    request["municipal_feedback"],
+                    request.get("review_note", ""),
+                    status,
                 ),
             ).fetchone()
             self._audit(
@@ -3257,11 +3303,18 @@ class PostGISRepository:
                        registered_at=now()
                    RETURNING id, reference_key, status, registered_at""",
                 (
-                    city[0], request["reference_key"], request["source_type"],
-                    request["source_url"], request["retrieval_date"],
-                    request["source_sha256"], request["license"], request["attribution"],
-                    request["extraction_rule"], json.dumps(request["coverage"], ensure_ascii=False),
-                    request["status"], json.dumps(request["limitations"], ensure_ascii=False),
+                    city[0],
+                    request["reference_key"],
+                    request["source_type"],
+                    request["source_url"],
+                    request["retrieval_date"],
+                    request["source_sha256"],
+                    request["license"],
+                    request["attribution"],
+                    request["extraction_rule"],
+                    json.dumps(request["coverage"], ensure_ascii=False),
+                    request["status"],
+                    json.dumps(request["limitations"], ensure_ascii=False),
                     context.actor,
                 ),
             ).fetchone()

@@ -6,6 +6,14 @@ const base = "/plateau-city-gap/";
 export default defineConfig({
   base,
   plugins: [react()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true
+      }
+    }
+  },
   define: {
     CESIUM_BASE_URL: JSON.stringify(`${base}cesium/`)
   },
