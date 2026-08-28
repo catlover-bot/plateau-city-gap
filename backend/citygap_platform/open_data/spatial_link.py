@@ -35,6 +35,9 @@ def link_canonical_points(
     buildings: gpd.GeoDataFrame,
     analysis_crs: str,
     max_building_candidate_distance_m: float = 30,
+    city_link_explanation: str = (
+        "Resource was selected from the reviewed city-scoped official catalog."
+    ),
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
     """Attach city, 500 m mesh and PLATEAU building-candidate links without identity claims."""
 
@@ -57,7 +60,7 @@ def link_canonical_points(
                 "city",
                 city_code,
                 "exact",
-                "Resource was selected from the reviewed city-scoped official catalog.",
+                city_link_explanation,
             )
         )
         counts["city_exact"] += 1

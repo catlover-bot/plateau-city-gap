@@ -110,3 +110,33 @@ Canonical内訳は、facility 1,076、行政区人口時系列2,120、学校活�
 成果物はsource report、canonical JSONL、canonical summaryの3点で、相互SHA-256を持つ。
 canonical attributesから電話、email、contact form、画像、備考を除き、建物別人口推計も含めない。
 datum、reference date、建物identityのreviewが残るためpromotion状態は`requires_review`のままである。
+
+## MHLW medical and care real canonical run
+
+`python -m analysis.scripts.build_mhlw_health_open_data --observed-at <ISO-8601>`は、厚生労働省の
+[医療情報ネット・オープンデータ](https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html)
+と[介護サービス情報公表システム・オープンデータ](https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html)
+のページをversion manifestとして読む。日付付きsectionのうち最新日を選び、医療8 ZIPと介護35 CSVを
+HTTPS allowlist、byte上限、ZIP安全性、UTF-8 BOM、列重複、行形状、最大行数のgateを通して
+content-addressed raw storageへ保存する。
+
+2026-08-28の実行では、医療は2026-06-01時点、介護は2026-06-30時点（2026-07-09出力）で、
+43 resourceすべてのSHA-256が異なり、全schemaが合格した。対象自治体コードで絞ったcanonicalは
+舞鶴741件、藤沢7,182件、計7,923件で、対象行のrejectは0件だった。医療は病院、診療所、歯科、
+助産所、薬局、診療科と公開診療時間を、介護は公式35サービスコードと公開定員・利用可能曜日を保持する。
+医療はPDL 1.0、介護はCC BY 4.0としてresource単位で記録する。
+
+公開診療時間や公開定員は、現在の受入、予約枠、空床、緊急受入、利用資格を証明しない。これらの現在値は
+常に`unknown`とし、分析readyへの自動昇格を行わない。canonicalには電話、FAX、URL、法人連絡情報、
+自由記載備考を含めず、raw bytesもpublic assetsへ置かない。
+
+全7,923件を自治体および監査済み500m meshへ接続し、施設1,650件をPLATEAU 2025建物へ評価した。
+30m以内の最寄りfootprint 1,582件はすべて`ambiguous`な候補であり、施設と建物の同一性ではない。
+MHLW医療918施設とP04 2020、舞鶴市標準ODSを比較した結果は、`ambiguous` 18、`probable` 481、
+`unmatched` 419、uniqueな公的ID共有による`matched` 0だった。自動mergeは無効である。
+
+PLATEAU 2025、医療2026-06-01、介護2026-06-30を単一年度に見せず、`mixed`なtemporal alignmentとして
+保存する。成果物は`mhlw_health_source_report.json`、`mhlw_health_canonical.jsonl`、
+`mhlw_medical_identity_comparison.json`、`mhlw_health_summary.json`で相互SHA-256を持つ。
+水平datum未宣言、候補identity、現在availability未検証が残るため、状態は`requires_review`、
+unavailable reasonは`not_verified`である。

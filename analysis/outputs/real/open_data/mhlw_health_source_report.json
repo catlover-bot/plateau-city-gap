@@ -1,0 +1,5127 @@
+{
+  "claim_boundary": "Published facilities, departments, schedules and capacity fields are snapshot information. They do not establish current acceptance, vacancy, eligibility, emergency intake or real-time availability.",
+  "observed_at": "2026-08-28T20:20:00+09:00",
+  "promotion_status": "requires_review",
+  "providers": {
+    "care": {
+      "license_id": "cc-by-4.0",
+      "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+      "output_date": "2026-07-09",
+      "provider": "厚生労働省 介護サービス情報公表システム",
+      "reference_date": "2026-06-30",
+      "resource_count": 35
+    },
+    "medical": {
+      "license_id": "pdl-1.0",
+      "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+      "provider": "厚生労働省 医療情報ネット",
+      "reference_date": "2026-06-01",
+      "resource_count": 8
+    }
+  },
+  "rejected_rows": {
+    "fujisawa": {
+      "care": {
+        "jigyosho_110_all_20260709180319.csv": 0,
+        "jigyosho_120_all_20260709180323.csv": 0,
+        "jigyosho_130_all_20260709180342.csv": 0,
+        "jigyosho_140_all_20260709180350.csv": 0,
+        "jigyosho_150_all_20260709180445.csv": 0,
+        "jigyosho_155_all_20260709180449.csv": 0,
+        "jigyosho_160_all_20260709180500.csv": 0,
+        "jigyosho_170_all_20260709180509.csv": 0,
+        "jigyosho_210_all_20260709180538.csv": 0,
+        "jigyosho_220_all_20260709180546.csv": 0,
+        "jigyosho_230_all_20260709180549.csv": 0,
+        "jigyosho_320_all_20260709180609.csv": 0,
+        "jigyosho_331_all_20260709180619.csv": 0,
+        "jigyosho_332_all_20260709180623.csv": 0,
+        "jigyosho_334_all_20260709180627.csv": 0,
+        "jigyosho_335_all_20260709180630.csv": 0,
+        "jigyosho_336_all_20260709180633.csv": 0,
+        "jigyosho_337_all_20260709180637.csv": 0,
+        "jigyosho_361_all_20260709180640.csv": 0,
+        "jigyosho_362_all_20260709180644.csv": 0,
+        "jigyosho_364_all_20260709180647.csv": 0,
+        "jigyosho_410_all_20260709180655.csv": 0,
+        "jigyosho_430_all_20260709180740.csv": 0,
+        "jigyosho_510_all_20260709180754.csv": 0,
+        "jigyosho_520_all_20260709180802.csv": 0,
+        "jigyosho_530_all_20260709180805.csv": 0,
+        "jigyosho_540_all_20260709180811.csv": 0,
+        "jigyosho_550_all_20260709180931.csv": 0,
+        "jigyosho_551_all_20260709180935.csv": 0,
+        "jigyosho_710_all_20260709180814.csv": 0,
+        "jigyosho_720_all_20260709180821.csv": 0,
+        "jigyosho_730_all_20260709180837.csv": 0,
+        "jigyosho_760_all_20260709180841.csv": 0,
+        "jigyosho_770_all_20260709180847.csv": 0,
+        "jigyosho_780_all_20260709180927.csv": 0
+      },
+      "medical": {
+        "01-1_hospital_facility_info_20260601.csv.zip": 0,
+        "01-2_hospital_speciality_hours_20260601.csv.zip": 0,
+        "02-1_clinic_facility_info_20260601.csv.zip": 0,
+        "02-2_clinic_speciality_hours_20260601.csv.zip": 0,
+        "03-1_dental_facility_info_20260601.csv.zip": 0,
+        "03-2_dental_speciality_hours_20260601.csv.zip": 0,
+        "04_maternity_home_20260601.csv.zip": 0,
+        "05_pharmacy_20260601.csv.zip": 0
+      }
+    },
+    "maizuru": {
+      "care": {
+        "jigyosho_110_all_20260709180319.csv": 0,
+        "jigyosho_120_all_20260709180323.csv": 0,
+        "jigyosho_130_all_20260709180342.csv": 0,
+        "jigyosho_140_all_20260709180350.csv": 0,
+        "jigyosho_150_all_20260709180445.csv": 0,
+        "jigyosho_155_all_20260709180449.csv": 0,
+        "jigyosho_160_all_20260709180500.csv": 0,
+        "jigyosho_170_all_20260709180509.csv": 0,
+        "jigyosho_210_all_20260709180538.csv": 0,
+        "jigyosho_220_all_20260709180546.csv": 0,
+        "jigyosho_230_all_20260709180549.csv": 0,
+        "jigyosho_320_all_20260709180609.csv": 0,
+        "jigyosho_331_all_20260709180619.csv": 0,
+        "jigyosho_332_all_20260709180623.csv": 0,
+        "jigyosho_334_all_20260709180627.csv": 0,
+        "jigyosho_335_all_20260709180630.csv": 0,
+        "jigyosho_336_all_20260709180633.csv": 0,
+        "jigyosho_337_all_20260709180637.csv": 0,
+        "jigyosho_361_all_20260709180640.csv": 0,
+        "jigyosho_362_all_20260709180644.csv": 0,
+        "jigyosho_364_all_20260709180647.csv": 0,
+        "jigyosho_410_all_20260709180655.csv": 0,
+        "jigyosho_430_all_20260709180740.csv": 0,
+        "jigyosho_510_all_20260709180754.csv": 0,
+        "jigyosho_520_all_20260709180802.csv": 0,
+        "jigyosho_530_all_20260709180805.csv": 0,
+        "jigyosho_540_all_20260709180811.csv": 0,
+        "jigyosho_550_all_20260709180931.csv": 0,
+        "jigyosho_551_all_20260709180935.csv": 0,
+        "jigyosho_710_all_20260709180814.csv": 0,
+        "jigyosho_720_all_20260709180821.csv": 0,
+        "jigyosho_730_all_20260709180837.csv": 0,
+        "jigyosho_760_all_20260709180841.csv": 0,
+        "jigyosho_770_all_20260709180847.csv": 0,
+        "jigyosho_780_all_20260709180927.csv": 0
+      },
+      "medical": {
+        "01-1_hospital_facility_info_20260601.csv.zip": 0,
+        "01-2_hospital_speciality_hours_20260601.csv.zip": 0,
+        "02-1_clinic_facility_info_20260601.csv.zip": 0,
+        "02-2_clinic_speciality_hours_20260601.csv.zip": 0,
+        "03-1_dental_facility_info_20260601.csv.zip": 0,
+        "03-2_dental_speciality_hours_20260601.csv.zip": 0,
+        "04_maternity_home_20260601.csv.zip": 0,
+        "05_pharmacy_20260601.csv.zip": 0
+      }
+    }
+  },
+  "resources": {
+    "care": [
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 222,
+          "maizuru": 32
+        },
+        "content_length": 16122535,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-110",
+        "external_resource_id": "jigyosho_110_all_20260709180319.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 35166,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 35166,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 107,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/4f/4fa54cb485f6303c6b3f3cf2f38d37736997d3b4a4da9943b97d59fd8c5171bb",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "4fa54cb485f6303c6b3f3cf2f38d37736997d3b4a4da9943b97d59fd8c5171bb",
+        "raw_size_bytes": 16122535,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_110_all_20260709180319.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-110",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "110",
+          "resource_scope": "national",
+          "version_stamp": "20260709180319"
+        },
+        "source_title": "110_訪問介護［15.4MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_110_all_20260709180319.csv",
+        "title": "110_訪問介護［15.4MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180319",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 10,
+          "maizuru": 6
+        },
+        "content_length": 670154,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-120",
+        "external_resource_id": "jigyosho_120_all_20260709180323.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 1539,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 1539,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 8,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/ee/eeed6bed114791f42572fbb50429238100c581d115b23fee21a201589160abfb",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "eeed6bed114791f42572fbb50429238100c581d115b23fee21a201589160abfb",
+        "raw_size_bytes": 670154,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_120_all_20260709180323.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-120",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "120",
+          "resource_scope": "national",
+          "version_stamp": "20260709180323"
+        },
+        "source_title": "120_訪問入浴介護［655KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_120_all_20260709180323.csv",
+        "title": "120_訪問入浴介護［655KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180323",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 146,
+          "maizuru": 18
+        },
+        "content_length": 8281503,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-130",
+        "external_resource_id": "jigyosho_130_all_20260709180342.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 18436,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 18436,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 42,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/ff/ffa6feeb9b7f37608fadb8f55b73a5fd9a67ad70b031d1df2d3fb35739a3d197",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "ffa6feeb9b7f37608fadb8f55b73a5fd9a67ad70b031d1df2d3fb35739a3d197",
+        "raw_size_bytes": 8281503,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_130_all_20260709180342.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-130",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "130",
+          "resource_scope": "national",
+          "version_stamp": "20260709180342"
+        },
+        "source_title": "130_訪問看護［7.9MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_130_all_20260709180342.csv",
+        "title": "130_訪問看護［7.9MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180342",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 20,
+          "maizuru": 8
+        },
+        "content_length": 2173272,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-140",
+        "external_resource_id": "jigyosho_140_all_20260709180350.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 5067,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 5067,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 25,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/12/1261bcbfa567e3ca32522af4d73ec40e9860ff6a9460b2a11bb17fb2417ad1da",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "1261bcbfa567e3ca32522af4d73ec40e9860ff6a9460b2a11bb17fb2417ad1da",
+        "raw_size_bytes": 2173272,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_140_all_20260709180350.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-140",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "140",
+          "resource_scope": "national",
+          "version_stamp": "20260709180350"
+        },
+        "source_title": "140_訪問リハビリテーション［2.1MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_140_all_20260709180350.csv",
+        "title": "140_訪問リハビリテーション［2.1MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180350",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 146,
+          "maizuru": 30
+        },
+        "content_length": 10523160,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-150",
+        "external_resource_id": "jigyosho_150_all_20260709180445.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 24567,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 24567,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 138,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/cb/cbfbf417e98035d650c9aa1eb554e640e536b18c33dc19c79574cec52d76251a",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "cbfbf417e98035d650c9aa1eb554e640e536b18c33dc19c79574cec52d76251a",
+        "raw_size_bytes": 10523160,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_150_all_20260709180445.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-150",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "150",
+          "resource_scope": "national",
+          "version_stamp": "20260709180445"
+        },
+        "source_title": "150_通所介護［10.1MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_150_all_20260709180445.csv",
+        "title": "150_通所介護［10.1MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180445",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 21673,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-155",
+        "external_resource_id": "jigyosho_155_all_20260709180449.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 51,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 51,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/5d/5d6db48e7a6c8b8175e1fe22e4361c5af1bbede55bca4d01653f3eba8e9fcc73",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "5d6db48e7a6c8b8175e1fe22e4361c5af1bbede55bca4d01653f3eba8e9fcc73",
+        "raw_size_bytes": 21673,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_155_all_20260709180449.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-155",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "155",
+          "resource_scope": "national",
+          "version_stamp": "20260709180449"
+        },
+        "source_title": "155_通所介護（療養通所介護）［22KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_155_all_20260709180449.csv",
+        "title": "155_通所介護（療養通所介護）［22KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180449",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 18,
+          "maizuru": 16
+        },
+        "content_length": 3379114,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-160",
+        "external_resource_id": "jigyosho_160_all_20260709180500.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 7649,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 7649,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 74,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/f3/f36cf235d918a18ba8d5819909c7719dd9ab3e93948a739b86ebffff0070f659",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "f36cf235d918a18ba8d5819909c7719dd9ab3e93948a739b86ebffff0070f659",
+        "raw_size_bytes": 3379114,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_160_all_20260709180500.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-160",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "160",
+          "resource_scope": "national",
+          "version_stamp": "20260709180500"
+        },
+        "source_title": "160_通所リハビリテーション［3.3MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_160_all_20260709180500.csv",
+        "title": "160_通所リハビリテーション［3.3MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180500",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 34,
+          "maizuru": 6
+        },
+        "content_length": 2831699,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-170",
+        "external_resource_id": "jigyosho_170_all_20260709180509.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 7028,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 7028,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 35,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/0c/0c7efe1ce8d7f6b41ab5fcb651870a8d8f55dfc8ffb19a6987286b412be1eb00",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "0c7efe1ce8d7f6b41ab5fcb651870a8d8f55dfc8ffb19a6987286b412be1eb00",
+        "raw_size_bytes": 2831699,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_170_all_20260709180509.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-170",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "170",
+          "resource_scope": "national",
+          "version_stamp": "20260709180509"
+        },
+        "source_title": "170_福祉用具貸与［2.8MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_170_all_20260709180509.csv",
+        "title": "170_福祉用具貸与［2.8MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180509",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 54,
+          "maizuru": 10
+        },
+        "content_length": 4581143,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-210",
+        "external_resource_id": "jigyosho_210_all_20260709180538.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 11275,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 11275,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 8,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/22/227d83539c9711ac2e16a5996a4db20c90d2e84589605b5cd2572441e69112a2",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "227d83539c9711ac2e16a5996a4db20c90d2e84589605b5cd2572441e69112a2",
+        "raw_size_bytes": 4581143,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_210_all_20260709180538.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-210",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "210",
+          "resource_scope": "national",
+          "version_stamp": "20260709180538"
+        },
+        "source_title": "210_短期入所生活介護［4.4MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_210_all_20260709180538.csv",
+        "title": "210_短期入所生活介護［4.4MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180538",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 12,
+          "maizuru": 6
+        },
+        "content_length": 1513511,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-220",
+        "external_resource_id": "jigyosho_220_all_20260709180546.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 3678,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 3678,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 2,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/cd/cd968b1c55938083bb2cb93862521995071c3f6a877f4d19efb7ac3cf658bd0b",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "cd968b1c55938083bb2cb93862521995071c3f6a877f4d19efb7ac3cf658bd0b",
+        "raw_size_bytes": 1513511,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_220_all_20260709180546.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-220",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "220",
+          "resource_scope": "national",
+          "version_stamp": "20260709180546"
+        },
+        "source_title": "220_短期入所療養介護（介護老人保健施設）［1.5MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_220_all_20260709180546.csv",
+        "title": "220_短期入所療養介護（介護老人保健施設）［1.5MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180546",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 47839,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-230",
+        "external_resource_id": "jigyosho_230_all_20260709180549.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 125,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 125,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/64/64d60959fcff7f8ee688eb72cf57ec3a82dd6e9a78f7cad5b783b0c78800b387",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "64d60959fcff7f8ee688eb72cf57ec3a82dd6e9a78f7cad5b783b0c78800b387",
+        "raw_size_bytes": 47839,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_230_all_20260709180549.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-230",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "230",
+          "resource_scope": "national",
+          "version_stamp": "20260709180549"
+        },
+        "source_title": "230_短期入所療養介護（療養病床を有する病院等）［47KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_230_all_20260709180549.csv",
+        "title": "230_短期入所療養介護（療養病床を有する病院等）［47KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180549",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 64,
+          "maizuru": 10
+        },
+        "content_length": 5258347,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-320",
+        "external_resource_id": "jigyosho_320_all_20260709180609.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 14236,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 14236,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 23,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/1f/1fb8cb14f8eee8dacce3b26521abdd09b5175f31cb929efb8573a11487222cce",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "1fb8cb14f8eee8dacce3b26521abdd09b5175f31cb929efb8573a11487222cce",
+        "raw_size_bytes": 5258347,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_320_all_20260709180609.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-320",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "320",
+          "resource_scope": "national",
+          "version_stamp": "20260709180609"
+        },
+        "source_title": "320_認知症対応型共同生活介護［5.1MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_320_all_20260709180609.csv",
+        "title": "320_認知症対応型共同生活介護［5.1MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180609",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 44,
+          "maizuru": 0
+        },
+        "content_length": 1848230,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-331",
+        "external_resource_id": "jigyosho_331_all_20260709180619.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 4470,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 4470,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 2,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/2d/2d90fa696319e3d1181636806fb723bc1d2a9d1c7c24e39903641a5ce5759441",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "2d90fa696319e3d1181636806fb723bc1d2a9d1c7c24e39903641a5ce5759441",
+        "raw_size_bytes": 1848230,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_331_all_20260709180619.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-331",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "331",
+          "resource_scope": "national",
+          "version_stamp": "20260709180619"
+        },
+        "source_title": "331_特定施設入居者生活介護（有料老人ホーム）［1.8MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_331_all_20260709180619.csv",
+        "title": "331_特定施設入居者生活介護（有料老人ホーム）［1.8MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180619",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 2
+        },
+        "content_length": 202963,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-332",
+        "external_resource_id": "jigyosho_332_all_20260709180623.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 510,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 510,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/0d/0dbf11775353782cb26164c62e504750a9766afe8e1b1b5f4c442b2ca4d0111d",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "0dbf11775353782cb26164c62e504750a9766afe8e1b1b5f4c442b2ca4d0111d",
+        "raw_size_bytes": 202963,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_332_all_20260709180623.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-332",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "332",
+          "resource_scope": "national",
+          "version_stamp": "20260709180623"
+        },
+        "source_title": "332_特定施設入居者生活介護（軽費老人ホーム）［199KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_332_all_20260709180623.csv",
+        "title": "332_特定施設入居者生活介護（軽費老人ホーム）［199KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180623",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 6
+        },
+        "content_length": 291664,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-334",
+        "external_resource_id": "jigyosho_334_all_20260709180627.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 628,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 628,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 2,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/e5/e553e7c03d4cc5e2bf323952a56849362d76d72b0bc3d14479f3dcbda635dd57",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "e553e7c03d4cc5e2bf323952a56849362d76d72b0bc3d14479f3dcbda635dd57",
+        "raw_size_bytes": 291664,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_334_all_20260709180627.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-334",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "334",
+          "resource_scope": "national",
+          "version_stamp": "20260709180627"
+        },
+        "source_title": "334_特定施設入居者生活介護（サービス付き高齢者向け住宅）［285KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_334_all_20260709180627.csv",
+        "title": "334_特定施設入居者生活介護（サービス付き高齢者向け住宅）［285KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180627",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 3577,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-335",
+        "external_resource_id": "jigyosho_335_all_20260709180630.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 7,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 7,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/4c/4c83a7dec50d3d60b99379338b4883373e8cada7941856891960930140761558",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "4c83a7dec50d3d60b99379338b4883373e8cada7941856891960930140761558",
+        "raw_size_bytes": 3577,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_335_all_20260709180630.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-335",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "335",
+          "resource_scope": "national",
+          "version_stamp": "20260709180630"
+        },
+        "source_title": "335_特定施設入居者生活介護（有料老人ホーム・外部サービス利用型）［4KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_335_all_20260709180630.csv",
+        "title": "335_特定施設入居者生活介護（有料老人ホーム・外部サービス利用型）［4KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180630",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 2768,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-336",
+        "external_resource_id": "jigyosho_336_all_20260709180633.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 5,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 5,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/17/17969d23409264c32eb111862c8d899c5447ed3270a92cc78f8507449172be95",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "17969d23409264c32eb111862c8d899c5447ed3270a92cc78f8507449172be95",
+        "raw_size_bytes": 2768,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_336_all_20260709180633.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-336",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "336",
+          "resource_scope": "national",
+          "version_stamp": "20260709180633"
+        },
+        "source_title": "336_特定施設入居者生活介護（軽費老人ホーム・外部サービス利用型）［3KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_336_all_20260709180633.csv",
+        "title": "336_特定施設入居者生活介護（軽費老人ホーム・外部サービス利用型）［3KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180633",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 4726,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-337",
+        "external_resource_id": "jigyosho_337_all_20260709180637.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 8,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 8,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/91/910e2acbd9f5ab8d1e2fd6aeaae4159b801c8e035085655a880bfefc957bd5ab",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "910e2acbd9f5ab8d1e2fd6aeaae4159b801c8e035085655a880bfefc957bd5ab",
+        "raw_size_bytes": 4726,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_337_all_20260709180637.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-337",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "337",
+          "resource_scope": "national",
+          "version_stamp": "20260709180637"
+        },
+        "source_title": "337_特定施設入居者生活介護（サービス付き高齢者向け住宅・外部サービス利用型）［5KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_337_all_20260709180637.csv",
+        "title": "337_特定施設入居者生活介護（サービス付き高齢者向け住宅・外部サービス利用型）［5KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180637",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 14,
+          "maizuru": 0
+        },
+        "content_length": 110311,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-361",
+        "external_resource_id": "jigyosho_361_all_20260709180640.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 258,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 258,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/3e/3e76b83ba67379540830e7bd5adaa799c47d033a2c34b30390562602dc2be378",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "3e76b83ba67379540830e7bd5adaa799c47d033a2c34b30390562602dc2be378",
+        "raw_size_bytes": 110311,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_361_all_20260709180640.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-361",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "361",
+          "resource_scope": "national",
+          "version_stamp": "20260709180640"
+        },
+        "source_title": "361_地域密着型特定施設入居者生活介護（有料老人ホーム）［108KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_361_all_20260709180640.csv",
+        "title": "361_地域密着型特定施設入居者生活介護（有料老人ホーム）［108KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180640",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 2
+        },
+        "content_length": 27157,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-362",
+        "external_resource_id": "jigyosho_362_all_20260709180644.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 65,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 65,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/31/31b22939eee3b5cbc13003e71425a76791a9b48fdabeb1ee2b4f82d6d15d09b3",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "31b22939eee3b5cbc13003e71425a76791a9b48fdabeb1ee2b4f82d6d15d09b3",
+        "raw_size_bytes": 27157,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_362_all_20260709180644.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-362",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "362",
+          "resource_scope": "national",
+          "version_stamp": "20260709180644"
+        },
+        "source_title": "362_地域密着型特定施設入居者生活介護（軽費老人ホーム）［27KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_362_all_20260709180644.csv",
+        "title": "362_地域密着型特定施設入居者生活介護（軽費老人ホーム）［27KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180644",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 24724,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-364",
+        "external_resource_id": "jigyosho_364_all_20260709180647.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 52,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 52,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/0d/0dd22d4b32049448b6e2c1bb010e81766f306975ab18def58fa765014c5e9842",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "0dd22d4b32049448b6e2c1bb010e81766f306975ab18def58fa765014c5e9842",
+        "raw_size_bytes": 24724,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_364_all_20260709180647.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-364",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "364",
+          "resource_scope": "national",
+          "version_stamp": "20260709180647"
+        },
+        "source_title": "364_地域密着型特定施設入居者生活介護（サービス付き高齢者向け住宅）［25KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_364_all_20260709180647.csv",
+        "title": "364_地域密着型特定施設入居者生活介護（サービス付き高齢者向け住宅）［25KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180647",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 32,
+          "maizuru": 4
+        },
+        "content_length": 2395367,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-410",
+        "external_resource_id": "jigyosho_410_all_20260709180655.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 5921,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 5921,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 40,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/ca/caad416d9249b278fee64472ea073a8c2b31d7fff3a6d8267915f18803e756c0",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "caad416d9249b278fee64472ea073a8c2b31d7fff3a6d8267915f18803e756c0",
+        "raw_size_bytes": 2395367,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_410_all_20260709180655.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-410",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "410",
+          "resource_scope": "national",
+          "version_stamp": "20260709180655"
+        },
+        "source_title": "410_特定福祉用具販売［2.3MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_410_all_20260709180655.csv",
+        "title": "410_特定福祉用具販売［2.3MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180655",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 178,
+          "maizuru": 48
+        },
+        "content_length": 15378232,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-430",
+        "external_resource_id": "jigyosho_430_all_20260709180740.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 36212,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 36212,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 151,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/f7/f7c350410b0c1125ce973d25f6eb939107c8dc3920559976796a98f1a9830a59",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "f7c350410b0c1125ce973d25f6eb939107c8dc3920559976796a98f1a9830a59",
+        "raw_size_bytes": 15378232,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_430_all_20260709180740.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-430",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "430",
+          "resource_scope": "national",
+          "version_stamp": "20260709180740"
+        },
+        "source_title": "430_居宅介護支援［14.7MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_430_all_20260709180740.csv",
+        "title": "430_居宅介護支援［14.7MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180740",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 34,
+          "maizuru": 10
+        },
+        "content_length": 3272310,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-510",
+        "external_resource_id": "jigyosho_510_all_20260709180754.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 8527,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 8527,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 5,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/b5/b5ea71189da2276417c9bd2cbaa816ba7f0a305277ebc7d0e34df0166da5c7e1",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "b5ea71189da2276417c9bd2cbaa816ba7f0a305277ebc7d0e34df0166da5c7e1",
+        "raw_size_bytes": 3272310,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_510_all_20260709180754.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-510",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "510",
+          "resource_scope": "national",
+          "version_stamp": "20260709180754"
+        },
+        "source_title": "510_介護老人福祉施設［3.2MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_510_all_20260709180754.csv",
+        "title": "510_介護老人福祉施設［3.2MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180754",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 12,
+          "maizuru": 6
+        },
+        "content_length": 1564618,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-520",
+        "external_resource_id": "jigyosho_520_all_20260709180802.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 4091,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 4091,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/01/01efb5874e461cd2c67345d3064bfc4c050f85a7996f8fd67ed872d473f903e4",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "01efb5874e461cd2c67345d3064bfc4c050f85a7996f8fd67ed872d473f903e4",
+        "raw_size_bytes": 1564618,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_520_all_20260709180802.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-520",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "520",
+          "resource_scope": "national",
+          "version_stamp": "20260709180802"
+        },
+        "source_title": "520_介護老人保健施設［1.5MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_520_all_20260709180802.csv",
+        "title": "520_介護老人保健施設［1.5MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180802",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 19923,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-530",
+        "external_resource_id": "jigyosho_530_all_20260709180805.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 56,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 56,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/95/95f7beb00b24dbbf6db5aae3a680b9439ab8b50d208e11b21fbc3475f110c882",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "95f7beb00b24dbbf6db5aae3a680b9439ab8b50d208e11b21fbc3475f110c882",
+        "raw_size_bytes": 19923,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_530_all_20260709180805.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-530",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "530",
+          "resource_scope": "national",
+          "version_stamp": "20260709180805"
+        },
+        "source_title": "530_介護療養型医療施設［20KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_530_all_20260709180805.csv",
+        "title": "530_介護療養型医療施設［20KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180805",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 4,
+          "maizuru": 8
+        },
+        "content_length": 1128101,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-540",
+        "external_resource_id": "jigyosho_540_all_20260709180811.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 2562,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 2562,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/7c/7c883bf5dde5a86c02e313f3814fd844201bbf7a8ddff1bfdb26881ea115b376",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "7c883bf5dde5a86c02e313f3814fd844201bbf7a8ddff1bfdb26881ea115b376",
+        "raw_size_bytes": 1128101,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_540_all_20260709180811.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-540",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "540",
+          "resource_scope": "national",
+          "version_stamp": "20260709180811"
+        },
+        "source_title": "540_地域密着型介護老人福祉施設入所者生活介護［1.1MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_540_all_20260709180811.csv",
+        "title": "540_地域密着型介護老人福祉施設入所者生活介護［1.1MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180811",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 2,
+          "maizuru": 0
+        },
+        "content_length": 338258,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-550",
+        "external_resource_id": "jigyosho_550_all_20260709180931.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 938,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 938,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/d9/d961b7f7af045452b6c10e3a84117a760dcc1792f282f6c2c188b7502fc4c9be",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "d961b7f7af045452b6c10e3a84117a760dcc1792f282f6c2c188b7502fc4c9be",
+        "raw_size_bytes": 338258,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_550_all_20260709180931.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-550",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "550",
+          "resource_scope": "national",
+          "version_stamp": "20260709180931"
+        },
+        "source_title": "550_介護医療院［331KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_550_all_20260709180931.csv",
+        "title": "550_介護医療院［331KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180931",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 0,
+          "maizuru": 0
+        },
+        "content_length": 71922,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-551",
+        "external_resource_id": "jigyosho_551_all_20260709180935.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 186,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 186,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/9b/9b9a9536bda972bf2ab69c6520a7de58a264b2c88f1cb70012ccf984550e3b48",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "9b9a9536bda972bf2ab69c6520a7de58a264b2c88f1cb70012ccf984550e3b48",
+        "raw_size_bytes": 71922,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_551_all_20260709180935.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-551",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "551",
+          "resource_scope": "national",
+          "version_stamp": "20260709180935"
+        },
+        "source_title": "551_短期入所療養介護（介護医療院）［71KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_551_all_20260709180935.csv",
+        "title": "551_短期入所療養介護（介護医療院）［71KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180935",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 2,
+          "maizuru": 0
+        },
+        "content_length": 100201,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-710",
+        "external_resource_id": "jigyosho_710_all_20260709180814.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 204,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 204,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/e2/e2158d949e846068ad761be630269f46bec24718334fdf29dc6b65a1032c5340",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "e2158d949e846068ad761be630269f46bec24718334fdf29dc6b65a1032c5340",
+        "raw_size_bytes": 100201,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_710_all_20260709180814.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-710",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "710",
+          "resource_scope": "national",
+          "version_stamp": "20260709180814"
+        },
+        "source_title": "710_夜間対応型訪問介護［98KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_710_all_20260709180814.csv",
+        "title": "710_夜間対応型訪問介護［98KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180814",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 6,
+          "maizuru": 6
+        },
+        "content_length": 1296516,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-720",
+        "external_resource_id": "jigyosho_720_all_20260709180821.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 3028,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 3028,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 17,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/0d/0d9f62a4bfa3a225c4a5b02821edb0ca3353eb7fa895ccd6775eccf58db93981",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "0d9f62a4bfa3a225c4a5b02821edb0ca3353eb7fa895ccd6775eccf58db93981",
+        "raw_size_bytes": 1296516,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_720_all_20260709180821.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-720",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "720",
+          "resource_scope": "national",
+          "version_stamp": "20260709180821"
+        },
+        "source_title": "720_認知症対応型通所介護［1.3MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_720_all_20260709180821.csv",
+        "title": "720_認知症対応型通所介護［1.3MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180821",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 36,
+          "maizuru": 12
+        },
+        "content_length": 2199115,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-730",
+        "external_resource_id": "jigyosho_730_all_20260709180837.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 5388,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 5388,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 6,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/58/584bf963fd615e08a787202cf531a794898ccc2f4ba883f75758da0022c58ac4",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "584bf963fd615e08a787202cf531a794898ccc2f4ba883f75758da0022c58ac4",
+        "raw_size_bytes": 2199115,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_730_all_20260709180837.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-730",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "730",
+          "resource_scope": "national",
+          "version_stamp": "20260709180837"
+        },
+        "source_title": "730_小規模多機能型居宅介護［2.1MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_730_all_20260709180837.csv",
+        "title": "730_小規模多機能型居宅介護［2.1MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180837",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 8,
+          "maizuru": 2
+        },
+        "content_length": 657335,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-760",
+        "external_resource_id": "jigyosho_760_all_20260709180841.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 1516,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 1516,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/c1/c16bda40f40c1f2083b04a123e051d9e55bc193d60cfeb2781efd08d3488e943",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "c16bda40f40c1f2083b04a123e051d9e55bc193d60cfeb2781efd08d3488e943",
+        "raw_size_bytes": 657335,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_760_all_20260709180841.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-760",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "760",
+          "resource_scope": "national",
+          "version_stamp": "20260709180841"
+        },
+        "source_title": "760_定期巡回・随時対応型訪問介護看護［642KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_760_all_20260709180841.csv",
+        "title": "760_定期巡回・随時対応型訪問介護看護［642KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180841",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 16,
+          "maizuru": 0
+        },
+        "content_length": 591176,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-770",
+        "external_resource_id": "jigyosho_770_all_20260709180847.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 1142,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 1142,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/8a/8a774f25ea895bb51404cbf2a51cacd4b1c92d250cfd7556235dfc57e4a21f90",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "8a774f25ea895bb51404cbf2a51cacd4b1c92d250cfd7556235dfc57e4a21f90",
+        "raw_size_bytes": 591176,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_770_all_20260709180847.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-770",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "770",
+          "resource_scope": "national",
+          "version_stamp": "20260709180847"
+        },
+        "source_title": "770_看護小規模多機能型居宅介護［578KB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_770_all_20260709180847.csv",
+        "title": "770_看護小規模多機能型居宅介護［578KB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180847",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-care@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 88,
+          "maizuru": 14
+        },
+        "content_length": 7768868,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-care-service-780",
+        "external_resource_id": "jigyosho_780_all_20260709180927.csv",
+        "field_names": [
+          "都道府県コード又は市町村コード",
+          "No",
+          "都道府県名",
+          "市区町村名",
+          "事業所名",
+          "事業所名カナ",
+          "サービスの種類",
+          "住所",
+          "方書（ビル名等）",
+          "緯度",
+          "経度",
+          "電話番号",
+          "FAX番号",
+          "法人番号",
+          "法人の名称",
+          "事業所番号",
+          "利用可能曜日",
+          "利用可能曜日特記事項",
+          "定員",
+          "URL",
+          "高齢者の方と障害者の方が同時一体的に利用できるサービス",
+          "介護保険の通常の指定基準を満たしている",
+          "障害福祉の通常の指定基準を満たしている",
+          "備考"
+        ],
+        "format": "CSV",
+        "license_id": "cc-by-4.0",
+        "national_row_count": 18023,
+        "provider": "厚生労働省 介護サービス情報公表システム",
+        "published_at": "2026-07-09",
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 18023,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 77,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/19/19ed2778131c86f8e824e1ade115cec53c42a9a2a21eb0c5e0dcc68474c5581b",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "19ed2778131c86f8e824e1ade115cec53c42a9a2a21eb0c5e0dcc68474c5581b",
+        "raw_size_bytes": 7768868,
+        "reference_date": "2026-06-30",
+        "resource_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_780_all_20260709180927.csv",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "schema_id": "mhlw-care:recommended-open-data@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-care-columns:7ab24abab9d5608eba162195e23b5e030f43b60d15f9cd000333e000d23809cc",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published establishment information; not current capacity or eligibility",
+          "dataset_key": "service-780",
+          "discovery_context_municipality_code": "26202",
+          "format": "CSV",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月末時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd",
+          "manifest_url": "https://www.mhlw.go.jp/stf/kaigo-kouhyou_opendata.html",
+          "official_service_code": "780",
+          "resource_scope": "national",
+          "version_stamp": "20260709180927"
+        },
+        "source_title": "780_地域密着型通所介護［7.5MB］",
+        "source_url": "https://www.mhlw.go.jp/content/12300000/jigyosho_780_all_20260709180927.csv",
+        "title": "780_地域密着型通所介護［7.5MB］",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-30",
+          "20260709180927",
+          "4752f349cbc1bad7d4e36057b7aa570229f42e0deb09b5d5aa02cd015e8888dd"
+        ]
+      }
+    ],
+    "medical": [
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 16,
+          "maizuru": 6
+        },
+        "content_length": 761905,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-01-1-hospital-facility-info",
+        "external_resource_id": "01-1_hospital_facility_info_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "正式名称",
+          "正式名称（フリガナ）",
+          "略称",
+          "略称（フリガナ）",
+          "英語表記（ローマ字表記）",
+          "機関区分",
+          "都道府県コード",
+          "市区町村コード",
+          "所在地",
+          "所在地座標（緯度）",
+          "所在地座標（経度）",
+          "案内用ホームページアドレス",
+          "毎週決まった曜日に休診（月）",
+          "毎週決まった曜日に休診（火）",
+          "毎週決まった曜日に休診（水）",
+          "毎週決まった曜日に休診（木）",
+          "毎週決まった曜日に休診（金）",
+          "毎週決まった曜日に休診（土）",
+          "毎週決まった曜日に休診（日）",
+          "決まった週に休診（定期週）第1週（月）",
+          "決まった週に休診（定期週）第1週（火）",
+          "決まった週に休診（定期週）第1週（水）",
+          "決まった週に休診（定期週）第1週（木）",
+          "決まった週に休診（定期週）第1週（金）",
+          "決まった週に休診（定期週）第1週（土）",
+          "決まった週に休診（定期週）第1週（日）",
+          "決まった週に休診（定期週）第2週（月）",
+          "決まった週に休診（定期週）第2週（火）",
+          "決まった週に休診（定期週）第2週（水）",
+          "決まった週に休診（定期週）第2週（木）",
+          "決まった週に休診（定期週）第2週（金）",
+          "決まった週に休診（定期週）第2週（土）",
+          "決まった週に休診（定期週）第2週（日）",
+          "決まった週に休診（定期週）第3週（月）",
+          "決まった週に休診（定期週）第3週（火）",
+          "決まった週に休診（定期週）第3週（水）",
+          "決まった週に休診（定期週）第3週（木）",
+          "決まった週に休診（定期週）第3週（金）",
+          "決まった週に休診（定期週）第3週（土）",
+          "決まった週に休診（定期週）第3週（日）",
+          "決まった週に休診（定期週）第4週（月）",
+          "決まった週に休診（定期週）第4週（火）",
+          "決まった週に休診（定期週）第4週（水）",
+          "決まった週に休診（定期週）第4週（木）",
+          "決まった週に休診（定期週）第4週（金）",
+          "決まった週に休診（定期週）第4週（土）",
+          "決まった週に休診（定期週）第4週（日）",
+          "決まった週に休診（定期週）第5週（月）",
+          "決まった週に休診（定期週）第5週（火）",
+          "決まった週に休診（定期週）第5週（水）",
+          "決まった週に休診（定期週）第5週（木）",
+          "決まった週に休診（定期週）第5週（金）",
+          "決まった週に休診（定期週）第5週（土）",
+          "決まった週に休診（定期週）第5週（日）",
+          "祝日に休診",
+          "その他の休診日（gw、お盆等）",
+          "一般病床",
+          "療養病床",
+          "療養病床のうち医療保険適用",
+          "療養病床のうち介護保険適用",
+          "精神病床",
+          "結核病床",
+          "感染症病床",
+          "合計病床数"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 7715,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 7715,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/b4/b416472ec52a151455e1c91438e0dec5b471e19eafe70e3e2ee1bb22544efe87",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "b416472ec52a151455e1c91438e0dec5b471e19eafe70e3e2ee1bb22544efe87",
+        "raw_size_bytes": 761905,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/01-1_hospital_facility_info_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "facility",
+          "schema_id": "mhlw-medical:01-1@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:7284702e62d8e93375661d37563cd5a6733f437ca14f858b20762a761497a72d",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "01-1-hospital-facility-info",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "01-1",
+          "medical_resource_kind": "hospital_facility_info",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "病院 (施設票)",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/01-1_hospital_facility_info_20260601.csv.zip",
+        "title": "病院 (施設票)",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 633,
+          "maizuru": 144
+        },
+        "content_length": 1832586,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-01-2-hospital-speciality-hours",
+        "external_resource_id": "01-2_hospital_speciality_hours_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "診療科目コード",
+          "診療科目名",
+          "診療時間帯",
+          "月_診療開始時間",
+          "月_診療終了時間",
+          "火_診療開始時間",
+          "火_診療終了時間",
+          "水_診療開始時間",
+          "水_診療終了時間",
+          "木_診療開始時間",
+          "木_診療終了時間",
+          "金_診療開始時間",
+          "金_診療終了時間",
+          "土_診療開始時間",
+          "土_診療終了時間",
+          "日_診療開始時間",
+          "日_診療終了時間",
+          "祝_診療開始時間",
+          "祝_診療終了時間",
+          "月_外来受付開始時間",
+          "月_外来受付終了時間",
+          "火_外来受付開始時間",
+          "火_外来受付終了時間",
+          "水_外来受付開始時間",
+          "水_外来受付終了時間",
+          "木_外来受付開始時間",
+          "木_外来受付終了時間",
+          "金_外来受付開始時間",
+          "金_外来受付終了時間",
+          "土_外来受付開始時間",
+          "土_外来受付終了時間",
+          "日_外来受付開始時間",
+          "日_外来受付終了時間",
+          "祝_外来受付開始時間",
+          "祝_外来受付終了時間"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 250824,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 250824,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/01/016fac4a1ba0a6df67c4cc0a2854d57a2c9dd8c22cb80fb1733b65d48988290e",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "016fac4a1ba0a6df67c4cc0a2854d57a2c9dd8c22cb80fb1733b65d48988290e",
+        "raw_size_bytes": 1832586,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/01-2_hospital_speciality_hours_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "service_offering",
+          "schema_id": "mhlw-medical:01-2@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:b27dda79980f33ac25d4aad65ab7842b0829eb351a1ade1da584e0f5802d864c",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "01-2-hospital-speciality-hours",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "01-2",
+          "medical_resource_kind": "hospital_speciality_hours",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "病院 (診療科・診療時間票）",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/01-2_hospital_speciality_hours_20260601.csv.zip",
+        "title": "病院 (診療科・診療時間票）",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 367,
+          "maizuru": 21
+        },
+        "content_length": 6856873,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-02-1-clinic-facility-info",
+        "external_resource_id": "02-1_clinic_facility_info_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "正式名称",
+          "正式名称（フリガナ）",
+          "略称",
+          "略称（フリガナ）",
+          "英語表記（ローマ字表記）",
+          "機関区分",
+          "都道府県コード",
+          "市区町村コード",
+          "所在地",
+          "所在地座標（緯度）",
+          "所在地座標（経度）",
+          "案内用ホームページアドレス",
+          "毎週決まった曜日に休診（月）",
+          "毎週決まった曜日に休診（火）",
+          "毎週決まった曜日に休診（水）",
+          "毎週決まった曜日に休診（木）",
+          "毎週決まった曜日に休診（金）",
+          "毎週決まった曜日に休診（土）",
+          "毎週決まった曜日に休診（日）",
+          "決まった週に休診（定期週）第1週（月）",
+          "決まった週に休診（定期週）第1週（火）",
+          "決まった週に休診（定期週）第1週（水）",
+          "決まった週に休診（定期週）第1週（木）",
+          "決まった週に休診（定期週）第1週（金）",
+          "決まった週に休診（定期週）第1週（土）",
+          "決まった週に休診（定期週）第1週（日）",
+          "決まった週に休診（定期週）第2週（月）",
+          "決まった週に休診（定期週）第2週（火）",
+          "決まった週に休診（定期週）第2週（水）",
+          "決まった週に休診（定期週）第2週（木）",
+          "決まった週に休診（定期週）第2週（金）",
+          "決まった週に休診（定期週）第2週（土）",
+          "決まった週に休診（定期週）第2週（日）",
+          "決まった週に休診（定期週）第3週（月）",
+          "決まった週に休診（定期週）第3週（火）",
+          "決まった週に休診（定期週）第3週（水）",
+          "決まった週に休診（定期週）第3週（木）",
+          "決まった週に休診（定期週）第3週（金）",
+          "決まった週に休診（定期週）第3週（土）",
+          "決まった週に休診（定期週）第3週（日）",
+          "決まった週に休診（定期週）第4週（月）",
+          "決まった週に休診（定期週）第4週（火）",
+          "決まった週に休診（定期週）第4週（水）",
+          "決まった週に休診（定期週）第4週（木）",
+          "決まった週に休診（定期週）第4週（金）",
+          "決まった週に休診（定期週）第4週（土）",
+          "決まった週に休診（定期週）第4週（日）",
+          "決まった週に休診（定期週）第5週（月）",
+          "決まった週に休診（定期週）第5週（火）",
+          "決まった週に休診（定期週）第5週（水）",
+          "決まった週に休診（定期週）第5週（木）",
+          "決まった週に休診（定期週）第5週（金）",
+          "決まった週に休診（定期週）第5週（土）",
+          "決まった週に休診（定期週）第5週（日）",
+          "祝日に休診",
+          "その他の休診日（gw、お盆等）",
+          "一般病床",
+          "療養病床",
+          "療養病床のうち医療保険適用",
+          "療養病床のうち介護保険適用",
+          "合計病床数"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 80155,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 80155,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/60/602be1310990fc557cfca8cda0e84494304e4df8581c1aca218b68327ebea2cf",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "602be1310990fc557cfca8cda0e84494304e4df8581c1aca218b68327ebea2cf",
+        "raw_size_bytes": 6856873,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/02-1_clinic_facility_info_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "facility",
+          "schema_id": "mhlw-medical:02-1@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:11799d1c8a2f19fea28b32c55cc078e516e25fa0c19d732eae0eb8fccb74bb79",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "02-1-clinic-facility-info",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "02-1",
+          "medical_resource_kind": "clinic_facility_info",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "診療所 (施設票)",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/02-1_clinic_facility_info_20260601.csv.zip",
+        "title": "診療所 (施設票)",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 2667,
+          "maizuru": 159
+        },
+        "content_length": 5406828,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-02-2-clinic-speciality-hours",
+        "external_resource_id": "02-2_clinic_speciality_hours_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "診療科目コード",
+          "診療科目名",
+          "診療時間帯",
+          "月_診療開始時間",
+          "月_診療終了時間",
+          "火_診療開始時間",
+          "火_診療終了時間",
+          "水_診療開始時間",
+          "水_診療終了時間",
+          "木_診療開始時間",
+          "木_診療終了時間",
+          "金_診療開始時間",
+          "金_診療終了時間",
+          "土_診療開始時間",
+          "土_診療終了時間",
+          "日_診療開始時間",
+          "日_診療終了時間",
+          "祝_診療開始時間",
+          "祝_診療終了時間",
+          "月_外来受付開始時間",
+          "月_外来受付終了時間",
+          "火_外来受付開始時間",
+          "火_外来受付終了時間",
+          "水_外来受付開始時間",
+          "水_外来受付終了時間",
+          "木_外来受付開始時間",
+          "木_外来受付終了時間",
+          "金_外来受付開始時間",
+          "金_外来受付終了時間",
+          "土_外来受付開始時間",
+          "土_外来受付終了時間",
+          "日_外来受付開始時間",
+          "日_外来受付終了時間",
+          "祝_外来受付開始時間",
+          "祝_外来受付終了時間"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 667320,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 667320,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/9b/9b873f66f9450cf29846c217ced56b902ce03b0d750a008e7d4911d353712d5c",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "9b873f66f9450cf29846c217ced56b902ce03b0d750a008e7d4911d353712d5c",
+        "raw_size_bytes": 5406828,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/02-2_clinic_speciality_hours_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "service_offering",
+          "schema_id": "mhlw-medical:02-2@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:b27dda79980f33ac25d4aad65ab7842b0829eb351a1ade1da584e0f5802d864c",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "02-2-clinic-speciality-hours",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "02-2",
+          "medical_resource_kind": "clinic_speciality_hours",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "診療所 (診療科・診療時間票）",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/02-2_clinic_speciality_hours_20260601.csv.zip",
+        "title": "診療所 (診療科・診療時間票）",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 216,
+          "maizuru": 14
+        },
+        "content_length": 3988364,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-03-1-dental-facility-info",
+        "external_resource_id": "03-1_dental_facility_info_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "正式名称",
+          "正式名称（フリガナ）",
+          "略称",
+          "略称（フリガナ）",
+          "英語表記（ローマ字表記）",
+          "機関区分",
+          "都道府県コード",
+          "市区町村コード",
+          "所在地",
+          "所在地座標（緯度）",
+          "所在地座標（経度）",
+          "案内用ホームページアドレス",
+          "毎週決まった曜日に休診（月）",
+          "毎週決まった曜日に休診（火）",
+          "毎週決まった曜日に休診（水）",
+          "毎週決まった曜日に休診（木）",
+          "毎週決まった曜日に休診（金）",
+          "毎週決まった曜日に休診（土）",
+          "毎週決まった曜日に休診（日）",
+          "決まった週に休診（定期週）第1週（月）",
+          "決まった週に休診（定期週）第1週（火）",
+          "決まった週に休診（定期週）第1週（水）",
+          "決まった週に休診（定期週）第1週（木）",
+          "決まった週に休診（定期週）第1週（金）",
+          "決まった週に休診（定期週）第1週（土）",
+          "決まった週に休診（定期週）第1週（日）",
+          "決まった週に休診（定期週）第2週（月）",
+          "決まった週に休診（定期週）第2週（火）",
+          "決まった週に休診（定期週）第2週（水）",
+          "決まった週に休診（定期週）第2週（木）",
+          "決まった週に休診（定期週）第2週（金）",
+          "決まった週に休診（定期週）第2週（土）",
+          "決まった週に休診（定期週）第2週（日）",
+          "決まった週に休診（定期週）第3週（月）",
+          "決まった週に休診（定期週）第3週（火）",
+          "決まった週に休診（定期週）第3週（水）",
+          "決まった週に休診（定期週）第3週（木）",
+          "決まった週に休診（定期週）第3週（金）",
+          "決まった週に休診（定期週）第3週（土）",
+          "決まった週に休診（定期週）第3週（日）",
+          "決まった週に休診（定期週）第4週（月）",
+          "決まった週に休診（定期週）第4週（火）",
+          "決まった週に休診（定期週）第4週（水）",
+          "決まった週に休診（定期週）第4週（木）",
+          "決まった週に休診（定期週）第4週（金）",
+          "決まった週に休診（定期週）第4週（土）",
+          "決まった週に休診（定期週）第4週（日）",
+          "決まった週に休診（定期週）第5週（月）",
+          "決まった週に休診（定期週）第5週（火）",
+          "決まった週に休診（定期週）第5週（水）",
+          "決まった週に休診（定期週）第5週（木）",
+          "決まった週に休診（定期週）第5週（金）",
+          "決まった週に休診（定期週）第5週（土）",
+          "決まった週に休診（定期週）第5週（日）",
+          "祝日に休診",
+          "その他の休診日（gw、お盆等）"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 54637,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 54637,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 5,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/15/1585ea00b981df8c32d93850b2321a27053b8a9af3d46afc18df11af1f022727",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "1585ea00b981df8c32d93850b2321a27053b8a9af3d46afc18df11af1f022727",
+        "raw_size_bytes": 3988364,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/03-1_dental_facility_info_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "facility",
+          "schema_id": "mhlw-medical:03-1@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:0417d533ce4bf70dbdca7335a9a312f4a2aa967efe9a081914fe3d93e4a3061a",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "03-1-dental-facility-info",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "03-1",
+          "medical_resource_kind": "dental_facility_info",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "歯科診療所 (施設票)",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/03-1_dental_facility_info_20260601.csv.zip",
+        "title": "歯科診療所 (施設票)",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 1845,
+          "maizuru": 93
+        },
+        "content_length": 3117259,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-03-2-dental-speciality-hours",
+        "external_resource_id": "03-2_dental_speciality_hours_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "診療科目コード",
+          "診療科目名",
+          "診療時間帯",
+          "月_診療開始時間",
+          "月_診療終了時間",
+          "火_診療開始時間",
+          "火_診療終了時間",
+          "水_診療開始時間",
+          "水_診療終了時間",
+          "木_診療開始時間",
+          "木_診療終了時間",
+          "金_診療開始時間",
+          "金_診療終了時間",
+          "土_診療開始時間",
+          "土_診療終了時間",
+          "日_診療開始時間",
+          "日_診療終了時間",
+          "祝_診療開始時間",
+          "祝_診療終了時間",
+          "月_外来受付開始時間",
+          "月_外来受付終了時間",
+          "火_外来受付開始時間",
+          "火_外来受付終了時間",
+          "水_外来受付開始時間",
+          "水_外来受付終了時間",
+          "木_外来受付開始時間",
+          "木_外来受付終了時間",
+          "金_外来受付開始時間",
+          "金_外来受付終了時間",
+          "土_外来受付開始時間",
+          "土_外来受付終了時間",
+          "日_外来受付開始時間",
+          "日_外来受付終了時間",
+          "祝_外来受付開始時間",
+          "祝_外来受付終了時間"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 428139,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 428139,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 0,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/37/37ba1e33312a6febb9998172e16006047b19afcca5961d34e85f59945878a507",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "37ba1e33312a6febb9998172e16006047b19afcca5961d34e85f59945878a507",
+        "raw_size_bytes": 3117259,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/03-2_dental_speciality_hours_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "service_offering",
+          "schema_id": "mhlw-medical:03-2@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:b27dda79980f33ac25d4aad65ab7842b0829eb351a1ade1da584e0f5802d864c",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "03-2-dental-speciality-hours",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "03-2",
+          "medical_resource_kind": "dental_speciality_hours",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "歯科診療所 (診療科・診療時間票）",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/03-2_dental_speciality_hours_20260601.csv.zip",
+        "title": "歯科診療所 (診療科・診療時間票）",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 3,
+          "maizuru": 1
+        },
+        "content_length": 225000,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-04-maternity-home",
+        "external_resource_id": "04_maternity_home_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "正式名称",
+          "正式名称（フリガナ）",
+          "略称",
+          "略称（フリガナ）",
+          "英語表記（ローマ字表記）",
+          "機関区分",
+          "都道府県コード",
+          "市区町村コード",
+          "所在地",
+          "所在地座標（緯度）",
+          "所在地座標（経度）",
+          "案内用ホームページアドレス",
+          "毎週決まった曜日に休業（月）",
+          "毎週決まった曜日に休業（火）",
+          "毎週決まった曜日に休業（水）",
+          "毎週決まった曜日に休業（木）",
+          "毎週決まった曜日に休業（金）",
+          "毎週決まった曜日に休業（土）",
+          "毎週決まった曜日に休業（日）",
+          "決まった週に休業（定期週）第1週（月）",
+          "決まった週に休業（定期週）第1週（火）",
+          "決まった週に休業（定期週）第1週（水）",
+          "決まった週に休業（定期週）第1週（木）",
+          "決まった週に休業（定期週）第1週（金）",
+          "決まった週に休業（定期週）第1週（土）",
+          "決まった週に休業（定期週）第1週（日）",
+          "決まった週に休業（定期週）第2週（月）",
+          "決まった週に休業（定期週）第2週（火）",
+          "決まった週に休業（定期週）第2週（水）",
+          "決まった週に休業（定期週）第2週（木）",
+          "決まった週に休業（定期週）第2週（金）",
+          "決まった週に休業（定期週）第2週（土）",
+          "決まった週に休業（定期週）第2週（日）",
+          "決まった週に休業（定期週）第3週（月）",
+          "決まった週に休業（定期週）第3週（火）",
+          "決まった週に休業（定期週）第3週（水）",
+          "決まった週に休業（定期週）第3週（木）",
+          "決まった週に休業（定期週）第3週（金）",
+          "決まった週に休業（定期週）第3週（土）",
+          "決まった週に休業（定期週）第3週（日）",
+          "決まった週に休業（定期週）第4週（月）",
+          "決まった週に休業（定期週）第4週（火）",
+          "決まった週に休業（定期週）第4週（水）",
+          "決まった週に休業（定期週）第4週（木）",
+          "決まった週に休業（定期週）第4週（金）",
+          "決まった週に休業（定期週）第4週（土）",
+          "決まった週に休業（定期週）第4週（日）",
+          "決まった週に休業（定期週）第5週（月）",
+          "決まった週に休業（定期週）第5週（火）",
+          "決まった週に休業（定期週）第5週（水）",
+          "決まった週に休業（定期週）第5週（木）",
+          "決まった週に休業（定期週）第5週（金）",
+          "決まった週に休業（定期週）第5週（土）",
+          "決まった週に休業（定期週）第5週（日）",
+          "祝日に休業",
+          "その他の休業日（gw、お盆等）",
+          "月_就業時間帯1_開始時間",
+          "月_就業時間帯1_終了時間",
+          "火_就業時間帯1_開始時間",
+          "火_就業時間帯1_終了時間",
+          "水_就業時間帯1_開始時間",
+          "水_就業時間帯1_終了時間",
+          "木_就業時間帯1_開始時間",
+          "木_就業時間帯1_終了時間",
+          "金_就業時間帯1_開始時間",
+          "金_就業時間帯1_終了時間",
+          "土_就業時間帯1_開始時間",
+          "土_就業時間帯1_終了時間",
+          "日_就業時間帯1_開始時間",
+          "日_就業時間帯1_終了時間",
+          "祝_就業時間帯1_開始時間",
+          "祝_就業時間帯1_終了時間",
+          "月_就業時間帯2_開始時間",
+          "月_就業時間帯2_終了時間",
+          "火_就業時間帯2_開始時間",
+          "火_就業時間帯2_終了時間",
+          "水_就業時間帯2_開始時間",
+          "水_就業時間帯2_終了時間",
+          "木_就業時間帯2_開始時間",
+          "木_就業時間帯2_終了時間",
+          "金_就業時間帯2_開始時間",
+          "金_就業時間帯2_終了時間",
+          "土_就業時間帯2_開始時間",
+          "土_就業時間帯2_終了時間",
+          "日_就業時間帯2_開始時間",
+          "日_就業時間帯2_終了時間",
+          "祝_就業時間帯2_開始時間",
+          "祝_就業時間帯2_終了時間",
+          "月_就業時間帯3_開始時間",
+          "月_就業時間帯3_終了時間",
+          "火_就業時間帯3_開始時間",
+          "火_就業時間帯3_終了時間",
+          "水_就業時間帯3_開始時間",
+          "水_就業時間帯3_終了時間",
+          "木_就業時間帯3_開始時間",
+          "木_就業時間帯3_終了時間",
+          "金_就業時間帯3_開始時間",
+          "金_就業時間帯3_終了時間",
+          "土_就業時間帯3_開始時間",
+          "土_就業時間帯3_終了時間",
+          "日_就業時間帯3_開始時間",
+          "日_就業時間帯3_終了時間",
+          "祝_就業時間帯3_開始時間",
+          "祝_就業時間帯3_終了時間",
+          "月_外来受付時間帯1_開始時間",
+          "月_外来受付時間帯1_終了時間",
+          "火_外来受付時間帯1_開始時間",
+          "火_外来受付時間帯1_終了時間",
+          "水_外来受付時間帯1_開始時間",
+          "水_外来受付時間帯1_終了時間",
+          "木_外来受付時間帯1_開始時間",
+          "木_外来受付時間帯1_終了時間",
+          "金_外来受付時間帯1_開始時間",
+          "金_外来受付時間帯1_終了時間",
+          "土_外来受付時間帯1_開始時間",
+          "土_外来受付時間帯1_終了時間",
+          "日_外来受付時間帯1_開始時間",
+          "日_外来受付時間帯1_終了時間",
+          "祝_外来受付時間帯1_開始時間",
+          "祝_外来受付時間帯1_終了時間",
+          "月_外来受付時間帯2_開始時間",
+          "月_外来受付時間帯2_終了時間",
+          "火_外来受付時間帯2_開始時間",
+          "火_外来受付時間帯2_終了時間",
+          "水_外来受付時間帯2_開始時間",
+          "水_外来受付時間帯2_終了時間",
+          "木_外来受付時間帯2_開始時間",
+          "木_外来受付時間帯2_終了時間",
+          "金_外来受付時間帯2_開始時間",
+          "金_外来受付時間帯2_終了時間",
+          "土_外来受付時間帯2_開始時間",
+          "土_外来受付時間帯2_終了時間",
+          "日_外来受付時間帯2_開始時間",
+          "日_外来受付時間帯2_終了時間",
+          "祝_外来受付時間帯2_開始時間",
+          "祝_外来受付時間帯2_終了時間",
+          "月_外来受付時間帯3_開始時間",
+          "月_外来受付時間帯3_終了時間",
+          "火_外来受付時間帯3_開始時間",
+          "火_外来受付時間帯3_終了時間",
+          "水_外来受付時間帯3_開始時間",
+          "水_外来受付時間帯3_終了時間",
+          "木_外来受付時間帯3_開始時間",
+          "木_外来受付時間帯3_終了時間",
+          "金_外来受付時間帯3_開始時間",
+          "金_外来受付時間帯3_終了時間",
+          "土_外来受付時間帯3_開始時間",
+          "土_外来受付時間帯3_終了時間",
+          "日_外来受付時間帯3_開始時間",
+          "日_外来受付時間帯3_終了時間",
+          "祝_外来受付時間帯3_開始時間",
+          "祝_外来受付時間帯3_終了時間"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 2138,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 2138,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 1,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/27/27cc63ed72913f95d8da48cef2287246bbfc6f25f414caa94fc226524d6eb87a",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "27cc63ed72913f95d8da48cef2287246bbfc6f25f414caa94fc226524d6eb87a",
+        "raw_size_bytes": 225000,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/04_maternity_home_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "facility",
+          "schema_id": "mhlw-medical:04@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:c29cf893e2c1c33f337bb610e5dc27e79839b9cd612f3bb39313128402fd3f3d",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "04-maternity-home",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "04",
+          "medical_resource_kind": "maternity_home",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "助産所",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/04_maternity_home_20260601.csv.zip",
+        "title": "助産所",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      },
+      {
+        "adapter_version": "mhlw-medical@2026-06",
+        "analysis_readiness": "requires_review",
+        "analysis_readiness_reasons": [
+          "source_horizontal_datum_not_declared",
+          "facility_identity_candidates_require_review",
+          "published_schedule_or_capacity_is_not_current_availability"
+        ],
+        "city_canonical_record_counts": {
+          "fujisawa": 233,
+          "maizuru": 41
+        },
+        "content_length": 5440091,
+        "encoding": "utf-8-sig",
+        "external_dataset_id": "mhlw-medical-05-pharmacy",
+        "external_resource_id": "05_pharmacy_20260601.csv.zip",
+        "field_names": [
+          "ID",
+          "名称",
+          "フリガナ",
+          "ローマ字",
+          "機関区分",
+          "都道府県コード",
+          "市区町村コード",
+          "所在地",
+          "所在地座標（緯度）",
+          "所在地座標（経度）",
+          "薬局のホームページアドレス",
+          "営業日（月）",
+          "営業日（火）",
+          "営業日（水）",
+          "営業日（木）",
+          "営業日（金）",
+          "営業日（土）",
+          "営業日（日）",
+          "営業日（祝）",
+          "定期閉店毎週（月）",
+          "定期閉店毎週（火）",
+          "定期閉店毎週（水）",
+          "定期閉店毎週（木）",
+          "定期閉店毎週（金）",
+          "定期閉店毎週（土）",
+          "定期閉店毎週（日）",
+          "定期閉店毎週（祝）",
+          "定期閉店第１週（月）",
+          "定期閉店第１週（火）",
+          "定期閉店第１週（水）",
+          "定期閉店第１週（木）",
+          "定期閉店第１週（金）",
+          "定期閉店第１週（土）",
+          "定期閉店第１週（日）",
+          "定期閉店第２週（月）",
+          "定期閉店第２週（火）",
+          "定期閉店第２週（水）",
+          "定期閉店第２週（木）",
+          "定期閉店第２週（金）",
+          "定期閉店第２週（土）",
+          "定期閉店第２週（日）",
+          "定期閉店第３週（月）",
+          "定期閉店第３週（火）",
+          "定期閉店第３週（水）",
+          "定期閉店第３週（木）",
+          "定期閉店第３週（金）",
+          "定期閉店第３週（土）",
+          "定期閉店第３週（日）",
+          "定期閉店第４週（月）",
+          "定期閉店第４週（火）",
+          "定期閉店第４週（水）",
+          "定期閉店第４週（木）",
+          "定期閉店第４週（金）",
+          "定期閉店第４週（土）",
+          "定期閉店第４週（日）",
+          "定期閉店第５週（月）",
+          "定期閉店第５週（火）",
+          "定期閉店第５週（水）",
+          "定期閉店第５週（木）",
+          "定期閉店第５週（金）",
+          "定期閉店第５週（土）",
+          "定期閉店第５週（日）",
+          "祝日",
+          "その他の閉店日（gw、お盆等）",
+          "月_開店時間帯1_開始時間",
+          "月_開店時間帯1_終了時間",
+          "火_開店時間帯1_開始時間",
+          "火_開店時間帯1_終了時間",
+          "水_開店時間帯1_開始時間",
+          "水_開店時間帯1_終了時間",
+          "木_開店時間帯1_開始時間",
+          "木_開店時間帯1_終了時間",
+          "金_開店時間帯1_開始時間",
+          "金_開店時間帯1_終了時間",
+          "土_開店時間帯1_開始時間",
+          "土_開店時間帯1_終了時間",
+          "日_開店時間帯1_開始時間",
+          "日_開店時間帯1_終了時間",
+          "祝_開店時間帯1_開始時間",
+          "祝_開店時間帯1_終了時間",
+          "月_開店時間帯2_開始時間",
+          "月_開店時間帯2_終了時間",
+          "火_開店時間帯2_開始時間",
+          "火_開店時間帯2_終了時間",
+          "水_開店時間帯2_開始時間",
+          "水_開店時間帯2_終了時間",
+          "木_開店時間帯2_開始時間",
+          "木_開店時間帯2_終了時間",
+          "金_開店時間帯2_開始時間",
+          "金_開店時間帯2_終了時間",
+          "土_開店時間帯2_開始時間",
+          "土_開店時間帯2_終了時間",
+          "日_開店時間帯2_開始時間",
+          "日_開店時間帯2_終了時間",
+          "祝_開店時間帯2_開始時間",
+          "祝_開店時間帯2_終了時間",
+          "月_開店時間帯3_開始時間",
+          "月_開店時間帯3_終了時間",
+          "火_開店時間帯3_開始時間",
+          "火_開店時間帯3_終了時間",
+          "水_開店時間帯3_開始時間",
+          "水_開店時間帯3_終了時間",
+          "木_開店時間帯3_開始時間",
+          "木_開店時間帯3_終了時間",
+          "金_開店時間帯3_開始時間",
+          "金_開店時間帯3_終了時間",
+          "土_開店時間帯3_開始時間",
+          "土_開店時間帯3_終了時間",
+          "日_開店時間帯3_開始時間",
+          "日_開店時間帯3_終了時間",
+          "祝_開店時間帯3_開始時間",
+          "祝_開店時間帯3_終了時間",
+          "月_開店時間帯4_開始時間",
+          "月_開店時間帯4_終了時間",
+          "火_開店時間帯4_開始時間",
+          "火_開店時間帯4_終了時間",
+          "水_開店時間帯4_開始時間",
+          "水_開店時間帯4_終了時間",
+          "木_開店時間帯4_開始時間",
+          "木_開店時間帯4_終了時間",
+          "金_開店時間帯4_開始時間",
+          "金_開店時間帯4_終了時間",
+          "土_開店時間帯4_開始時間",
+          "土_開店時間帯4_終了時間",
+          "日_開店時間帯4_開始時間",
+          "日_開店時間帯4_終了時間",
+          "祝_開店時間帯4_開始時間",
+          "祝_開店時間帯4_終了時間"
+        ],
+        "format": "ZIP",
+        "license_id": "pdl-1.0",
+        "national_row_count": 61398,
+        "provider": "厚生労働省 医療情報ネット",
+        "published_at": null,
+        "quality_results": [
+          {
+            "gate": "non_empty_unique_schema",
+            "status": "passed"
+          },
+          {
+            "gate": "bounded_row_shape",
+            "rows": 61398,
+            "status": "passed"
+          },
+          {
+            "formula_like_cells": 3,
+            "gate": "formula_injection_boundary",
+            "handling": "preserve raw; escape only when exporting spreadsheet CSV",
+            "status": "passed"
+          },
+          {
+            "gate": "coordinate_reference",
+            "reason": "horizontal datum is not declared on the distribution page",
+            "status": "requires_review"
+          }
+        ],
+        "raw_object_key": "sha256/e5/e53eacdbd9b4a11593cfe89f9a8b57a62f62a1e066751d42c73591b6818f9bf4",
+        "raw_reuse_scope": "public_verified",
+        "raw_sha256": "e53eacdbd9b4a11593cfe89f9a8b57a62f62a1e066751d42c73591b6818f9bf4",
+        "raw_size_bytes": 5440091,
+        "reference_date": "2026-06-01",
+        "resource_url": "https://www.mhlw.go.jp/content/11121000/05_pharmacy_20260601.csv.zip",
+        "retrieved_at": "2026-08-28T20:20:00+09:00",
+        "schema_audit": {
+          "missing_required_fields": [],
+          "resource_role": "facility",
+          "schema_id": "mhlw-medical:05@2026-06",
+          "status": "passed"
+        },
+        "schema_version": "mhlw-medical-columns:5cb973accbd521e39af8f8d5effa5d1f9796da8a78b2775e0b0ce3f34149fa50",
+        "source_crs": null,
+        "source_metadata": {
+          "availability_semantics": "published facility/schedule information; not real-time availability",
+          "dataset_key": "05-pharmacy",
+          "discovery_context_municipality_code": "26202",
+          "format": "ZIP",
+          "manifest_etag": null,
+          "manifest_heading": "2026年６月１日時点",
+          "manifest_last_modified": null,
+          "manifest_sha256": "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb",
+          "manifest_url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/newpage_43373.html",
+          "medical_resource_code": "05",
+          "medical_resource_kind": "pharmacy",
+          "resource_scope": "national",
+          "version_stamp": "20260601"
+        },
+        "source_title": "薬局",
+        "source_url": "https://www.mhlw.go.jp/content/11121000/05_pharmacy_20260601.csv.zip",
+        "title": "薬局",
+        "update_frequency": "not_declared",
+        "version_signals": [
+          "2026-06-01",
+          "20260601",
+          "59dee0f823cc29b2b791cae8280348313adb902fef1ad86e9d4b44f4ecbb40bb"
+        ]
+      }
+    ]
+  },
+  "schema_version": "citygap-mhlw-health-source-report@1"
+}

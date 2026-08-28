@@ -1,0 +1,105 @@
+{
+  "analysis_readiness": "requires_review",
+  "canonical_artifact": "analysis/outputs/real/open_data/mhlw_health_canonical.jsonl",
+  "canonical_artifact_sha256": "a739cd36ff43941f6731f35669c6a6d55c18c5d1526aa55e6d4a116e0333574e",
+  "canonical_record_count": 7923,
+  "canonical_version": "citygap-canonical-health@1",
+  "cities": {
+    "fujisawa": {
+      "canonical_record_count": 7182,
+      "city_code": "14205",
+      "city_name": "藤沢市",
+      "entity_kind_counts": {
+        "care_service_establishment": 601,
+        "care_service_offering": 601,
+        "medical_facility": 835,
+        "medical_service_offering": 5145
+      },
+      "medical_identity_counts": {
+        "probable": 464,
+        "unmatched": 371
+      },
+      "medical_reference_record_count": 718,
+      "plateau": {
+        "archive_sha256": "7e85ff8e1642b9c2cc627f356acedbe792e95fac25febe2ee70c9312d6c415ea",
+        "building_count": 169856,
+        "product_specification_version": "5.0"
+      },
+      "record_type_counts": {
+        "facility": 1436,
+        "service_offering": 5746
+      },
+      "runtime_seconds": 312.693471,
+      "spatial_link_counts": {
+        "city_exact": 7182,
+        "mesh_linked": 6867,
+        "mesh_unmatched": 315,
+        "plateau_building_candidate": 1391,
+        "plateau_building_unmatched": 45
+      },
+      "temporal_alignment": {
+        "care_reference_date": "2026-06-30",
+        "hidden_as_single_year": false,
+        "medical_reference_date": "2026-06-01",
+        "plateau_reference_year": 2025,
+        "status": "mixed"
+      }
+    },
+    "maizuru": {
+      "canonical_record_count": 741,
+      "city_code": "26202",
+      "city_name": "舞鶴市",
+      "entity_kind_counts": {
+        "care_service_establishment": 131,
+        "care_service_offering": 131,
+        "medical_facility": 83,
+        "medical_service_offering": 396
+      },
+      "medical_identity_counts": {
+        "ambiguous": 18,
+        "probable": 17,
+        "unmatched": 48
+      },
+      "medical_reference_record_count": 190,
+      "plateau": {
+        "archive_sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "building_count": 44640,
+        "product_specification_version": "5.0"
+      },
+      "record_type_counts": {
+        "facility": 214,
+        "service_offering": 527
+      },
+      "runtime_seconds": 112.256575,
+      "spatial_link_counts": {
+        "city_exact": 741,
+        "mesh_linked": 707,
+        "mesh_unmatched": 34,
+        "plateau_building_candidate": 191,
+        "plateau_building_unmatched": 23
+      },
+      "temporal_alignment": {
+        "care_reference_date": "2026-06-30",
+        "hidden_as_single_year": false,
+        "medical_reference_date": "2026-06-01",
+        "plateau_reference_year": 2025,
+        "status": "mixed"
+      }
+    }
+  },
+  "identity_report": "analysis/outputs/real/open_data/mhlw_medical_identity_comparison.json",
+  "identity_report_sha256": "76e57d8325b53d56b860f7e1c6e5cca9501784686c5c27eee1e9741a47e2f709",
+  "observed_at": "2026-08-28T20:20:00+09:00",
+  "performance": {
+    "materialize_and_schema_seconds": 31.156076,
+    "peak_rss_mib": 604.504,
+    "total_seconds": 459.07749
+  },
+  "privacy": "Canonical records exclude telephone, fax, free-form notes, contact URLs and corporate contact details. Raw official bytes remain outside public assets.",
+  "raw_resource_count": 43,
+  "raw_unique_sha256_count": 43,
+  "schema_version": "citygap-mhlw-health-summary@1",
+  "source_report": "analysis/outputs/real/open_data/mhlw_health_source_report.json",
+  "source_report_sha256": "78f259b0b58beb090918a892f731953ecd4af75931248eebb8cc613ee019bdb8",
+  "unavailable_reason": "not_verified"
+}
