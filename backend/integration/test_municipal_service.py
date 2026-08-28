@@ -111,9 +111,10 @@ def _ensure_open_data_record(database_url: str) -> dict[str, object]:
         connection.execute(
             """INSERT INTO dataset_versions (
                    id, organization_id, dataset_id, version_key, dataset_year, data_format,
-                   source_url, license, declared_source_crs, data_classification
+                   source_url, license, declared_source_crs, verification_status,
+                   registered_at, data_classification
                ) VALUES (%s, %s, %s, %s, 2026, 'CSV', %s, 'CC BY 4.0',
-                         'EPSG:4326', 'public')""",
+                         'EPSG:4326', 'checksum_verified', now(), 'public')""",
             (
                 version_id,
                 ORG_A,
