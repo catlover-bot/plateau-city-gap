@@ -14,7 +14,7 @@
   --cg-bluegray: #526f7e;
   --cg-hazard: #68617e;
   --cg-selected: #132f31;
-  --cg-good: #3d7457;
+  --cg-good: #246c67;
   --cg-error: #9a443d;
   --cg-space-1: 4px;
   --cg-space-2: 8px;
@@ -23,7 +23,7 @@
   --cg-space-5: 24px;
   --cg-space-6: 32px;
   --cg-radius: 3px;
-  --cg-shadow-panel: 0 4px 18px rgb(18 45 44 / 14%);
+  --cg-shadow-panel: none;
   --cg-font: "Noto Sans JP", "Yu Gothic UI", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   --cg-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --cg-z-map: 1;

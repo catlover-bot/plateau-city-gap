@@ -638,8 +638,14 @@ def build_audit() -> dict[str, Any]:
                 term in _read("frontend/src/service/components.tsx")
                 for term in ("標準形式への変換", "分析に使用中", "要確認")
             )
-            and "PLATEAU Contribution"
-            in _read("frontend/src/features/inspector/PlateauLineage.tsx")
+            and all(
+                term in _read("frontend/src/features/inspector/ObjectLens.tsx")
+                for term in (
+                    "PLATEAU OBJECT LENS",
+                    "Finding ↔ PLATEAU 追跡",
+                    "PLATEAUを外すと失われるもの",
+                )
+            )
         ),
         "field_feedback": (
             "CREATE TABLE open_data_field_tasks" in review

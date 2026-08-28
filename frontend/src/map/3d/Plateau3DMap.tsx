@@ -1,10 +1,11 @@
 import { forwardRef, lazy, Suspense, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import type { AppData, BuildingInfo, FuturesStressMode, GeoJsonFeatureCollection, InterventionSite, MeshMetrics, WorkspaceBuildingPoints, WorkspaceMapData, WorkspacePhase } from "../../types";
-import type { SpatialSelection, SpatialViewport } from "../../state/spatial/types";
+import type { AppData, BuildingInfo, FuturesStressMode, GeoJsonFeatureCollection, InterventionSite, MeshMetrics, RoadInfo, WorkspaceBuildingPoints, WorkspaceMapData, WorkspacePhase } from "../../types";
+import type { AnalysisLens, CounterfactualState, SpatialSelection, SpatialViewport } from "../../state/spatial/types";
 import type { ScenePresetId } from "../../state/spatial/types";
 import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import type { CesiumMapHandle } from "../../components/CesiumMap";
 import { SCENE_PRESETS } from "../core/scenePresets";
+import type { VisualReadinessResult, VisualReadinessSnapshot } from "./readiness/visualReadiness";
 
 const CesiumMap = lazy(async () => {
   const module = await import("../../components/CesiumMap");
@@ -17,6 +18,8 @@ interface Props {
   viewport: SpatialViewport;
   activeLayerIds: string[];
   scenePreset: ScenePresetId;
+  analysisLens: AnalysisLens;
+  counterfactualState: CounterfactualState;
   workspaceMap?: WorkspaceMapData | null;
   workspaceBuildingPoints?: WorkspaceBuildingPoints | null;
   workspacePhase?: WorkspacePhase;
@@ -55,8 +58,8 @@ function buildingSelection(data: AppData, building: BuildingInfo, current: Spati
     city: data.city.id,
     urbanState: "2025",
     label: building.usage ? `${building.usage}の建物` : "PLATEAU建物",
-    longitude: current?.longitude,
-    latitude: current?.latitude,
+    longitude: building.longitude ?? current?.longitude,
+    latitude: building.latitude ?? current?.latitude,
     properties: {
       usage: building.usage,
       measured_height_m: building.measuredHeight,
@@ -66,7 +69,78 @@ function buildingSelection(data: AppData, building: BuildingInfo, current: Spati
       total_floor_area_m2: building.totalFloorArea,
       lod: building.lod,
       attribute_kind: "official_plateau"
+      ,source_version: String(data.plateauMetadata?.year ?? 2025)
+      ,parent_mesh_code: current?.type === "mesh" || current?.type === "building_group"
+        ? current.id
+        : current?.properties?.parent_mesh_code ?? data.plateauMetadata?.reference_layer?.deep_dive_mesh_code
+      ,parent_finding_id: current?.type === "mesh" ? `finding:${current.id}` : current?.properties?.parent_finding_id
+      ,position_semantics: building.positionSemantics
     }
+  };
+}
+
+function roadSelection(data: AppData, road: RoadInfo, current: SpatialSelection | null): SpatialSelection {
+  return {
+    type: "road",
+    id: road.id,
+    city: data.city.id,
+    urbanState: "2025",
+    label: road.name ?? "PLATEAU道路",
+    longitude: road.longitude ?? current?.longitude,
+    latitude: road.latitude ?? current?.latitude,
+    properties: {
+      road_name: road.name,
+      road_class: road.roadClass,
+      road_function: road.roadFunction,
+      source: road.source,
+      source_version: String(data.plateauMetadata?.year ?? 2025),
+      graph_semantics: road.graphSemantics,
+      parent_mesh_code: current?.type === "mesh" || current?.type === "building_group"
+        ? current.id
+        : current?.properties?.parent_mesh_code,
+    },
+  };
+}
+
+function collectCoordinates(value: unknown, output: Array<[number, number]>) {
+  if (!Array.isArray(value)) return;
+  if (value.length >= 2 && typeof value[0] === "number" && typeof value[1] === "number") {
+    output.push([value[0], value[1]]);
+    return;
+  }
+  value.forEach((item) => collectCoordinates(item, output));
+}
+
+function workspaceCamera(
+  workspace: WorkspaceMapData | null,
+  phase: WorkspacePhase,
+  intent: "route" | "scenario" | "hazard",
+): { longitude: number; latitude: number; range: number } | null {
+  if (!workspace || phase === "baseline") return null;
+  const layers = intent === "scenario"
+    ? new Set(["representative_route", "representative_building", "scenario_site"])
+    : new Set(["representative_route", "representative_building"]);
+  const coordinates: Array<[number, number]> = [];
+  workspace.features.forEach((feature) => {
+    if (feature.properties?.story_id !== phase || !layers.has(String(feature.properties?.layer_type))) return;
+    collectCoordinates(feature.geometry && "coordinates" in feature.geometry ? feature.geometry.coordinates : null, coordinates);
+  });
+  if (!coordinates.length) return null;
+  const longitudes = coordinates.map(([longitude]) => longitude);
+  const latitudes = coordinates.map(([, latitude]) => latitude);
+  const minLongitude = Math.min(...longitudes);
+  const maxLongitude = Math.max(...longitudes);
+  const minLatitude = Math.min(...latitudes);
+  const maxLatitude = Math.max(...latitudes);
+  const latitude = (minLatitude + maxLatitude) / 2;
+  const spanMeters = Math.hypot(
+    (maxLongitude - minLongitude) * 111_000 * Math.cos(latitude * Math.PI / 180),
+    (maxLatitude - minLatitude) * 111_000,
+  );
+  return {
+    longitude: (minLongitude + maxLongitude) / 2,
+    latitude,
+    range: Math.max(intent === "scenario" ? 4_000 : 1_500, spanMeters * (intent === "scenario" ? 1.55 : 1.35)),
   };
 }
 
@@ -76,6 +150,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   viewport,
   activeLayerIds,
   scenePreset,
+  analysisLens,
+  counterfactualState,
   workspaceMap = null,
   workspaceBuildingPoints = null,
   workspacePhase = "baseline",
@@ -89,6 +165,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
 }, ref) {
   const cesiumRef = useRef<CesiumMapHandle>(null);
   const [ready, setReady] = useState(false);
+  const [progressiveReady, setProgressiveReady] = useState(false);
+  const [readiness, setReadiness] = useState<VisualReadinessResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const mesh = useMemo(() => meshFromSelection(data, selection), [data, selection]);
@@ -98,6 +176,24 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const terrain = activeLayerIds.includes("plateau-terrain") || decisionTwinContext;
   const deepDiveCode = data.plateauMetadata?.reference_layer?.deep_dive_mesh_code;
   const scene = SCENE_PRESETS[scenePreset];
+
+  useEffect(() => {
+    setReady(false);
+    setReadiness(null);
+    document.documentElement.dataset.visualReady = "false";
+  }, [analysisLens, counterfactualState, scenePreset]);
+
+  const updateVisualReadiness = (snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => {
+    setReadiness(result);
+    setReady(result.visualReady);
+    document.documentElement.dataset.visualReady = String(result.visualReady);
+    document.documentElement.dataset.visualScene = scenePreset;
+    document.documentElement.dataset.visualUnmet = result.unmet.join(",");
+    if (result.visualReady) {
+      window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail: { scenePreset, snapshot } }));
+      onReady?.();
+    }
+  };
 
   useImperativeHandle(ref, () => ({
     setViewport() { if (!selection) cesiumRef.current?.resetView(); },
@@ -117,12 +213,23 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   }), [data, onSelectionChange, selection, viewport]);
 
   useEffect(() => {
-    if (!ready) return;
-    if (mesh?.mesh_code === deepDiveCode) cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
+    if (!progressiveReady) return;
+    const cameraIntent = scene.camera === "route" || scene.camera === "scenario" || scene.camera === "hazard" ? scene.camera : null;
+    const workspaceTarget = cameraIntent ? workspaceCamera(workspaceMap, workspacePhase, cameraIntent) : null;
+    const deepDiveLongitude = data.plateauMetadata?.reference_layer?.viewpoint?.longitude;
+    const deepDiveLatitude = data.plateauMetadata?.reference_layer?.viewpoint?.latitude;
+    if (workspaceTarget && cameraIntent) cesiumRef.current?.flyToLocation(workspaceTarget.longitude, workspaceTarget.latitude, cameraIntent, workspaceTarget.range);
+    else if (mesh?.mesh_code === deepDiveCode && scene.camera === "building" && typeof deepDiveLongitude === "number" && typeof deepDiveLatitude === "number") {
+      cesiumRef.current?.flyToLocation(deepDiveLongitude, deepDiveLatitude, "building", 750);
+    }
+    else if (mesh?.mesh_code === deepDiveCode) cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
     else if (mesh) cesiumRef.current?.flyToMesh(mesh);
+    else if ((selection?.type === "road" || selection?.type === "terrain" || selection?.type === "planning" || selection?.type === "hazard") && selection.longitude !== undefined && selection.latitude !== undefined) {
+      cesiumRef.current?.flyToLocation(selection.longitude, selection.latitude, selection.type === "road" ? "route" : selection.type === "hazard" ? "hazard" : "building", selection.type === "road" ? 760 : 920);
+    }
     else if (selection?.type === "building") cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
     else cesiumRef.current?.resetView();
-  }, [deepDiveCode, mesh, ready, scene.camera, selection]);
+  }, [data.plateauMetadata, deepDiveCode, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
 
   return (
     <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready}>
@@ -133,6 +240,10 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           metricMode="gap"
           selectedMeshCode={mesh?.mesh_code ?? null}
           selectedBuildingId={selection?.type === "building" ? selection.id : null}
+          selectedRoadId={selection?.type === "road" ? selection.id : null}
+          analysisLens={analysisLens}
+          counterfactualState={counterfactualState}
+          readinessRequirements={scene.readiness}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
           plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
@@ -159,13 +270,16 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           onMeshSelect={(selected) => onSelectionChange({ type: "mesh", id: selected.mesh_code, city: data.city.id, urbanState: "2025", label: selected.area_label ? String(selected.area_label) : `500mメッシュ ${selected.mesh_code}`, longitude: Number(selected.centroid_lon), latitude: Number(selected.centroid_lat), properties: selected })}
           onVirtualPointSelect={() => undefined}
           onBuildingSelect={(building) => building ? onSelectionChange(buildingSelection(data, building, selection)) : undefined}
-          onReady={() => { setReady(true); onReady?.(); }}
+          onRoadSelect={(road) => onSelectionChange(roadSelection(data, road, selection))}
+          onVisualReadinessChange={updateVisualReadiness}
+          onReady={() => setProgressiveReady(true)}
           onError={setError}
           onWarning={setWarning}
         />
       </Suspense>
-      {!ready && !error && <div className="map-engine-loading" role="status"><span />PLATEAU地物と背景図を読み込み中</div>}
-      <div className="plateau-3d-context"><strong>PLATEAU 3D DECISION TWIN · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>
+      {!progressiveReady && !error && <div className="map-engine-loading" role="status"><span />PLATEAU地物と背景図を読み込み中</div>}
+      {progressiveReady && !ready && !error && <div className="visual-readiness-status" role="status"><span />建物・道路・DEM・cameraを確認中<small>{readiness?.unmet.join(" · ")}</small></div>}
+      <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>
       {warning && <div className="map-inline-warning" role="status">{warning}</div>}
       {error && <div className="map-engine-fallback" role="alert"><strong>3Dを表示できません</strong><p>{error}</p><span>2D地図と候補一覧は引き続き利用できます。</span></div>}
     </div>

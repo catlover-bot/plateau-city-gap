@@ -2,20 +2,25 @@ import { SCENE_PRESETS } from "../../map/core/scenePresets";
 import { CITY_VIEWPORTS, type SelectionType, type SpatialAction, type SpatialResolution, type SpatialState } from "./types";
 
 const TASK_PRESETS = {
-  discover: ["discovery", "analysis-city-gap", "overview", "discover", "city", "gap_discovery"],
-  detail: ["plateau-detail", "plateau-buildings", "focus", "inspect", "mesh", "plateau_detail"],
-  try: ["scenario-compare", "scenario-footprint", "compare", "scenario", "site", "scenario_compare"],
-  validate: ["validation-compare", "validation-disagreement", "validation", "validate", "route", "validation_disagreement"],
-  operate: ["discovery", "analysis-city-gap", "focus", "inspect", "mesh", "gap_discovery"]
+  discover: ["discovery", "analysis-city-gap", "overview", "discover", "gap_discovery"],
+  detail: ["plateau-detail", "plateau-buildings", "focus", "inspect", "plateau_detail"],
+  try: ["scenario-compare", "scenario-footprint", "compare", "scenario", "scenario_compare"],
+  validate: ["validation-compare", "validation-disagreement", "validation", "validate", "validation_disagreement"],
+  operate: ["discovery", "analysis-city-gap", "focus", "inspect", "gap_discovery"]
 } as const;
 
 const RESOLUTION_BY_SELECTION: Record<SelectionType, SpatialResolution> = {
+  district: "district",
   mesh: "mesh",
+  building_group: "building_group",
   building: "building",
-  road: "route",
+  road: "road",
+  terrain: "building_group",
+  planning: "site",
+  hazard: "site",
   facility: "site",
   scenario_site: "site",
-  validation_sample: "route",
+  validation_sample: "road",
   temporal_change: "building",
 };
 
@@ -31,8 +36,9 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
       mapState: "overview"
     };
     case "set-task": {
-      const [preset, primaryLayer, mapState, intent, resolution, scenePreset] = TASK_PRESETS[action.task];
-      return { ...state, task: action.task, preset, primaryLayer, mapState, intent, resolution, scenePreset, demoMode: false };
+      const [preset, primaryLayer, mapState, intent, scenePreset] = TASK_PRESETS[action.task];
+      const scene = SCENE_PRESETS[scenePreset];
+      return { ...state, task: action.task, preset, primaryLayer, mapState, intent, scenePreset, savedInvestigationOpen: false, analysisLens: scene.analysisLens, counterfactualState: action.task === "try" ? "scenario" : "baseline" };
     }
     case "set-urban-state": return {
       ...state,
@@ -64,17 +70,20 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
         ...state,
         scenePreset: scene.id,
         intent: scene.intent,
-        resolution: scene.resolution,
         preset: scene.legacyLayerPreset,
         primaryLayer: scene.primaryLayer,
         mapMode: scene.recommendedMapMode,
         mapState: scene.recommendedMapMode === "plateau3d" ? "detail3d" : scene.intent === "validate" ? "validation" : scene.intent === "scenario" ? "compare" : state.selection ? "focus" : "overview",
+        analysisLens: scene.analysisLens,
+        counterfactualState: scene.intent === "resilience" ? "stress" : scene.intent === "scenario" ? "scenario" : "baseline",
       };
     }
     case "set-preset": return { ...state, preset: action.preset, primaryLayer: action.primaryLayer };
     case "set-primary-layer": return { ...state, primaryLayer: action.primaryLayer };
     case "set-viewport": return { ...state, viewport: action.viewport };
     case "set-inspector-open": return { ...state, inspectorOpen: action.open };
-    case "set-demo-mode": return { ...state, demoMode: action.enabled };
+    case "set-saved-investigation-open": return { ...state, savedInvestigationOpen: action.open };
+    case "set-analysis-lens": return { ...state, analysisLens: action.lens };
+    case "set-counterfactual-state": return { ...state, counterfactualState: action.state };
   }
 }

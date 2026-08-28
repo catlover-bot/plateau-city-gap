@@ -4,11 +4,22 @@ export type ProductTask = "discover" | "detail" | "try" | "validate" | "operate"
 
 export type MapMode = "map2d" | "plateau3d";
 
+export type AnalysisLens = "none" | "urban-xray" | "service-pulse" | "changed-only" | "temporal-ghost";
+
+export type CounterfactualState = "baseline" | "scenario" | "stress";
+
 export type MapState = "overview" | "focus" | "detail3d" | "compare" | "placement" | "validation";
 
 export type SpatialIntent = "discover" | "inspect" | "scenario" | "resilience" | "validate";
 
-export type SpatialResolution = "city" | "mesh" | "building" | "route" | "site";
+export type SpatialResolution =
+  | "city"
+  | "district"
+  | "mesh"
+  | "building_group"
+  | "building"
+  | "road"
+  | "site";
 
 export type ScenePresetId =
   | "city_overview"
@@ -23,9 +34,14 @@ export type ScenePresetId =
 export type UrbanStateId = "2020" | "2023" | "2025" | "2040";
 
 export type SelectionType =
+  | "district"
   | "mesh"
+  | "building_group"
   | "building"
   | "road"
+  | "terrain"
+  | "planning"
+  | "hazard"
   | "facility"
   | "scenario_site"
   | "validation_sample"
@@ -75,7 +91,9 @@ export interface SpatialState {
   primaryLayer: string;
   viewport: SpatialViewport;
   inspectorOpen: boolean;
-  demoMode: boolean;
+  savedInvestigationOpen: boolean;
+  analysisLens: AnalysisLens;
+  counterfactualState: CounterfactualState;
 }
 
 export type SpatialAction =
@@ -95,7 +113,9 @@ export type SpatialAction =
   | { type: "set-primary-layer"; primaryLayer: string }
   | { type: "set-viewport"; viewport: SpatialViewport }
   | { type: "set-inspector-open"; open: boolean }
-  | { type: "set-demo-mode"; enabled: boolean };
+  | { type: "set-saved-investigation-open"; open: boolean }
+  | { type: "set-analysis-lens"; lens: AnalysisLens }
+  | { type: "set-counterfactual-state"; state: CounterfactualState };
 
 export const CITY_VIEWPORTS: Record<CityId, SpatialViewport> = {
   maizuru: { longitude: 135.33, latitude: 35.47, zoom: 10.45, bearing: 0, pitch: 0 },
@@ -118,5 +138,7 @@ export const DEFAULT_SPATIAL_STATE: SpatialState = {
   primaryLayer: "analysis-city-gap",
   viewport: CITY_VIEWPORTS.maizuru,
   inspectorOpen: true,
-  demoMode: false
+  savedInvestigationOpen: false,
+  analysisLens: "none",
+  counterfactualState: "baseline"
 };

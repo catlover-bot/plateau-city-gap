@@ -170,6 +170,20 @@ export interface BuildingInfo {
   footprintArea: number | null;
   totalFloorArea: number | null;
   lod: string | null;
+  longitude: number | null;
+  latitude: number | null;
+  positionSemantics: "picked_surface_position" | "position_unavailable";
+}
+
+export interface RoadInfo {
+  id: string;
+  name: string | null;
+  roadClass: string | null;
+  roadFunction: string | null;
+  source: string;
+  longitude: number | null;
+  latitude: number | null;
+  graphSemantics: "experimental_plateau_lod1_road_surface_adjacency";
 }
 
 export interface PlacementCandidate extends JsonProperties {

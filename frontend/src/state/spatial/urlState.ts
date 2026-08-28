@@ -1,6 +1,7 @@
 import {
   CITY_VIEWPORTS,
   DEFAULT_SPATIAL_STATE,
+  type AnalysisLens,
   type CityId,
   type LayerPresetId,
   type MapMode,
@@ -20,14 +21,19 @@ const CITIES = new Set<CityId>(["maizuru", "fujisawa"]);
 const STATES = new Set<UrbanStateId>(["2020", "2023", "2025", "2040"]);
 const MAP_MODES = new Set<MapMode>(["map2d", "plateau3d"]);
 const INTENTS = new Set<SpatialIntent>(["discover", "inspect", "scenario", "resilience", "validate"]);
-const RESOLUTIONS = new Set<SpatialResolution>(["city", "mesh", "building", "route", "site"]);
+const RESOLUTIONS = new Set<SpatialResolution>([
+  "city", "district", "mesh", "building_group", "building", "road", "site"
+]);
 const SCENES = new Set<ScenePresetId>(["city_overview", "gap_discovery", "plateau_detail", "network_access", "scenario_compare", "hazard_stress", "temporal_change", "validation_disagreement"]);
 const PRESETS = new Set<LayerPresetId>([
   "discovery", "plateau-detail", "transport", "medical", "hazard", "scenario-compare", "validation-compare"
 ]);
 const SELECTION_TYPES = new Set<SelectionType>([
-  "mesh", "building", "road", "facility", "scenario_site", "validation_sample", "temporal_change"
+  "district", "mesh", "building_group", "building", "road", "terrain", "planning", "hazard",
+  "facility", "scenario_site", "validation_sample", "temporal_change"
 ]);
+const ANALYSIS_LENSES = new Set<AnalysisLens>(["none", "urban-xray", "service-pulse", "changed-only", "temporal-ghost"]);
+const COUNTERFACTUAL_STATES = new Set(["baseline", "scenario", "stress"] as const);
 
 const LEGACY_TASKS: Record<string, ProductTask> = {
   demo: "discover",
@@ -43,10 +49,22 @@ function finite(value: string | null, fallback: number): number {
 }
 
 function selectionFromParams(params: URLSearchParams, city: CityId, urbanState: UrbanStateId): SpatialSelection | null {
+  const rawSelectionLongitude = params.get("selectionLng") ?? params.get("lng");
+  const rawSelectionLatitude = params.get("selectionLat") ?? params.get("lat");
+  const selectionLongitude = rawSelectionLongitude === null ? Number.NaN : Number(rawSelectionLongitude);
+  const selectionLatitude = rawSelectionLatitude === null ? Number.NaN : Number(rawSelectionLatitude);
+  const position = Number.isFinite(selectionLongitude) && Number.isFinite(selectionLatitude)
+    ? { longitude: selectionLongitude, latitude: selectionLatitude }
+    : {};
   const ordered: Array<[string, SelectionType]> = [
+    ["district", "district"],
     ["mesh", "mesh"],
+    ["buildingGroup", "building_group"],
     ["building", "building"],
     ["road", "road"],
+    ["terrain", "terrain"],
+    ["planning", "planning"],
+    ["hazard", "hazard"],
     ["facility", "facility"],
     ["scenarioSite", "scenario_site"],
     ["validationSample", "validation_sample"],
@@ -55,10 +73,10 @@ function selectionFromParams(params: URLSearchParams, city: CityId, urbanState: 
   const explicitType = params.get("selectionType") as SelectionType | null;
   const explicitId = params.get("selection");
   if (explicitType && explicitId && SELECTION_TYPES.has(explicitType)) {
-    return { type: explicitType, id: explicitId, city, urbanState };
+    return { type: explicitType, id: explicitId, city, urbanState, ...position };
   }
   const match = ordered.find(([key]) => params.has(key));
-  return match ? { type: match[1], id: params.get(match[0]) ?? "", city, urbanState } : null;
+  return match ? { type: match[1], id: params.get(match[0]) ?? "", city, urbanState, ...position } : null;
 }
 
 export function parseSpatialUrl(search: string): SpatialState {
@@ -75,6 +93,8 @@ export function parseSpatialUrl(search: string): SpatialState {
   const sceneParam = params.get("scene") as ScenePresetId | null;
   const scenePreset = sceneParam && SCENES.has(sceneParam) ? sceneParam : DEFAULT_SPATIAL_STATE.scenePreset;
   const scene = scenePresetById(scenePreset);
+  const lensParam = params.get("lens") as AnalysisLens | null;
+  const twinParam = params.get("twin") as "baseline" | "scenario" | "stress" | null;
   const task: ProductTask = explicitTask ?? (scene.intent === "discover" ? "discover" : scene.intent === "inspect" ? "detail" : scene.intent === "scenario" || scene.intent === "resilience" ? "try" : "validate");
   const mapModeParam = params.get("mapMode") as MapMode | null;
   const mapMode = mapModeParam && MAP_MODES.has(mapModeParam) ? mapModeParam : scene.recommendedMapMode;
@@ -92,7 +112,21 @@ export function parseSpatialUrl(search: string): SpatialState {
     validationSample: params.get("validationSample"),
     mapMode,
     intent: intentParam && INTENTS.has(intentParam) ? intentParam : scene.intent,
-    resolution: resolutionParam && RESOLUTIONS.has(resolutionParam) ? resolutionParam : selection ? selection.type === "building" ? "building" : selection.type === "road" || selection.type === "validation_sample" ? "route" : selection.type === "scenario_site" || selection.type === "facility" ? "site" : "mesh" : scene.resolution,
+    resolution: resolutionParam && RESOLUTIONS.has(resolutionParam)
+      ? resolutionParam
+      : selection
+        ? selection.type === "district"
+          ? "district"
+          : selection.type === "building_group"
+            ? "building_group"
+            : selection.type === "building"
+              ? "building"
+              : selection.type === "road" || selection.type === "validation_sample"
+                ? "road"
+                : selection.type === "scenario_site" || selection.type === "facility" || selection.type === "planning" || selection.type === "hazard"
+                  ? "site"
+                  : "mesh"
+        : DEFAULT_SPATIAL_STATE.resolution,
     scenePreset,
     mapState: mapMode === "plateau3d" ? "detail3d" : task === "validate" ? "validation" : selection ? "focus" : "overview",
     preset,
@@ -105,7 +139,15 @@ export function parseSpatialUrl(search: string): SpatialState {
       pitch: mapMode === "map2d" ? 0 : finite(params.get("pitch"), 0)
     },
     inspectorOpen: params.get("inspector") !== "closed",
-    demoMode: params.get("demo") === "1"
+    savedInvestigationOpen: params.get("saved") === "1",
+    analysisLens: lensParam && ANALYSIS_LENSES.has(lensParam) ? lensParam : scene.analysisLens,
+    counterfactualState: twinParam && COUNTERFACTUAL_STATES.has(twinParam)
+      ? twinParam
+      : scene.intent === "resilience"
+        ? "stress"
+        : scene.intent === "scenario"
+          ? "scenario"
+          : "baseline"
   };
 }
 
@@ -121,6 +163,8 @@ export function spatialStateToSearch(state: SpatialState): string {
   params.set("scene", state.scenePreset);
   params.set("preset", state.preset);
   params.set("layer", state.primaryLayer);
+  params.set("lens", state.analysisLens);
+  params.set("twin", state.counterfactualState);
   params.set("lng", state.viewport.longitude.toFixed(5));
   params.set("lat", state.viewport.latitude.toFixed(5));
   params.set("z", state.viewport.zoom.toFixed(2));
@@ -129,13 +173,18 @@ export function spatialStateToSearch(state: SpatialState): string {
   if (state.selection) {
     params.set("selectionType", state.selection.type);
     params.set("selection", state.selection.id);
-    const key = state.selection.type === "scenario_site" ? "scenarioSite"
+    const key = state.selection.type === "building_group" ? "buildingGroup"
+      : state.selection.type === "scenario_site" ? "scenarioSite"
       : state.selection.type === "validation_sample" ? "validationSample"
       : state.selection.type === "temporal_change" ? "temporalChange"
       : state.selection.type;
     params.set(key, state.selection.id);
+    if (state.selection.longitude !== undefined && state.selection.latitude !== undefined) {
+      params.set("selectionLng", state.selection.longitude.toFixed(7));
+      params.set("selectionLat", state.selection.latitude.toFixed(7));
+    }
   }
   if (!state.inspectorOpen) params.set("inspector", "closed");
-  if (state.demoMode) params.set("demo", "1");
+  if (state.savedInvestigationOpen) params.set("saved", "1");
   return `?${params.toString()}`;
 }

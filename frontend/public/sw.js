@@ -1,7 +1,13 @@
 /* global self, caches, URL, Response, fetch */
-const SHELL_CACHE = "citygap-shell-v3";
+const SHELL_CACHE = "citygap-shell-v4";
 const FIELD_CACHE = "citygap-selected-field-v1";
-const shellUrls = ["./", "./data/urban_futures_resilience.json"];
+const shellUrls = [
+  "./",
+  "./data/mesh_metrics.geojson",
+  "./data/summary.json",
+  "./data/plateau_metadata.json",
+  "./data/evidence.json",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(SHELL_CACHE).then((cache) => cache.addAll(shellUrls)));

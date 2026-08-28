@@ -19,7 +19,7 @@ import {
   UrlTemplateImageryProvider,
   Viewer
 } from "cesium";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type {
   AppData,
   BuildingInfo,
@@ -29,6 +29,7 @@ import type {
   MeshMetrics,
   MetricMode,
   InterventionSite,
+  RoadInfo,
   WorkspaceLayerVisibility,
   WorkspaceBuildingPoints,
   WorkspaceMapData,
@@ -37,6 +38,13 @@ import type {
 import { finiteNumber, isTop10Rank } from "../lib/format";
 import type { VirtualPoint } from "../lib/scenario";
 import { CameraController } from "../map/3d/CameraController";
+import type { AnalysisLens, CounterfactualState } from "../state/spatial/types";
+import { buildUrbanXrayField, meshBounds } from "../map/3d/xray/urbanXray";
+import { deriveCounterfactualChanges } from "../map/3d/comparison/counterfactualTwin";
+import { extractServicePulseRoutes } from "../map/3d/pulse/servicePulse";
+import { renderServicePulse, type ServicePulseRenderer } from "../map/3d/pulse/servicePulseRenderer";
+import { startCesiumReadinessController, type CesiumReadinessController, type CesiumReadinessFlags } from "../map/3d/readiness/CesiumReadinessController";
+import type { SceneReadinessRequirements, VisualReadinessResult, VisualReadinessSnapshot } from "../map/3d/readiness/visualReadiness";
 import {
   addTileset,
   applyBuildingStyle,
@@ -50,6 +58,7 @@ import {
 export interface CesiumMapHandle {
   flyToMesh: (mesh: MeshMetrics) => void;
   flyToPlateau: (intent?: "building" | "route" | "hazard" | "scenario") => void;
+  flyToLocation: (longitude: number, latitude: number, intent: "building" | "route" | "hazard" | "scenario", range?: number) => void;
   resetView: () => void;
 }
 
@@ -58,6 +67,10 @@ interface CesiumMapProps {
   metricMode: MetricMode;
   selectedMeshCode: string | null;
   selectedBuildingId?: string | null;
+  selectedRoadId?: string | null;
+  analysisLens?: AnalysisLens;
+  counterfactualState?: CounterfactualState;
+  readinessRequirements: SceneReadinessRequirements;
   visibility: LayerVisibility;
   plateauVisibility?: { buildings: boolean; roads: boolean; terrain?: boolean };
   meshPresentation?: "analysis" | "outline";
@@ -75,6 +88,8 @@ interface CesiumMapProps {
   onMeshSelect: (mesh: MeshMetrics) => void;
   onVirtualPointSelect: (point: VirtualPoint) => void;
   onBuildingSelect: (building: BuildingInfo | null) => void;
+  onRoadSelect?: (road: RoadInfo) => void;
+  onVisualReadinessChange?: (snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => void;
   onReady: () => void;
   onError: (message: string | null) => void;
   onWarning: (message: string | null) => void;
@@ -122,7 +137,7 @@ function isTileFeature(value: unknown): value is TileFeatureLike {
     typeof (value as { getProperty?: unknown }).getProperty === "function";
 }
 
-function buildingFromFeature(feature: TileFeatureLike): BuildingInfo {
+function buildingFromFeature(feature: TileFeatureLike, coordinate: [number, number] | null = null): BuildingInfo {
   const read = (name: string) => feature.getProperty(name);
   const rawAttributes = read("attributes");
   const attributes = typeof rawAttributes === "object" && rawAttributes !== null
@@ -148,7 +163,35 @@ function buildingFromFeature(feature: TileFeatureLike): BuildingInfo {
     storeysBelowGround: boundedNumber(readAttribute("bldg:storeysBelowGround"), 0, 50),
     footprintArea: boundedNumber(read("uro:buildingFootprintArea") ?? details["uro:buildingFootprintArea"], 0, 1_000_000),
     totalFloorArea: boundedNumber(read("uro:totalFloorArea") ?? details["uro:totalFloorArea"], 0, 10_000_000),
-    lod: rawLod === null || rawLod === undefined ? null : `LOD${String(rawLod)}`
+    lod: rawLod === null || rawLod === undefined ? null : `LOD${String(rawLod)}`,
+    longitude: coordinate?.[0] ?? null,
+    latitude: coordinate?.[1] ?? null,
+    positionSemantics: coordinate ? "picked_surface_position" : "position_unavailable",
+  };
+}
+
+function pickedCoordinate(viewer: Viewer, position: Cartesian2): [number, number] | null {
+  const cartesian = viewer.scene.pickPositionSupported
+    ? viewer.scene.pickPosition(position)
+    : viewer.camera.pickEllipsoid(position, viewer.scene.globe.ellipsoid);
+  if (!cartesian) return null;
+  const coordinate = Cartographic.fromCartesian(cartesian);
+  return [CesiumMath.toDegrees(coordinate.longitude), CesiumMath.toDegrees(coordinate.latitude)];
+}
+
+function roadFromEntity(entity: Entity, coordinate: [number, number] | null): RoadInfo | null {
+  const values = entityValues(entity);
+  const rawId = values.road_id;
+  if (typeof rawId !== "string" || !rawId) return null;
+  return {
+    id: rawId,
+    name: typeof values.road_name === "string" ? values.road_name : null,
+    roadClass: values.road_class === null || values.road_class === undefined ? null : String(values.road_class),
+    roadFunction: values.road_function === null || values.road_function === undefined ? null : String(values.road_function),
+    source: String(values.source ?? "Project PLATEAU 舞鶴市2025 道路LOD1"),
+    longitude: coordinate?.[0] ?? null,
+    latitude: coordinate?.[1] ?? null,
+    graphSemantics: "experimental_plateau_lod1_road_surface_adjacency",
   };
 }
 
@@ -191,10 +234,21 @@ function styleMeshes(
   mode: MetricMode,
   selectedMeshCode: string | null,
   afterScores: Record<string, number> | null,
-  presentation: "analysis" | "outline" = "analysis"
+  presentation: "analysis" | "outline" = "analysis",
+  analysisLens: AnalysisLens = "none",
 ) {
   const values = dataSource.entities.values.map((entity) => styledValue(entityValues(entity), mode, afterScores));
   const maxGap = mode === "gap" ? Math.max(...values.filter((value): value is number => value !== null), 0.01) : 1;
+  const xray = buildUrbanXrayField({ type: "FeatureCollection", features: dataSource.entities.values.map((entity) => ({
+    type: "Feature" as const,
+    geometry: null,
+    properties: entityValues(entity),
+  })) }, afterScores);
+  const counterfactual = deriveCounterfactualChanges({ type: "FeatureCollection", features: dataSource.entities.values.map((entity) => ({
+    type: "Feature" as const,
+    geometry: null,
+    properties: entityValues(entity),
+  })) }, afterScores);
 
   for (const entity of dataSource.entities.values) {
     if (!entity.polygon) continue;
@@ -204,7 +258,15 @@ function styleMeshes(
     const normalized = value === null ? null : value / maxGap;
     const isSelected = selectedMeshCode === code;
     const isTop10 = isTop10Rank(properties.rank);
-    const baseColor = presentation === "outline"
+    const xrayCell = xray.get(code);
+    const change = counterfactual.get(code);
+    const baseColor = analysisLens === "changed-only" && change
+      ? change.changed
+        ? Color.fromCssColorString(change.delta < 0 ? "#406e65" : "#ad6547").withAlpha(0.64)
+        : Color.fromCssColorString("#bbc2bd").withAlpha(0.025)
+      : analysisLens === "urban-xray" && xrayCell
+        ? colorScale(xrayCell.normalizedIntensity, mode).withAlpha(isSelected ? 0.62 : 0.09)
+      : presentation === "outline"
       ? Color.fromCssColorString("#7b8c86").withAlpha(0.045)
       : normalized === null ? Color.fromCssColorString("#72828a").withAlpha(0.12) : colorScale(normalized, mode);
     entity.polygon.material = new ColorMaterialProperty(
@@ -219,6 +281,17 @@ function styleMeshes(
           : Color.fromCssColorString("#53766f").withAlpha(presentation === "outline" ? 0.2 : 0.45)
     );
     entity.polygon.outlineWidth = new ConstantProperty(isSelected ? 4 : isTop10 ? 2 : 1);
+    if (analysisLens === "urban-xray" && xrayCell && isSelected) {
+      entity.polygon.height = new ConstantProperty(3);
+      entity.polygon.extrudedHeight = new ConstantProperty(xrayCell.displayHeightM);
+      entity.polygon.heightReference = new ConstantProperty(HeightReference.RELATIVE_TO_GROUND);
+      entity.polygon.extrudedHeightReference = new ConstantProperty(HeightReference.RELATIVE_TO_GROUND);
+    } else {
+      entity.polygon.height = undefined;
+      entity.polygon.extrudedHeight = undefined;
+      entity.polygon.heightReference = new ConstantProperty(HeightReference.CLAMP_TO_GROUND);
+      entity.polygon.extrudedHeightReference = undefined;
+    }
   }
 }
 
@@ -284,15 +357,19 @@ function styleBuildings(source: GeoJsonDataSource | undefined) {
   }
 }
 
-function styleRoads(source: GeoJsonDataSource | undefined) {
+function styleRoads(source: GeoJsonDataSource | undefined, selectedRoadId: string | null = null, analysisLens: AnalysisLens = "none") {
   if (!source) return;
   for (const entity of source.entities.values) {
     if (!entity.polygon) continue;
-    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString("#d8a64e").withAlpha(0.56));
+    const values = entityValues(entity);
+    const selected = String(values.road_id ?? "") === selectedRoadId;
+    const alpha = selected ? 0.9 : analysisLens === "service-pulse" ? 0.44 : analysisLens === "urban-xray" ? 0.26 : 0.56;
+    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString(selected ? "#b85134" : "#9d7a42").withAlpha(alpha));
     entity.polygon.heightReference = new ConstantProperty(HeightReference.CLAMP_TO_GROUND);
     entity.polygon.classificationType = new ConstantProperty(ClassificationType.BOTH);
     entity.polygon.outline = new ConstantProperty(true);
-    entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString("#fff0c4").withAlpha(0.9));
+    entity.polygon.outlineColor = new ConstantProperty(Color.fromCssColorString(selected ? "#fff4d6" : "#e9d9ae").withAlpha(0.9));
+    entity.polygon.outlineWidth = new ConstantProperty(selected ? 4 : 1);
   }
 }
 
@@ -399,18 +476,21 @@ function styleWorkspace(source: GeoJsonDataSource | undefined) {
 function setWorkspacePointVisibility(
   points: WorkspacePointRef[] | undefined,
   phase: WorkspacePhase,
-  visibility: WorkspaceLayerVisibility
+  visibility: WorkspaceLayerVisibility,
+  counterfactualState: CounterfactualState,
 ) {
   const activeStory = phase === "scenario_a" || phase === "scenario_b" || phase === "scenario_c" ? phase : null;
   for (const item of points ?? []) {
-    item.point.show = visibility.affectedBuildings && item.storyId === activeStory;
+    item.point.show = counterfactualState !== "baseline" && visibility.affectedBuildings && item.storyId === activeStory;
   }
 }
 
 function setWorkspaceVisibility(
   source: GeoJsonDataSource | undefined,
   phase: WorkspacePhase,
-  visibility: WorkspaceLayerVisibility
+  visibility: WorkspaceLayerVisibility,
+  counterfactualState: CounterfactualState,
+  analysisLens: AnalysisLens,
 ) {
   if (!source) return;
   const activeStory = phase === "scenario_a" || phase === "scenario_b" || phase === "scenario_c" ? phase : null;
@@ -418,10 +498,15 @@ function setWorkspaceVisibility(
     const values = entityValues(entity);
     const layer = String(values.layer_type ?? "");
     const isActive = activeStory !== null && values.story_id === activeStory;
+    const routeKind = String(values.route_kind ?? "");
+    const routeVisible = analysisLens === "service-pulse"
+      ? routeKind === (counterfactualState === "baseline" ? "before" : "after")
+      : counterfactualState === "baseline" ? routeKind === "before" : routeKind === "after";
     entity.show = isActive && (
-      layer === "scenario_site" ||
+      (layer === "scenario_site" && counterfactualState !== "baseline") ||
       (layer === "affected_building" && visibility.affectedBuildings) ||
-      ((layer === "representative_route" || layer === "representative_building") && visibility.routes) ||
+      (layer === "representative_route" && visibility.routes && routeVisible) ||
+      (layer === "representative_building" && visibility.routes) ||
       (layer === "landuse_context" && visibility.landuse) ||
       (layer === "planning_context" && visibility.planning) ||
       (layer === "hazard_context" && visibility.hazard)
@@ -499,6 +584,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     metricMode,
     selectedMeshCode,
     selectedBuildingId = null,
+    selectedRoadId = null,
+    analysisLens = "none",
+    counterfactualState = "baseline",
+    readinessRequirements,
     visibility,
     plateauVisibility,
     meshPresentation = "analysis",
@@ -516,6 +605,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     onMeshSelect,
     onVirtualPointSelect,
     onBuildingSelect,
+    onRoadSelect,
+    onVisualReadinessChange,
     onReady,
     onError,
     onWarning
@@ -523,6 +614,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [viewerReady, setViewerReady] = useState(false);
   const viewerRef = useRef<Viewer | null>(null);
   const cameraControllerRef = useRef<CameraController | null>(null);
   const sourcesRef = useRef<DataSourceRefs>({});
@@ -531,11 +623,22 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const workspacePointLoadRef = useRef<Promise<WorkspacePointRef[]> | null>(null);
   const workspaceSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
   const futuresSourceLoadRef = useRef<Promise<GeoJsonDataSource | undefined> | null>(null);
+  const pulseRendererRef = useRef<ServicePulseRenderer | null>(null);
+  const readinessControllerRef = useRef<CesiumReadinessController | null>(null);
+  const readinessFlagsRef = useRef<CesiumReadinessFlags>({
+    appReady: false,
+    basemapReady: false,
+    analysisReady: false,
+    broadTerrainReady: false,
+    localDemLoaded: false,
+    overlayReady: false,
+  });
   const workspaceMapRef = useRef(workspaceMap);
   const futuresMapRef = useRef(futuresMap);
   const onMeshSelectRef = useRef(onMeshSelect);
   const onVirtualPointSelectRef = useRef(onVirtualPointSelect);
   const onBuildingSelectRef = useRef(onBuildingSelect);
+  const onRoadSelectRef = useRef(onRoadSelect);
   const placementModeRef = useRef(placementMode);
   const onReadyRef = useRef(onReady);
   const onErrorRef = useRef(onError);
@@ -543,6 +646,11 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   const metricModeRef = useRef(metricMode);
   const selectedMeshCodeRef = useRef(selectedMeshCode);
   const selectedBuildingIdRef = useRef(selectedBuildingId);
+  const selectedRoadIdRef = useRef(selectedRoadId);
+  const analysisLensRef = useRef(analysisLens);
+  const counterfactualStateRef = useRef(counterfactualState);
+  const readinessRequirementsRef = useRef(readinessRequirements);
+  const onVisualReadinessChangeRef = useRef(onVisualReadinessChange);
   const afterScoresRef = useRef(afterScores);
   const decisionSiteIdsRef = useRef<string[]>([]);
   const visibilityRef = useRef(visibility);
@@ -554,6 +662,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   onMeshSelectRef.current = onMeshSelect;
   onVirtualPointSelectRef.current = onVirtualPointSelect;
   onBuildingSelectRef.current = onBuildingSelect;
+  onRoadSelectRef.current = onRoadSelect;
   placementModeRef.current = placementMode;
   onReadyRef.current = onReady;
   onErrorRef.current = onError;
@@ -561,6 +670,11 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   metricModeRef.current = metricMode;
   selectedMeshCodeRef.current = selectedMeshCode;
   selectedBuildingIdRef.current = selectedBuildingId;
+  selectedRoadIdRef.current = selectedRoadId;
+  analysisLensRef.current = analysisLens;
+  counterfactualStateRef.current = counterfactualState;
+  readinessRequirementsRef.current = readinessRequirements;
+  onVisualReadinessChangeRef.current = onVisualReadinessChange;
   afterScoresRef.current = afterScores;
   visibilityRef.current = visibility;
   plateauVisibilityRef.current = plateauVisibility;
@@ -578,6 +692,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     const viewer = viewerRef.current;
     if (!viewer || viewer.isDestroyed()) return Promise.resolve();
     plateauLoadRef.current = (async () => {
+      const verifiedLocalOnly = new URLSearchParams(window.location.search).get("buildingSource") === "verified-local";
       const visible = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
         workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
       );
@@ -592,7 +707,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           try {
             const tileset = await loadOfficialBuildingTileset(data);
             if (!tileset || viewer.isDestroyed()) return;
-            applyBuildingStyle(tileset, selectedBuildingIdRef.current);
+            applyBuildingStyle(tileset, selectedBuildingIdRef.current, {
+              analysisLens: analysisLensRef.current,
+              selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
+            });
             addTileset(viewer, tileset);
             tileset.show = visible;
             sourcesRef.current.plateauTileset = tileset;
@@ -623,7 +741,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           fallbackStarted = true;
           const fallback = await loadBundledBuildingTileset(data);
           if (!fallback || viewer.isDestroyed()) { await startOfficialStream(); return; }
-          applyBuildingStyle(fallback, selectedBuildingIdRef.current);
+          applyBuildingStyle(fallback, selectedBuildingIdRef.current, {
+            analysisLens: analysisLensRef.current,
+            selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
+          });
           addTileset(viewer, fallback);
           fallback.show = visible;
           sourcesRef.current.plateauFallbackTileset = fallback;
@@ -634,14 +755,17 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
             containerRef.current?.setAttribute("data-building-source", "bundled-fallback");
             containerRef.current?.setAttribute("data-building-tiles-loaded", "fallback");
             viewer.scene.requestRender();
-            window.setTimeout(() => void startOfficialStream(), 350);
+            if (!verifiedLocalOnly) window.setTimeout(() => void startOfficialStream(), 350);
           });
-          window.setTimeout(() => void startOfficialStream(), 4_000);
+          if (!verifiedLocalOnly) window.setTimeout(() => void startOfficialStream(), 4_000);
         };
 
         const fast = await loadFastStartBuildingTileset(data);
         if (!fast || viewer.isDestroyed()) { await startBundledFallback(); return; }
-        applyBuildingStyle(fast, selectedBuildingIdRef.current);
+        applyBuildingStyle(fast, selectedBuildingIdRef.current, {
+          analysisLens: analysisLensRef.current,
+          selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
+        });
         addTileset(viewer, fast);
         fast.show = visible;
         sourcesRef.current.plateauFastTileset = fast;
@@ -651,9 +775,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           containerRef.current?.setAttribute("data-building-source", "fast-start");
           containerRef.current?.setAttribute("data-building-tiles-loaded", "fast");
           viewer.scene.requestRender();
-          window.setTimeout(() => void startBundledFallback(), 250);
+          if (!verifiedLocalOnly) window.setTimeout(() => void startBundledFallback(), 250);
         });
-        window.setTimeout(() => void startBundledFallback(), 1_200);
+        if (!verifiedLocalOnly) window.setTimeout(() => void startBundledFallback(), 1_200);
       } catch (error) {
         console.warn("Bundled PLATEAU building subset failed to initialize", error);
         containerRef.current?.setAttribute("data-building-source", "unavailable");
@@ -678,7 +802,13 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         addTileset(viewer, tileset);
         tileset.show = plateauVisibilityRef.current?.terrain ?? false;
         sourcesRef.current.plateauTerrainTileset = tileset;
-        containerRef.current?.setAttribute("data-local-dem", "ready");
+        containerRef.current?.setAttribute("data-local-dem", "loading");
+        tileset.initialTilesLoaded.addEventListener(() => {
+          if (viewer.isDestroyed()) return;
+          readinessFlagsRef.current.localDemLoaded = true;
+          containerRef.current?.setAttribute("data-local-dem", "ready");
+          readinessControllerRef.current?.refresh();
+        });
       } catch (error) {
         console.warn("Local PLATEAU DEM terrain loading failed", error);
         containerRef.current?.setAttribute("data-local-dem", "fallback");
@@ -696,6 +826,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     },
     flyToPlateau(intent = "building") {
       cameraControllerRef.current?.plateau(intent);
+    },
+    flyToLocation(longitude, latitude, intent, range) {
+      cameraControllerRef.current?.focus(longitude, latitude, intent, range);
     },
     resetView() {
       cameraControllerRef.current?.city();
@@ -736,12 +869,48 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     }
     viewerRef.current = viewer;
     cameraControllerRef.current = new CameraController(viewer, data);
+    let resizeFrame = 0;
+    const resizeObserver = new ResizeObserver(() => {
+      if (resizeFrame || viewer.isDestroyed()) return;
+      resizeFrame = requestAnimationFrame(() => {
+        resizeFrame = 0;
+        if (viewer.isDestroyed()) return;
+        viewer.forceResize();
+        viewer.scene.requestRender();
+        readinessControllerRef.current?.refresh();
+      });
+    });
+    resizeObserver.observe(container);
     (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer = viewer;
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.baseColor = Color.fromCssColorString("#d8dfda");
     viewer.scene.backgroundColor = Color.fromCssColorString("#dfe5e1");
     viewer.scene.highDynamicRange = false;
     viewer.scene.skyBox.show = false;
+    readinessFlagsRef.current = {
+      appReady: false,
+      basemapReady: false,
+      analysisReady: false,
+      broadTerrainReady: false,
+      localDemLoaded: false,
+      overlayReady: false,
+    };
+    readinessControllerRef.current = startCesiumReadinessController({
+      viewer,
+      container,
+      requirements: () => readinessRequirementsRef.current,
+      sources: () => ({
+        buildingTilesets: [
+          { source: "official-stream", tileset: sourcesRef.current.plateauTileset },
+          { source: "bundled-fallback", tileset: sourcesRef.current.plateauFallbackTileset },
+          { source: "verified-fast-start", tileset: sourcesRef.current.plateauFastTileset },
+        ],
+        terrainTileset: sourcesRef.current.plateauTerrainTileset,
+        roads: sourcesRef.current.plateauRoads,
+      }),
+      flags: () => readinessFlagsRef.current,
+      onChange: (snapshot, result) => onVisualReadinessChangeRef.current?.(snapshot, result),
+    });
     if (selectedMeshCodeRef.current === data.plateauMetadata?.reference_layer?.deep_dive_mesh_code) {
       cameraControllerRef.current.plateau("building");
     } else {
@@ -755,6 +924,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     void createBroadTerrain(data).then((provider) => {
       if (!provider || cancelled || viewer.isDestroyed()) return;
       viewer.terrainProvider = provider;
+      readinessFlagsRef.current.broadTerrainReady = true;
       containerRef.current?.setAttribute("data-broad-terrain", "ready");
       viewer.scene.requestRender();
     }).catch((error: unknown) => {
@@ -771,6 +941,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           credit: "地理院タイル"
         });
         viewer.imageryLayers.addImageryProvider(paleImagery);
+        readinessFlagsRef.current.basemapReady = true;
         containerRef.current?.setAttribute("data-basemap", "ready");
         const boundary = await addGeoJson(viewer, data.boundary);
         const plateauGeoJson = await addGeoJson(viewer, data.plateauBuildings);
@@ -786,8 +957,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         sourcesRef.current = { ...sourcesRef.current, boundary, plateauGeoJson, plateauRoads, meshes, stations, busStops, medical };
         styleBoundary(boundary);
         styleBuildings(plateauGeoJson);
-        styleRoads(plateauRoads);
-        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current, afterScoresRef.current, meshPresentationRef.current);
+        styleRoads(plateauRoads, selectedRoadIdRef.current, analysisLensRef.current);
+        if (meshes) styleMeshes(meshes, metricModeRef.current, selectedMeshCodeRef.current, afterScoresRef.current, meshPresentationRef.current, analysisLensRef.current);
         stylePoints(stations, Color.fromCssColorString("#d5a43c"), 11);
         stylePoints(busStops, Color.fromCssColorString("#28766f"), 7);
         stylePoints(medical, Color.fromCssColorString("#a64f3f"), 9);
@@ -804,7 +975,12 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         if (plateauVisibilityRef.current?.terrain) await loadPlateauTerrain();
         if (cancelled || viewer.isDestroyed()) return;
         containerRef.current?.setAttribute("data-analysis", "ready");
+        readinessFlagsRef.current.appReady = true;
+        readinessFlagsRef.current.analysisReady = true;
+        if (analysisLensRef.current !== "service-pulse") readinessFlagsRef.current.overlayReady = true;
+        readinessControllerRef.current?.refresh();
         viewer.scene.requestRender();
+        setViewerReady(true);
         onReadyRef.current();
       } catch (error) {
         console.error("Cesium layer loading failed", error);
@@ -831,17 +1007,29 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       const drilled = viewer.scene.drillPick(movement.position, 20) as Array<({ id?: Entity } & Partial<TileFeatureLike>)>;
       const building = drilled.find(isTileFeature);
       if (building) {
-        onBuildingSelectRef.current(buildingFromFeature(building));
+        onBuildingSelectRef.current(buildingFromFeature(building, pickedCoordinate(viewer, movement.position)));
         return;
       }
       const picked = drilled[0] ?? viewer.scene.pick(movement.position) as ({ id?: Entity } & Partial<TileFeatureLike>) | undefined;
       if (!picked?.id) return;
+      const road = roadFromEntity(picked.id, pickedCoordinate(viewer, movement.position));
+      if (road) {
+        onRoadSelectRef.current?.(road);
+        return;
+      }
       const mesh = entityMesh(picked.id);
       if (mesh) onMeshSelectRef.current(mesh);
     }, ScreenSpaceEventType.LEFT_CLICK);
 
     return () => {
       cancelled = true;
+      resizeObserver.disconnect();
+      if (resizeFrame) cancelAnimationFrame(resizeFrame);
+      setViewerReady(false);
+      pulseRendererRef.current?.dispose();
+      pulseRendererRef.current = null;
+      readinessControllerRef.current?.destroy();
+      readinessControllerRef.current = null;
       sourcesRef.current = {};
       viewerRef.current = null;
       cameraControllerRef.current = null;
@@ -949,12 +1137,18 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   }, [decisionFlow]);
 
   useEffect(() => {
-    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores, meshPresentation);
-    if (sourcesRef.current.plateauTileset) applyBuildingStyle(sourcesRef.current.plateauTileset, selectedBuildingId);
-    if (sourcesRef.current.plateauFastTileset) applyBuildingStyle(sourcesRef.current.plateauFastTileset, selectedBuildingId);
-    if (sourcesRef.current.plateauFallbackTileset) applyBuildingStyle(sourcesRef.current.plateauFallbackTileset, selectedBuildingId);
+    if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores, meshPresentation, analysisLens);
+    styleRoads(sourcesRef.current.plateauRoads, selectedRoadId, analysisLens);
+    const styleContext = { analysisLens, selectedMeshBounds: meshBounds(data.meshes, selectedMeshCode) };
+    if (sourcesRef.current.plateauTileset) applyBuildingStyle(sourcesRef.current.plateauTileset, selectedBuildingId, styleContext);
+    if (sourcesRef.current.plateauFastTileset) applyBuildingStyle(sourcesRef.current.plateauFastTileset, selectedBuildingId, styleContext);
+    if (sourcesRef.current.plateauFallbackTileset) applyBuildingStyle(sourcesRef.current.plateauFallbackTileset, selectedBuildingId, styleContext);
+    containerRef.current?.setAttribute("data-analysis-lens", analysisLens);
+    readinessFlagsRef.current.overlayReady = analysisLens !== "service-pulse";
+    containerRef.current?.setAttribute("data-overlay", analysisLens === "service-pulse" ? "loading" : "ready");
+    readinessControllerRef.current?.refresh();
     viewerRef.current?.scene.requestRender();
-  }, [afterScores, meshPresentation, metricMode, selectedBuildingId, selectedMeshCode]);
+  }, [afterScores, analysisLens, data.meshes, meshPresentation, metricMode, selectedBuildingId, selectedMeshCode, selectedRoadId]);
 
   useEffect(() => {
     const sources = sourcesRef.current;
@@ -984,10 +1178,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   }, [loadPlateauTerrain, loadPlateauTileset, plateauVisibility, visibility, workspaceMap, workspaceVisibility]);
 
   useEffect(() => {
-    setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility);
-    setWorkspacePointVisibility(sourcesRef.current.workspacePoints, workspacePhase, workspaceVisibility);
+    setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility, counterfactualState, analysisLens);
+    setWorkspacePointVisibility(sourcesRef.current.workspacePoints, workspacePhase, workspaceVisibility, counterfactualState);
     viewerRef.current?.scene.requestRender();
-  }, [workspacePhase, workspaceVisibility]);
+  }, [analysisLens, counterfactualState, workspacePhase, workspaceVisibility]);
 
   useEffect(() => {
     const visible = setFuturesVisibility(sourcesRef.current.futures, futuresStressMode);
@@ -1057,7 +1251,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       setWorkspaceVisibility(
         sourcesRef.current.workspace,
         workspacePhaseRef.current,
-        workspaceVisibilityRef.current
+        workspaceVisibilityRef.current,
+        counterfactualStateRef.current,
+        analysisLensRef.current,
       );
       viewer.scene.requestRender();
       return;
@@ -1078,7 +1274,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         setWorkspaceVisibility(
           source,
           workspacePhaseRef.current,
-          workspaceVisibilityRef.current
+          workspaceVisibilityRef.current,
+          counterfactualStateRef.current,
+          analysisLensRef.current,
         );
         viewer.scene.requestRender();
       }
@@ -1115,7 +1313,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           setWorkspacePointVisibility(
             sourcesRef.current.workspacePoints,
             workspacePhaseRef.current,
-            workspaceVisibilityRef.current
+            workspaceVisibilityRef.current,
+            counterfactualStateRef.current,
           );
           viewer.scene.requestRender();
         }
@@ -1130,6 +1329,37 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         workspacePointLoadRef.current = null;
       });
   }, [workspaceBuildingPoints, workspacePhase, workspaceVisibility]);
+
+  useEffect(() => {
+    pulseRendererRef.current?.dispose();
+    pulseRendererRef.current = null;
+    const viewer = viewerRef.current;
+    if (!viewerReady || !viewer || viewer.isDestroyed() || analysisLens !== "service-pulse") {
+      containerRef.current?.setAttribute("data-pulse-markers", "0");
+      readinessFlagsRef.current.overlayReady = analysisLens !== "service-pulse";
+      readinessControllerRef.current?.refresh();
+      return;
+    }
+    const story = workspacePhase === "baseline" ? "scenario_a" : workspacePhase;
+    const routes = extractServicePulseRoutes(workspaceMap, story);
+    const routeKind = counterfactualState === "baseline" ? "before" : "after";
+    const route = routes.find((candidate) => candidate.routeKind === routeKind) ?? null;
+    const renderer = renderServicePulse(viewer, route);
+    pulseRendererRef.current = renderer;
+    containerRef.current?.setAttribute("data-pulse-markers", String(renderer.markerCount));
+    containerRef.current?.setAttribute("data-pulse-semantics", "network-distance-only");
+    readinessFlagsRef.current.overlayReady = renderer.markerCount > 0;
+    containerRef.current?.setAttribute("data-overlay", renderer.markerCount > 0 ? "ready" : "incomplete");
+    readinessControllerRef.current?.refresh();
+    return () => {
+      renderer.dispose();
+      if (pulseRendererRef.current === renderer) pulseRendererRef.current = null;
+    };
+  }, [analysisLens, counterfactualState, viewerReady, workspaceMap, workspacePhase]);
+
+  useEffect(() => {
+    readinessControllerRef.current?.refresh();
+  }, [readinessRequirements]);
 
   return <div ref={containerRef} className="cesium-map" aria-label="舞鶴市の3D地図" />;
 });

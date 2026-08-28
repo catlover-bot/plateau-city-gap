@@ -25,6 +25,7 @@ function flyTo(
   latitude: number,
   radius: number,
   intent: Exclude<CameraIntent, "city">,
+  rangeOverride?: number,
 ) {
   const preset = CAMERA[intent];
   viewer.camera.flyToBoundingSphere(
@@ -33,7 +34,7 @@ function flyTo(
       offset: new HeadingPitchRange(
         CesiumMath.toRadians(preset.heading),
         CesiumMath.toRadians(preset.pitch),
-        preset.range,
+        rangeOverride ?? preset.range,
       ),
       duration: preset.duration,
     },
@@ -69,5 +70,9 @@ export class CameraController {
     const latitude = finiteNumber(viewpoint?.latitude);
     if (longitude === null || latitude === null) return;
     flyTo(this.viewer, longitude, latitude, intent === "building" ? 120 : 300, intent);
+  }
+
+  focus(longitude: number, latitude: number, intent: "building" | "route" | "hazard" | "scenario", range?: number) {
+    flyTo(this.viewer, longitude, latitude, Math.max(120, (range ?? CAMERA[intent].range) * 0.22), intent, range);
   }
 }

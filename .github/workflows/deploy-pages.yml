@@ -33,6 +33,7 @@ jobs:
         working-directory: frontend
         run: |
           npm run lint
+          npm run check:docs
           npm run typecheck
           npm run test
           npm run build

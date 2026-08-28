@@ -1,11 +1,11 @@
 {
-  "name": "CITY GAP Urban Futures & Resilience",
+  "name": "CITY GAP Resolution Intelligence",
   "short_name": "CITY GAP",
   "lang": "ja",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "background_color": "#06151b",
-  "theme_color": "#0a2028",
-  "description": "自治体向けの時間状態・サービス継続性・選択地点現地確認Workspace"
+  "background_color": "#f4f0e5",
+  "theme_color": "#183f3d",
+  "description": "500mの課題候補をPLATEAU建物・道路・地形まで詳細化する自治体向け都市調査基盤"
 }

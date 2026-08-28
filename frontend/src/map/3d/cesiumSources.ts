@@ -5,6 +5,7 @@ import {
   Viewer
 } from "cesium";
 import type { AppData } from "../../types";
+import type { AnalysisLens } from "../../state/spatial/types";
 
 function absolutePublicUrl(path: string): string {
   if (/^https?:\/\//.test(path)) return path;
@@ -60,17 +61,31 @@ export async function loadLocalDemTileset(data: AppData): Promise<Cesium3DTilese
   });
 }
 
-export function applyBuildingStyle(tileset: Cesium3DTileset, selectedBuildingId: string | null) {
+export interface BuildingStyleContext {
+  analysisLens?: AnalysisLens;
+  selectedMeshBounds?: [number, number, number, number] | null;
+}
+
+export function applyBuildingStyle(tileset: Cesium3DTileset, selectedBuildingId: string | null, context: BuildingStyleContext = {}) {
   const selected = selectedBuildingId?.replaceAll("'", "\\'");
+  const bounds = context.selectedMeshBounds;
+  const inSelectedMesh = bounds
+    ? `\${_x} >= ${bounds[0]} && \${_x} <= ${bounds[2]} && \${_y} >= ${bounds[1]} && \${_y} <= ${bounds[3]}`
+    : null;
+  const conditions: Array<[string, string]> = [];
+  if (selected) conditions.push([`\${gml_id} === '${selected}'`, "color('#be5b37', 1.0)"]);
+  if (context.analysisLens === "urban-xray" && inSelectedMesh) {
+    conditions.push([inSelectedMesh, "color('#d59b3e', 0.96)"]);
+    conditions.push(["true", "color('#cbd2ce', 0.20)"]);
+  } else if (context.analysisLens === "changed-only") {
+    conditions.push(["true", "color('#c7cfca', 0.32)"]);
+  } else if (context.analysisLens === "service-pulse") {
+    conditions.push(["true", "color('#ced6d2', 0.72)"]);
+  } else {
+    conditions.push(["true", "color('#d7e0dc', 0.98)"]);
+  }
   tileset.style = new Cesium3DTileStyle({
-    color: selected
-      ? {
-          conditions: [
-            [`\${gml_id} === '${selected}'`, "color('#e2ad3f', 1.0)"],
-            ["true", "color('#d7e0dc', 0.98)"],
-          ],
-        }
-      : "color('#d7e0dc', 0.98)",
+    color: { conditions },
   });
 }
 

@@ -339,6 +339,18 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
+.service-home-grid {
+  gap: 0;
+  border: 1px solid var(--cg-line);
+  background: #fafbf7;
+}
+.service-home-grid > .service-panel {
+  border: 0;
+  border-right: 1px solid var(--cg-line);
+}
+.service-home-grid > .service-panel:last-child {
+  border-right: 0;
+}
 .service-panel {
   min-width: 0;
   border: 1px solid var(--cg-line);
@@ -362,7 +374,7 @@
 .service-panel > header b {
   min-width: 28px;
   padding: 5px;
-  border-radius: 20px;
+  border-radius: 1px;
   background: var(--cg-teal-pale);
   color: var(--cg-teal-dark);
   font: 11px var(--cg-mono);
@@ -546,7 +558,7 @@
   align-items: center;
   padding: 0 7px;
   border: 1px solid var(--cg-line);
-  border-radius: 20px;
+  border-radius: 1px;
   background: #f0f2ee;
   color: var(--cg-ink-soft);
   font: 700 8px var(--cg-mono);
@@ -1355,7 +1367,7 @@
 
 .municipal-spatial-workspace {
   border: 1px solid var(--cg-line);
-  border-radius: 16px;
+  border-radius: 1px;
   overflow: hidden;
   background: #f7f8f5;
 }
@@ -1385,7 +1397,7 @@
   gap: 0.35rem;
   padding: 0.35rem 0.55rem;
   border: 1px solid var(--cg-line);
-  border-radius: 999px;
+  border-radius: 1px;
   background: #fff;
   font-size: 0.75rem;
 }
@@ -1420,7 +1432,7 @@
   align-items: center;
   padding: 0.65rem;
   border: 1px solid var(--cg-line);
-  border-radius: 10px;
+  border-radius: 1px;
 }
 
 .saved-view-list article > div {
@@ -1507,6 +1519,13 @@
   .service-evidence-grid,
   .case-layout {
     grid-template-columns: 1fr;
+  }
+  .service-home-grid > .service-panel {
+    border-right: 0;
+    border-bottom: 1px solid var(--cg-line);
+  }
+  .service-home-grid > .service-panel:last-child {
+    border-bottom: 0;
   }
   .city-data-readiness > div,
   .missing-data-panel > div {

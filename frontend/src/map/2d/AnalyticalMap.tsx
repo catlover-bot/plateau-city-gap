@@ -205,6 +205,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     canvas.tabIndex = 0;
     canvas.setAttribute("role", "application");
     canvas.setAttribute("aria-label", ariaLabel);
+    let criticalError = false;
 
     map.on("load", () => {
       addGeoJson(map, "boundary", data.boundary);
@@ -289,6 +290,24 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       };
       map.on("click", "validation-primary", routeSelection);
       map.on("click", "validation-reference", routeSelection);
+      map.on("click", "temporal-point", (event) => {
+        const feature = event.features?.[0];
+        const properties = feature?.properties as Record<string, unknown> | undefined;
+        if (!feature || !properties) return;
+        const changeType = String(properties.change_type ?? "changed");
+        onSelectionRef.current({
+          type: "temporal_change",
+          id: String(feature.id ?? properties.sample_id ?? `${changeType}:${event.lngLat.lng}:${event.lngLat.lat}`),
+          city: data.city.id,
+          urbanState: "2025",
+          label: `PLATEAU ${changeType} sample`,
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          properties: { ...properties, geometry_semantics: "published_point_only" },
+        });
+      });
+      map.on("mouseenter", "temporal-point", () => { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", "temporal-point", () => { map.getCanvas().style.cursor = ""; });
       const initialShowMeshes = primaryLayer.startsWith("analysis-");
       layerVisibility(map, "mesh-fill", initialShowMeshes);
       layerVisibility(map, "mesh-outline", initialShowMeshes);
@@ -308,7 +327,21 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       layerVisibility(map, "resilience-network", primaryLayer === "hazard-composite");
       layerVisibility(map, "resilience-area", primaryLayer === "hazard-composite");
       layerVisibility(map, "resilience-area-outline", primaryLayer === "hazard-composite");
-      onReady?.();
+      let stableFrames = 0;
+      const settle = () => {
+        if (criticalError) return;
+        stableFrames += 1;
+        if (stableFrames < 3) {
+          requestAnimationFrame(settle);
+          return;
+        }
+        void document.fonts?.ready.then(() => {
+          containerRef.current?.parentElement?.setAttribute("data-visual-ready", "true");
+          containerRef.current?.parentElement?.setAttribute("data-stable-frames", String(stableFrames));
+          onReady?.();
+        });
+      };
+      map.once("idle", () => requestAnimationFrame(settle));
     });
     map.on("moveend", () => {
       const center = map.getCenter();
@@ -318,7 +351,10 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     });
     map.on("error", (event) => {
       const message = event.error?.message ?? "2D地図データを読み込めませんでした";
-      if (!message.includes("cyberjapandata")) onError?.(message);
+      criticalError = true;
+      containerRef.current?.parentElement?.setAttribute("data-visual-ready", "false");
+      containerRef.current?.parentElement?.setAttribute("data-critical-error", message);
+      onError?.(message);
     });
     return () => {
       map.remove();

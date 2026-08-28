@@ -15,7 +15,7 @@ export function ProductHeader({ evidenceStatus, onOpenMenu, onOpenSearch }: Prop
   return (
     <header className="product-header">
       <a className="product-brand" href={import.meta.env.BASE_URL} aria-label="CITY GAP ホーム">
-        <strong>CITY GAP</strong><span>都市課題を、場所から考える</span>
+        <strong>CITY GAP</strong><span>統計の候補を、建物・道路まで調べる</span>
       </a>
       <div className="spatial-context-bar" aria-label="現在の空間コンテキスト">
         <label><span>都市</span><select aria-label="都市" value={state.city} onChange={(event) => dispatch({ type: "set-city", city: event.target.value as "maizuru" | "fujisawa" })}><option value="maizuru">舞鶴市</option><option value="fujisawa">藤沢市</option></select></label>

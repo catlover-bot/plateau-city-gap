@@ -11,8 +11,9 @@ import { SpatialSearch } from "../features/search/SpatialSearch";
 import { AnalyticalMap } from "../map/2d/AnalyticalMap";
 import { Plateau3DMap } from "../map/3d/Plateau3DMap";
 import { ContextLegend } from "../map/controls/ContextLegend";
-import { PresentationGuide } from "../map/controls/PresentationGuide";
+import { SavedInvestigationRail } from "../map/controls/SavedInvestigationRail";
 import { ResolutionRail } from "../map/controls/ResolutionRail";
+import { AnalysisLensRail } from "../map/controls/AnalysisLensRail";
 import { LayerControls } from "../map/layers/LayerControls";
 import { EvidenceModal } from "../components/EvidenceModal";
 import { LoadingState, ErrorState } from "../components/AppStates";
@@ -21,8 +22,9 @@ import { layerById } from "../map/layers/layerRegistry";
 import { sceneForLayerPreset, sceneLayerIds, SCENE_PRESETS } from "../map/core/scenePresets";
 import { loadAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, InterventionPlan, MeshMetrics, MunicipalWorkspaceData, UrbanFuturesData, ValidationWorkspaceData } from "../types";
-import { CITY_VIEWPORTS, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
+import { CITY_VIEWPORTS, type AnalysisLens, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
+import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -59,6 +61,7 @@ export function ProductApp() {
   const [stress, setStress] = useState<FuturesStressMode>("normal");
   const [validationView, setValidationView] = useState<ValidationView>("reference");
   const mapRef = useRef<MapEngineAdapter>(null);
+  const visual2dParts = useRef(new Set<string>());
 
   useEffect(() => {
     let cancelled = false; setError(null);
@@ -82,11 +85,16 @@ export function ProductApp() {
     void loadUrbanFuturesData().then(setFutures).catch(() => undefined);
   }, [futures, state.task]);
   useEffect(() => {
-    if ((state.task !== "try" && state.task !== "operate") || municipal) return;
+    if ((state.task !== "try" && state.task !== "operate" && state.task !== "detail" && state.mapMode !== "plateau3d") || municipal) return;
     void loadMunicipalWorkspaceData().then(setMunicipal).catch(() => undefined);
-  }, [municipal, state.task]);
+  }, [municipal, state.mapMode, state.task]);
 
   useEffect(() => { setActiveLayers(sceneLayerIds(state.scenePreset)); }, [state.scenePreset]);
+  useEffect(() => {
+    visual2dParts.current.clear();
+    document.documentElement.dataset.visualReady = "false";
+    document.documentElement.dataset.visualScene = state.scenePreset;
+  }, [state.analysisLens, state.city, state.counterfactualState, state.mapMode, state.primaryLayer, state.scenePreset]);
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
@@ -98,6 +106,16 @@ export function ProductApp() {
   const plan = data?.interventions?.plans.overall[String(siteCount) as "1" | "2" | "3"] ?? null;
   const scenario = useMemo(() => data ? scenarioCollections(data, plan) : { sites: EMPTY, meshes: EMPTY }, [data, plan]);
   const scenarioScores = useMemo(() => plan ? Object.fromEntries(Object.entries(plan.mesh_results).map(([code, result]) => [code, Number(result.after_score_c)]).filter((entry) => Number.isFinite(entry[1]))) : null, [plan]);
+  const selectedWorkspaceStory = siteCount === 1
+      ? "scenario_a" as const
+      : siteCount === 2
+        ? "scenario_b" as const
+        : "scenario_c" as const;
+  const workspacePhase = state.analysisLens === "service-pulse"
+    ? selectedWorkspaceStory
+    : state.counterfactualState === "baseline" || (state.task !== "try" && state.task !== "operate")
+      ? "baseline" as const
+      : selectedWorkspaceStory;
   const decisionFlow = useMemo(() => {
     if (!plan?.sites[0] || state.selection?.type !== "mesh" || state.selection.longitude === undefined || state.selection.latitude === undefined) return null;
     return { meshLongitude: state.selection.longitude, meshLatitude: state.selection.latitude, siteLongitude: plan.sites[0].longitude, siteLatitude: plan.sites[0].latitude };
@@ -110,13 +128,13 @@ export function ProductApp() {
   const select = useCallback((selection: SpatialSelection | null) => dispatch({ type: "set-selection", selection }), [dispatch]);
   const openPlateau3D = useCallback(() => {
     if (!data) return;
-    const preserveDemo = state.demoMode;
+    const preserveSavedInvestigation = state.savedInvestigationOpen;
     if (state.task !== "try" && state.task !== "operate" && state.task !== "detail") {
       dispatch({ type: "set-task", task: "detail" });
     }
     const deepDiveCode = data.plateauMetadata?.reference_layer?.deep_dive_mesh_code;
     const viewpoint = data.plateauMetadata?.reference_layer?.viewpoint;
-    if (state.selection?.type !== "building" && state.selection?.id !== deepDiveCode && deepDiveCode) {
+    if (!state.selection && deepDiveCode) {
       const feature = data.meshes.features.find((candidate) => String(candidate.properties?.mesh_code) === deepDiveCode);
       const longitude = Number(feature?.properties?.centroid_lon ?? viewpoint?.longitude);
       const latitude = Number(feature?.properties?.centroid_lat ?? viewpoint?.latitude);
@@ -140,8 +158,8 @@ export function ProductApp() {
       }
     }
     dispatch({ type: "set-scene-preset", scenePreset: "plateau_detail" });
-    if (preserveDemo) dispatch({ type: "set-demo-mode", enabled: true });
-  }, [data, dispatch, state.demoMode, state.selection, state.task]);
+    if (preserveSavedInvestigation) dispatch({ type: "set-saved-investigation-open", open: true });
+  }, [data, dispatch, state.savedInvestigationOpen, state.selection, state.task]);
   const changeTask = useCallback((task: ProductTask) => { if (state.primaryLayer === "validation-temporal" && task !== "validate") dispatch({ type: "set-viewport", viewport: CITY_VIEWPORTS[state.city] }); dispatch({ type: "set-task", task }); if (task !== "detail") dispatch({ type: "set-map-mode", mapMode: "map2d" }); }, [dispatch, state.city, state.primaryLayer]);
   const changeValidation = useCallback((view: ValidationView) => {
     setValidationView(view);
@@ -153,35 +171,95 @@ export function ProductApp() {
       openPlateau3D();
       return;
     }
-    const preserveDemo = state.demoMode;
+    const preserveSavedInvestigation = state.savedInvestigationOpen;
     const scene = SCENE_PRESETS[scenePreset];
     const task: ProductTask = scene.intent === "discover" ? "discover" : scene.intent === "inspect" ? "detail" : scene.intent === "scenario" || scene.intent === "resilience" ? "try" : "validate";
     dispatch({ type: "set-task", task });
     dispatch({ type: "set-scene-preset", scenePreset });
-    if (preserveDemo) dispatch({ type: "set-demo-mode", enabled: true });
-  }, [dispatch, openPlateau3D, state.demoMode]);
+    if (preserveSavedInvestigation) dispatch({ type: "set-saved-investigation-open", open: true });
+  }, [dispatch, openPlateau3D, state.savedInvestigationOpen]);
   const changeResolution = useCallback((resolution: SpatialResolution) => {
-    if (resolution === "city") changeScene("city_overview");
-    else if (resolution === "mesh") changeScene("gap_discovery");
-    else if (resolution === "building") openPlateau3D();
-    else if (resolution === "route") { openPlateau3D(); dispatch({ type: "set-scene-preset", scenePreset: "network_access" }); }
-    else changeScene("scenario_compare");
-  }, [changeScene, dispatch, openPlateau3D]);
-  const share = useCallback(() => { void navigator.clipboard?.writeText(shareUrl); setMenuOpen(false); }, [shareUrl]);
-  const selectContribution = useCallback((layerId: string) => {
-    if (layerId === "plateau-buildings" || layerId === "plateau-terrain") {
-      openPlateau3D();
-      setActiveLayers((current) => [...new Set([...current, layerId, "plateau-buildings", "plateau-roads"])]);
+    dispatch({ type: "set-resolution", resolution });
+    if (resolution === "city") {
+      dispatch({ type: "set-map-mode", mapMode: "map2d" });
+      dispatch({ type: "set-viewport", viewport: CITY_VIEWPORTS[state.city] });
       return;
     }
-    if (layerId === "plateau-roads") {
+    if (resolution === "district") {
+      dispatch({ type: "set-map-mode", mapMode: "map2d" });
+      dispatch({ type: "set-viewport", viewport: { ...state.viewport, zoom: Math.max(12, state.viewport.zoom), bearing: 0, pitch: 0 } });
+      return;
+    }
+    if (resolution === "mesh") {
+      dispatch({ type: "set-map-mode", mapMode: "map2d" });
+      dispatch({ type: "set-viewport", viewport: { ...state.viewport, zoom: Math.max(14.1, state.viewport.zoom), bearing: 0, pitch: 0 } });
+      return;
+    }
+    if (resolution === "building_group" || resolution === "building") {
+      openPlateau3D();
+      dispatch({ type: "set-resolution", resolution });
+      return;
+    }
+    if (resolution === "road") {
       openPlateau3D();
       dispatch({ type: "set-scene-preset", scenePreset: "network_access" });
+      dispatch({ type: "set-resolution", resolution });
       return;
     }
-    dispatch({ type: "set-map-mode", mapMode: "map2d" });
-    dispatch({ type: "set-primary-layer", primaryLayer: layerId });
-    setActiveLayers((current) => [...new Set([...current, "reference-gsi-pale", layerId])]);
+    dispatch({ type: "set-scene-preset", scenePreset: "scenario_compare" });
+    dispatch({ type: "set-resolution", resolution });
+  }, [dispatch, openPlateau3D, state.city, state.viewport]);
+  const share = useCallback(() => { void navigator.clipboard?.writeText(shareUrl); setMenuOpen(false); }, [shareUrl]);
+  const mark2dReady = useCallback((part: string, expected = 1) => {
+    visual2dParts.current.add(part);
+    if (visual2dParts.current.size < expected) return;
+    document.documentElement.dataset.visualReady = "true";
+    document.documentElement.dataset.visualUnmet = "";
+    window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail: { scenePreset: state.scenePreset, engine: "maplibre", stableFrames: 3 } }));
+  }, [state.scenePreset]);
+  const markMapReady = useCallback(() => mark2dReady("map"), [mark2dReady]);
+  const markBeforeReady = useCallback(() => mark2dReady("before", 2), [mark2dReady]);
+  const markAfterReady = useCallback(() => mark2dReady("after", 2), [mark2dReady]);
+  const selectObject = useCallback((node: UrbanObjectNode) => {
+    const prefix = `${node.kind}:`;
+    const id = node.id.startsWith(prefix) ? node.id.slice(prefix.length) : node.id;
+    const type = node.kind === "site" ? "scenario_site" : node.kind;
+    if (!["mesh", "building_group", "building", "road", "terrain", "planning", "hazard", "scenario_site"].includes(type)) return;
+    dispatch({ type: "set-selection", selection: {
+      type: type as SpatialSelection["type"],
+      id,
+      city: state.city,
+      urbanState: state.urbanState,
+      label: node.label,
+      longitude: state.selection?.longitude,
+      latitude: state.selection?.latitude,
+      properties: {
+        ...node.attributes,
+        parent_mesh_code: state.selection?.type === "mesh"
+          ? state.selection.id
+          : state.selection?.properties?.parent_mesh_code,
+      },
+    } });
+  }, [dispatch, state.city, state.selection, state.urbanState]);
+  const changeAnalysisLens = useCallback((lens: AnalysisLens) => {
+    if (lens === "urban-xray") {
+      openPlateau3D();
+      dispatch({ type: "set-resolution", resolution: "building_group" });
+    } else if (lens === "service-pulse") {
+      openPlateau3D();
+      dispatch({ type: "set-scene-preset", scenePreset: "network_access" });
+      dispatch({ type: "set-resolution", resolution: "road" });
+    } else if (lens === "changed-only") {
+      dispatch({ type: "set-task", task: "try" });
+      dispatch({ type: "set-scene-preset", scenePreset: "scenario_compare" });
+      dispatch({ type: "set-map-mode", mapMode: "plateau3d" });
+      dispatch({ type: "set-resolution", resolution: "site" });
+    } else if (lens === "temporal-ghost") {
+      dispatch({ type: "set-task", task: "validate" });
+      dispatch({ type: "set-scene-preset", scenePreset: "temporal_change" });
+      dispatch({ type: "set-resolution", resolution: "building" });
+    }
+    dispatch({ type: "set-analysis-lens", lens });
   }, [dispatch, openPlateau3D]);
 
   if (error && !data) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
@@ -196,8 +274,8 @@ export function ProductApp() {
   const compare = state.task === "try" && scenarioMode === "compare" && state.mapMode === "map2d" && Boolean(plan);
   return <div className="product-app" data-task={state.task} data-map-state={state.mapState} data-spatial-intent={state.intent} data-spatial-resolution={state.resolution} data-scene-preset={state.scenePreset}>
     <ProductHeader evidenceStatus={validation ? "検証済み" : "根拠あり"} onOpenMenu={() => setMenuOpen((value) => !value)} onOpenSearch={() => setSearchOpen(true)} />
-    <TaskNavigation value={state.task} onChange={changeTask} />
     <main className="spatial-workbench">
+      <TaskNavigation value={state.task} onChange={changeTask} />
       <section className={`map-stage ${compare ? "compare" : ""}`} aria-label="共通Spatial Map">
         <div className="map-toolbar">
           <MapModeSwitch value={state.mapMode} onChange={(mapMode) => {
@@ -206,19 +284,20 @@ export function ProductApp() {
             else openPlateau3D();
           }} />
           <button type="button" className="share-map-button" onClick={share}>URLを共有</button>
-          <button type="button" className={`presentation-trigger ${state.demoMode ? "active" : ""}`} aria-pressed={state.demoMode} onClick={() => dispatch({ type: "set-demo-mode", enabled: !state.demoMode })}>4分デモ</button>
+          <button type="button" className={`saved-investigation-trigger ${state.savedInvestigationOpen ? "active" : ""}`} aria-pressed={state.savedInvestigationOpen} onClick={() => dispatch({ type: "set-saved-investigation-open", open: !state.savedInvestigationOpen })}>保存済み調査</button>
         </div>
         <ResolutionRail value={state.resolution} onChange={changeResolution} />
+        <AnalysisLensRail value={state.analysisLens} counterfactual={state.counterfactualState} resolution={state.resolution} selection={state.selection} workspace={municipal?.map ?? null} workspacePhase={workspacePhase} onChange={changeAnalysisLens} onCounterfactualChange={(counterfactualState) => dispatch({ type: "set-counterfactual-state", state: counterfactualState })} />
         <LayerControls city={state.city} preset={state.preset} mapMode={state.mapMode} primaryLayer={state.primaryLayer} activeLayerIds={activeLayers} onPresetChange={(preset) => dispatch({ type: "set-scene-preset", scenePreset: sceneForLayerPreset(preset) })} onPrimaryLayerChange={(primaryLayer) => dispatch({ type: "set-primary-layer", primaryLayer })} onContextLayerToggle={(layerId) => setActiveLayers((current) => current.includes(layerId) ? current.filter((id) => id !== layerId) : [...current, layerId])} />
-        <PresentationGuide open={state.demoMode} value={state.scenePreset} onClose={() => dispatch({ type: "set-demo-mode", enabled: false })} onSelect={changeScene} />
-        {compare ? <div className="synchronized-maps"><div className="compare-map"><header><span>BEFORE</span><strong>2025 現況</strong></header><AnalyticalMap data={data} validation={validation} preset="discovery" primaryLayer="analysis-city-gap" activeLayerIdsOverride={["reference-gsi-pale"]} selection={state.selection} viewport={state.viewport} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} /></div><div className="compare-map"><header><span>AFTER</span><strong>Scenario {siteCount === 1 ? "A" : siteCount === 2 ? "B" : "C"} · {siteCount}地点</strong></header><AnalyticalMap data={data} validation={validation} preset="scenario-compare" primaryLayer="scenario-footprint" activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} /></div></div>
-          : state.mapMode === "map2d" ? <AnalyticalMap ref={mapRef} data={data} validation={validation} preset={state.preset} primaryLayer={state.primaryLayer} activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} resilienceMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} dimNonSelected={Boolean(state.selection)} onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onError={setError} />
-            : <Plateau3DMap ref={mapRef} data={data} selection={state.selection} viewport={state.viewport} activeLayerIds={activeLayers} scenePreset={state.scenePreset} workspaceMap={state.task === "operate" ? municipal?.map ?? null : null} workspaceBuildingPoints={state.task === "operate" ? municipal?.buildingPoints ?? null : null} workspacePhase={state.task === "operate" ? (siteCount === 1 ? "scenario_a" : siteCount === 2 ? "scenario_b" : "scenario_c") : "baseline"} futuresMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} decisionSites={state.task === "try" ? plan?.sites ?? [] : []} afterScores={state.task === "try" ? scenarioScores : null} decisionFlow={state.task === "try" ? decisionFlow : null} onSelectionChange={select} />}
+        <SavedInvestigationRail open={state.savedInvestigationOpen} value={state.scenePreset} onClose={() => dispatch({ type: "set-saved-investigation-open", open: false })} onSelect={changeScene} />
+        {compare ? <div className="synchronized-maps"><div className="compare-map"><header><span>BEFORE</span><strong>2025 現況</strong></header><AnalyticalMap data={data} validation={validation} preset="discovery" primaryLayer="analysis-city-gap" activeLayerIdsOverride={["reference-gsi-pale"]} selection={state.selection} viewport={state.viewport} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markBeforeReady} /></div><div className="compare-map"><header><span>AFTER</span><strong>Scenario {siteCount === 1 ? "A" : siteCount === 2 ? "B" : "C"} · {siteCount}地点</strong></header><AnalyticalMap data={data} validation={validation} preset="scenario-compare" primaryLayer="scenario-footprint" activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markAfterReady} /></div></div>
+          : state.mapMode === "map2d" ? <AnalyticalMap ref={mapRef} data={data} validation={validation} preset={state.preset} primaryLayer={state.primaryLayer} activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} resilienceMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} dimNonSelected={Boolean(state.selection)} onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markMapReady} onError={setError} />
+            : <Plateau3DMap ref={mapRef} data={data} selection={state.selection} viewport={state.viewport} activeLayerIds={activeLayers} scenePreset={state.scenePreset} analysisLens={state.analysisLens} counterfactualState={state.counterfactualState} workspaceMap={municipal?.map ?? null} workspaceBuildingPoints={municipal?.buildingPoints ?? null} workspacePhase={workspacePhase} futuresMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} decisionSites={state.task === "try" ? plan?.sites ?? [] : []} afterScores={state.task === "try" ? scenarioScores : null} decisionFlow={state.task === "try" ? decisionFlow : null} onSelectionChange={select} />}
         <ContextLegend layerId={state.primaryLayer} />
         {state.primaryLayer === "validation-temporal" && <div className="map-reference-badge"><span>VALIDATION REFERENCE</span><strong>国立市 · 2023→2025</strong></div>}
         {!state.inspectorOpen && <button type="button" className="open-inspector" onClick={() => dispatch({ type: "set-inspector-open", open: true })}>地点情報を開く</button>}
       </section>
-      <ContextInspector data={data} selection={state.selection} primaryLayer={state.primaryLayer} open={state.inspectorOpen} onClose={() => dispatch({ type: "set-inspector-open", open: false })} onOpenEvidence={() => setEvidenceOpen(true)} onContributionSelect={selectContribution}>{inspectorContent}</ContextInspector>
+      <ContextInspector data={data} selection={state.selection} primaryLayer={state.primaryLayer} workspaceMap={municipal?.map ?? null} workspacePhase={workspacePhase} open={state.inspectorOpen} onClose={() => dispatch({ type: "set-inspector-open", open: false })} onOpenEvidence={() => setEvidenceOpen(true)} onObjectSelect={selectObject}>{inspectorContent}</ContextInspector>
     </main>
     {menuOpen && <aside className="utility-menu" aria-label="設定と管理"><header><strong>運用メニュー</strong><button type="button" onClick={() => setMenuOpen(false)}>×</button></header><button type="button" onClick={() => { changeTask("operate"); setMenuOpen(false); }}>自治体ワークフロー</button><button type="button" onClick={() => { changeTask("validate"); setMenuOpen(false); }}>検証状態</button><button type="button" onClick={share}>現在のURLをコピー</button><small>分析値と公開境界は既存パイプラインを維持</small></aside>}
     <SpatialSearch open={searchOpen} data={data} onClose={() => setSearchOpen(false)} onMesh={selectMesh} onTask={changeTask} />

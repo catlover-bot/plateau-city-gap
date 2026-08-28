@@ -36,6 +36,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run lint
+      - run: npm run check:docs
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
@@ -93,11 +94,10 @@ jobs:
         run: pytest backend/tests/test_validation_chaos.py -q
       - name: privacy-leak
         run: pytest backend/tests/test_public_validation_privacy.py -q
-      - name: accessibility and Validation Workspace contract
+      - name: PLATEAU-native browser, accessibility and strict 3D readiness
         working-directory: frontend
         run: |
           npm ci
-          npm run test -- src/components/validationWorkspace.test.tsx
           npm run typecheck
           ./node_modules/.bin/playwright-core install --with-deps chromium
           npm run build
@@ -108,7 +108,8 @@ jobs:
             if curl --fail --silent http://127.0.0.1:4173/plateau-city-gap/ >/dev/null; then break; fi
             sleep 1
           done
-          npm run audit:validation
+          npm run audit:plateau-native -- --output /tmp/plateau-native-browser-audit.json
+          npm run capture:current -- --output /tmp/citygap-current-capture --diagnostics /tmp/citygap-readiness-failures --only 03-resolution-lift
       - name: pilot-rehearsal and Evidence integrity
         run: |
           python -m analysis.scripts.run_validation_pilot_rehearsal

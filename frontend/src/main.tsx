@@ -2,11 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "maplibre-gl/dist/maplibre-gl.css";
 import App from "./App";
-import "./styles.css";
 import "./design-system/tokens.css";
+import "./design-system/foundation.css";
 import "./app/product-shell.css";
 import "./map/map.css";
 import "./features/inspector/inspector.css";
+import "./features/inspector/object-lens.css";
+import "./app/workbench.css";
 import "./service/service.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
