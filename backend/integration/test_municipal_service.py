@@ -377,6 +377,14 @@ def test_open_data_operator_workflows_are_explicit_versioned_and_tenant_scoped(
     assert metadata.json()["metadata_only"] is True
     assert metadata.json()["current_promoted_data_retained"] is True
     assert metadata.json()["job"]["job_type"] == "metadata_refresh"
+    assert (
+        client.post(
+            f"/api/v1/sources/{source['id']}/metadata-checks",
+            headers=_headers("data_manager", ORG_B),
+            json={"reason": "cross-tenant source refresh attempt"},
+        ).status_code
+        == 404
+    )
 
     suffix = uuid.uuid4().hex[:8]
     registered = client.post(
@@ -543,6 +551,21 @@ def test_open_data_operator_workflows_are_explicit_versioned_and_tenant_scoped(
     assert reprocessed.status_code == 202, reprocessed.text
     assert reprocessed.json()["previous_canonical_retained"] is True
     assert reprocessed.json()["job"]["job_type"] == "schema_normalization"
+    assert (
+        client.post(
+            f"/api/v1/resources/{resource_id}/reprocess",
+            headers=_headers("data_manager", ORG_B),
+            json={
+                "adapter_id": "ckan-v3@1",
+                "adapter_version": "2",
+                "transformation_version": "acceptance-transform@2",
+                "canonical_version": "canonical@2",
+                "previous_transformation_run_id": str(transformation_id),
+                "reason": "cross-tenant reprocess attempt",
+            },
+        ).status_code
+        == 404
+    )
 
     quarantined = client.post(
         f"/api/v1/resources/{resource_id}/quarantine",
@@ -575,6 +598,18 @@ def test_open_data_operator_workflows_are_explicit_versioned_and_tenant_scoped(
     assert started.status_code == 200, started.text
     assert started.json()["status"] == "in_progress"
     assert (
+        client.patch(
+            f"/api/v1/data-tasks/{update_task['id']}",
+            headers=_headers("data_manager", ORG_B),
+            json={
+                "expected_status": "in_progress",
+                "proposed_status": "resolved",
+                "resolution_note": "cross-tenant task mutation attempt",
+            },
+        ).status_code
+        == 404
+    )
+    assert (
         client.get(
             "/api/v1/cities/maizuru/data-tasks", headers=_headers("viewer", ORG_B)
         ).status_code
@@ -600,6 +635,138 @@ def test_open_data_operator_workflows_are_explicit_versioned_and_tenant_scoped(
             (ORG_A, resource_id),
         ).fetchone()[0]
         assert processing == "quarantined"
+
+
+def test_public_raw_blob_dedup_keeps_tenant_source_metadata_separate(
+    database_url: str,
+) -> None:
+    _prepare_service_fixture(database_url)
+
+    import psycopg
+
+    suffix = uuid.uuid4().hex
+    raw_sha = (suffix * 2)[:64]
+    with psycopg.connect(database_url) as connection:
+        city_a = connection.execute(
+            "SELECT id FROM cities WHERE organization_id = %s AND city_key = 'maizuru'",
+            (ORG_A,),
+        ).fetchone()[0]
+        source_a = connection.execute(
+            """SELECT id FROM city_open_data_sources
+               WHERE organization_id = %s AND city_id = %s
+               ORDER BY id LIMIT 1""",
+            (ORG_A, city_a),
+        ).fetchone()[0]
+        license_id = connection.execute(
+            """SELECT license_id FROM open_data_license_policies
+               WHERE unknown_terms = false ORDER BY license_id LIMIT 1"""
+        ).fetchone()[0]
+        source_b = connection.execute(
+            """INSERT INTO city_open_data_sources (
+                   organization_id, city_id, source_key, external_dataset_id,
+                   dataset_family, title, source_url, availability, review_status,
+                   license_id, reference_date
+               ) VALUES (%s, %s, 'bodik-maizuru', %s, 'municipal_facilities',
+                         '組織B 公開raw共有検証', 'https://data.bodik.jp/',
+                         'available', 'selected', %s, '2026-01-01')
+               RETURNING id""",
+            (ORG_B, CITY_B, f"tenant-b-{suffix}", license_id),
+        ).fetchone()[0]
+
+        blob_id = connection.execute(
+            """INSERT INTO open_data_raw_blobs (
+                   owner_organization_id, sha256, size_bytes, content_type,
+                   storage_provider, object_key, reuse_scope, first_retrieved_at
+               ) VALUES (NULL, %s, 24, 'text/csv', 'local', %s,
+                         'public_verified', now())
+               RETURNING id""",
+            (raw_sha, f"sha256/{raw_sha[:2]}/{raw_sha}"),
+        ).fetchone()[0]
+        reused_blob_id = connection.execute(
+            """INSERT INTO open_data_raw_blobs (
+                   owner_organization_id, sha256, size_bytes, content_type,
+                   storage_provider, object_key, reuse_scope, first_retrieved_at
+               ) VALUES (NULL, %s, 24, 'text/csv', 'local', %s,
+                         'public_verified', now())
+               ON CONFLICT (sha256, owner_organization_id) DO UPDATE SET
+                   size_bytes = EXCLUDED.size_bytes
+               RETURNING id""",
+            (raw_sha, f"duplicate-attempt/{suffix}"),
+        ).fetchone()[0]
+        assert reused_blob_id == blob_id
+
+        resource_a = connection.execute(
+            """INSERT INTO open_data_resources (
+                   organization_id, city_source_id, raw_blob_id,
+                   external_resource_id, resource_title, resource_url, format,
+                   content_length, raw_checksum, retrieved_at, adapter_version
+               ) VALUES (%s, %s, %s, %s, '組織A metadata', %s, 'CSV', 24,
+                         %s, now(), 'ckan-v3@1')
+               RETURNING id""",
+            (
+                ORG_A,
+                source_a,
+                blob_id,
+                f"tenant-a-{suffix}",
+                f"https://data.bodik.jp/resource/{suffix}/a.csv",
+                raw_sha,
+            ),
+        ).fetchone()[0]
+        resource_b = connection.execute(
+            """INSERT INTO open_data_resources (
+                   organization_id, city_source_id, raw_blob_id,
+                   external_resource_id, resource_title, resource_url, format,
+                   content_length, raw_checksum, retrieved_at, adapter_version
+               ) VALUES (%s, %s, %s, %s, '組織B metadata', %s, 'CSV', 24,
+                         %s, now(), 'ckan-v3@1')
+               RETURNING id""",
+            (
+                ORG_B,
+                source_b,
+                blob_id,
+                f"tenant-b-{suffix}",
+                f"https://data.bodik.jp/resource/{suffix}/b.csv",
+                raw_sha,
+            ),
+        ).fetchone()[0]
+        assert resource_a != resource_b
+        assert connection.execute(
+            "SELECT count(*) FROM open_data_raw_blobs WHERE sha256 = %s",
+            (raw_sha,),
+        ).fetchone()[0] == 1
+        assert connection.execute(
+            """SELECT count(DISTINCT organization_id)
+               FROM open_data_resources WHERE raw_blob_id = %s""",
+            (blob_id,),
+        ).fetchone()[0] == 2
+
+        with pytest.raises(psycopg.errors.ForeignKeyViolation), connection.transaction():
+            connection.execute(
+                """INSERT INTO open_data_resources (
+                           organization_id, city_source_id, raw_blob_id,
+                           external_resource_id, resource_title, resource_url, format,
+                           raw_checksum, adapter_version
+                       ) VALUES (%s, %s, %s, %s, 'cross-tenant metadata', %s,
+                                 'CSV', %s, 'ckan-v3@1')""",
+                (
+                    ORG_B,
+                    source_a,
+                    blob_id,
+                    f"forbidden-{suffix}",
+                    f"https://data.bodik.jp/resource/{suffix}/forbidden.csv",
+                    raw_sha,
+                ),
+            )
+
+        with pytest.raises(psycopg.errors.ForeignKeyViolation), connection.transaction():
+            connection.execute(
+                """INSERT INTO open_data_source_feedback (
+                           organization_id, city_id, city_source_id, feedback_type,
+                           statement, submitted_by
+                       ) VALUES (%s, %s, %s, 'attribute_issue',
+                                 'cross-tenant source feedback attempt', 'acceptance-test')""",
+                (ORG_B, CITY_B, source_a),
+            )
 
 
 def test_organization_a_b_isolation_for_api_and_database_constraints(

@@ -155,6 +155,9 @@ def test_city_data_coverage_and_lineage_are_forward_only_and_non_ranking() -> No
 
 
 def test_open_data_operations_are_append_only_tenant_scoped_and_analysis_blocking() -> None:
+    foundation_sql = Path("infra/migrations/018_open_data_foundation.sql").read_text(
+        encoding="utf-8"
+    )
     sql = Path("infra/migrations/024_open_data_operations.sql").read_text(encoding="utf-8")
     for table in (
         "open_data_operator_tasks",
@@ -174,3 +177,8 @@ def test_open_data_operations_are_append_only_tenant_scoped_and_analysis_blockin
     assert "REFERENCES open_data_resources(organization_id, id)" in sql
     assert "REFERENCES analysis_runs(organization_id, id)" in sql
     assert "CREATE INDEX open_data_spatial_links_record_method_idx" in sql
+    assert "UNIQUE NULLS NOT DISTINCT (sha256, owner_organization_id)" in foundation_sql
+    assert "reuse_scope = 'public_verified' AND owner_organization_id IS NULL" in foundation_sql
+    assert "reuse_scope = 'tenant_only' AND owner_organization_id IS NOT NULL" in foundation_sql
+    assert "REFERENCES city_open_data_sources(organization_id, id)" in sql
+    assert "REFERENCES canonical_open_data_records(organization_id, id)" in sql
