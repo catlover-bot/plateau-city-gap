@@ -200,15 +200,16 @@ def load_scenario_artifacts(
                        algorithm_version, objective_mode, objective_definition,
                        site_count, candidate_count, algorithm_kind, config_hash,
                        generated_at, runtime_seconds, lifecycle_status, metadata,
-                       base_urban_state_id
+                       base_urban_state_id, title
                    ) VALUES (
                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, 'draft', %s, %s
+                       %s, %s, 'draft', %s, %s, %s
                    ) ON CONFLICT (id) DO UPDATE SET
                        objective_definition = EXCLUDED.objective_definition,
                        runtime_seconds = EXCLUDED.runtime_seconds,
                        metadata = EXCLUDED.metadata,
                        base_urban_state_id = EXCLUDED.base_urban_state_id,
+                       title = EXCLUDED.title,
                        updated_at = now()""",
                 (
                     row.scenario_run_id,
@@ -228,6 +229,7 @@ def load_scenario_artifacts(
                     float(row.runtime_seconds),
                     json.dumps(_json(row.metadata_json), ensure_ascii=False),
                     base_urban_state_id,
+                    row.scenario_key,
                 ),
             )
             if existed is None:
