@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "citygap.visual-identity-audit@1",
+  "label": "baseline",
+  "baseUrl": "http://127.0.0.1:4173/plateau-city-gap/",
+  "generatedAt": "2026-08-28T16:12:09.408Z",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "productReadyMs": 4250,
+      "visibleElementCount": 295,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 8,
+      "floatingPanelCount": 4,
+      "borderedSurfaceCount": 17,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 5,
+      "accentColors": [
+        "rgb(144, 99, 26)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)",
+        "rgb(61, 116, 87)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1070,
+      "mapHeightPx": 784,
+      "mapWidthPercent": 74.3,
+      "mapAreaPercent": 64.7,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "productReadyMs": 4344,
+      "visibleElementCount": 295,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 8,
+      "floatingPanelCount": 4,
+      "borderedSurfaceCount": 17,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 5,
+      "accentColors": [
+        "rgb(144, 99, 26)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)",
+        "rgb(61, 116, 87)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 910,
+      "mapHeightPx": 684,
+      "mapWidthPercent": 71.1,
+      "mapAreaPercent": 60.8,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "productReadyMs": 3589,
+      "visibleElementCount": 283,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 8,
+      "floatingPanelCount": 4,
+      "borderedSurfaceCount": 17,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 5,
+      "accentColors": [
+        "rgb(144, 99, 26)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)",
+        "rgb(61, 116, 87)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 694,
+      "mapHeightPx": 662,
+      "mapWidthPercent": 67.8,
+      "mapAreaPercent": 58.4,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "productReadyMs": 5274,
+      "visibleElementCount": 267,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 8,
+      "floatingPanelCount": 5,
+      "borderedSurfaceCount": 16,
+      "maximumRadiusPx": 3,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(144, 99, 26)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 768,
+      "mapHeightPx": 918,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 89.6,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "productReadyMs": 3236,
+      "visibleElementCount": 242,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 1,
+      "gradientCount": 0,
+      "shadowCount": 6,
+      "floatingPanelCount": 5,
+      "borderedSurfaceCount": 13,
+      "maximumRadiusPx": 3,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(144, 99, 26)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 390,
+      "mapHeightPx": 746,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 88.4,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    }
+  ],
+  "consoleErrors": [],
+  "localHttpFailures": [],
+  "files": {
+    "sourceCss": [
+      {
+        "path": "frontend/src/app/product-shell.css",
+        "bytes": 10618,
+        "gzipBytes": 2389
+      },
+      {
+        "path": "frontend/src/design-system/tokens.css",
+        "bytes": 1193,
+        "gzipBytes": 602
+      },
+      {
+        "path": "frontend/src/features/inspector/inspector.css",
+        "bytes": 12670,
+        "gzipBytes": 2591
+      },
+      {
+        "path": "frontend/src/map/map.css",
+        "bytes": 12648,
+        "gzipBytes": 2768
+      },
+      {
+        "path": "frontend/src/service/service.css",
+        "bytes": 30860,
+        "gzipBytes": 5521
+      },
+      {
+        "path": "frontend/src/styles.css",
+        "bytes": 98866,
+        "gzipBytes": 19147
+      }
+    ],
+    "sourceCssBytes": 166855,
+    "buildAssets": [
+      {
+        "path": "frontend/dist/assets/CesiumMap-D9zZ3V7f.js",
+        "bytes": 3573760,
+        "gzipBytes": 926904
+      },
+      {
+        "path": "frontend/dist/assets/index-DyOzbxV-.css",
+        "bytes": 223963,
+        "gzipBytes": 37723
+      },
+      {
+        "path": "frontend/dist/assets/index-VCPoQrI1.js",
+        "bytes": 14026,
+        "gzipBytes": 4823
+      },
+      {
+        "path": "frontend/dist/assets/ProductApp-CDOggMTR.js",
+        "bytes": 90802,
+        "gzipBytes": 24644
+      },
+      {
+        "path": "frontend/dist/assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "gzipBytes": 45800
+      },
+      {
+        "path": "frontend/dist/assets/ServiceApp-BzHgUxqm.js",
+        "bytes": 107017,
+        "gzipBytes": 28961
+      }
+    ],
+    "screenshotCount": 58,
+    "screenshotBytes": 16832280
+  }
+}

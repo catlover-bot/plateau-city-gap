@@ -210,4 +210,4 @@ version-pinned raw/canonicalを未取込で、利用者数を駅容量・混雑�
 項目はrepositoryおよびPublic Showcaseへ配布しない。
 
 Goal 1〜120の最終対応、実データ件数、CI証跡、外部作業境界は
-[Municipal Open Data Platform final audit](open-data-platform-final-audit.md)を参照する。
+公開assetの契約はCIの `public-assets` と `validation-gates` で毎回検証する。過去時点のfinal audit文書はSSOTにしない。

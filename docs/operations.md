@@ -82,7 +82,7 @@ one transaction. A manifest cannot silently select a latest scenario version.
 
 Evidence V3 adds the urban state, exact source/network versions, future/hazard assumptions,
 stress-test metrics, criticality evidence, limitations and field verification in deterministic
-JSON/CSV/print HTML. See [Urban Futures & Resilience](urban-futures-resilience.md).
+JSON/CSV/print HTML. The current public investigation boundary is documented in [Architecture](architecture.md).
 
 The authenticated `運用管理` surface reads `/admin/snapshot` and the pilot-readiness endpoint. It
 shows current cities, datasets/versions/quality state, capabilities, networks, jobs and users/roles.

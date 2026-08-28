@@ -1,48 +1,85 @@
-# PLATEAU 3D Decision Twin rendering
+# PLATEAU 3D rendering
+
+## Purpose
+
+3Dは独立した閲覧機能ではない。500mで見つけたFindingを、同じselectionのまま建物群、建物、道路、地形、計画・災害contextへ詳細化する調査面として使う。
+
+PLATEAUを外すと建物level Investigation、道路object調査、実DEM上の位置関係、Planning/Hazard object context、objectからFindingへの逆引きが成立しない。2D discoveryはPLATEAUなしでも一部成立する。
 
 ## Building delivery
 
-建物は最初の意味ある形状を早く出しつつ、公式全市配信へ移行する3段階構成である。
+建物は実データだけを3段階で配信する。
 
-1. `plateau-fast`: 公式b3dm 1 tile / 15棟。Dracoだけをlossless decodeし、形状簡略化・高さ推定をしない。
-2. `plateau`: 検証済みlocal fallback 3 tiles / 856棟。公式配信が失敗してもDeep Dive操作を継続する。
-3. PLATEAU VIEW official camera stream: 舞鶴市2025 LOD1 44,640棟。初期tile読込後にlocal 2段を非表示にする。
+1. `plateau-fast`: 公式b3dm 1 tile / 15棟。geometry simplification、height estimationなし。
+2. `plateau`: 検証済みlocal subset 3 tiles / 856棟。対象mesh内296棟。
+3. 公式camera stream: 舞鶴市2025 LOD1 44,640棟。
 
-公式APIの可用性を暗黙に保証しない。画面DOMは `data-building-source` と `data-building-tiles-loaded` を公開し、監査が実際のstageを検証する。選択建物は黄色、他の公式建物は淡い灰緑で表示する。
+通常はfast-start → bundled subset → official streamへprogressiveに移行する。正規Deep Dive captureは `buildingSource=verified-local` で公式b3dm由来の15棟sourceを固定し、外部streamの可用性で画像が変わらないようにする。これはfallback geometryの捏造ではなく、checksumとmetadataを持つ公式source subsetである。
 
-## Actual PLATEAU DEM surface
+Urban X-Rayは建物高さを変形しない。選択mesh内の建物所属をamber、対象外をneutral/dim、選択建物をsemantic accentで表示する。個別建物へ500m統計値を付与しない。
 
-局所地形は `analysis/scripts/build_plateau_terrain_web_tiles.py` で公式舞鶴市2025 CityGMLの `udx/dem/533513_dem_6697_00_op.gml` から生成する。
+## Terrain
 
-- source CRS: EPSG:6697（JGD2011 + JGD2011重力関連高）
-- render CRS: EPSG:4979 / 4978（楕円体高 / ECEF）
-- vertical transform: PROJの公式 `jp_gsi_gsigeo2011.tif` をinverse適用
-- 走査1,896,487三角形、Deep Dive選択65,232、表示65,232
-- 195,696頂点参照を同一座標でindex化し、再標本化なしで32,990頂点へ集約
-- source標高25.063–164.581m、render楕円体高62.088–201.645m
-- GLB 1,575,692 bytes、SHA-256 `137cb6478a7e7c26c921a7e50508547380149c7f02f399873b8e3486e20a99fa`
-- 補間、平滑化、高さ誇張はしない
+局所地形は舞鶴市2025 CityGML `dem:TINRelief` から生成する。
 
-品質境界は常団地前バス停周辺、mesh `533513314` 近傍だけであり、全市の実CityGML DEM表示とは主張しない。広域地形はPLATEAU-Terrain quantized meshを用い、局所実TINを `plateau-terrain` Scene layerとして上に重ねる。
+- source CRS: EPSG:6697
+- render CRS: EPSG:4979 / 4978
+- vertical transform: `jp_gsi_gsigeo2011.tif`
+- Deep Dive: 65,232 triangles、32,990 indexed vertices
+- interpolation、smoothing、vertical exaggerationなし（1.0）
+- coverage: mesh `533513314`近傍のみ
 
-## Roads, analysis and policy objects
+広域はPLATEAU-Terrain、Deep Diveは実TINを使用する。Urban X-Ray分析面は実terrainより上に分離し、legendとcopyで「実地形ではない」と表示する。DEMから歩行負荷、斜度、危険度を新たに推定しない。
 
-公式PLATEAU道路LOD1 polygonはCesium ground classificationで地形・3D Tilesの表面へ重ねる。施策候補地、Before/After経路、改善建物位置、災害stressの不通領域・critical edge・影響施設は同じCesium sceneへ追加する。ただし公式地物とCITY GAP派生成果物は色、legend、provenanceを分離する。
+## Roads and object graph
 
-## Camera and render budget
+公式PLATEAU道路LOD1 polygonを地形上へ表示し、クリック可能なobjectとして扱う。Building → nearest Road、Mesh → Road、Road → FindingをUrban Object Graphで辿る。距離は選択座標から道路geometry頂点への概算直線距離である。
 
-CameraControllerは `city / mesh / building / route / hazard / scenario` の6 intentを持つ。建物は520m、道路は1,450m、災害は2,600m、施策は1,150mのrangeを基準とし、選択対象へ1.15–1.2秒で遷移する。
+graph semanticsは常に `experimental PLATEAU LOD1 road-surface adjacency`。pedestrian network、walking network、walking timeではない。
 
-- Cesiumは `requestRenderMode=true`、`maximumRenderTimeChange=Infinity`。
-- 3D Tiles SSEはdesktop 13、mobile 22。
-- building cacheはdesktop 192MiB、mobile 96MiB。DEMは24MiB。
-- dynamic SSEを有効化し、semantic zoom外のlayerはon-demand/camera streamとする。
-- WebGL不可、公式stream失敗、局所DEM失敗を個別に通知し、2Dまたは検証済みfallbackを維持する。
+## Analysis overlays
 
-初回3D JavaScriptはlazy chunkであり、2D discoveryの初期bundleから分離する。実測値は `docs/assets/spatial-v1/audit.json` に保存する。
+- Urban X-Ray: 既存 `exploratory_score_c` だけを半透明analysis surfaceへ変換
+- Service Pulse: 既存representative routeのnetwork distance band（500m / 1km / 2km / endpoint）
+- Counterfactual Twin: 既存scenario結果のchanged road / affected building / siteだけを強調
+- Temporal Ghost: 公開済みactual Point sampleだけをadded / removed / changedとして表示
 
-## Production audit result
+Pulseはpath distanceを毎frame計算しない。precomputed route positionsを使い、reduced motionではanimationを止めてstatic distance bandsだけを残す。routeの水平geometryは既存結果を維持し、3D表示線だけを地形から25m分離する。この高さはroute標高ではない。Scenarioで架空の建物新設・撤去・変形を行わない。
 
-1440×900のproduction previewをChromium headless + SwiftShaderで測定した。2D product readyは5.000秒、3Dの最初の建物+局所DEMは8.071秒。最終PLATEAU detail captureでは公式stream 9 tiles / 2,720 features、局所DEM 1 tile、建物実pick成功。Hazard Sceneでは公式28 tiles / 7,795 features、resilience 88地物を同一sceneで確認した。console errorとHTTP 4xx/5xxは0。
+## Camera choreography
 
-強制連続render throughputは2.7 fpsだった。これはGPUを使わないCI用SwiftShader・1070×784 canvas・公式streamと局所TIN同時表示の値で、利用者端末のFPSやSLAとはみなさない。通常動作は `requestRenderMode` のため静止中に連続描画せず、cameraやstate変更時だけrenderする。実GPUの代表端末別測定は公開pilot前の残課題である。
+`CameraController`は `city / mesh / building / route / hazard / scenario` のintentを持つ。
+
+- city: top-down
+- mesh: slight tilt
+- building: architectural perspective
+- route/service: routeと関係objectが読める角度
+- hazard/scenario:対象contextを含む高めのview
+
+Sceneとresolutionは独立stateである。sceneは何を調べるか、resolutionはどの粒度で見るかを表す。URL fixtureがcameraとselectionを固定し、手作業のcamera位置を正規画像に使わない。
+
+## Visual Readiness Protocol
+
+撮影は時間待ちではなく、次をscene requirementsとして評価する。
+
+- app、basemap、analysis、overlay、font ready
+- camera settled
+- Cesium sceneとcanvas CSS / drawing bufferの寸法一致
+- building tiles loadedかつfeature countが閾値以上
+- terrain provider ready、必要sceneはlocal DEM ready、terrain tile count > 0
+- road objects ready
+- outstanding critical requests = 0
+- 同一readiness signatureが3 render frame連続
+
+全条件が揃うまで `document.documentElement.dataset.visualReady` はfalseである。timeout時は画像を保存せず、readiness、camera、tile count、network failure、consoleを診断JSONへ保存する。画面外の任意LOD refinementはcritical resourceと分けてmanifestへ記録する。
+
+## Render budget
+
+- `requestRenderMode=true`
+- building SSE: desktop 13、mobile 22
+- building cache: desktop 192MiB、mobile 96MiB
+- DEM cache: 24MiB
+- Cesiumは2D initial bundleからlazy-load
+- WebGL、全市stream、local DEMの失敗を別々に扱う
+
+SwiftShader値は実GPU SLAとして扱わない。正規計測値はcurrent capture manifestとperformance auditへ記録し、旧screenshot auditを参照しない。

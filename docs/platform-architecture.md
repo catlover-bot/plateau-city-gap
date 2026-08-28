@@ -61,7 +61,7 @@ ScenePreset, primary layer, viewport and 2D/3D mode. Eight ScenePresets bind cam
 required layers, legend and Context Inspector. MapLibre + GSI pale tiles remain the analytical 2D
 surface; Cesium is lazy-loaded for the PLATEAU 3D Decision Twin. The central registry currently
 governs 26 analysis, PLATEAU, infrastructure, planning, hazard, scenario, validation and reference
-layers. See [Spatial Workspace](spatial-workspace.md).
+layers. See the current [Architecture](architecture.md) and [Visual system](visual-system.md).
 
 PLATEAU buildings use a staged delivery path: a losslessly Draco-decoded 15-building official tile,
 a verified local 856-building fallback, then the official camera-driven Maizuru 2025 stream of

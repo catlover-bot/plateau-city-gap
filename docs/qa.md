@@ -1,6 +1,6 @@
 # CITY GAP final Q&A
 
-各回答は30秒以内を想定しています。詳細数値は `presentation-facts.md`、監査結果は `score-audit.md` を参照します。
+回答根拠は `data-sources.md`、`methodology.md`、`score-audit.md` と正規capture manifestを参照します。発表用に複製した数値表はSSOTにしません。
 
 ## Q1 なぜPLATEAU？
 

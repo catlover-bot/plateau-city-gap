@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "citygap.visual-identity-audit@1",
+  "label": "current",
+  "commit": "2a43ef68719736d497e888302faef395ce80bb20",
+  "baseUrl": "http://127.0.0.1:4174/plateau-city-gap/",
+  "generatedAt": "2026-08-28T20:05:31.430Z",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "productReadyMs": 9487,
+      "visibleElementCount": 277,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 7,
+      "borderedSurfaceCount": 21,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(180, 122, 33)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1440,
+      "mapHeightPx": 848,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 94.2,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "productReadyMs": 4191,
+      "visibleElementCount": 277,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 7,
+      "borderedSurfaceCount": 21,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(180, 122, 33)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1280,
+      "mapHeightPx": 748,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 93.5,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "productReadyMs": 3467,
+      "visibleElementCount": 270,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 7,
+      "borderedSurfaceCount": 21,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(180, 122, 33)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1024,
+      "mapHeightPx": 716,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 93.2,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "productReadyMs": 2926,
+      "visibleElementCount": 264,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 7,
+      "borderedSurfaceCount": 21,
+      "maximumRadiusPx": 3,
+      "accentColorCount": 4,
+      "accentColors": [
+        "rgb(180, 122, 33)",
+        "rgb(197, 139, 43)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 768,
+      "mapHeightPx": 976,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 95.3,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "productReadyMs": 2129,
+      "visibleElementCount": 220,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 1,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 7,
+      "borderedSurfaceCount": 16,
+      "maximumRadiusPx": 3,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(180, 122, 33)",
+        "rgb(23, 77, 74)",
+        "rgb(36, 108, 103)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 390,
+      "mapHeightPx": 752,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 89.1,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    }
+  ],
+  "consoleErrors": [],
+  "localHttpFailures": [],
+  "files": {
+    "sourceCss": [
+      {
+        "path": "frontend/src/app/product-shell.css",
+        "bytes": 10639,
+        "gzipBytes": 2395
+      },
+      {
+        "path": "frontend/src/app/workbench.css",
+        "bytes": 8954,
+        "gzipBytes": 2292
+      },
+      {
+        "path": "frontend/src/design-system/foundation.css",
+        "bytes": 4006,
+        "gzipBytes": 1342
+      },
+      {
+        "path": "frontend/src/design-system/tokens.css",
+        "bytes": 1167,
+        "gzipBytes": 576
+      },
+      {
+        "path": "frontend/src/features/inspector/inspector.css",
+        "bytes": 10065,
+        "gzipBytes": 2255
+      },
+      {
+        "path": "frontend/src/features/inspector/object-lens.css",
+        "bytes": 3126,
+        "gzipBytes": 817
+      },
+      {
+        "path": "frontend/src/map/map.css",
+        "bytes": 13275,
+        "gzipBytes": 2873
+      },
+      {
+        "path": "frontend/src/service/service.css",
+        "bytes": 31298,
+        "gzipBytes": 5552
+      }
+    ],
+    "sourceCssBytes": 82530,
+    "buildAssets": [
+      {
+        "path": "frontend/dist/assets/CesiumMap-BjNTIRmO.js",
+        "bytes": 3588002,
+        "gzipBytes": 931308
+      },
+      {
+        "path": "frontend/dist/assets/index-B9RwqA5r.css",
+        "bytes": 153866,
+        "gzipBytes": 23509
+      },
+      {
+        "path": "frontend/dist/assets/index-C39JXpq8.js",
+        "bytes": 16378,
+        "gzipBytes": 5409
+      },
+      {
+        "path": "frontend/dist/assets/ProductApp-DJWMA67E.js",
+        "bytes": 116322,
+        "gzipBytes": 32548
+      },
+      {
+        "path": "frontend/dist/assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "gzipBytes": 45800
+      },
+      {
+        "path": "frontend/dist/assets/ServiceApp-BzHgUxqm.js",
+        "bytes": 107017,
+        "gzipBytes": 28961
+      }
+    ],
+    "screenshotCount": 10,
+    "screenshotBytes": 4586842
+  }
+}

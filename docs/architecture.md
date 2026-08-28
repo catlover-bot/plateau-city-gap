@@ -1,170 +1,111 @@
 # Architecture
 
-CITY GAPは分析と配信を分離した静的Webアプリです。Python側の実分析成果物をSingle Source of Truthとし、ブラウザは検証済みの公開assetを読み込みます。常時稼働するAPI、データベース、認証、API keyはありません。
+CITY GAPは、公式都市データを「発見」から「検証可能な施策比較」へつなぐ静的Webアプリである。分析結果はPythonで生成・検証し、ブラウザは公開可能な集計assetだけを読み込む。PLATEAUは背景装飾ではなく、500mメッシュのFindingを実在する都市objectへ詳細化するUrban Object Modelとして扱う。
 
-## System overview
-
-```text
-公式公開データ
-  ├─ e-Stat人口 2020
-  ├─ 国土数値情報 P11 2022 / P04 2020
-  └─ Project PLATEAU 舞鶴市 2025
-          │
-          ▼
-Python / GeoPandas analysis（EPSG:6674）
-          │
-          ▼
-analysis/outputs/real/
-  CSV + GeoJSON + summary.json
-  └─ 分析値のSingle Source of Truth
-          │
-          ▼
-build_web_assets.py
-  schema・値・geometry・lineage検証
-          │
-          ▼
-frontend/public/data/
-  軽量GeoJSON / JSON + PLATEAU 3D Tiles subset
-  + PLATEAU道路subset + final demo candidates
-          │
-          ▼
-React + TypeScript + CesiumJS
-  ├─ ranking / detail / Story Mode
-  ├─ metric・point・3D layer
-  └─ browser内What-if（proj4 / EPSG:6674）
-          │
-          ▼
-Vite static build → GitHub Pages
-```
-
-## Analysis layer
-
-`analysis/src/` は計算責務を分けています。
-
-| Module | Responsibility |
-|---|---|
-| `mesh.py` | JIS X 0410 500mメッシュの復号とgeometry |
-| `population.py` | 5歳階級から65歳以上人口を集計 |
-| `spatial.py` | 行政界との交差・point抽出 |
-| `distances.py` / `accessibility.py` | EPSG:6674上の最寄り直線距離 |
-| `metrics.py` | percentile、Score A/B/C、Pareto |
-| `ranking.py` | 開示条件・人口条件を明示した順位 |
-| `validation.py` | CRS、schema、値域、件数の検証 |
-| `plateau_road_network.py` | LOD1道路面、公式generator adapter、実験graph、Dijkstra |
-| `network_verification.py` | edge最適性とpredecessorによる独立shortest-path証明 |
-| `plateau_terrain.py` | DEM TIN補間、edge標高差、route上り・下り・grade |
-
-`analysis/outputs/real/maizuru_city_gap.geojson`、`maizuru_city_gap_top10.csv`、`maizuru_summary.json` がプロダクトへ渡す確定値です。React側でRank 1などを再入力しません。
-
-## Web asset boundary
-
-`analysis/scripts/build_web_assets.py` は分析用の広いschemaから、ブラウザに必要な属性だけを選択し `frontend/public/data/` に出力します。
-
-- 495メッシュとTop 10の対応、rank 1〜10、mesh code一意性
-- 人口・65歳以上人口・距離の値域
-- 緯度経度範囲とGeoJSON geometry
-- 駅・バス停・医療施設・行政界の件数
-- 入力ファイルのbyte数とSHA-256、変換履歴
-- PLATEAU建物inspectionの件数とTop 10 coverage
-
-異常時は不完全なassetを公開せずbuildを失敗させます。`manifest.json` は生成日時、分析version、CRS、データ年次、source record、output hash、limitationsを持ちます。
-
-## PLATEAU 3D pipeline
-
-公式「3D都市モデル（舞鶴市）2025年度」3D Tiles/MVT ZIPは約161MBのため `data/raw/plateau_3d/` に置き、Git管理外にします。
-
-1. `download_plateau_3d.py` が公式ZIPのbyte数・SHA-256・ZIP pathを検証し、LOD1/LOD2建物containerを展開する。
-2. `inspect_plateau_buildings.py` がLOD1/LOD2配布コンテナの各427 b3dmを検査する。
-3. `gml_id` でtile間の重複を除き、公式配布3D Tiles内44,640棟とLOD1/LOD2 ID一致を確認する。
-4. Top 10の各500m polygonと建物代表点・bounding boxを照合する。
-5. Top 10内0棟をcoverage結果として記録し、geometryを推定しない。
-6. `build_final_demo_assets.py` が44,640建物代表点を500mメッシュへ結合し、PLATEAU-covered Top 5を生成する。
-7. 同scriptがCityGML道路LOD1 15,684面を読み、既存交通から150m超の11,460道路面代表点でWhat-ifを評価し、1.5km以上離したTop 3を生成する。Deep Diveでは道路135面とDEM TINを抽出する。
-8. `build_plateau_web_subset.py` が全市23位 `533513314` と交差する3 leaf tileを選び、公式ZIP内memberへhash照合して公開する。
-
-現在のsubset payloadは4,313,608 bytes、856棟です。対象500mメッシュ内の代表点は296棟で、実際のgeometryは全856棟がLOD1です。用途・計測高さ・階数・建築面積・延べ面積・LODはbatch tableに存在する値だけを表示します。
-
-このsubsetはCITY GAP Top 10の周辺ではありません。Story Mode Step 3はPLATEAU-coveredの全市23位へ移動し、Top 10の0棟coverageと区別します。
-
-## Frontend
-
-`frontend/src/` の主な責務は次の通りです。
-
-| Area | Responsibility |
-|---|---|
-| `lib/data.ts` | 相対base pathからassetをloadし、必須・任意layerを区別 |
-| `CesiumMap` | 500m polygon、point、行政界、3D Tiles、camera、pick |
-| `RankingPanel` / `DetailPanel` | Top 10、実測値、最寄り施設、percentile、説明 |
-| `MetricSelector` / `LayerPanel` | 指標色分けとlayer表示状態 |
-| `StoryMode` | 指標比較 → Rank 1 → 3D Deep Dive → 配置候補 → 意思決定の5ステップ |
-| `ScenarioPanel` / `lib/scenario.ts` | 仮想交通支援拠点とBefore / After |
-| `MethodologyModal` | source、計算式、coverage、限界 |
-
-Cesiumは500m polygonと施設pointをローカルGeoJSONから、PLATEAU建物をローカル3D Tilesから読みます。背景にはCesium同梱のNatural Earth II静的tileを使い、外部地図APIへ実行時依存しません。地図を操作できなくても、ranking/detailから同じ数値へ到達できます。
-
-## What-if data flow
+## System map
 
 ```text
-PLATEAU道路面Top 3 または map click（EPSG:4326）
-  → proj4でEPSG:6674
-  → 秘匿・合算影響のない286比較meshの中心までのEuclidean距離
-  → min(既存交通距離, 仮想地点距離)
-  → 286件で交通距離percentileを再計算
-  → Score C after
-  → selected mesh Before/After
-     + 改善mesh数
-     + 対象meshの65歳以上人口合計
-     + 平均距離短縮 / Score C合計純減少
-     + 改善幅Top 5
+PLATEAU
+  建物 / 道路 / 地形 / 土地利用 / 都市計画 / 洪水・土砂・津波
+国勢調査 / 国土数値情報 / GTFS・施設
+                         │
+                         ▼
+Urban Data Platform
+  version / CRS / lineage / disclosure / validation
+             ┌───────────┼───────────┐
+             ▼           ▼           ▼
+        建物人口配分   経路・距離   災害・計画context
+             └───────────┼───────────┘
+                         ▼
+CITY GAP Engine
+          発見 ── 検証 ── 施策案 ── 複数案比較
+                         │
+                         ▼
+               自治体レビュー / Decision Record
 ```
 
-再計算はブラウザ内だけで完結し、サーバへ保存しません。同じassetと同じ座標なら同じ結果になります。これは直線距離だけの感度確認で、交通計画の最適化モデルではありません。
+## Trust boundary
 
-## Deployment and performance
+- `analysis/outputs/real/` が計算結果のSingle Source of Truthである。
+- `analysis/scripts/build_web_assets.py` がschema、値域、geometry、lineageを検証して `frontend/public/data/` を生成する。
+- Reactは人口・距離・スコアを再計算して確定値を作らない。表示、選択、trace、既存scenarioの比較だけを担う。
+- 公開面は集計・非機微・read-onlyであり、認証済み自治体APIやDecision Recordの書込みを装わない。
+- 不足データは `unavailable` のまま扱い、施設、費用、承認、観察結果を補完しない。
 
-Viteのbase pathは `/plateau-city-gap/`。GitHub ActionsはmainへのpushでNode install、typecheck、test、production buildを実行し、GitHub Pages artifactを配信します。
+## Spatial state model
 
-公式配布全体の約161MB 3D Tiles ZIP、約914MB CityGML ZIPや展開済みcontainerは配信しません。3D payloadは4.31MBのDeep Dive subsetに限定します。Cesium runtime、Natural Earth II、分析JSON、3D Tiles、道路GeoJSONは全てstatic assetで、外部地図・分析APIへ実行時依存しません。
+SceneとResolutionを独立stateにする。
 
-## Current implementation and claim boundary
+- Scene: `city_overview / gap_discovery / plateau_detail / network_access / healthcare_access / hazard_context / scenario_compare / temporal_change`
+- Resolution: `city → district → mesh → building_group → building → road → site`
+- Selection: mesh、building、road、siteと座標をURLへ直列化する。
+- Lens: `none / urban-xray / service-pulse / changed-only / temporal-ghost`
+- Twin: `baseline / scenario`
 
-| Current product | Not claimed / not implemented |
-|---|---|
-| mesh中心、建物加重Euclidean、実験道路面隣接networkの比較 | 公式歩行者network、徒歩時間 |
-| 500m人口の用途検証済み居住建物への面積按分 | 実在個人・世帯・確認済み入居者 |
-| 公式3D建物Deep Diveと面積を含む属性確認 | 建物入口・確認済み居住起点 |
-| PLATEAU coverageをQAとして表示 | 公式配布全体の3D配信 |
-| 道路面上Top 3と従来Euclidean What-if | network-aware配置案、運行、需要、費用の最適化 |
-| DEM TINによる全道路node標高とroute地形component | 測量道路勾配、歩行energy、坂penalty routing |
+Sceneは「何を調べるか」、Resolutionは「どの粒度で調べるか」である。Scene切替はResolutionを暗黙に上書きしない。URL fixtureから同じ選択、カメラ、分析Lensを復元できる。
 
-将来拡張を現行機能としては扱いません。特に建物形状・用途・階数は現時点のCITY GAPスコアへ入っていません。
+## Urban Object Graph
 
-## Cross-city architecture
+`frontend/src/map/core/urbanObjectGraph.ts` が、UIやrendererに依存しないobject関係を構築する。
 
 ```text
-analysis/config/{maizuru,fujisawa}.yaml
-                  │
-                  ▼
-          city_config.py (validation)
-                  │
-                  ▼
-         run_city_analysis.py
-     mesh ─ population ─ distances
-        ranking ─ Pareto ─ QA
-          │                 │
-          ├─ maizuru_*      └─ fujisawa_*
-          │                       │
-          ▼                       ▼
- build_web_assets.py     build_city_validation_assets.py
-          │                       │
-          └──────────┬────────────┘
-                     ▼
-        React city-aware data loader
-          │                       │
-   Primary demo             Validation mode
-  Story / 3D / What-if      Top 10 / Detail / WHY
+City
+ └─ Mesh 500m
+     ├─ contains → Building Group → Building
+     ├─ intersects / nearest → Road
+     ├─ context → Land Use / Planning / Hazard
+     └─ supports ↔ Finding
+
+Building ─ nearest → Road
+Road ─ supports ↔ Finding
+Finding ─ derived from → metric + source + method + limitation
 ```
 
-共通engineはPLATEAU 3D subsetやWhat-ifを知りません。それらは舞鶴の深い実証を担うpublication layerに残し、都市横断分析と分離しています。これにより、藤沢へ舞鶴の3D metadataや候補地を誤って表示しません。
+Object Lensは選択objectからsource、year、ID、属性、関係object、Findingを双方向に辿る。対象Deep Dive mesh `533513314` では実在296棟のmembershipを確認できる。それ以外で建物object coverageがない場合は `unavailable` と表示する。
 
-Frontendの `AppData.city` が都市名、mode、cameraを保持します。`loadAppData` は舞鶴Primary、`loadValidationCityData` は藤沢の軽量assetを読みます。Cesium viewerは都市切替時に破棄・再生成され、cameraとlayerを都市ごとに初期化します。
+## PLATEAU rendering boundary
+
+- Building: 公式b3dm fast-start、検証済みlocal subset、公式camera streamをprogressiveに扱う。
+- Road: 公式LOD1道路面を表示・pickし、実験的road-surface adjacencyとしてだけ使う。
+- Terrain: 実CityGML TINを説明contextとして表示する。歩行負荷、斜度、危険度を推定しない。
+- Land use / planning / hazard: source属性を関係contextとして表示し、適法性や危険を自動判定しない。
+- Urban X-Ray: 既存CITY GAP scoreの位置関係を分析面として分離表示し、建物geometryを変形しない。
+
+公共画面の建物人口は「モデル推計配分（実居住者数ではない）」である。建物ごとの人数は公開せず、帯域・集計だけを表示する。
+
+## Analysis overlays
+
+| Lens | Existing evidence | Claim boundary |
+|---|---|---|
+| Urban X-Ray | `exploratory_score_c` | 実地形・建物固有スコアではない |
+| Service Pulse | representative route上のprecomputed network distance | 徒歩、時間、pedestrian networkではない |
+| Counterfactual Twin | 既存scenarioのchanged road / building band / site | 建物の新設・撤去・変形ではない |
+| Temporal Ghost | 公開済みactual Point sample | 公式polygon差分や全棟変化ではない |
+
+## Runtime surfaces
+
+`VITE_CITYGAP_SURFACE` で配信面を分ける。
+
+- `showcase`: 地図中心の公開調査面。MapLibreを初期表示し、CesiumをPLATEAU sceneでlazy-loadする。
+- `municipal`: 調査、比較、レビュー、現地確認を扱う自治体運用面。公開デモではread-only境界を保つ。
+
+両面は同じdata contractsとclaim boundaryを使う。UIは分析値を独自に再解釈しない。
+
+## Visual Readiness Protocol
+
+正規画像は固定時間待ちではなく、scene requirementsで撮影可否を決める。
+
+- basemap、font、analysis、overlay ready
+- camera settled
+- canvas CSS寸法とWebGL drawing buffer寸法が一致
+- required building、road、terrain、local DEMがready
+- critical request 0
+- 同一readiness signatureが3 frame以上継続
+
+timeout時は画像を保存せず診断JSONを残す。画面外LOD refinementはoptionalとして分離する。capture manifestはcommit、URL、viewport、camera、source、feature/tile count、readiness、SHA-256を記録する。
+
+## Deployment
+
+Viteのbase pathは `/plateau-city-gap/`。mainへのpushで既存9ゲートを実行し、GitHub Pagesへstatic artifactを配信する。秘密鍵、外部地図API key、常時APIは不要である。分析入力の取得・再生成、PostGIS統合、自治体運用面の詳細は各SSOT文書を参照する。
+
+PLATEAU 3D source tier、DEM、道路、カメラ、render budgetは [3d-rendering.md](./3d-rendering.md)、色・レイアウト・画面構成は [visual-system.md](./visual-system.md) に定義する。

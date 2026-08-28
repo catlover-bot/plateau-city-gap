@@ -64,7 +64,14 @@ for (const specification of scenes) {
     await page.waitForSelector(".product-app", { timeout: 90_000 });
     const readinessTimeout = specification.mode === "plateau3d" && !specification.route.includes("buildingSource=verified-local") ? 240_000 : 180_000;
     await page.waitForFunction(() => document.documentElement.dataset.visualReady === "true", null, { timeout: readinessTimeout });
-    if (specification.requireObjectLens) await page.locator(".object-lens").scrollIntoViewIfNeeded();
+    if (specification.requireObjectLens) {
+      await page.evaluate(() => {
+        const objectLens = document.querySelector(".object-lens");
+        if (!(objectLens instanceof HTMLElement)) throw new Error("PLATEAU Object Lens is not mounted");
+        objectLens.scrollIntoView({ block: "start", behavior: "instant" });
+      });
+      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    }
     const readiness = await page.evaluate((scene) => {
       const cesium = document.querySelector(".cesium-map");
       const map2d = document.querySelector(".analytical-map-shell");
