@@ -33,7 +33,11 @@ def build_audit() -> dict[str, Any]:
         path.read_text(encoding="utf-8")
         for path in sorted((ROOT / "infra/migrations").glob("*.sql"))
     )
-    routes = {route.path for route in create_app(repository=object()).routes}
+    routes = {
+        path
+        for route in create_app(repository=object()).routes
+        if (path := getattr(route, "path", None)) is not None
+    }
     validate_platform_registry(registry)
 
     cities = validation["cities"]
