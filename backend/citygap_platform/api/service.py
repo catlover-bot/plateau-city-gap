@@ -21,6 +21,7 @@ from backend.citygap_platform.domain.municipal_service import (
     FindingStatus,
     FindingType,
     InvestigationStatus,
+    ProductRole,
     ReviewStatus,
 )
 from backend.citygap_platform.domain.scenarios import FieldCheckValue
@@ -205,6 +206,20 @@ class AssignmentCreateRequest(StrictRequest):
     assigned_to: UUID
     due_date: date | None = None
     note: str = Field(default="", max_length=4000)
+
+
+class MembershipCreateRequest(StrictRequest):
+    issuer: str = Field(min_length=1, max_length=2000)
+    subject: str = Field(min_length=1, max_length=500)
+    display_name: str = Field(min_length=1, max_length=300)
+    email: str | None = Field(default=None, pattern=r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
+    role: ProductRole
+
+
+class MembershipStatusRequest(StrictRequest):
+    expected_active: bool
+    proposed_active: bool
+    note: str = Field(min_length=1, max_length=2000)
 
 
 class FieldObservationCreateRequest(StrictRequest):
@@ -441,6 +456,57 @@ def current_organization(
     if profile is None:
         raise _not_found("Organization")
     return profile["organization"]
+
+
+@router.get(
+    "/organizations/current/memberships",
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def organization_memberships(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    return {"items": repo.organization_members(organization_id)}
+
+
+@router.post(
+    "/organizations/current/memberships",
+    status_code=201,
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def create_organization_membership(
+    body: MembershipCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    return repo.create_organization_membership(organization_id, body.model_dump(mode="json"))
+
+
+@router.patch(
+    "/organizations/current/memberships/{user_id}/{role}",
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def transition_organization_membership(
+    user_id: UUID,
+    role: ProductRole,
+    body: MembershipStatusRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_organization_membership(
+            organization_id,
+            str(user_id),
+            role.value,
+            body.expected_active,
+            body.proposed_active,
+            body.note,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Organization membership")
+    return result
 
 
 @router.get("/cities", dependencies=[Depends(require_permission("platform:read"))])
@@ -1480,6 +1546,34 @@ def service_health(
     repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
 ) -> dict[str, Any]:
     return repo.service_health(organization_id)
+
+
+@router.get(
+    "/support-bundle",
+    dependencies=[Depends(require_permission("organization:manage"))],
+    summary="Build a secret-free support snapshot for an administrator",
+)
+def support_bundle(
+    request: Request,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    operations = repo.operations_overview(organization_id)
+    return {
+        "generated_at": datetime.now().astimezone().isoformat(),
+        "request_id": getattr(request.state, "request_id", None),
+        "health": repo.service_health(organization_id),
+        "jobs": operations["jobs"],
+        "datasets": operations["datasets"],
+        "releases": operations["releases"],
+        "boundaries": operations["boundaries"],
+        "excluded": [
+            "tokens",
+            "credentials",
+            "attachment_bytes",
+            "restricted_record_bodies",
+        ],
+    }
 
 
 @router.get(

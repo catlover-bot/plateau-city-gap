@@ -2771,6 +2771,36 @@ function OperationsPage({
     );
   };
 
+  const membershipSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      "/api/v1/organizations/current/memberships",
+      "POST",
+      {
+        issuer: data.get("issuer"),
+        subject: data.get("subject"),
+        display_name: data.get("display_name"),
+        email: data.get("email") || null,
+        role: data.get("role"),
+      },
+      "IdP identityへ組織Roleを登録しました",
+    );
+  };
+
+  const membershipStatus = (userId: string, role: string, active: boolean) => {
+    void mutate(
+      `/api/v1/organizations/current/memberships/${userId}/${role}`,
+      "PATCH",
+      {
+        expected_active: active,
+        proposed_active: !active,
+        note: "AdministratorがIdP identityと担当を確認して変更",
+      },
+      active ? "組織Roleを無効にしました" : "組織Roleを有効にしました",
+    );
+  };
+
   return (
     <>
       <PageHeader
@@ -2855,6 +2885,96 @@ function OperationsPage({
           ]}
         />
       </section>
+      {canOperate && (
+        <section className="service-panel full">
+          <header>
+            <div>
+              <span>ORGANIZATION ACCESS</span>
+              <h2>利用者と6 Role</h2>
+            </div>
+          </header>
+          <form
+            className="service-form member-form"
+            onSubmit={membershipSubmit}
+          >
+            <label>
+              OIDC issuer
+              <input name="issuer" type="url" required />
+            </label>
+            <label>
+              Subject
+              <input name="subject" required maxLength={500} />
+            </label>
+            <label>
+              表示名
+              <input name="display_name" required maxLength={300} />
+            </label>
+            <label>
+              Email（任意）
+              <input name="email" type="email" />
+            </label>
+            <label>
+              Role
+              <select name="role" defaultValue="viewer">
+                {Object.entries(ROLE_LABELS).map(([role, label]) => (
+                  <option key={role} value={role}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button className="primary-action" type="submit">
+              Directory identityを登録
+            </button>
+          </form>
+          <ServiceTable
+            caption="組織membership"
+            empty="登録済みmembershipはありません"
+            rows={
+              operations.memberships as unknown as Array<
+                Record<string, unknown>
+              >
+            }
+            rowKey={(row) => `${String(row.user_id)}:${String(row.role)}`}
+            columns={[
+              { key: "display_name", label: "利用者" },
+              { key: "email", label: "Email" },
+              { key: "role", label: "Role" },
+              {
+                key: "active",
+                label: "状態",
+                render: (row) => (
+                  <StatusChip value={row.active ? "active" : "inactive"} />
+                ),
+              },
+              {
+                key: "membership_action",
+                label: "操作",
+                render: (row) => (
+                  <button
+                    className="table-action"
+                    type="button"
+                    onClick={() =>
+                      membershipStatus(
+                        String(row.user_id),
+                        String(row.role),
+                        Boolean(row.active),
+                      )
+                    }
+                  >
+                    {row.active ? "disable" : "enable"}
+                  </button>
+                ),
+              },
+            ]}
+          />
+          <p className="service-panel-note">
+            招待メールは送信しません。実在するIdP issuer /
+            subjectを登録し、OIDC検証とactive
+            membershipの両方が一致した場合だけ利用できます。
+          </p>
+        </section>
+      )}
       {canOperate && (
         <section className="service-panel full">
           <header>

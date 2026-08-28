@@ -190,6 +190,140 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             return {"organization": organization, "user": user, "memberships": memberships}
 
+    def organization_members(self, organization_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._dicts(
+                connection.execute(
+                    """SELECT platform_user.id AS user_id, platform_user.issuer,
+                              platform_user.subject, platform_user.display_name,
+                              platform_user.email, platform_user.active AS user_active,
+                              membership.role, membership.active, membership.granted_at
+                       FROM organization_memberships AS membership
+                       JOIN platform_users AS platform_user ON platform_user.id = membership.user_id
+                       WHERE membership.organization_id = %s
+                       ORDER BY platform_user.display_name, membership.role""",
+                    (organization_id,),
+                )
+            )
+
+    def create_organization_membership(
+        self, organization_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            user = self._one(
+                connection.execute(
+                    """INSERT INTO platform_users (
+                           issuer, subject, display_name, email, active
+                       ) VALUES (%s, %s, %s, %s, true)
+                       ON CONFLICT (issuer, subject) DO UPDATE SET
+                           display_name = EXCLUDED.display_name,
+                           email = EXCLUDED.email,
+                           updated_at = now()
+                       RETURNING id, issuer, subject, display_name, email, active AS user_active""",
+                    (
+                        payload["issuer"],
+                        payload["subject"],
+                        payload["display_name"],
+                        payload.get("email"),
+                    ),
+                )
+            )
+            assert user is not None
+            before = self._one(
+                connection.execute(
+                    """SELECT role, active, granted_at
+                       FROM organization_memberships
+                       WHERE organization_id = %s AND user_id = %s AND role = %s""",
+                    (organization_id, user["id"], payload["role"]),
+                )
+            )
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO organization_memberships (
+                           organization_id, user_id, role, active
+                       ) VALUES (%s, %s, %s, true)
+                       ON CONFLICT (organization_id, user_id, role) DO UPDATE SET
+                           active = true, granted_at = now()
+                       RETURNING user_id, role, active, granted_at""",
+                    (organization_id, user["id"], payload["role"]),
+                )
+            )
+            assert result is not None
+            after = {**user, **result}
+            self._service_audit(
+                connection,
+                organization_id,
+                "membership.grant",
+                "organization_membership",
+                f"{user['id']}:{payload['role']}",
+                None,
+                before,
+                after,
+            )
+            return after
+
+    def transition_organization_membership(
+        self,
+        organization_id: str,
+        user_id: str,
+        role: str,
+        expected_active: bool,
+        proposed_active: bool,
+        note: str,
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT membership.user_id, membership.role, membership.active,
+                              platform_user.display_name, platform_user.issuer,
+                              platform_user.subject
+                       FROM organization_memberships AS membership
+                       JOIN platform_users AS platform_user
+                         ON platform_user.id = membership.user_id
+                       WHERE membership.organization_id = %s
+                         AND membership.user_id = %s AND membership.role = %s
+                       FOR UPDATE OF membership""",
+                    (organization_id, user_id, role),
+                )
+            )
+            if before is None:
+                return None
+            if before["active"] != expected_active:
+                raise ValueError("Membership changed; reload before updating it")
+            if role == "administrator" and expected_active and not proposed_active:
+                active_administrators = connection.execute(
+                    """SELECT count(*) FROM organization_memberships
+                       WHERE organization_id = %s AND role = 'administrator' AND active""",
+                    (organization_id,),
+                ).fetchone()[0]
+                if active_administrators <= 1:
+                    raise ValueError(
+                        "The last active organization administrator cannot be disabled"
+                    )
+            after = self._one(
+                connection.execute(
+                    """UPDATE organization_memberships SET active = %s
+                       WHERE organization_id = %s AND user_id = %s AND role = %s
+                       RETURNING user_id, role, active, granted_at""",
+                    (proposed_active, organization_id, user_id, role),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "membership.status",
+                "organization_membership",
+                f"{user_id}:{role}",
+                None,
+                {**before, "note": None},
+                {**after, "note": note},
+            )
+            return {**before, **after}
+
     def service_cities(self, organization_id: str) -> list[dict[str, Any]]:
         with self._connect() as connection:
             connection.row_factory = dict_row
@@ -2645,11 +2779,13 @@ class MunicipalServiceRepository(PostGISRepository):
         with self._connect() as connection:
             connection.row_factory = dict_row
             city_id = None
+            city_code = None
             if city_reference:
                 city = self._city(connection, organization_id, city_reference)
                 if city is None:
                     return {"items": [], "next_cursor": None}
                 city_id = str(city["id"])
+                city_code = city["city_code"]
             rows = self._dicts(
                 connection.execute(
                     """SELECT id, actor, action, resource_type, resource_id, city_id,
@@ -2657,7 +2793,7 @@ class MunicipalServiceRepository(PostGISRepository):
                               data_classification, occurred_at
                        FROM audit_log
                        WHERE organization_id = %s
-                         AND (%s::text IS NULL OR city_id = %s)
+                         AND (%s::text IS NULL OR city_id IN (%s, %s))
                          AND (%s::text IS NULL OR action = %s)
                          AND (%s::text IS NULL OR actor = %s)
                          AND (%s::timestamptz IS NULL OR occurred_at >= %s)
@@ -2668,6 +2804,7 @@ class MunicipalServiceRepository(PostGISRepository):
                         organization_id,
                         city_id,
                         city_id,
+                        city_code,
                         action,
                         action,
                         actor,

@@ -271,3 +271,36 @@ def test_organization_a_b_isolation_for_api_and_database_constraints(
                 (str(uuid.uuid4()), ORG_B, city_a),
             )
         connection.rollback()
+
+    membership = client.post(
+        "/api/v1/organizations/current/memberships",
+        headers=_headers("administrator", ORG_B),
+        json={
+            "issuer": "https://identity.integration.example",
+            "subject": "org-b-admin",
+            "display_name": "組織B管理者",
+            "email": "org-b-admin@example.jp",
+            "role": "administrator",
+        },
+    )
+    assert membership.status_code == 201, membership.text
+    user_id = membership.json()["user_id"]
+    org_b_members = client.get(
+        "/api/v1/organizations/current/memberships",
+        headers=_headers("administrator", ORG_B),
+    )
+    assert any(item["subject"] == "org-b-admin" for item in org_b_members.json()["items"])
+    org_a_members = client.get(
+        "/api/v1/organizations/current/memberships", headers=_headers("administrator")
+    )
+    assert all(item["subject"] != "org-b-admin" for item in org_a_members.json()["items"])
+    last_admin = client.patch(
+        f"/api/v1/organizations/current/memberships/{user_id}/administrator",
+        headers=_headers("administrator", ORG_B),
+        json={
+            "expected_active": True,
+            "proposed_active": False,
+            "note": "last administrator guard integration",
+        },
+    )
+    assert last_admin.status_code == 409

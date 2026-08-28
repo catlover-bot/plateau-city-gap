@@ -1216,21 +1216,20 @@ JOIN city_dataset_versions AS version ON version.id = scenario.dataset_version_i
 JOIN cities AS city
   ON city.city_code = version.city_id AND city.organization_id = scenario.organization_id
 UNION ALL
-SELECT city.organization_id, city.id, 'facility', facility.id::text,
+SELECT city.organization_id, city.id, 'facility', facility.facility_key,
        facility.name, facility.facility_type || ' · ' || facility.facility_key,
        version.created_at
 FROM facility_registry AS facility
 JOIN city_dataset_versions AS version ON version.id = facility.dataset_version_id
 JOIN cities AS city ON city.city_code = version.city_id
 UNION ALL
-SELECT city.organization_id, city.id, 'building', object.id::text,
+SELECT city.organization_id, city.id, 'building', object.gml_id,
        object.gml_id, object.theme || ' · ' || object.feature_type, object.ingested_at
 FROM plateau_city_objects AS object
 JOIN city_dataset_versions AS version ON version.id = object.dataset_version_id
 JOIN cities AS city ON city.city_code = version.city_id
 UNION ALL
-SELECT city.organization_id, city.id, 'mesh',
-       version.id::text || ':' || demographic.mesh_code,
+SELECT city.organization_id, city.id, 'mesh', demographic.mesh_code,
        demographic.mesh_code, '500m mesh · ' || version.dataset_year::text,
        max(demographic.created_at)
 FROM building_demographics AS demographic

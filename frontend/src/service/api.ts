@@ -108,10 +108,18 @@ export async function loadServiceSnapshot(
               fetcher,
             )
           : Promise.resolve({ items: [] }),
-      ]).then(([overview, jobs, audit]) => ({
+        profile.roles.includes("administrator")
+          ? requestJson<{ items: OperationsPayload["memberships"] }>(
+              "/api/v1/organizations/current/memberships",
+              {},
+              fetcher,
+            )
+          : Promise.resolve({ items: [] }),
+      ]).then(([overview, jobs, audit, memberships]) => ({
         overview,
         jobs: jobs.items,
         auditEvents: audit.items,
+        memberships: memberships.items,
       }))
     : null;
   const selectedCity =

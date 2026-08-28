@@ -900,6 +900,18 @@
   background: transparent;
   color: #69401f;
 }
+.member-form {
+  margin: 0 14px 14px;
+}
+.service-panel-note {
+  margin: 12px 14px 14px;
+  padding: 10px;
+  border-left: 3px solid var(--cg-teal);
+  background: var(--cg-teal-pale);
+  color: var(--cg-ink-soft);
+  font-size: 9px;
+  line-height: 1.6;
+}
 .field-status {
   margin-top: 10px;
   border-color: var(--cg-teal);

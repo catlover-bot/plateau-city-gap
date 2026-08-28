@@ -17,6 +17,13 @@ def test_compose_keeps_static_demo_and_platform_services_separate() -> None:
         "service_completed_successfully"
     )
     assert services["frontend"]["ports"] == ["${CITYGAP_FRONTEND_PORT:-8080}:80"]
+    assert services["api"]["environment"]["CITYGAP_API_SURFACE"] == (
+        "${CITYGAP_API_SURFACE:-municipal}"
+    )
+    assert services["api"]["environment"]["CITYGAP_ATTACHMENT_PROVIDER"] == (
+        "${CITYGAP_ATTACHMENT_PROVIDER:-local}"
+    )
+    assert "citygap_artifacts:/app/var" in services["api"]["volumes"]
 
 
 def test_raw_data_is_excluded_from_docker_build_context() -> None:

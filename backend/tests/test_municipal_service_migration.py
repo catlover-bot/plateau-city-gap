@@ -75,3 +75,11 @@ def test_offline_field_and_attachment_records_have_composite_tenant_guards() -> 
         assert constraint in SQL
     assert "attachment_objects" in SQL
     assert "FOREIGN KEY (organization_id, city_id)" in SQL
+
+
+def test_service_search_includes_real_spatial_identifiers() -> None:
+    for entity_type in ("'facility'", "'building'", "'mesh'"):
+        assert entity_type in SQL
+    assert "object.gml_id" in SQL
+    assert "demographic.mesh_code" in SQL
+    assert "facility.facility_key" in SQL

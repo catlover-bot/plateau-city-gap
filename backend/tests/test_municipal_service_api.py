@@ -23,6 +23,7 @@ SCENARIO_B = "80000000-0000-0000-0000-000000000002"
 REPORT_ID = "90000000-0000-0000-0000-000000000001"
 JOB_ID = "a0000000-0000-0000-0000-000000000001"
 ATTACHMENT_ID = "b0000000-0000-0000-0000-000000000001"
+USER_ID = "c0000000-0000-0000-0000-000000000001"
 
 
 def headers(role: str, organization_id: str = ORG_A) -> dict[str, str]:
@@ -55,6 +56,39 @@ class MunicipalRepository:
     def service_cities(self, organization_id: str):
         self.calls.append(("cities", organization_id))
         return [] if organization_id != ORG_A else [{"city_id": CITY_ID, "name": "検証市"}]
+
+    def organization_members(self, organization_id: str):
+        return (
+            []
+            if organization_id != ORG_A
+            else [
+                {
+                    "user_id": USER_ID,
+                    "display_name": "検証管理者",
+                    "role": "administrator",
+                    "active": True,
+                }
+            ]
+        )
+
+    def create_organization_membership(self, organization_id: str, payload: dict[str, Any]):
+        return {"user_id": USER_ID, "active": True, **payload}
+
+    def transition_organization_membership(
+        self,
+        organization_id: str,
+        user_id: str,
+        role: str,
+        expected_active: bool,
+        proposed_active: bool,
+        note: str,
+    ):
+        return {
+            "user_id": user_id,
+            "role": role,
+            "active": proposed_active,
+            "note": note,
+        }
 
     def create_service_city(self, organization_id: str, payload: dict[str, Any]):
         return {"id": CITY_ID, "service_status": "onboarding", **payload}
@@ -442,6 +476,7 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
     assert schema["info"]["version"] == "0.2.0"
     for path in (
         "/api/v1/cities",
+        "/api/v1/organizations/current/memberships",
         "/api/v1/cities/{city}/home",
         "/api/v1/cities/{city}/onboarding",
         "/api/v1/cities/{city}/urban-states",
@@ -473,6 +508,7 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/jobs/{job_id}/operations",
         "/api/v1/metrics",
         "/api/v1/audit-events",
+        "/api/v1/support-bundle",
     ):
         assert path in schema["paths"]
 
@@ -552,6 +588,39 @@ def test_six_roles_are_separated_across_the_municipal_workflow() -> None:
         client.patch(transition_url, headers=headers("administrator"), json=transition).status_code
         == 200
     )
+
+
+def test_administrator_manages_directory_backed_memberships_without_invitation_claims() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    url = "/api/v1/organizations/current/memberships"
+    assert client.get(url, headers=headers("planner")).status_code == 403
+    listed = client.get(url, headers=headers("administrator"))
+    assert listed.status_code == 200
+    assert listed.json()["items"][0]["role"] == "administrator"
+    created = client.post(
+        url,
+        headers=headers("administrator"),
+        json={
+            "issuer": "https://identity.example.jp",
+            "subject": "directory-user-42",
+            "display_name": "データ担当者",
+            "email": "data@example.jp",
+            "role": "data_manager",
+        },
+    )
+    assert created.status_code == 201
+    assert created.json()["role"] == "data_manager"
+    disabled = client.patch(
+        f"{url}/{USER_ID}/data_manager",
+        headers=headers("administrator"),
+        json={
+            "expected_active": True,
+            "proposed_active": False,
+            "note": "担当変更をIdP記録と照合",
+        },
+    )
+    assert disabled.status_code == 200
+    assert disabled.json()["active"] is False
 
 
 def test_decision_contract_rejects_automation_fields_and_requires_planner() -> None:
@@ -860,6 +929,19 @@ def test_immutable_audit_api_is_admin_only_and_tenant_scoped() -> None:
         ).status_code
         == 422
     )
+
+
+def test_support_bundle_excludes_secret_and_attachment_content() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    assert client.get("/api/v1/support-bundle", headers=headers("data_manager")).status_code == 403
+    response = client.get(
+        "/api/v1/support-bundle",
+        headers={**headers("administrator"), "X-Request-ID": "support-request"},
+    )
+    assert response.status_code == 200
+    assert response.json()["request_id"] == "support-request"
+    assert "tokens" in response.json()["excluded"]
+    assert "backups" not in response.json()
 
 
 def test_municipal_deployment_surface_blocks_legacy_tenant_unsafe_paths(

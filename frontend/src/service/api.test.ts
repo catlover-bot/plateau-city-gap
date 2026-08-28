@@ -129,12 +129,14 @@ describe("municipal service API client", () => {
       if (url === "/api/v1/jobs?limit=100") return response({ items: [] });
       if (url === "/api/v1/audit-events?limit=100")
         return response({ items: [] });
+      if (url === "/api/v1/organizations/current/memberships")
+        return response({ items: [] });
       return response({}, 404);
     }) as unknown as typeof fetch;
     const result = await loadServiceSnapshot(fetcher);
     expect(result.cities).toEqual([]);
     expect(result.cityHome).toBeNull();
-    expect((fetcher as ReturnType<typeof vi.fn>).mock.calls).toHaveLength(7);
+    expect((fetcher as ReturnType<typeof vi.fn>).mock.calls).toHaveLength(8);
   });
 
   it("preserves request ID and remediation from unified API errors", async () => {

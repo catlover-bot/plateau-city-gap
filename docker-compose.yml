@@ -46,11 +46,15 @@ services:
       CITYGAP_BACKUP_DIRECTORY: ${CITYGAP_BACKUP_DIRECTORY:-}
       CITYGAP_BACKUP_COMMAND_VERIFIED: ${CITYGAP_BACKUP_COMMAND_VERIFIED:-false}
       CITYGAP_TILE_CACHE_ITEMS: ${CITYGAP_TILE_CACHE_ITEMS:-512}
+      CITYGAP_ATTACHMENT_PROVIDER: ${CITYGAP_ATTACHMENT_PROVIDER:-local}
+      CITYGAP_ATTACHMENT_DIRECTORY: ${CITYGAP_ATTACHMENT_DIRECTORY:-/app/var/attachments}
     ports:
       - "${CITYGAP_API_PORT:-8000}:8000"
     depends_on:
       migrate:
         condition: service_completed_successfully
+    volumes:
+      - citygap_artifacts:/app/var
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s

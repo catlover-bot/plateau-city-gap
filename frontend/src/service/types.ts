@@ -289,6 +289,17 @@ export interface OperationsPayload {
     data_classification: "public" | "internal" | "restricted";
     occurred_at: string;
   }>;
+  memberships: Array<{
+    user_id: string;
+    issuer: string;
+    subject: string;
+    display_name: string;
+    email: string | null;
+    user_active: boolean;
+    role: ProductRole;
+    active: boolean;
+    granted_at: string;
+  }>;
 }
 
 export interface ScenarioSummary {
