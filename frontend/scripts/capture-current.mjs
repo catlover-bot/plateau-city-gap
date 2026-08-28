@@ -49,7 +49,11 @@ for (const specification of scenes) {
   const requestFailures = [];
   const responses = [];
   page.on("console", (message) => {
-    if (message.type() === "error") consoleErrors.push({ text: message.text(), location: message.location() });
+    if (message.type() === "error") {
+      const entry = { text: message.text(), location: message.location(), arguments: [] };
+      consoleErrors.push(entry);
+      void Promise.all(message.args().map((argument) => argument.jsonValue().catch(() => "[unserializable]"))).then((values) => { entry.arguments = values; });
+    }
   });
   page.on("pageerror", (error) => consoleErrors.push({ text: error.message, location: null }));
   page.on("requestfailed", (request) => requestFailures.push({ url: request.url(), failure: request.failure()?.errorText ?? "unknown" }));
@@ -122,7 +126,9 @@ for (const specification of scenes) {
       return { actual, complete: checks.every(Boolean), checks };
     }, specification);
     const optionalLodCancellations = requestFailures.filter((item) => item.failure.includes("ERR_ABORTED") && item.url.endsWith(".b3dm"));
-    const criticalRequestFailures = [...requestFailures.filter((item) => !optionalLodCancellations.includes(item)), ...responses]
+    const optionalBasemapCancellations = requestFailures.filter((item) => item.failure.includes("ERR_ABORTED") && item.url.includes("cyberjapandata.gsi.go.jp/xyz/"));
+    const optionalRequestCancellations = [...optionalLodCancellations, ...optionalBasemapCancellations];
+    const criticalRequestFailures = [...requestFailures.filter((item) => !optionalRequestCancellations.includes(item)), ...responses]
       .filter((item) => item.url.startsWith(baseUrl) || item.url.includes("cyberjapandata.gsi.go.jp"));
     if (!readiness.complete || criticalRequestFailures.length || consoleErrors.length) {
       throw new Error(`Visual readiness incomplete: ${JSON.stringify({ readiness, criticalRequestFailures, consoleErrors })}`);
@@ -144,6 +150,7 @@ for (const specification of scenes) {
     const bytes = await readFile(target);
     captures.push({
       schema_version: "citygap.visual-capture@1",
+      capture_id: specification.id,
       generated_at: new Date().toISOString(),
       production_url: baseUrl,
       commit,
@@ -178,6 +185,7 @@ for (const specification of scenes) {
       optional_building_stream_requests: readiness.actual.optionalBuildingRequests,
       request_failures: criticalRequestFailures,
       optional_lod_cancellations: optionalLodCancellations.length,
+      optional_basemap_cancellations: optionalBasemapCancellations.length,
       console_errors: consoleErrors,
       capture_wall_time_ms: Date.now() - captureStartedAt,
       runtime_metrics: runtimeMetrics,
@@ -213,9 +221,18 @@ for (const specification of scenes) {
 
 await browser.close();
 if (failed) {
+  if (!only) await rm(outputDirectory, { recursive: true, force: true });
   process.exitCode = 1;
 } else {
   await mkdir(outputDirectory, { recursive: true });
-  await writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify({ schema_version: "citygap.visual-capture-manifest@1", generated_at: new Date().toISOString(), commit, captures }, null, 2)}\n`, "utf8");
+  const manifestPath = path.join(outputDirectory, "manifest.json");
+  let manifestCaptures = captures;
+  if (only) {
+    const existing = await readFile(manifestPath, "utf8").then(JSON.parse).catch(() => ({ captures: [] }));
+    const replaced = new Set(captures.map((capture) => capture.capture_id));
+    manifestCaptures = [...(existing.captures ?? []).filter((capture) => !replaced.has(capture.capture_id)), ...captures]
+      .sort((left, right) => String(left.capture_id).localeCompare(String(right.capture_id)));
+  }
+  await writeFile(manifestPath, `${JSON.stringify({ schema_version: "citygap.visual-capture-manifest@1", generated_at: new Date().toISOString(), commit, captures: manifestCaptures }, null, 2)}\n`, "utf8");
   process.stdout.write(`${captures.length} complete production captures written to ${outputDirectory}\n`);
 }
