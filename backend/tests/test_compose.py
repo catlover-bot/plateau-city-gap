@@ -23,6 +23,12 @@ def test_compose_keeps_static_demo_and_platform_services_separate() -> None:
     assert services["api"]["environment"]["CITYGAP_ATTACHMENT_PROVIDER"] == (
         "${CITYGAP_ATTACHMENT_PROVIDER:-local}"
     )
+    assert services["api"]["environment"]["CITYGAP_APPLICATION_VERSION"] == (
+        "${CITYGAP_APPLICATION_VERSION:-unversioned-development}"
+    )
+    assert services["worker"]["environment"]["CITYGAP_APPLICATION_VERSION"] == (
+        "${CITYGAP_APPLICATION_VERSION:-unversioned-development}"
+    )
     assert "citygap_artifacts:/app/var" in services["api"]["volumes"]
 
 

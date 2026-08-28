@@ -49,6 +49,23 @@ ALLOWED_ATTACHMENT_CONTENT_TYPES = frozenset(
         "text/plain",
     }
 )
+ORGANIZATION_CONFIG_KEYS = frozenset(
+    {
+        "annual_update_algorithm_version",
+        "default_data_classification",
+        "default_map_basemap",
+        "field_offline_expiry_hours",
+        "locale",
+        "timezone",
+    }
+)
+FORBIDDEN_CONFIG_FRAGMENTS = (
+    "secret",
+    "password",
+    "token",
+    "credential",
+    "private_key",
+)
 
 
 def _repository(request: Request) -> MunicipalServiceRepository:
@@ -242,6 +259,43 @@ class MembershipCreateRequest(StrictRequest):
 class MembershipStatusRequest(StrictRequest):
     expected_active: bool
     proposed_active: bool
+    note: str = Field(min_length=1, max_length=2000)
+
+
+def _configuration_contains_secret_key(value: Any) -> bool:
+    if isinstance(value, dict):
+        return any(
+            any(fragment in str(key).lower() for fragment in FORBIDDEN_CONFIG_FRAGMENTS)
+            or _configuration_contains_secret_key(child)
+            for key, child in value.items()
+        )
+    if isinstance(value, list):
+        return any(_configuration_contains_secret_key(child) for child in value)
+    return False
+
+
+class OrganizationConfigurationRequest(StrictRequest):
+    expected_updated_at: datetime | None = None
+    config_value: Any
+    note: str = Field(min_length=1, max_length=2000)
+
+    @model_validator(mode="after")
+    def non_secret_and_bounded(self) -> OrganizationConfigurationRequest:
+        if self.expected_updated_at is not None and (
+            self.expected_updated_at.tzinfo is None or self.expected_updated_at.utcoffset() is None
+        ):
+            raise ValueError("expected_updated_at must include a timezone")
+        if _configuration_contains_secret_key(self.config_value):
+            raise ValueError("Organization configuration cannot contain secret-bearing keys")
+        if len(json.dumps(self.config_value, ensure_ascii=False).encode()) > 16384:
+            raise ValueError("Organization configuration value exceeds 16 KiB")
+        return self
+
+
+class RetentionPolicyRequest(StrictRequest):
+    expected_retention_days: int | None = Field(default=None, ge=1, le=36500)
+    proposed_retention_days: int | None = Field(default=None, ge=1, le=36500)
+    legal_hold_supported: bool = False
     note: str = Field(min_length=1, max_length=2000)
 
 
@@ -534,6 +588,74 @@ def transition_organization_membership(
     if result is None:
         raise _not_found("Organization membership")
     return result
+
+
+@router.get(
+    "/organizations/current/settings",
+    dependencies=[Depends(require_permission("operations:read"))],
+)
+def organization_settings(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    return {
+        **repo.organization_settings(organization_id),
+        "allowed_config_keys": sorted(ORGANIZATION_CONFIG_KEYS),
+        "boundaries": {
+            "secrets": "environment or secret manager only",
+            "retention_enforcement": "policy record only; no purge worker is enabled",
+            "legal_hold": "not implemented",
+        },
+    }
+
+
+@router.patch(
+    "/organizations/current/configuration/{config_key}",
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def update_organization_configuration(
+    config_key: str,
+    body: OrganizationConfigurationRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    if config_key not in ORGANIZATION_CONFIG_KEYS:
+        raise HTTPException(status_code=422, detail="Unsupported organization config key")
+    try:
+        return repo.update_organization_configuration(
+            organization_id,
+            config_key,
+            body.config_value,
+            body.expected_updated_at,
+            body.note,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+
+
+@router.patch(
+    "/organizations/current/retention-policies/{resource_type}",
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def update_retention_policy(
+    resource_type: Literal["audit", "field_observation", "attachment", "job"],
+    body: RetentionPolicyRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    if body.legal_hold_supported:
+        raise HTTPException(status_code=422, detail="Legal hold is not implemented")
+    try:
+        return repo.update_retention_policy(
+            organization_id,
+            resource_type,
+            body.expected_retention_days,
+            body.proposed_retention_days,
+            body.legal_hold_supported,
+            body.note,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
 
 
 @router.get("/cities", dependencies=[Depends(require_permission("platform:read"))])

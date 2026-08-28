@@ -20,7 +20,7 @@ protected assets.
 | Offline silent overwrite | record version, idempotent client operation and explicit 409 conflict |
 | Public data leakage | separate deployment surface and classification-gated exports |
 | Audit tampering | immutable audit trigger and Administrator-only tenant API |
-| Secret disclosure | configuration keys reject secret/password/token/credential names |
+| Secret disclosure | API allow-list plus recursive secret-bearing key rejection; DB key guard |
 
 ## Attachment model
 

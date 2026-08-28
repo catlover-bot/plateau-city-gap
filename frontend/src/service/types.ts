@@ -275,6 +275,19 @@ export interface OperationsPayload {
     };
     backups: Array<Record<string, unknown>>;
     releases: Array<Record<string, unknown>>;
+    configuration: Array<{
+      config_key: string;
+      config_value: unknown;
+      updated_by: string;
+      updated_at: string;
+    }>;
+    retention_policies: Array<{
+      resource_type: "audit" | "field_observation" | "attachment" | "job";
+      retention_days: number | null;
+      legal_hold_supported: boolean;
+      configured_by: string;
+      configured_at: string;
+    }>;
     boundaries: Record<string, string>;
   };
   jobs: ServiceJobSummary[];

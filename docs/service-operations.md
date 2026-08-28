@@ -31,3 +31,15 @@ of recoverability.
 Collect request ID, release version, migration version, health details, redacted job
 events and relevant audit IDs. Exclude tokens, credentials, attachment bytes and
 restricted record bodies unless separately authorized.
+
+## Organization settings and retention
+
+Administrator may record only the documented non-secret settings. Credentials, tokens,
+private keys and passwords remain deployment secret-manager inputs. Configuration
+updates use the last `updated_at` value so concurrent edits fail visibly.
+
+Retention records cover audit, field observation, attachment and Job resources. A null
+duration means the municipality has not supplied an approved duration. The current
+service records and audits the policy but does not execute purges and does not implement
+legal hold. Those controls require municipal governance approval, an implementation and
+a restore-tested rollout before enablement.

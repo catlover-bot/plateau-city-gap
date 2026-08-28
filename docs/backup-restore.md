@@ -19,3 +19,10 @@ database and checks two extensions and 30 canonical scenarios. This validates co
 compatibility and relational restoration, not full-city recovery time. Pilot operations
 still require encrypted off-host storage, access control, retention, periodic restore
 drills and locally agreed RPO/RTO.
+
+When `CITYGAP_ATTACHMENT_DIRECTORY` is supplied, the same verification script also
+archives the attachment object tree, restores it into an isolated temporary directory
+and compares a sorted per-file SHA-256 manifest. Database-only CI reports attachments as
+`not_configured`; that must not be presented as attachment recovery evidence. A complete
+municipal backup run needs both the database dump and object archive under the same
+recorded backup identifier and retention policy.

@@ -3072,6 +3072,58 @@ function OperationsPage({
     );
   };
 
+  const configurationSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const key = String(data.get("config_key"));
+    const valueInput = event.currentTarget.elements.namedItem(
+      "config_value",
+    ) as HTMLInputElement;
+    let value: unknown;
+    try {
+      value = JSON.parse(valueInput.value);
+      valueInput.setCustomValidity("");
+    } catch {
+      valueInput.setCustomValidity("有効なJSON値を入力してください");
+      valueInput.reportValidity();
+      return;
+    }
+    const existing = operations.overview.configuration.find(
+      (item) => item.config_key === key,
+    );
+    void mutate(
+      `/api/v1/organizations/current/configuration/${encodeURIComponent(key)}`,
+      "PATCH",
+      {
+        expected_updated_at: existing?.updated_at ?? null,
+        config_value: value,
+        note: "Administratorが非secret設定値を確認して更新",
+      },
+      "Organization設定を更新しました",
+    );
+  };
+
+  const retentionSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const resourceType = String(data.get("resource_type"));
+    const existing = operations.overview.retention_policies.find(
+      (item) => item.resource_type === resourceType,
+    );
+    const rawDays = String(data.get("retention_days") ?? "").trim();
+    void mutate(
+      `/api/v1/organizations/current/retention-policies/${encodeURIComponent(resourceType)}`,
+      "PATCH",
+      {
+        expected_retention_days: existing?.retention_days ?? null,
+        proposed_retention_days: rawDays ? Number(rawDays) : null,
+        legal_hold_supported: false,
+        note: "Administratorが保持期間の方針記録を更新",
+      },
+      "保持方針を記録しました（自動削除は未実装）",
+    );
+  };
+
   return (
     <>
       <PageHeader
@@ -3276,6 +3328,132 @@ function OperationsPage({
               },
             ]}
           />
+        </section>
+      )}
+      {canOperate && (
+        <section className="service-panel full">
+          <header>
+            <div>
+              <span>ORGANIZATION SETTINGS</span>
+              <h2>非secret設定と保持方針</h2>
+            </div>
+          </header>
+          <div className="service-two-column organization-settings">
+            <div>
+              <form className="case-form" onSubmit={configurationSubmit}>
+                <h3>Organization設定</h3>
+                <label>
+                  設定項目
+                  <select name="config_key" defaultValue="timezone">
+                    <option value="timezone">timezone</option>
+                    <option value="locale">locale</option>
+                    <option value="default_data_classification">
+                      default data classification
+                    </option>
+                    <option value="default_map_basemap">
+                      default map basemap
+                    </option>
+                    <option value="field_offline_expiry_hours">
+                      field offline expiry hours
+                    </option>
+                    <option value="annual_update_algorithm_version">
+                      annual update algorithm version
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  JSON値
+                  <input
+                    name="config_value"
+                    defaultValue='"Asia/Tokyo"'
+                    maxLength={16384}
+                    required
+                  />
+                </label>
+                <button type="submit">設定を保存</button>
+              </form>
+              <ServiceTable
+                caption="Organization設定"
+                empty="Organization設定はありません"
+                rows={
+                  operations.overview.configuration as unknown as Array<
+                    Record<string, unknown>
+                  >
+                }
+                rowKey={(row) => String(row.config_key)}
+                columns={[
+                  { key: "config_key", label: "設定" },
+                  {
+                    key: "config_value",
+                    label: "値",
+                    render: (row) => JSON.stringify(row.config_value),
+                  },
+                  { key: "updated_by", label: "更新者" },
+                  {
+                    key: "updated_at",
+                    label: "更新",
+                    render: (row) => formatDate(row.updated_at),
+                  },
+                ]}
+              />
+            </div>
+            <div>
+              <form className="case-form" onSubmit={retentionSubmit}>
+                <h3>保持方針</h3>
+                <label>
+                  Resource
+                  <select name="resource_type" defaultValue="attachment">
+                    <option value="audit">audit</option>
+                    <option value="field_observation">field observation</option>
+                    <option value="attachment">attachment</option>
+                    <option value="job">job</option>
+                  </select>
+                </label>
+                <label>
+                  保持日数（未決定は空欄）
+                  <input
+                    name="retention_days"
+                    type="number"
+                    min="1"
+                    max="36500"
+                  />
+                </label>
+                <button type="submit">方針を記録</button>
+              </form>
+              <ServiceTable
+                caption="保持方針"
+                empty="保持方針は未決定です"
+                rows={
+                  operations.overview.retention_policies as unknown as Array<
+                    Record<string, unknown>
+                  >
+                }
+                rowKey={(row) => String(row.resource_type)}
+                columns={[
+                  { key: "resource_type", label: "Resource" },
+                  {
+                    key: "retention_days",
+                    label: "保持日数",
+                    render: (row) =>
+                      row.retention_days == null
+                        ? "未決定"
+                        : `${String(row.retention_days)}日`,
+                  },
+                  { key: "configured_by", label: "更新者" },
+                  {
+                    key: "configured_at",
+                    label: "更新",
+                    render: (row) => formatDate(row.configured_at),
+                  },
+                ]}
+              />
+            </div>
+          </div>
+          <p className="service-panel-note">
+            secret・password・token・credential・private
+            keyは保存できません。保持期間は方針記録であり、自動削除workerとlegal
+            holdは未実装です。
+          </p>
         </section>
       )}
       <div className="service-two-column operations-records">

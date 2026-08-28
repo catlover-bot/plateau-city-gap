@@ -25,6 +25,8 @@
 - field: selected-site offline packages, sync/conflicts and attachments
 - evidence: evidence centers, reports, artifacts and classified exports
 - operations: jobs, health, metrics and immutable audit events
+- organization operations: non-secret configuration and retention-policy records under
+  `/organizations/current`; only Administrator mutates them
 
 ## Large and binary data
 
@@ -41,3 +43,8 @@ Saved-view share tokens are opaque locators, not bearer authorization. Resolving
 owning organization and `investigation:read`. Annual-update creation is idempotent for
 the organization, state pair and algorithm version and returns the durable dataset-diff
 Job plus an explicit statement that prior version references were not mutated.
+
+Organization configuration accepts only an API allow-list of non-secret keys, rejects
+secret-bearing nested keys, caps JSON values at 16 KiB and uses `expected_updated_at`
+for optimistic concurrency. Retention endpoints record a reviewed policy; they do not
+claim deletion enforcement or legal-hold support.

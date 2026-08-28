@@ -7,6 +7,13 @@ version, release status, notes and rollback version. API, worker and frontend mu
 compatible set. Dataset and algorithm versions are independent domain versions and must
 not be replaced by the application release number.
 
+Deployment must set `CITYGAP_APPLICATION_VERSION` and
+`CITYGAP_APPLICATION_COMMIT` to the immutable artifact identity for both API and worker.
+`service-health` exposes those runtime values. The compose default
+`unversioned-development` is deliberately not a release claim, and the migration seed
+with an all-zero commit remains a candidate placeholder until a deployment records a
+real commit.
+
 ## Milestone policy
 
 Use small, reviewable commits for domain/schema, workflow, field/offline, operations,

@@ -92,6 +92,43 @@ class MunicipalRepository:
             "note": note,
         }
 
+    def organization_settings(self, organization_id: str):
+        return {
+            "configuration": [],
+            "retention_policies": [],
+        }
+
+    def update_organization_configuration(
+        self,
+        organization_id: str,
+        config_key: str,
+        config_value: Any,
+        expected_updated_at,
+        note: str,
+    ):
+        return {
+            "config_key": config_key,
+            "config_value": config_value,
+            "updated_by": "fixture-administrator",
+            "updated_at": "2026-08-28T12:00:00+09:00",
+        }
+
+    def update_retention_policy(
+        self,
+        organization_id: str,
+        resource_type: str,
+        expected_retention_days: int | None,
+        proposed_retention_days: int | None,
+        legal_hold_supported: bool,
+        note: str,
+    ):
+        return {
+            "resource_type": resource_type,
+            "retention_days": proposed_retention_days,
+            "legal_hold_supported": legal_hold_supported,
+            "enforcement_enabled": False,
+        }
+
     def create_service_city(self, organization_id: str, payload: dict[str, Any]):
         return {"id": CITY_ID, "service_status": "onboarding", **payload}
 
@@ -486,6 +523,8 @@ class MunicipalRepository:
             "datasets": {"failed": 0},
             "backups": [],
             "releases": [],
+            "configuration": [],
+            "retention_policies": [],
             "boundaries": {},
         }
 
@@ -527,6 +566,9 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
     for path in (
         "/api/v1/cities",
         "/api/v1/organizations/current/memberships",
+        "/api/v1/organizations/current/settings",
+        "/api/v1/organizations/current/configuration/{config_key}",
+        "/api/v1/organizations/current/retention-policies/{resource_type}",
         "/api/v1/cities/{city}/home",
         "/api/v1/cities/{city}/onboarding",
         "/api/v1/cities/{city}/urban-states",
@@ -1124,3 +1166,65 @@ def test_scenario_clone_is_a_draft_action_and_remains_tenant_scoped() -> None:
         client.post(url, headers=headers("analyst", ORG_B), json={"title": "越境"}).status_code
         == 404
     )
+
+
+def test_non_secret_configuration_and_retention_boundaries_are_admin_controlled() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    settings_url = "/api/v1/organizations/current/settings"
+    assert client.get(settings_url, headers=headers("viewer")).status_code == 403
+    settings = client.get(settings_url, headers=headers("data_manager"))
+    assert settings.status_code == 200
+    assert "timezone" in settings.json()["allowed_config_keys"]
+    assert settings.json()["boundaries"]["legal_hold"] == "not implemented"
+
+    config_url = "/api/v1/organizations/current/configuration/timezone"
+    body = {
+        "expected_updated_at": None,
+        "config_value": "Asia/Tokyo",
+        "note": "自治体運用時刻を確認",
+    }
+    assert client.patch(config_url, headers=headers("data_manager"), json=body).status_code == 403
+    updated = client.patch(config_url, headers=headers("administrator"), json=body)
+    assert updated.status_code == 200
+    assert updated.json()["config_value"] == "Asia/Tokyo"
+    assert (
+        client.patch(
+            "/api/v1/organizations/current/configuration/unsupported",
+            headers=headers("administrator"),
+            json=body,
+        ).status_code
+        == 422
+    )
+    assert (
+        client.patch(
+            config_url,
+            headers=headers("administrator"),
+            json={**body, "config_value": {"api_token": "must-not-be-stored"}},
+        ).status_code
+        == 422
+    )
+
+    retention_url = "/api/v1/organizations/current/retention-policies/audit"
+    retention = client.patch(
+        retention_url,
+        headers=headers("administrator"),
+        json={
+            "expected_retention_days": None,
+            "proposed_retention_days": 3650,
+            "legal_hold_supported": False,
+            "note": "条例・庁内規程の確認前の設定記録",
+        },
+    )
+    assert retention.status_code == 200
+    assert retention.json()["enforcement_enabled"] is False
+    unsupported_hold = client.patch(
+        retention_url,
+        headers=headers("administrator"),
+        json={
+            "expected_retention_days": 3650,
+            "proposed_retention_days": 3650,
+            "legal_hold_supported": True,
+            "note": "未実装境界",
+        },
+    )
+    assert unsupported_hold.status_code == 422

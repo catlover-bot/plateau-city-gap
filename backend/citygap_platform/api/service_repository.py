@@ -324,6 +324,138 @@ class MunicipalServiceRepository(PostGISRepository):
             )
             return {**before, **after}
 
+    def organization_settings(self, organization_id: str) -> dict[str, Any]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            configuration = self._dicts(
+                connection.execute(
+                    """SELECT config_key, config_value, updated_by, updated_at
+                       FROM organization_configuration
+                       WHERE organization_id = %s ORDER BY config_key""",
+                    (organization_id,),
+                )
+            )
+            retention = self._dicts(
+                connection.execute(
+                    """SELECT resource_type, retention_days, legal_hold_supported,
+                              configured_by, configured_at
+                       FROM retention_policies
+                       WHERE organization_id = %s ORDER BY resource_type""",
+                    (organization_id,),
+                )
+            )
+            return {"configuration": configuration, "retention_policies": retention}
+
+    def update_organization_configuration(
+        self,
+        organization_id: str,
+        config_key: str,
+        config_value: Any,
+        expected_updated_at: datetime | None,
+        note: str,
+    ) -> dict[str, Any]:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT config_key, config_value, updated_by, updated_at
+                       FROM organization_configuration
+                       WHERE organization_id = %s AND config_key = %s FOR UPDATE""",
+                    (organization_id, config_key),
+                )
+            )
+            if before is None and expected_updated_at is not None:
+                raise ValueError("Configuration does not exist; reload settings")
+            if before is not None and (
+                expected_updated_at is None or before["updated_at"] != expected_updated_at
+            ):
+                raise ValueError("Configuration changed; reload settings before updating")
+            after = self._one(
+                connection.execute(
+                    """INSERT INTO organization_configuration (
+                           organization_id, config_key, config_value, updated_by
+                       ) VALUES (%s, %s, %s, %s)
+                       ON CONFLICT (organization_id, config_key) DO UPDATE
+                       SET config_value = EXCLUDED.config_value,
+                           updated_by = EXCLUDED.updated_by, updated_at = now()
+                       RETURNING config_key, config_value, updated_by, updated_at""",
+                    (organization_id, config_key, json.dumps(config_value), context.actor),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "organization_configuration.update",
+                "organization_configuration",
+                config_key,
+                None,
+                before,
+                {**after, "change_note": note},
+            )
+            return after
+
+    def update_retention_policy(
+        self,
+        organization_id: str,
+        resource_type: str,
+        expected_retention_days: int | None,
+        proposed_retention_days: int | None,
+        legal_hold_supported: bool,
+        note: str,
+    ) -> dict[str, Any]:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT resource_type, retention_days, legal_hold_supported,
+                              configured_by, configured_at
+                       FROM retention_policies
+                       WHERE organization_id = %s AND resource_type = %s FOR UPDATE""",
+                    (organization_id, resource_type),
+                )
+            )
+            if before is None and expected_retention_days is not None:
+                raise ValueError("Retention policy does not exist; reload settings")
+            if before is not None and before["retention_days"] != expected_retention_days:
+                raise ValueError("Retention policy changed; reload settings before updating")
+            after = self._one(
+                connection.execute(
+                    """INSERT INTO retention_policies (
+                           organization_id, resource_type, retention_days,
+                           legal_hold_supported, configured_by
+                       ) VALUES (%s, %s, %s, %s, %s)
+                       ON CONFLICT (organization_id, resource_type) DO UPDATE
+                       SET retention_days = EXCLUDED.retention_days,
+                           legal_hold_supported = EXCLUDED.legal_hold_supported,
+                           configured_by = EXCLUDED.configured_by,
+                           configured_at = now()
+                       RETURNING resource_type, retention_days, legal_hold_supported,
+                                 configured_by, configured_at""",
+                    (
+                        organization_id,
+                        resource_type,
+                        proposed_retention_days,
+                        legal_hold_supported,
+                        context.actor,
+                    ),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "retention_policy.update",
+                "retention_policy",
+                resource_type,
+                None,
+                before,
+                {**after, "change_note": note, "enforcement_enabled": False},
+            )
+            return {**after, "enforcement_enabled": False}
+
     def service_cities(self, organization_id: str) -> list[dict[str, Any]]:
         with self._connect() as connection:
             connection.row_factory = dict_row
@@ -3394,15 +3526,36 @@ class MunicipalServiceRepository(PostGISRepository):
                        ORDER BY created_at DESC"""
                 )
             )
+            configuration = self._dicts(
+                connection.execute(
+                    """SELECT config_key, config_value, updated_by, updated_at
+                       FROM organization_configuration
+                       WHERE organization_id = %s ORDER BY config_key""",
+                    (organization_id,),
+                )
+            )
+            retention = self._dicts(
+                connection.execute(
+                    """SELECT resource_type, retention_days, legal_hold_supported,
+                              configured_by, configured_at
+                       FROM retention_policies
+                       WHERE organization_id = %s ORDER BY resource_type""",
+                    (organization_id,),
+                )
+            )
             return {
                 "jobs": jobs,
                 "datasets": datasets,
                 "backups": backups,
                 "releases": releases,
+                "configuration": configuration,
+                "retention_policies": retention,
                 "boundaries": {
                     "running_job_cancel": "operator intervention; API only cancels queued jobs",
                     "backup_execution": "deployment operator command; records are shown here",
                     "slo": "measurement foundation; no contractual SLA is asserted",
+                    "retention": "policy record only; no purge worker is enabled",
+                    "legal_hold": "not implemented",
                 },
             }
 
@@ -3620,6 +3773,17 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id,),
                 )
             )
+            samples = self._dicts(
+                connection.execute(
+                    """SELECT metric_name, count(*) AS count,
+                              COALESCE(sum(metric_value), 0) AS value_sum
+                       FROM service_metric_samples
+                       WHERE (organization_id IS NULL OR organization_id = %s)
+                         AND observed_at >= now() - interval '15 minutes'
+                       GROUP BY metric_name ORDER BY metric_name""",
+                    (organization_id,),
+                )
+            )
         lines = [
             "# HELP citygap_jobs Tenant-scoped durable jobs by effective state.",
             "# TYPE citygap_jobs gauge",
@@ -3638,6 +3802,16 @@ class MunicipalServiceRepository(PostGISRepository):
         lines.extend(
             f'citygap_dataset_versions{{state="{row["state"]}"}} {row["count"]}' for row in datasets
         )
+        for sample in samples:
+            metric_name = sample["metric_name"]
+            lines.extend(
+                [
+                    f"# HELP citygap_service_{metric_name} Recent recorded service metric.",
+                    f"# TYPE citygap_service_{metric_name} summary",
+                    f"citygap_service_{metric_name}_count {sample['count']}",
+                    f"citygap_service_{metric_name}_sum {sample['value_sum']}",
+                ]
+            )
         return "\n".join(lines) + "\n"
 
     def service_health(self, organization_id: str) -> dict[str, Any]:
@@ -3687,16 +3861,14 @@ class MunicipalServiceRepository(PostGISRepository):
                     "status": "ready" if promoted["promoted_versions"] else "unavailable",
                     **promoted,
                 }
-        storage_provider = os.getenv("CITYGAP_ATTACHMENT_STORAGE_PROVIDER", "local")
+        storage_provider = os.getenv("CITYGAP_ATTACHMENT_PROVIDER", "local")
         if storage_provider == "local":
             attachment_path = Path(os.getenv("CITYGAP_ATTACHMENT_DIRECTORY", "var/attachments"))
             storage_ready = attachment_path.exists() and os.access(attachment_path, os.W_OK)
             storage_detail = str(attachment_path)
         else:
-            storage_ready = bool(
-                os.getenv("CITYGAP_S3_ENDPOINT") and os.getenv("CITYGAP_S3_BUCKET")
-            )
-            storage_detail = "S3-compatible provider configuration"
+            storage_ready = False
+            storage_detail = "S3-compatible attachment adapter is not implemented"
         dependencies = {
             "service": {"status": "ready"},
             "database": {"status": "ready" if database_ready else "unavailable"},
@@ -3720,4 +3892,11 @@ class MunicipalServiceRepository(PostGISRepository):
             "checked_at": datetime.now(UTC).isoformat(),
             "dependencies": dependencies,
             "process_readiness": process,
+            "runtime_release": {
+                "application_version": os.getenv(
+                    "CITYGAP_APPLICATION_VERSION", "unversioned-development"
+                ),
+                "application_commit": os.getenv("CITYGAP_APPLICATION_COMMIT"),
+                "migration_version": "015_municipal_service.sql",
+            },
         }

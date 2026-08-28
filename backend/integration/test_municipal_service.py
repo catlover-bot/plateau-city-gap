@@ -294,6 +294,46 @@ def test_organization_a_b_isolation_for_api_and_database_constraints(
         "/api/v1/organizations/current/memberships", headers=_headers("administrator")
     )
     assert all(item["subject"] != "org-b-admin" for item in org_a_members.json()["items"])
+    org_a_setting = client.patch(
+        "/api/v1/organizations/current/configuration/timezone",
+        headers=_headers("administrator"),
+        json={
+            "expected_updated_at": None,
+            "config_value": "Asia/Tokyo",
+            "note": "Organization A timezone",
+        },
+    )
+    assert org_a_setting.status_code == 200, org_a_setting.text
+    org_b_settings = client.get(
+        "/api/v1/organizations/current/settings",
+        headers=_headers("data_manager", ORG_B),
+    )
+    assert org_b_settings.status_code == 200
+    assert all(item["config_key"] != "timezone" for item in org_b_settings.json()["configuration"])
+    org_b_retention = client.patch(
+        "/api/v1/organizations/current/retention-policies/attachment",
+        headers=_headers("administrator", ORG_B),
+        json={
+            "expected_retention_days": None,
+            "proposed_retention_days": 365,
+            "legal_hold_supported": False,
+            "note": "policy record only",
+        },
+    )
+    assert org_b_retention.status_code == 200, org_b_retention.text
+    assert org_b_retention.json()["enforcement_enabled"] is False
+    with psycopg.connect(database_url) as connection:
+        connection.execute(
+            """INSERT INTO service_metric_samples (
+                   organization_id, metric_name, metric_value, labels
+               ) VALUES (%s, 'api_error', 2, '{}'), (%s, 'api_error', 900, '{}')""",
+            (ORG_A, ORG_B),
+        )
+    org_a_metrics = client.get("/api/v1/metrics", headers=_headers("administrator"))
+    assert org_a_metrics.status_code == 200
+    assert "citygap_service_api_error_count 1" in org_a_metrics.text
+    assert "citygap_service_api_error_sum 2" in org_a_metrics.text
+    assert "902" not in org_a_metrics.text
     last_admin = client.patch(
         f"/api/v1/organizations/current/memberships/{user_id}/administrator",
         headers=_headers("administrator", ORG_B),
