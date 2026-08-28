@@ -9,7 +9,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import uuid
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from psycopg.rows import dict_row
@@ -207,6 +210,417 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             )
 
+    def create_service_city(self, organization_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        capabilities = (
+            "screening",
+            "building_detail",
+            "road_network",
+            "terrain",
+            "land_use",
+            "urban_planning",
+            "hazard",
+            "gtfs",
+            "scenario",
+            "temporal_diff",
+            "future_population",
+            "hazard_stress_test",
+            "criticality",
+            "field_mode",
+            "outcome_monitoring",
+            "evacuation_reachability",
+            "planning_monitoring",
+        )
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            duplicate = connection.execute(
+                """SELECT 1 FROM cities
+                   WHERE city_code = %s OR city_key = %s""",
+                (payload["city_code"], payload["city_key"]),
+            ).fetchone()
+            if duplicate:
+                raise ValueError("City code or key is already registered")
+            city = self._one(
+                connection.execute(
+                    """INSERT INTO cities (
+                           city_code, city_key, name, prefecture_code,
+                           prefecture_name, analysis_crs, organization_id,
+                           service_status
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, 'onboarding')
+                       RETURNING *""",
+                    (
+                        payload["city_code"],
+                        payload["city_key"],
+                        payload["name"],
+                        payload["prefecture_code"],
+                        payload["prefecture_name"],
+                        payload["analysis_crs"],
+                        organization_id,
+                    ),
+                )
+            )
+            assert city is not None
+            connection.executemany(
+                """INSERT INTO city_capabilities (
+                       city_id, capability, status, note, evidence, updated_at
+                   ) VALUES (%s, %s, 'unavailable', %s, '[]', now())""",
+                [
+                    (
+                        city["id"],
+                        capability,
+                        "必要な実データと検証済み成果がまだ登録されていません",
+                    )
+                    for capability in capabilities
+                ],
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "city.create",
+                "city",
+                str(city["id"]),
+                str(city["id"]),
+                None,
+                city,
+            )
+            return city
+
+    def city_onboarding(self, organization_id: str, city_reference: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            categories = self._dicts(
+                connection.execute(
+                    """SELECT dataset.dataset_category,
+                              count(version.id) AS registered_versions,
+                              count(version.id) FILTER (
+                                  WHERE version.service_status = 'promoted'
+                              ) AS promoted_versions
+                       FROM datasets AS dataset
+                       LEFT JOIN dataset_versions AS version
+                         ON version.organization_id = dataset.organization_id
+                        AND version.dataset_id = dataset.id
+                       WHERE dataset.organization_id = %s AND dataset.city_id = %s
+                       GROUP BY dataset.dataset_category""",
+                    (organization_id, city["id"]),
+                )
+            )
+            by_category = {row["dataset_category"]: row for row in categories}
+            state_count = connection.execute(
+                """SELECT count(*) FROM urban_states
+                   WHERE organization_id = %s AND city_id = %s
+                     AND lifecycle_status IN ('validated', 'current')""",
+                (organization_id, city["id"]),
+            ).fetchone()[0]
+            analysis_count = connection.execute(
+                """SELECT count(*) FROM analysis_runs
+                   WHERE organization_id = %s AND city_id = %s""",
+                (organization_id, city["id"]),
+            ).fetchone()[0]
+            capability_rows = self._dicts(
+                connection.execute(
+                    """SELECT capability, status, note
+                       FROM city_capabilities WHERE city_id = %s ORDER BY capability""",
+                    (city["id"],),
+                )
+            )
+
+            def dataset_step(category: str) -> dict[str, Any]:
+                row = by_category.get(category, {})
+                promoted = int(row.get("promoted_versions", 0))
+                registered = int(row.get("registered_versions", 0))
+                return {
+                    "key": category,
+                    "status": "complete"
+                    if promoted
+                    else "in_progress"
+                    if registered
+                    else "missing",
+                    "registered_versions": registered,
+                    "promoted_versions": promoted,
+                }
+
+            steps = [dataset_step(key) for key in ("plateau", "population", "facilities")]
+            steps.extend(
+                [
+                    {
+                        "key": "first_urban_state",
+                        "status": "complete" if state_count else "missing",
+                        "count": state_count,
+                    },
+                    {
+                        "key": "first_analysis",
+                        "status": "complete" if analysis_count else "missing",
+                        "count": analysis_count,
+                    },
+                ]
+            )
+            return {"city": city, "steps": steps, "capabilities": capability_rows}
+
+    def register_service_dataset(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            if connection.execute(
+                """SELECT 1 FROM datasets
+                   WHERE organization_id = %s AND city_id = %s AND dataset_key = %s""",
+                (organization_id, city["id"], payload["dataset_key"]),
+            ).fetchone():
+                raise ValueError("Dataset key is already registered for this city")
+            dataset_id = str(uuid.uuid4())
+            version_id = str(uuid.uuid4())
+            dataset = self._one(
+                connection.execute(
+                    """INSERT INTO datasets (
+                           id, city_id, dataset_key, title, provider,
+                           organization_id, data_classification, dataset_category
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        dataset_id,
+                        city["id"],
+                        payload["dataset_key"],
+                        payload["title"],
+                        payload["provider"],
+                        organization_id,
+                        payload.get("data_classification", "internal"),
+                        payload["dataset_category"],
+                    ),
+                )
+            )
+            version = self._one(
+                connection.execute(
+                    """INSERT INTO dataset_versions (
+                           id, dataset_id, version_key, dataset_year, data_format,
+                           source_url, license, declared_source_crs,
+                           verification_status, registered_at, organization_id,
+                           data_classification, service_status
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,
+                                 'metadata_registered', now(), %s, %s, 'registered')
+                       RETURNING *""",
+                    (
+                        version_id,
+                        dataset_id,
+                        payload["version_key"],
+                        payload["dataset_year"],
+                        payload["data_format"],
+                        payload.get("source_url"),
+                        payload.get("license"),
+                        payload.get("declared_source_crs"),
+                        organization_id,
+                        payload.get("data_classification", "internal"),
+                    ),
+                )
+            )
+            assert dataset is not None and version is not None
+            connection.execute(
+                """INSERT INTO dataset_onboarding_events (
+                       organization_id, dataset_version_id, to_status, note, actor
+                   ) VALUES (%s, %s, 'registered', %s, %s)""",
+                (
+                    organization_id,
+                    version_id,
+                    "source metadata registered; validation has not run",
+                    context.actor,
+                ),
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "dataset.register",
+                "dataset_version",
+                version_id,
+                str(city["id"]),
+                None,
+                {"dataset": dataset, "version": version},
+            )
+            return {"dataset": dataset, "version": version}
+
+    def service_urban_states(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> list[dict[str, Any]] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            return self._dicts(
+                connection.execute(
+                    """SELECT state.id, state.state_key, state.label, state.effective_date,
+                              state.state_type, state.lifecycle_status, state.base_state_id,
+                              state.primary_dataset_version_id,
+                              state.primary_plateau_dataset_version_id,
+                              state.source_verified, state.population_model,
+                              state.fixed_service_assumption, state.validation_report,
+                              state.created_by, state.created_at, state.validated_at
+                       FROM urban_states AS state
+                       WHERE state.organization_id = %s AND state.city_id = %s
+                       ORDER BY state.effective_date DESC, state.created_at DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+
+    def create_service_urban_state(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            primary = self._one(
+                connection.execute(
+                    """SELECT version.id, version.service_status, version.quality_status,
+                              version.analysis_ready
+                       FROM dataset_versions AS version
+                       JOIN datasets AS dataset ON dataset.id = version.dataset_id
+                       WHERE version.organization_id = %s AND dataset.city_id = %s
+                         AND version.id = %s""",
+                    (organization_id, city["id"], payload["primary_dataset_version_id"]),
+                )
+            )
+            if primary is None:
+                raise ValueError("Primary dataset version does not belong to this city")
+            if not (
+                primary["service_status"] == "promoted"
+                and primary["quality_status"] == "passed"
+                and primary["analysis_ready"]
+            ):
+                raise ValueError("Urban State requires a promoted, quality-passed dataset version")
+            base_state_id = payload.get("base_state_id")
+            if (
+                base_state_id
+                and not connection.execute(
+                    """SELECT 1 FROM urban_states
+                   WHERE organization_id = %s AND city_id = %s AND id = %s
+                     AND lifecycle_status IN ('validated', 'current')""",
+                    (organization_id, city["id"], base_state_id),
+                ).fetchone()
+            ):
+                raise ValueError("Base Urban State must be validated in the same city")
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO urban_states (
+                           organization_id, city_id, state_key, label, effective_date,
+                           state_type, lifecycle_status, base_state_id,
+                           primary_dataset_version_id, source_verified, population_model,
+                           fixed_service_assumption, validation_report, created_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, 'draft', %s, %s, %s, %s, %s,
+                                 '{"service":"municipal-v1","validation":"pending"}', %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        city["id"],
+                        payload["state_key"],
+                        payload["label"],
+                        payload["effective_date"],
+                        payload["state_type"],
+                        base_state_id,
+                        payload["primary_dataset_version_id"],
+                        payload["source_verified"],
+                        payload.get("population_model"),
+                        payload.get("fixed_service_assumption", False),
+                        context.actor,
+                    ),
+                )
+            )
+            assert result is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "urban_state.create",
+                "urban_state",
+                str(result["id"]),
+                str(city["id"]),
+                None,
+                result,
+            )
+            return result
+
+    def transition_service_urban_state(
+        self,
+        organization_id: str,
+        state_id: str,
+        expected_status: str,
+        proposed_status: str,
+        note: str,
+    ) -> dict[str, Any] | None:
+        allowed = {
+            "draft": {"validated", "archived"},
+            "validated": {"current", "archived"},
+            "current": {"superseded"},
+            "superseded": {"archived"},
+            "archived": set(),
+        }
+        if proposed_status not in allowed.get(expected_status, set()):
+            raise ValueError(
+                f"Invalid Urban State transition: {expected_status} -> {proposed_status}"
+            )
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT * FROM urban_states
+                       WHERE organization_id = %s AND id = %s FOR UPDATE""",
+                    (organization_id, state_id),
+                )
+            )
+            if before is None:
+                return None
+            if before["lifecycle_status"] != expected_status:
+                raise ValueError(f"Urban State status changed: expected {expected_status}")
+            if proposed_status in {"validated", "current"} and not before["source_verified"]:
+                raise ValueError("Source verification is required before validation")
+            if proposed_status == "current":
+                connection.execute(
+                    """UPDATE urban_states
+                       SET lifecycle_status = 'superseded', updated_at = now()
+                       WHERE organization_id = %s AND city_id = %s
+                         AND state_type = %s AND lifecycle_status = 'current'""",
+                    (organization_id, before["city_id"], before["state_type"]),
+                )
+            after = self._one(
+                connection.execute(
+                    """UPDATE urban_states
+                       SET lifecycle_status = %s,
+                           validated_at = CASE WHEN %s = 'validated' THEN now()
+                                               ELSE validated_at END,
+                           validation_report = validation_report || %s::jsonb,
+                           updated_at = now()
+                       WHERE organization_id = %s AND id = %s RETURNING *""",
+                    (
+                        proposed_status,
+                        proposed_status,
+                        json.dumps(
+                            {"lifecycle_note": note, "lifecycle_actor": context.actor},
+                            ensure_ascii=False,
+                        ),
+                        organization_id,
+                        state_id,
+                    ),
+                )
+            )
+            assert after is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "urban_state.transition",
+                "urban_state",
+                state_id,
+                str(before["city_id"]),
+                before,
+                after,
+            )
+            return after
+
     def city_service_home(self, organization_id: str, city_reference: str) -> dict[str, Any] | None:
         with self._connect() as connection:
             connection.row_factory = dict_row
@@ -228,7 +642,8 @@ class MunicipalServiceRepository(PostGISRepository):
             )
             datasets = self._dicts(
                 connection.execute(
-                    """SELECT dataset.dataset_key, dataset.title, version.id AS version_id,
+                    """SELECT dataset.dataset_key, dataset.dataset_category,
+                              dataset.title, version.id AS version_id,
                               version.version_key, version.dataset_year, version.service_status,
                               version.data_classification, version.quality_status,
                               version.analysis_ready
@@ -410,21 +825,6 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             )
             assert after is not None
-            if before["investigation_id"]:
-                next_investigation_status = {
-                    "reviewed": "decision_pending",
-                    "changes_requested": "open",
-                }.get(proposed_status)
-                if next_investigation_status:
-                    connection.execute(
-                        """UPDATE investigations SET status = %s
-                           WHERE organization_id = %s AND id = %s""",
-                        (
-                            next_investigation_status,
-                            organization_id,
-                            before["investigation_id"],
-                        ),
-                    )
             self._activity(
                 connection,
                 organization_id,
@@ -1008,6 +1408,21 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             )
             assert after is not None
+            if before["investigation_id"]:
+                next_investigation_status = {
+                    "reviewed": "decision_pending",
+                    "changes_requested": "open",
+                }.get(proposed_status)
+                if next_investigation_status:
+                    connection.execute(
+                        """UPDATE investigations SET status = %s, updated_at = now()
+                           WHERE organization_id = %s AND id = %s""",
+                        (
+                            next_investigation_status,
+                            organization_id,
+                            before["investigation_id"],
+                        ),
+                    )
             self._activity(
                 connection,
                 organization_id,
@@ -1035,6 +1450,18 @@ class MunicipalServiceRepository(PostGISRepository):
                 return None
             if investigation["status"] in {"closed", "archived"}:
                 raise ValueError("Closed investigations cannot receive new field observations")
+            attachment_ids = payload.get("attachment_ids", [])
+            if attachment_ids:
+                matched_attachments = connection.execute(
+                    """SELECT count(*) AS count FROM attachment_objects
+                       WHERE organization_id = %s AND city_id = %s
+                         AND id = ANY(%s::uuid[])""",
+                    (organization_id, investigation["city_id"], attachment_ids),
+                ).fetchone()["count"]
+                if matched_attachments != len(set(attachment_ids)):
+                    raise ValueError(
+                        "Every attachment must belong to the investigation tenant and city"
+                    )
             if investigation["status"] != "field_check":
                 validate_investigation_transition(
                     InvestigationStatus(investigation["status"]),
@@ -1075,7 +1502,7 @@ class MunicipalServiceRepository(PostGISRepository):
                         latitude,
                         payload["observed_at"],
                         context.actor,
-                        payload.get("attachment_ids", []),
+                        attachment_ids,
                     ),
                 )
             )
@@ -1118,6 +1545,17 @@ class MunicipalServiceRepository(PostGISRepository):
             ).fetchone()["status"]
             if investigation_status != "decision_pending":
                 raise ValueError("Investigation must be decision_pending before a decision")
+            evidence_ids = payload["related_evidence_ids"]
+            matched_evidence = connection.execute(
+                """SELECT count(*) AS count FROM evidence_centers
+                   WHERE organization_id = %s AND city_id = %s
+                     AND id = ANY(%s::uuid[])""",
+                (organization_id, review["city_id"], evidence_ids),
+            ).fetchone()["count"]
+            if matched_evidence != len(set(evidence_ids)):
+                raise ValueError(
+                    "Every Decision Record evidence reference must belong to the tenant and city"
+                )
             context = current_request_context()
             result = self._one(
                 connection.execute(
@@ -1138,15 +1576,16 @@ class MunicipalServiceRepository(PostGISRepository):
                         payload["reason"],
                         context.actor,
                         payload.get("related_scenario_run_id"),
-                        payload["related_evidence_ids"],
+                        evidence_ids,
                         payload.get("official_approval_reference"),
                     ),
                 )
             )
             assert result is not None
             connection.execute(
-                "UPDATE investigations SET status = 'closed', updated_at = now() WHERE id = %s",
-                (investigation_id,),
+                """UPDATE investigations SET status = 'closed', updated_at = now()
+                   WHERE organization_id = %s AND id = %s""",
+                (organization_id, investigation_id),
             )
             self._activity(
                 connection,
@@ -1177,7 +1616,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 return None
             datasets = self._dicts(
                 connection.execute(
-                    """SELECT dataset.id AS dataset_id, dataset.dataset_key, dataset.title,
+                    """SELECT dataset.id AS dataset_id, dataset.dataset_key,
+                              dataset.dataset_category, dataset.title,
                               dataset.provider, dataset.data_classification,
                               version.id AS version_id, version.version_key,
                               version.dataset_year, version.data_format, version.source_url,
@@ -1211,11 +1651,22 @@ class MunicipalServiceRepository(PostGISRepository):
                     (organization_id, city["id"]),
                 )
             )
+            urban_states = self._dicts(
+                connection.execute(
+                    """SELECT id, state_key, label, effective_date, state_type,
+                              lifecycle_status, source_verified, created_at
+                       FROM urban_states
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY effective_date DESC, created_at DESC""",
+                    (organization_id, city["id"]),
+                )
+            )
             return {
                 "city": city,
                 "datasets": datasets,
                 "quality_checks": quality,
                 "plateau_model": plateau_model,
+                "urban_states": urban_states,
             }
 
     def transition_dataset_version(
@@ -1330,6 +1781,289 @@ class MunicipalServiceRepository(PostGISRepository):
                 )
             return definitions
 
+    def service_analysis_runs(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> list[dict[str, Any]] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            return self._dicts(
+                connection.execute(
+                    """SELECT run.id, run.analysis_type, run.status, run.algorithm_version,
+                              run.config_hash, run.parameters, run.result_hash,
+                              run.output_artifact, run.started_at, run.completed_at,
+                              run.created_by,
+                              array_remove(array_agg(input.dataset_version_id), NULL)
+                                  AS dataset_version_ids,
+                              job.id AS job_id, job.state AS job_state,
+                              job.current_stage AS job_stage
+                       FROM analysis_runs AS run
+                       LEFT JOIN analysis_run_dataset_versions AS input
+                         ON input.analysis_run_id = run.id
+                       LEFT JOIN job_runs AS job
+                         ON job.organization_id = run.organization_id
+                        AND job.parameters ->> 'analysis_run_id' = run.id::text
+                       WHERE run.organization_id = %s AND run.city_id = %s
+                       GROUP BY run.id, job.id
+                       ORDER BY run.started_at DESC, run.id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+
+    @staticmethod
+    def _validated_analysis_parameters(
+        definitions: list[dict[str, Any]], supplied: dict[str, Any]
+    ) -> dict[str, Any]:
+        known = {definition["parameter_key"]: definition for definition in definitions}
+        unknown = set(supplied) - set(known)
+        if unknown:
+            raise ValueError(f"Unknown analysis parameters: {', '.join(sorted(unknown))}")
+        values: dict[str, Any] = {}
+        for key, definition in known.items():
+            value = supplied.get(key, definition["default_value"])
+            value_type = definition["value_type"]
+            valid_type = {
+                "integer": type(value) is int,
+                "number": type(value) in {int, float},
+                "string": isinstance(value, str),
+                "boolean": type(value) is bool,
+                "enum": isinstance(value, str),
+            }[value_type]
+            if not valid_type:
+                raise ValueError(f"Analysis parameter {key} must be {value_type}")
+            if definition["minimum"] is not None and value < definition["minimum"]:
+                raise ValueError(f"Analysis parameter {key} is below its minimum")
+            if definition["maximum"] is not None and value > definition["maximum"]:
+                raise ValueError(f"Analysis parameter {key} exceeds its maximum")
+            allowed = definition["allowed_values"]
+            if allowed is not None and value not in allowed:
+                raise ValueError(f"Analysis parameter {key} is not an allowed value")
+            values[key] = value
+        return values
+
+    def create_service_analysis_run(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            definition = self._one(
+                connection.execute(
+                    """SELECT id, version, name, required_capabilities,
+                              input_contract, output_contract, claim_boundary
+                       FROM analysis_definitions
+                       WHERE id = %s AND version = %s AND active""",
+                    (payload["analysis_id"], payload["analysis_version"]),
+                )
+            )
+            if definition is None:
+                raise ValueError("Analysis definition or version is not active")
+            parameter_definitions = self._dicts(
+                connection.execute(
+                    """SELECT parameter_key, value_type, default_value, minimum,
+                              maximum, allowed_values
+                       FROM analysis_parameter_definitions
+                       WHERE analysis_id = %s AND analysis_version = %s
+                       ORDER BY parameter_key""",
+                    (payload["analysis_id"], payload["analysis_version"]),
+                )
+            )
+            parameters = self._validated_analysis_parameters(
+                parameter_definitions, payload.get("parameters", {})
+            )
+            unavailable = self._dicts(
+                connection.execute(
+                    """SELECT required.capability,
+                              COALESCE(capability.status, 'unavailable') AS status
+                       FROM unnest(%s::text[]) AS required(capability)
+                       LEFT JOIN city_capabilities AS capability
+                         ON capability.city_id = %s
+                        AND capability.capability = required.capability
+                       WHERE capability.status IS DISTINCT FROM 'available'""",
+                    (definition["required_capabilities"], city["id"]),
+                )
+            )
+            if unavailable:
+                missing = ", ".join(f"{row['capability']}={row['status']}" for row in unavailable)
+                raise ValueError(f"Required city capabilities are unavailable: {missing}")
+            state = self._one(
+                connection.execute(
+                    """SELECT id, state_key, lifecycle_status FROM urban_states
+                       WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                    (organization_id, city["id"], payload["urban_state_id"]),
+                )
+            )
+            if state is None:
+                raise ValueError(
+                    "Urban State does not belong to the selected organization and city"
+                )
+            if state["lifecycle_status"] not in {"validated", "current"}:
+                raise ValueError("Analysis requires a validated or current Urban State")
+            input_versions = payload["dataset_versions"]
+            if not input_versions:
+                raise ValueError("At least one explicit dataset version is required")
+            required_dataset_roles = set(definition["input_contract"].get("dataset_roles", []))
+            supplied_dataset_roles = set(input_versions)
+            if supplied_dataset_roles != required_dataset_roles:
+                missing_roles = sorted(required_dataset_roles - supplied_dataset_roles)
+                unexpected_roles = sorted(supplied_dataset_roles - required_dataset_roles)
+                details = []
+                if missing_roles:
+                    details.append("missing=" + ",".join(missing_roles))
+                if unexpected_roles:
+                    details.append("unexpected=" + ",".join(unexpected_roles))
+                raise ValueError(
+                    "Dataset input roles must exactly match the analysis contract: "
+                    + "; ".join(details)
+                )
+            version_ids = list(dict.fromkeys(input_versions.values()))
+            versions = self._dicts(
+                connection.execute(
+                    """SELECT version.id, dataset.dataset_key, version.service_status
+                       FROM dataset_versions AS version
+                       JOIN datasets AS dataset ON dataset.id = version.dataset_id
+                       WHERE version.organization_id = %s AND dataset.city_id = %s
+                         AND version.id = ANY(%s::uuid[])""",
+                    (organization_id, city["id"], version_ids),
+                )
+            )
+            if {str(row["id"]) for row in versions} != set(version_ids):
+                raise ValueError("Every dataset version must belong to the selected city")
+            unpromoted = [str(row["id"]) for row in versions if row["service_status"] != "promoted"]
+            if unpromoted:
+                raise ValueError(
+                    "Analysis inputs must be promoted dataset versions: " + ", ".join(unpromoted)
+                )
+            algorithm_version = f"{definition['id']}@{definition['version']}"
+            reproducibility = {
+                "organization_id": organization_id,
+                "city_id": str(city["id"]),
+                "urban_state_id": payload["urban_state_id"],
+                "analysis_id": definition["id"],
+                "analysis_version": definition["version"],
+                "dataset_versions": input_versions,
+                "parameters": parameters,
+            }
+            config_hash = hashlib.sha256(
+                json.dumps(
+                    reproducibility,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode()
+            ).hexdigest()
+            run = self._one(
+                connection.execute(
+                    """INSERT INTO analysis_runs (
+                           id, organization_id, city_id, analysis_type, status,
+                           config_hash, started_at, metadata, created_by,
+                           algorithm_version, parameters
+                       ) VALUES (
+                           gen_random_uuid(), %s, %s, %s, 'queued', %s, now(),
+                           %s, %s, %s, %s
+                       ) RETURNING *""",
+                    (
+                        organization_id,
+                        city["id"],
+                        definition["id"],
+                        config_hash,
+                        json.dumps(
+                            {
+                                "urban_state_id": payload["urban_state_id"],
+                                "dataset_roles": input_versions,
+                                "input_contract": definition["input_contract"],
+                                "output_contract": definition["output_contract"],
+                                "claim_boundary": definition["claim_boundary"],
+                            },
+                            ensure_ascii=False,
+                        ),
+                        context.actor,
+                        algorithm_version,
+                        json.dumps(parameters, ensure_ascii=False),
+                    ),
+                )
+            )
+            assert run is not None
+            for role, version_id in sorted(input_versions.items()):
+                connection.execute(
+                    """INSERT INTO analysis_run_dataset_versions (
+                           analysis_run_id, dataset_version_id, input_role
+                       ) VALUES (%s, %s, %s)""",
+                    (run["id"], version_id, role),
+                )
+            connection.execute(
+                """INSERT INTO state_analysis_runs (
+                       urban_state_id, analysis_run_id, result_role
+                   ) VALUES (%s, %s, 'derived')""",
+                (payload["urban_state_id"], run["id"]),
+            )
+            idempotency_key = hashlib.sha256(
+                f"{organization_id}:analysis_run:{run['id']}:{config_hash}".encode()
+            ).hexdigest()
+            job = self._one(
+                connection.execute(
+                    """INSERT INTO job_runs (
+                           organization_id, city_id, job_type, state, config_hash,
+                           algorithm_version, idempotency_key, parameters
+                       ) VALUES (%s, %s, 'analysis_run', 'queued', %s, %s, %s, %s)
+                       ON CONFLICT (idempotency_key) WHERE idempotency_key IS NOT NULL
+                       DO UPDATE SET idempotency_key = EXCLUDED.idempotency_key
+                       RETURNING id, state, current_stage, queued_at""",
+                    (
+                        organization_id,
+                        city["id"],
+                        config_hash,
+                        algorithm_version,
+                        idempotency_key,
+                        json.dumps(
+                            {
+                                "analysis_run_id": str(run["id"]),
+                                "analysis_id": definition["id"],
+                                "analysis_version": definition["version"],
+                            }
+                        ),
+                    ),
+                )
+            )
+            assert job is not None
+            for version_id in sorted(set(version_ids)):
+                connection.execute(
+                    """INSERT INTO job_dataset_versions (job_run_id, dataset_version_id)
+                       VALUES (%s, %s) ON CONFLICT DO NOTHING""",
+                    (job["id"], version_id),
+                )
+            connection.execute(
+                """INSERT INTO job_events (job_run_id, state, message)
+                   VALUES (%s, 'queued', 'versioned analysis contract accepted')
+                   ON CONFLICT DO NOTHING""",
+                (job["id"],),
+            )
+            self._activity(
+                connection,
+                organization_id,
+                str(city["id"]),
+                "analysis_started",
+                "analysis_run",
+                str(run["id"]),
+                f"分析「{definition['name']}」をversion付き入力で登録",
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "analysis.create",
+                "analysis_run",
+                str(run["id"]),
+                str(city["id"]),
+                None,
+                {**run, "job_id": job["id"], "reproducibility": reproducibility},
+            )
+            return {"analysis_run": run, "job": job, "reproducibility": reproducibility}
+
     def scenario_library(
         self, organization_id: str, city_reference: str, limit: int
     ) -> list[dict[str, Any]] | None:
@@ -1352,6 +2086,25 @@ class MunicipalServiceRepository(PostGISRepository):
                        WHERE scenario.organization_id = %s AND version.city_id = %s
                        ORDER BY scenario.generated_at DESC LIMIT %s""",
                     (organization_id, city["city_code"], limit),
+                )
+            )
+
+    def scenario_comparisons(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> list[dict[str, Any]] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            return self._dicts(
+                connection.execute(
+                    """SELECT id, investigation_id, title, scenario_run_ids,
+                              comparison_dimensions, created_by, created_at
+                       FROM scenario_comparisons
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY created_at DESC, id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
                 )
             )
 
@@ -1395,11 +2148,48 @@ class MunicipalServiceRepository(PostGISRepository):
     def create_evidence_center(
         self, organization_id: str, city_reference: str, payload: dict[str, Any]
     ) -> dict[str, Any] | None:
+        if payload.get("data_classification", "internal") == "public":
+            sources = payload["source_manifest"].get("sources", [])
+            if (
+                not sources
+                or any(
+                    not isinstance(source, dict) or source.get("data_classification") != "public"
+                    for source in sources
+                )
+                or payload.get("field_evidence_manifest")
+                or payload.get("decision_manifest")
+            ):
+                raise ValueError(
+                    "Public Evidence requires public-classified sources and excludes field/decision records"
+                )
         with self._connect() as connection:
             connection.row_factory = dict_row
             city = self._city(connection, organization_id, city_reference)
             if city is None:
                 return None
+            investigation_id = payload.get("investigation_id")
+            scenario_run_id = payload.get("scenario_run_id")
+            if (
+                investigation_id
+                and not connection.execute(
+                    """SELECT 1 FROM investigations
+                   WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                    (organization_id, city["id"], investigation_id),
+                ).fetchone()
+            ):
+                raise ValueError("Evidence investigation does not belong to the tenant and city")
+            if (
+                scenario_run_id
+                and not connection.execute(
+                    """SELECT 1 FROM scenario_runs AS scenario
+                   JOIN city_dataset_versions AS version
+                     ON version.id = scenario.dataset_version_id
+                   WHERE scenario.organization_id = %s AND version.city_id = %s
+                     AND scenario.id = %s""",
+                    (organization_id, city["city_code"], scenario_run_id),
+                ).fetchone()
+            ):
+                raise ValueError("Evidence scenario does not belong to the tenant and city")
             manifest = {
                 "source_manifest": payload["source_manifest"],
                 "algorithm_manifest": payload["algorithm_manifest"],
@@ -1425,8 +2215,8 @@ class MunicipalServiceRepository(PostGISRepository):
                     (
                         organization_id,
                         city["id"],
-                        payload.get("investigation_id"),
-                        payload.get("scenario_run_id"),
+                        investigation_id,
+                        scenario_run_id,
                         json.dumps(manifest["source_manifest"], ensure_ascii=False),
                         json.dumps(manifest["algorithm_manifest"], ensure_ascii=False),
                         json.dumps(manifest["validation_manifest"], ensure_ascii=False),
@@ -1434,6 +2224,280 @@ class MunicipalServiceRepository(PostGISRepository):
                         json.dumps(manifest["decision_manifest"], ensure_ascii=False),
                         digest,
                         payload.get("data_classification", "internal"),
+                        context.actor,
+                    ),
+                )
+            )
+
+    def evidence_library(
+        self, organization_id: str, city_reference: str, limit: int
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            evidence = self._dicts(
+                connection.execute(
+                    """SELECT id, investigation_id, scenario_run_id, manifest_sha256,
+                              data_classification, created_by, created_at,
+                              jsonb_array_length(field_evidence_manifest) AS field_evidence_count,
+                              jsonb_array_length(decision_manifest) AS decision_count
+                       FROM evidence_centers
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY created_at DESC, id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            reports = self._dicts(
+                connection.execute(
+                    """SELECT id, report_type, title, investigation_id,
+                              scenario_comparison_id, generator_version,
+                              artifact_uri, artifact_sha256, data_classification,
+                              created_by, created_at
+                       FROM report_records
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY created_at DESC, id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            validations = self._dicts(
+                connection.execute(
+                    """SELECT id, claim_key, method_key, validation_status,
+                              run_status, algorithm_version, generated_at
+                       FROM validation_runs
+                       WHERE organization_id = %s AND city_id = %s
+                       ORDER BY generated_at DESC, id DESC LIMIT %s""",
+                    (organization_id, city["id"], limit),
+                )
+            )
+            return {
+                "city": city,
+                "evidence_centers": evidence,
+                "reports": reports,
+                "validation_runs": validations,
+            }
+
+    @staticmethod
+    def _report_digest(content: dict[str, Any]) -> tuple[str, str]:
+        serialized = json.dumps(
+            content,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=str,
+        )
+        return serialized, hashlib.sha256(serialized.encode()).hexdigest()
+
+    def create_report_record(
+        self, organization_id: str, city_reference: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        generator_version = "municipal-report-v1.0.0"
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            city = self._city(connection, organization_id, city_reference)
+            if city is None:
+                return None
+            organization = self._one(
+                connection.execute(
+                    "SELECT id, name FROM organizations WHERE id = %s",
+                    (organization_id,),
+                )
+            )
+            assert organization is not None
+            report_type = payload["report_type"]
+            subject: dict[str, Any]
+            investigation_id = payload.get("investigation_id")
+            comparison_id = payload.get("scenario_comparison_id")
+            if report_type == "investigation":
+                if not investigation_id or comparison_id:
+                    raise ValueError("Investigation reports require one investigation_id")
+                investigation = self.investigation_detail(organization_id, investigation_id)
+                if investigation is None or str(investigation["investigation"]["city_id"]) != str(
+                    city["id"]
+                ):
+                    raise ValueError("Investigation does not belong to the selected city")
+                subject = investigation
+            elif report_type == "scenario_comparison":
+                if not comparison_id or investigation_id:
+                    raise ValueError(
+                        "Scenario comparison reports require one scenario_comparison_id"
+                    )
+                comparison = self._one(
+                    connection.execute(
+                        """SELECT * FROM scenario_comparisons
+                           WHERE organization_id = %s AND city_id = %s AND id = %s""",
+                        (organization_id, city["id"], comparison_id),
+                    )
+                )
+                if comparison is None:
+                    raise ValueError("Scenario comparison does not belong to the selected city")
+                subject = {"scenario_comparison": comparison}
+            elif report_type == "data_quality":
+                if investigation_id or comparison_id:
+                    raise ValueError("Data quality reports are city-scoped")
+                subject = self.data_hub(organization_id, city_reference) or {}
+            elif report_type in {"annual_change", "resilience_review"}:
+                if investigation_id or comparison_id:
+                    raise ValueError(f"{report_type} reports are city-scoped")
+                subject = {
+                    "urban_states": self._dicts(
+                        connection.execute(
+                            """SELECT id, state_key, label, effective_date, state_type,
+                                      lifecycle_status, source_verified, validation_report
+                               FROM urban_states
+                               WHERE organization_id = %s AND city_id = %s
+                               ORDER BY effective_date, id""",
+                            (organization_id, city["id"]),
+                        )
+                    ),
+                    "stress_tests": self._dicts(
+                        connection.execute(
+                            """SELECT id, title, stress_test_type, status, assumption_hash,
+                                      algorithm_version, route_semantics, limitation, created_at
+                               FROM stress_test_runs
+                               WHERE organization_id = %s AND city_id = %s
+                               ORDER BY created_at, id""",
+                            (organization_id, city["id"]),
+                        )
+                    ),
+                }
+            else:
+                raise ValueError("Unsupported report type")
+            evidence = self._dicts(
+                connection.execute(
+                    """SELECT id, manifest_sha256, data_classification, created_at
+                       FROM evidence_centers
+                       WHERE organization_id = %s AND city_id = %s
+                         AND (%s::uuid IS NULL OR investigation_id = %s)
+                       ORDER BY created_at, id""",
+                    (organization_id, city["id"], investigation_id, investigation_id),
+                )
+            )
+            requested_classification = payload.get("data_classification", "internal")
+            if requested_classification == "public":
+                if report_type != "data_quality":
+                    raise ValueError(
+                        "This deterministic generator only supports public data_quality reports"
+                    )
+                dataset_classifications = {
+                    row.get("data_classification")
+                    for row in subject.get("datasets", [])
+                    if row.get("version_id")
+                }
+                if dataset_classifications - {"public"} or any(
+                    row["data_classification"] != "public" for row in evidence
+                ):
+                    raise ValueError("Public reports require public-classified inputs and evidence")
+            structured_content = {
+                "schema_version": "citygap-municipal-report-1.0.0",
+                "generator_version": generator_version,
+                "organization": {
+                    "id": organization_id,
+                    "name": organization["name"],
+                },
+                "city": {
+                    "id": str(city["id"]),
+                    "city_code": city["city_code"],
+                    "city_key": city["city_key"],
+                    "name": city["name"],
+                },
+                "report_type": report_type,
+                "title": payload["title"],
+                "subject": subject,
+                "evidence": evidence,
+                "claim_boundary": (
+                    "This report records versioned model outputs, reviews and human decisions; "
+                    "it does not create an administrative approval or policy recommendation."
+                ),
+            }
+            _, digest = self._report_digest(structured_content)
+            report_id = str(uuid.uuid4())
+            artifact_uri = f"citygap-report://{report_id}/report.json"
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO report_records (
+                           id, organization_id, city_id, investigation_id,
+                           scenario_comparison_id, report_type, title, structured_content,
+                           generator_version, artifact_uri, artifact_sha256,
+                           data_classification, created_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                       RETURNING id, report_type, title, generator_version, artifact_uri,
+                                 artifact_sha256, data_classification, created_by, created_at""",
+                    (
+                        report_id,
+                        organization_id,
+                        city["id"],
+                        investigation_id,
+                        comparison_id,
+                        report_type,
+                        payload["title"],
+                        json.dumps(structured_content, ensure_ascii=False, default=str),
+                        generator_version,
+                        artifact_uri,
+                        digest,
+                        requested_classification,
+                        context.actor,
+                    ),
+                )
+            )
+            assert result is not None
+            self._service_audit(
+                connection,
+                organization_id,
+                "report.create",
+                "report",
+                report_id,
+                str(city["id"]),
+                None,
+                result,
+            )
+            return result
+
+    def report_artifact(self, organization_id: str, report_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            report = self._one(
+                connection.execute(
+                    """SELECT id, title, structured_content, artifact_sha256,
+                              data_classification, generator_version, created_at
+                       FROM report_records WHERE organization_id = %s AND id = %s""",
+                    (organization_id, report_id),
+                )
+            )
+            if report is None:
+                return None
+            _, calculated = self._report_digest(report["structured_content"])
+            if calculated != report["artifact_sha256"]:
+                raise ValueError("Stored report content does not match its artifact hash")
+            return report
+
+    def export_report(
+        self, organization_id: str, report_id: str, export_scope: str
+    ) -> dict[str, Any] | None:
+        report = self.report_artifact(organization_id, report_id)
+        if report is None:
+            return None
+        if export_scope == "public" and report["data_classification"] != "public":
+            raise ValueError("Only public-classified reports can be exported publicly")
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._one(
+                connection.execute(
+                    """INSERT INTO report_exports (
+                           organization_id, report_id, export_scope, data_classification,
+                           artifact_uri, artifact_sha256, exported_by
+                       ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                       RETURNING *""",
+                    (
+                        organization_id,
+                        report_id,
+                        export_scope,
+                        report["data_classification"],
+                        f"citygap-report://{report_id}/{export_scope}.json",
+                        report["artifact_sha256"],
                         context.actor,
                     ),
                 )
@@ -1508,10 +2572,393 @@ class MunicipalServiceRepository(PostGISRepository):
                 (organization_id, city_id, event_name, feature_key),
             )
 
-    def service_health(self) -> dict[str, Any]:
-        detail = self.readiness(None)
+    def operations_overview(self, organization_id: str) -> dict[str, Any]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            jobs = (
+                self._one(
+                    connection.execute(
+                        """SELECT
+                           count(*) FILTER (
+                               WHERE job.state = 'queued' AND cancellation.job_run_id IS NULL
+                           ) AS queued,
+                           count(*) FILTER (WHERE job.state = 'running') AS running,
+                           count(*) FILTER (WHERE job.state = 'failed') AS failed,
+                           count(*) FILTER (
+                               WHERE cancellation.job_run_id IS NOT NULL
+                           ) AS cancelled,
+                           max(job.last_heartbeat_at) FILTER (
+                               WHERE job.state = 'running'
+                           ) AS latest_worker_heartbeat
+                       FROM job_runs AS job
+                       LEFT JOIN job_cancellation_requests AS cancellation
+                         ON cancellation.organization_id = job.organization_id
+                        AND cancellation.job_run_id = job.id
+                       WHERE job.organization_id = %s""",
+                        (organization_id,),
+                    )
+                )
+                or {}
+            )
+            datasets = (
+                self._one(
+                    connection.execute(
+                        """SELECT
+                           count(*) FILTER (WHERE version.service_status = 'failed') AS failed,
+                           count(*) FILTER (WHERE version.service_status = 'validating') AS validating,
+                           count(*) FILTER (WHERE version.service_status = 'analysis_ready')
+                               AS awaiting_promotion
+                       FROM dataset_versions AS version
+                       WHERE version.organization_id = %s""",
+                        (organization_id,),
+                    )
+                )
+                or {}
+            )
+            backups = self._dicts(
+                connection.execute(
+                    """SELECT id, backup_type, status, artifact_sha256,
+                              started_at, completed_at, initiated_by, error_message
+                       FROM backup_runs
+                       WHERE organization_id = %s
+                       ORDER BY started_at DESC LIMIT 10""",
+                    (organization_id,),
+                )
+            )
+            releases = self._dicts(
+                connection.execute(
+                    """SELECT version, application_commit, migration_version,
+                              frontend_asset_version, analysis_versions,
+                              release_status, migration_plan_uri, rollback_plan_uri,
+                              released_at, created_at
+                       FROM service_releases
+                       ORDER BY created_at DESC"""
+                )
+            )
+            return {
+                "jobs": jobs,
+                "datasets": datasets,
+                "backups": backups,
+                "releases": releases,
+                "boundaries": {
+                    "running_job_cancel": "operator intervention; API only cancels queued jobs",
+                    "backup_execution": "deployment operator command; records are shown here",
+                    "slo": "measurement foundation; no contractual SLA is asserted",
+                },
+            }
+
+    def service_jobs(
+        self,
+        organization_id: str,
+        state: str | None,
+        limit: int,
+    ) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._dicts(
+                connection.execute(
+                    """SELECT job.id, city.city_key, city.name AS city_name,
+                              job.job_type,
+                              CASE WHEN cancellation.job_run_id IS NOT NULL
+                                   THEN 'cancelled' ELSE job.state END AS state,
+                              job.current_stage, job.algorithm_version, job.config_hash,
+                              job.retry_count, job.max_retries, job.queued_at,
+                              job.started_at, job.finished_at, job.last_heartbeat_at,
+                              job.error_message, cancellation.reason AS cancellation_reason,
+                              cancellation.requested_by AS cancelled_by,
+                              cancellation.requested_at AS cancelled_at
+                       FROM job_runs AS job
+                       JOIN cities AS city
+                         ON city.organization_id = job.organization_id
+                        AND city.id = job.city_id
+                       LEFT JOIN job_cancellation_requests AS cancellation
+                         ON cancellation.organization_id = job.organization_id
+                        AND cancellation.job_run_id = job.id
+                       WHERE job.organization_id = %s
+                         AND (%s::text IS NULL OR
+                              CASE WHEN cancellation.job_run_id IS NOT NULL
+                                   THEN 'cancelled' ELSE job.state END = %s)
+                       ORDER BY job.queued_at DESC, job.id DESC LIMIT %s""",
+                    (organization_id, state, state, limit),
+                )
+            )
+
+    def service_job_detail(self, organization_id: str, job_id: str) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            job = self._one(
+                connection.execute(
+                    """SELECT job.*,
+                              CASE WHEN cancellation.job_run_id IS NOT NULL
+                                   THEN 'cancelled' ELSE job.state END AS effective_state,
+                              cancellation.reason AS cancellation_reason,
+                              cancellation.requested_by AS cancelled_by,
+                              cancellation.requested_at AS cancelled_at
+                       FROM job_runs AS job
+                       LEFT JOIN job_cancellation_requests AS cancellation
+                         ON cancellation.organization_id = job.organization_id
+                        AND cancellation.job_run_id = job.id
+                       WHERE job.organization_id = %s AND job.id = %s""",
+                    (organization_id, job_id),
+                )
+            )
+            if job is None:
+                return None
+            inputs = self._dicts(
+                connection.execute(
+                    """SELECT link.dataset_version_id, version.version_key,
+                              version.dataset_year, dataset.dataset_key, dataset.title
+                       FROM job_dataset_versions AS link
+                       JOIN dataset_versions AS version ON version.id = link.dataset_version_id
+                       JOIN datasets AS dataset ON dataset.id = version.dataset_id
+                       WHERE link.job_run_id = %s
+                         AND version.organization_id = %s
+                       ORDER BY dataset.dataset_key, version.version_key""",
+                    (job_id, organization_id),
+                )
+            )
+            events = self._dicts(
+                connection.execute(
+                    """SELECT state, stage, message, recorded_at
+                       FROM job_events WHERE job_run_id = %s
+                       ORDER BY recorded_at, id""",
+                    (job_id,),
+                )
+            )
+            attempts = self._dicts(
+                connection.execute(
+                    """SELECT attempt_number, worker_id, started_at, finished_at,
+                              result, error_message
+                       FROM job_attempts WHERE job_run_id = %s
+                       ORDER BY attempt_number""",
+                    (job_id,),
+                )
+            )
+            return {"job": job, "inputs": inputs, "events": events, "attempts": attempts}
+
+    def operate_service_job(
+        self,
+        organization_id: str,
+        job_id: str,
+        action: str,
+        expected_state: str,
+        reason: str,
+        cancel_confirmation: str | None,
+    ) -> dict[str, Any] | None:
+        context = current_request_context()
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            before = self._one(
+                connection.execute(
+                    """SELECT job.*, cancellation.job_run_id AS cancellation_id,
+                              COALESCE(
+                                  (SELECT max(attempt_number) FROM job_attempts
+                                   WHERE job_run_id = job.id), 0
+                              ) AS attempt_count
+                       FROM job_runs AS job
+                       LEFT JOIN job_cancellation_requests AS cancellation
+                         ON cancellation.organization_id = job.organization_id
+                        AND cancellation.job_run_id = job.id
+                       WHERE job.organization_id = %s AND job.id = %s
+                       FOR UPDATE OF job""",
+                    (organization_id, job_id),
+                )
+            )
+            if before is None:
+                return None
+            effective_state = "cancelled" if before["cancellation_id"] else before["state"]
+            if effective_state != expected_state:
+                raise ValueError(
+                    f"Job state changed: expected {expected_state}, current {effective_state}"
+                )
+            if action == "cancel":
+                if expected_state != "queued" or cancel_confirmation != "cancel":
+                    raise ValueError(
+                        "Only queued jobs can be cancelled and cancel_confirmation must be 'cancel'"
+                    )
+                connection.execute(
+                    """INSERT INTO job_cancellation_requests (
+                           organization_id, job_run_id, reason, requested_by
+                       ) VALUES (%s, %s, %s, %s)""",
+                    (organization_id, job_id, reason, context.actor),
+                )
+                after = {**before, "effective_state": "cancelled", "cancellation_reason": reason}
+            elif action == "retry":
+                if expected_state != "failed" or before["cancellation_id"]:
+                    raise ValueError("Only failed, non-cancelled jobs can be retried")
+                attempt_count = int(before["attempt_count"])
+                if attempt_count >= 10:
+                    raise ValueError("Manual retry limit reached")
+                after = self._one(
+                    connection.execute(
+                        """UPDATE job_runs
+                           SET state = 'queued', current_stage = NULL,
+                               started_at = NULL, completed_at = NULL, finished_at = NULL,
+                               last_heartbeat_at = NULL, locked_by = NULL,
+                               error_message = NULL, retry_count = %s,
+                               max_retries = GREATEST(max_retries, %s)
+                           WHERE organization_id = %s AND id = %s
+                           RETURNING *""",
+                        (attempt_count, attempt_count + 1, organization_id, job_id),
+                    )
+                )
+                connection.execute(
+                    """INSERT INTO job_events (job_run_id, state, message)
+                       VALUES (%s, 'queued', %s)""",
+                    (job_id, f"manual retry requested: {reason}"),
+                )
+                assert after is not None
+                after["effective_state"] = "queued"
+            else:
+                raise ValueError("Unsupported job operation")
+            self._service_audit(
+                connection,
+                organization_id,
+                f"job.{action}",
+                "job",
+                job_id,
+                str(before["city_id"]),
+                before,
+                after,
+            )
+            return after
+
+    def prometheus_metrics(self, organization_id: str) -> str:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            rows = self._dicts(
+                connection.execute(
+                    """SELECT
+                           CASE WHEN cancellation.job_run_id IS NOT NULL
+                                THEN 'cancelled' ELSE job.state END AS state,
+                           count(*) AS count
+                       FROM job_runs AS job
+                       LEFT JOIN job_cancellation_requests AS cancellation
+                         ON cancellation.organization_id = job.organization_id
+                        AND cancellation.job_run_id = job.id
+                       WHERE job.organization_id = %s
+                       GROUP BY 1 ORDER BY 1""",
+                    (organization_id,),
+                )
+            )
+            runtime = self._one(
+                connection.execute(
+                    """SELECT count(*) FILTER (
+                               WHERE started_at IS NOT NULL AND finished_at IS NOT NULL
+                           ) AS completed_count,
+                           COALESCE(sum(EXTRACT(EPOCH FROM (finished_at - started_at)))
+                               FILTER (WHERE started_at IS NOT NULL AND finished_at IS NOT NULL), 0)
+                               AS runtime_seconds_sum
+                       FROM job_runs WHERE organization_id = %s""",
+                    (organization_id,),
+                )
+            ) or {"completed_count": 0, "runtime_seconds_sum": 0}
+            datasets = self._dicts(
+                connection.execute(
+                    """SELECT service_status AS state, count(*) AS count
+                       FROM dataset_versions WHERE organization_id = %s
+                       GROUP BY service_status ORDER BY service_status""",
+                    (organization_id,),
+                )
+            )
+        lines = [
+            "# HELP citygap_jobs Tenant-scoped durable jobs by effective state.",
+            "# TYPE citygap_jobs gauge",
+        ]
+        lines.extend(f'citygap_jobs{{state="{row["state"]}"}} {row["count"]}' for row in rows)
+        lines.extend(
+            [
+                "# HELP citygap_job_runtime_seconds Completed durable job runtime.",
+                "# TYPE citygap_job_runtime_seconds summary",
+                "citygap_job_runtime_seconds_count " + str(runtime["completed_count"]),
+                "citygap_job_runtime_seconds_sum " + str(runtime["runtime_seconds_sum"]),
+                "# HELP citygap_dataset_versions Tenant dataset versions by lifecycle state.",
+                "# TYPE citygap_dataset_versions gauge",
+            ]
+        )
+        lines.extend(
+            f'citygap_dataset_versions{{state="{row["state"]}"}} {row["count"]}' for row in datasets
+        )
+        return "\n".join(lines) + "\n"
+
+    def service_health(self, organization_id: str) -> dict[str, Any]:
+        process = self.readiness(None)
+        database_ready = bool(process.get("ready"))
+        worker = {"status": "unavailable", "last_seen_at": None, "worker_count": 0}
+        required_datasets = {"status": "unavailable", "promoted_versions": 0}
+        tile = {
+            "status": "ready" if process.get("checks", {}).get("extensions") else "unavailable",
+            "detail": "PostGIS and pgRouting query boundary",
+        }
+        if database_ready:
+            with self._connect() as connection:
+                connection.row_factory = dict_row
+                heartbeat = (
+                    self._one(
+                        connection.execute(
+                            """SELECT count(*) AS worker_count, max(last_seen_at) AS last_seen_at,
+                                  COALESCE(EXTRACT(EPOCH FROM (now() - max(last_seen_at))), 1e12)
+                                      AS age_seconds
+                           FROM service_worker_heartbeats"""
+                        )
+                    )
+                    or {}
+                )
+                threshold = int(os.getenv("CITYGAP_WORKER_HEALTH_SECONDS", "30"))
+                worker = {
+                    "status": (
+                        "ready"
+                        if heartbeat.get("last_seen_at")
+                        and float(heartbeat["age_seconds"]) <= threshold
+                        else "unavailable"
+                    ),
+                    "last_seen_at": heartbeat.get("last_seen_at"),
+                    "worker_count": heartbeat.get("worker_count", 0),
+                    "threshold_seconds": threshold,
+                }
+                promoted = self._one(
+                    connection.execute(
+                        """SELECT count(*) AS promoted_versions
+                           FROM dataset_versions
+                           WHERE organization_id = %s AND service_status = 'promoted'""",
+                        (organization_id,),
+                    )
+                ) or {"promoted_versions": 0}
+                required_datasets = {
+                    "status": "ready" if promoted["promoted_versions"] else "unavailable",
+                    **promoted,
+                }
+        storage_provider = os.getenv("CITYGAP_ATTACHMENT_STORAGE_PROVIDER", "local")
+        if storage_provider == "local":
+            attachment_path = Path(os.getenv("CITYGAP_ATTACHMENT_DIRECTORY", "var/attachments"))
+            storage_ready = attachment_path.exists() and os.access(attachment_path, os.W_OK)
+            storage_detail = str(attachment_path)
+        else:
+            storage_ready = bool(
+                os.getenv("CITYGAP_S3_ENDPOINT") and os.getenv("CITYGAP_S3_BUCKET")
+            )
+            storage_detail = "S3-compatible provider configuration"
+        dependencies = {
+            "service": {"status": "ready"},
+            "database": {"status": "ready" if database_ready else "unavailable"},
+            "worker": worker,
+            "object_storage": {
+                "status": "ready" if storage_ready else "unavailable",
+                "provider": storage_provider,
+                "detail": storage_detail,
+            },
+            "required_datasets": required_datasets,
+            "tile_service": tile,
+        }
+        required_statuses = [
+            dependencies[key]["status"]
+            for key in ("database", "worker", "object_storage", "tile_service")
+        ]
         return {
-            "status": "ready" if detail["ready"] else "degraded",
+            "status": "ready"
+            if all(value == "ready" for value in required_statuses)
+            else "degraded",
             "checked_at": datetime.now(UTC).isoformat(),
-            "dependencies": detail,
+            "dependencies": dependencies,
+            "process_readiness": process,
         }

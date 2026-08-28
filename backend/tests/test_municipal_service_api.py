@@ -18,6 +18,8 @@ EVIDENCE_ID = "60000000-0000-0000-0000-000000000001"
 VERSION_ID = "70000000-0000-0000-0000-000000000001"
 SCENARIO_A = "80000000-0000-0000-0000-000000000001"
 SCENARIO_B = "80000000-0000-0000-0000-000000000002"
+REPORT_ID = "90000000-0000-0000-0000-000000000001"
+JOB_ID = "a0000000-0000-0000-0000-000000000001"
 
 
 def headers(role: str, organization_id: str = ORG_A) -> dict[str, str]:
@@ -49,6 +51,30 @@ class MunicipalRepository:
     def service_cities(self, organization_id: str):
         self.calls.append(("cities", organization_id))
         return [] if organization_id != ORG_A else [{"city_id": CITY_ID, "name": "検証市"}]
+
+    def create_service_city(self, organization_id: str, payload: dict[str, Any]):
+        return {"id": CITY_ID, "service_status": "onboarding", **payload}
+
+    def city_onboarding(self, organization_id: str, city: str):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {"city": {"id": CITY_ID}, "steps": [], "capabilities": []}
+
+    def service_urban_states(self, organization_id: str, city: str, limit: int):
+        return [{"id": STATE_ID, "lifecycle_status": "validated"}]
+
+    def create_service_urban_state(self, organization_id: str, city: str, payload: dict[str, Any]):
+        return {"id": STATE_ID, "lifecycle_status": "draft", **payload}
+
+    def transition_service_urban_state(
+        self,
+        organization_id: str,
+        state_id: str,
+        expected_status: str,
+        proposed_status: str,
+        note: str,
+    ):
+        return {"id": state_id, "lifecycle_status": proposed_status}
 
     def city_service_home(self, organization_id: str, city: str):
         self.calls.append(("home", organization_id))
@@ -169,7 +195,7 @@ class MunicipalRepository:
 
     def data_hub(self, organization_id: str, city: str):
         self.calls.append(("data_hub", organization_id))
-        return {"city": {"id": CITY_ID}, "datasets": []}
+        return {"city": {"id": CITY_ID}, "datasets": [], "urban_states": []}
 
     def transition_dataset_version(
         self,
@@ -182,10 +208,29 @@ class MunicipalRepository:
         self.calls.append(("dataset_transition", organization_id))
         return {"id": version_id, "service_status": proposed_status, "note": note}
 
+    def register_service_dataset(self, organization_id: str, city: str, payload: dict[str, Any]):
+        return {
+            "dataset": {"id": FINDING_ID, **payload},
+            "version": {"id": VERSION_ID, "service_status": "registered"},
+        }
+
     def analysis_catalog(self):
         return [{"id": "accessibility-gap", "version": "1.0.0"}]
 
+    def service_analysis_runs(self, organization_id: str, city: str, limit: int):
+        return []
+
+    def create_service_analysis_run(self, organization_id: str, city: str, payload: dict[str, Any]):
+        return {
+            "analysis_run": {"id": FINDING_ID, "status": "queued"},
+            "job": {"id": REVIEW_ID, "state": "queued"},
+            "reproducibility": payload,
+        }
+
     def scenario_library(self, organization_id: str, city: str, limit: int):
+        return []
+
+    def scenario_comparisons(self, organization_id: str, city: str, limit: int):
         return []
 
     def create_scenario_comparison(self, organization_id: str, city: str, payload: dict[str, Any]):
@@ -193,6 +238,44 @@ class MunicipalRepository:
 
     def create_evidence_center(self, organization_id: str, city: str, payload: dict[str, Any]):
         return {"id": EVIDENCE_ID, **payload}
+
+    def evidence_library(self, organization_id: str, city: str, limit: int):
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {
+            "city": {"id": CITY_ID},
+            "evidence_centers": [{"id": EVIDENCE_ID}],
+            "reports": [{"id": REPORT_ID}],
+            "validation_runs": [],
+        }
+
+    def create_report_record(self, organization_id: str, city: str, payload: dict[str, Any]):
+        self.calls.append(("create_report", organization_id))
+        if organization_id != ORG_A or city != "fixture-city":
+            return None
+        return {
+            "id": REPORT_ID,
+            "artifact_sha256": "a" * 64,
+            "data_classification": payload["data_classification"],
+            **payload,
+        }
+
+    def report_artifact(self, organization_id: str, report_id: str):
+        if organization_id != ORG_A or report_id != REPORT_ID:
+            return None
+        return {
+            "structured_content": {
+                "schema_version": "citygap-municipal-report-1.0.0",
+                "claim_boundary": "human decision required",
+            },
+            "artifact_sha256": "a" * 64,
+            "data_classification": "internal",
+        }
+
+    def export_report(self, organization_id: str, report_id: str, export_scope: str):
+        if export_scope == "public":
+            raise ValueError("Only public-classified reports can be exported publicly")
+        return {"id": EVIDENCE_ID, "report_id": report_id, "export_scope": export_scope}
 
     def service_search(self, organization_id: str, query: str, city: str | None, limit: int):
         self.calls.append(("search", organization_id))
@@ -210,8 +293,44 @@ class MunicipalRepository:
     ) -> None:
         self.calls.append(("usage", organization_id))
 
-    def service_health(self):
+    def operations_overview(self, organization_id: str):
+        return {
+            "jobs": {"queued": 1, "running": 0, "failed": 0, "cancelled": 0},
+            "datasets": {"failed": 0},
+            "backups": [],
+            "releases": [],
+            "boundaries": {},
+        }
+
+    def service_jobs(self, organization_id: str, state: str | None, limit: int):
+        if organization_id != ORG_A:
+            return []
+        return [{"id": JOB_ID, "state": state or "queued", "job_type": "analysis_run"}]
+
+    def service_job_detail(self, organization_id: str, job_id: str):
+        if organization_id != ORG_A:
+            return None
+        return {"job": {"id": job_id, "effective_state": "queued"}, "events": []}
+
+    def operate_service_job(
+        self,
+        organization_id: str,
+        job_id: str,
+        action: str,
+        expected_state: str,
+        reason: str,
+        cancel_confirmation: str | None,
+    ):
+        return {
+            "id": job_id,
+            "effective_state": "cancelled" if action == "cancel" else "queued",
+        }
+
+    def service_health(self, organization_id: str):
         return {"status": "ready"}
+
+    def prometheus_metrics(self, organization_id: str):
+        return 'citygap_jobs{state="queued"} 1\n'
 
 
 def test_v1_openapi_exposes_stable_service_resources() -> None:
@@ -221,6 +340,9 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
     for path in (
         "/api/v1/cities",
         "/api/v1/cities/{city}/home",
+        "/api/v1/cities/{city}/onboarding",
+        "/api/v1/cities/{city}/urban-states",
+        "/api/v1/urban-states/{state_id}/status",
         "/api/v1/cities/{city}/findings",
         "/api/v1/cities/{city}/investigations",
         "/api/v1/investigations/{investigation_id}/reviews",
@@ -228,7 +350,19 @@ def test_v1_openapi_exposes_stable_service_resources() -> None:
         "/api/v1/investigations/{investigation_id}/field-observations",
         "/api/v1/investigations/{investigation_id}/decisions",
         "/api/v1/cities/{city}/data-hub",
+        "/api/v1/cities/{city}/datasets",
         "/api/v1/analysis-definitions",
+        "/api/v1/cities/{city}/analysis-runs",
+        "/api/v1/cities/{city}/scenario-comparisons",
+        "/api/v1/cities/{city}/evidence",
+        "/api/v1/cities/{city}/reports",
+        "/api/v1/reports/{report_id}/artifact",
+        "/api/v1/reports/{report_id}/exports",
+        "/api/v1/operations/overview",
+        "/api/v1/jobs",
+        "/api/v1/jobs/{job_id}",
+        "/api/v1/jobs/{job_id}/operations",
+        "/api/v1/metrics",
     ):
         assert path in schema["paths"]
 
@@ -249,6 +383,7 @@ def test_tenant_context_is_forwarded_and_unknown_tenant_is_not_found() -> None:
     assert other.json()["error"] == {
         "code": "resource_not_found",
         "message": "City not found in this organization",
+        "detail": None,
         "request_id": "tenant-boundary-test",
         "remediation": "Confirm the resource belongs to the selected organization and city.",
     }
@@ -400,3 +535,184 @@ def test_spatial_and_scenario_inputs_are_bounded_and_explicit() -> None:
         },
     )
     assert valid.status_code == 201
+
+
+def test_analysis_run_requires_explicit_versions_and_analysis_role() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    payload = {
+        "analysis_id": "accessibility-gap",
+        "analysis_version": "1.0.0",
+        "urban_state_id": STATE_ID,
+        "dataset_versions": {
+            "population": VERSION_ID,
+            "facilities": VERSION_ID,
+            "plateau_buildings": VERSION_ID,
+        },
+        "parameters": {"candidate_limit": 10},
+    }
+    url = "/api/v1/cities/fixture-city/analysis-runs"
+    assert client.post(url, headers=headers("viewer"), json=payload).status_code == 403
+    result = client.post(url, headers=headers("analyst"), json=payload)
+    assert result.status_code == 202
+    assert result.json()["analysis_run"]["status"] == "queued"
+    missing_versions = client.post(
+        url, headers=headers("analyst"), json={**payload, "dataset_versions": {}}
+    )
+    assert missing_versions.status_code == 422
+
+
+def test_report_center_is_planner_authored_and_artifact_is_hash_addressed() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    url = "/api/v1/cities/fixture-city/reports"
+    payload = {
+        "report_type": "data_quality",
+        "title": "データ品質レポート",
+        "data_classification": "internal",
+    }
+    assert client.post(url, headers=headers("analyst"), json=payload).status_code == 403
+    created = client.post(url, headers=headers("planner"), json=payload)
+    assert created.status_code == 201
+    assert created.json()["id"] == REPORT_ID
+
+    artifact = client.get(f"/api/v1/reports/{REPORT_ID}/artifact", headers=headers("viewer"))
+    assert artifact.status_code == 200
+    assert artifact.headers["etag"] == f'"{"a" * 64}"'
+    assert artifact.headers["x-citygap-data-classification"] == "internal"
+    assert artifact.json()["claim_boundary"] == "human decision required"
+
+    public_export = client.post(
+        f"/api/v1/reports/{REPORT_ID}/exports",
+        headers=headers("planner"),
+        json={"export_scope": "public"},
+    )
+    assert public_export.status_code == 422
+    internal_export = client.post(
+        f"/api/v1/reports/{REPORT_ID}/exports",
+        headers=headers("planner"),
+        json={"export_scope": "internal"},
+    )
+    assert internal_export.status_code == 201
+
+
+def test_evidence_library_is_tenant_scoped() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    result = client.get("/api/v1/cities/fixture-city/evidence", headers=headers("viewer"))
+    assert result.status_code == 200
+    assert result.json()["reports"][0]["id"] == REPORT_ID
+    outside_tenant = client.get(
+        "/api/v1/cities/fixture-city/evidence", headers=headers("viewer", ORG_B)
+    )
+    assert outside_tenant.status_code == 404
+
+
+def test_job_operations_are_visible_to_data_manager_but_mutated_only_by_admin() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    assert client.get("/api/v1/jobs", headers=headers("viewer")).status_code == 403
+    listed = client.get("/api/v1/jobs", headers=headers("data_manager"))
+    assert listed.status_code == 200
+    assert listed.json()["items"][0]["id"] == JOB_ID
+
+    operation = {
+        "action": "cancel",
+        "expected_state": "queued",
+        "reason": "入力versionを再確認する",
+        "cancel_confirmation": "cancel",
+    }
+    url = f"/api/v1/jobs/{JOB_ID}/operations"
+    assert client.post(url, headers=headers("data_manager"), json=operation).status_code == 403
+    cancelled = client.post(url, headers=headers("administrator"), json=operation)
+    assert cancelled.status_code == 200
+    assert cancelled.json()["effective_state"] == "cancelled"
+
+    missing_confirmation = client.post(
+        url,
+        headers=headers("administrator"),
+        json={**operation, "cancel_confirmation": None},
+    )
+    assert missing_confirmation.status_code == 422
+
+
+def test_metrics_are_admin_only_and_use_bounded_service_labels() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    assert client.get("/api/v1/metrics", headers=headers("data_manager")).status_code == 403
+    metrics = client.get("/api/v1/metrics", headers=headers("administrator"))
+    assert metrics.status_code == 200
+    assert metrics.headers["content-type"].startswith("text/plain")
+    assert "citygap_http_requests_total" in metrics.text
+    assert 'citygap_jobs{state="queued"} 1' in metrics.text
+    assert ORG_A not in metrics.text
+
+
+def test_municipal_deployment_surface_blocks_legacy_tenant_unsafe_paths(
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    assert client.get("/cities", headers=headers("administrator")).status_code == 404
+    assert client.get("/jobs/00000000-0000-0000-0000-000000000000").status_code == 404
+    assert client.get("/api/v1/cities", headers=headers("viewer")).status_code == 200
+    assert client.get("/health").status_code == 200
+
+
+def test_admin_and_data_manager_own_explicit_onboarding_lifecycle() -> None:
+    client = TestClient(create_app(MunicipalRepository()))  # type: ignore[arg-type]
+    city_payload = {
+        "city_code": "99999",
+        "city_key": "new-city",
+        "name": "新規市",
+        "prefecture_code": "99",
+        "prefecture_name": "検証県",
+        "analysis_crs": "EPSG:6674",
+    }
+    assert (
+        client.post("/api/v1/cities", headers=headers("viewer"), json=city_payload).status_code
+        == 403
+    )
+    assert (
+        client.post(
+            "/api/v1/cities", headers=headers("administrator"), json=city_payload
+        ).status_code
+        == 201
+    )
+    dataset_payload = {
+        "dataset_key": "plateau-2026",
+        "title": "PLATEAU 2026",
+        "provider": "Project PLATEAU",
+        "dataset_category": "plateau",
+        "data_classification": "public",
+        "version_key": "2026-v1",
+        "dataset_year": 2026,
+        "data_format": "CityGML",
+    }
+    dataset_url = "/api/v1/cities/fixture-city/datasets"
+    assert (
+        client.post(dataset_url, headers=headers("planner"), json=dataset_payload).status_code
+        == 403
+    )
+    registered = client.post(dataset_url, headers=headers("data_manager"), json=dataset_payload)
+    assert registered.status_code == 201
+    assert registered.json()["version"]["service_status"] == "registered"
+
+    state_payload = {
+        "state_key": "observed-2026",
+        "label": "2026年度都市状態",
+        "effective_date": "2026-01-01",
+        "state_type": "observed",
+        "primary_dataset_version_id": VERSION_ID,
+        "source_verified": True,
+    }
+    state_url = "/api/v1/cities/fixture-city/urban-states"
+    assert client.post(state_url, headers=headers("analyst"), json=state_payload).status_code == 403
+    state = client.post(state_url, headers=headers("data_manager"), json=state_payload)
+    assert state.status_code == 201
+    transition = client.patch(
+        f"/api/v1/urban-states/{STATE_ID}/status",
+        headers=headers("data_manager"),
+        json={
+            "expected_status": "draft",
+            "proposed_status": "validated",
+            "note": "出典と品質を確認",
+        },
+    )
+    assert transition.status_code == 200
+    assert transition.json()["lifecycle_status"] == "validated"

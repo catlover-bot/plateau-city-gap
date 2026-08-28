@@ -209,12 +209,26 @@ class PostgresWorker:
 
     def claim(self) -> ClaimedJob | None:
         with self._connect() as connection:
+            connection.execute(
+                """INSERT INTO service_worker_heartbeats (
+                       worker_id, application_version, last_seen_at
+                   ) VALUES (%s, %s, now())
+                   ON CONFLICT (worker_id) DO UPDATE
+                   SET application_version = EXCLUDED.application_version,
+                       last_seen_at = EXCLUDED.last_seen_at""",
+                (self.worker_id, os.getenv("CITYGAP_APPLICATION_VERSION", "0.2.0")),
+            )
             self._recover_stale(connection)
             row = connection.execute(
                 """SELECT job.id, job.job_type, job.parameters, job.retry_count,
                           city.city_code, job.organization_id
                    FROM job_runs AS job JOIN cities AS city ON city.id=job.city_id
                    WHERE job.state = 'queued'
+                     AND NOT EXISTS (
+                         SELECT 1 FROM job_cancellation_requests AS cancellation
+                         WHERE cancellation.organization_id = job.organization_id
+                           AND cancellation.job_run_id = job.id
+                     )
                    ORDER BY job.queued_at, job.id
                    FOR UPDATE OF job SKIP LOCKED LIMIT 1"""
             ).fetchone()

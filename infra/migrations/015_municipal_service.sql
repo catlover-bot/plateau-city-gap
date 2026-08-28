@@ -83,7 +83,23 @@ ALTER TABLE datasets
         REFERENCES organizations(id),
     ADD COLUMN data_classification text NOT NULL DEFAULT 'internal' CHECK (
         data_classification IN ('public', 'internal', 'restricted')
+    ),
+    ADD COLUMN dataset_category text NOT NULL DEFAULT 'municipal_custom' CHECK (
+        dataset_category IN (
+            'plateau', 'population', 'facilities', 'transport', 'hazard',
+            'planning', 'municipal_custom'
+        )
     );
+UPDATE datasets SET dataset_category = CASE
+    WHEN dataset_key ILIKE '%plateau%' THEN 'plateau'
+    WHEN dataset_key ILIKE '%population%' OR dataset_key ILIKE '%census%' THEN 'population'
+    WHEN dataset_key ILIKE '%facility%' THEN 'facilities'
+    WHEN dataset_key ILIKE '%gtfs%' OR dataset_key ILIKE '%transport%' THEN 'transport'
+    WHEN dataset_key ILIKE '%hazard%' OR dataset_key ILIKE '%flood%'
+         OR dataset_key ILIKE '%tsunami%' THEN 'hazard'
+    WHEN dataset_key ILIKE '%planning%' OR dataset_key ILIKE '%landuse%' THEN 'planning'
+    ELSE dataset_category
+END;
 ALTER TABLE dataset_versions
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
@@ -120,13 +136,32 @@ ALTER TABLE datasets ADD CONSTRAINT datasets_organization_id_id_unique
     UNIQUE (organization_id, id);
 ALTER TABLE dataset_versions ADD CONSTRAINT dataset_versions_organization_id_id_unique
     UNIQUE (organization_id, id);
+ALTER TABLE datasets ADD CONSTRAINT datasets_organization_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE dataset_versions ADD CONSTRAINT dataset_versions_organization_dataset_fk
+    FOREIGN KEY (organization_id, dataset_id) REFERENCES datasets(organization_id, id);
 
 ALTER TABLE urban_states
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
-        REFERENCES organizations(id);
+        REFERENCES organizations(id),
+    ADD COLUMN primary_dataset_version_id uuid REFERENCES dataset_versions(id);
+UPDATE urban_states AS state
+SET primary_dataset_version_id = version.registry_version_id
+FROM city_dataset_versions AS version
+WHERE version.id = state.primary_plateau_dataset_version_id
+  AND version.registry_version_id IS NOT NULL;
+ALTER TABLE urban_states ALTER COLUMN primary_plateau_dataset_version_id DROP NOT NULL;
+ALTER TABLE urban_states ADD CONSTRAINT urban_states_primary_version_required CHECK (
+    primary_dataset_version_id IS NOT NULL OR primary_plateau_dataset_version_id IS NOT NULL
+);
 ALTER TABLE urban_states ADD CONSTRAINT urban_states_organization_id_id_unique
     UNIQUE (organization_id, id);
+ALTER TABLE urban_states ADD CONSTRAINT urban_states_organization_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+ALTER TABLE urban_states ADD CONSTRAINT urban_states_organization_dataset_fk
+    FOREIGN KEY (organization_id, primary_dataset_version_id)
+        REFERENCES dataset_versions(organization_id, id);
 CREATE INDEX urban_states_tenant_time_idx
     ON urban_states (organization_id, city_id, effective_date DESC, lifecycle_status);
 ALTER TABLE urban_state_change_sets
@@ -183,10 +218,45 @@ ALTER TABLE analysis_runs
     );
 ALTER TABLE analysis_runs ADD CONSTRAINT analysis_runs_organization_id_id_unique
     UNIQUE (organization_id, id);
+ALTER TABLE analysis_runs ADD CONSTRAINT analysis_runs_organization_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
 ALTER TABLE job_runs
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id);
+ALTER TABLE job_runs DROP CONSTRAINT job_runs_job_type_check;
+ALTER TABLE job_runs ADD CONSTRAINT job_runs_job_type_check CHECK (
+    job_type IN (
+        'plateau_ingestion', 'building_demographics',
+        'road_network', 'network_generation',
+        'terrain', 'terrain_enrichment',
+        'spatial_context', 'context_generation',
+        'scenario_optimization', 'evidence_export',
+        'dataset_diff', 'incremental_recompute', 'future_population',
+        'stress_test', 'criticality_analysis', 'outcome_evaluation',
+        'validation_run', 'validation_reproduce', 'pilot_rehearsal',
+        'analysis_run', 'report_generation'
+    )
+);
+CREATE INDEX job_runs_tenant_state_idx
+    ON job_runs (organization_id, state, queued_at, id);
+ALTER TABLE job_runs ADD CONSTRAINT job_runs_organization_id_id_unique
+    UNIQUE (organization_id, id);
+ALTER TABLE job_runs ADD CONSTRAINT job_runs_organization_city_fk
+    FOREIGN KEY (organization_id, city_id) REFERENCES cities(organization_id, id);
+
+CREATE TABLE job_cancellation_requests (
+    organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    job_run_id uuid NOT NULL,
+    reason text NOT NULL CHECK (length(reason) BETWEEN 1 AND 4000),
+    requested_by text NOT NULL,
+    requested_at timestamptz NOT NULL DEFAULT now(),
+    PRIMARY KEY (organization_id, job_run_id),
+    FOREIGN KEY (organization_id, job_run_id)
+        REFERENCES job_runs(organization_id, id) ON DELETE CASCADE
+);
+COMMENT ON TABLE job_cancellation_requests IS
+    'Durable cancellation for queued work. Running processes are never killed unsafely by the API.';
 ALTER TABLE audit_log
     ADD COLUMN organization_id uuid NOT NULL
         DEFAULT '00000000-0000-0000-0000-000000000001'
@@ -207,7 +277,6 @@ ALTER TABLE scenario_runs
         DEFAULT '00000000-0000-0000-0000-000000000001'
         REFERENCES organizations(id),
     ADD COLUMN title text,
-    ADD COLUMN base_urban_state_id uuid REFERENCES urban_states(id),
     ADD COLUMN parent_scenario_run_id uuid REFERENCES scenario_runs(id),
     ADD COLUMN assumptions jsonb NOT NULL DEFAULT '[]',
     ADD COLUMN review_status text NOT NULL DEFAULT 'not_requested' CHECK (
@@ -219,6 +288,12 @@ UPDATE scenario_runs SET title = scenario_key WHERE title IS NULL;
 ALTER TABLE scenario_runs ALTER COLUMN title SET NOT NULL;
 ALTER TABLE scenario_runs ADD CONSTRAINT scenario_runs_organization_id_id_unique
     UNIQUE (organization_id, id);
+ALTER TABLE scenario_runs ADD CONSTRAINT scenario_runs_organization_base_state_fk
+    FOREIGN KEY (organization_id, base_urban_state_id)
+        REFERENCES urban_states(organization_id, id);
+ALTER TABLE scenario_runs ADD CONSTRAINT scenario_runs_organization_parent_fk
+    FOREIGN KEY (organization_id, parent_scenario_run_id)
+        REFERENCES scenario_runs(organization_id, id);
 
 ALTER TABLE field_offline_packages
     ADD COLUMN organization_id uuid NOT NULL
@@ -282,6 +357,7 @@ CREATE TABLE workspaces (
     created_at timestamptz NOT NULL DEFAULT now(),
     updated_at timestamptz NOT NULL DEFAULT now(),
     UNIQUE (organization_id, city_id, workspace_key),
+    UNIQUE (organization_id, id),
     FOREIGN KEY (organization_id, city_id)
         REFERENCES cities(organization_id, id)
 );
@@ -317,7 +393,9 @@ CREATE TABLE findings (
     FOREIGN KEY (organization_id, city_id)
         REFERENCES cities(organization_id, id),
     FOREIGN KEY (organization_id, urban_state_id)
-        REFERENCES urban_states(organization_id, id)
+        REFERENCES urban_states(organization_id, id),
+    FOREIGN KEY (organization_id, source_analysis_run_id)
+        REFERENCES analysis_runs(organization_id, id)
 );
 ALTER TABLE findings ADD CONSTRAINT findings_organization_id_id_unique
     UNIQUE (organization_id, id);
@@ -374,7 +452,11 @@ CREATE TABLE investigations (
     FOREIGN KEY (organization_id, city_id)
         REFERENCES cities(organization_id, id),
     FOREIGN KEY (organization_id, urban_state_id)
-        REFERENCES urban_states(organization_id, id)
+        REFERENCES urban_states(organization_id, id),
+    FOREIGN KEY (organization_id, workspace_id)
+        REFERENCES workspaces(organization_id, id),
+    FOREIGN KEY (organization_id, active_analysis_run_id)
+        REFERENCES analysis_runs(organization_id, id)
 );
 ALTER TABLE investigations ADD CONSTRAINT investigations_organization_id_id_unique
     UNIQUE (organization_id, id);
@@ -635,7 +717,7 @@ CREATE TABLE activity_events (
             'scenario_compared', 'review_submitted', 'field_check_added',
             'decision_recorded', 'urban_state_promoted',
             'finding_status_changed', 'review_status_changed',
-            'investigation_status_changed'
+            'investigation_status_changed', 'analysis_started'
         )
     ),
     title text NOT NULL,
@@ -643,7 +725,11 @@ CREATE TABLE activity_events (
     actor_label text NOT NULL,
     resource_type text NOT NULL,
     resource_id text NOT NULL,
-    occurred_at timestamptz NOT NULL DEFAULT now()
+    occurred_at timestamptz NOT NULL DEFAULT now(),
+    FOREIGN KEY (organization_id, city_id)
+        REFERENCES cities(organization_id, id),
+    FOREIGN KEY (organization_id, investigation_id)
+        REFERENCES investigations(organization_id, id)
 );
 CREATE INDEX activity_events_city_idx
     ON activity_events (organization_id, city_id, occurred_at DESC, id DESC);
@@ -792,32 +878,32 @@ INSERT INTO analysis_definitions (
 ) VALUES
 ('accessibility-gap', '1.0.0', '生活サービスへのアクセス候補抽出',
  '500mメッシュ単位で追加調査候補を抽出する', ARRAY['screening','building_detail'],
- '{"required":["urban_state","population","facilities","plateau_buildings"]}',
+ '{"required":["urban_state","population","facilities","plateau_buildings"],"context_roles":["urban_state"],"dataset_roles":["population","facilities","plateau_buildings"]}',
  '{"produces":["finding","mesh_metrics"]}', 'CITY GAP screening',
  '候補は政策上の問題認定、危険度、優先順位ではない。'),
 ('building-accessibility', '2.0.0', '建物アクセシビリティ',
  'PLATEAU建物を起点に施設へのモデル距離を確認する', ARRAY['building_detail'],
- '{"required":["plateau_buildings","facilities"]}',
+ '{"required":["plateau_buildings","facilities"],"context_roles":[],"dataset_roles":["plateau_buildings","facilities"]}',
  '{"produces":["building_accessibility_metrics"]}', 'Versioned deterministic distance model',
  '建物別推計人口は観測値ではなく、公開出力へ含めない。'),
 ('network-criticality', '1.0.0', '道路ネットワーク確認候補',
  '道路graph上で接続性の確認候補を抽出する', ARRAY['road_network'],
- '{"required":["network_version","building_snap"]}',
+ '{"required":["network_version","building_snap"],"context_roles":[],"dataset_roles":["network_version","building_snap"]}',
  '{"produces":["criticality_finding"]}', 'Bounded graph candidate analysis',
  '道路の危険性、行政上の重要度、実際の通行可否を断定しない。'),
 ('stress-test', '1.0.0', '仮定条件によるStress Test',
  '明示した利用不可仮定でサービス継続性を比較する', ARRAY['road_network','hazard'],
- '{"required":["network_version","closure_assumptions"]}',
+ '{"required":["network_version","closure_assumptions"],"context_roles":["closure_assumptions"],"dataset_roles":["network_version"]}',
  '{"produces":["stress_test_result"]}', 'Counterfactual graph comparison',
  '災害予測や実際の通行止めではない。'),
 ('future-accessibility', '1.0.0', '将来人口シナリオ比較',
  '公式人口シナリオを固定サービス仮定で比較する', ARRAY['future_population','scenario'],
- '{"required":["future_urban_state","fixed_service_assumption"]}',
+ '{"required":["future_urban_state","fixed_service_assumption","population_scenario"],"context_roles":["future_urban_state","fixed_service_assumption"],"dataset_roles":["population_scenario"]}',
  '{"produces":["future_accessibility_metrics"]}', 'Fixed-service comparison',
  '建物別人口予測や最良シナリオの選定ではない。'),
 ('temporal-diff', '1.0.0', '年度差分',
  'version間の追加・削除・形状・属性差分を分類する', ARRAY['temporal_diff'],
- '{"required":["from_dataset_version","to_dataset_version"]}',
+ '{"required":["from_dataset_version","to_dataset_version"],"context_roles":[],"dataset_roles":["from_dataset_version","to_dataset_version"]}',
  '{"produces":["change_set","impacted_analyses"]}', 'Hash-based deterministic diff',
  'source仕様変更が都市変化として現れる可能性をEvidenceへ残す。');
 
@@ -842,7 +928,12 @@ CREATE TABLE scenario_comparisons (
         jsonb_typeof(comparison_dimensions) = 'array'
     ),
     created_by text NOT NULL,
-    created_at timestamptz NOT NULL DEFAULT now()
+    created_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (organization_id, id),
+    FOREIGN KEY (organization_id, city_id)
+        REFERENCES cities(organization_id, id),
+    FOREIGN KEY (organization_id, investigation_id)
+        REFERENCES investigations(organization_id, id)
 );
 
 CREATE TABLE evidence_centers (
@@ -862,7 +953,14 @@ CREATE TABLE evidence_centers (
     ),
     created_by text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
-    CHECK ((investigation_id IS NOT NULL)::integer + (scenario_run_id IS NOT NULL)::integer <= 1)
+    CHECK ((investigation_id IS NOT NULL)::integer + (scenario_run_id IS NOT NULL)::integer <= 1),
+    UNIQUE (organization_id, id),
+    FOREIGN KEY (organization_id, city_id)
+        REFERENCES cities(organization_id, id),
+    FOREIGN KEY (organization_id, investigation_id)
+        REFERENCES investigations(organization_id, id),
+    FOREIGN KEY (organization_id, scenario_run_id)
+        REFERENCES scenario_runs(organization_id, id)
 );
 
 CREATE TABLE report_records (
@@ -886,7 +984,14 @@ CREATE TABLE report_records (
         data_classification IN ('public', 'internal', 'restricted')
     ),
     created_by text NOT NULL,
-    created_at timestamptz NOT NULL DEFAULT now()
+    created_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (organization_id, id),
+    FOREIGN KEY (organization_id, city_id)
+        REFERENCES cities(organization_id, id),
+    FOREIGN KEY (organization_id, investigation_id)
+        REFERENCES investigations(organization_id, id),
+    FOREIGN KEY (organization_id, scenario_comparison_id)
+        REFERENCES scenario_comparisons(organization_id, id)
 );
 
 CREATE TABLE report_exports (
@@ -901,7 +1006,9 @@ CREATE TABLE report_exports (
     artifact_sha256 char(64) NOT NULL,
     exported_by text NOT NULL,
     exported_at timestamptz NOT NULL DEFAULT now(),
-    CHECK (export_scope <> 'public' OR data_classification = 'public')
+    CHECK (export_scope <> 'public' OR data_classification = 'public'),
+    FOREIGN KEY (organization_id, report_id)
+        REFERENCES report_records(organization_id, id) ON DELETE CASCADE
 );
 
 -- ---------------------------------------------------------------------------
@@ -924,7 +1031,10 @@ CREATE TABLE attachment_objects (
     retention_class text NOT NULL DEFAULT 'municipal_record',
     created_by text NOT NULL,
     created_at timestamptz NOT NULL DEFAULT now(),
-    UNIQUE (organization_id, storage_provider, object_key)
+    UNIQUE (organization_id, storage_provider, object_key),
+    UNIQUE (organization_id, id),
+    FOREIGN KEY (organization_id, city_id)
+        REFERENCES cities(organization_id, id)
 );
 
 CREATE TABLE organization_configuration (
@@ -973,6 +1083,12 @@ CREATE TABLE service_metric_samples (
 );
 CREATE INDEX service_metric_samples_time_idx
     ON service_metric_samples (metric_name, observed_at DESC);
+
+CREATE TABLE service_worker_heartbeats (
+    worker_id text PRIMARY KEY,
+    application_version text NOT NULL,
+    last_seen_at timestamptz NOT NULL DEFAULT now()
+);
 
 CREATE TABLE backup_runs (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

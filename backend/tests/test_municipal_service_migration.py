@@ -24,6 +24,8 @@ def test_municipal_service_schema_contains_required_product_entities() -> None:
         "attachment_objects",
         "backup_runs",
         "service_releases",
+        "job_cancellation_requests",
+        "service_worker_heartbeats",
     ):
         assert f"CREATE TABLE {table}" in SQL
 
@@ -36,6 +38,7 @@ def test_tenant_and_human_decision_guards_are_database_enforced() -> None:
     assert "source text NOT NULL DEFAULT 'human_entry' CHECK (source = 'human_entry')" in SQL
     assert "CREATE TRIGGER audit_log_immutable" in SQL
     assert "export_scope <> 'public' OR data_classification = 'public'" in SQL
+    assert SQL.count("FOREIGN KEY (organization_id,") >= 30
 
 
 def test_dataset_upload_cannot_silently_promote() -> None:

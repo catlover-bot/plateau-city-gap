@@ -140,6 +140,20 @@ JOB_STAGES = {
         "verify_evidence",
         "persist_artifacts",
     ),
+    "analysis_run": (
+        "validate_contract",
+        "resolve_versioned_inputs",
+        "execute_versioned_algorithm",
+        "verify_output_contract",
+        "persist_findings_and_artifacts",
+    ),
+    "report_generation": (
+        "collect_saved_records",
+        "render_structured_report",
+        "verify_public_internal_boundary",
+        "hash_artifacts",
+        "persist_artifacts",
+    ),
 }
 
 

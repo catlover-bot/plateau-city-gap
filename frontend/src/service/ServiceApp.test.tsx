@@ -8,24 +8,38 @@ const snapshot: ServiceSnapshot = {
     actor: "fixture-planner",
     issuer: "fixture",
     roles: ["planner"],
-    organization: { id: "org-1", organization_key: "fixture-org", name: "検証組織" },
+    organization: {
+      id: "org-1",
+      organization_key: "fixture-org",
+      name: "検証組織",
+    },
     user: { id: "user-1", display_name: "検証担当" },
-    memberships: [{ role: "planner", granted_at: "2026-08-28T00:00:00Z" }]
+    memberships: [{ role: "planner", granted_at: "2026-08-28T00:00:00Z" }],
   },
-  cities: [{
-    city_id: "city-1",
-    city_code: "00000",
-    city_key: "fixture-city",
-    name: "検証市",
-    service_status: "active",
-    open_findings: 2,
-    active_investigations: 1,
-    pending_reviews: 1,
-    pending_field_checks: 0,
-    latest_activity_at: "2026-08-28T00:00:00Z"
-  }],
+  cities: [
+    {
+      city_id: "city-1",
+      city_code: "00000",
+      city_key: "fixture-city",
+      name: "検証市",
+      service_status: "active",
+      open_findings: 2,
+      active_investigations: 1,
+      pending_reviews: 1,
+      pending_field_checks: 0,
+      latest_activity_at: "2026-08-28T00:00:00Z",
+    },
+  ],
   cityHome: {
-    city: { id: "city-1", city_code: "00000", city_key: "fixture-city", name: "検証市", prefecture_name: "検証県", analysis_crs: "EPSG:6674", service_status: "active" },
+    city: {
+      id: "city-1",
+      city_code: "00000",
+      city_key: "fixture-city",
+      name: "検証市",
+      prefecture_name: "検証県",
+      analysis_crs: "EPSG:6674",
+      service_status: "active",
+    },
     summary: {
       city_id: "city-1",
       city_code: "00000",
@@ -36,24 +50,45 @@ const snapshot: ServiceSnapshot = {
       active_investigations: 1,
       pending_reviews: 1,
       pending_field_checks: 0,
-      latest_activity_at: "2026-08-28T00:00:00Z"
+      latest_activity_at: "2026-08-28T00:00:00Z",
     },
     capabilities: [],
     datasets: [],
-    recent_activity: []
+    recent_activity: [],
   },
   findings: [],
   investigations: [],
-  workQueue: { user: { id: "user-1", display_name: "検証担当" }, assignments: [], notifications: [], unregistered_identity: false },
+  workQueue: {
+    user: { id: "user-1", display_name: "検証担当" },
+    assignments: [],
+    notifications: [],
+    unregistered_identity: false,
+  },
   analyses: [],
+  analysisRuns: [],
   scenarios: [],
-  dataHub: null
+  scenarioComparisons: [],
+  dataHub: null,
+  evidence: null,
+  operations: null,
+  onboarding: null,
 };
 
 describe("Municipal Service shell", () => {
   it("renders service navigation, role home and the human decision boundary", () => {
-    const html = renderToStaticMarkup(<ServiceApp initialSnapshot={snapshot} />);
-    for (const label of ["Home", "Cities", "Data", "Analysis", "Measures", "Review", "Evidence"]) expect(html).toContain(label);
+    const html = renderToStaticMarkup(
+      <ServiceApp initialSnapshot={snapshot} />,
+    );
+    for (const label of [
+      "Home",
+      "Cities",
+      "Data",
+      "Analysis",
+      "Measures",
+      "Review",
+      "Evidence",
+    ])
+      expect(html).toContain(label);
     expect(html).toContain("企画・計画担当 HOME");
     expect(html).toContain("検証市の業務状況");
     expect(html).toContain("人がレビューし、人が判断を記録");

@@ -293,6 +293,10 @@ def create_app(
     )
     application.state.repository = repository or MunicipalServiceRepository(database_url)
     application.state.auth_settings = auth_settings or AuthSettings.from_environment()
+    api_surface = os.getenv("CITYGAP_API_SURFACE", "combined").lower()
+    if api_surface not in {"municipal", "public-showcase", "combined"}:
+        raise RuntimeError(f"Unsupported CITYGAP_API_SURFACE: {api_surface}")
+    application.state.api_surface = api_surface
     application.state.tile_cache = VersionedTileCache(
         int(os.getenv("CITYGAP_TILE_CACHE_ITEMS", "512"))
     )
@@ -328,6 +332,7 @@ def create_app(
             "error": {
                 "code": code,
                 "message": message,
+                "detail": None if isinstance(detail, str) else detail,
                 "request_id": getattr(request.state, "request_id", None)
                 or request.headers.get("X-Request-ID"),
                 "remediation": remediation,
@@ -374,6 +379,31 @@ def create_app(
 
     @application.middleware("http")
     async def authentication_and_observability(request: Request, call_next):
+        infrastructure_path = request.url.path in {
+            "/health",
+            "/ready",
+            "/docs",
+            "/redoc",
+            "/openapi.json",
+        }
+        blocked = (
+            api_surface == "municipal"
+            and not infrastructure_path
+            and not request.url.path.startswith("/api/v1")
+        ) or (
+            api_surface == "public-showcase"
+            and (
+                request.url.path.startswith("/api/v1")
+                or (request.method != "GET" and not infrastructure_path)
+            )
+        )
+        if blocked:
+            failure = JSONResponse(status_code=404, content={"detail": "Not found"})
+
+            async def surface_not_found(_request: Request):
+                return failure
+
+            return await request_observability_middleware(request, surface_not_found)
         if request.url.path in {"/health", "/ready"}:
             request.state.identity = Identity(
                 actor="health-probe",

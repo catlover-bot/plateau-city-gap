@@ -1,18 +1,42 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 import { ServiceApiError, loadServiceSnapshot, serviceApi } from "./api";
-import { ServiceEmpty, ServiceError, ServiceLoading, ServiceTable, StatusChip } from "./components";
-import type { Finding, Investigation, ProductRole, ServiceSnapshot } from "./types";
+import {
+  ServiceEmpty,
+  ServiceError,
+  ServiceLoading,
+  ServiceTable,
+  StatusChip,
+} from "./components";
+import type {
+  Finding,
+  Investigation,
+  ProductRole,
+  ServiceSnapshot,
+} from "./types";
 
-type ServicePage = "home" | "cities" | "data" | "analysis" | "measures" | "review" | "evidence";
+type ServicePage =
+  | "home"
+  | "cities"
+  | "data"
+  | "analysis"
+  | "measures"
+  | "review"
+  | "evidence"
+  | "operations";
 
-const NAVIGATION: Array<{ id: ServicePage; label: string; description: string }> = [
+const NAVIGATION: Array<{
+  id: ServicePage;
+  label: string;
+  description: string;
+}> = [
   { id: "home", label: "Home", description: "担当と都市状況" },
   { id: "cities", label: "Cities", description: "都市ワークスペース" },
   { id: "data", label: "Data", description: "登録・品質・年度" },
   { id: "analysis", label: "Analysis", description: "Findingと分析" },
   { id: "measures", label: "Measures", description: "Scenario比較" },
   { id: "review", label: "Review", description: "調査・現地・判断" },
-  { id: "evidence", label: "Evidence", description: "根拠とReport" }
+  { id: "evidence", label: "Evidence", description: "根拠とReport" },
+  { id: "operations", label: "Operations", description: "Job・更新・Release" },
 ];
 
 const ROLE_LABELS: Record<ProductRole, string> = {
@@ -21,23 +45,33 @@ const ROLE_LABELS: Record<ProductRole, string> = {
   planner: "企画・計画担当",
   field_staff: "現地確認担当",
   data_manager: "データ管理担当",
-  administrator: "管理者"
+  administrator: "管理者",
 };
 
 function initialPage(): ServicePage {
   if (typeof window === "undefined") return "home";
-  const value = new URLSearchParams(window.location.search).get("servicePage") as ServicePage | null;
+  const value = new URLSearchParams(window.location.search).get(
+    "servicePage",
+  ) as ServicePage | null;
   return NAVIGATION.some((item) => item.id === value) ? value! : "home";
 }
 
 function formatDate(value: unknown): string {
   if (!value) return "—";
   const parsed = new Date(String(value));
-  return Number.isNaN(parsed.valueOf()) ? String(value) : new Intl.DateTimeFormat("ja-JP", { dateStyle: "medium", timeStyle: "short" }).format(parsed);
+  return Number.isNaN(parsed.valueOf())
+    ? String(value)
+    : new Intl.DateTimeFormat("ja-JP", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(parsed);
 }
 
 function permits(roles: ProductRole[], allowed: ProductRole[]): boolean {
-  return roles.includes("administrator") || roles.some((role) => allowed.includes(role));
+  return (
+    roles.includes("administrator") ||
+    roles.some((role) => allowed.includes(role))
+  );
 }
 
 function updateUrl(page: ServicePage, cityKey?: string) {
@@ -48,193 +82,2456 @@ function updateUrl(page: ServicePage, cityKey?: string) {
   window.history.replaceState({}, "", url);
 }
 
-export function ServiceApp({ initialSnapshot }: { initialSnapshot?: ServiceSnapshot }) {
-  const [snapshot, setSnapshot] = useState<ServiceSnapshot | null>(initialSnapshot ?? null);
+export function ServiceApp({
+  initialSnapshot,
+}: {
+  initialSnapshot?: ServiceSnapshot;
+}) {
+  const [snapshot, setSnapshot] = useState<ServiceSnapshot | null>(
+    initialSnapshot ?? null,
+  );
   const [page, setPageState] = useState<ServicePage>(initialPage);
-  const [selectedCity, setSelectedCity] = useState<string>(() => typeof window === "undefined" ? initialSnapshot?.cityHome?.city.city_key ?? "" : new URLSearchParams(window.location.search).get("city") ?? initialSnapshot?.cityHome?.city.city_key ?? "");
+  const [selectedCity, setSelectedCity] = useState<string>(() =>
+    typeof window === "undefined"
+      ? (initialSnapshot?.cityHome?.city.city_key ?? "")
+      : (new URLSearchParams(window.location.search).get("city") ??
+        initialSnapshot?.cityHome?.city.city_key ??
+        ""),
+  );
   const [loading, setLoading] = useState(!initialSnapshot);
-  const [error, setError] = useState<{ message: string; requestId?: string | null } | null>(null);
+  const [error, setError] = useState<{
+    message: string;
+    requestId?: string | null;
+  } | null>(null);
   const [reload, setReload] = useState(0);
   const [findingFilter, setFindingFilter] = useState("open");
   const [findingFormOpen, setFindingFormOpen] = useState(false);
   const [caseId, setCaseId] = useState<string | null>(null);
-  const [caseDetail, setCaseDetail] = useState<Record<string, unknown> | null>(null);
+  const [caseDetail, setCaseDetail] = useState<Record<string, unknown> | null>(
+    null,
+  );
   const [mutationMessage, setMutationMessage] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Array<Record<string, unknown>>>([]);
+  const [searchResults, setSearchResults] = useState<
+    Array<Record<string, unknown>>
+  >([]);
 
   useEffect(() => {
     if (initialSnapshot) return;
     let cancelled = false;
-    setLoading(true); setError(null);
-    loadServiceSnapshot().then((result) => {
-      if (cancelled) return;
-      setSnapshot(result);
-      const requested = new URLSearchParams(window.location.search).get("city");
-      const city = result.cities.find((item) => item.city_key === requested)?.city_key ?? result.cityHome?.city.city_key ?? "";
-      setSelectedCity(city);
-      setLoading(false);
-    }).catch((reason: unknown) => {
-      if (cancelled) return;
-      const apiError = reason instanceof ServiceApiError ? reason : null;
-      setError({ message: reason instanceof Error ? reason.message : "不明な読み込みエラー", requestId: apiError?.requestId });
-      setLoading(false);
-    });
-    return () => { cancelled = true; };
+    setLoading(true);
+    setError(null);
+    loadServiceSnapshot()
+      .then((result) => {
+        if (cancelled) return;
+        setSnapshot(result);
+        const requested = new URLSearchParams(window.location.search).get(
+          "city",
+        );
+        const city =
+          result.cities.find((item) => item.city_key === requested)?.city_key ??
+          result.cityHome?.city.city_key ??
+          "";
+        setSelectedCity(city);
+        setLoading(false);
+      })
+      .catch((reason: unknown) => {
+        if (cancelled) return;
+        const apiError = reason instanceof ServiceApiError ? reason : null;
+        setError({
+          message:
+            reason instanceof Error ? reason.message : "不明な読み込みエラー",
+          requestId: apiError?.requestId,
+        });
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [initialSnapshot, reload]);
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setSearchOpen(true);
+      }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  const setPage = useCallback((next: ServicePage) => {
-    setPageState(next); updateUrl(next, selectedCity);
-  }, [selectedCity]);
+  const setPage = useCallback(
+    (next: ServicePage) => {
+      setPageState(next);
+      updateUrl(next, selectedCity);
+    },
+    [selectedCity],
+  );
 
-  const refreshCity = useCallback(async (cityKey = selectedCity) => {
-    if (!snapshot || !cityKey) return;
-    const data = await serviceApi.loadCity(cityKey);
-    setSnapshot((current) => current ? { ...current, ...data } : current);
-    setMutationMessage("最新状態へ更新しました");
-  }, [selectedCity, snapshot]);
+  const refreshCity = useCallback(
+    async (cityKey = selectedCity) => {
+      if (!snapshot || !cityKey) return;
+      const data = await serviceApi.loadCity(cityKey);
+      setSnapshot((current) => (current ? { ...current, ...data } : current));
+      setMutationMessage("最新状態へ更新しました");
+    },
+    [selectedCity, snapshot],
+  );
 
-  const changeCity = useCallback(async (cityKey: string) => {
-    setSelectedCity(cityKey); updateUrl(page, cityKey); setLoading(true); setError(null);
-    try { await refreshCity(cityKey); }
-    catch (reason) {
-      const apiError = reason instanceof ServiceApiError ? reason : null;
-      setError({ message: reason instanceof Error ? reason.message : "都市を切り替えられませんでした", requestId: apiError?.requestId });
-    } finally { setLoading(false); }
-  }, [page, refreshCity]);
+  const changeCity = useCallback(
+    async (cityKey: string) => {
+      setSelectedCity(cityKey);
+      updateUrl(page, cityKey);
+      setLoading(true);
+      setError(null);
+      try {
+        await refreshCity(cityKey);
+      } catch (reason) {
+        const apiError = reason instanceof ServiceApiError ? reason : null;
+        setError({
+          message:
+            reason instanceof Error
+              ? reason.message
+              : "都市を切り替えられませんでした",
+          requestId: apiError?.requestId,
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [page, refreshCity],
+  );
 
   const openCase = useCallback(async (id: string) => {
-    setCaseId(id); setCaseDetail(null);
-    try { setCaseDetail(await serviceApi.request<Record<string, unknown>>(`/api/v1/investigations/${id}`)); }
-    catch (reason) { setMutationMessage(reason instanceof Error ? reason.message : "調査を読み込めませんでした"); }
+    setCaseId(id);
+    setCaseDetail(null);
+    try {
+      setCaseDetail(
+        await serviceApi.request<Record<string, unknown>>(
+          `/api/v1/investigations/${id}`,
+        ),
+      );
+    } catch (reason) {
+      setMutationMessage(
+        reason instanceof Error ? reason.message : "調査を読み込めませんでした",
+      );
+    }
   }, []);
 
-  const mutate = useCallback(async (path: string, method: "POST" | "PATCH", body: unknown, success: string) => {
+  const mutate = useCallback(
+    async (
+      path: string,
+      method: "POST" | "PATCH",
+      body: unknown,
+      success: string,
+    ) => {
+      setMutationMessage(null);
+      try {
+        await serviceApi.request(path, { method, body: JSON.stringify(body) });
+        setMutationMessage(success);
+        await refreshCity();
+        if (caseId) await openCase(caseId);
+        return true;
+      } catch (reason) {
+        const apiError = reason instanceof ServiceApiError ? reason : null;
+        setMutationMessage(
+          `${reason instanceof Error ? reason.message : "操作に失敗しました"}${apiError?.requestId ? `（Request ID: ${apiError.requestId}）` : ""}`,
+        );
+        return false;
+      }
+    },
+    [caseId, openCase, refreshCity],
+  );
+
+  const createCity = useCallback(async (body: Record<string, unknown>) => {
     setMutationMessage(null);
     try {
-      await serviceApi.request(path, { method, body: JSON.stringify(body) });
-      setMutationMessage(success);
-      await refreshCity();
-      if (caseId) await openCase(caseId);
+      const city = await serviceApi.request<{ city_key: string }>("/api/v1/cities", {
+        method: "POST",
+        body: JSON.stringify(body),
+      });
+      const updated = await loadServiceSnapshot();
+      setSnapshot(updated);
+      setSelectedCity(city.city_key);
+      updateUrl("data", city.city_key);
+      setPageState("data");
+      setMutationMessage("都市を登録しました。Data Hubで実データを登録してください");
       return true;
     } catch (reason) {
       const apiError = reason instanceof ServiceApiError ? reason : null;
-      setMutationMessage(`${reason instanceof Error ? reason.message : "操作に失敗しました"}${apiError?.requestId ? `（Request ID: ${apiError.requestId}）` : ""}`);
+      setMutationMessage(
+        `${reason instanceof Error ? reason.message : "都市を登録できませんでした"}${apiError?.requestId ? `（Request ID: ${apiError.requestId}）` : ""}`,
+      );
       return false;
     }
-  }, [caseId, openCase, refreshCity]);
+  }, []);
 
-  const search = useCallback(async (event: FormEvent) => {
-    event.preventDefault(); if (!searchQuery.trim()) return;
-    try {
-      const city = selectedCity ? `&city=${encodeURIComponent(selectedCity)}` : "";
-      const result = await serviceApi.request<{ items: Array<Record<string, unknown>> }>(`/api/v1/search?q=${encodeURIComponent(searchQuery.trim())}${city}`);
-      setSearchResults(result.items);
-    } catch (reason) { setMutationMessage(reason instanceof Error ? reason.message : "検索できませんでした"); }
-  }, [searchQuery, selectedCity]);
+  const search = useCallback(
+    async (event: FormEvent) => {
+      event.preventDefault();
+      if (!searchQuery.trim()) return;
+      try {
+        const city = selectedCity
+          ? `&city=${encodeURIComponent(selectedCity)}`
+          : "";
+        const result = await serviceApi.request<{
+          items: Array<Record<string, unknown>>;
+        }>(`/api/v1/search?q=${encodeURIComponent(searchQuery.trim())}${city}`);
+        setSearchResults(result.items);
+      } catch (reason) {
+        setMutationMessage(
+          reason instanceof Error ? reason.message : "検索できませんでした",
+        );
+      }
+    },
+    [searchQuery, selectedCity],
+  );
 
   if (loading && !snapshot) return <ServiceLoading />;
-  if (error && !snapshot) return <ServiceError message={error.message} requestId={error.requestId} onRetry={() => setReload((value) => value + 1)} />;
+  if (error && !snapshot)
+    return (
+      <ServiceError
+        message={error.message}
+        requestId={error.requestId}
+        onRetry={() => setReload((value) => value + 1)}
+      />
+    );
   if (!snapshot) return null;
 
   const roles = snapshot.profile.roles;
-  const visibleFindings = snapshot.findings.filter((finding) => findingFilter === "all" || (findingFilter === "open" ? !["resolved", "dismissed", "archived"].includes(finding.status) : finding.status === findingFilter));
+  const visibleNavigation = NAVIGATION.filter(
+    (item) =>
+      item.id !== "operations" ||
+      permits(roles, ["data_manager", "administrator"]),
+  );
+  const visibleFindings = snapshot.findings.filter(
+    (finding) =>
+      findingFilter === "all" ||
+      (findingFilter === "open"
+        ? !["resolved", "dismissed", "archived"].includes(finding.status)
+        : finding.status === findingFilter),
+  );
   const primaryRole = roles[0] ?? "viewer";
 
-  return <div className="municipal-service" data-page={page}>
-    <aside className="service-sidebar">
-      <a className="service-brand" href="?servicePage=home" onClick={(event) => { event.preventDefault(); setPage("home"); }}><strong>CITY GAP</strong><span>Municipal Urban Intelligence</span></a>
-      <div className="service-organization"><span>ORGANIZATION</span><strong>{snapshot.profile.organization.name}</strong><small>{snapshot.profile.organization.organization_key}</small></div>
-      <nav aria-label="サービスナビゲーション">{NAVIGATION.map((item) => <button type="button" key={item.id} className={page === item.id ? "active" : ""} onClick={() => setPage(item.id)}><span>{item.label}</span><small>{item.description}</small></button>)}</nav>
-      <footer><span className="human-boundary">人がレビューし、人が判断を記録</span><small>分析結果は候補であり行政判断ではありません</small></footer>
-    </aside>
-    <section className="service-shell">
-      <header className="service-topbar">
-        <label><span>CITY WORKSPACE</span><select value={selectedCity} onChange={(event) => void changeCity(event.target.value)}><option value="">都市を選択</option>{snapshot.cities.map((item) => <option key={item.city_id} value={item.city_key}>{item.name}</option>)}</select></label>
-        <button className="service-search-trigger" type="button" onClick={() => setSearchOpen(true)}>検索 <kbd>⌘K</kbd></button>
-        <div className="service-user"><span>{snapshot.profile.user?.display_name ?? snapshot.profile.actor}</span><small>{roles.map((role) => ROLE_LABELS[role]).join(" / ")}</small></div>
-      </header>
-      {mutationMessage && <div className="service-toast" role="status">{mutationMessage}<button type="button" onClick={() => setMutationMessage(null)}>閉じる</button></div>}
-      {error && <div className="service-banner" role="alert">{error.message}<button type="button" onClick={() => setError(null)}>閉じる</button></div>}
-      <main className="service-content">
-        {page === "home" && <HomePage snapshot={snapshot} primaryRole={primaryRole} onNavigate={setPage} />}
-        {page === "cities" && <CitiesPage snapshot={snapshot} onCity={(cityKey) => void changeCity(cityKey)} />}
-        {page === "data" && <DataPage snapshot={snapshot} roles={roles} mutate={mutate} />}
-        {page === "analysis" && <AnalysisPage snapshot={snapshot} roles={roles} findings={visibleFindings} filter={findingFilter} onFilter={setFindingFilter} formOpen={findingFormOpen} onFormOpen={setFindingFormOpen} mutate={mutate} />}
-        {page === "measures" && <MeasuresPage snapshot={snapshot} />}
-        {page === "review" && <ReviewPage snapshot={snapshot} roles={roles} selectedId={caseId} detail={caseDetail} onSelect={(id) => void openCase(id)} mutate={mutate} />}
-        {page === "evidence" && <EvidencePage snapshot={snapshot} />}
-      </main>
-    </section>
-    {searchOpen && <div className="service-search-backdrop" onMouseDown={() => setSearchOpen(false)}><section className="service-global-search" onMouseDown={(event) => event.stopPropagation()}><form onSubmit={(event) => void search(event)}><span>⌕</span><input autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="都市、Finding、Investigation、Scenario、IDを検索" /><button type="button" onClick={() => setSearchOpen(false)}>閉じる</button></form><div>{searchResults.length === 0 ? <ServiceEmpty title="検索語を入力してください" detail="技術IDは検索できますが、通常画面では必要な場合だけ表示します。" /> : searchResults.map((result) => <button key={String(result.entity_id)} type="button" onClick={() => { if (result.entity_type === "investigation") { setPage("review"); void openCase(String(result.entity_id)); } setSearchOpen(false); }}><span>{String(result.entity_type)}</span><strong>{String(result.title)}</strong><small>{String(result.subtitle ?? "")}</small></button>)}</div></section></div>}
-  </div>;
+  return (
+    <div className="municipal-service" data-page={page}>
+      <aside className="service-sidebar">
+        <a
+          className="service-brand"
+          href="?servicePage=home"
+          onClick={(event) => {
+            event.preventDefault();
+            setPage("home");
+          }}
+        >
+          <strong>CITY GAP</strong>
+          <span>Municipal Urban Intelligence</span>
+        </a>
+        <div className="service-organization">
+          <span>ORGANIZATION</span>
+          <strong>{snapshot.profile.organization.name}</strong>
+          <small>{snapshot.profile.organization.organization_key}</small>
+        </div>
+        <nav aria-label="サービスナビゲーション">
+          {visibleNavigation.map((item) => (
+            <button
+              type="button"
+              key={item.id}
+              className={page === item.id ? "active" : ""}
+              onClick={() => setPage(item.id)}
+            >
+              <span>{item.label}</span>
+              <small>{item.description}</small>
+            </button>
+          ))}
+        </nav>
+        <footer>
+          <span className="human-boundary">人がレビューし、人が判断を記録</span>
+          <small>分析結果は候補であり行政判断ではありません</small>
+        </footer>
+      </aside>
+      <section className="service-shell">
+        <header className="service-topbar">
+          <label>
+            <span>CITY WORKSPACE</span>
+            <select
+              value={selectedCity}
+              onChange={(event) => void changeCity(event.target.value)}
+            >
+              <option value="">都市を選択</option>
+              {snapshot.cities.map((item) => (
+                <option key={item.city_id} value={item.city_key}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            className="service-search-trigger"
+            type="button"
+            onClick={() => setSearchOpen(true)}
+          >
+            検索 <kbd>⌘K</kbd>
+          </button>
+          <div className="service-user">
+            <span>
+              {snapshot.profile.user?.display_name ?? snapshot.profile.actor}
+            </span>
+            <small>{roles.map((role) => ROLE_LABELS[role]).join(" / ")}</small>
+          </div>
+        </header>
+        {mutationMessage && (
+          <div className="service-toast" role="status">
+            {mutationMessage}
+            <button type="button" onClick={() => setMutationMessage(null)}>
+              閉じる
+            </button>
+          </div>
+        )}
+        {error && (
+          <div className="service-banner" role="alert">
+            {error.message}
+            <button type="button" onClick={() => setError(null)}>
+              閉じる
+            </button>
+          </div>
+        )}
+        <main className="service-content">
+          {page === "home" && (
+            <HomePage
+              snapshot={snapshot}
+              primaryRole={primaryRole}
+              onNavigate={setPage}
+            />
+          )}
+          {page === "cities" && (
+            <CitiesPage
+              snapshot={snapshot}
+              roles={roles}
+              onCity={(cityKey) => void changeCity(cityKey)}
+              onCreate={createCity}
+            />
+          )}
+          {page === "data" && (
+            <DataPage snapshot={snapshot} roles={roles} mutate={mutate} />
+          )}
+          {page === "analysis" && (
+            <AnalysisPage
+              snapshot={snapshot}
+              roles={roles}
+              findings={visibleFindings}
+              filter={findingFilter}
+              onFilter={setFindingFilter}
+              formOpen={findingFormOpen}
+              onFormOpen={setFindingFormOpen}
+              mutate={mutate}
+            />
+          )}
+          {page === "measures" && (
+            <MeasuresPage snapshot={snapshot} roles={roles} mutate={mutate} />
+          )}
+          {page === "review" && (
+            <ReviewPage
+              snapshot={snapshot}
+              roles={roles}
+              selectedId={caseId}
+              detail={caseDetail}
+              onSelect={(id) => void openCase(id)}
+              mutate={mutate}
+            />
+          )}
+          {page === "evidence" && (
+            <EvidencePage snapshot={snapshot} roles={roles} mutate={mutate} />
+          )}
+          {page === "operations" && (
+            <OperationsPage snapshot={snapshot} roles={roles} mutate={mutate} />
+          )}
+        </main>
+      </section>
+      {searchOpen && (
+        <div
+          className="service-search-backdrop"
+          onMouseDown={() => setSearchOpen(false)}
+        >
+          <section
+            className="service-global-search"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <form onSubmit={(event) => void search(event)}>
+              <span>⌕</span>
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="都市、Finding、Investigation、Scenario、IDを検索"
+              />
+              <button type="button" onClick={() => setSearchOpen(false)}>
+                閉じる
+              </button>
+            </form>
+            <div>
+              {searchResults.length === 0 ? (
+                <ServiceEmpty
+                  title="検索語を入力してください"
+                  detail="技術IDは検索できますが、通常画面では必要な場合だけ表示します。"
+                />
+              ) : (
+                searchResults.map((result) => (
+                  <button
+                    key={String(result.entity_id)}
+                    type="button"
+                    onClick={() => {
+                      if (result.entity_type === "investigation") {
+                        setPage("review");
+                        void openCase(String(result.entity_id));
+                      }
+                      setSearchOpen(false);
+                    }}
+                  >
+                    <span>{String(result.entity_type)}</span>
+                    <strong>{String(result.title)}</strong>
+                    <small>{String(result.subtitle ?? "")}</small>
+                  </button>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
+      )}
+    </div>
+  );
 }
 
-function PageHeader({ eyebrow, title, description, action }: { eyebrow: string; title: string; description: string; action?: React.ReactNode }) {
-  return <header className="service-page-header"><div><span>{eyebrow}</span><h1>{title}</h1><p>{description}</p></div>{action}</header>;
+function PageHeader({
+  eyebrow,
+  title,
+  description,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  action?: React.ReactNode;
+}) {
+  return (
+    <header className="service-page-header">
+      <div>
+        <span>{eyebrow}</span>
+        <h1>{title}</h1>
+        <p>{description}</p>
+      </div>
+      {action}
+    </header>
+  );
 }
 
-function HomePage({ snapshot, primaryRole, onNavigate }: { snapshot: ServiceSnapshot; primaryRole: ProductRole; onNavigate(page: ServicePage): void }) {
+function HomePage({
+  snapshot,
+  primaryRole,
+  onNavigate,
+}: {
+  snapshot: ServiceSnapshot;
+  primaryRole: ProductRole;
+  onNavigate(page: ServicePage): void;
+}) {
   const summary = snapshot.cityHome?.summary;
   const roleLead: Record<ProductRole, string> = {
     viewer: "都市の更新状況とレビュー済み記録を確認できます。",
     analyst: "未整理のFindingから調査を開始し、再現可能な分析を実行します。",
-    planner: "レビュー待ちの調査を確認し、人の判断をDecision Recordへ記録します。",
+    planner:
+      "レビュー待ちの調査を確認し、人の判断をDecision Recordへ記録します。",
     field_staff: "割り当てられた現地確認をオフライン対応の記録へ残します。",
     data_manager: "データの品質検証、受入、分析可能化、昇格を管理します。",
-    administrator: "テナント、利用者、ジョブ、データ更新とサービス状態を管理します。"
+    administrator:
+      "テナント、利用者、ジョブ、データ更新とサービス状態を管理します。",
   };
-  if (!snapshot.cityHome) return <><PageHeader eyebrow="SERVICE HOME" title="自治体サービスを開始" description={roleLead[primaryRole]} /><ServiceEmpty title="都市がまだ登録されていません" detail="管理者がOrganizationへCityを登録すると、City Homeとデータオンボーディングが利用できます。" /></>;
-  return <><PageHeader eyebrow={`${ROLE_LABELS[primaryRole]} HOME`} title={`${snapshot.cityHome.city.name}の業務状況`} description={roleLead[primaryRole]} /><div className="service-kpis"><button type="button" onClick={() => onNavigate("analysis")}><span>OPEN FINDINGS</span><strong>{summary?.open_findings ?? 0}</strong><small>追加調査候補</small></button><button type="button" onClick={() => onNavigate("review")}><span>INVESTIGATIONS</span><strong>{summary?.active_investigations ?? 0}</strong><small>進行中の調査</small></button><button type="button" onClick={() => onNavigate("review")}><span>REVIEWS</span><strong>{summary?.pending_reviews ?? 0}</strong><small>レビュー待ち</small></button><button type="button" onClick={() => onNavigate("review")}><span>FIELD CHECKS</span><strong>{summary?.pending_field_checks ?? 0}</strong><small>現地確認待ち</small></button></div><div className="service-home-grid"><section className="service-panel"><header><div><span>MY WORK</span><h2>担当と通知</h2></div><b>{snapshot.workQueue.assignments.length + snapshot.workQueue.notifications.filter((item) => !item.read_at).length}</b></header>{snapshot.workQueue.unregistered_identity ? <ServiceEmpty title="このIdentityの担当情報は未登録です" detail="開発用Identityでは架空の担当者を作成しません。管理者が実利用者をOrganizationへ登録してください。" /> : snapshot.workQueue.assignments.length === 0 ? <ServiceEmpty title="現在の担当はありません" detail="新しい割当が作成されると、ここへ表示されます。" /> : snapshot.workQueue.assignments.map((item) => <article className="work-item" key={item.id}><StatusChip value={item.status} /><strong>{item.assignment_type.replaceAll("_", " ")}</strong><small>期限 {item.due_date ?? "未設定"}</small></article>)}</section><section className="service-panel"><header><div><span>RECENT ACTIVITY</span><h2>最近の業務履歴</h2></div></header>{snapshot.cityHome.recent_activity.length === 0 ? <ServiceEmpty title="Activityはまだありません" detail="データ更新、調査、レビュー、現地確認、Decision Recordを人が操作した履歴だけを表示します。" /> : snapshot.cityHome.recent_activity.map((item) => <article className="activity-item" key={`${item.resource_type}-${item.resource_id}-${item.occurred_at}`}><i /><div><strong>{item.summary}</strong><small>{item.actor_label} · {formatDate(item.occurred_at)}</small></div></article>)}</section></div></>;
+  if (!snapshot.cityHome)
+    return (
+      <>
+        <PageHeader
+          eyebrow="SERVICE HOME"
+          title="自治体サービスを開始"
+          description={roleLead[primaryRole]}
+        />
+        <ServiceEmpty
+          title="都市がまだ登録されていません"
+          detail="管理者がOrganizationへCityを登録すると、City Homeとデータオンボーディングが利用できます。"
+        />
+      </>
+    );
+  return (
+    <>
+      <PageHeader
+        eyebrow={`${ROLE_LABELS[primaryRole]} HOME`}
+        title={`${snapshot.cityHome.city.name}の業務状況`}
+        description={roleLead[primaryRole]}
+      />
+      <div className="service-kpis">
+        <button type="button" onClick={() => onNavigate("analysis")}>
+          <span>OPEN FINDINGS</span>
+          <strong>{summary?.open_findings ?? 0}</strong>
+          <small>追加調査候補</small>
+        </button>
+        <button type="button" onClick={() => onNavigate("review")}>
+          <span>INVESTIGATIONS</span>
+          <strong>{summary?.active_investigations ?? 0}</strong>
+          <small>進行中の調査</small>
+        </button>
+        <button type="button" onClick={() => onNavigate("review")}>
+          <span>REVIEWS</span>
+          <strong>{summary?.pending_reviews ?? 0}</strong>
+          <small>レビュー待ち</small>
+        </button>
+        <button type="button" onClick={() => onNavigate("review")}>
+          <span>FIELD CHECKS</span>
+          <strong>{summary?.pending_field_checks ?? 0}</strong>
+          <small>現地確認待ち</small>
+        </button>
+      </div>
+      <div className="service-home-grid">
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>MY WORK</span>
+              <h2>担当と通知</h2>
+            </div>
+            <b>
+              {snapshot.workQueue.assignments.length +
+                snapshot.workQueue.notifications.filter((item) => !item.read_at)
+                  .length}
+            </b>
+          </header>
+          {snapshot.workQueue.unregistered_identity ? (
+            <ServiceEmpty
+              title="このIdentityの担当情報は未登録です"
+              detail="開発用Identityでは架空の担当者を作成しません。管理者が実利用者をOrganizationへ登録してください。"
+            />
+          ) : snapshot.workQueue.assignments.length === 0 ? (
+            <ServiceEmpty
+              title="現在の担当はありません"
+              detail="新しい割当が作成されると、ここへ表示されます。"
+            />
+          ) : (
+            snapshot.workQueue.assignments.map((item) => (
+              <article className="work-item" key={item.id}>
+                <StatusChip value={item.status} />
+                <strong>{item.assignment_type.replaceAll("_", " ")}</strong>
+                <small>期限 {item.due_date ?? "未設定"}</small>
+              </article>
+            ))
+          )}
+        </section>
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>RECENT ACTIVITY</span>
+              <h2>最近の業務履歴</h2>
+            </div>
+          </header>
+          {snapshot.cityHome.recent_activity.length === 0 ? (
+            <ServiceEmpty
+              title="Activityはまだありません"
+              detail="データ更新、調査、レビュー、現地確認、Decision Recordを人が操作した履歴だけを表示します。"
+            />
+          ) : (
+            snapshot.cityHome.recent_activity.map((item) => (
+              <article
+                className="activity-item"
+                key={`${item.resource_type}-${item.resource_id}-${item.occurred_at}`}
+              >
+                <i />
+                <div>
+                  <strong>{item.summary}</strong>
+                  <small>
+                    {item.actor_label} · {formatDate(item.occurred_at)}
+                  </small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+      </div>
+    </>
+  );
 }
 
-function CitiesPage({ snapshot, onCity }: { snapshot: ServiceSnapshot; onCity(city: string): void }) {
-  return <><PageHeader eyebrow="CITIES" title="都市ワークスペース" description="Organization内の都市、利用可能な機能、進行中の業務を確認します。" /><ServiceTable caption="都市一覧" empty="登録された都市がありません" rows={snapshot.cities as unknown as Array<Record<string, unknown>>} rowKey={(row) => String(row.city_id)} onRow={(row) => onCity(String(row.city_key))} columns={[{ key: "name", label: "都市" }, { key: "service_status", label: "状態", render: (row) => <StatusChip value={String(row.service_status)} /> }, { key: "available_capabilities", label: "機能", render: (row) => `${Number(row.available_capabilities ?? 0)} / ${Number(row.capability_count ?? 0)}` }, { key: "open_findings", label: "Finding" }, { key: "active_investigations", label: "Investigation" }, { key: "latest_activity_at", label: "最終更新", render: (row) => formatDate(row.latest_activity_at) }]} /></>;
+function CitiesPage({
+  snapshot,
+  roles,
+  onCity,
+  onCreate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  onCity(city: string): void;
+  onCreate(body: Record<string, unknown>): Promise<boolean>;
+}) {
+  const [formOpen, setFormOpen] = useState(snapshot.cities.length === 0);
+  const canCreate = permits(roles, ["administrator"]);
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const created = await onCreate({
+      city_code: data.get("city_code"),
+      city_key: data.get("city_key"),
+      name: data.get("name"),
+      prefecture_code: data.get("prefecture_code"),
+      prefecture_name: data.get("prefecture_name"),
+      analysis_crs: data.get("analysis_crs"),
+    });
+    if (created) setFormOpen(false);
+  };
+  return (
+    <>
+      <PageHeader
+        eyebrow="CITIES"
+        title="都市ワークスペース"
+        description="Organization内の都市、利用可能な機能、進行中の業務を確認します。"
+        action={
+          canCreate ? (
+            <button
+              className="primary-action"
+              type="button"
+              onClick={() => setFormOpen((value) => !value)}
+            >
+              都市を登録
+            </button>
+          ) : undefined
+        }
+      />
+      {canCreate && formOpen && (
+        <form className="service-form" onSubmit={(event) => void submit(event)}>
+          <label>
+            市区町村コード
+            <input name="city_code" required pattern="[0-9]{5}" placeholder="26202" />
+          </label>
+          <label>
+            City key
+            <input name="city_key" required pattern="[a-z0-9][a-z0-9-]+" />
+          </label>
+          <label>
+            都市名
+            <input name="name" required />
+          </label>
+          <label>
+            都道府県コード
+            <input name="prefecture_code" required pattern="[0-9]{2}" />
+          </label>
+          <label>
+            都道府県名
+            <input name="prefecture_name" required />
+          </label>
+          <label>
+            分析座標系
+            <input name="analysis_crs" required pattern="EPSG:[0-9]{4,6}" />
+          </label>
+          <button className="primary-action" type="submit">
+            onboardingを開始
+          </button>
+        </form>
+      )}
+      <ServiceTable
+        caption="都市一覧"
+        empty="登録された都市がありません"
+        rows={snapshot.cities as unknown as Array<Record<string, unknown>>}
+        rowKey={(row) => String(row.city_id)}
+        onRow={(row) => onCity(String(row.city_key))}
+        columns={[
+          { key: "name", label: "都市" },
+          {
+            key: "service_status",
+            label: "状態",
+            render: (row) => <StatusChip value={String(row.service_status)} />,
+          },
+          {
+            key: "available_capabilities",
+            label: "機能",
+            render: (row) =>
+              `${Number(row.available_capabilities ?? 0)} / ${Number(row.capability_count ?? 0)}`,
+          },
+          { key: "open_findings", label: "Finding" },
+          { key: "active_investigations", label: "Investigation" },
+          {
+            key: "latest_activity_at",
+            label: "最終更新",
+            render: (row) => formatDate(row.latest_activity_at),
+          },
+        ]}
+      />
+    </>
+  );
 }
 
-function DataPage({ snapshot, roles, mutate }: { snapshot: ServiceSnapshot; roles: ProductRole[]; mutate: (path: string, method: "POST" | "PATCH", body: unknown, success: string) => Promise<boolean> }) {
+function DataPage({
+  snapshot,
+  roles,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const [datasetFormOpen, setDatasetFormOpen] = useState(false);
+  const [stateFormOpen, setStateFormOpen] = useState(false);
   const hub = snapshot.dataHub;
-  if (!hub) return <><PageHeader eyebrow="DATA HUB" title="データオンボーディング" description="登録、検証、受入、取込、分析可能化、昇格を明示的に管理します。" /><ServiceEmpty title="都市を選択してください" detail="データはアップロードだけで分析対象へ昇格しません。" /></>;
+  if (!hub)
+    return (
+      <>
+        <PageHeader
+          eyebrow="DATA HUB"
+          title="データオンボーディング"
+          description="登録、検証、受入、取込、分析可能化、昇格を明示的に管理します。"
+        />
+        <ServiceEmpty
+          title="都市を選択してください"
+          detail="データはアップロードだけで分析対象へ昇格しません。"
+        />
+      </>
+    );
   const canManage = permits(roles, ["data_manager"]);
-  const nextStatus: Record<string, string> = { registered: "validating", validating: "validated", validated: "accepted", accepted: "ingesting", ingesting: "analysis_ready", analysis_ready: "promoted", rejected: "validating", failed: "validating" };
-  return <><PageHeader eyebrow="DATA HUB" title={`${hub.city.name}のデータ`} description="年度、出典、品質、Capability、PLATEAU収録モデルを一つのライフサイクルで管理します。" /><section className="service-panel full"><header><div><span>DATASET VERSIONS</span><h2>データとバージョン</h2></div></header><ServiceTable caption="データセットバージョン" empty="データセットが登録されていません" rows={hub.datasets as unknown as Array<Record<string, unknown>>} rowKey={(row) => String(row.version_id ?? row.dataset_id)} columns={[{ key: "title", label: "データ" }, { key: "dataset_year", label: "年度" }, { key: "version_key", label: "Version" }, { key: "service_status", label: "Service状態", render: (row) => <StatusChip value={String(row.service_status)} /> }, { key: "quality_status", label: "品質", render: (row) => <StatusChip value={String(row.quality_status)} /> }, { key: "data_classification", label: "分類" }, { key: "action", label: "次の操作", render: (row) => canManage && nextStatus[String(row.service_status)] ? <button className="table-action" type="button" onClick={(event) => { event.stopPropagation(); const proposed = nextStatus[String(row.service_status)]; void mutate(`/api/v1/dataset-versions/${String(row.version_id)}/status`, "PATCH", { expected_status: row.service_status, proposed_status: proposed, note: "Data Hubで人がライフサイクルを確認" }, `${proposed}へ更新しました`); }}>{nextStatus[String(row.service_status)]}</button> : <span>—</span> }]} /></section><div className="service-two-column"><section className="service-panel"><header><div><span>QUALITY</span><h2>品質チェック</h2></div></header>{hub.quality_checks.length === 0 ? <ServiceEmpty title="品質チェックは未登録です" detail="geometry、CRS、属性、件数、欠損、コード、年度整合、公開制約を記録します。" /> : hub.quality_checks.map((check) => <article className="quality-row" key={`${check.dataset_version_id}-${check.check_key}-${check.checked_at}`}><StatusChip value={check.status} /><div><strong>{check.check_key.replaceAll("_", " ")}</strong><small>{check.explanation}</small></div></article>)}</section><section className="service-panel"><header><div><span>PLATEAU MODEL</span><h2>収録モデル</h2></div></header>{hub.plateau_model.length === 0 ? <ServiceEmpty title="PLATEAU Model Inventoryはありません" detail="実際に取込済みのCityGML objectのみを表示します。" /> : hub.plateau_model.map((model) => <article className="quality-row" key={`${model.plateau_dataset_version_id}-${model.theme}`}><StatusChip value={`${model.feature_count}`} /><div><strong>{model.theme}</strong><small>LOD {model.available_lods.join(", ") || "—"} · geometry {model.geometry_count}</small></div></article>)}</section></div></>;
+  const city = hub.city.city_key;
+  const registerDataset = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/datasets`,
+      "POST",
+      {
+        dataset_key: data.get("dataset_key"),
+        title: data.get("title"),
+        provider: data.get("provider"),
+        dataset_category: data.get("dataset_category"),
+        data_classification: data.get("data_classification"),
+        version_key: data.get("version_key"),
+        dataset_year: Number(data.get("dataset_year")),
+        data_format: data.get("data_format"),
+        source_url: data.get("source_url") || null,
+        license: data.get("license") || null,
+        declared_source_crs: data.get("declared_source_crs") || null,
+      },
+      "Dataset Versionをregisteredとして登録しました",
+    );
+    setDatasetFormOpen(false);
+  };
+  const createUrbanState = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/urban-states`,
+      "POST",
+      {
+        state_key: data.get("state_key"),
+        label: data.get("label"),
+        effective_date: data.get("effective_date"),
+        state_type: "observed",
+        primary_dataset_version_id: data.get("primary_dataset_version_id"),
+        source_verified: true,
+      },
+      "Urban Stateをdraftとして登録しました",
+    );
+    setStateFormOpen(false);
+  };
+  const nextStatus: Record<string, string> = {
+    registered: "validating",
+    validating: "validated",
+    validated: "accepted",
+    accepted: "ingesting",
+    ingesting: "analysis_ready",
+    analysis_ready: "promoted",
+    rejected: "validating",
+    failed: "validating",
+  };
+  const stateTransitions: Record<string, string> = {
+    draft: "validated",
+    validated: "current",
+  };
+  return (
+    <>
+      <PageHeader
+        eyebrow="DATA HUB"
+        title={`${hub.city.name}のデータ`}
+        description="年度、出典、品質、Capability、PLATEAU収録モデルを一つのライフサイクルで管理します。"
+        action={
+          canManage ? (
+            <div className="page-actions">
+              <button
+                className="primary-action"
+                type="button"
+                onClick={() => setDatasetFormOpen((value) => !value)}
+              >
+                Datasetを登録
+              </button>
+              <button
+                className="secondary-action"
+                type="button"
+                onClick={() => setStateFormOpen((value) => !value)}
+              >
+                Urban Stateを作成
+              </button>
+            </div>
+          ) : undefined
+        }
+      />
+      {snapshot.onboarding && (
+        <section className="service-panel full onboarding-progress">
+          <header>
+            <div>
+              <span>ONBOARDING</span>
+              <h2>導入状況</h2>
+            </div>
+          </header>
+          <div>
+            {snapshot.onboarding.steps.map((step) => (
+              <article key={step.key}>
+                <StatusChip value={step.status} />
+                <strong>{step.key.replaceAll("_", " ")}</strong>
+                <small>
+                  {step.promoted_versions ?? step.count ?? 0} ready
+                </small>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+      {datasetFormOpen && (
+        <form className="service-form" onSubmit={registerDataset}>
+          <label>
+            種別
+            <select name="dataset_category" required>
+              <option value="plateau">PLATEAU</option>
+              <option value="population">人口</option>
+              <option value="facilities">施設</option>
+              <option value="transport">交通</option>
+              <option value="hazard">災害</option>
+              <option value="planning">都市計画</option>
+              <option value="municipal_custom">自治体独自</option>
+            </select>
+          </label>
+          <label>
+            Dataset key
+            <input name="dataset_key" required />
+          </label>
+          <label>
+            表示名
+            <input name="title" required />
+          </label>
+          <label>
+            提供者
+            <input name="provider" required />
+          </label>
+          <label>
+            Version
+            <input name="version_key" required />
+          </label>
+          <label>
+            年度
+            <input name="dataset_year" type="number" min="1900" max="2200" required />
+          </label>
+          <label>
+            形式
+            <input name="data_format" required placeholder="CityGML / CSV / GeoJSON" />
+          </label>
+          <label>
+            Source URL
+            <input name="source_url" type="url" />
+          </label>
+          <label>
+            License
+            <input name="license" />
+          </label>
+          <label>
+            Source CRS
+            <input name="declared_source_crs" placeholder="EPSG:6697" />
+          </label>
+          <label>
+            データ分類
+            <select name="data_classification" defaultValue="internal">
+              <option value="public">public</option>
+              <option value="internal">internal</option>
+              <option value="restricted">restricted</option>
+            </select>
+          </label>
+          <button className="primary-action" type="submit">
+            registeredとして保存
+          </button>
+        </form>
+      )}
+      {stateFormOpen && (
+        <form className="service-form" onSubmit={createUrbanState}>
+          <label>
+            State key
+            <input name="state_key" required />
+          </label>
+          <label>
+            表示名
+            <input name="label" required />
+          </label>
+          <label>
+            基準日
+            <input name="effective_date" type="date" required />
+          </label>
+          <label className="wide">
+            Primary Dataset Version
+            <select name="primary_dataset_version_id" required>
+              <option value="">promoted versionを選択</option>
+              {hub.datasets
+                .filter((dataset) => dataset.service_status === "promoted")
+                .map((dataset) => (
+                  <option key={dataset.version_id} value={dataset.version_id}>
+                    {dataset.title} · {dataset.dataset_year} · {dataset.version_key}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <button className="primary-action" type="submit">
+            draftを作成
+          </button>
+        </form>
+      )}
+      <section className="service-panel full">
+        <header>
+          <div>
+            <span>DATASET VERSIONS</span>
+            <h2>データとバージョン</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="データセットバージョン"
+          empty="データセットが登録されていません"
+          rows={hub.datasets as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.version_id ?? row.dataset_id)}
+          columns={[
+            { key: "title", label: "データ" },
+            { key: "dataset_category", label: "種別" },
+            { key: "dataset_year", label: "年度" },
+            { key: "version_key", label: "Version" },
+            {
+              key: "service_status",
+              label: "Service状態",
+              render: (row) => (
+                <StatusChip value={String(row.service_status)} />
+              ),
+            },
+            {
+              key: "quality_status",
+              label: "品質",
+              render: (row) => (
+                <StatusChip value={String(row.quality_status)} />
+              ),
+            },
+            { key: "data_classification", label: "分類" },
+            {
+              key: "action",
+              label: "次の操作",
+              render: (row) =>
+                canManage && nextStatus[String(row.service_status)] ? (
+                  <button
+                    className="table-action"
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      const proposed = nextStatus[String(row.service_status)];
+                      void mutate(
+                        `/api/v1/dataset-versions/${String(row.version_id)}/status`,
+                        "PATCH",
+                        {
+                          expected_status: row.service_status,
+                          proposed_status: proposed,
+                          note: "Data Hubで人がライフサイクルを確認",
+                        },
+                        `${proposed}へ更新しました`,
+                      );
+                    }}
+                  >
+                    {nextStatus[String(row.service_status)]}
+                  </button>
+                ) : (
+                  <span>—</span>
+                ),
+            },
+          ]}
+        />
+      </section>
+      <section className="service-panel full">
+        <header>
+          <div>
+            <span>URBAN STATES</span>
+            <h2>都市状態と年度</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="Urban State一覧"
+          empty="Urban Stateはまだありません"
+          rows={hub.urban_states as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "label", label: "都市状態" },
+            { key: "effective_date", label: "基準日" },
+            { key: "state_type", label: "種別" },
+            {
+              key: "lifecycle_status",
+              label: "状態",
+              render: (row) => <StatusChip value={String(row.lifecycle_status)} />,
+            },
+            {
+              key: "source_verified",
+              label: "出典確認",
+              render: (row) => (row.source_verified ? "確認済み" : "未確認"),
+            },
+            {
+              key: "action",
+              label: "次の操作",
+              render: (row) => {
+                if (!canManage) return <span>—</span>;
+                const next = stateTransitions[String(row.lifecycle_status)];
+                return next ? (
+                  <button
+                    className="table-action"
+                    type="button"
+                    onClick={() =>
+                      void mutate(
+                        `/api/v1/urban-states/${String(row.id)}/status`,
+                        "PATCH",
+                        {
+                          expected_status: row.lifecycle_status,
+                          proposed_status: next,
+                          note: "Data Hubで出典・品質・年度を確認",
+                        },
+                        `Urban Stateを${next}へ更新しました`,
+                      )
+                    }
+                  >
+                    {next}
+                  </button>
+                ) : (
+                  <span>—</span>
+                );
+              },
+            },
+          ]}
+        />
+      </section>
+      <div className="service-two-column">
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>QUALITY</span>
+              <h2>品質チェック</h2>
+            </div>
+          </header>
+          {hub.quality_checks.length === 0 ? (
+            <ServiceEmpty
+              title="品質チェックは未登録です"
+              detail="geometry、CRS、属性、件数、欠損、コード、年度整合、公開制約を記録します。"
+            />
+          ) : (
+            hub.quality_checks.map((check) => (
+              <article
+                className="quality-row"
+                key={`${check.dataset_version_id}-${check.check_key}-${check.checked_at}`}
+              >
+                <StatusChip value={check.status} />
+                <div>
+                  <strong>{check.check_key.replaceAll("_", " ")}</strong>
+                  <small>{check.explanation}</small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>PLATEAU MODEL</span>
+              <h2>収録モデル</h2>
+            </div>
+          </header>
+          {hub.plateau_model.length === 0 ? (
+            <ServiceEmpty
+              title="PLATEAU Model Inventoryはありません"
+              detail="実際に取込済みのCityGML objectのみを表示します。"
+            />
+          ) : (
+            hub.plateau_model.map((model) => (
+              <article
+                className="quality-row"
+                key={`${model.plateau_dataset_version_id}-${model.theme}`}
+              >
+                <StatusChip value={`${model.feature_count}`} />
+                <div>
+                  <strong>{model.theme}</strong>
+                  <small>
+                    LOD {model.available_lods.join(", ") || "—"} · geometry{" "}
+                    {model.geometry_count}
+                  </small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+      </div>
+    </>
+  );
 }
 
-function AnalysisPage({ snapshot, roles, findings, filter, onFilter, formOpen, onFormOpen, mutate }: { snapshot: ServiceSnapshot; roles: ProductRole[]; findings: Finding[]; filter: string; onFilter(value: string): void; formOpen: boolean; onFormOpen(value: boolean): void; mutate: (path: string, method: "POST" | "PATCH", body: unknown, success: string) => Promise<boolean> }) {
-  const canWrite = permits(roles, ["analyst", "planner"]); const city = snapshot.cityHome?.city.city_key;
-  const submitFinding = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (!city) return; const data = new FormData(event.currentTarget); void mutate(`/api/v1/cities/${encodeURIComponent(city)}/findings`, "POST", { finding_type: data.get("finding_type"), title: data.get("title"), summary: data.get("summary"), urban_state_id: data.get("urban_state_id") || null }, "Findingを登録しました"); onFormOpen(false); };
+function AnalysisPage({
+  snapshot,
+  roles,
+  findings,
+  filter,
+  onFilter,
+  formOpen,
+  onFormOpen,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  findings: Finding[];
+  filter: string;
+  onFilter(value: string): void;
+  formOpen: boolean;
+  onFormOpen(value: boolean): void;
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const canWrite = permits(roles, ["analyst", "planner"]);
+  const city = snapshot.cityHome?.city.city_key;
+  const submitFinding = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!city) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/findings`,
+      "POST",
+      {
+        finding_type: data.get("finding_type"),
+        title: data.get("title"),
+        summary: data.get("summary"),
+        urban_state_id: data.get("urban_state_id") || null,
+      },
+      "Findingを登録しました",
+    );
+    onFormOpen(false);
+  };
   const startInvestigation = async (finding: Finding) => {
     if (!city || !finding.urban_state_id) return;
     if (finding.status === "new") {
-      const triaged = await mutate(`/api/v1/findings/${finding.id}/status`, "PATCH", { expected_status: "new", proposed_status: "triaged" }, "Findingをtriageしました");
+      const triaged = await mutate(
+        `/api/v1/findings/${finding.id}/status`,
+        "PATCH",
+        { expected_status: "new", proposed_status: "triaged" },
+        "Findingをtriageしました",
+      );
       if (!triaged) return;
     }
-    await mutate(`/api/v1/cities/${encodeURIComponent(city)}/investigations`, "POST", { urban_state_id: finding.urban_state_id, title: `調査: ${finding.title}`, objective: finding.summary, finding_ids: [finding.id], spatial_state: {} }, "Investigationを開始しました");
+    await mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/investigations`,
+      "POST",
+      {
+        urban_state_id: finding.urban_state_id,
+        title: `調査: ${finding.title}`,
+        objective: finding.summary,
+        finding_ids: [finding.id],
+        spatial_state: {},
+      },
+      "Investigationを開始しました",
+    );
   };
-  return <><PageHeader eyebrow="ANALYSIS" title="Finding Queueと分析カタログ" description="Findingは追加調査候補です。深刻度や政策優先順位、問題認定を自動付与しません。" action={canWrite ? <button className="primary-action" type="button" onClick={() => onFormOpen(!formOpen)}>Findingを登録</button> : undefined} />{formOpen && <form className="service-form" onSubmit={submitFinding}><label>種類<select name="finding_type" required><option value="accessibility_gap">Accessibility Gap</option><option value="network_criticality">Network Criticality</option><option value="planning_context">Planning Context</option><option value="temporal_change">Temporal Change</option><option value="resilience_impact">Resilience Impact</option><option value="data_quality_issue">Data Quality Issue</option></select></label><label>タイトル<input name="title" required maxLength={500} /></label><label className="wide">説明<textarea name="summary" required maxLength={5000} /></label><label>Urban State ID<input name="urban_state_id" inputMode="text" placeholder="実在するUUID（任意）" /></label><button className="primary-action" type="submit">候補として登録</button></form>}<div className="service-tabs" role="tablist"><button type="button" className={filter === "open" ? "active" : ""} onClick={() => onFilter("open")}>Open</button>{["new", "triaged", "investigating", "review_required", "resolved", "dismissed", "all"].map((status) => <button type="button" key={status} className={filter === status ? "active" : ""} onClick={() => onFilter(status)}>{status.replaceAll("_", " ")}</button>)}</div><ServiceTable caption="Finding Queue" empty="該当するFindingはありません" rows={findings as unknown as Array<Record<string, unknown>>} rowKey={(row) => String(row.id)} columns={[{ key: "title", label: "Finding" }, { key: "finding_type", label: "種類", render: (row) => String(row.finding_type).replaceAll("_", " ") }, { key: "status", label: "状態", render: (row) => <StatusChip value={String(row.status)} /> }, { key: "validation_status", label: "検証", render: (row) => <StatusChip value={String(row.validation_status)} /> }, { key: "created_at", label: "登録", render: (row) => formatDate(row.created_at) }, { key: "action", label: "次の操作", render: (row) => { const finding = row as unknown as Finding; return canWrite && ["new", "triaged"].includes(finding.status) ? <button className="table-action" type="button" disabled={!finding.urban_state_id} title={finding.urban_state_id ? "人の操作で調査を開始" : "Urban Stateが必要です"} onClick={() => void startInvestigation(finding)}>Investigation開始</button> : <span>—</span>; }}]} /><section className="service-panel full catalog"><header><div><span>ANALYSIS CATALOG</span><h2>再現可能な分析定義</h2></div></header><div className="catalog-grid">{snapshot.analyses.map((analysis) => <article key={`${analysis.id}-${analysis.version}`}><div><StatusChip value={`v${analysis.version}`} /><small>{analysis.required_capabilities.join(" · ")}</small></div><h3>{analysis.name}</h3><p>{analysis.purpose}</p><footer><strong>断定しない範囲</strong><span>{analysis.claim_boundary}</span></footer></article>)}</div></section></>;
+  return (
+    <>
+      <PageHeader
+        eyebrow="ANALYSIS"
+        title="Finding Queueと分析カタログ"
+        description="Findingは追加調査候補です。深刻度や政策優先順位、問題認定を自動付与しません。"
+        action={
+          canWrite ? (
+            <button
+              className="primary-action"
+              type="button"
+              onClick={() => onFormOpen(!formOpen)}
+            >
+              Findingを登録
+            </button>
+          ) : undefined
+        }
+      />
+      <AnalysisRunPanel
+        snapshot={snapshot}
+        canRun={canWrite}
+        mutate={mutate}
+      />
+      {formOpen && (
+        <form className="service-form" onSubmit={submitFinding}>
+          <label>
+            種類
+            <select name="finding_type" required>
+              <option value="accessibility_gap">Accessibility Gap</option>
+              <option value="network_criticality">Network Criticality</option>
+              <option value="planning_context">Planning Context</option>
+              <option value="temporal_change">Temporal Change</option>
+              <option value="resilience_impact">Resilience Impact</option>
+              <option value="data_quality_issue">Data Quality Issue</option>
+            </select>
+          </label>
+          <label>
+            タイトル
+            <input name="title" required maxLength={500} />
+          </label>
+          <label className="wide">
+            説明
+            <textarea name="summary" required maxLength={5000} />
+          </label>
+          <label>
+            Urban State ID
+            <input
+              name="urban_state_id"
+              inputMode="text"
+              placeholder="実在するUUID（任意）"
+            />
+          </label>
+          <button className="primary-action" type="submit">
+            候補として登録
+          </button>
+        </form>
+      )}
+      <div className="service-tabs" role="tablist">
+        <button
+          type="button"
+          className={filter === "open" ? "active" : ""}
+          onClick={() => onFilter("open")}
+        >
+          Open
+        </button>
+        {[
+          "new",
+          "triaged",
+          "investigating",
+          "review_required",
+          "resolved",
+          "dismissed",
+          "all",
+        ].map((status) => (
+          <button
+            type="button"
+            key={status}
+            className={filter === status ? "active" : ""}
+            onClick={() => onFilter(status)}
+          >
+            {status.replaceAll("_", " ")}
+          </button>
+        ))}
+      </div>
+      <ServiceTable
+        caption="Finding Queue"
+        empty="該当するFindingはありません"
+        rows={findings as unknown as Array<Record<string, unknown>>}
+        rowKey={(row) => String(row.id)}
+        columns={[
+          { key: "title", label: "Finding" },
+          {
+            key: "finding_type",
+            label: "種類",
+            render: (row) => String(row.finding_type).replaceAll("_", " "),
+          },
+          {
+            key: "status",
+            label: "状態",
+            render: (row) => <StatusChip value={String(row.status)} />,
+          },
+          {
+            key: "validation_status",
+            label: "検証",
+            render: (row) => (
+              <StatusChip value={String(row.validation_status)} />
+            ),
+          },
+          {
+            key: "created_at",
+            label: "登録",
+            render: (row) => formatDate(row.created_at),
+          },
+          {
+            key: "action",
+            label: "次の操作",
+            render: (row) => {
+              const finding = row as unknown as Finding;
+              return canWrite && ["new", "triaged"].includes(finding.status) ? (
+                <button
+                  className="table-action"
+                  type="button"
+                  disabled={!finding.urban_state_id}
+                  title={
+                    finding.urban_state_id
+                      ? "人の操作で調査を開始"
+                      : "Urban Stateが必要です"
+                  }
+                  onClick={() => void startInvestigation(finding)}
+                >
+                  Investigation開始
+                </button>
+              ) : (
+                <span>—</span>
+              );
+            },
+          },
+        ]}
+      />
+      <section className="service-panel full catalog">
+        <header>
+          <div>
+            <span>ANALYSIS CATALOG</span>
+            <h2>再現可能な分析定義</h2>
+          </div>
+        </header>
+        <div className="catalog-grid">
+          {snapshot.analyses.map((analysis) => (
+            <article key={`${analysis.id}-${analysis.version}`}>
+              <div>
+                <StatusChip value={`v${analysis.version}`} />
+                <small>{analysis.required_capabilities.join(" · ")}</small>
+              </div>
+              <h3>{analysis.name}</h3>
+              <p>{analysis.purpose}</p>
+              <footer>
+                <strong>断定しない範囲</strong>
+                <span>{analysis.claim_boundary}</span>
+              </footer>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="service-panel full run-history">
+        <header>
+          <div>
+            <span>ANALYSIS RUNS</span>
+            <h2>Version固定の実行履歴</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="分析実行履歴"
+          empty="この都市で実行された分析はありません"
+          rows={snapshot.analysisRuns as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "analysis_type", label: "分析" },
+            { key: "algorithm_version", label: "Version" },
+            {
+              key: "job_state",
+              label: "Job",
+              render: (row) => (
+                <StatusChip value={String(row.job_state ?? row.status)} />
+              ),
+            },
+            { key: "job_stage", label: "現在Stage" },
+            {
+              key: "dataset_version_ids",
+              label: "入力Version数",
+              render: (row) =>
+                Array.isArray(row.dataset_version_ids)
+                  ? row.dataset_version_ids.length
+                  : 0,
+            },
+            {
+              key: "started_at",
+              label: "登録",
+              render: (row) => formatDate(row.started_at),
+            },
+          ]}
+        />
+      </section>
+    </>
+  );
 }
 
-function MeasuresPage({ snapshot }: { snapshot: ServiceSnapshot }) {
-  return <><PageHeader eyebrow="MEASURES" title="Scenario Library" description="複数案を同じUrban Stateと明示した仮定で比較します。最良案や採用案を自動決定しません。" /><ServiceTable caption="Scenario Library" empty="この都市にはScenarioがありません" rows={snapshot.scenarios as unknown as Array<Record<string, unknown>>} rowKey={(row) => String(row.id)} columns={[{ key: "title", label: "Scenario" }, { key: "objective_mode", label: "比較軸" }, { key: "site_count", label: "地点数" }, { key: "lifecycle_status", label: "状態", render: (row) => <StatusChip value={String(row.lifecycle_status)} /> }, { key: "review_status", label: "Review", render: (row) => <StatusChip value={String(row.review_status)} /> }, { key: "generated_at", label: "生成", render: (row) => formatDate(row.generated_at) }]} /><div className="service-boundary-note"><strong>比較の境界</strong><p>費用は自治体が登録したversion付き外部データだけを利用します。災害Stress Testは明示した利用不可仮定の比較であり、災害予測ではありません。</p></div></>;
+function AnalysisRunPanel({
+  snapshot,
+  canRun,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  canRun: boolean;
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const [definitionKey, setDefinitionKey] = useState(
+    snapshot.analyses[0]
+      ? `${snapshot.analyses[0].id}@${snapshot.analyses[0].version}`
+      : "",
+  );
+  const definition = snapshot.analyses.find(
+    (item) => `${item.id}@${item.version}` === definitionKey,
+  );
+  const city = snapshot.cityHome?.city.city_key;
+  const promoted =
+    snapshot.dataHub?.datasets.filter(
+      (dataset) => dataset.version_id && dataset.service_status === "promoted",
+    ) ?? [];
+  const states = snapshot.dataHub?.urban_states ?? [];
+  const datasetRoles = definition?.input_contract.dataset_roles ?? [];
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!city || !definition) return;
+    const data = new FormData(event.currentTarget);
+    const datasetVersions = Object.fromEntries(
+      datasetRoles.map((role) => [role, String(data.get(`dataset:${role}`))]),
+    );
+    const parameters = Object.fromEntries(
+      definition.parameters.map((parameter) => {
+        const raw = String(data.get(`parameter:${parameter.parameter_key}`) ?? "");
+        const value =
+          parameter.value_type === "integer"
+            ? Number.parseInt(raw, 10)
+            : parameter.value_type === "number"
+              ? Number(raw)
+              : parameter.value_type === "boolean"
+                ? raw === "true"
+                : raw;
+        return [parameter.parameter_key, value];
+      }),
+    );
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/analysis-runs`,
+      "POST",
+      {
+        analysis_id: definition.id,
+        analysis_version: definition.version,
+        urban_state_id: data.get("urban_state_id"),
+        dataset_versions: datasetVersions,
+        parameters,
+      },
+      "Version固定の分析Jobを登録しました",
+    );
+  };
+
+  return (
+    <section className="service-panel full analysis-runner">
+      <header>
+        <div>
+          <span>RUN ANALYSIS</span>
+          <h2>明示したUrban StateとDataset Versionで実行</h2>
+        </div>
+      </header>
+      {!canRun ? (
+        <ServiceEmpty
+          title="閲覧権限で表示しています"
+          detail="分析の実行はAnalyst、Planner、Administratorが行えます。"
+        />
+      ) : !definition || !city ? (
+        <ServiceEmpty
+          title="分析定義または都市がありません"
+          detail="管理者が実在する都市と有効な分析定義を登録してください。"
+        />
+      ) : states.length === 0 || promoted.length === 0 ? (
+        <ServiceEmpty
+          title="実行条件が揃っていません"
+          detail="Data HubでUrban Stateとpromoted済みDataset Versionを準備してください。"
+        />
+      ) : (
+        <form className="service-form analysis-run-form" onSubmit={submit}>
+          <label>
+            分析定義
+            <select
+              value={definitionKey}
+              onChange={(event) => setDefinitionKey(event.target.value)}
+            >
+              {snapshot.analyses.map((analysis) => (
+                <option
+                  key={`${analysis.id}@${analysis.version}`}
+                  value={`${analysis.id}@${analysis.version}`}
+                >
+                  {analysis.name} · v{analysis.version}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Urban State
+            <select name="urban_state_id" required>
+              {states.map((state) => (
+                <option key={state.id} value={state.id}>
+                  {state.label} · {state.effective_date} · {state.lifecycle_status}
+                </option>
+              ))}
+            </select>
+          </label>
+          {datasetRoles.map((role) => (
+            <label key={role}>
+              Dataset role: {role}
+              <select name={`dataset:${role}`} required>
+                <option value="">Versionを選択</option>
+                {promoted.map((dataset) => (
+                  <option key={`${role}-${dataset.version_id}`} value={dataset.version_id}>
+                    {dataset.title} · {dataset.dataset_year} · {dataset.version_key}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+          {definition.parameters.map((parameter) => (
+            <label key={parameter.parameter_key}>
+              {parameter.description}
+              {parameter.value_type === "boolean" ? (
+                <select
+                  name={`parameter:${parameter.parameter_key}`}
+                  defaultValue={String(parameter.default_value)}
+                >
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                </select>
+              ) : (
+                <input
+                  name={`parameter:${parameter.parameter_key}`}
+                  type={["integer", "number"].includes(parameter.value_type) ? "number" : "text"}
+                  defaultValue={String(parameter.default_value)}
+                  min={parameter.minimum ?? undefined}
+                  max={parameter.maximum ?? undefined}
+                  step={parameter.value_type === "integer" ? 1 : undefined}
+                  required
+                />
+              )}
+            </label>
+          ))}
+          <button className="primary-action" type="submit">
+            分析Jobを登録
+          </button>
+          <p className="form-boundary">
+            必須Capabilityと入力VersionはAPIでも再検証されます。実行結果は候補であり行政判断ではありません。
+          </p>
+        </form>
+      )}
+    </section>
+  );
 }
 
-function ReviewPage({ snapshot, roles, selectedId, detail, onSelect, mutate }: { snapshot: ServiceSnapshot; roles: ProductRole[]; selectedId: string | null; detail: Record<string, unknown> | null; onSelect(id: string): void; mutate: (path: string, method: "POST" | "PATCH", body: unknown, success: string) => Promise<boolean> }) {
-  const canReview = permits(roles, ["planner"]); const canField = permits(roles, ["field_staff", "planner"]); const investigation = detail?.investigation as Investigation | undefined; const reviews = (detail?.reviews ?? []) as Array<Record<string, unknown>>;
-  const fieldSubmit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (!selectedId) return; const data = new FormData(event.currentTarget); void mutate(`/api/v1/investigations/${selectedId}/field-observations`, "POST", { observation_type: data.get("observation_type"), notes: data.get("notes"), observed_at: new Date().toISOString() }, "現地観察を記録しました"); };
-  const decisionSubmit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (!selectedId) return; const data = new FormData(event.currentTarget); void mutate(`/api/v1/investigations/${selectedId}/decisions`, "POST", { review_request_id: data.get("review_request_id"), decision: data.get("decision"), reason: data.get("reason"), related_evidence_ids: String(data.get("evidence_ids") ?? "").split(",").map((item) => item.trim()).filter(Boolean) }, "Decision Recordを人の操作で記録しました"); };
-  return <><PageHeader eyebrow="REVIEW" title="Investigation Case Workflow" description="Findingから調査、Scenario、Review、Field、Decisionへ一つのCaseとして引き継ぎます。" /><div className="case-layout"><section className="service-panel case-list"><header><div><span>INVESTIGATIONS</span><h2>調査一覧</h2></div></header>{snapshot.investigations.length === 0 ? <ServiceEmpty title="Investigationはありません" detail="AnalystがFindingをtriageして調査を開始すると表示されます。" /> : snapshot.investigations.map((item) => <button type="button" key={item.id} className={selectedId === item.id ? "active" : ""} onClick={() => onSelect(item.id)}><div><strong>{item.title}</strong><small>{item.objective}</small></div><StatusChip value={item.status} /></button>)}</section><section className="service-panel case-detail"><header><div><span>CASE DETAIL</span><h2>{investigation?.title ?? "調査を選択"}</h2></div></header>{!selectedId ? <ServiceEmpty title="Investigationを選択してください" detail="技術IDではなく、調査タイトルと業務状態を中心に表示します。" /> : !detail ? <div className="inline-loading">Caseを読み込んでいます</div> : <div className="case-workflow"><ol><li className="done">Finding</li><li className={investigation?.status !== "open" ? "done" : "current"}>Investigation</li><li className={reviews.length ? "done" : ""}>Review</li><li className={((detail.field_observations ?? []) as unknown[]).length ? "done" : ""}>Field</li><li className={((detail.decisions ?? []) as unknown[]).length ? "done" : ""}>Decision</li></ol><p>{investigation?.objective}</p><div className="case-actions">{canReview && investigation?.status !== "closed" && <button type="button" onClick={() => void mutate(`/api/v1/investigations/${selectedId}/reviews`, "POST", { request_note: "Case画面からレビューを依頼" }, "レビューを依頼しました")}>Reviewを依頼</button>}{canReview && reviews.map((review) => review.status === "requested" ? <button key={String(review.id)} type="button" onClick={() => void mutate(`/api/v1/reviews/${String(review.id)}/status`, "PATCH", { expected_status: "requested", proposed_status: "in_review", review_note: "" }, "レビューを開始しました")}>Review開始</button> : review.status === "in_review" ? <button key={String(review.id)} type="button" onClick={() => void mutate(`/api/v1/reviews/${String(review.id)}/status`, "PATCH", { expected_status: "in_review", proposed_status: "reviewed", review_note: "根拠と限界を確認" }, "レビュー済みとして記録しました")}>Review完了</button> : null)}</div>{canField && <form className="case-form" onSubmit={fieldSubmit}><h3>現地観察</h3><label>観察種別<input name="observation_type" required defaultValue="access_check" /></label><label>記録<textarea name="notes" required /></label><button type="submit">現地記録を追加</button></form>}{canReview && investigation?.status === "decision_pending" && <form className="case-form decision" onSubmit={decisionSubmit}><h3>Decision Record</h3><label>Review<select name="review_request_id" required>{reviews.filter((review) => review.status === "reviewed").map((review) => <option key={String(review.id)} value={String(review.id)}>Reviewed · {formatDate(review.reviewed_at)}</option>)}</select></label><label>判断<select name="decision"><option value="adopted">adopted</option><option value="on_hold">on hold</option><option value="rejected">rejected</option><option value="additional_investigation">additional investigation</option></select></label><label>理由<textarea name="reason" required /></label><label>Evidence ID（カンマ区切り）<input name="evidence_ids" required /></label><button type="submit">人の判断として記録</button></form>}</div>}</section></div></>;
+function MeasuresPage({
+  snapshot,
+  roles,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const [selected, setSelected] = useState<string[]>([]);
+  const canCompare = permits(roles, ["analyst", "planner"]);
+  const city = snapshot.cityHome?.city.city_key;
+  const toggle = (id: string) => {
+    setSelected((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : current.length < 3
+          ? [...current, id]
+          : current,
+    );
+  };
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!city || selected.length < 2 || selected.length > 3) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/scenario-comparisons`,
+      "POST",
+      {
+        title: data.get("title"),
+        scenario_run_ids: selected,
+        comparison_dimensions: [
+          { key: "metrics", label: "指標" },
+          { key: "assumptions", label: "仮定" },
+          { key: "validation", label: "検証" },
+          { key: "field_checks", label: "現地確認" },
+        ],
+      },
+      "Scenario Comparisonを保存しました",
+    );
+    setSelected([]);
+  };
+  return (
+    <>
+      <PageHeader
+        eyebrow="MEASURES"
+        title="Scenario Library"
+        description="複数案を同じUrban Stateと明示した仮定で比較します。最良案や採用案を自動決定しません。"
+      />
+      <ServiceTable
+        caption="Scenario Library"
+        empty="この都市にはScenarioがありません"
+        rows={snapshot.scenarios as unknown as Array<Record<string, unknown>>}
+        rowKey={(row) => String(row.id)}
+        columns={[
+          {
+            key: "select",
+            label: "比較",
+            render: (row) => (
+              <input
+                type="checkbox"
+                aria-label={`${String(row.title)}を比較`}
+                checked={selected.includes(String(row.id))}
+                disabled={
+                  !canCompare ||
+                  (!selected.includes(String(row.id)) && selected.length >= 3)
+                }
+                onChange={() => toggle(String(row.id))}
+              />
+            ),
+          },
+          { key: "title", label: "Scenario" },
+          { key: "objective_mode", label: "比較軸" },
+          { key: "site_count", label: "地点数" },
+          {
+            key: "lifecycle_status",
+            label: "状態",
+            render: (row) => (
+              <StatusChip value={String(row.lifecycle_status)} />
+            ),
+          },
+          {
+            key: "review_status",
+            label: "Review",
+            render: (row) => <StatusChip value={String(row.review_status)} />,
+          },
+          {
+            key: "generated_at",
+            label: "生成",
+            render: (row) => formatDate(row.generated_at),
+          },
+        ]}
+      />
+      {canCompare && selected.length >= 2 && (
+        <form className="service-form comparison-form" onSubmit={submit}>
+          <label className="wide">
+            比較名
+            <input name="title" required maxLength={500} />
+          </label>
+          <div className="comparison-selection">
+            {selected.length}案を選択中（最大3案）
+          </div>
+          <button className="primary-action" type="submit">
+            比較を保存
+          </button>
+        </form>
+      )}
+      <section className="service-panel full comparison-library">
+        <header>
+          <div>
+            <span>COMPARISON LIBRARY</span>
+            <h2>保存済み比較</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="保存済みScenario Comparison"
+          empty="保存済みの比較はありません"
+          rows={snapshot.scenarioComparisons as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "title", label: "比較" },
+            {
+              key: "scenario_run_ids",
+              label: "案数",
+              render: (row) =>
+                Array.isArray(row.scenario_run_ids)
+                  ? row.scenario_run_ids.length
+                  : 0,
+            },
+            {
+              key: "comparison_dimensions",
+              label: "比較軸",
+              render: (row) =>
+                Array.isArray(row.comparison_dimensions)
+                  ? row.comparison_dimensions.length
+                  : 0,
+            },
+            { key: "created_by", label: "作成者" },
+            {
+              key: "created_at",
+              label: "保存",
+              render: (row) => formatDate(row.created_at),
+            },
+          ]}
+        />
+      </section>
+      <div className="service-boundary-note">
+        <strong>比較の境界</strong>
+        <p>
+          費用は自治体が登録したversion付き外部データだけを利用します。災害Stress
+          Testは明示した利用不可仮定の比較であり、災害予測ではありません。
+        </p>
+      </div>
+    </>
+  );
 }
 
-function EvidencePage({ snapshot }: { snapshot: ServiceSnapshot }) {
+function ReviewPage({
+  snapshot,
+  roles,
+  selectedId,
+  detail,
+  onSelect,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  selectedId: string | null;
+  detail: Record<string, unknown> | null;
+  onSelect(id: string): void;
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const canReview = permits(roles, ["planner"]);
+  const canField = permits(roles, ["field_staff", "planner"]);
+  const investigation = detail?.investigation as Investigation | undefined;
+  const reviews = (detail?.reviews ?? []) as Array<Record<string, unknown>>;
+  const fieldSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedId) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/investigations/${selectedId}/field-observations`,
+      "POST",
+      {
+        observation_type: data.get("observation_type"),
+        notes: data.get("notes"),
+        observed_at: new Date().toISOString(),
+      },
+      "現地観察を記録しました",
+    );
+  };
+  const decisionSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!selectedId) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/investigations/${selectedId}/decisions`,
+      "POST",
+      {
+        review_request_id: data.get("review_request_id"),
+        decision: data.get("decision"),
+        reason: data.get("reason"),
+        related_evidence_ids: String(data.get("evidence_ids") ?? "")
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+      },
+      "Decision Recordを人の操作で記録しました",
+    );
+  };
+  return (
+    <>
+      <PageHeader
+        eyebrow="REVIEW"
+        title="Investigation Case Workflow"
+        description="Findingから調査、Scenario、Review、Field、Decisionへ一つのCaseとして引き継ぎます。"
+      />
+      <div className="case-layout">
+        <section className="service-panel case-list">
+          <header>
+            <div>
+              <span>INVESTIGATIONS</span>
+              <h2>調査一覧</h2>
+            </div>
+          </header>
+          {snapshot.investigations.length === 0 ? (
+            <ServiceEmpty
+              title="Investigationはありません"
+              detail="AnalystがFindingをtriageして調査を開始すると表示されます。"
+            />
+          ) : (
+            snapshot.investigations.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                className={selectedId === item.id ? "active" : ""}
+                onClick={() => onSelect(item.id)}
+              >
+                <div>
+                  <strong>{item.title}</strong>
+                  <small>{item.objective}</small>
+                </div>
+                <StatusChip value={item.status} />
+              </button>
+            ))
+          )}
+        </section>
+        <section className="service-panel case-detail">
+          <header>
+            <div>
+              <span>CASE DETAIL</span>
+              <h2>{investigation?.title ?? "調査を選択"}</h2>
+            </div>
+          </header>
+          {!selectedId ? (
+            <ServiceEmpty
+              title="Investigationを選択してください"
+              detail="技術IDではなく、調査タイトルと業務状態を中心に表示します。"
+            />
+          ) : !detail ? (
+            <div className="inline-loading">Caseを読み込んでいます</div>
+          ) : (
+            <div className="case-workflow">
+              <ol>
+                <li className="done">Finding</li>
+                <li
+                  className={
+                    investigation?.status !== "open" ? "done" : "current"
+                  }
+                >
+                  Investigation
+                </li>
+                <li className={reviews.length ? "done" : ""}>Review</li>
+                <li
+                  className={
+                    ((detail.field_observations ?? []) as unknown[]).length
+                      ? "done"
+                      : ""
+                  }
+                >
+                  Field
+                </li>
+                <li
+                  className={
+                    ((detail.decisions ?? []) as unknown[]).length ? "done" : ""
+                  }
+                >
+                  Decision
+                </li>
+              </ol>
+              <p>{investigation?.objective}</p>
+              <div className="case-actions">
+                {canReview && investigation?.status !== "closed" && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      void mutate(
+                        `/api/v1/investigations/${selectedId}/reviews`,
+                        "POST",
+                        { request_note: "Case画面からレビューを依頼" },
+                        "レビューを依頼しました",
+                      )
+                    }
+                  >
+                    Reviewを依頼
+                  </button>
+                )}
+                {canReview &&
+                  reviews.map((review) =>
+                    review.status === "requested" ? (
+                      <button
+                        key={String(review.id)}
+                        type="button"
+                        onClick={() =>
+                          void mutate(
+                            `/api/v1/reviews/${String(review.id)}/status`,
+                            "PATCH",
+                            {
+                              expected_status: "requested",
+                              proposed_status: "in_review",
+                              review_note: "",
+                            },
+                            "レビューを開始しました",
+                          )
+                        }
+                      >
+                        Review開始
+                      </button>
+                    ) : review.status === "in_review" ? (
+                      <button
+                        key={String(review.id)}
+                        type="button"
+                        onClick={() =>
+                          void mutate(
+                            `/api/v1/reviews/${String(review.id)}/status`,
+                            "PATCH",
+                            {
+                              expected_status: "in_review",
+                              proposed_status: "reviewed",
+                              review_note: "根拠と限界を確認",
+                            },
+                            "レビュー済みとして記録しました",
+                          )
+                        }
+                      >
+                        Review完了
+                      </button>
+                    ) : null,
+                  )}
+                {canReview && investigation?.status === "field_check" && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      void mutate(
+                        `/api/v1/investigations/${selectedId}/status`,
+                        "PATCH",
+                        {
+                          expected_status: "field_check",
+                          proposed_status: "decision_pending",
+                          note: "現地記録を確認し、Decision Record作成へ進む",
+                        },
+                        "現地確認を完了しました",
+                      )
+                    }
+                  >
+                    現地確認を完了
+                  </button>
+                )}
+              </div>
+              {canField && (
+                <form className="case-form" onSubmit={fieldSubmit}>
+                  <h3>現地観察</h3>
+                  <label>
+                    観察種別
+                    <input
+                      name="observation_type"
+                      required
+                      defaultValue="access_check"
+                    />
+                  </label>
+                  <label>
+                    記録
+                    <textarea name="notes" required />
+                  </label>
+                  <button type="submit">現地記録を追加</button>
+                </form>
+              )}
+              {canReview && investigation?.status === "decision_pending" && (
+                <form className="case-form decision" onSubmit={decisionSubmit}>
+                  <h3>Decision Record</h3>
+                  <label>
+                    Review
+                    <select name="review_request_id" required>
+                      {reviews
+                        .filter((review) => review.status === "reviewed")
+                        .map((review) => (
+                          <option
+                            key={String(review.id)}
+                            value={String(review.id)}
+                          >
+                            Reviewed · {formatDate(review.reviewed_at)}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                  <label>
+                    判断
+                    <select name="decision">
+                      <option value="adopted">adopted</option>
+                      <option value="on_hold">on hold</option>
+                      <option value="rejected">rejected</option>
+                      <option value="additional_investigation">
+                        additional investigation
+                      </option>
+                    </select>
+                  </label>
+                  <label>
+                    理由
+                    <textarea name="reason" required />
+                  </label>
+                  <label>
+                    Evidence ID（カンマ区切り）
+                    <input name="evidence_ids" required />
+                  </label>
+                  <button type="submit">人の判断として記録</button>
+                </form>
+              )}
+            </div>
+          )}
+        </section>
+      </div>
+    </>
+  );
+}
+
+function EvidencePage({
+  snapshot,
+  roles,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
   const datasets = snapshot.cityHome?.datasets ?? [];
-  return <><PageHeader eyebrow="EVIDENCE CENTER" title="根拠・検証・Report" description="出典、version、アルゴリズム、検証、現地記録、Decision Recordを再現可能なmanifestへまとめます。" /><div className="service-evidence-grid"><section className="service-panel"><header><div><span>SOURCE LINEAGE</span><h2>現在参照するデータ</h2></div></header>{datasets.length === 0 ? <ServiceEmpty title="根拠対象データがありません" detail="Data Hubでpromotedになった実データだけがEvidenceの入力になります。" /> : datasets.map((dataset) => <article className="evidence-source" key={dataset.version_id}><StatusChip value={dataset.data_classification} /><div><strong>{dataset.title} · {dataset.dataset_year}</strong><small>{dataset.dataset_key} / {dataset.version_key} · {dataset.quality_status}</small></div></article>)}</section><section className="service-panel"><header><div><span>EXPORT BOUNDARY</span><h2>公開と内部の分離</h2></div></header><div className="evidence-policy"><strong>Internal</strong><p>担当者、コメント、現地添付、内部Decision、restrictedデータを含められます。</p><strong>Public</strong><p>public分類の集計・出典・検証済み成果だけを含み、個人情報・内部注記を除外します。</p></div></section></div><div className="service-boundary-note"><strong>決定論的Report</strong><p>Reportは保存済みのversion付き入力とmanifestから再生成し、artifact SHA-256を記録します。画面表示の都合で数値や出典を作りません。</p></div></>;
+  const city = snapshot.cityHome?.city.city_key;
+  const canCreate = permits(roles, ["planner"]);
+  const [reportType, setReportType] = useState("data_quality");
+  const createReport = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!city) return;
+    const data = new FormData(event.currentTarget);
+    void mutate(
+      `/api/v1/cities/${encodeURIComponent(city)}/reports`,
+      "POST",
+      {
+        report_type: reportType,
+        title: data.get("title"),
+        investigation_id:
+          reportType === "investigation" ? data.get("subject_id") : null,
+        scenario_comparison_id:
+          reportType === "scenario_comparison" ? data.get("subject_id") : null,
+        data_classification: data.get("data_classification"),
+      },
+      "保存済み記録からReportを生成しました",
+    );
+  };
+  return (
+    <>
+      <PageHeader
+        eyebrow="EVIDENCE CENTER"
+        title="根拠・検証・Report"
+        description="出典、version、アルゴリズム、検証、現地記録、Decision Recordを再現可能なmanifestへまとめます。"
+      />
+      {canCreate && city && (
+        <form className="service-form report-form" onSubmit={createReport}>
+          <label>
+            Report種別
+            <select
+              name="report_type"
+              value={reportType}
+              onChange={(event) => setReportType(event.target.value)}
+            >
+              <option value="data_quality">Data Quality</option>
+              <option value="investigation">Investigation</option>
+              <option value="scenario_comparison">Scenario Comparison</option>
+              <option value="annual_change">Annual Change</option>
+              <option value="resilience_review">Resilience Review</option>
+            </select>
+          </label>
+          <label>
+            タイトル
+            <input name="title" required maxLength={500} />
+          </label>
+          {(reportType === "investigation" ||
+            reportType === "scenario_comparison") && (
+            <label>
+              対象ID
+              <input name="subject_id" required />
+            </label>
+          )}
+          <label>
+            データ分類
+            <select name="data_classification" defaultValue="internal">
+              <option value="internal">internal</option>
+              <option value="restricted">restricted</option>
+              {reportType === "data_quality" && (
+                <option value="public">public（public入力のみ）</option>
+              )}
+            </select>
+          </label>
+          <button className="primary-action" type="submit">
+            決定論的Reportを生成
+          </button>
+        </form>
+      )}
+      <div className="service-evidence-grid">
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>SOURCE LINEAGE</span>
+              <h2>現在参照するデータ</h2>
+            </div>
+          </header>
+          {datasets.length === 0 ? (
+            <ServiceEmpty
+              title="根拠対象データがありません"
+              detail="Data Hubでpromotedになった実データだけがEvidenceの入力になります。"
+            />
+          ) : (
+            datasets.map((dataset) => (
+              <article className="evidence-source" key={dataset.version_id}>
+                <StatusChip value={dataset.data_classification} />
+                <div>
+                  <strong>
+                    {dataset.title} · {dataset.dataset_year}
+                  </strong>
+                  <small>
+                    {dataset.dataset_key} / {dataset.version_key} ·{" "}
+                    {dataset.quality_status}
+                  </small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>EXPORT BOUNDARY</span>
+              <h2>公開と内部の分離</h2>
+            </div>
+          </header>
+          <div className="evidence-policy">
+            <strong>Internal</strong>
+            <p>
+              担当者、コメント、現地添付、内部Decision、restrictedデータを含められます。
+            </p>
+            <strong>Public</strong>
+            <p>
+              public分類の集計・出典・検証済み成果だけを含み、個人情報・内部注記を除外します。
+            </p>
+          </div>
+        </section>
+      </div>
+      <section className="service-panel full evidence-library">
+        <header>
+          <div>
+            <span>REPORT LIBRARY</span>
+            <h2>保存済みReport</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="保存済みReport"
+          empty="Reportはまだ生成されていません"
+          rows={(snapshot.evidence?.reports ?? []) as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "title", label: "Report" },
+            { key: "report_type", label: "種別" },
+            {
+              key: "data_classification",
+              label: "分類",
+              render: (row) => (
+                <StatusChip value={String(row.data_classification)} />
+              ),
+            },
+            { key: "generator_version", label: "Generator" },
+            {
+              key: "artifact_sha256",
+              label: "SHA-256",
+              render: (row) => String(row.artifact_sha256).slice(0, 12),
+            },
+            {
+              key: "created_at",
+              label: "生成",
+              render: (row) => formatDate(row.created_at),
+            },
+            {
+              key: "artifact",
+              label: "Artifact",
+              render: (row) => (
+                <a
+                  className="table-action"
+                  href={serviceApi.url(
+                    `/api/v1/reports/${String(row.id)}/artifact`,
+                  )}
+                >
+                  JSON
+                </a>
+              ),
+            },
+            {
+              key: "export",
+              label: "Export記録",
+              render: (row) =>
+                canCreate ? (
+                  <button
+                    className="table-action"
+                    type="button"
+                    onClick={() =>
+                      void mutate(
+                        `/api/v1/reports/${String(row.id)}/exports`,
+                        "POST",
+                        { export_scope: "internal" },
+                        "内部Export記録を作成しました",
+                      )
+                    }
+                  >
+                    internal
+                  </button>
+                ) : (
+                  <span>—</span>
+                ),
+            },
+          ]}
+        />
+      </section>
+      <div className="service-two-column evidence-records">
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>MANIFESTS</span>
+              <h2>Evidence Manifest</h2>
+            </div>
+          </header>
+          {(snapshot.evidence?.evidence_centers ?? []).length === 0 ? (
+            <ServiceEmpty
+              title="Evidence Manifestはありません"
+              detail="出典、アルゴリズム、検証、現地記録、Decisionを保存すると表示されます。"
+            />
+          ) : (
+            snapshot.evidence?.evidence_centers.map((item) => (
+              <article className="evidence-source" key={item.id}>
+                <StatusChip value={item.data_classification} />
+                <div>
+                  <strong>{item.manifest_sha256.slice(0, 16)}…</strong>
+                  <small>
+                    field {item.field_evidence_count} · decision {item.decision_count} · {formatDate(item.created_at)}
+                  </small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>VALIDATION</span>
+              <h2>検証履歴</h2>
+            </div>
+          </header>
+          {(snapshot.evidence?.validation_runs ?? []).length === 0 ? (
+            <ServiceEmpty
+              title="検証履歴はありません"
+              detail="実行済みの一次モデルと参照モデルの比較だけを表示します。"
+            />
+          ) : (
+            snapshot.evidence?.validation_runs.map((item) => (
+              <article className="evidence-source" key={item.id}>
+                <StatusChip value={item.validation_status} />
+                <div>
+                  <strong>{item.claim_key}</strong>
+                  <small>
+                    {item.method_key} · {item.algorithm_version} · {formatDate(item.generated_at)}
+                  </small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+      </div>
+      <div className="service-boundary-note">
+        <strong>決定論的Report</strong>
+        <p>
+          Reportは保存済みのversion付き入力とmanifestから再生成し、artifact
+          SHA-256を記録します。画面表示の都合で数値や出典を作りません。
+        </p>
+      </div>
+    </>
+  );
+}
+
+function OperationsPage({
+  snapshot,
+  roles,
+  mutate,
+}: {
+  snapshot: ServiceSnapshot;
+  roles: ProductRole[];
+  mutate: (
+    path: string,
+    method: "POST" | "PATCH",
+    body: unknown,
+    success: string,
+  ) => Promise<boolean>;
+}) {
+  const operations = snapshot.operations;
+  const canOperate = permits(roles, ["administrator"]);
+  if (!operations)
+    return (
+      <>
+        <PageHeader
+          eyebrow="OPERATIONS"
+          title="サービス運用"
+          description="Job、データ更新、backup記録、release versionを確認します。"
+        />
+        <ServiceEmpty
+          title="このRoleでは運用情報を表示できません"
+          detail="Data ManagerまたはAdministratorの権限が必要です。"
+        />
+      </>
+    );
+
+  const jobOperation = (
+    jobId: string,
+    action: "retry" | "cancel",
+    expectedState: "failed" | "queued",
+  ) => {
+    if (
+      action === "cancel" &&
+      !window.confirm("未実行のJobをcancelします。処理を続けますか？")
+    )
+      return;
+    void mutate(
+      `/api/v1/jobs/${jobId}/operations`,
+      "POST",
+      {
+        action,
+        expected_state: expectedState,
+        reason:
+          action === "retry"
+            ? "Operations画面で失敗内容を確認して再実行"
+            : "Operations画面で入力条件を再確認するためcancel",
+        cancel_confirmation: action === "cancel" ? "cancel" : null,
+      },
+      action === "retry"
+        ? "Jobを再実行待ちに戻しました"
+        : "Jobをcancelしました",
+    );
+  };
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="OPERATIONS"
+        title="サービス運用"
+        description="内部Job名は運用担当だけに表示し、進捗は実Stageで確認します。架空の進捗率は使いません。"
+      />
+      <div className="service-kpis operations-kpis">
+        {(["queued", "running", "failed", "cancelled"] as const).map(
+          (state) => (
+            <button type="button" key={state}>
+              <span>{state.toUpperCase()}</span>
+              <strong>{operations.overview.jobs[state] ?? 0}</strong>
+              <small>Job</small>
+            </button>
+          ),
+        )}
+      </div>
+      <section className="service-panel full">
+        <header>
+          <div>
+            <span>JOB OPERATIONS</span>
+            <h2>実行履歴</h2>
+          </div>
+        </header>
+        <ServiceTable
+          caption="Job実行履歴"
+          empty="Job履歴はありません"
+          rows={operations.jobs as unknown as Array<Record<string, unknown>>}
+          rowKey={(row) => String(row.id)}
+          columns={[
+            { key: "city_name", label: "都市" },
+            {
+              key: "job_type",
+              label: "処理",
+              render: (row) => String(row.job_type).replaceAll("_", " "),
+            },
+            {
+              key: "state",
+              label: "状態",
+              render: (row) => <StatusChip value={String(row.state)} />,
+            },
+            { key: "current_stage", label: "現在Stage" },
+            { key: "algorithm_version", label: "Algorithm" },
+            {
+              key: "queued_at",
+              label: "登録",
+              render: (row) => formatDate(row.queued_at),
+            },
+            {
+              key: "action",
+              label: "操作",
+              render: (row) => {
+                if (!canOperate) return <span>—</span>;
+                if (row.state === "failed")
+                  return (
+                    <button
+                      className="table-action"
+                      type="button"
+                      onClick={() =>
+                        jobOperation(String(row.id), "retry", "failed")
+                      }
+                    >
+                      retry
+                    </button>
+                  );
+                if (row.state === "queued")
+                  return (
+                    <button
+                      className="table-action destructive"
+                      type="button"
+                      onClick={() =>
+                        jobOperation(String(row.id), "cancel", "queued")
+                      }
+                    >
+                      cancel
+                    </button>
+                  );
+                return <span>—</span>;
+              },
+            },
+          ]}
+        />
+      </section>
+      <div className="service-two-column operations-records">
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>BACKUP RECORDS</span>
+              <h2>Backup / Restore</h2>
+            </div>
+          </header>
+          {operations.overview.backups.length === 0 ? (
+            <ServiceEmpty
+              title="tenant backup記録はありません"
+              detail="実行はdeployment operator境界です。復元後はintegrity validationを記録します。"
+            />
+          ) : (
+            operations.overview.backups.map((backup) => (
+              <article className="quality-row" key={String(backup.id)}>
+                <StatusChip value={String(backup.status)} />
+                <div>
+                  <strong>{String(backup.backup_type)}</strong>
+                  <small>{formatDate(backup.started_at)}</small>
+                </div>
+              </article>
+            ))
+          )}
+        </section>
+        <section className="service-panel">
+          <header>
+            <div>
+              <span>RELEASE</span>
+              <h2>Versionと移行計画</h2>
+            </div>
+          </header>
+          {operations.overview.releases.map((release) => (
+            <article className="quality-row" key={String(release.version)}>
+              <StatusChip value={String(release.release_status)} />
+              <div>
+                <strong>{String(release.version)}</strong>
+                <small>
+                  DB {String(release.migration_version)} · Frontend {String(release.frontend_asset_version)}
+                </small>
+              </div>
+            </article>
+          ))}
+        </section>
+      </div>
+      <div className="service-boundary-note">
+        <strong>SLO / cancellation boundary</strong>
+        <p>
+          測定基盤はSLAを断定しません。APIから安全にcancelできるのはqueued
+          Jobだけです。running processは運用者が実行環境で停止し、監査記録を残します。
+        </p>
+      </div>
+    </>
+  );
 }

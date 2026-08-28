@@ -114,6 +114,7 @@ ROLE_PERMISSIONS = {
             "evidence:read",
             "finding:read",
             "investigation:read",
+            "operations:read",
             "scenario:read",
             "validation:reference:register",
             "validation:run",

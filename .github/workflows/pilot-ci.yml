@@ -172,6 +172,8 @@ jobs:
           pytest
           backend/integration/test_postgis_platform.py::test_real_canonical_scenarios_spatial_api_and_comparison
           backend/integration/test_postgis_platform.py::test_temporal_resilience_and_offline_field_postgis_contract
+          backend/integration/test_municipal_service.py::test_role_based_finding_to_human_decision_acceptance
+          backend/integration/test_municipal_service.py::test_organization_a_b_isolation_for_api_and_database_constraints
           -q
       - name: Start API and verify health plus database readiness
         run: |

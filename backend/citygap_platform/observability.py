@@ -6,9 +6,11 @@ import json
 import logging
 import time
 import uuid
+from collections import defaultdict
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
+from threading import Lock
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -25,6 +27,43 @@ class RequestContext:
 
 
 _CONTEXT: ContextVar[RequestContext | None] = ContextVar("citygap_request_context", default=None)
+_METRIC_LOCK = Lock()
+_REQUEST_COUNT: dict[tuple[str, str, str], int] = defaultdict(int)
+_REQUEST_DURATION_MS: dict[tuple[str, str], tuple[int, float]] = defaultdict(lambda: (0, 0.0))
+
+
+def reset_request_metrics() -> None:
+    """Clear process-local metrics for isolated tests."""
+
+    with _METRIC_LOCK:
+        _REQUEST_COUNT.clear()
+        _REQUEST_DURATION_MS.clear()
+
+
+def render_request_metrics() -> str:
+    """Render bounded-cardinality process metrics in Prometheus text format."""
+
+    lines = [
+        "# HELP citygap_http_requests_total HTTP requests handled by this API process.",
+        "# TYPE citygap_http_requests_total counter",
+    ]
+    with _METRIC_LOCK:
+        for (method, route, status_class), value in sorted(_REQUEST_COUNT.items()):
+            lines.append(
+                f'citygap_http_requests_total{{method="{method}",route="{route}",'
+                f'status_class="{status_class}"}} {value}'
+            )
+        lines.extend(
+            [
+                "# HELP citygap_http_request_duration_ms HTTP request duration by route.",
+                "# TYPE citygap_http_request_duration_ms summary",
+            ]
+        )
+        for (method, route), (count, duration_sum) in sorted(_REQUEST_DURATION_MS.items()):
+            labels = f'method="{method}",route="{route}"'
+            lines.append(f"citygap_http_request_duration_ms_count{{{labels}}} {count}")
+            lines.append(f"citygap_http_request_duration_ms_sum{{{labels}}} {duration_sum:.3f}")
+    return "\n".join(lines) + "\n"
 
 
 def current_request_context() -> RequestContext:
@@ -86,6 +125,13 @@ async def request_observability_middleware(request: Request, call_next):
         return response
     finally:
         duration_ms = round((time.perf_counter() - started) * 1000, 3)
+        route = request.scope.get("route")
+        route_path = getattr(route, "path", "unmatched")
+        metric_key = (request.method, route_path)
+        with _METRIC_LOCK:
+            _REQUEST_COUNT[(request.method, route_path, f"{status // 100}xx")] += 1
+            count, duration_sum = _REQUEST_DURATION_MS[metric_key]
+            _REQUEST_DURATION_MS[metric_key] = (count + 1, duration_sum + duration_ms)
         parts = request.url.path.strip("/").split("/")
         city = parts[1] if len(parts) > 1 and parts[0] == "cities" else None
         LOGGER.info(

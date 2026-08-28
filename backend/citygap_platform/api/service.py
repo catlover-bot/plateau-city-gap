@@ -7,6 +7,8 @@ from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from backend.citygap_platform.domain.municipal_service import (
@@ -18,6 +20,7 @@ from backend.citygap_platform.domain.municipal_service import (
     InvestigationStatus,
     ReviewStatus,
 )
+from backend.citygap_platform.observability import render_request_metrics
 from backend.citygap_platform.security.auth import (
     Identity,
     require_organization,
@@ -69,6 +72,63 @@ class FindingCreateRequest(StrictRequest):
         if value is not None and not {"type", "coordinates"} <= set(value):
             raise ValueError("geometry must be a GeoJSON geometry")
         return value
+
+
+class CityCreateRequest(StrictRequest):
+    city_code: str = Field(pattern=r"^[0-9]{5}$")
+    city_key: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,62}$")
+    name: str = Field(min_length=1, max_length=300)
+    prefecture_code: str = Field(pattern=r"^[0-9]{2}$")
+    prefecture_name: str = Field(min_length=1, max_length=100)
+    analysis_crs: str = Field(pattern=r"^EPSG:[0-9]{4,6}$")
+
+
+class DatasetRegisterRequest(StrictRequest):
+    dataset_key: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{1,99}$")
+    title: str = Field(min_length=1, max_length=500)
+    provider: str = Field(min_length=1, max_length=500)
+    dataset_category: Literal[
+        "plateau",
+        "population",
+        "facilities",
+        "transport",
+        "hazard",
+        "planning",
+        "municipal_custom",
+    ]
+    data_classification: DataClassification = DataClassification.INTERNAL
+    version_key: str = Field(min_length=1, max_length=200)
+    dataset_year: int = Field(ge=1900, le=2200)
+    data_format: str = Field(min_length=1, max_length=100)
+    source_url: str | None = Field(default=None, max_length=2000)
+    license: str | None = Field(default=None, max_length=500)
+    declared_source_crs: str | None = Field(default=None, max_length=100)
+
+
+class UrbanStateCreateRequest(StrictRequest):
+    state_key: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{1,99}$")
+    label: str = Field(min_length=1, max_length=500)
+    effective_date: date
+    state_type: Literal["observed", "future", "scenario"] = "observed"
+    primary_dataset_version_id: UUID
+    base_state_id: UUID | None = None
+    source_verified: bool
+    population_model: str | None = Field(default=None, max_length=2000)
+    fixed_service_assumption: bool = False
+
+    @model_validator(mode="after")
+    def state_contract(self) -> UrbanStateCreateRequest:
+        if self.state_type != "observed" and self.base_state_id is None:
+            raise ValueError("Future and scenario states require base_state_id")
+        if self.state_type == "future" and not self.population_model:
+            raise ValueError("Future states require a declared population_model")
+        return self
+
+
+class UrbanStateTransitionRequest(StrictRequest):
+    expected_status: Literal["draft", "validated", "current", "superseded", "archived"]
+    proposed_status: Literal["draft", "validated", "current", "superseded", "archived"]
+    note: str = Field(min_length=1, max_length=4000)
 
 
 class FindingTransitionRequest(StrictRequest):
@@ -164,6 +224,21 @@ class DatasetTransitionRequest(StrictRequest):
     note: str = Field(min_length=1, max_length=4000)
 
 
+class AnalysisRunCreateRequest(StrictRequest):
+    analysis_id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{1,99}$")
+    analysis_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
+    urban_state_id: UUID
+    dataset_versions: dict[str, UUID] = Field(min_length=1, max_length=30)
+    parameters: dict[str, Any] = Field(default_factory=dict, max_length=50)
+
+    @field_validator("dataset_versions")
+    @classmethod
+    def safe_input_roles(cls, value: dict[str, UUID]) -> dict[str, UUID]:
+        if any(not role.replace("_", "").isalnum() or len(role) > 100 for role in value):
+            raise ValueError("dataset input roles must be bounded identifiers")
+        return value
+
+
 class ScenarioComparisonCreateRequest(StrictRequest):
     title: str = Field(min_length=1, max_length=500)
     scenario_run_ids: list[UUID] = Field(min_length=2, max_length=3)
@@ -195,10 +270,45 @@ class EvidenceCenterCreateRequest(StrictRequest):
         return self
 
 
+class ReportCreateRequest(StrictRequest):
+    report_type: Literal[
+        "investigation",
+        "scenario_comparison",
+        "annual_change",
+        "resilience_review",
+        "data_quality",
+    ]
+    title: str = Field(min_length=1, max_length=500)
+    investigation_id: UUID | None = None
+    scenario_comparison_id: UUID | None = None
+    data_classification: DataClassification = DataClassification.INTERNAL
+
+
+class ReportExportRequest(StrictRequest):
+    export_scope: Literal["public", "internal"]
+
+
 class UsageEventRequest(StrictRequest):
     event_name: Literal["feature_used", "workflow_completed", "workflow_error"]
     feature_key: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{1,99}$")
     city: str | None = Field(default=None, max_length=100)
+
+
+class JobOperationRequest(StrictRequest):
+    action: Literal["retry", "cancel"]
+    expected_state: Literal["queued", "failed"]
+    reason: str = Field(min_length=1, max_length=4000)
+    cancel_confirmation: Literal["cancel"] | None = None
+
+    @model_validator(mode="after")
+    def operation_matches_state(self) -> JobOperationRequest:
+        if self.action == "cancel" and (
+            self.expected_state != "queued" or self.cancel_confirmation != "cancel"
+        ):
+            raise ValueError("Cancelling requires queued state and explicit confirmation")
+        if self.action == "retry" and self.expected_state != "failed":
+            raise ValueError("Retry requires failed state")
+        return self
 
 
 @router.get("/me")
@@ -240,6 +350,22 @@ def cities(
     return {"items": repo.service_cities(organization_id)}
 
 
+@router.post(
+    "/cities",
+    status_code=201,
+    dependencies=[Depends(require_permission("organization:manage"))],
+)
+def create_city(
+    body: CityCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        return repo.create_service_city(organization_id, body.model_dump(mode="json"))
+    except ValueError as error:
+        raise _conflict(error) from error
+
+
 @router.get("/cities/{city}/home", dependencies=[Depends(require_permission("platform:read"))])
 def city_home(
     city: str,
@@ -249,6 +375,84 @@ def city_home(
     result = repo.city_service_home(organization_id, city)
     if result is None:
         raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/onboarding",
+    dependencies=[Depends(require_permission("platform:read"))],
+)
+def city_onboarding(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.city_onboarding(organization_id, city)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/urban-states",
+    dependencies=[Depends(require_permission("platform:read"))],
+)
+def urban_states(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    items = repo.service_urban_states(organization_id, city, limit)
+    if items is None:
+        raise _not_found("City")
+    return {"items": items}
+
+
+@router.post(
+    "/cities/{city}/urban-states",
+    status_code=201,
+    dependencies=[Depends(require_permission("dataset:promote"))],
+)
+def create_urban_state(
+    city: str,
+    body: UrbanStateCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_service_urban_state(
+            organization_id, city, body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.patch(
+    "/urban-states/{state_id}/status",
+    dependencies=[Depends(require_permission("dataset:promote"))],
+)
+def transition_urban_state(
+    state_id: UUID,
+    body: UrbanStateTransitionRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.transition_service_urban_state(
+            organization_id,
+            str(state_id),
+            body.expected_status,
+            body.proposed_status,
+            body.note,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Urban State")
     return result
 
 
@@ -578,6 +782,26 @@ def data_hub(
     return result
 
 
+@router.post(
+    "/cities/{city}/datasets",
+    status_code=201,
+    dependencies=[Depends(require_permission("dataset:register"))],
+)
+def register_dataset(
+    city: str,
+    body: DatasetRegisterRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.register_service_dataset(organization_id, city, body.model_dump(mode="json"))
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
 @router.patch("/dataset-versions/{version_id}/status")
 def transition_dataset_version(
     version_id: UUID,
@@ -627,6 +851,44 @@ def analysis_definitions(
 
 
 @router.get(
+    "/cities/{city}/analysis-runs",
+    dependencies=[Depends(require_permission("analysis:read"))],
+)
+def analysis_runs(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    items = repo.service_analysis_runs(organization_id, city, limit)
+    if items is None:
+        raise _not_found("City")
+    return {"items": items}
+
+
+@router.post(
+    "/cities/{city}/analysis-runs",
+    status_code=202,
+    dependencies=[Depends(require_permission("analysis:run"))],
+)
+def create_analysis_run(
+    city: str,
+    body: AnalysisRunCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_service_analysis_run(
+            organization_id, city, body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
     "/cities/{city}/scenarios",
     dependencies=[Depends(require_permission("scenario:read"))],
 )
@@ -637,6 +899,22 @@ def scenario_library(
     limit: Annotated[int, Query(ge=1, le=100)] = 30,
 ) -> dict[str, Any]:
     items = repo.scenario_library(organization_id, city, limit)
+    if items is None:
+        raise _not_found("City")
+    return {"items": items}
+
+
+@router.get(
+    "/cities/{city}/scenario-comparisons",
+    dependencies=[Depends(require_permission("scenario:read"))],
+)
+def scenario_comparisons(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    items = repo.scenario_comparisons(organization_id, city, limit)
     if items is None:
         raise _not_found("City")
     return {"items": items}
@@ -675,9 +953,93 @@ def create_evidence_center(
     organization_id: Annotated[str, Depends(require_organization)],
     repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
 ) -> dict[str, Any]:
-    result = repo.create_evidence_center(organization_id, city, body.model_dump(mode="json"))
+    try:
+        result = repo.create_evidence_center(organization_id, city, body.model_dump(mode="json"))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
     if result is None:
         raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/cities/{city}/evidence",
+    dependencies=[Depends(require_permission("evidence:read"))],
+)
+def evidence_library(
+    city: str,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> dict[str, Any]:
+    result = repo.evidence_library(organization_id, city, limit)
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.post(
+    "/cities/{city}/reports",
+    status_code=201,
+    dependencies=[Depends(require_permission("report:create"))],
+)
+def create_report(
+    city: str,
+    body: ReportCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_report_record(organization_id, city, body.model_dump(mode="json"))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("City")
+    return result
+
+
+@router.get(
+    "/reports/{report_id}/artifact",
+    dependencies=[Depends(require_permission("evidence:read"))],
+)
+def report_artifact(
+    report_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> JSONResponse:
+    try:
+        result = repo.report_artifact(organization_id, str(report_id))
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    if result is None:
+        raise _not_found("Report")
+    return JSONResponse(
+        content=jsonable_encoder(result["structured_content"]),
+        headers={
+            "ETag": f'"{result["artifact_sha256"]}"',
+            "Content-Disposition": f'attachment; filename="citygap-report-{report_id}.json"',
+            "X-CITYGAP-Data-Classification": result["data_classification"],
+        },
+    )
+
+
+@router.post(
+    "/reports/{report_id}/exports",
+    status_code=201,
+    dependencies=[Depends(require_permission("evidence:export"))],
+)
+def export_report(
+    report_id: UUID,
+    body: ReportExportRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.export_report(organization_id, str(report_id), body.export_scope)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    if result is None:
+        raise _not_found("Report")
     return result
 
 
@@ -715,9 +1077,90 @@ def usage_event(
     return {"accepted": True}
 
 
-@router.get("/service-health")
-def service_health(
-    _organization_id: Annotated[str, Depends(require_organization)],
+@router.get(
+    "/operations/overview",
+    dependencies=[Depends(require_permission("operations:read"))],
+)
+def operations_overview(
+    organization_id: Annotated[str, Depends(require_organization)],
     repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
 ) -> dict[str, Any]:
-    return repo.service_health()
+    return repo.operations_overview(organization_id)
+
+
+@router.get(
+    "/jobs",
+    dependencies=[Depends(require_permission("operations:read"))],
+)
+def jobs(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    state: Annotated[
+        Literal["queued", "running", "succeeded", "failed", "cancelled"] | None,
+        Query(),
+    ] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 50,
+) -> dict[str, Any]:
+    return {"items": repo.service_jobs(organization_id, state, limit)}
+
+
+@router.get(
+    "/jobs/{job_id}",
+    dependencies=[Depends(require_permission("operations:read"))],
+)
+def job_detail(
+    job_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.service_job_detail(organization_id, str(job_id))
+    if result is None:
+        raise _not_found("Job")
+    return result
+
+
+@router.post(
+    "/jobs/{job_id}/operations",
+    dependencies=[Depends(require_permission("operations:operate"))],
+)
+def operate_job(
+    job_id: UUID,
+    body: JobOperationRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.operate_service_job(
+            organization_id,
+            str(job_id),
+            body.action,
+            body.expected_state,
+            body.reason,
+            body.cancel_confirmation,
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Job")
+    return result
+
+
+@router.get("/service-health")
+def service_health(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    return repo.service_health(organization_id)
+
+
+@router.get(
+    "/metrics",
+    response_class=PlainTextResponse,
+    dependencies=[Depends(require_permission("metrics:read"))],
+)
+def metrics(
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> PlainTextResponse:
+    body = render_request_metrics() + repo.prometheus_metrics(organization_id)
+    return PlainTextResponse(body, media_type="text/plain; version=0.0.4")

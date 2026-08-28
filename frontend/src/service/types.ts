@@ -1,4 +1,10 @@
-export type ProductRole = "viewer" | "analyst" | "planner" | "field_staff" | "data_manager" | "administrator";
+export type ProductRole =
+  | "viewer"
+  | "analyst"
+  | "planner"
+  | "field_staff"
+  | "data_manager"
+  | "administrator";
 
 export interface Organization {
   id: string;
@@ -43,6 +49,7 @@ export interface Capability {
 export interface DatasetSummary {
   dataset_id?: string;
   dataset_key: string;
+  dataset_category?: string;
   title: string;
   provider?: string;
   data_classification: "public" | "internal" | "restricted";
@@ -55,6 +62,22 @@ export interface DatasetSummary {
   lifecycle_status?: string;
   analysis_ready: boolean;
   registered_at?: string;
+}
+
+export interface OnboardingPayload {
+  city: CityHomePayload["city"];
+  steps: Array<{
+    key: string;
+    status: "missing" | "in_progress" | "complete";
+    registered_versions?: number;
+    promoted_versions?: number;
+    count?: number;
+  }>;
+  capabilities: Array<{
+    capability: string;
+    status: "available" | "partial" | "unavailable";
+    note: string;
+  }>;
 }
 
 export interface ActivityEvent {
@@ -139,7 +162,11 @@ export interface AnalysisDefinition {
   name: string;
   purpose: string;
   required_capabilities: string[];
-  input_contract: Record<string, unknown>;
+  input_contract: {
+    required?: string[];
+    context_roles?: string[];
+    dataset_roles?: string[];
+  };
   output_contract: Record<string, unknown>;
   algorithm_description: string;
   claim_boundary: string;
@@ -150,7 +177,107 @@ export interface AnalysisDefinition {
     default_value: unknown;
     minimum: number | null;
     maximum: number | null;
+    allowed_values?: unknown[] | null;
   }>;
+}
+
+export interface UrbanStateSummary {
+  id: string;
+  state_key: string;
+  label: string;
+  effective_date: string;
+  state_type: string;
+  lifecycle_status: string;
+  source_verified: boolean;
+}
+
+export interface AnalysisRunSummary {
+  id: string;
+  analysis_type: string;
+  status: string;
+  algorithm_version: string;
+  config_hash: string;
+  parameters: Record<string, unknown>;
+  result_hash: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  created_by: string;
+  dataset_version_ids: string[];
+  job_id: string | null;
+  job_state: string | null;
+  job_stage: string | null;
+}
+
+export interface EvidenceLibrary {
+  city: CityHomePayload["city"];
+  evidence_centers: Array<{
+    id: string;
+    investigation_id: string | null;
+    scenario_run_id: string | null;
+    manifest_sha256: string;
+    data_classification: "public" | "internal" | "restricted";
+    created_by: string;
+    created_at: string;
+    field_evidence_count: number;
+    decision_count: number;
+  }>;
+  reports: Array<{
+    id: string;
+    report_type: string;
+    title: string;
+    artifact_sha256: string;
+    data_classification: "public" | "internal" | "restricted";
+    generator_version: string;
+    created_by: string;
+    created_at: string;
+  }>;
+  validation_runs: Array<{
+    id: string;
+    claim_key: string;
+    method_key: string;
+    validation_status: string;
+    run_status: string;
+    algorithm_version: string;
+    generated_at: string;
+  }>;
+}
+
+export interface ServiceJobSummary {
+  id: string;
+  city_key: string;
+  city_name: string;
+  job_type: string;
+  state: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  current_stage: string | null;
+  algorithm_version: string;
+  retry_count: number;
+  max_retries: number;
+  queued_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+  last_heartbeat_at: string | null;
+  error_message: string | null;
+}
+
+export interface OperationsPayload {
+  overview: {
+    jobs: {
+      queued: number;
+      running: number;
+      failed: number;
+      cancelled: number;
+      latest_worker_heartbeat: string | null;
+    };
+    datasets: {
+      failed: number;
+      validating: number;
+      awaiting_promotion: number;
+    };
+    backups: Array<Record<string, unknown>>;
+    releases: Array<Record<string, unknown>>;
+    boundaries: Record<string, string>;
+  };
+  jobs: ServiceJobSummary[];
 }
 
 export interface ScenarioSummary {
@@ -163,6 +290,16 @@ export interface ScenarioSummary {
   lifecycle_status: string;
   review_status: string;
   generated_at: string;
+}
+
+export interface ScenarioComparisonSummary {
+  id: string;
+  investigation_id: string | null;
+  title: string;
+  scenario_run_ids: string[];
+  comparison_dimensions: Array<Record<string, unknown>>;
+  created_by: string;
+  created_at: string;
 }
 
 export interface DataHubPayload {
@@ -184,6 +321,7 @@ export interface DataHubPayload {
     available_lods: number[];
     geometry_count: number;
   }>;
+  urban_states: UrbanStateSummary[];
 }
 
 export interface ServiceSnapshot {
@@ -194,6 +332,11 @@ export interface ServiceSnapshot {
   investigations: Investigation[];
   workQueue: WorkQueue;
   analyses: AnalysisDefinition[];
+  analysisRuns: AnalysisRunSummary[];
   scenarios: ScenarioSummary[];
+  scenarioComparisons: ScenarioComparisonSummary[];
   dataHub: DataHubPayload | null;
+  evidence: EvidenceLibrary | null;
+  operations: OperationsPayload | null;
+  onboarding: OnboardingPayload | null;
 }
