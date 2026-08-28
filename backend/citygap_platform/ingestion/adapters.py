@@ -53,11 +53,17 @@ class SourceInspection:
         return asdict(self)
 
 
-def _checked_path(path: str | Path, *, suffixes: Sequence[str], max_bytes: int) -> Path:
+def _checked_path(
+    path: str | Path,
+    *,
+    suffixes: Sequence[str],
+    max_bytes: int,
+    allow_extensionless: bool = False,
+) -> Path:
     source = Path(path).resolve(strict=True)
     if not source.is_file():
         raise ValueError("Municipal source must be a regular file")
-    if source.suffix.lower() not in suffixes:
+    if source.suffix.lower() not in suffixes and not (allow_extensionless and source.suffix == ""):
         raise ValueError(f"Expected one of these source extensions: {sorted(suffixes)}")
     size = source.stat().st_size
     if size > max_bytes:
@@ -100,8 +106,14 @@ class CsvSourceAdapter:
         encoding: str = "utf-8-sig",
         max_bytes: int = DEFAULT_FILE_LIMIT,
         max_rows: int = DEFAULT_ROW_LIMIT,
+        allow_extensionless: bool = False,
     ) -> None:
-        self.path = _checked_path(path, suffixes=(".csv",), max_bytes=max_bytes)
+        self.path = _checked_path(
+            path,
+            suffixes=(".csv",),
+            max_bytes=max_bytes,
+            allow_extensionless=allow_extensionless,
+        )
         self.required_columns = tuple(required_columns)
         self.encoding = encoding
         self.max_rows = max_rows

@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 19)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 20)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -75,3 +75,11 @@ def test_open_data_foundation_is_tenant_scoped_and_forward_only() -> None:
         "planning_monitoring",
     ):
         assert f"'{preserved_capability}'" in sql
+
+
+def test_static_catalog_extension_is_forward_only_and_keeps_terms_unverified() -> None:
+    sql = Path("infra/migrations/019_official_static_catalog.sql").read_text(encoding="utf-8")
+    assert "official-static-catalog@1" in sql
+    assert "linked resource licence must be verified independently" in sql
+    assert "linked_resource_terms_require_review" in sql
+    assert "ARRAY['CSV','GeoJSON','XLSX','ZIP']" in sql

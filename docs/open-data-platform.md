@@ -73,3 +73,20 @@ deduplicationは、再配布確認済みpublic objectだけに限定する。ten
 canonicalization、spatial linkage、capability refresh、dependency-based recomputationの実stageで
 進める。更新前Urban StateとFindingは履歴として残し、新版で再現したか、解消したか、比較不能かを
 明示する。架空の進捗率や「最新」という無根拠な表示は行わない。
+
+## 2026-08-28 official catalog audit
+
+`python -m analysis.scripts.build_municipal_open_data_inventory --observed-at <ISO-8601>`
+は、allowlist済み公式入口を再取得し、
+`analysis/outputs/real/open_data/municipal_catalog_inventory.json`を決定論的に生成する。
+現在の実監査では、舞鶴市BODIKから30 dataset / 31 resource、藤沢市公式ライブラリの
+「掲載データ一覧」から9 linked datasetを発見した。
+
+舞鶴市の30 datasetは全件でBODIK metadata上のCC BY 4.0を確認した。藤沢市ページ自体の
+利用規約はCC BY 4.0だが、リンク先resourceの条件を一律に継承したとは扱わない。そのため
+藤沢9件のlinked-resource licenseは`unknown`、状態は`requires_review / not_verified`である。
+どちらの都市もこの段階ではcatalog発見だけなので、`analysis_ready_dataset_count`は0である。
+
+取得clientはHTTPS、明示host allowlist、credential URL拒否、標準443 port、DNSのglobal IP、
+redirect先再検査、Content-Lengthと実byte上限を強制する。raw取得後はSHA-256 object keyへ
+原子的に移動し、既存objectを再利用する際もhashとsizeを再検証する。

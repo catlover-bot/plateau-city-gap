@@ -1,0 +1,1677 @@
+{
+  "analysis_ready_dataset_count": 0,
+  "cities": [
+    {
+      "adapter_id": "ckan-v3@1",
+      "catalog_api": "https://data.bodik.jp/api/3/action/package_search",
+      "catalog_license_id": "cc-by-4.0",
+      "catalog_url": "https://data.bodik.jp/organization/262021",
+      "catalog_version": "2026-08-04T02:49:08.724676",
+      "city_code": "26202",
+      "city_name": "舞鶴市",
+      "dataset_count": 30,
+      "datasets": [
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "aed",
+          "external_dataset_id": "262021_aed",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:26:30.099611",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_aed",
+              "external_resource_id": "13e03442-0846-46cf-9711-2789030e5e6f",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/da81fc4a-e3d6-498e-9e8a-2b18a4c60ba8/resource/13e03442-0846-46cf-9711-2789030e5e6f/download/262021_aed_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:26:30.099611",
+                "package_notes": "舞鶴市のAED設置場所です。",
+                "package_title": "【舞鶴市】AED設置箇所一覧",
+                "resource_created": "2021-09-24T00:47:44.545915",
+                "resource_description": "舞鶴市のAED設置箇所一覧",
+                "resource_last_modified": "2026-08-04T02:26:30.091217",
+                "resource_size": 32459,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】AED設置箇所一覧",
+              "version_signals": [
+                "2026-08-04T02:26:30.099611",
+                "2026-08-04T02:26:30.091217"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】AED設置箇所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "transport_facility",
+          "external_dataset_id": "262021_bicycle_parking",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:54:20.885956",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_bicycle_parking",
+              "external_resource_id": "409d71a2-759a-4c7f-830c-3aeab3910337",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/a2fdb9c9-8576-4f31-a257-ff007506edfe/resource/409d71a2-759a-4c7f-830c-3aeab3910337/download/262021_bicycle_parking.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:54:20.885956",
+                "package_notes": "舞鶴市内の公営駐輪場一覧です。",
+                "package_title": "【舞鶴市】公営駐輪場一覧",
+                "resource_created": "2023-06-08T04:13:08.563550",
+                "resource_description": "舞鶴市の公営駐輪場一覧",
+                "resource_last_modified": "2023-06-08T04:18:46.518735",
+                "resource_size": 1197,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】公営駐輪場一覧",
+              "version_signals": [
+                "2024-02-09T05:54:20.885956",
+                "2023-06-08T04:18:46.518735"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】公営駐輪場一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "childcare",
+          "external_dataset_id": "262021_byojihoiku",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:33:56.068579",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_byojihoiku",
+              "external_resource_id": "578e7a24-0335-4705-a7f2-92bf1c34449f",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/f2c375ab-1959-4f43-aa0f-be4f43fcad24/resource/578e7a24-0335-4705-a7f2-92bf1c34449f/download/262021_byojihoiku.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:33:56.068579",
+                "package_notes": "舞鶴市の病児保育実施施設の一覧です。",
+                "package_title": "【舞鶴市】病児保育実施施設一覧",
+                "resource_created": "2024-01-17T04:25:36.884579",
+                "resource_description": "舞鶴市の病児保育実施施設の一覧です。",
+                "resource_last_modified": "2024-01-17T04:25:36.789731",
+                "resource_size": 1772,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】病児保育実施施設一覧",
+              "version_signals": [
+                "2024-02-09T05:33:56.068579",
+                "2024-01-17T04:25:36.789731"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】病児保育実施施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "transport_facility",
+          "external_dataset_id": "262021_car_park",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:53:36.848127",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_car_park",
+              "external_resource_id": "af35947f-7c88-4e49-b50b-abd038348e01",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/b558fbdf-5e02-4023-ae46-2ee66709a093/resource/af35947f-7c88-4e49-b50b-abd038348e01/download/262021_car_park.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:53:36.848127",
+                "package_notes": "舞鶴市内の公営駐車場一覧です。",
+                "package_title": "【舞鶴市】公営駐車場一覧",
+                "resource_created": "2023-06-08T04:10:27.078241",
+                "resource_description": "舞鶴市の公営駐車場一覧",
+                "resource_last_modified": "2023-06-08T04:17:43.217147",
+                "resource_size": 1475,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】公営駐車場一覧",
+              "version_signals": [
+                "2024-02-09T05:53:36.848127",
+                "2023-06-08T04:17:43.217147"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】公営駐車場一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "care",
+          "external_dataset_id": "262021_care_service",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:26:08.617360",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_care_service",
+              "external_resource_id": "36a9ca51-97af-4951-8d7d-87d54d5adb17",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/c3212864-2ab2-430d-ba36-a24872a7cf29/resource/36a9ca51-97af-4951-8d7d-87d54d5adb17/download/262021_care_service.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:26:08.617360",
+                "package_notes": "舞鶴市内の介護サービス事業所一覧です。",
+                "package_title": "【舞鶴市】介護サービス事業所一覧",
+                "resource_created": "2023-06-29T01:46:17.958887",
+                "resource_description": "舞鶴市内の介護サービス事業所一覧",
+                "resource_last_modified": "2023-06-29T01:46:17.883659",
+                "resource_size": 61111,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】介護サービス事業所一覧",
+              "version_signals": [
+                "2024-02-09T05:26:08.617360",
+                "2023-06-29T01:46:17.883659"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】介護サービス事業所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "cultural_asset",
+          "external_dataset_id": "262021_cultural_property",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:49:08.724676",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_cultural_property",
+              "external_resource_id": "f336c91c-a241-4d3b-8f9d-a623af2fa399",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/c8e720eb-e2ce-47f2-8978-5cb8efc40d93/resource/f336c91c-a241-4d3b-8f9d-a623af2fa399/download/262021_cultural_propert_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:49:08.724676",
+                "package_notes": "舞鶴市内の文化財一覧です。",
+                "package_title": "【舞鶴市】文化財一覧",
+                "resource_created": "2023-12-26T05:11:54.340918",
+                "resource_description": "舞鶴市内の文化財一覧です。",
+                "resource_last_modified": "2026-08-04T02:49:08.715065",
+                "resource_size": 79226,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】文化財一覧",
+              "version_signals": [
+                "2026-08-04T02:49:08.724676",
+                "2026-08-04T02:49:08.715065"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】文化財一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "education",
+          "external_dataset_id": "262021_educational_institution",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:47:09.823267",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_educational_institution",
+              "external_resource_id": "9715607b-ddca-4e81-af48-219d010cc038",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/d9e4d402-e73c-4fa9-b5f5-3fa44c9e0358/resource/9715607b-ddca-4e81-af48-219d010cc038/download/262021_educational_institution_20230330.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:47:09.823267",
+                "package_notes": "舞鶴市内の教育機関の一覧です。",
+                "package_title": "【舞鶴市】教育機関一覧",
+                "resource_created": "2023-03-30T09:05:37.753603",
+                "resource_description": "",
+                "resource_last_modified": "2023-03-30T09:05:37.677811",
+                "resource_size": 6389,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】教育機関一覧",
+              "version_signals": [
+                "2024-02-09T05:47:09.823267",
+                "2023-03-30T09:05:37.677811"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】教育機関一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "hazard_support",
+          "external_dataset_id": "262021_emergency_radio",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:29:52.156362",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_emergency_radio",
+              "external_resource_id": "33eacc77-216a-4840-aad1-aa7115489800",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/f3df1bb6-9024-4218-8fe2-0572ef7b71a9/resource/33eacc77-216a-4840-aad1-aa7115489800/download/262021_emergency_radio.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:29:52.156362",
+                "package_notes": "舞鶴市の防災行政無線設置一覧です。",
+                "package_title": "【舞鶴市】防災行政無線設置一覧",
+                "resource_created": "2023-07-14T06:15:08.432624",
+                "resource_description": "市内の防災行政無線設置一覧です。",
+                "resource_last_modified": "2023-07-14T06:15:08.358855",
+                "resource_size": 20823,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】防災行政無線設置一覧",
+              "version_signals": [
+                "2024-02-09T05:29:52.156362",
+                "2023-07-14T06:15:08.358855"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】防災行政無線設置一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "shelter",
+          "external_dataset_id": "262021_evacuation_space",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:50:03.486202",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_evacuation_space",
+              "external_resource_id": "938467b1-91ea-44c4-9f87-111936f957e3",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/74917621-50e4-444b-a81a-60cf406f962c/resource/938467b1-91ea-44c4-9f87-111936f957e3/download/262021_evacuation_space.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:50:03.486202",
+                "package_notes": "舞鶴市内の指定緊急避難場所一覧です。",
+                "package_title": "【舞鶴市】指定緊急避難場所一覧",
+                "resource_created": "2023-07-03T01:44:18.542799",
+                "resource_description": "舞鶴市内の指定緊急避難場所一覧です。",
+                "resource_last_modified": "2023-07-03T01:44:18.471225",
+                "resource_size": 69101,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】指定緊急避難場所一覧.csv",
+              "version_signals": [
+                "2024-02-09T05:50:03.486202",
+                "2023-07-03T01:44:18.471225"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】指定緊急避難場所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "hazard_support",
+          "external_dataset_id": "262021_fire_hydrant",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:31:00.061185",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_fire_hydrant",
+              "external_resource_id": "8fd654e4-1a9a-4c8e-ba86-6e3f83dd77ce",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/e84c2a03-16f4-4cff-a50d-7a006f306c8d/resource/8fd654e4-1a9a-4c8e-ba86-6e3f83dd77ce/download/262021_fire_hydran_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:31:00.061185",
+                "package_notes": "舞鶴市内の消防水利施設(公設)一覧です。",
+                "package_title": "【舞鶴市】消防水利施設一覧",
+                "resource_created": "2023-03-30T10:53:11.891557",
+                "resource_description": "",
+                "resource_last_modified": "2026-08-04T02:31:00.054733",
+                "resource_size": 374521,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】消防水利施設一覧",
+              "version_signals": [
+                "2026-08-04T02:31:00.061185",
+                "2026-08-04T02:31:00.054733"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】消防水利施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "education",
+          "external_dataset_id": "262021_gakkokoku",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:51:33.441921",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_gakkokoku",
+              "external_resource_id": "51304cb4-f750-4599-98ef-da8c396a809e",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/89210ce6-5ae5-4712-bac1-60665f110038/resource/51304cb4-f750-4599-98ef-da8c396a809e/download/262021_gakkokoku.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:51:33.441921",
+                "package_notes": "舞鶴市内の学校校区一覧です。",
+                "package_title": "【舞鶴市】学校校区一覧",
+                "resource_created": "2023-12-19T01:15:46.907580",
+                "resource_description": "舞鶴市内の学校校区一覧です。",
+                "resource_last_modified": "2023-12-19T01:15:46.821016",
+                "resource_size": 32232,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "262021_gakkokoku.csv",
+              "version_signals": [
+                "2024-02-09T05:51:33.441921",
+                "2023-12-19T01:15:46.821016"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】学校校区一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_garbage_collection_place",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T01:21:56.240540",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_garbage_collection_place",
+              "external_resource_id": "378f96ff-8a74-4cbc-9950-85b24ecbfd7d",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/da678b1c-4c1b-4cb6-94a6-71719334cfca/resource/378f96ff-8a74-4cbc-9950-85b24ecbfd7d/download/262021_garbage_collection_place_202603.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T01:21:56.240540",
+                "package_notes": "舞鶴市のゴミ集積場所一覧です。",
+                "package_title": "【舞鶴市】ゴミ集積場所一覧",
+                "resource_created": "2023-07-28T08:32:27.432932",
+                "resource_description": "舞鶴市のゴミ集積場所一覧です。",
+                "resource_last_modified": "2026-08-04T01:21:56.231612",
+                "resource_size": 90621,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】ゴミ集積場所一覧.csv",
+              "version_signals": [
+                "2026-08-04T01:21:56.240540",
+                "2026-08-04T01:21:56.231612"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】ゴミ集積場所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_garbage_separation",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T01:25:06.903061",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_garbage_separation",
+              "external_resource_id": "fe4cfce8-e2e6-41fe-b668-07cd4582ec30",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/89477a05-8e5f-4333-be96-de37a912679b/resource/fe4cfce8-e2e6-41fe-b668-07cd4582ec30/download/262021_garbage_separation_20260330.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T01:25:06.903061",
+                "package_notes": "舞鶴市のゴミの分別方法一覧です。",
+                "package_title": "【舞鶴市】ゴミの分別方法一覧",
+                "resource_created": "2023-07-28T08:31:21.510733",
+                "resource_description": "舞鶴市のゴミの分別方法一覧です。",
+                "resource_last_modified": "2026-08-04T01:25:06.892466",
+                "resource_size": 15908,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】ゴミの分別方法一覧.csv",
+              "version_signals": [
+                "2026-08-04T01:25:06.903061",
+                "2026-08-04T01:25:06.892466"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】ゴミの分別方法一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "medical",
+          "external_dataset_id": "262021_hospital",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:46:04.719225",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_hospital",
+              "external_resource_id": "a6e5c5ab-8463-4033-bbb9-c72c7c4350f8",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/cbadee7d-5e04-43c1-b39d-6fb491f54304/resource/a6e5c5ab-8463-4033-bbb9-c72c7c4350f8/download/262021_hospital_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:46:04.719225",
+                "package_notes": "舞鶴市内の医療機関の一覧です。",
+                "package_title": "【舞鶴市】医療機関一覧",
+                "resource_created": "2023-03-30T09:11:30.884832",
+                "resource_description": "",
+                "resource_last_modified": "2026-08-04T02:46:04.710875",
+                "resource_size": 21472,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】医療機関一覧",
+              "version_signals": [
+                "2026-08-04T02:46:04.719225",
+                "2026-08-04T02:46:04.710875"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】医療機関一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "childcare",
+          "external_dataset_id": "262021_ichijiazukari",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:32:43.917168",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_ichijiazukari",
+              "external_resource_id": "c0ebca88-09c0-4e7a-a481-af95e1875ffb",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/39de1729-3526-415c-8d7c-ad216dc68776/resource/c0ebca88-09c0-4e7a-a481-af95e1875ffb/download/262021_ichijiazukari.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:32:43.917168",
+                "package_notes": "舞鶴市の一時預り（保育）の実施施設一覧です。",
+                "package_title": "【舞鶴市】一時預かり（保育）実施施設一覧",
+                "resource_created": "2024-01-17T04:12:43.429585",
+                "resource_description": "舞鶴市の一時預り（保育）の実施施設一覧です。",
+                "resource_last_modified": "2024-01-17T04:12:43.343555",
+                "resource_size": 50608,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】一時預かり（保育）実施施設一覧",
+              "version_signals": [
+                "2024-02-09T05:32:43.917168",
+                "2024-01-17T04:12:43.343555"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】一時預かり（保育）実施施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "education",
+          "external_dataset_id": "262021_jidoseitosu",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:34:31.474605",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_jidoseitosu",
+              "external_resource_id": "c9e340ca-9561-49ca-b17d-f2bab312c834",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/6af91a58-981f-4f69-92a6-77a904eed7ef/resource/c9e340ca-9561-49ca-b17d-f2bab312c834/download/262021_jidoseitosu_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:34:31.474605",
+                "package_notes": "舞鶴市内の児童生徒数一覧です。",
+                "package_title": "【舞鶴市】児童生徒数一覧",
+                "resource_created": "2023-12-19T01:13:12.858512",
+                "resource_description": "舞鶴市内の児童生徒数一覧です。",
+                "resource_last_modified": "2026-08-04T02:34:31.464149",
+                "resource_size": 42609,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】児童生徒数一覧",
+              "version_signals": [
+                "2026-08-04T02:34:31.474605",
+                "2026-08-04T02:34:31.464149"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】児童生徒数一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_kyokenbyo",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T01:28:37.864027",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_kyokenbyo",
+              "external_resource_id": "979e73bd-e38b-45bf-9026-4dee3d6a8ce2",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/23ffdd49-910d-4d5f-b759-d2fab7c28e67/resource/979e73bd-e38b-45bf-9026-4dee3d6a8ce2/download/262021_kyokenbyo_20260330.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T01:28:37.864027",
+                "package_notes": "舞鶴市の狂犬病予防集合注射場所の一覧です。",
+                "package_title": "【舞鶴市】狂犬病予防集合注射場所一覧",
+                "resource_created": "2024-02-27T02:40:13.280085",
+                "resource_description": "舞鶴市の狂犬病予防集合注射場所一覧です。",
+                "resource_last_modified": "2026-08-04T01:28:08.971153",
+                "resource_size": 10721,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】狂犬病予防集合注射場所一覧",
+              "version_signals": [
+                "2026-08-04T01:28:37.864027",
+                "2026-08-04T01:28:08.971153"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】狂犬病予防集合注射場所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "childcare",
+          "external_dataset_id": "262021_mushokataisho",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:33:24.562907",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_mushokataisho",
+              "external_resource_id": "772cc27c-bbab-4b43-bdfe-3c583a5bb4f6",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/88a5ebf8-eb2a-4313-9a38-caf43e8cd374/resource/772cc27c-bbab-4b43-bdfe-3c583a5bb4f6/download/262021_mushokataisho.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:33:24.562907",
+                "package_notes": "舞鶴市の幼児教育・保育の無償化対象施設一覧です。",
+                "package_title": "【舞鶴市】幼児教育・保育の無償化対象施設一覧",
+                "resource_created": "2024-01-17T04:15:14.764092",
+                "resource_description": "舞鶴市の幼児教育・保育の無償化対象施設一覧です。",
+                "resource_last_modified": "2024-01-17T04:15:14.674628",
+                "resource_size": 22423,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】幼児教育・保育の無償化対象施設一覧",
+              "version_signals": [
+                "2024-02-09T05:33:24.562907",
+                "2024-01-17T04:15:14.674628"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】幼児教育・保育の無償化対象施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_open_data_list",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:36:02.950623",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_open_data_list",
+              "external_resource_id": "a80f78f0-05f9-4826-bb50-89b0ed44347c",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/b3701a0e-373c-44bd-9485-dce7675718f8/resource/a80f78f0-05f9-4826-bb50-89b0ed44347c/download/262021_open_data_list.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:36:02.950623",
+                "package_notes": "舞鶴市のオープンデータセットの一覧です。",
+                "package_title": "【舞鶴市】オープンデータセット一覧",
+                "resource_created": "2024-01-05T02:03:04.049324",
+                "resource_description": "舞鶴市のオープンデータセットの一覧です。",
+                "resource_last_modified": "2024-01-17T04:40:29.051753",
+                "resource_size": 23987,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】オープンデータセット一覧",
+              "version_signals": [
+                "2024-02-09T05:36:02.950623",
+                "2024-01-17T04:40:29.051753"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】オープンデータセット一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "population",
+          "external_dataset_id": "262021_opendatamap",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2021-08-30T04:38:19.711092",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_opendatamap",
+              "external_resource_id": "b4ad1a5c-e97a-4bae-a097-6ea8d6e08b7e",
+              "format": "XLSX",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/7be2e188-137b-4d8d-b8a2-49e45ff5f5fa/resource/b4ad1a5c-e97a-4bae-a097-6ea8d6e08b7e/download/262021_kyoto_maizuru.xlsx",
+              "source_metadata": {
+                "metadata_modified": "2021-08-30T04:38:19.711092",
+                "package_notes": "オープンデータマップで使用するポリゴンと塗分け用の人口データです。",
+                "package_title": "オープンデータマップ用データセット",
+                "resource_created": "2021-08-30T04:38:19.755423",
+                "resource_description": "平成２７年国勢調査（小地域）_男女別人口総数及ひ世帯総数です。",
+                "resource_last_modified": "2021-08-30T04:38:19.699836",
+                "resource_size": 31179,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "街区別人口データ",
+              "version_signals": [
+                "2021-08-30T04:38:19.711092",
+                "2021-08-30T04:38:19.699836"
+              ]
+            },
+            {
+              "external_dataset_id": "262021_opendatamap",
+              "external_resource_id": "b9d75e9c-aa97-46ff-ba60-6bc666244200",
+              "format": "GEOJSON",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/7be2e188-137b-4d8d-b8a2-49e45ff5f5fa/resource/b9d75e9c-aa97-46ff-ba60-6bc666244200/download/262021_kyoto_maizuru.geojson",
+              "source_metadata": {
+                "metadata_modified": "2021-08-30T04:38:19.711092",
+                "package_notes": "オープンデータマップで使用するポリゴンと塗分け用の人口データです。",
+                "package_title": "オープンデータマップ用データセット",
+                "resource_created": "2021-08-30T04:38:19.358636",
+                "resource_description": "塗分け用ポリゴンデータです。",
+                "resource_last_modified": "2021-08-30T04:38:19.307959",
+                "resource_size": 1229730,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "塗分け用ポリゴンデータ",
+              "version_signals": [
+                "2021-08-30T04:38:19.711092",
+                "2021-08-30T04:38:19.307959"
+              ]
+            }
+          ],
+          "title": "オープンデータマップ用データセット"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_pollingstation",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:48:14.887060",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_pollingstation",
+              "external_resource_id": "54a432df-615b-438e-8cdd-8956835bdebd",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/da66eefa-dca0-4057-ab38-eb7497c05eb9/resource/54a432df-615b-438e-8cdd-8956835bdebd/download/262021_polling_station_20230330.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:48:14.887060",
+                "package_notes": "舞鶴市の投票所一覧です。施設の使用可否によっては投票所が変更になる場合があります。投票できる投票所は選挙管理委員会から送付する投票所入場券でご確認ください。",
+                "package_title": "【舞鶴市】投票所一覧",
+                "resource_created": "2022-01-19T07:07:14.988861",
+                "resource_description": "舞鶴市の投票所一覧です。",
+                "resource_last_modified": "2023-03-30T10:33:12.732287",
+                "resource_size": 7235,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】投票所一覧",
+              "version_signals": [
+                "2024-02-09T05:48:14.887060",
+                "2023-03-30T10:33:12.732287"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】投票所一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "population",
+          "external_dataset_id": "262021_population",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:37:06.666598",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_population",
+              "external_resource_id": "3d487bf1-b661-4dc0-9e2e-4d5d3aa1d05f",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/e5f1aa7e-eb5b-4131-bea7-6bdda79c61e4/resource/3d487bf1-b661-4dc0-9e2e-4d5d3aa1d05f/download/262021_population_20230401.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:37:06.666598",
+                "package_notes": "舞鶴市の行政区別・年齢別（5歳区分）人口及び世帯数です。",
+                "package_title": "【舞鶴市】地域・年齢別人口",
+                "resource_created": "2024-01-05T01:45:43.886518",
+                "resource_description": "2023年4月1日現在の住民基本台帳に基づく地域・年齢別の人口一覧です。2019年からデータを積み上げています。",
+                "resource_last_modified": "2024-01-05T01:45:43.744938",
+                "resource_size": 355726,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "262021_population_20230401.csv",
+              "version_signals": [
+                "2024-02-09T05:37:06.666598",
+                "2024-01-05T01:45:43.744938"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】地域・年齢別人口"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "childcare",
+          "external_dataset_id": "262021_preschool",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:48:39.407011",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_preschool",
+              "external_resource_id": "fb57b4cd-9834-400f-ad2f-4763c5a5254c",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/7176d2a2-efea-4ff5-b382-1404dcde7272/resource/fb57b4cd-9834-400f-ad2f-4763c5a5254c/download/262021_preschool_20230330.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:48:39.407011",
+                "package_notes": "舞鶴市内の幼稚園、保育所・保育園、こども園の一覧です。",
+                "package_title": "【舞鶴市】子育て施設一覧",
+                "resource_created": "2023-03-30T08:53:56.594300",
+                "resource_description": "",
+                "resource_last_modified": "2023-03-30T08:53:56.517310",
+                "resource_size": 15583,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】子育て施設一覧",
+              "version_signals": [
+                "2024-02-09T05:48:39.407011",
+                "2023-03-30T08:53:56.517310"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】子育て施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_public_facility",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:41:09.972563",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_public_facility",
+              "external_resource_id": "e4254973-187c-4c4d-add0-1f8522355177",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/b06476d2-a899-43f0-bfbc-ce59b3fc93bc/resource/e4254973-187c-4c4d-add0-1f8522355177/download/262021_public_facility.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:41:09.972563",
+                "package_notes": "舞鶴市の公共施設一覧です。",
+                "package_title": "【舞鶴市】公共施設一覧",
+                "resource_created": "2023-12-04T04:48:18.399761",
+                "resource_description": "舞鶴市の公共施設一覧です。",
+                "resource_last_modified": "2023-12-08T05:30:31.264648",
+                "resource_size": 130469,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】公共施設一覧",
+              "version_signals": [
+                "2024-02-09T05:41:09.972563",
+                "2023-12-08T05:30:31.264648"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】公共施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_shiteikanrisisetsu",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:37:28.787102",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "262021_shiteikanrisisetsu",
+              "external_resource_id": "38d33f69-4d35-4f18-a2df-23c8f2e47444",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/26665718-bd0e-47d8-9f53-0a813b82f46f/resource/38d33f69-4d35-4f18-a2df-23c8f2e47444/download/262021_shiteikanrisisetsu.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:37:28.787102",
+                "package_notes": "舞鶴市内の指定管理施設一覧です。",
+                "package_title": "【舞鶴市】指定管理施設一覧",
+                "resource_created": "2023-12-19T01:18:27.633349",
+                "resource_description": "舞鶴市内の指定管理施設一覧です。",
+                "resource_last_modified": "2023-12-19T01:18:27.558316",
+                "resource_size": 6789,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "262021_shiteikanrisisetsu.csv",
+              "version_signals": [
+                "2024-02-09T05:37:28.787102",
+                "2023-12-19T01:18:27.558316"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】指定管理施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_shuntokusensakana",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:36:24.295802",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_shuntokusensakana",
+              "external_resource_id": "ab1a28cb-6699-4598-a6f5-7f48393bf076",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/09a8461a-0255-4506-98df-fadf55952241/resource/ab1a28cb-6699-4598-a6f5-7f48393bf076/download/262021_shuntokusensakana.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:36:24.295802",
+                "package_notes": "舞鶴の旬の特鮮さかな一覧です。",
+                "package_title": "【舞鶴市】舞鶴の旬の特鮮さかな一覧",
+                "resource_created": "2024-01-11T04:05:22.607142",
+                "resource_description": "舞鶴の旬の特鮮さかな一覧です。",
+                "resource_last_modified": "2024-01-11T04:05:22.519457",
+                "resource_size": 29390,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "舞鶴の旬の特鮮さかな一覧",
+              "version_signals": [
+                "2024-02-09T05:36:24.295802",
+                "2024-01-11T04:05:22.519457"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】舞鶴の旬の特鮮さかな一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "municipal_other",
+          "external_dataset_id": "262021_suidogesuidoryokin",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:36:41.862670",
+          "priority": "P2",
+          "resources": [
+            {
+              "external_dataset_id": "262021_suidogesuidoryokin",
+              "external_resource_id": "e761c91d-3d53-4404-98dd-38f6326ac389",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/0db8c7d3-e1b6-4614-9d02-073eb194f88a/resource/e761c91d-3d53-4404-98dd-38f6326ac389/download/262021_suidogesuidoryokin.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:36:41.862670",
+                "package_notes": "舞鶴市の水道料金・下水道使用料一覧です。",
+                "package_title": "【舞鶴市】水道料金・下水道使用料一覧",
+                "resource_created": "2024-01-05T02:06:20.508329",
+                "resource_description": "舞鶴市の水道料金・下水道使用料一覧です。",
+                "resource_last_modified": "2024-01-05T02:06:20.412553",
+                "resource_size": 48554,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】水道料金・下水道使用料一覧",
+              "version_signals": [
+                "2024-02-09T05:36:41.862670",
+                "2024-01-05T02:06:20.412553"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】水道料金・下水道使用料一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_toshikoen",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:23:06.346445",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_toshikoen",
+              "external_resource_id": "7928542c-05c5-4c47-9780-d0e058595407",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/db2b805f-c427-4326-a28e-74077db0ad21/resource/7928542c-05c5-4c47-9780-d0e058595407/download/262021_toshikoen_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:23:06.346445",
+                "package_notes": "舞鶴市の都市公園の一覧です。",
+                "package_title": "【舞鶴市】都市公園一覧",
+                "resource_created": "2024-01-17T04:30:26.763176",
+                "resource_description": "舞鶴市の都市公園の一覧です。",
+                "resource_last_modified": "2026-08-04T02:23:06.337847",
+                "resource_size": 4769,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】都市公園一覧",
+              "version_signals": [
+                "2026-08-04T02:23:06.346445",
+                "2026-08-04T02:23:06.337847"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】都市公園一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_tourism",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2026-08-04T02:43:56.506756",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_tourism",
+              "external_resource_id": "1b113121-4e97-4f73-b79b-912252de31a2",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/e1248ea1-8eca-41e4-a892-32378f08b268/resource/1b113121-4e97-4f73-b79b-912252de31a2/download/262021_tourism_202608.csv",
+              "source_metadata": {
+                "metadata_modified": "2026-08-04T02:43:56.506756",
+                "package_notes": "舞鶴市の観光施設一覧です。",
+                "package_title": "【舞鶴市】観光施設一覧",
+                "resource_created": "2023-11-20T00:02:09.139542",
+                "resource_description": "舞鶴市の観光施設一覧です。",
+                "resource_last_modified": "2026-08-04T02:43:56.500636",
+                "resource_size": 28669,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】観光施設一覧",
+              "version_signals": [
+                "2026-08-04T02:43:56.506756",
+                "2026-08-04T02:43:56.500636"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】観光施設一覧"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "available",
+          "dataset_family": "facilities",
+          "external_dataset_id": "262021_wirelesslan",
+          "license_id": "cc-by-4.0",
+          "metadata_modified": "2024-02-09T05:47:52.661408",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "262021_wirelesslan",
+              "external_resource_id": "c6a72e3b-520d-4466-9c38-7c083ff247d8",
+              "format": "CSV",
+              "license_id": "cc-by-4.0",
+              "reference_date": null,
+              "resource_url": "https://data.bodik.jp/dataset/c0664a10-1c06-4ea4-ad00-b97900015998/resource/c6a72e3b-520d-4466-9c38-7c083ff247d8/download/262021_public_wireless_lan_20230330.csv",
+              "source_metadata": {
+                "metadata_modified": "2024-02-09T05:47:52.661408",
+                "package_notes": "公衆無線LANアクセスポイントの一覧です。",
+                "package_title": "【舞鶴市】公衆無線LANアクセスポイント一覧",
+                "resource_created": "2023-03-30T10:26:45.314924",
+                "resource_description": "",
+                "resource_last_modified": "2023-03-30T10:26:45.223950",
+                "resource_size": 2925,
+                "source_license_id": "cc-by-40-intl",
+                "source_license_title": "Creative Commons Attribution 4.0 International"
+              },
+              "title": "【舞鶴市】公衆無線LANアクセスポイント一覧",
+              "version_signals": [
+                "2024-02-09T05:47:52.661408",
+                "2023-03-30T10:26:45.223950"
+              ]
+            }
+          ],
+          "title": "【舞鶴市】公衆無線LANアクセスポイント一覧"
+        }
+      ],
+      "normalized_catalog_sha256": "956262800ac80d966c591924c1334a6fb4c017d6428ed1bda29c3f12a7b3619f",
+      "resource_count": 31,
+      "source_key": "bodik-maizuru"
+    },
+    {
+      "adapter_id": "official-static-catalog@1",
+      "catalog_license_id": "cc-by-4.0",
+      "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+      "catalog_terms_url": "https://www.city.fujisawa.kanagawa.jp/documents/13230/riyoukiyaku20250401.pdf",
+      "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+      "city_code": "14205",
+      "city_name": "藤沢市",
+      "dataset_count": 9,
+      "datasets": [
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "education",
+          "external_dataset_id": "static-60d2bb7a26f4330ef4be86e7",
+          "license_id": "unknown",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "static-60d2bb7a26f4330ef4be86e7",
+              "external_resource_id": "60d2bb7a26f4330ef4be86e7",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/gakko-k/kyoiku/kyoiku/kyushoku/chu/chukyushokukondate.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "中学校給食献立情報",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/gakko-k/kyoiku/kyoiku/kyushoku/chu/chukyushokukondate.html"
+              ]
+            }
+          ],
+          "title": "中学校給食献立情報",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "population",
+          "external_dataset_id": "static-ba7abaf8200c595a3667b06a",
+          "license_id": "unknown",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "static-ba7abaf8200c595a3667b06a",
+              "external_resource_id": "ba7abaf8200c595a3667b06a",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/bunsho/shise/toke/jinko/jinko/index.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "人口と世帯に関する統計情報",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/bunsho/shise/toke/jinko/jinko/index.html"
+              ]
+            }
+          ],
+          "title": "人口と世帯に関する統計情報",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "care",
+          "external_dataset_id": "static-ebbc7f25ec7f06365f6b6933",
+          "license_id": "unknown",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "static-ebbc7f25ec7f06365f6b6933",
+              "external_resource_id": "ebbc7f25ec7f06365f6b6933",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/kaigo-j/jigyousyoitiran/itiran.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "介護保険サービス提供事業者",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/kaigo-j/jigyousyoitiran/itiran.html"
+              ]
+            }
+          ],
+          "title": "介護保険サービス提供事業者",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "cultural_asset",
+          "external_dataset_id": "static-50d284f7abf24e24a5aeead0",
+          "license_id": "unknown",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "static-50d284f7abf24e24a5aeead0",
+              "external_resource_id": "50d284f7abf24e24a5aeead0",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/bunkazai/tourokubunkazai/sakuseichuu.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "国登録有形文化財（建造物）",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/bunkazai/tourokubunkazai/sakuseichuu.html"
+              ]
+            }
+          ],
+          "title": "国登録有形文化財（建造物）",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "reference",
+          "external_dataset_id": "static-d3e0c67f423a121643c11b93",
+          "license_id": "unknown",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "static-d3e0c67f423a121643c11b93",
+              "external_resource_id": "d3e0c67f423a121643c11b93",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://webgis.alandis.jp/fujisawa14/portal/index.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "地理空間情報",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://webgis.alandis.jp/fujisawa14/portal/index.html"
+              ]
+            }
+          ],
+          "title": "地理空間情報",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "cultural_asset",
+          "external_dataset_id": "static-dad3366604910ed5eef09f97",
+          "license_id": "unknown",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "static-dad3366604910ed5eef09f97",
+              "external_resource_id": "dad3366604910ed5eef09f97",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/bunkazai/kyoiku/bunka/bunkazai/mokuroku.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "指定文化財情報",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/bunkazai/kyoiku/bunka/bunkazai/mokuroku.html"
+              ]
+            }
+          ],
+          "title": "指定文化財情報",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "economic_activity",
+          "external_dataset_id": "static-3eba6528b6d343a902910e01",
+          "license_id": "unknown",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "static-3eba6528b6d343a902910e01",
+              "external_resource_id": "3eba6528b6d343a902910e01",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/seiei/kankyouopendate.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "理容所・美容所・クリーニング所",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/seiei/kankyouopendate.html"
+              ]
+            }
+          ],
+          "title": "理容所・美容所・クリーニング所",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "shelter",
+          "external_dataset_id": "static-1f54134841317685dbc061a2",
+          "license_id": "unknown",
+          "priority": "P0",
+          "resources": [
+            {
+              "external_dataset_id": "static-1f54134841317685dbc061a2",
+              "external_resource_id": "1f54134841317685dbc061a2",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://bosaiinfo.city.fujisawa.kanagawa.jp/evacuation/",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "防災施設（避難先・帰宅困難者受入施設一覧）",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://bosaiinfo.city.fujisawa.kanagawa.jp/evacuation/"
+              ]
+            }
+          ],
+          "title": "防災施設（避難先・帰宅困難者受入施設一覧）",
+          "unavailable_reason": "not_verified"
+        },
+        {
+          "analysis_readiness": "requires_review",
+          "analysis_readiness_reason": "not_verified",
+          "availability": "requires_review",
+          "dataset_family": "economic_activity",
+          "external_dataset_id": "static-441fa8df45e953459cdd12f9",
+          "license_id": "unknown",
+          "priority": "P1",
+          "resources": [
+            {
+              "external_dataset_id": "static-441fa8df45e953459cdd12f9",
+              "external_resource_id": "441fa8df45e953459cdd12f9",
+              "format": "HTML_OR_PORTAL",
+              "license_id": "unknown",
+              "reference_date": null,
+              "resource_url": "https://www.city.fujisawa.kanagawa.jp/seiei/shokuhineisei/opendatabase.html",
+              "source_metadata": {
+                "availability": "requires_review",
+                "catalog_last_modified": "Tue, 09 Jun 2026 00:00:06 GMT",
+                "catalog_sha256": "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "catalog_url": "https://www.city.fujisawa.kanagawa.jp/kyoso/shise/kekaku/kakushu/datalibrary.html",
+                "discovery_kind": "official_linked_page",
+                "unavailable_reason": "not_verified"
+              },
+              "title": "食品衛生法に基づく営業許可施設情報",
+              "version_signals": [
+                "110f516bee2300b469f9c1ba93084f224710eca8aa3eeb15bef5a1570750db8c",
+                "https://www.city.fujisawa.kanagawa.jp/seiei/shokuhineisei/opendatabase.html"
+              ]
+            }
+          ],
+          "title": "食品衛生法に基づく営業許可施設情報",
+          "unavailable_reason": "not_verified"
+        }
+      ],
+      "linked_resource_license_id": "unknown",
+      "resource_count": 9,
+      "source_key": "fujisawa-open-data-library"
+    }
+  ],
+  "claim_boundary": "Discovery proves catalog publication only. It does not prove schema quality, analysis fitness, current service operation, or linked-resource redistribution rights.",
+  "coverage": [
+    {
+      "city_code": "26202",
+      "dataset_family": "aed",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "care",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "childcare",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "cultural_asset",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "economic_activity",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "education",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "facilities",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "hazard_support",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "medical",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "municipal_other",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "population",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "reference",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "shelter",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "26202",
+      "dataset_family": "transport_facility",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "aed",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "care",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "childcare",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "cultural_asset",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "economic_activity",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "education",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "facilities",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "hazard_support",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "medical",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "municipal_other",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "population",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "reference",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "shelter",
+      "explanation": "Official catalog entry discovered; resource promotion is pending.",
+      "status": "requires_review",
+      "unavailable_reason": "not_verified"
+    },
+    {
+      "city_code": "14205",
+      "dataset_family": "transport_facility",
+      "explanation": "No entry was published in the audited municipal catalog section.",
+      "status": "unavailable",
+      "unavailable_reason": "not_published"
+    }
+  ],
+  "observed_at": "2026-08-28T09:00:00+09:00",
+  "official_sources_only": true,
+  "schema_version": "citygap-municipal-open-data-inventory@1"
+}

@@ -7,6 +7,7 @@ sources, or treat an unknown licence as permission to redistribute bytes.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Protocol, runtime_checkable
@@ -206,7 +207,7 @@ class OpenDataAdapter(Protocol):
         resource: DiscoveredResource,
         receipt: RawResourceReceipt,
         inspection: SchemaInspection,
-    ) -> tuple[dict[str, Any], ...]: ...
+    ) -> Iterator[dict[str, Any]]: ...
 
 
 def validate_coverage_reason(status: CoverageStatus, reason: UnavailableReason | None) -> None:
