@@ -3637,8 +3637,9 @@ class MunicipalServiceRepository(PostGISRepository):
                     "Dataset cannot be promoted before quality and ingestion gates pass"
                 )
             if proposed_status == "promoted":
-                open_data_block = connection.execute(
-                    """SELECT EXISTS (
+                open_data_block = self._one(
+                    connection.execute(
+                        """SELECT EXISTS (
                            SELECT 1
                            FROM open_data_resources AS resource
                            JOIN city_open_data_sources AS source
@@ -3663,10 +3664,11 @@ class MunicipalServiceRepository(PostGISRepository):
                                        AND quality.status IN ('failed','requires_review')
                                  )
                              )
-                       )""",
-                    (organization_id, version_id),
-                ).fetchone()[0]
-                if open_data_block:
+                       ) AS blocked""",
+                        (organization_id, version_id),
+                    )
+                )
+                if open_data_block and open_data_block["blocked"]:
                     raise ValueError(
                         "Dataset cannot be promoted while an open-data quality, CRS, "
                         "checksum, schema or licence review blocks analysis"
