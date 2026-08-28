@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 17)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 18)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -32,5 +32,16 @@ def test_activity_event_extension_preserves_existing_types_and_adds_saved_views(
         "decision_recorded",
         "analysis_started",
         "saved_view_created",
+    ):
+        assert f"'{event_type}'" in sql
+
+
+def test_annual_update_activity_extension_preserves_existing_types() -> None:
+    sql = Path("infra/migrations/017_annual_update_activity.sql").read_text(encoding="utf-8")
+    for event_type in (
+        "dataset_updated",
+        "decision_recorded",
+        "saved_view_created",
+        "annual_update_queued",
     ):
         assert f"'{event_type}'" in sql
