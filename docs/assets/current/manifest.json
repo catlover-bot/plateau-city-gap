@@ -1,8 +1,8 @@
 {
-  "schema_version": "citygap.guided-capture-manifest@1",
-  "generated_at": "2026-08-29T14:57:52.661Z",
-  "capture_script_version": "guided-first-run-capture@1.0.0",
-  "repository_head": "798c942c364481b7dfe32236a1ef560c0765acd1",
+  "schema_version": "citygap.guided-capture-manifest@2",
+  "generated_at": "2026-08-29T16:18:37.126Z",
+  "capture_script_version": "guided-first-run-capture@2.0.0",
+  "repository_head": "8d064f7a07be882b1d83349c21b3204aa11d95a7",
   "base_url": "http://127.0.0.1:4173/plateau-city-gap/",
   "capture_count": 8,
   "required_png_files": [
@@ -15,7 +15,166 @@
     "07-advanced.png",
     "08-mobile.png"
   ],
-  "publication_contract": "stage-validate-swap",
+  "publication_contract": "stage-validate-atomic-swap",
+  "provenance": {
+    "repository_head": "8d064f7a07be882b1d83349c21b3204aa11d95a7",
+    "render_source_commit": "8d064f7a07be882b1d83349c21b3204aa11d95a7",
+    "capture_asset_commit": "8d064f7a07be882b1d83349c21b3204aa11d95a7",
+    "frontend_source_sha256": "fb0fea9d75c7674304d8c52891b36384989f46853655471965ab4ec2d72160cb",
+    "frontend_source_file_count": 93,
+    "frontend_dist_asset_sha256": "cd9206792fb1fa89cba3a9f087f9929bb8a743b29e447688922e4230af4883fd",
+    "frontend_dist_asset_file_count": 8,
+    "capture_script_version": "guided-first-run-capture@2.0.0",
+    "capture_script_sha256": "87e8e2272c69115e43208cb8dd3318f485bef132d0bcf0ff9101efd0e692b747",
+    "guided_browser_contract_sha256": "d41cc1ff7261dc7b37a8a1746a1f24b0db2be240c669ca6543ce1334cb828f63",
+    "data_manifest_sha256": "57f3a8fc5b3027cc09bba125c0af7ba224e18d8f82239f25188cb3071e932b73",
+    "data_manifest_schema_version": "1.0.0",
+    "pack_id": "maizuru-533513314-plateau-2025-v1",
+    "pack_schema": "citygap.spatial-evidence-pack@1",
+    "pack_content_sha256": "d5f0f99a32b3a956e48b96c5b6c78db04aba03dd4bc1e246e1dc49950303c804",
+    "pack_manifest_sha256": "92bb64755fe75a3d32954c57e79bc65f5c4da472d7d01f19633232a8c3cc1c09",
+    "pack_manifest_file_sha256": "3000d46887c5041aa50998d4f1830d0360fab425a0532a600375f108c7b7d155",
+    "pack_artifact_sha256": {
+      "objects.json": "23e89769d715e7d392aa8025fcf07c18df0cf7d6bdad4d51447a64a56ce30bd5",
+      "sections.json": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c"
+    },
+    "finding_id": "mesh-533513314-accessibility-gap",
+    "investigation_id": "maizuru-municipal-pilot",
+    "source_data_ids": [
+      "plateau-building-2025:15cf5e12b507b89e2b86fe0c2968a22e8d770ea36cb8c64cc7e8db578109f2d9",
+      "plateau-dem-2025:13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+      "plateau-road-lod1-maizuru-2025",
+      "estat-t001192",
+      "ksj-p11-2022",
+      "ksj-p04-2020",
+      "plateau-maizuru-2025-related"
+    ],
+    "worktree": {
+      "clean": true,
+      "changed_path_count": 0,
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fingerprint_sha256": "b017d8afe0e0d11f967499a899a6b56231cfab0ddfebc42a69233863878b831b",
+      "fingerprint_contract": "git-status+changed-path-content@1"
+    },
+    "difference_reasons": [],
+    "runtime_environment": {
+      "browser": {
+        "engine": "chromium",
+        "version": "149.0.7827.55"
+      },
+      "renderer": {
+        "requested_backend": "swiftshader",
+        "launch_args": [
+          "--no-sandbox",
+          "--disable-dev-shm-usage",
+          "--enable-webgl",
+          "--ignore-gpu-blocklist",
+          "--use-gl=swiftshader"
+        ],
+        "reduced_motion": "reduce",
+        "device_scale_factor": 1,
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36",
+        "webgl_vendor": "Google Inc. (Google)",
+        "webgl_renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+      }
+    },
+    "provenance_fingerprint_sha256": "393ec370365beb53a2b522b17d3bf1cc0478e9d23bfb2ea1d56c0a3a03481b56"
+  },
+  "network_observations": {
+    "desktop": {
+      "pageErrors": [],
+      "failedRequests": [],
+      "errorResponses": [],
+      "ignoredOptionalFailures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_ABORTED",
+          "reason": "cancelled-gsi-background-tile"
+        }
+      ]
+    },
+    "mobile": {
+      "pageErrors": [],
+      "failedRequests": [],
+      "errorResponses": [],
+      "ignoredOptionalFailures": []
+    }
+  },
   "captures": [
     {
       "filename": "01-landing.png",
@@ -86,12 +245,13 @@
       "guided_render_path": "static-section",
       "section": {
         "ready": true,
+        "pack_id": "maizuru-533513314-plateau-2025-v1",
         "buildings": 63,
         "roads": 14,
         "terrain_covered": 94
       },
-      "sha256": "486469c870898bd0e98d8ce189c985b47d9fe0f6137ee7d80b127275281946a5",
-      "bytes": 310671
+      "sha256": "8871df0a571cf058e8832d91f40f96eeea1ef13f55f86b85963522aae8a801e1",
+      "bytes": 311999
     },
     {
       "filename": "05-what-if.png",
@@ -109,6 +269,7 @@
       "guided_render_path": "static-section",
       "section": {
         "ready": true,
+        "pack_id": "maizuru-533513314-plateau-2025-v1",
         "buildings": 63,
         "roads": 14,
         "terrain_covered": 94
@@ -132,6 +293,7 @@
       "guided_render_path": "static-section",
       "section": {
         "ready": true,
+        "pack_id": "maizuru-533513314-plateau-2025-v1",
         "buildings": 63,
         "roads": 14,
         "terrain_covered": 94
@@ -145,6 +307,28 @@
         "id": "advanced",
         "question": false
       },
+      "advanced_render_state": {
+        "complete": true,
+        "retained_target": true,
+        "target_id": "533513314",
+        "task_navigation_visible": true,
+        "readiness_path": "verified-section",
+        "section": {
+          "present": true,
+          "ready": true,
+          "pack_id": "maizuru-533513314-plateau-2025-v1",
+          "buildings": 63,
+          "roads": 14,
+          "terrain_covered": 94,
+          "verified": true
+        },
+        "renderer": {
+          "present": true,
+          "engine": "cesium",
+          "ui_mode": "advanced",
+          "ready": false
+        }
+      },
       "viewport": {
         "width": 1440,
         "height": 900
@@ -154,12 +338,13 @@
       "guided_render_path": null,
       "section": {
         "ready": true,
+        "pack_id": "maizuru-533513314-plateau-2025-v1",
         "buildings": 63,
         "roads": 14,
         "terrain_covered": 94
       },
-      "sha256": "c5ace758ce98667ef1c55afec391992d576cde90ffed7a5d7def2599456190fb",
-      "bytes": 176373
+      "sha256": "340800e86925780d20aceefc2bd1c55b770da814473c5c6561b07790e9c8638d",
+      "bytes": 176874
     },
     {
       "filename": "08-mobile.png",
@@ -177,12 +362,13 @@
       "guided_render_path": "static-section",
       "section": {
         "ready": true,
+        "pack_id": "maizuru-533513314-plateau-2025-v1",
         "buildings": 63,
         "roads": 14,
         "terrain_covered": 94
       },
-      "sha256": "1d67991df121d75b81aa2a41c763407afe5fcb25271518812d1989767e41c960",
-      "bytes": 91132
+      "sha256": "0d737297352a7bd1fc8ba88ce83aac12995449ea9ae4fb7f83469839f978907b",
+      "bytes": 91233
     }
   ]
 }
