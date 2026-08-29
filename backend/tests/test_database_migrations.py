@@ -11,6 +11,19 @@ def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     assert all(path.stat().st_size > 0 for path in files)
 
 
+def test_spatial_evidence_migration_creates_tenant_safe_saved_view_key_before_fk() -> None:
+    sql = Path("infra/migrations/027_spatial_evidence_urban_section.sql").read_text(
+        encoding="utf-8"
+    )
+    prerequisite = (
+        "ADD CONSTRAINT saved_views_organization_id_id_key\n"
+        "    UNIQUE (organization_id, id)"
+    )
+    reference = "REFERENCES saved_views(organization_id, id)"
+    assert prerequisite in sql
+    assert sql.index(prerequisite) < sql.index(reference)
+
+
 def test_migration_runner_is_not_mounted_as_untracked_initdb_magic() -> None:
     source = Path("backend/citygap_platform/database/migrations.py").read_text(encoding="utf-8")
     assert "schema_migrations" in source

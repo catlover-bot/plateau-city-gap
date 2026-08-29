@@ -1918,8 +1918,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 connection.execute(
                     """SELECT id, pack_key, city_id, urban_state_id, finding_id,
                               investigation_id, ST_AsGeoJSON(geometry)::jsonb AS geometry,
-                              ARRAY[ST_XMin(ST_Box3D(bbox)),ST_YMin(ST_Box3D(bbox)),
-                                    ST_XMax(ST_Box3D(bbox)),ST_YMax(ST_Box3D(bbox))] AS bbox,
+                              ARRAY[ST_XMin(Box3D(bbox)),ST_YMin(Box3D(bbox)),
+                                    ST_XMax(Box3D(bbox)),ST_YMax(Box3D(bbox))] AS bbox,
                               buffer_m, status, data_classification,
                               source_dataset_version_ids, network_version_id,
                               analysis_run_ids, content_sha256, manifest_sha256,
@@ -1976,7 +1976,7 @@ class MunicipalServiceRepository(PostGISRepository):
                               relation_semantics, content_sha256
                        FROM spatial_pack_objects
                        WHERE organization_id=%s AND pack_id=%s
-                         AND (%s IS NULL OR object_type=%s)
+                         AND (CAST(%s AS text) IS NULL OR object_type=%s)
                        ORDER BY object_type, source_object_id, id
                        LIMIT %s OFFSET %s""",
                     (organization_id, pack_id, object_type, object_type, limit, offset),
@@ -2038,8 +2038,8 @@ class MunicipalServiceRepository(PostGISRepository):
                 connection.execute(
                     """SELECT investigation_id,
                               ST_AsGeoJSON(geometry)::jsonb AS geometry,
-                              ARRAY[ST_XMin(ST_Box3D(bbox)),ST_YMin(ST_Box3D(bbox)),
-                                    ST_XMax(ST_Box3D(bbox)),ST_YMax(ST_Box3D(bbox))] AS bbox,
+                              ARRAY[ST_XMin(Box3D(bbox)),ST_YMin(Box3D(bbox)),
+                                    ST_XMax(Box3D(bbox)),ST_YMax(Box3D(bbox))] AS bbox,
                               buffer_m, data_classification,
                               source_dataset_version_ids, network_version_id,
                               analysis_run_ids

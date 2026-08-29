@@ -107,14 +107,22 @@ export function startCesiumReadinessController(input: {
   let lastSignature = "";
   let lastEmission = "";
   let animationFrame = 0;
+  let nextFrameTimeout = 0;
   let globePendingRequests = 0;
 
   const requestNext = () => {
-    if (destroyed || viewer.isDestroyed() || animationFrame) return;
-    animationFrame = requestAnimationFrame(() => {
-      animationFrame = 0;
-      if (!destroyed && !viewer.isDestroyed()) viewer.scene.requestRender();
-    });
+    if (destroyed || viewer.isDestroyed() || nextFrameTimeout || animationFrame) return;
+    // requestRenderMode avoids a permanent render loop, so readiness must ask
+    // for another frame while required tiles are still arriving. A short pause
+    // keeps SwiftShader and the browser control channel responsive during
+    // strict capture without weakening any readiness condition.
+    nextFrameTimeout = window.setTimeout(() => {
+      nextFrameTimeout = 0;
+      animationFrame = requestAnimationFrame(() => {
+        animationFrame = 0;
+        if (!destroyed && !viewer.isDestroyed()) viewer.scene.requestRender();
+      });
+    }, 100);
   };
 
   const evaluate = () => {
@@ -275,6 +283,7 @@ export function startCesiumReadinessController(input: {
     },
     destroy() {
       destroyed = true;
+      if (nextFrameTimeout) window.clearTimeout(nextFrameTimeout);
       if (animationFrame) cancelAnimationFrame(animationFrame);
       removeMoveStart();
       removeMoveEnd();

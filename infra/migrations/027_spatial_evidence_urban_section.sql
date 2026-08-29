@@ -161,6 +161,11 @@ CREATE TABLE urban_section_objects (
     CHECK (start_distance_m >= 0 AND end_distance_m >= start_distance_m)
 );
 
+-- Composite tenant references require the same candidate key on the parent.
+ALTER TABLE saved_views
+    ADD CONSTRAINT saved_views_organization_id_id_key
+    UNIQUE (organization_id, id);
+
 CREATE TABLE investigation_spatial_states (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     organization_id uuid NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
