@@ -1,5 +1,13 @@
 # Performance and spatial delivery
 
+## Browser readiness measurements
+
+production UIはnavigation開始から `app_shell / map_2d_interaction / three_d_first_meaningful / pack_interaction / visual_complete / capture_strict` を `performance.mark` と最大100件のlocal sampleへ記録する。normal GPUとSwiftShaderを混在させず、p50/p95を別系列で集計する。
+
+目標値は2D interaction p50 ≤ 2秒・p95 ≤ 4秒、Pack 3D interaction p50 ≤ 8秒・p95 ≤ 12秒、canonical local strict ≤ 60秒である。これは目標でありSLAではない。全市camera streamと画面外refinementはPack interactionのcritical pathに入れない。
+
+canonical PackはJSON 0.6 MiB未満で、既存immutable b3dm約4.3 MiBとDEM GLB約1.6 MiBを参照する。API artifactはSHA-256 ETag、immutable cache、Range対応storage URIを返す。Service Workerは明示された単一Pack assignmentだけをoffline cacheし、全市建物をcacheしない。
+
 No production SLA is claimed. Measurements are labelled either `REAL_MUNICIPAL_DATA` (offline pipeline timings from Maizuru/Fujisawa) or `SYNTHETIC_SCALE` (database/API scale fixture).
 
 `python -m analysis.scripts.benchmark_pilot_api --output pilot-performance.json` creates 100,000 synthetic buildings and 100,000 synthetic road edges in migrated PostGIS, takes 30 samples (10 for cold MVT and municipal home views), reports p50/p95/max, then removes the fixture. It measures `/cities`, bounded buildings, mesh detail, scenario detail, A/B/C comparison, route detail, City Home, Data Hub, and cold/warm tiles. CI publishes the JSON as the `pilot-performance` artifact.

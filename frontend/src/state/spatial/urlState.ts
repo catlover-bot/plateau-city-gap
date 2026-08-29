@@ -186,6 +186,11 @@ export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearc
   }
   if (!state.inspectorOpen) params.set("inspector", "closed");
   if (state.savedInvestigationOpen) params.set("saved", "1");
-  if (passthrough?.get("buildingSource") === "verified-local") params.set("buildingSource", "verified-local");
+  const buildingSource = passthrough?.get("buildingSource");
+  if (buildingSource === "verified-local" || buildingSource === "spatial-pack") {
+    params.set("buildingSource", buildingSource);
+  }
+  const section = passthrough?.get("section");
+  if (section === "open" || section === "closed") params.set("section", section);
   return `?${params.toString()}`;
 }

@@ -15,6 +15,7 @@ import {
   PointGraphics,
   PointPrimitive,
   PointPrimitiveCollection,
+  PolygonHierarchy,
   ScreenSpaceEventType,
   UrlTemplateImageryProvider,
   Viewer
@@ -71,6 +72,7 @@ interface CesiumMapProps {
   analysisLens?: AnalysisLens;
   counterfactualState?: CounterfactualState;
   readinessRequirements: SceneReadinessRequirements;
+  showUrbanSection?: boolean;
   visibility: LayerVisibility;
   plateauVisibility?: { buildings: boolean; roads: boolean; terrain?: boolean };
   meshPresentation?: "analysis" | "outline";
@@ -110,6 +112,7 @@ interface DataSourceRefs {
   workspace?: GeoJsonDataSource;
   futures?: GeoJsonDataSource;
   workspacePoints?: WorkspacePointRef[];
+  urbanSectionPlane?: Entity;
 }
 
 interface WorkspacePointRef {
@@ -588,6 +591,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     analysisLens = "none",
     counterfactualState = "baseline",
     readinessRequirements,
+    showUrbanSection = false,
     visibility,
     plateauVisibility,
     meshPresentation = "analysis",
@@ -692,7 +696,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     const viewer = viewerRef.current;
     if (!viewer || viewer.isDestroyed()) return Promise.resolve();
     plateauLoadRef.current = (async () => {
-      const verifiedLocalOnly = new URLSearchParams(window.location.search).get("buildingSource") === "verified-local";
+      const requestedBuildingSource = new URLSearchParams(window.location.search).get("buildingSource");
+      const localPackOnly = requestedBuildingSource === "spatial-pack"
+        || requestedBuildingSource === "verified-local";
       const visible = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
         workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
       );
@@ -741,7 +747,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           fallbackStarted = true;
           const fallback = await loadBundledBuildingTileset(data);
           if (!fallback || viewer.isDestroyed()) {
-            if (!verifiedLocalOnly) await startOfficialStream();
+            if (!localPackOnly) await startOfficialStream();
             return;
           }
           applyBuildingStyle(fallback, selectedBuildingIdRef.current, {
@@ -751,22 +757,21 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           addTileset(viewer, fallback);
           fallback.show = visible;
           sourcesRef.current.plateauFallbackTileset = fallback;
-          containerRef.current?.setAttribute("data-building-source", "bundled-fallback-loading");
+          containerRef.current?.setAttribute("data-building-source", "spatial-pack-loading");
           fallback.initialTilesLoaded.addEventListener(() => {
             if (viewer.isDestroyed()) return;
             if (sourcesRef.current.plateauFastTileset) sourcesRef.current.plateauFastTileset.show = false;
-            containerRef.current?.setAttribute("data-building-source", "bundled-fallback");
-            containerRef.current?.setAttribute("data-building-tiles-loaded", "fallback");
+            containerRef.current?.setAttribute("data-building-source", "spatial-evidence-pack");
+            containerRef.current?.setAttribute("data-building-tiles-loaded", "pack-296");
             viewer.scene.requestRender();
-            if (!verifiedLocalOnly) window.setTimeout(() => void startOfficialStream(), 350);
+            if (!localPackOnly) window.setTimeout(() => void startOfficialStream(), 350);
           });
-          if (!verifiedLocalOnly) window.setTimeout(() => void startOfficialStream(), 4_000);
+          if (!localPackOnly) window.setTimeout(() => void startOfficialStream(), 4_000);
         };
 
         const fast = await loadFastStartBuildingTileset(data);
         if (!fast || viewer.isDestroyed()) {
-          if (!verifiedLocalOnly) await startBundledFallback();
-          else containerRef.current?.setAttribute("data-building-source", "verified-fast-start-unavailable");
+          await startBundledFallback();
           return;
         }
         applyBuildingStyle(fast, selectedBuildingIdRef.current, {
@@ -782,9 +787,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           containerRef.current?.setAttribute("data-building-source", "fast-start");
           containerRef.current?.setAttribute("data-building-tiles-loaded", "fast");
           viewer.scene.requestRender();
-          if (!verifiedLocalOnly) window.setTimeout(() => void startBundledFallback(), 250);
+          window.setTimeout(() => void startBundledFallback(), 250);
         });
-        if (!verifiedLocalOnly) window.setTimeout(() => void startBundledFallback(), 1_200);
+        window.setTimeout(() => void startBundledFallback(), 1_200);
       } catch (error) {
         console.warn("Bundled PLATEAU building subset failed to initialize", error);
         containerRef.current?.setAttribute("data-building-source", "unavailable");
@@ -909,8 +914,18 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       sources: () => ({
         buildingTilesets: [
           { source: "official-stream", tileset: sourcesRef.current.plateauTileset },
-          { source: "bundled-fallback", tileset: sourcesRef.current.plateauFallbackTileset },
-          { source: "verified-fast-start", tileset: sourcesRef.current.plateauFastTileset },
+          {
+            source: "spatial-evidence-pack",
+            tileset: sourcesRef.current.plateauFallbackTileset,
+            targetFeatureCount: 296,
+            packId: "maizuru-533513314-plateau-2025-v1",
+          },
+          {
+            source: "verified-fast-start",
+            tileset: sourcesRef.current.plateauFastTileset,
+            targetFeatureCount: 15,
+            packId: "maizuru-533513314-plateau-2025-v1",
+          },
         ],
         terrainTileset: sourcesRef.current.plateauTerrainTileset,
         roads: sourcesRef.current.plateauRoads,
@@ -1183,6 +1198,76 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     if (plateauTerrain && !sources.plateauTerrainTileset) void loadPlateauTerrain();
     viewerRef.current?.scene.requestRender();
   }, [loadPlateauTerrain, loadPlateauTileset, plateauVisibility, visibility, workspaceMap, workspaceVisibility]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewerReady || !viewer || viewer.isDestroyed()) return;
+    if (sourcesRef.current.urbanSectionPlane) {
+      viewer.entities.remove(sourcesRef.current.urbanSectionPlane);
+      sourcesRef.current.urbanSectionPlane = undefined;
+    }
+    containerRef.current?.setAttribute("data-section-plane-ready", "false");
+    if (!showUrbanSection) {
+      viewer.scene.requestRender();
+      return;
+    }
+    let cancelled = false;
+    const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+    void fetch(`${base}data/spatial-packs/maizuru-533513314-plateau-2025-v1/sections.json`)
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Urban Section HTTP ${response.status}`);
+        return response.json() as Promise<{
+          geometry: { coordinates: Array<[number, number]> };
+          terrain_samples: Array<{ elevation_m: number | null }>;
+          buildings: Array<{ properties: { measured_height_m?: number | null } }>;
+          transect_id: string;
+        }>;
+      })
+      .then((section) => {
+        if (cancelled || viewer.isDestroyed()) return;
+        const elevations = section.terrain_samples
+          .map((sample) => sample.elevation_m)
+          .filter((value): value is number => typeof value === "number");
+        const heights = section.buildings
+          .map((building) => building.properties.measured_height_m)
+          .filter((value): value is number => typeof value === "number");
+        const endpoints = [
+          section.geometry.coordinates[0],
+          section.geometry.coordinates[section.geometry.coordinates.length - 1],
+        ]
+          .filter((coordinate): coordinate is [number, number] => Boolean(coordinate));
+        if (endpoints.length !== 2 || elevations.length === 0) throw new Error("Urban Section has no real TIN coverage");
+        const minimum = Math.min(...elevations);
+        const maximum = Math.max(...elevations) + Math.max(...heights, 0);
+        const positions = Cartesian3.fromDegreesArrayHeights([
+          endpoints[0][0], endpoints[0][1], minimum,
+          endpoints[1][0], endpoints[1][1], minimum,
+          endpoints[1][0], endpoints[1][1], maximum,
+          endpoints[0][0], endpoints[0][1], maximum,
+        ]);
+        sourcesRef.current.urbanSectionPlane = viewer.entities.add({
+          id: `urban-section-plane:${section.transect_id}`,
+          name: "PLATEAU Urban Section plane",
+          polygon: {
+            hierarchy: new PolygonHierarchy(positions),
+            perPositionHeight: true,
+            material: Color.fromCssColorString("#b47a21").withAlpha(0.18),
+            outline: true,
+            outlineColor: Color.fromCssColorString("#8f5c18").withAlpha(0.85),
+          },
+          properties: {
+            source: "PLATEAU Maizuru 2025 dem:TINRelief + actual building measuredHeight",
+            elevationExaggeration: 1,
+          },
+        });
+        containerRef.current?.setAttribute("data-section-plane-ready", "true");
+        viewer.scene.requestRender();
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) onWarningRef.current(reason instanceof Error ? reason.message : "Urban Section plane unavailable");
+      });
+    return () => { cancelled = true; };
+  }, [showUrbanSection, viewerReady]);
 
   useEffect(() => {
     setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility, counterfactualState, analysisLens);

@@ -61,9 +61,10 @@
 .map-mode-switch button { height: 31px; padding: 0 10px; }
 .share-map-button, .saved-investigation-trigger { height: 35px; }
 .open-inspector { top: 12px; right: 12px; border-radius: 2px; box-shadow: none; }
-.map-preset-bar { top: 12px; right: 312px; max-width: min(530px, calc(100% - 690px)); border-radius: 2px; box-shadow: none; }
+.map-preset-bar { top: 12px; right: 312px; max-width: min(530px, calc(100% - 690px)); border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .layer-catalog { right: 312px; border-radius: 0; box-shadow: none; }
-.resolution-rail { top: 58px; left: 62px; border-radius: 0; box-shadow: none; }
+.resolution-rail { top: 58px; left: 62px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.resolution-rail li, .resolution-rail button, .resolution-rail-label { background: rgb(247 246 238 / 96%); }
 .resolution-rail-label { padding: 0 6px; writing-mode: horizontal-tb; }
 .resolution-rail button { min-width: 58px; height: 41px; padding: 0 7px 0 10px; }
 .resolution-rail button strong { font-size: 9px; }
@@ -82,6 +83,8 @@
   background: rgb(246 245 237 / 96%);
   color: var(--cg-ink);
 }
+.analysis-lens-rail { border: 0; background: transparent; }
+.analysis-lens-rail > header, .analysis-lens-tabs, .lens-legend, .counterfactual-switch, .lens-claim-boundary { background: rgb(246 245 237 / 96%); }
 .analysis-lens-rail > header { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 8px 9px; border-right: 1px solid var(--cg-line); }
 .analysis-lens-rail > header span { color: var(--cg-teal); font-size: 6px; font-weight: 900; letter-spacing: .13em; }
 .analysis-lens-rail > header strong { overflow: hidden; margin-top: 3px; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
@@ -101,7 +104,7 @@
 .counterfactual-switch button.active { border-color: var(--cg-ink); background: var(--cg-ink); color: #fff; }
 .lens-claim-boundary { grid-column: 1 / 3; margin: 0; padding: 6px 8px; border-top: 1px solid var(--cg-line); color: #59625d; font-size: 7px; line-height: 1.45; }
 
-.context-legend { bottom: 12px; left: 416px; border-radius: 0; box-shadow: none; }
+.context-legend { display: none; }
 .plateau-3d-context { bottom: 12px; left: 416px; max-width: calc(100% - 740px); border-radius: 0; box-shadow: none; }
 .cesium-map::after { right: 312px; bottom: 12px; }
 .visual-readiness-status { position: absolute; z-index: 12; right: 312px; bottom: 42px; display: flex; max-width: 340px; align-items: center; padding: 7px 9px; border-left: 2px solid var(--cg-amber); background: rgb(246 245 237 / 95%); color: var(--cg-ink); font-size: 8px; gap: 7px; }

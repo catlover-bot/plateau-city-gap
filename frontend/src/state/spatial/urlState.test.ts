@@ -47,6 +47,8 @@ describe("spatial URL state", () => {
     const state = parseSpatialUrl("?city=maizuru&scene=plateau_detail&resolution=building_group");
     const serialized = spatialStateToSearch(state, new URLSearchParams("buildingSource=verified-local&unknown=discard"));
     expect(serialized).toContain("buildingSource=verified-local");
+    expect(spatialStateToSearch(state, new URLSearchParams("buildingSource=spatial-pack"))).toContain("buildingSource=spatial-pack");
+    expect(spatialStateToSearch(state, new URLSearchParams("section=closed"))).toContain("section=closed");
     expect(serialized).not.toContain("unknown");
   });
 });

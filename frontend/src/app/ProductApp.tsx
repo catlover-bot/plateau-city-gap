@@ -25,6 +25,8 @@ import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, Intervention
 import { CITY_VIEWPORTS, type AnalysisLens, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
 import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
+import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
+import { UrbanSection } from "../features/urban-section/UrbanSection";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -60,6 +62,9 @@ export function ProductApp() {
   const [scenarioMode, setScenarioMode] = useState<"compare" | "stress">("compare");
   const [stress, setStress] = useState<FuturesStressMode>("normal");
   const [validationView, setValidationView] = useState<ValidationView>("reference");
+  const [urbanSectionOpen, setUrbanSectionOpen] = useState(
+    () => new URLSearchParams(window.location.search).get("section") !== "closed",
+  );
   const mapRef = useRef<MapEngineAdapter>(null);
   const visual2dParts = useRef(new Set<string>());
 
@@ -92,6 +97,9 @@ export function ProductApp() {
   useEffect(() => { setActiveLayers(sceneLayerIds(state.scenePreset)); }, [state.scenePreset]);
   useEffect(() => {
     visual2dParts.current.clear();
+    document.documentElement.dataset.interactionReady = "false";
+    document.documentElement.dataset.visualComplete = "false";
+    document.documentElement.dataset.captureStrictReady = "false";
     document.documentElement.dataset.visualReady = "false";
     document.documentElement.dataset.visualScene = state.scenePreset;
   }, [state.analysisLens, state.city, state.counterfactualState, state.mapMode, state.primaryLayer, state.scenePreset]);
@@ -103,6 +111,9 @@ export function ProductApp() {
   }, []);
 
   const data = datasets[state.city] ?? datasets.maizuru;
+  useEffect(() => {
+    if (data) recordReadinessMetric("app_shell", state.scenePreset);
+  }, [data, state.scenePreset]);
   const plan = data?.interventions?.plans.overall[String(siteCount) as "1" | "2" | "3"] ?? null;
   const scenario = useMemo(() => data ? scenarioCollections(data, plan) : { sites: EMPTY, meshes: EMPTY }, [data, plan]);
   const scenarioScores = useMemo(() => plan ? Object.fromEntries(Object.entries(plan.mesh_results).map(([code, result]) => [code, Number(result.after_score_c)]).filter((entry) => Number.isFinite(entry[1]))) : null, [plan]);
@@ -213,9 +224,16 @@ export function ProductApp() {
   const mark2dReady = useCallback((part: string, expected = 1) => {
     visual2dParts.current.add(part);
     if (visual2dParts.current.size < expected) return;
+    document.documentElement.dataset.interactionReady = "true";
+    document.documentElement.dataset.visualComplete = "true";
+    document.documentElement.dataset.captureStrictReady = "true";
     document.documentElement.dataset.visualReady = "true";
     document.documentElement.dataset.visualUnmet = "";
-    window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail: { scenePreset: state.scenePreset, engine: "maplibre", stableFrames: 3 } }));
+    recordReadinessMetric("map_2d_interaction", state.scenePreset);
+    const detail = { scenePreset: state.scenePreset, engine: "maplibre", stableFrames: 3 };
+    window.dispatchEvent(new CustomEvent("citygap:interaction-ready", { detail }));
+    window.dispatchEvent(new CustomEvent("citygap:visual-complete", { detail }));
+    window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail }));
   }, [state.scenePreset]);
   const markMapReady = useCallback(() => mark2dReady("map"), [mark2dReady]);
   const markBeforeReady = useCallback(() => mark2dReady("before", 2), [mark2dReady]);
@@ -292,7 +310,23 @@ export function ProductApp() {
         <SavedInvestigationRail open={state.savedInvestigationOpen} value={state.scenePreset} onClose={() => dispatch({ type: "set-saved-investigation-open", open: false })} onSelect={changeScene} />
         {compare ? <div className="synchronized-maps"><div className="compare-map"><header><span>BEFORE</span><strong>2025 現況</strong></header><AnalyticalMap data={data} validation={validation} preset="discovery" primaryLayer="analysis-city-gap" activeLayerIdsOverride={["reference-gsi-pale"]} selection={state.selection} viewport={state.viewport} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markBeforeReady} /></div><div className="compare-map"><header><span>AFTER</span><strong>Scenario {siteCount === 1 ? "A" : siteCount === 2 ? "B" : "C"} · {siteCount}地点</strong></header><AnalyticalMap data={data} validation={validation} preset="scenario-compare" primaryLayer="scenario-footprint" activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} interactive onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markAfterReady} /></div></div>
           : state.mapMode === "map2d" ? <AnalyticalMap ref={mapRef} data={data} validation={validation} preset={state.preset} primaryLayer={state.primaryLayer} activeLayerIdsOverride={activeLayers} selection={state.selection} viewport={state.viewport} scenarioSites={scenario.sites} scenarioMeshes={scenario.meshes} resilienceMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} dimNonSelected={Boolean(state.selection)} onSelectionChange={select} onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })} onReady={markMapReady} onError={setError} />
-            : <Plateau3DMap ref={mapRef} data={data} selection={state.selection} viewport={state.viewport} activeLayerIds={activeLayers} scenePreset={state.scenePreset} analysisLens={state.analysisLens} counterfactualState={state.counterfactualState} workspaceMap={municipal?.map ?? null} workspaceBuildingPoints={municipal?.buildingPoints ?? null} workspacePhase={workspacePhase} futuresMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} decisionSites={state.task === "try" ? plan?.sites ?? [] : []} afterScores={state.task === "try" ? scenarioScores : null} decisionFlow={state.task === "try" ? decisionFlow : null} onSelectionChange={select} />}
+            : <Plateau3DMap ref={mapRef} data={data} selection={state.selection} viewport={state.viewport} activeLayerIds={activeLayers} scenePreset={state.scenePreset} analysisLens={state.analysisLens} counterfactualState={state.counterfactualState} showUrbanSection={urbanSectionOpen} workspaceMap={municipal?.map ?? null} workspaceBuildingPoints={municipal?.buildingPoints ?? null} workspacePhase={workspacePhase} futuresMap={futures?.cities[state.city].resilience_map ?? null} stressMode={stress} decisionSites={state.task === "try" ? plan?.sites ?? [] : []} afterScores={state.task === "try" ? scenarioScores : null} decisionFlow={state.task === "try" ? decisionFlow : null} onSelectionChange={select} />}
+        {state.mapMode === "plateau3d" && state.city === "maizuru" && <UrbanSection
+          open={urbanSectionOpen}
+          selection={state.selection}
+          counterfactualState={state.counterfactualState}
+          onClose={() => setUrbanSectionOpen((value) => !value)}
+          onSelectBuilding={(id, properties) => dispatch({ type: "set-selection", selection: {
+            type: "building",
+            id,
+            city: state.city,
+            urbanState: state.urbanState,
+            label: `${String(properties.usage ?? "用途不明")}のPLATEAU建物`,
+            longitude: state.selection?.longitude,
+            latitude: state.selection?.latitude,
+            properties: { ...properties, parent_mesh_code: "533513314", pack_id: "maizuru-533513314-plateau-2025-v1" },
+          } })}
+        />}
         <ContextLegend layerId={state.primaryLayer} />
         {state.primaryLayer === "validation-temporal" && <div className="map-reference-badge"><span>VALIDATION REFERENCE</span><strong>国立市 · 2023→2025</strong></div>}
         {!state.inspectorOpen && <button type="button" className="open-inspector" onClick={() => dispatch({ type: "set-inspector-open", open: true })}>地点情報を開く</button>}

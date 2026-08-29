@@ -6,13 +6,15 @@
 
 CITY GAPは、人口・高齢者数と公共交通・医療への到達しやすさを500mメッシュで重ね、追加調査候補を見つけます。結果は危険度、施策優先順位、居住者個人の実数を示しません。候補を選んだ後は、同じFindingと選択を保ったままPLATEAUの都市objectへ解像度を上げ、施策比較とEvidenceへ接続します。
 
-![CITY GAP Resolution Lift](docs/assets/current/03-resolution-lift.png)
+![CITY GAP Resolution Lift](docs/assets/current/02-resolution-lift.png)
 
 ## What it does
 
 - 舞鶴市495メッシュと藤沢市327メッシュを同じ決定論的pipelineで分析
 - 都市 → 地区 → 500m → 建物群 → 建物 → 道路 → 施策のResolution Lift
 - PLATEAU建物・道路LOD1面・実DEMを同じ調査sceneで表示
+- 296棟・道路135・実TINを固定するcontent-addressed Spatial Evidence Pack
+- 同じ選択を3Dと実DEM断面で同期するPLATEAU Urban Section
 - 既存のCITY GAP計算値だけを使うUrban X-Ray
 - 実network距離だけを表示するService Pulse
 - Baseline / Scenario / Stressのchanged-only Counterfactual Twin
@@ -108,6 +110,7 @@ python -m analysis.src.run_city_analysis --config analysis/config/fujisawa.yaml
 python -m analysis.scripts.run_final_audit
 python -m analysis.scripts.verify_decision_studio
 python -m analysis.scripts.verify_network_scenarios
+python -m analysis.scripts.build_spatial_evidence_pack
 pytest -q
 ```
 

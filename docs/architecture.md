@@ -7,7 +7,7 @@ CITY GAPは、公式都市データを「発見」から「検証可能な施策
 ```text
 PLATEAU
   建物 / 道路 / 地形 / 土地利用 / 都市計画 / 洪水・土砂・津波
-国勢調査 / 国土数値情報 / GTFS・施設
+国勢調査 / 国土数値情報P11駅・バス停 / 施設（舞鶴市公式GTFSは未公開・利用なし）
                          │
                          ▼
 Urban Data Platform
@@ -23,6 +23,8 @@ CITY GAP Engine
                          ▼
                自治体レビュー / Decision Record
 ```
+
+Findingの局所調査は、`Spatial Evidence Pack → Urban Section` を経由する。Packは都市全体の複製ではなく、Investigationで選択した境界とversionを固定した不変delivery unitである。詳細は [Spatial Evidence Pack](spatial-evidence-pack.md) と [Urban Section](urban-section.md) を参照する。
 
 ## Trust boundary
 
@@ -94,6 +96,10 @@ Object Lensは選択objectからsource、year、ID、属性、関係object、Fin
 ## Visual Readiness Protocol
 
 正規画像は固定時間待ちではなく、scene requirementsで撮影可否を決める。
+
+- `INTERACTION_READY`: fast-start建物15棟、局所DEM、道路、selectionが操作可能。全市streamを待たない。
+- `VISUAL_COMPLETE`: 対象Pack 296棟、局所DEM、label/overlay/font、cameraが揃う。
+- `CAPTURE_STRICT_READY`: coverage 0.95以上、critical request 0、同一signature 3 frame、scene固有断面条件が揃う。
 
 - basemap、font、analysis、overlay ready
 - camera settled

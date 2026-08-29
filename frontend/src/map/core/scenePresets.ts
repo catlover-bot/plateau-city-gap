@@ -26,8 +26,21 @@ export interface ScenePreset {
 }
 
 const inspector = ["summary", "why", "plateau", "accessibility", "planning-hazard", "evidence"] as const;
-const readiness2d: SceneReadinessRequirements = { requiresTerrain: false, requiresLocalDem: false, requiresBuildings: false, requiresRoads: false, requiresAnalysis: true, minimumBuildingFeatures: 0, minimumTerrainTiles: 0, stableFrames: 3 };
-const readinessLocal3d: SceneReadinessRequirements = { requiresTerrain: true, requiresLocalDem: true, requiresBuildings: true, requiresRoads: true, requiresAnalysis: true, minimumBuildingFeatures: 1, minimumTerrainTiles: 1, stableFrames: 3 };
+const readiness2d: SceneReadinessRequirements = { requiresTerrain: false, requiresLocalDem: false, requiresBuildings: false, requiresRoads: false, requiresAnalysis: true, requiresBasemap: true, minimumBuildingFeatures: 0, minimumTerrainTiles: 0, stableFrames: 3 };
+const readinessLocal3d: SceneReadinessRequirements = {
+  requiresTerrain: true,
+  requiresLocalDem: true,
+  requiresBuildings: true,
+  requiresRoads: true,
+  requiresAnalysis: true,
+  requiresBasemap: false,
+  minimumBuildingFeatures: 15,
+  interactionMinimumBuildingFeatures: 15,
+  expectedTargetBuildingCount: 296,
+  strictTargetCoverageRatio: 0.95,
+  minimumTerrainTiles: 1,
+  stableFrames: 3,
+};
 const readinessContext3d: SceneReadinessRequirements = { ...readinessLocal3d, requiresLocalDem: false };
 
 export const SCENE_PRESETS: Record<ScenePresetId, ScenePreset> = {

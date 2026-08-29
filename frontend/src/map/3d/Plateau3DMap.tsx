@@ -6,6 +6,7 @@ import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import type { CesiumMapHandle } from "../../components/CesiumMap";
 import { SCENE_PRESETS } from "../core/scenePresets";
 import type { VisualReadinessResult, VisualReadinessSnapshot } from "./readiness/visualReadiness";
+import { recordReadinessMetric } from "./readiness/performanceMetrics";
 
 const CesiumMap = lazy(async () => {
   const module = await import("../../components/CesiumMap");
@@ -20,6 +21,7 @@ interface Props {
   scenePreset: ScenePresetId;
   analysisLens: AnalysisLens;
   counterfactualState: CounterfactualState;
+  showUrbanSection?: boolean;
   workspaceMap?: WorkspaceMapData | null;
   workspaceBuildingPoints?: WorkspaceBuildingPoints | null;
   workspacePhase?: WorkspacePhase;
@@ -152,6 +154,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   scenePreset,
   analysisLens,
   counterfactualState,
+  showUrbanSection = false,
   workspaceMap = null,
   workspaceBuildingPoints = null,
   workspacePhase = "baseline",
@@ -169,6 +172,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const [readiness, setReadiness] = useState<VisualReadinessResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
+  const readinessEventsRef = useRef({ interaction: false, visual: false, strict: false });
   const mesh = useMemo(() => meshFromSelection(data, selection), [data, selection]);
   const decisionTwinContext = scenePreset === "scenario_compare" || scenePreset === "hazard_stress";
   const buildings = activeLayerIds.includes("plateau-buildings") || decisionTwinContext;
@@ -180,18 +184,37 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   useEffect(() => {
     setReady(false);
     setReadiness(null);
+    readinessEventsRef.current = { interaction: false, visual: false, strict: false };
+    document.documentElement.dataset.interactionReady = "false";
+    document.documentElement.dataset.visualComplete = "false";
+    document.documentElement.dataset.captureStrictReady = "false";
     document.documentElement.dataset.visualReady = "false";
   }, [analysisLens, counterfactualState, scenePreset]);
 
   const updateVisualReadiness = (snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => {
     setReadiness(result);
-    setReady(result.visualReady);
-    document.documentElement.dataset.visualReady = String(result.visualReady);
+    setReady(result.interactionReady);
+    document.documentElement.dataset.interactionReady = String(result.interactionReady);
+    document.documentElement.dataset.visualComplete = String(result.visualComplete);
+    document.documentElement.dataset.captureStrictReady = String(result.captureStrictReady);
+    document.documentElement.dataset.visualReady = String(result.captureStrictReady);
     document.documentElement.dataset.visualScene = scenePreset;
     document.documentElement.dataset.visualUnmet = result.unmet.join(",");
-    if (result.visualReady) {
-      window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail: { scenePreset, snapshot } }));
+    if (result.interactionReady && !readinessEventsRef.current.interaction) {
+      readinessEventsRef.current.interaction = true;
+      window.dispatchEvent(new CustomEvent("citygap:interaction-ready", { detail: { scenePreset, snapshot } }));
+      recordReadinessMetric("pack_interaction", scenePreset);
       onReady?.();
+    }
+    if (result.visualComplete && !readinessEventsRef.current.visual) {
+      readinessEventsRef.current.visual = true;
+      window.dispatchEvent(new CustomEvent("citygap:visual-complete", { detail: { scenePreset, snapshot } }));
+      recordReadinessMetric("visual_complete", scenePreset);
+    }
+    if (result.captureStrictReady && !readinessEventsRef.current.strict) {
+      readinessEventsRef.current.strict = true;
+      window.dispatchEvent(new CustomEvent("citygap:visual-ready", { detail: { scenePreset, snapshot } }));
+      recordReadinessMetric("capture_strict", scenePreset);
     }
   };
 
@@ -244,6 +267,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           analysisLens={analysisLens}
           counterfactualState={counterfactualState}
           readinessRequirements={scene.readiness}
+          showUrbanSection={showUrbanSection}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
           plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
@@ -272,13 +296,16 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           onBuildingSelect={(building) => building ? onSelectionChange(buildingSelection(data, building, selection)) : undefined}
           onRoadSelect={(road) => onSelectionChange(roadSelection(data, road, selection))}
           onVisualReadinessChange={updateVisualReadiness}
-          onReady={() => setProgressiveReady(true)}
+          onReady={() => {
+            setProgressiveReady(true);
+            recordReadinessMetric("three_d_first_meaningful", scenePreset);
+          }}
           onError={setError}
           onWarning={setWarning}
         />
       </Suspense>
       {!progressiveReady && !error && <div className="map-engine-loading" role="status"><span />PLATEAU地物と背景図を読み込み中</div>}
-      {progressiveReady && !ready && !error && <div className="visual-readiness-status" role="status"><span />建物・道路・DEM・cameraを確認中<small>{readiness?.unmet.join(" · ")}</small></div>}
+      {progressiveReady && !ready && !error && <div className="visual-readiness-status" role="status"><span />操作用の建物・道路・DEMを確認中<small>{readiness?.interactionUnmet.join(" · ")}</small></div>}
       <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>
       {warning && <div className="map-inline-warning" role="status">{warning}</div>}
       {error && <div className="map-engine-fallback" role="alert"><strong>3Dを表示できません</strong><p>{error}</p><span>2D地図と候補一覧は引き続き利用できます。</span></div>}

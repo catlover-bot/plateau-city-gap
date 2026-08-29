@@ -142,6 +142,7 @@ for (const viewport of viewports) {
     let gradientCount = 0;
     let shadowCount = 0;
     let floatingPanelCount = 0;
+    const floatingPanels = [];
     let borderedSurfaceCount = 0;
     let maximumRadiusPx = 0;
     for (const element of elements) {
@@ -153,7 +154,15 @@ for (const viewport of viewports) {
       if (isSurface(style) && radius >= rect.height * 0.4 && rect.width > rect.height * 1.15) pillCount += 1;
       if (style.backgroundImage.includes("gradient")) gradientCount += 1;
       if (style.boxShadow !== "none") shadowCount += 1;
-      if ((style.position === "absolute" || style.position === "fixed") && isSurface(style) && rect.width >= 120) floatingPanelCount += 1;
+      if ((style.position === "absolute" || style.position === "fixed") && isSurface(style) && rect.width >= 120) {
+        floatingPanelCount += 1;
+        floatingPanels.push({
+          tag: element.tagName.toLowerCase(),
+          className: element.className?.toString() ?? "",
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+        });
+      }
       if (isSurface(style) && [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth].some((width) => Number.parseFloat(width) > 0)) borderedSurfaceCount += 1;
       for (const color of [style.color, style.backgroundColor, style.borderTopColor]) {
         if (saturated(color)) colors.add(color);
@@ -170,6 +179,12 @@ for (const viewport of viewports) {
       gradientCount,
       shadowCount,
       floatingPanelCount,
+      floatingPanels,
+      persistentMajorSurfaceCount: [
+        document.querySelector(".task-navigation"),
+        document.querySelector(".context-inspector:not(.closed)"),
+        document.querySelector(".urban-section"),
+      ].filter((element) => element && visible(element)).length,
       borderedSurfaceCount,
       maximumRadiusPx,
       accentColorCount: colors.size,
@@ -212,6 +227,10 @@ await writeFile(output, `${JSON.stringify(report, null, 2)}\n`, "utf8");
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 await browser.close();
 
-if (report.consoleErrors.length || report.localHttpFailures.length || report.viewports.some((item) => item.horizontalOverflow)) {
+if (
+  report.consoleErrors.length
+  || report.localHttpFailures.length
+  || report.viewports.some((item) => item.horizontalOverflow || item.persistentMajorSurfaceCount > 3)
+) {
   process.exitCode = 1;
 }

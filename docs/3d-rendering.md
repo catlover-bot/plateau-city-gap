@@ -14,7 +14,7 @@ PLATEAUを外すと建物level Investigation、道路object調査、実DEM上の
 2. `plateau`: 検証済みlocal subset 3 tiles / 856棟。対象mesh内296棟。
 3. 公式camera stream: 舞鶴市2025 LOD1 44,640棟。
 
-通常はfast-start → bundled subset → official streamへprogressiveに移行する。正規Deep Dive captureは `buildingSource=verified-local` で公式b3dm由来の15棟sourceを固定し、外部streamの可用性で画像が変わらないようにする。これはfallback geometryの捏造ではなく、checksumとmetadataを持つ公式source subsetである。
+通常はfast-start → Spatial Evidence Pack → optional official streamへprogressiveに移行する。`INTERACTION_READY` は15棟で操作を解放するが、正規captureは `buildingSource=spatial-pack` で対象296棟の95%以上がloadedになるまで成功しない。外部全市streamはstrict条件をblockしない。
 
 Urban X-Rayは建物高さを変形しない。選択mesh内の建物所属をamber、対象外をneutral/dim、選択建物をsemantic accentで表示する。個別建物へ500m統計値を付与しない。
 
@@ -60,7 +60,7 @@ Sceneとresolutionは独立stateである。sceneは何を調べるか、resolut
 
 ## Visual Readiness Protocol
 
-撮影は時間待ちではなく、次をscene requirementsとして評価する。
+撮影は時間待ちではなく、`INTERACTION_READY / VISUAL_COMPLETE / CAPTURE_STRICT_READY`を別々に評価する。
 
 - app、basemap、analysis、overlay、font ready
 - camera settled
@@ -71,7 +71,7 @@ Sceneとresolutionは独立stateである。sceneは何を調べるか、resolut
 - outstanding critical requests = 0
 - 同一readiness signatureが3 render frame連続
 
-全条件が揃うまで `document.documentElement.dataset.visualReady` はfalseである。timeout時は画像を保存せず、readiness、camera、tile count、network failure、consoleを診断JSONへ保存する。画面外の任意LOD refinementはcritical resourceと分けてmanifestへ記録する。
+通常操作は `dataset.interactionReady` だけを待つ。画像は `dataset.captureStrictReady`（互換alias `visualReady`）だけを待つ。15棟fast-start、terrain fallback、空断面、coverage不足は画像を保存せず、readiness、camera、target count、network failure、consoleを診断JSONへ保存する。画面外の任意LOD refinementはcritical resourceと分ける。
 
 ## Render budget
 

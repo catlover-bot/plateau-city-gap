@@ -70,11 +70,20 @@ describe("3D analysis contracts", () => {
   it("fails a terrain scene until every explicit readiness requirement is met", () => {
     const requirements = { requiresTerrain: true, requiresLocalDem: true, requiresBuildings: true, requiresRoads: true, requiresAnalysis: true, minimumBuildingFeatures: 1, minimumTerrainTiles: 1, stableFrames: 3 };
     expect(evaluateVisualReadiness(INITIAL_VISUAL_READINESS, requirements).visualReady).toBe(false);
-    const complete = { ...INITIAL_VISUAL_READINESS, appReady: true, basemapReady: true, analysisReady: true, cameraSettled: true, cesiumSceneReady: true, canvasSizeReady: true, buildingTilesReady: true, buildingFeatureCount: 1, terrainProviderReady: true, terrainTileCount: 1, localDemReady: true, roadsReady: true, overlayReady: true, fontReady: true, stableFrameCount: 3, terrainSource: "PLATEAU DEM", buildingSource: "PLATEAU 3D Tiles" };
-    expect(evaluateVisualReadiness(complete, requirements)).toEqual({ visualReady: true, unmet: [] });
+    const complete = { ...INITIAL_VISUAL_READINESS, appReady: true, basemapReady: true, analysisReady: true, cameraSettled: true, cesiumSceneReady: true, canvasSizeReady: true, buildingTilesReady: true, buildingFeatureCount: 1, targetBuildingCount: 1, loadedTargetBuildingCount: 1, targetCoverageRatio: 1, terrainProviderReady: true, terrainTileCount: 1, localDemReady: true, roadsReady: true, overlayReady: true, fontReady: true, stableFrameCount: 3, terrainSource: "PLATEAU DEM", buildingSource: "PLATEAU 3D Tiles", packId: "pack" };
+    const result = evaluateVisualReadiness(complete, requirements);
+    expect(result.interactionReady).toBe(true);
+    expect(result.visualComplete).toBe(true);
+    expect(result.captureStrictReady).toBe(true);
+    expect(result.unmet).toEqual([]);
     expect(evaluateVisualReadiness({ ...complete, localDemReady: false }, requirements).unmet).toContain("local_dem");
     expect(evaluateVisualReadiness({ ...complete, canvasSizeReady: false }, requirements).unmet).toContain("canvas_size");
     expect(evaluateVisualReadiness({ ...complete, outstandingCriticalRequests: 1 }, requirements).unmet).toContain("critical_requests");
     expect(evaluateVisualReadiness({ ...complete, stableFrameCount: 2 }, requirements).unmet).toContain("stable_frames");
+    const canonical = { ...requirements, minimumBuildingFeatures: 15, expectedTargetBuildingCount: 296 };
+    const fastStart = { ...complete, buildingFeatureCount: 15, targetBuildingCount: 296, loadedTargetBuildingCount: 15, targetCoverageRatio: 15 / 296 };
+    expect(evaluateVisualReadiness(fastStart, canonical).interactionReady).toBe(true);
+    expect(evaluateVisualReadiness(fastStart, canonical).captureStrictReady).toBe(false);
+    expect(evaluateVisualReadiness(fastStart, canonical).unmet).toContain("target_coverage");
   });
 });

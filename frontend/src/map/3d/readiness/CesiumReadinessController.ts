@@ -15,7 +15,12 @@ interface ReadinessTileset extends Cesium3DTileset {
 }
 
 export interface CesiumReadinessSources {
-  buildingTilesets: Array<{ source: string; tileset: Cesium3DTileset | undefined }>;
+  buildingTilesets: Array<{
+    source: string;
+    tileset: Cesium3DTileset | undefined;
+    targetFeatureCount?: number;
+    packId?: string;
+  }>;
   terrainTileset?: Cesium3DTileset;
   roads?: GeoJsonDataSource;
 }
@@ -58,10 +63,16 @@ function cameraSignature(viewer: Viewer): string {
 
 function setDataset(container: HTMLElement, snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) {
   container.dataset.visualReady = String(result.visualReady);
+  container.dataset.interactionReady = String(result.interactionReady);
+  container.dataset.visualComplete = String(result.visualComplete);
+  container.dataset.captureStrictReady = String(result.captureStrictReady);
   container.dataset.visualUnmet = result.unmet.join(",");
   container.dataset.cameraSettled = String(snapshot.cameraSettled);
   container.dataset.canvasSizeReady = String(snapshot.canvasSizeReady);
   container.dataset.buildingFeatureCount = String(snapshot.buildingFeatureCount);
+  container.dataset.targetBuildingCount = String(snapshot.targetBuildingCount);
+  container.dataset.loadedTargetBuildingCount = String(snapshot.loadedTargetBuildingCount);
+  container.dataset.targetCoverageRatio = snapshot.targetCoverageRatio.toFixed(6);
   container.dataset.terrainTileCount = String(snapshot.terrainTileCount);
   container.dataset.terrainReady = String(snapshot.terrainProviderReady);
   container.dataset.localDemReady = String(snapshot.localDemReady);
@@ -70,6 +81,7 @@ function setDataset(container: HTMLElement, snapshot: VisualReadinessSnapshot, r
   container.dataset.criticalRequests = String(snapshot.outstandingCriticalRequests);
   container.dataset.terrainSource = snapshot.terrainSource;
   container.dataset.buildingSource = snapshot.buildingSource;
+  container.dataset.packId = snapshot.packId;
 }
 
 export function startCesiumReadinessController(input: {
@@ -133,6 +145,14 @@ export function startCesiumReadinessController(input: {
       ? Math.max(activeBuilding.stats.numberOfFeaturesSelected ?? 0, activeBuilding.stats.numberOfFeaturesLoaded ?? 0)
       : 0;
     const buildingTilesReady = Boolean(activeBuilding && hasRequiredBuildingContent(activeBuilding));
+    const expectedTargetBuildings = requirements.expectedTargetBuildingCount ?? requirements.minimumBuildingFeatures;
+    const targetBuildingCount = expectedTargetBuildings > 0 ? expectedTargetBuildings : 0;
+    const loadedTargetBuildingCount = activeBuilding?.tileset?.tilesLoaded
+      ? Math.min(targetBuildingCount, activeBuilding.targetFeatureCount ?? 0)
+      : Math.min(targetBuildingCount, buildingFeatureCount, activeBuilding?.targetFeatureCount ?? 0);
+    const targetCoverageRatio = targetBuildingCount > 0
+      ? loadedTargetBuildingCount / targetBuildingCount
+      : 1;
     const terrainStats = statistics(sources.terrainTileset);
     const localTerrainTiles = terrainStats.numberOfTilesWithContentReady ?? 0;
     const terrainTileCount = Math.max(localTerrainTiles, globeTiles);
@@ -147,7 +167,7 @@ export function startCesiumReadinessController(input: {
     const outstandingCriticalRequests = (buildingTilesReady ? 0 : activeBuildingRequests)
       + (terrainStats.numberOfPendingRequests ?? 0)
       + (terrainStats.numberOfTilesProcessing ?? 0)
-      + (globeTiles === 0 ? globePendingRequests : 0);
+      + (requirements.requiresBasemap && globeTiles === 0 ? globePendingRequests : 0);
     container.dataset.optionalGlobeRequests = String(globeTiles > 0 ? globePendingRequests : 0);
     container.dataset.optionalBuildingRequests = String(optionalBuildingRequests);
     const signature = [
@@ -170,10 +190,13 @@ export function startCesiumReadinessController(input: {
       basemapReady: flags.basemapReady && globeTiles > 0,
       analysisReady: flags.analysisReady,
       cameraSettled,
-      cesiumSceneReady: !viewer.scene.isDestroyed() && globeTiles > 0,
+      cesiumSceneReady: !viewer.scene.isDestroyed(),
       canvasSizeReady,
       buildingTilesReady,
       buildingFeatureCount,
+      targetBuildingCount,
+      loadedTargetBuildingCount,
+      targetCoverageRatio,
       terrainProviderReady: (flags.broadTerrainReady && globeTiles > 0) || localDemReady,
       terrainTileCount,
       localDemReady,
@@ -184,6 +207,7 @@ export function startCesiumReadinessController(input: {
       stableFrameCount,
       terrainSource: requirements.requiresLocalDem && localDemReady ? "plateau-local-dem" : flags.broadTerrainReady ? "plateau-terrain" : localDemReady ? "plateau-local-dem-context" : "none",
       buildingSource: activeBuilding?.source ?? "none",
+      packId: activeBuilding?.packId ?? "none",
     };
     const result = evaluateVisualReadiness(snapshot, requirements);
     setDataset(container, snapshot, result);
@@ -192,7 +216,7 @@ export function startCesiumReadinessController(input: {
       lastEmission = emission;
       input.onChange(snapshot, result);
     }
-    if (!result.visualReady) requestNext();
+    if (!result.captureStrictReady) requestNext();
   };
 
   const removeMoveStart = viewer.camera.moveStart.addEventListener(() => {
