@@ -1,8 +1,8 @@
 {
   "schema_version": "citygap.plateau-native-browser-audit@1",
-  "generated_at": "2026-08-28T20:06:29.823Z",
-  "commit": "2a43ef68719736d497e888302faef395ce80bb20",
-  "production_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "generated_at": "2026-08-29T10:57:23.259Z",
+  "commit": "c13b33423408ab8fad1b11d9a7a9eed46c047e6e",
+  "production_url": "http://localhost:4173/plateau-city-gap/",
   "automated_browser_walkthrough": true,
   "human_usability_study": false,
   "checks": {

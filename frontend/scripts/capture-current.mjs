@@ -200,6 +200,8 @@ for (const specification of scenes) {
         sectionRoadCount: Number(section?.getAttribute("data-road-count") ?? 0),
         sectionTerrainSamples: Number(section?.getAttribute("data-terrain-samples") ?? 0),
         sectionTerrainCovered: Number(section?.getAttribute("data-terrain-covered") ?? 0),
+        serviceSectionReady: section?.getAttribute("data-service-section-ready") === "true",
+        counterfactualSectionReady: section?.getAttribute("data-counterfactual-ready") === "true",
         objectLensVisible: Boolean(document.querySelector(".object-lens")),
         reportVisible: Boolean(document.querySelector(".operations-workspace, .decision-record, .evidence-center")),
       };
@@ -231,9 +233,9 @@ for (const specification of scenes) {
         actual.sectionTerrainSamples > 0,
         actual.sectionTerrainCovered > 0,
       );
-      if (scene.requirePulse) checks.push(actual.pulseMarkers > 0, actual.pulseSemantics === "network-distance-only");
+      if (scene.requirePulse) checks.push(actual.pulseMarkers > 0, actual.pulseSemantics === "network-distance-only", actual.serviceSectionReady);
       if (scene.requireXray) checks.push(actual.lens === "urban-xray");
-      if (scene.requireTwin) checks.push(actual.lens === "changed-only", actual.counterfactual === "scenario");
+      if (scene.requireTwin) checks.push(actual.lens === "changed-only", actual.counterfactual === "scenario", actual.counterfactualSectionReady);
       if (scene.requireObject) checks.push(actual.selectionType === scene.requireObject);
       if (scene.requireObjectLens) checks.push(actual.objectLensVisible);
       if (scene.requireReport) checks.push(actual.reportVisible);
@@ -319,6 +321,8 @@ for (const specification of scenes) {
         building_relations: readiness.actual.sectionBuildingCount,
         road_intersections: readiness.actual.sectionRoadCount,
         plane_ready: readiness.actual.sectionPlaneReady,
+        service_relation_ready: readiness.actual.serviceSectionReady,
+        counterfactual_relation_ready: readiness.actual.counterfactualSectionReady,
       } : null,
       readiness: {
         interaction_ready: readiness.actual.interactionReady,

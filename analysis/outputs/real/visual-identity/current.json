@@ -1,27 +1,47 @@
 {
   "schemaVersion": "citygap.visual-identity-audit@1",
   "label": "current",
-  "commit": "2a43ef68719736d497e888302faef395ce80bb20",
-  "baseUrl": "http://127.0.0.1:4174/plateau-city-gap/",
-  "generatedAt": "2026-08-28T20:05:31.430Z",
+  "commit": "c13b33423408ab8fad1b11d9a7a9eed46c047e6e",
+  "baseUrl": "http://localhost:4173/plateau-city-gap/",
+  "generatedAt": "2026-08-29T10:57:25.225Z",
   "viewports": [
     {
       "width": 1440,
       "height": 900,
-      "productReadyMs": 9487,
-      "visibleElementCount": 277,
+      "productReadyMs": 3521,
+      "visibleElementCount": 265,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
       "gradientCount": 0,
       "shadowCount": 2,
-      "floatingPanelCount": 7,
-      "borderedSurfaceCount": 21,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1440,
+          "height": 848
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1440,
+          "height": 848
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 300,
+          "height": 848
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
       "maximumRadiusPx": 50,
-      "accentColorCount": 4,
+      "accentColorCount": 3,
       "accentColors": [
         "rgb(180, 122, 33)",
-        "rgb(197, 139, 43)",
         "rgb(23, 77, 74)",
         "rgb(36, 108, 103)"
       ],
@@ -38,20 +58,40 @@
     {
       "width": 1280,
       "height": 800,
-      "productReadyMs": 4191,
-      "visibleElementCount": 277,
+      "productReadyMs": 2280,
+      "visibleElementCount": 265,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
       "gradientCount": 0,
       "shadowCount": 2,
-      "floatingPanelCount": 7,
-      "borderedSurfaceCount": 21,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1280,
+          "height": 748
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1280,
+          "height": 748
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 300,
+          "height": 748
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
       "maximumRadiusPx": 50,
-      "accentColorCount": 4,
+      "accentColorCount": 3,
       "accentColors": [
         "rgb(180, 122, 33)",
-        "rgb(197, 139, 43)",
         "rgb(23, 77, 74)",
         "rgb(36, 108, 103)"
       ],
@@ -68,20 +108,40 @@
     {
       "width": 1024,
       "height": 768,
-      "productReadyMs": 3467,
-      "visibleElementCount": 270,
+      "productReadyMs": 2511,
+      "visibleElementCount": 258,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
       "gradientCount": 0,
       "shadowCount": 2,
-      "floatingPanelCount": 7,
-      "borderedSurfaceCount": 21,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1024,
+          "height": 716
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1024,
+          "height": 716
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 288,
+          "height": 716
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
       "maximumRadiusPx": 50,
-      "accentColorCount": 4,
+      "accentColorCount": 3,
       "accentColors": [
         "rgb(180, 122, 33)",
-        "rgb(197, 139, 43)",
         "rgb(23, 77, 74)",
         "rgb(36, 108, 103)"
       ],
@@ -98,20 +158,40 @@
     {
       "width": 768,
       "height": 1024,
-      "productReadyMs": 2926,
-      "visibleElementCount": 264,
+      "productReadyMs": 4593,
+      "visibleElementCount": 252,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
       "gradientCount": 0,
       "shadowCount": 2,
-      "floatingPanelCount": 7,
-      "borderedSurfaceCount": 21,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 768,
+          "height": 976
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 768,
+          "height": 976
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 726,
+          "height": 390
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
       "maximumRadiusPx": 3,
-      "accentColorCount": 4,
+      "accentColorCount": 3,
       "accentColors": [
         "rgb(180, 122, 33)",
-        "rgb(197, 139, 43)",
         "rgb(23, 77, 74)",
         "rgb(36, 108, 103)"
       ],
@@ -128,15 +208,42 @@
     {
       "width": 390,
       "height": 844,
-      "productReadyMs": 2129,
+      "productReadyMs": 2203,
       "visibleElementCount": 220,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 1,
       "gradientCount": 0,
       "shadowCount": 2,
-      "floatingPanelCount": 7,
-      "borderedSurfaceCount": 16,
+      "floatingPanelCount": 4,
+      "floatingPanels": [
+        {
+          "tag": "nav",
+          "className": "task-navigation",
+          "width": 390,
+          "height": 44
+        },
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 390,
+          "height": 752
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 390,
+          "height": 752
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 390,
+          "height": 350
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 14,
       "maximumRadiusPx": 3,
       "accentColorCount": 3,
       "accentColors": [
@@ -166,8 +273,8 @@
       },
       {
         "path": "frontend/src/app/workbench.css",
-        "bytes": 8954,
-        "gzipBytes": 2292
+        "bytes": 9295,
+        "gzipBytes": 2347
       },
       {
         "path": "frontend/src/design-system/foundation.css",
@@ -190,6 +297,11 @@
         "gzipBytes": 817
       },
       {
+        "path": "frontend/src/features/urban-section/urban-section.css",
+        "bytes": 4110,
+        "gzipBytes": 1272
+      },
+      {
         "path": "frontend/src/map/map.css",
         "bytes": 13275,
         "gzipBytes": 2873
@@ -200,27 +312,27 @@
         "gzipBytes": 5552
       }
     ],
-    "sourceCssBytes": 82530,
+    "sourceCssBytes": 86981,
     "buildAssets": [
       {
-        "path": "frontend/dist/assets/CesiumMap-BjNTIRmO.js",
-        "bytes": 3588002,
-        "gzipBytes": 931308
+        "path": "frontend/dist/assets/CesiumMap-CEXmCi91.js",
+        "bytes": 3597034,
+        "gzipBytes": 933982
       },
       {
-        "path": "frontend/dist/assets/index-B9RwqA5r.css",
-        "bytes": 153866,
-        "gzipBytes": 23509
+        "path": "frontend/dist/assets/index-1gXsZUfZ.css",
+        "bytes": 157708,
+        "gzipBytes": 24372
       },
       {
-        "path": "frontend/dist/assets/index-C39JXpq8.js",
-        "bytes": 16378,
-        "gzipBytes": 5409
+        "path": "frontend/dist/assets/index-B2TvnWJE.js",
+        "bytes": 16618,
+        "gzipBytes": 5502
       },
       {
-        "path": "frontend/dist/assets/ProductApp-DJWMA67E.js",
-        "bytes": 116322,
-        "gzipBytes": 32548
+        "path": "frontend/dist/assets/ProductApp-66n_71-6.js",
+        "bytes": 129139,
+        "gzipBytes": 36460
       },
       {
         "path": "frontend/dist/assets/react-hRsyaU4r.js",
@@ -233,7 +345,7 @@
         "gzipBytes": 28961
       }
     ],
-    "screenshotCount": 10,
-    "screenshotBytes": 4586842
+    "screenshotCount": 11,
+    "screenshotBytes": 5011269
   }
 }
