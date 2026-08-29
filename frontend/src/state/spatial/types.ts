@@ -1,5 +1,9 @@
 export type CityId = "maizuru" | "fujisawa";
 
+export type PublicExperience = "landing" | "guided" | "advanced";
+
+export type GuidedStep = 1 | 2 | 3 | 4 | 5;
+
 export type ProductTask = "discover" | "detail" | "try" | "validate" | "operate";
 
 export type MapMode = "map2d" | "plateau3d";
@@ -76,6 +80,8 @@ export type LayerPresetId =
   | "validation-compare";
 
 export interface SpatialState {
+  experience: PublicExperience;
+  guidedStep: GuidedStep;
   city: CityId;
   task: ProductTask;
   urbanState: UrbanStateId;
@@ -98,6 +104,8 @@ export interface SpatialState {
 
 export type SpatialAction =
   | { type: "hydrate"; state: SpatialState }
+  | { type: "set-experience"; experience: PublicExperience }
+  | { type: "set-guided-step"; step: GuidedStep }
   | { type: "set-city"; city: CityId }
   | { type: "set-task"; task: ProductTask }
   | { type: "set-urban-state"; urbanState: UrbanStateId }
@@ -123,6 +131,8 @@ export const CITY_VIEWPORTS: Record<CityId, SpatialViewport> = {
 };
 
 export const DEFAULT_SPATIAL_STATE: SpatialState = {
+  experience: "landing",
+  guidedStep: 1,
   city: "maizuru",
   task: "discover",
   urbanState: "2025",

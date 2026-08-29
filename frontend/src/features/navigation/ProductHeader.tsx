@@ -5,11 +5,12 @@ interface Props {
   evidenceStatus: string;
   onOpenMenu(): void;
   onOpenSearch(): void;
+  onRestart(): void;
 }
 
 const stateLabels = { "2020": "2020 統計", "2023": "2023 実測", "2025": "2025 現況", "2040": "2040 シナリオ" } as const;
 
-export function ProductHeader({ evidenceStatus, onOpenMenu, onOpenSearch }: Props) {
+export function ProductHeader({ evidenceStatus, onOpenMenu, onOpenSearch, onRestart }: Props) {
   const { state, dispatch } = useSpatialContext();
   const route = routeById(state.task);
   return (
@@ -24,6 +25,7 @@ export function ProductHeader({ evidenceStatus, onOpenMenu, onOpenSearch }: Prop
         <div className="evidence-status"><span>根拠</span><strong><i />{evidenceStatus}</strong></div>
       </div>
       <div className="product-header-actions">
+        <button type="button" className="restart-showcase-button" onClick={onRestart}>最初から見る</button>
         <button type="button" className="search-button" onClick={onOpenSearch} aria-label="地域・施設・シナリオを検索"><kbd>⌘ K</kbd><span>検索</span></button>
         <button type="button" className="utility-button" onClick={onOpenMenu} aria-label="設定と管理を開く">•••</button>
       </div>

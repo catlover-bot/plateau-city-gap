@@ -49,8 +49,14 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
       - run: pip install -e ".[platform,dev]" pip-audit
       - run: pip-audit --skip-editable
+      - run: npm --prefix frontend audit --audit-level=high
       - name: Reject tracked secrets and raw municipal data
         run: |
           ! git grep -En '(BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|AKIA[0-9A-Z]{16})'
@@ -109,7 +115,9 @@ jobs:
             sleep 1
           done
           npm run audit:plateau-native -- --output /tmp/plateau-native-browser-audit.json
-          npm run capture:current -- --output /tmp/citygap-current-capture --diagnostics /tmp/citygap-readiness-failures --only 02-resolution-lift
+          npm run audit:visual-identity -- --output /tmp/citygap-visual-identity.json
+          npm run test:guided
+          npm run capture:advanced -- --output /tmp/citygap-advanced-capture --diagnostics /tmp/citygap-readiness-failures --only 02-resolution-lift
       - name: pilot-rehearsal and Evidence integrity
         run: |
           python -m analysis.scripts.run_validation_pilot_rehearsal

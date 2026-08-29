@@ -27,6 +27,12 @@ const RESOLUTION_BY_SELECTION: Record<SelectionType, SpatialResolution> = {
 export function spatialReducer(state: SpatialState, action: SpatialAction): SpatialState {
   switch (action.type) {
     case "hydrate": return action.state;
+    case "set-experience": return {
+      ...state,
+      experience: action.experience,
+      guidedStep: action.experience === "landing" ? 1 : state.guidedStep,
+    };
+    case "set-guided-step": return { ...state, experience: "guided", guidedStep: action.step };
     case "set-city": return {
       ...state,
       city: action.city,

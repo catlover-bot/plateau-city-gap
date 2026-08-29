@@ -14,7 +14,9 @@
     "audit:plateau-native": "node scripts/audit-plateau-native.mjs",
     "check:docs": "node scripts/check-doc-links.mjs",
     "audit:visual-identity": "node scripts/audit-visual-identity.mjs",
-    "capture:current": "node scripts/capture-current.mjs",
+    "capture:current": "node scripts/capture-guided-current.mjs",
+    "capture:advanced": "node scripts/capture-current.mjs",
+    "test:guided": "node scripts/test-guided.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty false"

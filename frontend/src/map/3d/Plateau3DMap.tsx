@@ -22,6 +22,8 @@ interface Props {
   analysisLens: AnalysisLens;
   counterfactualState: CounterfactualState;
   showUrbanSection?: boolean;
+  uiMode?: "advanced" | "guided";
+  preferredBuildingSource?: "spatial-pack" | "verified-local";
   workspaceMap?: WorkspaceMapData | null;
   workspaceBuildingPoints?: WorkspaceBuildingPoints | null;
   workspacePhase?: WorkspacePhase;
@@ -155,6 +157,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   analysisLens,
   counterfactualState,
   showUrbanSection = false,
+  uiMode = "advanced",
+  preferredBuildingSource,
   workspaceMap = null,
   workspaceBuildingPoints = null,
   workspacePhase = "baseline",
@@ -255,8 +259,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   }, [data.plateauMetadata, deepDiveCode, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
 
   return (
-    <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready}>
-      <Suspense fallback={<div className="map-engine-loading" role="status"><span />PLATEAU 3Dを読み込み中</div>}>
+    <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready} data-ui-mode={uiMode}>
+      <Suspense fallback={<div className="map-engine-loading" role="status"><span />{uiMode === "guided" ? "建物・道路・地形を準備しています" : "PLATEAU 3Dを読み込み中"}</div>}>
         <CesiumMap
           ref={cesiumRef}
           data={data}
@@ -268,6 +272,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           counterfactualState={counterfactualState}
           readinessRequirements={scene.readiness}
           showUrbanSection={showUrbanSection}
+          preferredBuildingSource={preferredBuildingSource}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
           plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
@@ -304,11 +309,21 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           onWarning={setWarning}
         />
       </Suspense>
-      {!progressiveReady && !error && <div className="map-engine-loading" role="status"><span />PLATEAU地物と背景図を読み込み中</div>}
-      {progressiveReady && !ready && !error && <div className="visual-readiness-status" role="status"><span />操作用の建物・道路・DEMを確認中<small>{readiness?.interactionUnmet.join(" · ")}</small></div>}
-      <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>
-      {warning && <div className="map-inline-warning" role="status">{warning}</div>}
-      {error && <div className="map-engine-fallback" role="alert"><strong>3Dを表示できません</strong><p>{error}</p><span>2D地図と候補一覧は引き続き利用できます。</span></div>}
+      {!progressiveReady && !error && <div className="map-engine-loading" role="status"><span />{uiMode === "guided" ? "建物・道路・地形を準備しています" : "PLATEAU地物と背景図を読み込み中"}</div>}
+      {progressiveReady && !ready && !error && <div className="visual-readiness-status" role="status">
+        <span />
+        {uiMode === "guided" ? "建物・道路・地形を確認しています" : "操作用の建物・道路・DEMを確認中"}
+        {uiMode === "advanced" && <small>{readiness?.interactionUnmet.join(" · ")}</small>}
+      </div>}
+      {uiMode === "advanced" && <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>}
+      {warning && <div className="map-inline-warning" role="status">
+        {uiMode === "guided" ? "一部の3D表示を読み込めません。街の断面で確認を続けられます。" : warning}
+      </div>}
+      {error && <div className="map-engine-fallback" role="alert">
+        <strong>3Dを表示できません</strong>
+        {uiMode === "advanced" && <p>{error}</p>}
+        <span>{uiMode === "guided" ? "検証済みの建物・道路・地形データと街の断面で確認を続けられます。" : "2D地図と候補一覧は引き続き利用できます。"}</span>
+      </div>}
     </div>
   );
 });

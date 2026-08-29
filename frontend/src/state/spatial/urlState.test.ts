@@ -2,6 +2,23 @@ import { describe, expect, it } from "vitest";
 import { parseSpatialUrl, spatialStateToSearch } from "./urlState";
 
 describe("spatial URL state", () => {
+  it("opens the public landing unless guided or advanced is explicit", () => {
+    expect(parseSpatialUrl("")).toMatchObject({ experience: "landing", guidedStep: 1 });
+    expect(parseSpatialUrl("?scene=plateau_detail")).toMatchObject({ experience: "landing" });
+    expect(parseSpatialUrl("?experience=guided&guide=4")).toMatchObject({ experience: "guided", guidedStep: 4 });
+    expect(parseSpatialUrl("?experience=guided&guide=99")).toMatchObject({ experience: "guided", guidedStep: 1 });
+    expect(parseSpatialUrl("?experience=advanced")).toMatchObject({ experience: "advanced" });
+    expect(parseSpatialUrl("?advanced=1")).toMatchObject({ experience: "advanced" });
+  });
+
+  it("serializes the guided step with the shared spatial URL writer", () => {
+    const state = parseSpatialUrl("?experience=guided&guide=3&mesh=533513314");
+    const serialized = spatialStateToSearch(state);
+    expect(serialized).toContain("experience=guided");
+    expect(serialized).toContain("guide=3");
+    expect(serialized).toContain("mesh=533513314");
+  });
+
   it("hydrates every shareable spatial dimension", () => {
     const state = parseSpatialUrl("?city=fujisawa&task=validate&urbanState=2023&mesh=523973982&scenario=B&validationSample=route-1&mapMode=plateau3d&intent=validate&resolution=road&scene=validation_disagreement&lens=service-pulse&twin=stress&lng=139.47&lat=35.36&z=14");
     expect(state.city).toBe("fujisawa");

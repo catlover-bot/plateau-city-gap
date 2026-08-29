@@ -1,12 +1,14 @@
 # CITY GAP
 
-統計で見つけた地域課題を、PLATEAUの建物・道路・地形まで掘り下げて確認する自治体向け都市調査基盤です。
+高齢者が多いのに、交通や医療へ届きにくい地域を見つけます。
+
+500mで候補を見つけ、PLATEAUの建物・道路・地形まで掘り下げて確認します。
 
 [Public Showcase](https://catlover-bot.github.io/plateau-city-gap/) · [Product vision](docs/product-vision.md) · [Architecture](docs/architecture.md) · [Data and methodology](docs/methodology.md)
 
 CITY GAPは、人口・高齢者数と公共交通・医療への到達しやすさを500mメッシュで重ね、追加調査候補を見つけます。結果は危険度、施策優先順位、居住者個人の実数を示しません。候補を選んだ後は、同じFindingと選択を保ったままPLATEAUの都市objectへ解像度を上げ、施策比較とEvidenceへ接続します。
 
-![CITY GAP Resolution Lift](docs/assets/current/02-resolution-lift.png)
+![CITY GAP Guided Landing](docs/assets/current/01-landing.png)
 
 ## What it does
 
@@ -123,14 +125,14 @@ npm --prefix frontend test -- --run
 npm --prefix frontend run build
 ```
 
-正規スクリーンショットはproduction buildからだけ生成します。Cesium canvas寸法、建物feature、地形tile、道路、分析overlay、font、camera、未処理critical request、3連続安定frameの全条件が揃わなければ失敗します。
+正規スクリーンショットはproduction buildのGuided Investigationを実際に完走して生成します。各画面の問い、実データ値、都市断面、主操作、viewport、critical requestを検証し、8枚すべてが揃ったstageだけを公開します。3Dの準備中は検証済み都市断面を正直に表示し、manifestへ表示経路を記録します。
 
 ```bash
 npm --prefix frontend run capture:current -- \
   --url http://127.0.0.1:4173/plateau-city-gap/
 ```
 
-出力は `docs/assets/current/` の10枚と `manifest.json` だけです。readiness failure時だけ `analysis/outputs/real/visual-readiness-failures/` に診断JSONを保存します。
+出力は `docs/assets/current/` の8枚と `manifest.json` だけです。失敗時は既存currentを保持し、`analysis/outputs/real/visual-readiness-failures/` に診断JSONを保存します。Cesiumの完全読込を要求する従来の高度分析captureは `capture:advanced` として分離しています。
 
 ## Current documentation
 
@@ -141,6 +143,7 @@ npm --prefix frontend run capture:current -- \
 - [Methodology](docs/methodology.md)
 - [Data sources](docs/data-sources.md)
 - [Validation evidence](docs/validation-evidence.md)
+- [First-run comprehension test](docs/first-run-comprehension-test.md)
 - [Operations](docs/operations.md)
 - [Security](docs/tenant-security.md)
 

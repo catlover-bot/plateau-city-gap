@@ -75,6 +75,7 @@ interface CesiumMapProps {
   counterfactualState?: CounterfactualState;
   readinessRequirements: SceneReadinessRequirements;
   showUrbanSection?: boolean;
+  preferredBuildingSource?: "spatial-pack" | "verified-local";
   visibility: LayerVisibility;
   plateauVisibility?: { buildings: boolean; roads: boolean; terrain?: boolean };
   meshPresentation?: "analysis" | "outline";
@@ -595,6 +596,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     counterfactualState = "baseline",
     readinessRequirements,
     showUrbanSection = false,
+    preferredBuildingSource,
     visibility,
     plateauVisibility,
     meshPresentation = "analysis",
@@ -700,8 +702,9 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     if (!viewer || viewer.isDestroyed()) return Promise.resolve();
     plateauLoadRef.current = (async () => {
       const requestedBuildingSource = new URLSearchParams(window.location.search).get("buildingSource");
-      const localPackOnly = requestedBuildingSource === "spatial-pack"
-        || requestedBuildingSource === "verified-local";
+      const selectedBuildingSource = preferredBuildingSource ?? requestedBuildingSource;
+      const localPackOnly = selectedBuildingSource === "spatial-pack"
+        || selectedBuildingSource === "verified-local";
       const visible = (plateauVisibilityRef.current?.buildings ?? visibilityRef.current.plateau) || (
         workspaceMap !== null && workspaceVisibilityRef.current.plateauBuildings
       );
@@ -817,7 +820,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       }
     })();
     return plateauLoadRef.current;
-  }, [data, workspaceMap]);
+  }, [data, preferredBuildingSource, workspaceMap]);
 
   const loadPlateauTerrain = useCallback(() => {
     if (sourcesRef.current.plateauTerrainTileset || plateauTerrainLoadRef.current) {

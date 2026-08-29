@@ -22,11 +22,13 @@ import { layerById } from "../map/layers/layerRegistry";
 import { sceneForLayerPreset, sceneLayerIds, SCENE_PRESETS } from "../map/core/scenePresets";
 import { loadAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, InterventionPlan, MeshMetrics, MunicipalWorkspaceData, UrbanFuturesData, ValidationWorkspaceData } from "../types";
-import { CITY_VIEWPORTS, type AnalysisLens, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
+import { CITY_VIEWPORTS, type AnalysisLens, type GuidedStep, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
 import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
 import { UrbanSection } from "../features/urban-section/UrbanSection";
+import { GuidedInvestigation, ShowcaseLanding } from "../features/guided/GuidedShowcase";
+import { buildGuidedCase, guidedMeshSelection } from "../features/guided/guidedCase";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -55,6 +57,7 @@ export function ProductApp() {
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState(0);
   const [evidenceOpen, setEvidenceOpen] = useState(false);
+  const [evidenceReviewed, setEvidenceReviewed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLayers, setActiveLayers] = useState<string[]>(sceneLayerIds(state.scenePreset));
@@ -111,6 +114,32 @@ export function ProductApp() {
   }, []);
 
   const data = datasets[state.city] ?? datasets.maizuru;
+  const guidedData = datasets.maizuru ?? null;
+  const guidedCase = useMemo(() => guidedData ? buildGuidedCase(guidedData) : null, [guidedData]);
+  const guidedSelection = useMemo(
+    () => guidedData && guidedCase ? guidedMeshSelection(guidedData, guidedCase) : null,
+    [guidedCase, guidedData],
+  );
+  const guidedPlan = guidedCase?.scenarioPlan ?? null;
+  const guidedScenario = useMemo(
+    () => guidedData ? scenarioCollections(guidedData, guidedPlan) : { sites: EMPTY, meshes: EMPTY },
+    [guidedData, guidedPlan],
+  );
+  const guidedScenarioScores = useMemo(
+    () => guidedPlan
+      ? Object.fromEntries(Object.entries(guidedPlan.mesh_results).map(([code, result]) => [code, Number(result.after_score_c)]).filter((entry) => Number.isFinite(entry[1])))
+      : null,
+    [guidedPlan],
+  );
+  const guidedDecisionFlow = useMemo(() => {
+    if (!guidedPlan?.sites[0] || !guidedSelection?.longitude || !guidedSelection.latitude) return null;
+    return {
+      meshLongitude: guidedSelection.longitude,
+      meshLatitude: guidedSelection.latitude,
+      siteLongitude: guidedPlan.sites[0].longitude,
+      siteLatitude: guidedPlan.sites[0].latitude,
+    };
+  }, [guidedPlan, guidedSelection]);
   useEffect(() => {
     if (data) recordReadinessMetric("app_shell", state.scenePreset);
   }, [data, state.scenePreset]);
@@ -132,11 +161,73 @@ export function ProductApp() {
     return { meshLongitude: state.selection.longitude, meshLatitude: state.selection.latitude, siteLongitude: plan.sites[0].longitude, siteLatitude: plan.sites[0].latitude };
   }, [plan, state.selection]);
 
+  useEffect(() => {
+    if (state.experience !== "guided" || !guidedData || !guidedSelection || !guidedPlan) return;
+
+    const step = state.guidedStep;
+    const isDetail = step === 3;
+    const isScenario = step >= 4;
+    const scenePreset: ScenePresetId = isScenario ? "scenario_compare" : isDetail ? "plateau_detail" : "gap_discovery";
+    const task: ProductTask = isScenario ? "try" : isDetail ? "detail" : "discover";
+    const resolution: SpatialResolution = isScenario ? "site" : isDetail ? "building_group" : "mesh";
+    const lens: AnalysisLens = isScenario ? "changed-only" : isDetail ? "urban-xray" : "none";
+    const counterfactualState = isScenario ? "scenario" as const : "baseline" as const;
+    const viewport = {
+      longitude: guidedSelection.longitude ?? 135.396875,
+      latitude: guidedSelection.latitude ?? 35.4479167,
+      zoom: isDetail || isScenario ? 15.2 : step === 2 ? 14.1 : 12.8,
+      bearing: isDetail || isScenario ? 14 : 0,
+      pitch: isDetail || isScenario ? 42 : 0,
+    };
+
+    setSiteCount(1);
+    setUrbanSectionOpen(step >= 3);
+    dispatch({ type: "set-city", city: "maizuru" });
+    dispatch({ type: "set-task", task });
+    dispatch({ type: "set-scene-preset", scenePreset });
+    dispatch({ type: "set-selection", selection: guidedSelection });
+    dispatch({ type: "set-resolution", resolution });
+    dispatch({ type: "set-analysis-lens", lens });
+    dispatch({ type: "set-counterfactual-state", state: counterfactualState });
+    dispatch({ type: "set-scenario", scenario: isScenario ? guidedPlan.plan_id : null });
+    dispatch({ type: "set-viewport", viewport });
+  }, [dispatch, guidedData, guidedPlan, guidedSelection, state.experience, state.guidedStep]);
+
   const selectMesh = useCallback((mesh: MeshMetrics) => {
     if (!data) return;
     dispatch({ type: "set-selection", selection: meshSelection(data, mesh) });
   }, [data, dispatch]);
   const select = useCallback((selection: SpatialSelection | null) => dispatch({ type: "set-selection", selection }), [dispatch]);
+  const startGuided = useCallback(() => {
+    setEvidenceReviewed(false);
+    setEvidenceOpen(false);
+    dispatch({ type: "set-guided-step", step: 1 });
+  }, [dispatch]);
+  const restartGuided = useCallback(() => {
+    setEvidenceReviewed(false);
+    setEvidenceOpen(false);
+    setSearchOpen(false);
+    setMenuOpen(false);
+    dispatch({ type: "set-experience", experience: "landing" });
+  }, [dispatch]);
+  const guidedBack = useCallback(() => {
+    if (state.guidedStep === 1) {
+      restartGuided();
+      return;
+    }
+    dispatch({ type: "set-guided-step", step: (state.guidedStep - 1) as GuidedStep });
+  }, [dispatch, restartGuided, state.guidedStep]);
+  const guidedNext = useCallback(() => {
+    dispatch({ type: "set-guided-step", step: Math.min(5, state.guidedStep + 1) as GuidedStep });
+  }, [dispatch, state.guidedStep]);
+  const openGuidedEvidence = useCallback(() => {
+    setEvidenceReviewed(true);
+    setEvidenceOpen(true);
+  }, []);
+  const openGuidedAdvanced = useCallback(() => {
+    setEvidenceOpen(false);
+    dispatch({ type: "set-experience", experience: "advanced" });
+  }, [dispatch]);
   const openPlateau3D = useCallback(() => {
     if (!data) return;
     const preserveSavedInvestigation = state.savedInvestigationOpen;
@@ -259,6 +350,22 @@ export function ProductApp() {
       },
     } });
   }, [dispatch, state.city, state.selection, state.urbanState]);
+  const selectPlateauBuilding = useCallback((id: string, properties: Record<string, unknown>) => {
+    dispatch({ type: "set-selection", selection: {
+      type: "building",
+      id,
+      city: state.city,
+      urbanState: state.urbanState,
+      label: `${String(properties.usage ?? "用途不明")}のPLATEAU建物`,
+      longitude: state.selection?.longitude,
+      latitude: state.selection?.latitude,
+      properties: {
+        ...properties,
+        parent_mesh_code: "533513314",
+        pack_id: "maizuru-533513314-plateau-2025-v1",
+      },
+    } });
+  }, [dispatch, state.city, state.selection?.latitude, state.selection?.longitude, state.urbanState]);
   const changeAnalysisLens = useCallback((lens: AnalysisLens) => {
     if (lens === "urban-xray") {
       openPlateau3D();
@@ -280,6 +387,44 @@ export function ProductApp() {
     dispatch({ type: "set-analysis-lens", lens });
   }, [dispatch, openPlateau3D]);
 
+  if (state.experience === "landing") {
+    return <ShowcaseLanding onStart={startGuided} onExplore={startGuided} onRestart={restartGuided} />;
+  }
+
+  if (state.experience === "guided") {
+    if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
+    if (!guidedData || !guidedCase || !guidedSelection || !guidedPlan) return <LoadingState />;
+    return <>
+      <GuidedInvestigation
+        data={guidedData}
+        state={state}
+        activeLayerIds={activeLayers}
+        plan={guidedPlan}
+        scenarioSites={guidedScenario.sites}
+        scenarioMeshes={guidedScenario.meshes}
+        scenarioScores={guidedScenarioScores}
+        decisionFlow={guidedDecisionFlow}
+        evidenceReviewed={evidenceReviewed}
+        onBack={guidedBack}
+        onNext={guidedNext}
+        onRestart={restartGuided}
+        onOpenEvidence={openGuidedEvidence}
+        onOpenAdvanced={openGuidedAdvanced}
+        onSelectionChange={select}
+        onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })}
+        onSelectBuilding={selectPlateauBuilding}
+      />
+      <EvidenceModal
+        open={evidenceOpen}
+        mode="guided"
+        evidence={guidedData.evidence}
+        plan={guidedPlan}
+        onClose={() => setEvidenceOpen(false)}
+      />
+      {error && <div className="nonblocking-error" role="alert">{error}<button type="button" onClick={() => setError(null)}>閉じる</button></div>}
+    </>;
+  }
+
   if (error && !data) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
   if (!data) return <LoadingState />;
 
@@ -290,8 +435,8 @@ export function ProductApp() {
           : <OperationsWorkspace data={municipal} onShare={share} onEvidence={() => setEvidenceOpen(true)} />;
 
   const compare = state.task === "try" && scenarioMode === "compare" && state.mapMode === "map2d" && Boolean(plan);
-  return <div className="product-app" data-task={state.task} data-map-state={state.mapState} data-spatial-intent={state.intent} data-spatial-resolution={state.resolution} data-scene-preset={state.scenePreset}>
-    <ProductHeader evidenceStatus={validation ? "検証済み" : "根拠あり"} onOpenMenu={() => setMenuOpen((value) => !value)} onOpenSearch={() => setSearchOpen(true)} />
+  return <div className="product-app" data-experience="advanced" data-task={state.task} data-map-state={state.mapState} data-spatial-intent={state.intent} data-spatial-resolution={state.resolution} data-scene-preset={state.scenePreset}>
+    <ProductHeader evidenceStatus={validation ? "検証済み" : "根拠あり"} onOpenMenu={() => setMenuOpen((value) => !value)} onOpenSearch={() => setSearchOpen(true)} onRestart={restartGuided} />
     <main className="spatial-workbench">
       <TaskNavigation value={state.task} onChange={changeTask} />
       <section className={`map-stage ${compare ? "compare" : ""}`} aria-label="共通Spatial Map">
@@ -317,16 +462,7 @@ export function ProductApp() {
           counterfactualState={state.counterfactualState}
           analysisLens={state.analysisLens}
           onClose={() => setUrbanSectionOpen((value) => !value)}
-          onSelectBuilding={(id, properties) => dispatch({ type: "set-selection", selection: {
-            type: "building",
-            id,
-            city: state.city,
-            urbanState: state.urbanState,
-            label: `${String(properties.usage ?? "用途不明")}のPLATEAU建物`,
-            longitude: state.selection?.longitude,
-            latitude: state.selection?.latitude,
-            properties: { ...properties, parent_mesh_code: "533513314", pack_id: "maizuru-533513314-plateau-2025-v1" },
-          } })}
+          onSelectBuilding={selectPlateauBuilding}
         />}
         <ContextLegend layerId={state.primaryLayer} />
         {state.primaryLayer === "validation-temporal" && <div className="map-reference-badge"><span>VALIDATION REFERENCE</span><strong>国立市 · 2023→2025</strong></div>}

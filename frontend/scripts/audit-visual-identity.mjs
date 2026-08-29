@@ -110,7 +110,7 @@ for (const viewport of viewports) {
   const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
   observe(page, viewport);
   const started = Date.now();
-  await page.goto(`${baseUrl}?city=maizuru&scene=gap_discovery`, {
+  await page.goto(`${baseUrl}?experience=advanced&city=maizuru&scene=gap_discovery`, {
     waitUntil: "domcontentloaded",
     timeout: 90_000,
   });

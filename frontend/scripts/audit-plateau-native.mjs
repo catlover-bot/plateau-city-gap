@@ -29,7 +29,8 @@ page.on("requestfailed", (request) => {
 
 async function visit(route, viewport = { width: 1440, height: 900 }) {
   await page.setViewportSize(viewport);
-  await page.goto(`${baseUrl}${route}`, { waitUntil: "domcontentloaded", timeout: 90_000 });
+  const routeParameters = route.startsWith("?") ? route.slice(1) : route;
+  await page.goto(`${baseUrl}?experience=advanced&${routeParameters}`, { waitUntil: "domcontentloaded", timeout: 90_000 });
   await page.locator(".product-app").waitFor({ timeout: 90_000 });
   await page.waitForFunction(() => document.documentElement.dataset.visualReady === "true", null, { timeout: 120_000 });
 }

@@ -3,6 +3,7 @@ import {
   DEFAULT_SPATIAL_STATE,
   type AnalysisLens,
   type CityId,
+  type GuidedStep,
   type LayerPresetId,
   type MapMode,
   type ProductTask,
@@ -34,6 +35,7 @@ const SELECTION_TYPES = new Set<SelectionType>([
 ]);
 const ANALYSIS_LENSES = new Set<AnalysisLens>(["none", "urban-xray", "service-pulse", "changed-only", "temporal-ghost"]);
 const COUNTERFACTUAL_STATES = new Set(["baseline", "scenario", "stress"] as const);
+const GUIDED_STEPS = new Set<GuidedStep>([1, 2, 3, 4, 5]);
 
 const LEGACY_TASKS: Record<string, ProductTask> = {
   demo: "discover",
@@ -81,6 +83,16 @@ function selectionFromParams(params: URLSearchParams, city: CityId, urbanState: 
 
 export function parseSpatialUrl(search: string): SpatialState {
   const params = new URLSearchParams(search);
+  const parsedGuidedStep = Number(params.get("guide"));
+  const guidedStep = GUIDED_STEPS.has(parsedGuidedStep as GuidedStep)
+    ? parsedGuidedStep as GuidedStep
+    : DEFAULT_SPATIAL_STATE.guidedStep;
+  const requestedExperience = params.get("experience");
+  const experience = requestedExperience === "advanced" || params.get("advanced") === "1"
+    ? "advanced" as const
+    : requestedExperience === "guided" || params.has("guide")
+      ? "guided" as const
+      : "landing" as const;
   const cityParam = params.get("city") as CityId | null;
   const city = cityParam && CITIES.has(cityParam) ? cityParam : DEFAULT_SPATIAL_STATE.city;
   const stateParam = (params.get("urbanState") ?? params.get("state")) as UrbanStateId | null;
@@ -104,6 +116,8 @@ export function parseSpatialUrl(search: string): SpatialState {
   const selection = selectionFromParams(params, city, urbanState);
   return {
     ...DEFAULT_SPATIAL_STATE,
+    experience,
+    guidedStep,
     city,
     task,
     urbanState,
@@ -153,6 +167,8 @@ export function parseSpatialUrl(search: string): SpatialState {
 
 export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearchParams): string {
   const params = new URLSearchParams();
+  params.set("experience", state.experience);
+  if (state.experience === "guided") params.set("guide", String(state.guidedStep));
   params.set("city", state.city);
   params.set("task", state.task);
   params.set("workspace", state.task === "discover" ? "demo" : state.task === "validate" ? "validation" : state.task === "try" ? "futures" : state.task === "operate" ? "workspace" : "demo");

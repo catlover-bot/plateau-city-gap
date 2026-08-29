@@ -19,7 +19,7 @@ for (let index = 2; index < process.argv.length; index += 2) {
 }
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const baseUrl = parameters.get("--url") ?? "http://127.0.0.1:4173/plateau-city-gap/";
-const outputDirectory = path.resolve(process.cwd(), parameters.get("--output") ?? "../docs/assets/current");
+const outputDirectory = path.resolve(process.cwd(), parameters.get("--output") ?? "../analysis/outputs/real/advanced-captures");
 const diagnosticDirectory = path.resolve(process.cwd(), parameters.get("--diagnostics") ?? "../analysis/outputs/real/visual-readiness-failures");
 const only = parameters.get("--only") ?? null;
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? chromium.executablePath();
@@ -133,7 +133,8 @@ for (const specification of scenes) {
   page.on("response", (response) => {
     if (response.status() >= 400) errorResponses.push({ url: response.url(), status: response.status() });
   });
-  const route = `${baseUrl}${specification.route}`;
+  const routeParameters = specification.route.startsWith("?") ? specification.route.slice(1) : specification.route;
+  const route = `${baseUrl}?experience=advanced&${routeParameters}`;
   try {
     await page.goto(route, { waitUntil: "domcontentloaded", timeout: 90_000 });
     await page.waitForSelector(".product-app", { timeout: 90_000 });
