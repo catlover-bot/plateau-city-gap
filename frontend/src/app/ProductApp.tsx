@@ -315,6 +315,7 @@ export function ProductApp() {
           open={urbanSectionOpen}
           selection={state.selection}
           counterfactualState={state.counterfactualState}
+          analysisLens={state.analysisLens}
           onClose={() => setUrbanSectionOpen((value) => !value)}
           onSelectBuilding={(id, properties) => dispatch({ type: "set-selection", selection: {
             type: "building",

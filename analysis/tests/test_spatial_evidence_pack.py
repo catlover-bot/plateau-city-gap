@@ -4,7 +4,6 @@ from pathlib import Path
 from analysis.scripts.build_spatial_evidence_pack import PACK_ID, build
 from backend.citygap_platform.domain.spatial_evidence import assert_public_pack_safe
 
-
 OUTPUT = Path("frontend/public/data/spatial-packs") / PACK_ID
 
 
@@ -19,6 +18,11 @@ def test_canonical_pack_reproduces_296_actual_buildings() -> None:
     assert manifest["objects"]["target_coverage_ratio"] == 1
     assert manifest["terrain_contract"]["elevation_exaggeration"] == 1
     assert manifest["section"]["terrain_samples_with_coverage"] > 0
+    section = json.loads((OUTPUT / "sections.json").read_text(encoding="utf-8"))
+    assert section["counterfactual"]["baseline"]["distance_m"] == 562.597
+    assert section["counterfactual"]["scenario"]["distance_m"] == 29.867
+    assert section["counterfactual"]["distance_semantics"].endswith("not a walking route or travel time")
+    assert len(section["scenario_sites"]) == 1
 
 
 def test_public_pack_has_no_per_building_population_model() -> None:

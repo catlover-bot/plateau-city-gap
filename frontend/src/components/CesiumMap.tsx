@@ -54,6 +54,8 @@ import {
   loadFastStartBuildingTileset,
   loadOfficialBuildingTileset,
   loadLocalDemTileset,
+  verifySpatialEvidencePack,
+  type SpatialPackVerification,
 } from "../map/3d/cesiumSources";
 
 export interface CesiumMapHandle {
@@ -113,6 +115,7 @@ interface DataSourceRefs {
   futures?: GeoJsonDataSource;
   workspacePoints?: WorkspacePointRef[];
   urbanSectionPlane?: Entity;
+  spatialPackVerification?: SpatialPackVerification;
 }
 
 interface WorkspacePointRef {
@@ -745,6 +748,21 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         const startBundledFallback = async () => {
           if (fallbackStarted || viewer.isDestroyed()) return;
           fallbackStarted = true;
+          void verifySpatialEvidencePack()
+            .then((verification) => {
+              if (viewer.isDestroyed()) return;
+              sourcesRef.current.spatialPackVerification = verification;
+              containerRef.current?.setAttribute("data-pack-artifacts-ready", "true");
+              containerRef.current?.setAttribute("data-pack-artifact-bytes", String(verification.artifactBytes));
+              containerRef.current?.setAttribute("data-pack-source-tile-count", String(verification.sourceTileCount));
+              readinessControllerRef.current?.refresh();
+            })
+            .catch((error: unknown) => {
+              console.error("Spatial Evidence Pack verification failed", error);
+              containerRef.current?.setAttribute("data-pack-artifacts-ready", "false");
+              onWarningRef.current("Spatial Evidence Packの完全性検証に失敗しました。厳格キャプチャは停止します。");
+              readinessControllerRef.current?.refresh();
+            });
           const fallback = await loadBundledBuildingTileset(data);
           if (!fallback || viewer.isDestroyed()) {
             if (!localPackOnly) await startOfficialStream();
@@ -893,7 +911,50 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       });
     });
     resizeObserver.observe(container);
-    (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer = viewer;
+    const captureWindow = window as Window & {
+      __cityGapCesiumViewer?: Viewer;
+      __cityGapStabilizeCapture?: () => Promise<{
+        globeHidden: boolean;
+        incompleteFallbackHidden: boolean;
+        fastStartVisible: boolean;
+      }>;
+    };
+    captureWindow.__cityGapCesiumViewer = viewer;
+    captureWindow.__cityGapStabilizeCapture = async () => {
+      // Capture automation calls this only after strict pack/hash readiness has
+      // been recorded. It stops optional globe traffic and SwiftShader work on
+      // a still-processing fallback tile; normal interactive rendering is not
+      // changed. The conservative visible-target count remains in the manifest.
+      readinessControllerRef.current?.destroy();
+      readinessControllerRef.current = null;
+      viewer.scene.globe.show = false;
+      const incompleteFallbackHidden = Boolean(
+        sourcesRef.current.plateauFallbackTileset
+        && !sourcesRef.current.plateauFallbackTileset.tilesLoaded,
+      );
+      if (incompleteFallbackHidden && sourcesRef.current.plateauFallbackTileset) {
+        sourcesRef.current.plateauFallbackTileset.show = false;
+        if (sourcesRef.current.plateauFastTileset) sourcesRef.current.plateauFastTileset.show = true;
+      }
+      await new Promise<void>((resolve) => {
+        let timeout = 0;
+        const remove = viewer.scene.postRender.addEventListener(() => {
+          window.clearTimeout(timeout);
+          remove();
+          resolve();
+        });
+        timeout = window.setTimeout(() => {
+          remove();
+          resolve();
+        }, 2_000);
+        viewer.scene.requestRender();
+      });
+      return {
+        globeHidden: true,
+        incompleteFallbackHidden,
+        fastStartVisible: Boolean(sourcesRef.current.plateauFastTileset?.show),
+      };
+    };
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.baseColor = Color.fromCssColorString("#d8dfda");
     viewer.scene.backgroundColor = Color.fromCssColorString("#dfe5e1");
@@ -917,8 +978,12 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           {
             source: "spatial-evidence-pack",
             tileset: sourcesRef.current.plateauFallbackTileset,
-            targetFeatureCount: 296,
-            packId: "maizuru-533513314-plateau-2025-v1",
+            targetFeatureCount: sourcesRef.current.spatialPackVerification?.targetFeatureCount ?? 296,
+            loadedTargetFeatureCount: sourcesRef.current.spatialPackVerification?.loadedTargetFeatureCount,
+            targetPositions: sourcesRef.current.spatialPackVerification?.targetPositions,
+            targetArtifactsReady: sourcesRef.current.spatialPackVerification?.artifactsReady ?? false,
+            targetArtifactBytes: sourcesRef.current.spatialPackVerification?.artifactBytes,
+            packId: sourcesRef.current.spatialPackVerification?.packId ?? "maizuru-533513314-plateau-2025-v1",
           },
           {
             source: "verified-fast-start",
@@ -1056,6 +1121,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       viewerRef.current = null;
       cameraControllerRef.current = null;
       delete (window as Window & { __cityGapCesiumViewer?: Viewer }).__cityGapCesiumViewer;
+      delete (window as Window & { __cityGapStabilizeCapture?: unknown }).__cityGapStabilizeCapture;
       if (!viewer.isDestroyed()) viewer.destroy();
     };
   }, [data, loadPlateauTerrain, loadPlateauTileset]);

@@ -5,6 +5,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 
+// Readiness already requires document.fonts.status === "loaded". Avoid a second,
+// non-stalling utility-world wait after SwiftShader has entered screenshot mode.
+process.env.PW_TEST_SCREENSHOT_NO_FONTS_READY = "1";
+
 const CAPTURE_SCRIPT_VERSION = "urban-anatomy-capture@2.0.0";
 const TARGET_BUILDINGS = 296;
 const MINIMUM_TARGET_COVERAGE = 0.95;
@@ -72,6 +76,14 @@ async function aggregateAssetHash(directory) {
 const dataManifestPath = path.join(process.cwd(), "public/data/manifest.json");
 const packManifestPath = path.join(process.cwd(), `public/data/spatial-packs/${PACK_ID}/manifest.json`);
 const packManifest = JSON.parse(await readFile(packManifestPath, "utf8"));
+const sourceDataIds = [
+  `plateau-building-2025:${packManifest.source_versions.buildings.sha256}`,
+  `plateau-dem-2025:${packManifest.source_versions.terrain.source_archive_sha256}`,
+  "plateau-road-lod1-maizuru-2025",
+  "ksj-p04-medical-2020",
+  "ksj-p11-transport-2022",
+  "citygap-mesh-analysis-2025",
+];
 const provenance = {
   repository_head: repositoryHead,
   render_source_commit: renderSourceCommit,
@@ -93,6 +105,10 @@ const browser = await chromium.launch({
   headless: true,
   args: ["--no-sandbox", "--disable-dev-shm-usage", "--enable-webgl", "--ignore-gpu-blocklist", "--use-gl=swiftshader"],
 });
+const context = await browser.newContext({
+  deviceScaleFactor: 1,
+  reducedMotion: "reduce",
+});
 const captures = [];
 let failed = false;
 await mkdir(diagnosticDirectory, { recursive: true });
@@ -104,11 +120,8 @@ if (!only) {
 
 for (const specification of scenes) {
   const captureStartedAt = Date.now();
-  const page = await browser.newPage({
-    viewport: { width: specification.width, height: specification.height },
-    deviceScaleFactor: 1,
-    reducedMotion: "reduce",
-  });
+  const page = await context.newPage();
+  await page.setViewportSize({ width: specification.width, height: specification.height });
   const consoleErrors = [];
   const requestFailures = [];
   const errorResponses = [];
@@ -134,7 +147,7 @@ for (const specification of scenes) {
         return rootReady && sectionReady;
       },
       specification,
-      { timeout: specification.mode === "plateau3d" ? 180_000 : 60_000 },
+      { timeout: specification.mode === "plateau3d" ? 300_000 : 60_000 },
     );
     if (specification.requireObjectLens) {
       await page.locator(".object-lens").scrollIntoViewIfNeeded();
@@ -162,7 +175,10 @@ for (const specification of scenes) {
         buildingFeatureCount: Number(cesium?.dataset.buildingFeatureCount ?? 0),
         targetBuildingCount: Number(cesium?.dataset.targetBuildingCount ?? 0),
         loadedTargetBuildingCount: Number(cesium?.dataset.loadedTargetBuildingCount ?? 0),
+        visibleTargetBuildingCount: Number(cesium?.dataset.visibleTargetBuildingCount ?? 0),
         targetCoverageRatio: Number(cesium?.dataset.targetCoverageRatio ?? 0),
+        packArtifactsReady: cesium?.dataset.packArtifactsReady === "true",
+        packArtifactBytes: Number(cesium?.dataset.packArtifactBytes ?? 0),
         terrainSource: cesium?.dataset.terrainSource ?? "none",
         terrainTileCount: Number(cesium?.dataset.terrainTileCount ?? 0),
         localDemReady: cesium?.dataset.localDemReady === "true",
@@ -204,6 +220,8 @@ for (const specification of scenes) {
         actual.targetBuildingCount === 296,
         actual.loadedTargetBuildingCount >= Math.ceil(296 * 0.95),
         actual.targetCoverageRatio >= 0.95,
+        actual.packArtifactsReady,
+        actual.packArtifactBytes > 4_000_000,
       );
       if (scene.requireSection) checks.push(
         actual.sectionReady,
@@ -232,19 +250,36 @@ for (const specification of scenes) {
     if (!readiness.complete || criticalNetworkFailures.length || consoleErrors.length) {
       throw new Error(`Strict capture rejected: ${JSON.stringify({ readiness, criticalNetworkFailures, consoleErrors })}`);
     }
+    const captureStabilization = specification.mode === "plateau3d"
+      ? await page.evaluate(async () => {
+        const hook = window.__cityGapStabilizeCapture;
+        if (typeof hook !== "function") throw new Error("3D capture stabilization hook is unavailable");
+        return hook();
+      })
+      : { globeHidden: false, incompleteFallbackHidden: false, fastStartVisible: false };
     const target = path.join(outputDirectory, `${specification.id}.png`);
-    await page.screenshot({ path: target, fullPage: false, animations: "disabled", timeout: 90_000 });
+    await page.screenshot({ path: target, fullPage: false, animations: "disabled", timeout: 180_000 });
     const captureBytes = await readFile(target);
-    const runtimeMetrics = await page.evaluate(() => ({
-      app_shell_ms: Number(document.documentElement.dataset.perfAppShellMs ?? 0),
-      map_2d_interaction_ms: Number(document.documentElement.dataset.perfMap2dInteractionMs ?? 0),
-      three_d_first_meaningful_ms: Number(document.documentElement.dataset.perfThreeDFirstMeaningfulMs ?? 0),
-      pack_interaction_ms: Number(document.documentElement.dataset.perfPackInteractionMs ?? 0),
-      visual_complete_ms: Number(document.documentElement.dataset.perfVisualCompleteMs ?? 0),
-      capture_strict_ms: Number(document.documentElement.dataset.perfCaptureStrictMs ?? 0),
-      resource_count: performance.getEntriesByType("resource").length,
-      js_heap_used_bytes: performance.memory?.usedJSHeapSize ?? null,
-    }));
+    const runtimeMetrics = await page.evaluate(() => {
+      const resources = performance.getEntriesByType("resource");
+      const b3dm = resources.filter((entry) => entry.name.endsWith(".b3dm"));
+      const transferred = b3dm.reduce((total, entry) => total + (entry.transferSize ?? 0), 0);
+      return {
+        app_shell_ms: Number(document.documentElement.dataset.perfAppShellMs ?? 0),
+        map_2d_interaction_ms: Number(document.documentElement.dataset.perfMap2dInteractionMs ?? 0),
+        three_d_first_meaningful_ms: Number(document.documentElement.dataset.perfThreeDFirstMeaningfulMs ?? 0),
+        pack_interaction_ms: Number(document.documentElement.dataset.perfPackInteractionMs ?? 0),
+        visual_complete_ms: Number(document.documentElement.dataset.perfVisualCompleteMs ?? 0),
+        capture_strict_ms: Number(document.documentElement.dataset.perfCaptureStrictMs ?? 0),
+        resource_count: resources.length,
+        js_heap_used_bytes: performance.memory?.usedJSHeapSize ?? null,
+        pack_cache: {
+          b3dm_resource_entries: b3dm.length,
+          transfer_size_bytes: transferred,
+          result: b3dm.length > 0 && transferred === 0 ? "warm-http-cache" : "cold-or-revalidated",
+        },
+      };
+    });
     captures.push({
       schema_version: "citygap.visual-capture@2",
       capture_id: specification.id,
@@ -259,11 +294,19 @@ for (const specification of scenes) {
       route: specification.route,
       city: "maizuru",
       map_mode: specification.mode,
+      urban_state: packManifest.urban_state,
       camera: readiness.actual.camera,
       pack_id: readiness.actual.packId,
       target_building_count: readiness.actual.targetBuildingCount,
       loaded_target_building_count: readiness.actual.loadedTargetBuildingCount,
+      visible_target_building_count: readiness.actual.visibleTargetBuildingCount,
       target_coverage_ratio: readiness.actual.targetCoverageRatio,
+      pack_artifacts_ready: readiness.actual.packArtifactsReady,
+      pack_artifact_bytes: readiness.actual.packArtifactBytes,
+      terrain_triangle_count: packManifest.objects.terrain_source_triangles,
+      road_object_count: packManifest.objects.roads,
+      section_sample_count: specification.requireSection ? readiness.actual.sectionTerrainSamples : 0,
+      source_data_ids: sourceDataIds,
       building_source: readiness.actual.buildingSource,
       building_feature_count: readiness.actual.buildingFeatureCount,
       terrain_source: readiness.actual.terrainSource,
@@ -291,6 +334,7 @@ for (const specification of scenes) {
       network_failures: criticalNetworkFailures,
       runtime_metrics: runtimeMetrics,
       capture_wall_time_ms: Date.now() - captureStartedAt,
+      capture_stabilization: captureStabilization,
       capture_sha256: sha256(captureBytes),
       capture_bytes: captureBytes.byteLength,
       incomplete_capture_rejection: {
@@ -326,6 +370,7 @@ for (const specification of scenes) {
   }
 }
 
+await context.close();
 await browser.close();
 if (failed) {
   if (!only) await rm(outputDirectory, { recursive: true, force: true });

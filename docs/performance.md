@@ -6,7 +6,9 @@ production UIはnavigation開始から `app_shell / map_2d_interaction / three_d
 
 目標値は2D interaction p50 ≤ 2秒・p95 ≤ 4秒、Pack 3D interaction p50 ≤ 8秒・p95 ≤ 12秒、canonical local strict ≤ 60秒である。これは目標でありSLAではない。全市camera streamと画面外refinementはPack interactionのcritical pathに入れない。
 
-canonical PackはJSON 0.6 MiB未満で、既存immutable b3dm約4.3 MiBとDEM GLB約1.6 MiBを参照する。API artifactはSHA-256 ETag、immutable cache、Range対応storage URIを返す。Service Workerは明示された単一Pack assignmentだけをoffline cacheし、全市建物をcacheしない。
+canonical Packは分析JSON 592,729 bytes（gzip 69,869 bytes）で、既存immutable b3dm 4,313,608 bytes、DEM GLB 1,575,692 bytes、道路95,447 bytesを参照する。参照core合計は6,577,476 bytes。API artifactはSHA-256 ETag、immutable cache、Range対応storage URIを返す。Service Workerは明示された単一Pack assignmentだけをoffline cacheし、全市建物をcacheしない。
+
+2026-08-29のproduction build・headless SwiftShader単一断面captureでは、app shell 2.624秒、3D first meaningful 6.058秒、Pack interaction 12.704秒、visual complete 56.447秒、strict 99.684秒だった。296/296のcatalogとB3DM SHA-256検証、局所DEM、道路、断面を必須にした値で、通常GPUではない。Pack interaction p95 12秒とstrict 60秒の目標はこのrunでは未達であり、達成済みとは扱わない。通常GPU p50/p95は実端末sampleがまだない。
 
 No production SLA is claimed. Measurements are labelled either `REAL_MUNICIPAL_DATA` (offline pipeline timings from Maizuru/Fujisawa) or `SYNTHETIC_SCALE` (database/API scale fixture).
 

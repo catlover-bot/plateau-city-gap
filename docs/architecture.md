@@ -81,7 +81,7 @@ Object Lensは選択objectからsource、year、ID、属性、関係object、Fin
 |---|---|---|
 | Urban X-Ray | `exploratory_score_c` | 実地形・建物固有スコアではない |
 | Service Pulse | representative route上のprecomputed network distance | 徒歩、時間、pedestrian networkではない |
-| Counterfactual Twin | 既存scenarioのchanged road / building band / site | 建物の新設・撤去・変形ではない |
+| Counterfactual Twin | 既存scenarioのchanged relation / building-group band / site | 建物の新設・撤去・変形ではない。mesh直線距離とnetwork routeを混同しない |
 | Temporal Ghost | 公開済みactual Point sample | 公式polygon差分や全棟変化ではない |
 
 ## Runtime surfaces
@@ -98,7 +98,7 @@ Object Lensは選択objectからsource、year、ID、属性、関係object、Fin
 正規画像は固定時間待ちではなく、scene requirementsで撮影可否を決める。
 
 - `INTERACTION_READY`: fast-start建物15棟、局所DEM、道路、selectionが操作可能。全市streamを待たない。
-- `VISUAL_COMPLETE`: 対象Pack 296棟、局所DEM、label/overlay/font、cameraが揃う。
+- `VISUAL_COMPLETE`: 対象Pack catalog 296棟と参照B3DM、局所DEM、label/overlay/font、cameraが揃う。visible countは別値。
 - `CAPTURE_STRICT_READY`: coverage 0.95以上、critical request 0、同一signature 3 frame、scene固有断面条件が揃う。
 
 - basemap、font、analysis、overlay ready

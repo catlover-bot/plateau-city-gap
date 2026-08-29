@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import type { CounterfactualState, SpatialSelection } from "../../state/spatial/types";
+import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import type { AnalysisLens, CounterfactualState, SpatialSelection } from "../../state/spatial/types";
 
 interface TerrainSample {
   sample_order: number;
@@ -41,6 +41,16 @@ interface SectionData {
   buildings: SectionRelation[];
   roads: SectionRelation[];
   service_locations: SectionRelation[];
+  scenario_sites: SectionRelation[];
+  counterfactual: {
+    plan_id: string;
+    building_group_count: number;
+    baseline: { distance_m: number; score_c: number };
+    scenario: { distance_m: number; score_c: number; distance_reduction_m: number; score_c_reduction: number };
+    distance_semantics: string;
+    geometry_policy: string;
+    limitations: string[];
+  };
   planning_bands: SectionBand[];
   hazard_bands: SectionBand[];
 }
@@ -74,11 +84,22 @@ interface Props {
   open: boolean;
   selection: SpatialSelection | null;
   counterfactualState: CounterfactualState;
+  analysisLens: AnalysisLens;
   onSelectBuilding(id: string, properties: Record<string, unknown>): void;
   onClose(): void;
 }
 
-export function UrbanSection({ open, selection, counterfactualState, onSelectBuilding, onClose }: Props) {
+function moveSectionFocus(event: ReactKeyboardEvent<SVGRectElement>) {
+  if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+  const objects = Array.from(event.currentTarget.parentElement?.querySelectorAll<SVGRectElement>("[data-section-building]") ?? []);
+  const index = objects.indexOf(event.currentTarget);
+  if (index < 0 || objects.length === 0) return;
+  event.preventDefault();
+  const direction = event.key === "ArrowRight" ? 1 : -1;
+  objects[(index + direction + objects.length) % objects.length]?.focus();
+}
+
+export function UrbanSection({ open, selection, counterfactualState, analysisLens, onSelectBuilding, onClose }: Props) {
   const [data, setData] = useState<SectionData | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -98,6 +119,7 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
     const covered = data.terrain_samples.filter((sample): sample is TerrainSample & { elevation_m: number } => sample.elevation_m !== null);
     const maxDistance = Math.max(...data.terrain_samples.map((sample) => sample.distance_m), 1);
     const minimumElevation = Math.min(...covered.map((sample) => sample.elevation_m));
+    const maximumElevation = Math.max(...covered.map((sample) => sample.elevation_m));
     const maximumBuildingTop = Math.max(
       ...data.buildings.map((building) => {
         const height = typeof building.properties.measured_height_m === "number" ? building.properties.measured_height_m : 0;
@@ -109,7 +131,7 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
     const elevationSpan = Math.max(maximumBuildingTop - minimumElevation, 20);
     const x = (distance: number) => 38 + distance / maxDistance * (VIEW_WIDTH - 58);
     const y = (elevation: number) => TERRAIN_BOTTOM - (elevation - minimumElevation) / elevationSpan * (TERRAIN_BOTTOM - TERRAIN_TOP);
-    return { covered, maxDistance, minimumElevation, x, y, terrainPaths: lineSegments(data.terrain_samples, x, y) };
+    return { covered, maxDistance, minimumElevation, maximumElevation, x, y, terrainPaths: lineSegments(data.terrain_samples, x, y) };
   }, [data]);
 
   if (!open) return <button type="button" className="urban-section-open" onClick={onClose}>都市断面を開く</button>;
@@ -123,6 +145,8 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
       data-terrain-samples={data?.terrain_samples.length ?? 0}
       data-terrain-covered={data?.terrain_samples.filter((sample) => sample.elevation_m !== null).length ?? 0}
       data-pack-id={data?.pack_id ?? "none"}
+      data-counterfactual-ready={counterfactualState !== "scenario" || Boolean(data?.counterfactual && data.scenario_sites.length > 0)}
+      data-service-section-ready={analysisLens !== "service-pulse" || Boolean(data?.service_locations.length)}
     >
       <header>
         <div><span>PLATEAU URBAN SECTION</span><strong>実DEM × 建物 × 道路</strong></div>
@@ -131,6 +155,11 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
       </header>
       {error && <p role="alert">Urban Section: {error}</p>}
       {!data || !plot ? <p role="status">実PLATEAU断面を読み込み中</p> : <>
+        <p className="section-text-summary">
+          地形標高 {plot.minimumElevation.toFixed(1)}〜{plot.maximumElevation.toFixed(1)}m。建物 {data.buildings.length}棟（直接交差 {data.buildings.filter((item) => item.relation === "direct").length}、近傍 {data.buildings.filter((item) => item.relation === "nearby").length}）。道路交差 {data.roads.length}、周辺施設 {data.service_locations.length}。
+          {counterfactualState === "scenario" ? ` Scenario ${data.counterfactual.plan_id}では500m集計直線距離が${data.counterfactual.baseline.distance_m}mから${data.counterfactual.scenario.distance_m}mへ変化。建物・道路geometryは不変。` : " Scenario relationは未選択。"}
+          高さ不明は補完せず、施設は断面からのoffsetを表示します。
+        </p>
         <svg viewBox={`0 0 ${VIEW_WIDTH} 220`} role="img" aria-labelledby="section-title section-description">
           <title id="section-title">常団地前500mメッシュのPLATEAU都市断面</title>
           <desc id="section-description">{data.terrain_source}を三角形内で補間した地形、直接交差と近傍を区別した建物、PLATEAU道路、計画・災害帯を表示。人口や建物高さの補完は行っていません。</desc>
@@ -157,11 +186,15 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
                 y={top}
                 width={Math.max(3, plot.x(building.end_distance_m) - plot.x(building.start_distance_m))}
                 height={Math.max(5, plot.y(nearest.elevation_m) - top)}
+                data-section-building="true"
                 tabIndex={0}
                 role="button"
                 aria-label={`${String(building.properties.usage ?? "用途不明")} ${height === null ? "高さ不明" : `高さ${height}m`} ${building.relation === "direct" ? "断面交差" : `断面から${building.offset_distance_m}m`}`}
                 onClick={() => onSelectBuilding(building.source_object_id, building.properties)}
-                onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") onSelectBuilding(building.source_object_id, building.properties); }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") onSelectBuilding(building.source_object_id, building.properties);
+                  moveSectionFocus(event);
+                }}
               ><title>{building.source_object_id} · {String(building.properties.usage ?? "用途不明")} · {height === null ? "高さ不明（補完なし）" : `${height}m`}</title></rect>;
             })}
           </g>
@@ -174,7 +207,20 @@ export function UrbanSection({ open, selection, counterfactualState, onSelectBui
           <g className="section-terrain" aria-label="PLATEAU DEM TIN地形">
             {plot.terrainPaths.map((path, index) => <path key={index} d={path} />)}
           </g>
-          {counterfactualState !== "baseline" && <text className="section-counterfactual-note" x="660" y="18">{counterfactualState.toUpperCase()} · 建物geometry不変 · 該当route relationのみ比較</text>}
+          {analysisLens === "service-pulse" && <text className="section-pulse-note" x="610" y="18">3D: experimental network距離 · 断面: 実施設のoffset投影（徒歩時間ではない）</text>}
+          {counterfactualState === "scenario" && <g className="section-counterfactual" aria-label={`Counterfactual comparison ${data.counterfactual.plan_id}`}>
+            <rect className="affected-group" x={plot.x(0)} y="3" width={plot.x(plot.maxDistance) - plot.x(0)} height="12"><title>{data.counterfactual.building_group_count}棟に関連する500m集計値。建物固有の改善ではありません。</title></rect>
+            <text x="42" y="12">CHANGED RELATION · 建物/道路geometry固定</text>
+            <line className="baseline" x1="664" x2="940" y1="8" y2="8" />
+            <line className="scenario" x1="664" x2={664 + 276 * data.counterfactual.scenario.distance_m / data.counterfactual.baseline.distance_m} y1="14" y2="14" />
+            <text x="660" y="26">500m集計直線距離 {data.counterfactual.baseline.distance_m}m → {data.counterfactual.scenario.distance_m}m（−{data.counterfactual.scenario.distance_reduction_m}m）</text>
+            {data.scenario_sites.map((site) => <g key={site.source_object_id} className="scenario-site">
+              <line x1={plot.x(site.start_distance_m)} x2={plot.x(site.start_distance_m)} y1="154" y2="181" />
+              <path d={`M${plot.x(site.start_distance_m) - 4},154 h8 l-4,-8 z`} />
+              <title>候補地点 {String(site.properties.road_name ?? site.source_object_id)} · 断面offset {site.offset_distance_m}m · siting未確定</title>
+            </g>)}
+          </g>}
+          {counterfactualState === "stress" && <text className="section-counterfactual-note" x="660" y="18">STRESS · このpackに断面固有stress relationなし · geometry不変</text>}
         </svg>
         <footer>
           <span>高さ基準: {data.vertical_datum}</span>

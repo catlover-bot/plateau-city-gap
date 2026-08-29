@@ -13,8 +13,11 @@ Spatial Evidence Packは、Findingを自治体レビューへ渡すための不�
 | terrain | 65,232 triangles | 公式 `dem:TINRelief`、EPSG:6697からGSIGEO2011でEPSG:4979/4978へ変換、誇張1.0 |
 | facilities | nearest 16 | 追跡済みP04/P11 derivative。舞鶴市公式GTFSは未公開・未使用 |
 | mesh analysis | 1 | 既存500m集計。建物固有値として扱わない |
+| scenario site | 1 | 既存 `overall-3` の候補。実PLATEAU道路面代表点だが、施設設置・適地・実施済みを意味しない |
 
 `objects.json` は属性・関係とsource bboxを持ち、重い3D geometryはchecksum済みb3dm/GLBを参照する。`sections.json` は同Packから作った断面ready artifactである。manifestは各artifact SHA-256、content hash、source version、privacy boundaryを記録する。
+
+現行manifestのdelivery内訳は、分析artifact 592,729 bytes（gzip 69,869 bytes）、対象building b3dm 4,313,608 bytes、DEM GLB 1,575,692 bytes、道路asset 95,447 bytes、参照core合計6,577,476 bytesである。25MB未満であり、全市streamは含めない。
 
 ## Lifecycle and storage
 

@@ -24,7 +24,10 @@ export interface VisualReadinessSnapshot {
   buildingFeatureCount: number;
   targetBuildingCount: number;
   loadedTargetBuildingCount: number;
+  visibleTargetBuildingCount: number;
   targetCoverageRatio: number;
+  packArtifactsReady: boolean;
+  packArtifactBytes: number;
   terrainProviderReady: boolean;
   terrainTileCount: number;
   localDemReady: boolean;
@@ -60,7 +63,10 @@ export const INITIAL_VISUAL_READINESS: VisualReadinessSnapshot = {
   buildingFeatureCount: 0,
   targetBuildingCount: 0,
   loadedTargetBuildingCount: 0,
+  visibleTargetBuildingCount: 0,
   targetCoverageRatio: 0,
+  packArtifactsReady: false,
+  packArtifactBytes: 0,
   terrainProviderReady: false,
   terrainTileCount: 0,
   localDemReady: false,

@@ -9,6 +9,7 @@ model population. Large 3D geometry remains in immutable referenced tilesets.
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import math
@@ -192,6 +193,52 @@ def load_service_objects() -> list[dict[str, Any]]:
     return [item for _, item in sorted(candidates, key=lambda pair: (pair[0], pair[1]["id"]))[:16]]
 
 
+def load_counterfactual_relation() -> tuple[dict[str, Any], dict[str, Any]]:
+    """Load the tracked target-mesh result without inventing a route."""
+
+    document = json.loads((PUBLIC_DATA / "intervention_scenarios.json").read_text(encoding="utf-8"))
+    plan = document["plans"]["overall"]["3"]
+    result = plan["mesh_results"][DEEP_DIVE["mesh_code"]]
+    assigned_site = next(site for site in plan["sites"] if site["candidate_id"] == result["assigned_site_id"])
+    scenario_site = {
+        "id": assigned_site["candidate_id"],
+        "object_type": "scenario_site",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [assigned_site["longitude"], assigned_site["latitude"]],
+        },
+        "properties": {
+            **assigned_site,
+            "scenario_plan_id": plan["plan_id"],
+            "scenario_semantics": "hypothetical support point at an actual PLATEAU road-surface representative point",
+            "siting_feasibility": "not_determined",
+        },
+    }
+    relation = {
+        "source": "CITY GAP deterministic intervention_scenarios.json",
+        "plan_id": plan["plan_id"],
+        "mode": plan["mode"],
+        "site_count": plan["site_count"],
+        "mesh_code": DEEP_DIVE["mesh_code"],
+        "building_group_count": DEEP_DIVE["expected_buildings"],
+        "baseline": {
+            "distance_m": result["before_distance_m"],
+            "score_c": result["before_score_c"],
+        },
+        "scenario": {
+            "distance_m": result["after_distance_m"],
+            "score_c": result["after_score_c"],
+            "distance_reduction_m": result["distance_reduction_m"],
+            "score_c_reduction": result["score_c_reduction"],
+        },
+        "selected_site_id": assigned_site["candidate_id"],
+        "distance_semantics": "500m mesh-centroid straight-line distance; not a walking route or travel time",
+        "geometry_policy": "building and road geometry remain unchanged; only the analysis relation and candidate site differ",
+        "limitations": document["limitations"],
+    }
+    return scenario_site, relation
+
+
 def parse_glb(path: Path) -> tuple[dict[str, Any], bytes]:
     blob = path.read_bytes()
     magic, version, length = struct.unpack_from("<4sII", blob, 0)
@@ -273,12 +320,13 @@ def build() -> dict[str, Any]:
     buildings = load_target_buildings()
     roads = load_geojson_objects(PUBLIC_DATA / "plateau_roads.geojson", "road")
     facilities = load_service_objects()
+    scenario_site, counterfactual = load_counterfactual_relation()
     mesh = next(
         item
         for item in load_geojson_objects(PUBLIC_DATA / "mesh_metrics.geojson", "analysis_relation")
         if item["id"] == DEEP_DIVE["mesh_code"]
     )
-    objects = [*buildings, *roads, *facilities, mesh]
+    objects = [*buildings, *roads, *facilities, scenario_site, mesh]
     assert_public_pack_safe(objects)
 
     transect_coordinates = choose_transect(buildings, roads)
@@ -287,6 +335,9 @@ def build() -> dict[str, Any]:
     building_relations = section_relations(transect_coordinates, buildings, buffer_m=12)
     road_relations = section_relations(transect_coordinates, roads, buffer_m=0)
     facility_relations = section_relations(transect_coordinates, facilities, buffer_m=2000)
+    scenario_site_relations = section_relations(transect_coordinates, [scenario_site], buffer_m=2000)
+    if len(scenario_site_relations) != 1:
+        raise ValueError("Expected the selected scenario site to project onto the canonical section")
     section = {
         "schema": "citygap.urban-section@1",
         "transect_id": f"{PACK_ID}-default-section",
@@ -301,6 +352,8 @@ def build() -> dict[str, Any]:
         "buildings": building_relations,
         "roads": road_relations,
         "service_locations": facility_relations,
+        "scenario_sites": scenario_site_relations,
+        "counterfactual": counterfactual,
         "planning_bands": [
             {
                 "source_object_id": item["source_object_id"],
@@ -339,6 +392,14 @@ def build() -> dict[str, Any]:
     content_hash = canonical_sha256({name: value["sha256"] for name, value in artifacts.items()})
     terrain_metadata = json.loads((PUBLIC_DATA / "plateau-terrain/metadata.json").read_text(encoding="utf-8"))
     plateau_metadata = json.loads((PUBLIC_DATA / "plateau/metadata.json").read_text(encoding="utf-8"))
+    analysis_bytes = sum(value["bytes"] for value in artifacts.values())
+    compressed_analysis_bytes = sum(
+        len(gzip.compress((OUTPUT / name).read_bytes(), compresslevel=9, mtime=0))
+        for name in artifacts
+    )
+    building_3d_bytes = sum(path.stat().st_size for path in BUILDING_FILES)
+    terrain_3d_bytes = TERRAIN_GLB.stat().st_size
+    road_asset_bytes = (PUBLIC_DATA / "plateau_roads.geojson").stat().st_size
     manifest_payload = {
         "schema": "citygap.spatial-evidence-pack@1",
         "pack_id": PACK_ID,
@@ -360,6 +421,7 @@ def build() -> dict[str, Any]:
             "roads": len(roads),
             "facilities": len(facilities),
             "analysis_relations": 1,
+            "scenario_sites": 1,
             "terrain_source_triangles": len(terrain_triangles),
         },
         "source_versions": {
@@ -372,11 +434,22 @@ def build() -> dict[str, Any]:
             "roads": "Project PLATEAU 舞鶴市2025 道路LOD1",
             "facilities_transport": "国土数値情報 P04/P11 tracked CITY GAP derivatives; official GTFS unavailable/not published",
             "analysis": "CITY GAP mesh metrics deterministic public derivative",
+            "scenario": "CITY GAP deterministic overall-3 mesh-centroid straight-line comparison",
         },
         "render_assets": {
             "building_tileset": "../../plateau/tileset.json",
             "terrain_tileset": "../../plateau-terrain/tileset.json",
             "roads": "../../plateau_roads.geojson",
+        },
+        "delivery": {
+            "analysis_raw_bytes": analysis_bytes,
+            "analysis_gzip_bytes": compressed_analysis_bytes,
+            "building_3d_bytes": building_3d_bytes,
+            "terrain_3d_bytes": terrain_3d_bytes,
+            "road_asset_bytes": road_asset_bytes,
+            "referenced_core_bytes": analysis_bytes + building_3d_bytes + terrain_3d_bytes + road_asset_bytes,
+            "version_key": PACK_ID,
+            "selected_pack_only_offline": True,
         },
         "terrain_contract": {
             "source_crs": terrain_metadata.get("source_crs"),
@@ -394,6 +467,8 @@ def build() -> dict[str, Any]:
             "building_nearby": sum(item["relation"] == "nearby" for item in building_relations),
             "road_intersections": len(road_relations),
             "service_locations": len(facility_relations),
+            "scenario_sites": len(scenario_site_relations),
+            "counterfactual_plan_id": counterfactual["plan_id"],
         },
         "privacy": {
             "public_building_population_model": "excluded",

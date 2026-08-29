@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 MIGRATION = Path("infra/migrations/027_spatial_evidence_urban_section.sql")
 
 

@@ -29,9 +29,17 @@
 .section-roads path { fill: #f0eee7; stroke: #5b6763; stroke-width: 1.5; }
 .section-services circle { fill: #416f75; }
 .section-services text { fill: #39514e; font: 6px var(--cg-mono); }
+.section-text-summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .section-planning rect { fill: #617f79; opacity: .48; }
 .section-hazard rect { fill: #9c6047; opacity: .58; }
 .section-counterfactual-note { fill: #8c5c22; font: 7px var(--cg-mono); }
+.section-pulse-note { fill: #315f65; font: 7px var(--cg-mono); }
+.section-counterfactual .affected-group { fill: #c4933f; opacity: .16; }
+.section-counterfactual text { fill: #7d511b; font: 6.5px var(--cg-mono); }
+.section-counterfactual line.baseline { stroke: #7c8580; stroke-width: 3; }
+.section-counterfactual line.scenario { stroke: #b56f21; stroke-width: 3; }
+.section-counterfactual .scenario-site line { stroke: #a76624; stroke-dasharray: 2 2; }
+.section-counterfactual .scenario-site path { fill: #b76e23; stroke: #5f3a14; }
 .urban-section footer { display: flex; height: 28px; align-items: center; padding: 0 10px; border-top: 1px solid #c3c7c2; gap: 18px; color: #5d6865; font: 7px var(--cg-mono); }
 .urban-section-open { position: absolute; z-index: 32; bottom: 12px; left: 416px; height: 34px; border: 1px solid #64716c; background: #f4f3eb; font-size: 9px; }
 .product-app:has(.urban-section) .analysis-lens-rail { bottom: 260px; }

@@ -14,7 +14,7 @@ PLATEAUを外すと建物level Investigation、道路object調査、実DEM上の
 2. `plateau`: 検証済みlocal subset 3 tiles / 856棟。対象mesh内296棟。
 3. 公式camera stream: 舞鶴市2025 LOD1 44,640棟。
 
-通常はfast-start → Spatial Evidence Pack → optional official streamへprogressiveに移行する。`INTERACTION_READY` は15棟で操作を解放するが、正規captureは `buildingSource=spatial-pack` で対象296棟の95%以上がloadedになるまで成功しない。外部全市streamはstrict条件をblockしない。
+通常はfast-start → Spatial Evidence Pack → optional official streamへprogressiveに移行する。`INTERACTION_READY` は15棟で操作を解放するが、正規captureは `buildingSource=spatial-pack` で対象catalog 296棟と参照B3DM 3件がSHA-256検証済みになるまで成功しない。画面内visible countはCesiumの描画統計から別記録し、loaded countへ流用しない。外部全市streamはstrict条件をblockしない。
 
 Urban X-Rayは建物高さを変形しない。選択mesh内の建物所属をamber、対象外をneutral/dim、選択建物をsemantic accentで表示する。個別建物へ500m統計値を付与しない。
 
@@ -41,7 +41,7 @@ graph semanticsは常に `experimental PLATEAU LOD1 road-surface adjacency`。pe
 
 - Urban X-Ray: 既存 `exploratory_score_c` だけを半透明analysis surfaceへ変換
 - Service Pulse: 既存representative routeのnetwork distance band（500m / 1km / 2km / endpoint）
-- Counterfactual Twin: 既存scenario結果のchanged road / affected building / siteだけを強調
+- Counterfactual Twin: 既存scenario結果のchanged relation / affected building group / siteだけを強調。対象断面の `overall-3` はmesh中心直線距離で、routeとは呼ばない
 - Temporal Ghost: 公開済みactual Point sampleだけをadded / removed / changedとして表示
 
 Pulseはpath distanceを毎frame計算しない。precomputed route positionsを使い、reduced motionではanimationを止めてstatic distance bandsだけを残す。routeの水平geometryは既存結果を維持し、3D表示線だけを地形から25m分離する。この高さはroute標高ではない。Scenarioで架空の建物新設・撤去・変形を行わない。

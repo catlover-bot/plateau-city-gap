@@ -109,7 +109,7 @@ jobs:
             sleep 1
           done
           npm run audit:plateau-native -- --output /tmp/plateau-native-browser-audit.json
-          npm run capture:current -- --output /tmp/citygap-current-capture --diagnostics /tmp/citygap-readiness-failures --only 03-resolution-lift
+          npm run capture:current -- --output /tmp/citygap-current-capture --diagnostics /tmp/citygap-readiness-failures --only 02-resolution-lift
       - name: pilot-rehearsal and Evidence integrity
         run: |
           python -m analysis.scripts.run_validation_pilot_rehearsal

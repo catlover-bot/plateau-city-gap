@@ -1,4 +1,4 @@
-import type { Cesium3DTileset, GeoJsonDataSource, Viewer } from "cesium";
+import { Cartesian3, SceneTransforms, type Cesium3DTileset, type GeoJsonDataSource, type Viewer } from "cesium";
 import { evaluateVisualReadiness, INITIAL_VISUAL_READINESS, type SceneReadinessRequirements, type VisualReadinessResult, type VisualReadinessSnapshot } from "./visualReadiness";
 
 interface TilesetStatistics {
@@ -19,6 +19,10 @@ export interface CesiumReadinessSources {
     source: string;
     tileset: Cesium3DTileset | undefined;
     targetFeatureCount?: number;
+    loadedTargetFeatureCount?: number;
+    targetPositions?: Array<[number, number, number]>;
+    targetArtifactsReady?: boolean;
+    targetArtifactBytes?: number;
     packId?: string;
   }>;
   terrainTileset?: Cesium3DTileset;
@@ -72,7 +76,10 @@ function setDataset(container: HTMLElement, snapshot: VisualReadinessSnapshot, r
   container.dataset.buildingFeatureCount = String(snapshot.buildingFeatureCount);
   container.dataset.targetBuildingCount = String(snapshot.targetBuildingCount);
   container.dataset.loadedTargetBuildingCount = String(snapshot.loadedTargetBuildingCount);
+  container.dataset.visibleTargetBuildingCount = String(snapshot.visibleTargetBuildingCount);
   container.dataset.targetCoverageRatio = snapshot.targetCoverageRatio.toFixed(6);
+  container.dataset.packArtifactsReady = String(snapshot.packArtifactsReady);
+  container.dataset.packArtifactBytes = String(snapshot.packArtifactBytes);
   container.dataset.terrainTileCount = String(snapshot.terrainTileCount);
   container.dataset.terrainReady = String(snapshot.terrainProviderReady);
   container.dataset.localDemReady = String(snapshot.localDemReady);
@@ -147,9 +154,27 @@ export function startCesiumReadinessController(input: {
     const buildingTilesReady = Boolean(activeBuilding && hasRequiredBuildingContent(activeBuilding));
     const expectedTargetBuildings = requirements.expectedTargetBuildingCount ?? requirements.minimumBuildingFeatures;
     const targetBuildingCount = expectedTargetBuildings > 0 ? expectedTargetBuildings : 0;
-    const loadedTargetBuildingCount = activeBuilding?.tileset?.tilesLoaded
+    const loadedTargetBuildingCount = activeBuilding?.targetArtifactsReady
+      ? Math.min(targetBuildingCount, activeBuilding.loadedTargetFeatureCount ?? 0)
+      : activeBuilding?.tileset?.tilesLoaded
       ? Math.min(targetBuildingCount, activeBuilding.targetFeatureCount ?? 0)
       : Math.min(targetBuildingCount, buildingFeatureCount, activeBuilding?.targetFeatureCount ?? 0);
+    const projectedTargetBuildingCount = activeBuilding?.targetPositions?.reduce((visible, [longitude, latitude, height]) => {
+      const point = SceneTransforms.worldToWindowCoordinates(
+        viewer.scene,
+        Cartesian3.fromDegrees(longitude, latitude, height),
+      );
+      if (!point) return visible;
+      return visible + Number(point.x >= 0 && point.x <= viewer.scene.canvas.clientWidth
+        && point.y >= 0 && point.y <= viewer.scene.canvas.clientHeight);
+    }, 0) ?? Math.min(targetBuildingCount, buildingFeatureCount, activeBuilding?.targetFeatureCount ?? 0);
+    // Cesium's selected-feature statistic is the conservative upper bound for
+    // actually rendered targets; projected catalog centroids alone are not.
+    const visibleTargetBuildingCount = Math.min(
+      projectedTargetBuildingCount,
+      buildingFeatureCount,
+      activeBuilding?.targetFeatureCount ?? 0,
+    );
     const targetCoverageRatio = targetBuildingCount > 0
       ? loadedTargetBuildingCount / targetBuildingCount
       : 1;
@@ -196,7 +221,10 @@ export function startCesiumReadinessController(input: {
       buildingFeatureCount,
       targetBuildingCount,
       loadedTargetBuildingCount,
+      visibleTargetBuildingCount,
       targetCoverageRatio,
+      packArtifactsReady: activeBuilding?.targetArtifactsReady ?? false,
+      packArtifactBytes: activeBuilding?.targetArtifactBytes ?? 0,
       terrainProviderReady: (flags.broadTerrainReady && globeTiles > 0) || localDemReady,
       terrainTileCount,
       localDemReady,

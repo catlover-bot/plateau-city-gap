@@ -13,9 +13,11 @@ Urban Sectionは、保存されたtransectに沿って同じSpatial Evidence Pac
 
 canonical transectは決定論的候補群から建物・道路の実交差数で選び、94 terrain samples、63 building relations、14 road intersectionsを持つ。
 
+Counterfactual Sectionは既存 `overall-3` の対象mesh結果を固定する。現況562.597m、scenario 29.867m、差532.73mは500m mesh中心からの直線距離で、徒歩経路・network route・所要時間ではない。候補地点は実PLATEAU道路面代表点へ投影するが、siting feasibilityは未判定である。296棟は関連building groupとして示し、個別棟の改善とは呼ばない。
+
 ## UI contract
 
-SVG断面はkeyboard focusとscreen-reader descriptionを持ち、reduced motionでも完全に読める。建物を選ぶと3DとObject Lensの同じGML IDを選択する。Cesiumの半透明断面面は同じLineStringと実TIN elevation rangeから作り、誇張1.0を保持する。
+SVG断面は左右矢印による建物移動、Enter/Space選択、screen-reader text summaryを持ち、reduced motionでも完全に読める。建物を選ぶと3DとObject Lensの同じGML IDを選択する。Cesiumの半透明断面面は同じLineStringと実TIN elevation rangeから作り、誇張1.0を保持する。
 
 Planning、Hazard、Service、Route/Scenario relationを意味layerとして分ける。Counterfactualは建物geometryを変えず、実scenarioで変化したrelationだけを表示する。該当relationがない場合は空を実値で埋めず、利用不可として扱う。
 
