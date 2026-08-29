@@ -1,5 +1,11 @@
 # Methodology
 
+## Urban anatomy derivation
+
+対象メッシュ `533513314` の296棟は、追跡済み公式b3dm batch tableの代表点を500m境界で選択して再現する。断面用のsource bboxは交差判定の意味を明記し、公式footprintそのものとは呼ばない。建物用途、実測高さ、階数、面積、LODのunknown/sentinelは補完しない。
+
+DEM断面は追跡済みGLBのpositions/indicesとtileset ECEF transformからsource TIN 65,232面を復元し、EPSG:6674上の三角形内で重心座標補間する。TIN外はNULLである。道路は公式LOD1 polygonと断面LineStringの交差であり、実験的road network relationとは別の証拠型として保存する。
+
 ## Scope and interpretation
 
 探索仮説は「高齢者の地域ニーズが大きく、公共交通と医療までの距離も相対的に長い地域がある」です。CITY GAPは、その空間的なミスマッチを複数データから見つけるための比較指標です。

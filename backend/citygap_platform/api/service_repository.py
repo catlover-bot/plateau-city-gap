@@ -1808,6 +1808,266 @@ class MunicipalServiceRepository(PostGISRepository):
                 "source_contributions": source_contributions,
             }
 
+    def create_spatial_pack(
+        self, organization_id: str, investigation_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            investigation = self._one(
+                connection.execute(
+                    """SELECT id, city_id, urban_state_id FROM investigations
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, investigation_id),
+                )
+            )
+            if investigation is None:
+                return None
+            versions = payload["source_dataset_version_ids"]
+            available = connection.execute(
+                """SELECT count(*) AS count FROM dataset_versions
+                   WHERE organization_id = %s AND id = ANY(%s::uuid[])""",
+                (organization_id, versions),
+            ).fetchone()["count"]
+            if int(available) != len(set(versions)):
+                raise ValueError("Every source dataset version must belong to this organization")
+            context = current_request_context()
+            key_digest = hashlib.sha256(
+                json.dumps(
+                    {
+                        "investigation_id": investigation_id,
+                        "geometry": payload["geometry"],
+                        "bbox": payload["bbox"],
+                        "versions": sorted(versions),
+                    },
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode()
+            ).hexdigest()[:20]
+            pack = self._one(
+                connection.execute(
+                    """INSERT INTO spatial_evidence_packs (
+                           pack_key, organization_id, city_id, urban_state_id,
+                           investigation_id, geometry, bbox, buffer_m, status,
+                           data_classification, source_dataset_version_ids,
+                           network_version_id, analysis_run_ids, created_by
+                       ) VALUES (
+                           %s,%s,%s,%s,%s,
+                           ST_SetSRID(ST_GeomFromGeoJSON(%s),4326),
+                           ST_MakeEnvelope(%s,%s,%s,%s,4326),%s,'queued',%s,%s,%s,%s,%s
+                       ) RETURNING id, pack_key, city_id, urban_state_id,
+                           investigation_id, status, data_classification, created_at""",
+                    (
+                        f"investigation-{key_digest}",
+                        organization_id,
+                        investigation["city_id"],
+                        investigation["urban_state_id"],
+                        investigation_id,
+                        json.dumps(payload["geometry"]),
+                        *payload["bbox"],
+                        payload["buffer_m"],
+                        payload["data_classification"],
+                        versions,
+                        payload.get("network_version_id"),
+                        payload.get("analysis_run_ids", []),
+                        context.actor,
+                    ),
+                )
+            )
+            assert pack is not None
+            job_parameters = {
+                "spatial_pack_id": str(pack["id"]),
+                "investigation_id": investigation_id,
+            }
+            config_hash = hashlib.sha256(
+                json.dumps(job_parameters, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
+            job = self._one(
+                connection.execute(
+                    """INSERT INTO job_runs (
+                           organization_id, city_id, job_type, state, config_hash,
+                           algorithm_version, parameters
+                       ) VALUES (%s,%s,'spatial_evidence_pack','queued',%s,
+                                 'spatial-evidence-pack@1.0.0',%s)
+                       RETURNING id, job_type, state, queued_at""",
+                    (
+                        organization_id,
+                        investigation["city_id"],
+                        config_hash,
+                        json.dumps(job_parameters),
+                    ),
+                )
+            )
+            self._service_audit(
+                connection,
+                organization_id,
+                "spatial_pack.create",
+                "spatial_evidence_pack",
+                str(pack["id"]),
+                str(investigation["city_id"]),
+                None,
+                {**pack, "job_id": job["id"] if job else None},
+            )
+            return {**pack, "job": job}
+
+    def spatial_pack_detail(
+        self, organization_id: str, pack_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._one(
+                connection.execute(
+                    """SELECT id, pack_key, city_id, urban_state_id, finding_id,
+                              investigation_id, ST_AsGeoJSON(geometry)::jsonb AS geometry,
+                              ARRAY[ST_XMin(ST_Box3D(bbox)),ST_YMin(ST_Box3D(bbox)),
+                                    ST_XMax(ST_Box3D(bbox)),ST_YMax(ST_Box3D(bbox))] AS bbox,
+                              buffer_m, status, data_classification,
+                              source_dataset_version_ids, network_version_id,
+                              analysis_run_ids, content_sha256, manifest_sha256,
+                              object_counts, failure_reason, created_by, created_at,
+                              ready_at, superseded_by_id
+                       FROM spatial_evidence_packs
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, pack_id),
+                )
+            )
+
+    def spatial_pack_manifest(
+        self, organization_id: str, pack_id: str
+    ) -> dict[str, Any] | None:
+        detail = self.spatial_pack_detail(organization_id, pack_id)
+        if detail is None:
+            return None
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            artifacts = self._dicts(
+                connection.execute(
+                    """SELECT artifact_type, media_type, storage_uri, byte_length,
+                              content_sha256, etag, cache_control, created_at
+                       FROM spatial_pack_artifacts
+                       WHERE organization_id = %s AND pack_id = %s
+                       ORDER BY artifact_type, created_at""",
+                    (organization_id, pack_id),
+                )
+            )
+        return {"pack": detail, "artifacts": artifacts}
+
+    def spatial_pack_objects(
+        self,
+        organization_id: str,
+        pack_id: str,
+        object_type: str | None,
+        limit: int,
+        offset: int,
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            exists = connection.execute(
+                """SELECT EXISTS(SELECT 1 FROM spatial_evidence_packs
+                   WHERE organization_id=%s AND id=%s) AS exists""",
+                (organization_id, pack_id),
+            ).fetchone()["exists"]
+            if not exists:
+                return None
+            rows = self._dicts(
+                connection.execute(
+                    """SELECT id, object_type, source_object_id,
+                              source_dataset_version_id,
+                              ST_AsGeoJSON(geometry)::jsonb AS geometry, attributes,
+                              relation_semantics, content_sha256
+                       FROM spatial_pack_objects
+                       WHERE organization_id=%s AND pack_id=%s
+                         AND (%s IS NULL OR object_type=%s)
+                       ORDER BY object_type, source_object_id, id
+                       LIMIT %s OFFSET %s""",
+                    (organization_id, pack_id, object_type, object_type, limit, offset),
+                )
+            )
+            return {
+                "items": rows,
+                "limit": limit,
+                "offset": offset,
+                "next_offset": offset + len(rows) if len(rows) == limit else None,
+                "geometry_delivery": "bounded page; use immutable artifacts for bulk geometry",
+            }
+
+    def spatial_pack_sections(
+        self, organization_id: str, pack_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            exists = connection.execute(
+                """SELECT EXISTS(SELECT 1 FROM spatial_evidence_packs
+                   WHERE organization_id=%s AND id=%s) AS exists""",
+                (organization_id, pack_id),
+            ).fetchone()["exists"]
+            if not exists:
+                return None
+            transects = self._dicts(
+                connection.execute(
+                    """SELECT id, title, ST_AsGeoJSON(geometry)::jsonb AS geometry,
+                              buffer_m, sample_interval_m, vertical_datum,
+                              terrain_source, content_sha256, created_at,
+                              (SELECT count(*) FROM urban_section_samples sample
+                               WHERE sample.organization_id=transect.organization_id
+                                 AND sample.transect_id=transect.id) AS terrain_sample_count,
+                              (SELECT count(*) FROM urban_section_objects object
+                               WHERE object.organization_id=transect.organization_id
+                                 AND object.transect_id=transect.id) AS object_count
+                       FROM urban_transects AS transect
+                       WHERE organization_id=%s AND pack_id=%s ORDER BY created_at, id""",
+                    (organization_id, pack_id),
+                )
+            )
+            artifacts = self._dicts(
+                connection.execute(
+                    """SELECT storage_uri, content_sha256, byte_length, etag
+                       FROM spatial_pack_artifacts
+                       WHERE organization_id=%s AND pack_id=%s
+                         AND artifact_type='section' ORDER BY created_at""",
+                    (organization_id, pack_id),
+                )
+            )
+            return {"items": transects, "artifacts": artifacts}
+
+    def refresh_spatial_pack(
+        self, organization_id: str, pack_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            source = self._one(
+                connection.execute(
+                    """SELECT investigation_id,
+                              ST_AsGeoJSON(geometry)::jsonb AS geometry,
+                              ARRAY[ST_XMin(ST_Box3D(bbox)),ST_YMin(ST_Box3D(bbox)),
+                                    ST_XMax(ST_Box3D(bbox)),ST_YMax(ST_Box3D(bbox))] AS bbox,
+                              buffer_m, data_classification,
+                              source_dataset_version_ids, network_version_id,
+                              analysis_run_ids
+                       FROM spatial_evidence_packs
+                       WHERE organization_id=%s AND id=%s
+                         AND status IN ('ready','failed')""",
+                    (organization_id, pack_id),
+                )
+            )
+        if source is None:
+            return None
+        result = self.create_spatial_pack(
+            organization_id,
+            str(source["investigation_id"]),
+            {
+                "geometry": source["geometry"],
+                "bbox": source["bbox"],
+                "buffer_m": source["buffer_m"],
+                "data_classification": source["data_classification"],
+                "source_dataset_version_ids": source["source_dataset_version_ids"],
+                "network_version_id": source["network_version_id"],
+                "analysis_run_ids": source["analysis_run_ids"],
+            },
+        )
+        if result is not None:
+            result["refresh_of"] = pack_id
+        return result
+
     def investigations(
         self,
         organization_id: str,

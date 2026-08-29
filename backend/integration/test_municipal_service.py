@@ -1462,3 +1462,54 @@ def test_scenario_clone_preserves_computed_result_and_resets_human_checks(
         ).fetchone()
     assert cloned_sites == parent_sites
     assert checks == (parent_sites, True)
+
+
+def test_spatial_pack_api_is_tenant_scoped_and_queues_real_stage_job(
+    database_url: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    state_id = _prepare_service_fixture(database_url)
+    monkeypatch.setenv("CITYGAP_API_SURFACE", "municipal")
+    client = TestClient(create_app(MunicipalServiceRepository(database_url)))
+    investigation = client.post(
+        "/api/v1/cities/maizuru/investigations",
+        headers=_headers("analyst"),
+        json={
+            "urban_state_id": state_id,
+            "title": "Spatial Evidence Pack integration",
+            "objective": "対象296棟と断面を同一versionで固定する",
+        },
+    )
+    assert investigation.status_code == 201, investigation.text
+    investigation_id = investigation.json()["id"]
+    created = client.post(
+        f"/api/v1/investigations/{investigation_id}/spatial-packs",
+        headers=_headers("analyst"),
+        json={
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    [135.39375, 35.4458333333], [135.4, 35.4458333333],
+                    [135.4, 35.45], [135.39375, 35.45],
+                    [135.39375, 35.4458333333],
+                ]],
+            },
+            "bbox": [135.39375, 35.4458333333, 135.4, 35.45],
+            "data_classification": "public",
+            "source_dataset_version_ids": ["10000000-0000-0000-0000-000000000002"],
+        },
+    )
+    assert created.status_code == 202, created.text
+    pack_id = created.json()["id"]
+    assert created.json()["status"] == "queued"
+    assert created.json()["job"]["job_type"] == "spatial_evidence_pack"
+    detail = client.get(f"/api/v1/spatial-packs/{pack_id}", headers=_headers("viewer"))
+    assert detail.status_code == 200, detail.text
+    assert detail.json()["data_classification"] == "public"
+    objects = client.get(
+        f"/api/v1/spatial-packs/{pack_id}/objects?limit=200", headers=_headers("viewer")
+    )
+    assert objects.status_code == 200
+    assert objects.json()["geometry_delivery"].startswith("bounded page")
+    assert client.get(
+        f"/api/v1/spatial-packs/{pack_id}", headers=_headers("viewer", ORG_B)
+    ).status_code == 404

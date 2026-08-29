@@ -588,7 +588,7 @@ def build_audit() -> dict[str, Any]:
         "skip_audit": _unimplemented_skip_count() == 0,
         "migration_safety": (
             [path.name[:3] for path in migration_files(ROOT / "infra/migrations")]
-            == [f"{number:03d}" for number in range(1, 27)]
+            == [f"{number:03d}" for number in range(1, 28)]
             and all(
                 len(checksum(path)) == 64 for path in migration_files(ROOT / "infra/migrations")
             )

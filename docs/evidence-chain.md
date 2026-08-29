@@ -1,5 +1,11 @@
 # Evidence Chain
 
+## Spatial evidence artifacts
+
+InvestigationのEvidence Chainは `Finding → mesh → Spatial Evidence Pack → transect/section → selected object → scenario relation → Decision Record / report` を保存する。Pack manifestのcontent hash、source dataset versions、network version、analysis runs、classificationをEvidence Centerとreport manifestへ参照させる。同じSaved Viewはpack ID、transect ID、camera、layer、selection、counterfactual stateを復元し、後のversionで暗黙に置換しない。
+
+公開Evidenceへはprivacy gateを通ったPackだけを出し、建物単位人口model、restricted field observation、庁内overrideを含めない。対象オブジェクトが不足する場合はEvidenceを生成済みにせず `unavailable` とする。
+
 CITY GAPは結果だけでなく、その数値がどの公式データからどう計算されたかを追跡できることを品質要件にする。生成AIの説明やブラックボックス推論は使わない。
 
 ## Rank 1の例

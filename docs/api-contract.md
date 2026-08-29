@@ -1,5 +1,14 @@
 # Stable municipal API contract
 
+## Spatial Evidence Pack
+
+- `POST /api/v1/investigations/{id}/spatial-packs`: bounded geometry、bbox、source versionsを受け、`spatial_evidence_pack` jobをqueueする。
+- `GET /api/v1/spatial-packs/{id}`: tenant-scoped lifecycleとhash/countを返す。
+- `GET /api/v1/spatial-packs/{id}/manifest`: content-addressed artifact metadataを返す。
+- `GET /api/v1/spatial-packs/{id}/objects?object_type=&limit=&offset=`: 最大200件のbounded page。bulk geometryはartifact URIを使う。
+- `GET /api/v1/spatial-packs/{id}/sections`: transect概要とimmutable section artifactを返す。
+- `POST /api/v1/spatial-packs/{id}/refresh`: source versionを固定した新Packをqueueする。既存ready Packを破壊しない。
+
 ## General rules
 
 - Stable endpoints are under `/api/v1`.

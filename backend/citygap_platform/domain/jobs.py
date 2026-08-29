@@ -209,6 +209,13 @@ JOB_STAGES = {
         "classify_finding_reproduction",
         "persist_artifacts",
     ),
+    "spatial_evidence_pack": (
+        "resolve_versioned_sources",
+        "extract_bounded_objects",
+        "build_section_ready_artifacts",
+        "validate_counts_privacy_and_hashes",
+        "persist_content_addressed_artifacts",
+    ),
 }
 
 

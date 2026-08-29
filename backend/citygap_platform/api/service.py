@@ -224,6 +224,36 @@ class SavedViewCreateRequest(StrictRequest):
         return value
 
 
+class SpatialPackCreateRequest(StrictRequest):
+    geometry: dict[str, Any]
+    bbox: tuple[float, float, float, float]
+    buffer_m: float = Field(default=0, ge=0, le=10_000)
+    data_classification: DataClassification = DataClassification.INTERNAL
+    source_dataset_version_ids: list[UUID] = Field(min_length=1, max_length=100)
+    network_version_id: UUID | None = None
+    analysis_run_ids: list[UUID] = Field(default_factory=list, max_length=100)
+
+    @field_validator("geometry")
+    @classmethod
+    def bounded_geometry(cls, value: dict[str, Any]) -> dict[str, Any]:
+        if value.get("type") not in {"Polygon", "MultiPolygon", "LineString", "MultiLineString"}:
+            raise ValueError("pack geometry must be a polygon or line GeoJSON geometry")
+        if "coordinates" not in value or len(json.dumps(value, ensure_ascii=False).encode()) > 262_144:
+            raise ValueError("pack geometry is missing or exceeds 256 KiB")
+        return value
+
+    @field_validator("bbox")
+    @classmethod
+    def valid_bbox(
+        cls, value: tuple[float, float, float, float]
+    ) -> tuple[float, float, float, float]:
+        west, south, east, north = value
+        valid = -180 <= west < east <= 180 and -90 <= south < north <= 90
+        if not valid:
+            raise ValueError("bbox must be west,south,east,north in EPSG:4326")
+        return value
+
+
 class ReviewCreateRequest(StrictRequest):
     reviewer_id: UUID | None = None
     request_note: str = Field(default="", max_length=5000)
@@ -1109,6 +1139,109 @@ def investigation_detail(
     result = repo.investigation_detail(organization_id, str(investigation_id))
     if result is None:
         raise _not_found("Investigation")
+    return result
+
+
+@router.post(
+    "/investigations/{investigation_id}/spatial-packs",
+    status_code=202,
+    dependencies=[Depends(require_permission("investigation:write"))],
+)
+def create_spatial_pack(
+    investigation_id: UUID,
+    body: SpatialPackCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_spatial_pack(
+            organization_id, str(investigation_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Investigation")
+    return result
+
+
+@router.get(
+    "/spatial-packs/{pack_id}",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def spatial_pack_detail(
+    pack_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.spatial_pack_detail(organization_id, str(pack_id))
+    if result is None:
+        raise _not_found("Spatial Evidence Pack")
+    return result
+
+
+@router.get(
+    "/spatial-packs/{pack_id}/manifest",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def spatial_pack_manifest(
+    pack_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.spatial_pack_manifest(organization_id, str(pack_id))
+    if result is None:
+        raise _not_found("Spatial Evidence Pack")
+    return result
+
+
+@router.get(
+    "/spatial-packs/{pack_id}/objects",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def spatial_pack_objects(
+    pack_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+    object_type: str | None = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 100,
+    offset: Annotated[int, Query(ge=0, le=1_000_000)] = 0,
+) -> dict[str, Any]:
+    result = repo.spatial_pack_objects(
+        organization_id, str(pack_id), object_type, limit, offset
+    )
+    if result is None:
+        raise _not_found("Spatial Evidence Pack")
+    return result
+
+
+@router.get(
+    "/spatial-packs/{pack_id}/sections",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def spatial_pack_sections(
+    pack_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.spatial_pack_sections(organization_id, str(pack_id))
+    if result is None:
+        raise _not_found("Spatial Evidence Pack")
+    return result
+
+
+@router.post(
+    "/spatial-packs/{pack_id}/refresh",
+    status_code=202,
+    dependencies=[Depends(require_permission("investigation:write"))],
+)
+def refresh_spatial_pack(
+    pack_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.refresh_spatial_pack(organization_id, str(pack_id))
+    if result is None:
+        raise _not_found("Spatial Evidence Pack")
     return result
 
 
