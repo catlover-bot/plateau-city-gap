@@ -6,6 +6,15 @@ CITY GAP is a municipal operations system for turning versioned urban data into
 reviewable findings, investigations, scenario comparisons, field observations and
 human-authored decision records. Its differentiator is traceable spatial computation:
 every result remains linked to an Urban State, explicit dataset versions, algorithm
+The public product is positioned narrowly as:
+
+**CITY GAP 地域交通・医療の現地調査候補をつくるツール**
+
+`500m candidate → PLATEAU field context → data gaps → field checks → editable investigation sheet → municipal review`
+
+Its primary user is a municipal local-public-transport officer. The public output is a
+candidate shortlist, a field investigation sheet and an internal investigation
+summary—not a policy recommendation or a replacement for the wider platform.
 version, parameters, validation evidence and stated limitations.
 
 The primary operating loop is:

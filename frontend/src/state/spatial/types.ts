@@ -2,7 +2,7 @@ export type CityId = "maizuru" | "fujisawa";
 
 export type PublicExperience = "landing" | "guided" | "advanced";
 
-export type GuidedStep = 1 | 2 | 3 | 4 | 5;
+export type GuidedStep = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type ProductTask = "discover" | "detail" | "try" | "validate" | "operate";
 

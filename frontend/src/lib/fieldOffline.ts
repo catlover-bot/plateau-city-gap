@@ -22,8 +22,16 @@ export interface QueuedFieldOperation {
   conflict_id?: string;
 }
 
+export interface LocalInvestigationSheet {
+  sheet_id: string;
+  candidate_id: string;
+  updated_at: string;
+  classification: "internal";
+  content: Record<string, unknown>;
+}
+
 const DB_NAME = "citygap-selected-field";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function database(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -34,6 +42,8 @@ function database(): Promise<IDBDatabase> {
         db.createObjectStore("packages", { keyPath: "offline_package_id" });
       if (!db.objectStoreNames.contains("operations"))
         db.createObjectStore("operations", { keyPath: "client_operation_id" });
+      if (!db.objectStoreNames.contains("investigationSheets"))
+        db.createObjectStore("investigationSheets", { keyPath: "sheet_id" });
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
@@ -41,7 +51,7 @@ function database(): Promise<IDBDatabase> {
 }
 
 async function put(
-  storeName: "packages" | "operations",
+  storeName: "packages" | "operations" | "investigationSheets",
   value: object,
 ): Promise<void> {
   const db = await database();
@@ -54,7 +64,9 @@ async function put(
   db.close();
 }
 
-async function getAll<T>(storeName: "packages" | "operations"): Promise<T[]> {
+async function getAll<T>(
+  storeName: "packages" | "operations" | "investigationSheets",
+): Promise<T[]> {
   const db = await database();
   const values = await new Promise<T[]>((resolve, reject) => {
     const transaction = db.transaction(storeName, "readonly");
@@ -75,6 +87,26 @@ export async function cacheSelectedFieldPackage(
     packageId: value.offline_package_id,
     payload: value,
   });
+}
+
+export async function saveLocalInvestigationSheet(
+  value: LocalInvestigationSheet,
+): Promise<void> {
+  if (value.classification !== "internal") {
+    throw new Error("現地メモをpublic分類では保存できません");
+  }
+  await put("investigationSheets", value);
+}
+
+export async function loadLocalInvestigationSheet(
+  candidateId: string,
+): Promise<LocalInvestigationSheet | null> {
+  const values = await getAll<LocalInvestigationSheet>("investigationSheets");
+  return (
+    values
+      .filter((value) => value.candidate_id === candidateId)
+      .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0] ?? null
+  );
 }
 
 export async function queueFieldOperation(

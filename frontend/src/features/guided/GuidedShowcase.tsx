@@ -101,6 +101,7 @@ const STEP_TITLES: Record<GuidedStep, string> = {
   3: "街のどこで起きている？",
   4: "施策を変えるとどうなる？",
   5: "その数字の根拠は？",
+  6: "庁内で共有する",
 };
 
 const NEXT_LABELS: Record<1 | 2 | 3 | 4, string> = {

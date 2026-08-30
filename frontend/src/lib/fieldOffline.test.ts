@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { applySyncResponse, type QueuedFieldOperation } from "./fieldOffline";
+import {
+  applySyncResponse,
+  saveLocalInvestigationSheet,
+  type LocalInvestigationSheet,
+  type QueuedFieldOperation,
+} from "./fieldOffline";
 
 const operation: QueuedFieldOperation = {
   client_operation_id: "op-1",
@@ -31,5 +36,19 @@ describe("offline field conflict boundary", () => {
         silent_last_write_wins: true,
       }),
     ).toThrow("明示的なconflict応答");
+  });
+
+  it("refuses to persist field notes with a public classification", async () => {
+    const invalid = {
+      sheet_id: "sheet-1",
+      candidate_id: "maizuru-533513314",
+      updated_at: "2026-08-30T00:00:00Z",
+      classification: "public",
+      content: { generalNote: "内部メモ" },
+    } as unknown as LocalInvestigationSheet;
+
+    await expect(saveLocalInvestigationSheet(invalid)).rejects.toThrow(
+      "現地メモをpublic分類では保存できません",
+    );
   });
 });

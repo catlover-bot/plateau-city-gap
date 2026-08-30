@@ -1,16 +1,37 @@
 /* global self, caches, URL, Response, fetch */
-const SHELL_CACHE = "citygap-shell-v5";
+const SHELL_CACHE = "citygap-shell-v6";
 const FIELD_CACHE = "citygap-selected-field-v1";
 const PACK_CACHE = "citygap-selected-spatial-pack-v1";
 const shellUrls = [
   "./",
+  "./manifest.webmanifest",
+  "./data/manifest.json",
   "./data/mesh_metrics.geojson",
+  "./data/top10.json",
   "./data/summary.json",
-  "./data/plateau_metadata.json",
+  "./data/final_demo.json",
+  "./data/robustness.json",
+  "./data/intervention_scenarios.json",
   "./data/evidence.json",
+  "./data/stations.geojson",
+  "./data/bus_stops.geojson",
+  "./data/medical_facilities.geojson",
+  "./data/maizuru_boundary.geojson",
+  "./data/plateau_buildings.geojson",
+  "./data/plateau_roads.geojson",
+  "./data/plateau_metadata.json",
   "./data/spatial-packs/maizuru-533513314-plateau-2025-v1/manifest.json",
+  "./data/spatial-packs/maizuru-533513314-plateau-2025-v1/objects.json",
   "./data/spatial-packs/maizuru-533513314-plateau-2025-v1/sections.json",
 ];
+
+function isPublicRuntimeAsset(request) {
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return false;
+  if (url.pathname.includes("/api/") || url.pathname.includes("/offline-field/")) return false;
+  if (["document", "script", "style", "worker"].includes(request.destination)) return true;
+  return /.(?:json|geojson|webmanifest)$/i.test(url.pathname);
+}
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(SHELL_CACHE).then((cache) => cache.addAll(shellUrls)));
@@ -48,14 +69,27 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
+  const requestUrl = new URL(event.request.url);
+  if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
+
   event.respondWith(
     fetch(event.request)
-      .then((response) => response)
+      .then(async (response) => {
+        if (response.ok && isPublicRuntimeAsset(event.request)) {
+          const cache = await caches.open(SHELL_CACHE);
+          await cache.put(event.request, response.clone());
+        }
+        return response;
+      })
       .catch(async () => {
         const selected = await caches.open(FIELD_CACHE).then((cache) => cache.match(event.request));
         const selectedPack = await caches.open(PACK_CACHE).then((cache) => cache.match(event.request));
-        return selected || selectedPack || caches.match(event.request) || Response.error();
+        const publicAsset = await caches.match(event.request, { ignoreSearch: true });
+        if (selected || selectedPack || publicAsset) return selected || selectedPack || publicAsset;
+        if (event.request.mode === "navigate") {
+          return caches.open(SHELL_CACHE).then((cache) => cache.match("./"));
+        }
+        return Response.error();
       })
   );
 });

@@ -35,7 +35,7 @@ const SELECTION_TYPES = new Set<SelectionType>([
 ]);
 const ANALYSIS_LENSES = new Set<AnalysisLens>(["none", "urban-xray", "service-pulse", "changed-only", "temporal-ghost"]);
 const COUNTERFACTUAL_STATES = new Set(["baseline", "scenario", "stress"] as const);
-const GUIDED_STEPS = new Set<GuidedStep>([1, 2, 3, 4, 5]);
+const GUIDED_STEPS = new Set<GuidedStep>([1, 2, 3, 4, 5, 6]);
 
 const LEGACY_TASKS: Record<string, ProductTask> = {
   demo: "discover",

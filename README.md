@@ -1,17 +1,25 @@
 # CITY GAP
 
-高齢者が多いのに、交通や医療へ届きにくい地域を見つけます。
+**地域交通・医療の現地調査候補をつくるツール**
 
-500mで候補を見つけ、PLATEAUの建物・道路・地形まで掘り下げて確認します。
+500mの課題候補を、PLATEAUで現地調査対象まで具体化します。
 
-[Public Showcase](https://catlover-bot.github.io/plateau-city-gap/) · [Product vision](docs/product-vision.md) · [Architecture](docs/architecture.md) · [Data and methodology](docs/methodology.md)
+[現地調査フロー](https://catlover-bot.github.io/plateau-city-gap/) · [Product positioning](docs/product-positioning.md) · [Municipal need validation](docs/municipal-need-validation.md) · [Architecture](docs/architecture.md)
 
-CITY GAPは、人口・高齢者数と公共交通・医療への到達しやすさを500mメッシュで重ね、追加調査候補を見つけます。結果は危険度、施策優先順位、居住者個人の実数を示しません。候補を選んだ後は、同じFindingと選択を保ったままPLATEAUの都市objectへ解像度を上げ、施策比較とEvidenceへ接続します。
+CITY GAPは、地域公共交通計画、デマンド交通、交通空白地域等を検討する自治体職員が、最初に現地確認すべき3〜5地域を絞るための意思決定前処理ツールです。人口・交通・医療の500m分析を「分析上の候補」「詳細調査例」「データ確認候補」に分け、PLATEAU収録範囲がある候補は建物・道路・地形へ具体化します。公開データにない運行頻度、歩行可否、施設利用条件、地域内サービスは、理由付きの現地確認項目へ変換します。
 
-![CITY GAP Guided Landing](docs/assets/current/01-landing.png)
+最終成果物は、候補一覧、編集可能な現地調査票、庁内共有用調査サマリーです。候補は危険度、政策推奨、施策優先順位、実施効果予測、居住者個人の実数を示しません。自治体レビューを受けるまで `AWAITING_MUNICIPAL_REVIEW` を維持します。
+
+![CITY GAP 現地調査候補](docs/assets/current/01-value-landing.png)
 
 ## What it does
 
+- 舞鶴市実データから異なる目的の現地調査候補3件を作成
+- 市境交差495件、percentile比較286件、Primary順位218件、候補順位を明確に分離
+- データ不足と分析上の仮定から、理由・生成元付きの現地確認項目を決定論的に生成
+- 状態・優先度・担当・期限・メモ・GPSを編集できる内部調査票
+- 通信なし端末保存、印刷、public/internal分離
+- 未確認を自動で確認済みにしない自治体レビュー境界
 - 舞鶴市495メッシュと藤沢市327メッシュを同じ決定論的pipelineで分析
 - 都市 → 地区 → 500m → 建物群 → 建物 → 道路 → 施策のResolution Lift
 - PLATEAU建物・道路LOD1面・実DEMを同じ調査sceneで表示
@@ -125,18 +133,20 @@ npm --prefix frontend test -- --run
 npm --prefix frontend run build
 ```
 
-正規スクリーンショットはproduction buildのGuided Investigationを実際に完走して生成します。各画面の問い、実データ値、都市断面、主操作、viewport、critical requestを検証し、8枚すべてが揃ったstageだけを公開します。3Dの準備中は検証済み都市断面を正直に表示し、manifestへ表示経路を記録します。
+正規スクリーンショットはproduction buildの現地調査フローを実際に完走して生成します。ランディング、候補一覧、候補brief、PLATEAU現地文脈、確認項目、調査票、自治体レビュー、390×844モバイルの8枚がすべて揃ったstageだけを公開します。
 
 ```bash
 npm --prefix frontend run capture:current -- \
   --url http://127.0.0.1:4173/plateau-city-gap/
 ```
 
-出力は `docs/assets/current/` の8枚と `manifest.json` だけです。失敗時は既存currentを保持し、`analysis/outputs/real/visual-readiness-failures/` に診断JSONを保存します。Cesiumの完全読込を要求する従来の高度分析captureは `capture:advanced` として分離しています。
+出力は `docs/assets/current/` の正規8枚と `manifest.json` だけです。生成はclean worktreeを要求し、失敗時は既存currentを保持します。従来の高度分析captureは `capture:advanced` として分離しています。
 
 ## Current documentation
 
 - [Product vision](docs/product-vision.md)
+- [Product positioning](docs/product-positioning.md)
+- [Municipal need validation](docs/municipal-need-validation.md)
 - [Architecture](docs/architecture.md)
 - [Visual system](docs/visual-system.md)
 - [3D rendering](docs/3d-rendering.md)

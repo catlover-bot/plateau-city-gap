@@ -6,6 +6,7 @@ describe("spatial URL state", () => {
     expect(parseSpatialUrl("")).toMatchObject({ experience: "landing", guidedStep: 1 });
     expect(parseSpatialUrl("?scene=plateau_detail")).toMatchObject({ experience: "landing" });
     expect(parseSpatialUrl("?experience=guided&guide=4")).toMatchObject({ experience: "guided", guidedStep: 4 });
+    expect(parseSpatialUrl("?experience=guided&guide=6")).toMatchObject({ experience: "guided", guidedStep: 6 });
     expect(parseSpatialUrl("?experience=guided&guide=99")).toMatchObject({ experience: "guided", guidedStep: 1 });
     expect(parseSpatialUrl("?experience=advanced")).toMatchObject({ experience: "advanced" });
     expect(parseSpatialUrl("?advanced=1")).toMatchObject({ experience: "advanced" });
