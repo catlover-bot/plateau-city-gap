@@ -170,6 +170,12 @@ try {
   await next(page, "街の構造を見る", 3);
   await page.getByText("296棟", { exact: true }).waitFor();
   await page.locator('.plateau-3d-shell[data-ui-mode="guided"]').waitFor({ state: "visible" });
+  await page.locator(".plateau-3d-shell .map-engine-loading").last().waitFor({
+    state: "hidden",
+    timeout: 180_000,
+  });
+  await page.locator(".plateau-3d-shell canvas").first().waitFor({ state: "visible" });
+  await page.waitForTimeout(1_000);
   await capture(page, NAMES[3], desktopViewport, "plateau-field-context");
 
   await next(page, "確認項目を見る", 4);

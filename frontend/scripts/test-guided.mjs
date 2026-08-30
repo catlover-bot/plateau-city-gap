@@ -82,6 +82,12 @@ try {
   await page.getByText("296棟", { exact: true }).waitFor();
   await page.getByText("135面", { exact: true }).waitFor();
   await page.locator('.plateau-3d-shell[data-ui-mode="guided"]').waitFor({ state: "visible" });
+  await page.locator(".plateau-3d-shell .map-engine-loading").last().waitFor({
+    state: "hidden",
+    timeout: 180_000,
+  });
+  await page.locator(".plateau-3d-shell canvas").first().waitFor({ state: "visible" });
+  await page.waitForTimeout(1_000);
 
   await next(page, "確認項目を見る", 4);
   if (await page.locator(".check-category-list li").count() !== 28) {
