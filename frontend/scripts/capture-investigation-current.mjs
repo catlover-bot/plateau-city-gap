@@ -157,10 +157,10 @@ try {
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
-  await page.getByRole("heading", { name: /どこから現地確認するかを/ }).waitFor();
+  await page.getByRole("heading", { name: /地図だけでは分からないことを/ }).waitFor();
   await capture(page, NAMES[0], desktopViewport, "value-landing");
 
-  await page.getByRole("button", { name: "舞鶴の現地調査候補を見る", exact: true }).click();
+  await page.getByRole("button", { name: "地図から確認候補を選ぶ", exact: true }).click();
   await waitForStep(page, 1);
   await capture(page, NAMES[1], desktopViewport, "candidate-shortlist");
 
@@ -203,7 +203,7 @@ try {
   const mobilePage = await mobile.newPage();
   mobilePage.setDefaultTimeout(120_000);
   await mobilePage.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
-  await mobilePage.getByRole("button", { name: "舞鶴の現地調査候補を見る", exact: true }).click();
+  await mobilePage.getByRole("button", { name: "地図から確認候補を選ぶ", exact: true }).click();
   await waitForStep(mobilePage, 1);
   await next(mobilePage, "候補理由を見る", 2);
   await next(mobilePage, "街の構造を見る", 3);

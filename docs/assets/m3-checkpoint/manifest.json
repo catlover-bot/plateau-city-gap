@@ -1,0 +1,97 @@
+{
+  "schema_version": "citygap.m3-validation-checkpoint@1",
+  "generated_at": "2026-08-30T17:58:48.057Z",
+  "repository_head": "2f28cd1089eda576c3002ebb2fb3e0f2b62123ff",
+  "base_url": "http://127.0.0.1:4183/plateau-city-gap/",
+  "public_walkthrough": {
+    "desktop_click_count": 5,
+    "first_meaningful_render_ms": 2603,
+    "candidate": {
+      "name": "常団地前周辺",
+      "mesh_code": "533513314"
+    },
+    "uncertainty_count": 4,
+    "object_ids": [
+      "bus-071",
+      "tran_05dbefba-6a77-40ea-88ac-a568a63a2f05-0",
+      "medical-105",
+      "bldg_00962182-17d0-4fde-8970-784dd489dcf5",
+      "533513314"
+    ],
+    "task_count": 4,
+    "required_items_per_task": [
+      5,
+      4,
+      5,
+      4
+    ],
+    "statuses": [
+      "未確認",
+      "未確認",
+      "未確認",
+      "未確認"
+    ],
+    "evidence_inputs_rendered": 0
+  },
+  "validation_status": {
+    "human": "AWAITING_HUMAN_TEST",
+    "municipal": "AWAITING_MUNICIPAL_REVIEW"
+  },
+  "screenshots": [
+    {
+      "filename": "01-landing.png",
+      "scene": "landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 246389,
+      "sha256": "9d92613ce4dd666c6cd1902f424e1c918aacfa9e76fe974d4ef30ab182f63168",
+      "url": "http://127.0.0.1:4183/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45"
+    },
+    {
+      "filename": "02-uncertainties.png",
+      "scene": "uncertainties",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 1281244,
+      "sha256": "1da205a487d78794259ea589f1b2ca0efb7625ae6996014aac6ad31955d17974",
+      "url": "http://127.0.0.1:4183/plateau-city-gap/?experience=guided&guide=2&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=14.10&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167"
+    },
+    {
+      "filename": "03-object-targets.png",
+      "scene": "object-targets",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 376352,
+      "sha256": "7f277320b150f69b8e82695323a0d74a5a9f6b77a8a2110c1aa9eb4b2731f5e3",
+      "url": "http://127.0.0.1:4183/plateau-city-gap/?experience=guided&guide=3&city=maizuru&task=detail&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building_group&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44792&z=15.20&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167"
+    },
+    {
+      "filename": "04-unverified-tasks.png",
+      "scene": "unverified-tasks",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 1288032,
+      "sha256": "7693fb6e4f1971bd369be972922324d854ca1216abdd3cddf1daebf4fa0550a0",
+      "url": "http://127.0.0.1:4183/plateau-city-gap/?experience=guided&guide=4&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=14.10&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167"
+    },
+    {
+      "filename": "05-mobile-unverified-tasks.png",
+      "scene": "mobile-tasks",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 211643,
+      "sha256": "d96906a5e26e1db70bd910a49953046b54c64c68b6331ea25b18a117539c45c0",
+      "url": "http://127.0.0.1:4183/plateau-city-gap/?experience=guided&guide=4&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=14.10&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167"
+    }
+  ]
+}

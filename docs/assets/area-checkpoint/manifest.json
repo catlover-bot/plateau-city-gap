@@ -1,0 +1,244 @@
+{
+  "schema_version": "citygap.area-validation-checkpoint@1",
+  "generated_at": "2026-08-31T13:37:56.147Z",
+  "repository_head": "d829defc54dc9417d3045d2c2ecfb9f19558e08a",
+  "base_url": "http://127.0.0.1:4175/plateau-city-gap/?journey=area",
+  "production_build_seconds": 67.12,
+  "public_walkthrough": {
+    "direct_area_url_click_count": 3,
+    "landing_to_task_click_count": 4,
+    "first_meaningful_render_samples_ms": [
+      1046,
+      712,
+      619,
+      1672,
+      3130
+    ],
+    "first_meaningful_render_median_ms": 1046,
+    "selected_area": "西舞鶴駅周辺800m",
+    "metric_order": [
+      "人口",
+      "年齢分布",
+      "建物用途分布",
+      "事業所",
+      "都市計画",
+      "交通"
+    ],
+    "unknown_count": 3,
+    "task_count": 3,
+    "required_items_per_task": [
+      4,
+      5,
+      4
+    ],
+    "target_ids": [
+      "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+      "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+      "medical-026"
+    ],
+    "statuses": [
+      "未確認",
+      "未確認",
+      "未確認"
+    ],
+    "fake_field_evidence": false,
+    "mobile_390x844": {
+      "inner_width": 390,
+      "document_scroll_width": 390,
+      "task_count": 3,
+      "unverified_count": 3
+    }
+  },
+  "comparison": {
+    "500m": {
+      "metrics": [
+        {
+          "label": "人口",
+          "status": "確認できた",
+          "value": "3,087 人（面積按分推計）"
+        },
+        {
+          "label": "年齢分布",
+          "status": "一部確認",
+          "value": "65歳以上 970人（31%）"
+        },
+        {
+          "label": "建物用途分布",
+          "status": "一部確認",
+          "value": "住宅 1312棟 / 不明 288棟 / 商業施設 124棟"
+        },
+        {
+          "label": "事業所",
+          "status": "確認できた",
+          "value": "事業所 266件 · 従業者 1,909人"
+        },
+        {
+          "label": "都市計画",
+          "status": "一部確認",
+          "value": "都市計画区域 / 市街化区域 / 第2種住居地域"
+        },
+        {
+          "label": "交通",
+          "status": "確認できた",
+          "value": "駅 1 · バス停 4"
+        }
+      ],
+      "unknown_count": 3,
+      "direct_area_url_click_count": 3,
+      "landing_to_task_click_count": 4,
+      "first_meaningful_render_scope": "shared_area_entry_before_radius_selection",
+      "first_meaningful_render_samples_ms": [
+        1046,
+        712,
+        619,
+        1672,
+        3130
+      ],
+      "first_meaningful_render_median_ms": 1046,
+      "task_count": 3,
+      "required_items_per_task": [
+        4,
+        5,
+        4
+      ],
+      "target_ids": [
+        "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+        "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+        "medical-026"
+      ],
+      "statuses": [
+        "未確認",
+        "未確認",
+        "未確認"
+      ],
+      "fake_field_evidence": false
+    },
+    "800m": {
+      "metrics": [
+        {
+          "label": "人口",
+          "status": "確認できた",
+          "value": "6,755 人（面積按分推計）"
+        },
+        {
+          "label": "年齢分布",
+          "status": "一部確認",
+          "value": "65歳以上 2,038人（30%）"
+        },
+        {
+          "label": "建物用途分布",
+          "status": "一部確認",
+          "value": "住宅 3094棟 / 不明 619棟 / 共同住宅 215棟"
+        },
+        {
+          "label": "事業所",
+          "status": "確認できた",
+          "value": "事業所 475件 · 従業者 3,684人"
+        },
+        {
+          "label": "都市計画",
+          "status": "一部確認",
+          "value": "都市計画区域 / 市街化区域 / 準防火地域"
+        },
+        {
+          "label": "交通",
+          "status": "確認できた",
+          "value": "駅 1 · バス停 6"
+        }
+      ],
+      "unknown_count": 3,
+      "direct_area_url_click_count": 3,
+      "landing_to_task_click_count": 4,
+      "first_meaningful_render_scope": "shared_area_entry_before_radius_selection",
+      "first_meaningful_render_samples_ms": [
+        1046,
+        712,
+        619,
+        1672,
+        3130
+      ],
+      "first_meaningful_render_median_ms": 1046,
+      "task_count": 3,
+      "required_items_per_task": [
+        4,
+        5,
+        4
+      ],
+      "target_ids": [
+        "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+        "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+        "medical-026"
+      ],
+      "statuses": [
+        "未確認",
+        "未確認",
+        "未確認"
+      ],
+      "fake_field_evidence": false
+    }
+  },
+  "validation_status": {
+    "aoi_need": "DIRECT_MUNICIPAL_NEED_CONFIRMED",
+    "area_summary_content": "DIRECT_MUNICIPAL_NEED_PARTIALLY_CONFIRMED",
+    "known_unknown_value": "DIRECT_MUNICIPAL_VALUE_SIGNAL_CONFIRMED",
+    "unknown_to_field_task_workflow": "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
+    "human": "AWAITING_HUMAN_TEST"
+  },
+  "screenshots": [
+    {
+      "filename": "01-area-origin.png",
+      "scene": "origin",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 543435,
+      "sha256": "0c00ddaffa5568ac56f32b49d04510fbbf6e1d43e723f2f9845716464b042b3b",
+      "url": "http://127.0.0.1:4175/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&journey=area"
+    },
+    {
+      "filename": "02-area-known-unknown-800m.png",
+      "scene": "known-unknown-800m",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 456780,
+      "sha256": "6238b86623ffee6b33c18514b304b8e36c027088fb1867dea8b5f05f6c006b52",
+      "url": "http://127.0.0.1:4175/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40&journey=area"
+    },
+    {
+      "filename": "03-area-unverified-tasks-800m.png",
+      "scene": "unverified-tasks-800m",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 492825,
+      "sha256": "8fdb65fac8f7aac837d932bc584e40bf2a875cde27cce72677f2020c5183ba01",
+      "url": "http://127.0.0.1:4175/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40&journey=area"
+    },
+    {
+      "filename": "04-area-known-unknown-500m.png",
+      "scene": "known-unknown-500m",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 456518,
+      "sha256": "c1aa687004405d8b409e7c3578ccb20c3e669a7ad70c2a866efbe181fac1bfc8",
+      "url": "http://127.0.0.1:4175/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40&journey=area"
+    },
+    {
+      "filename": "05-area-mobile-tasks-800m.png",
+      "scene": "mobile-tasks-800m",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 136685,
+      "sha256": "75049748c485fb65af07b8c702f40c83d56af4605edd94f2c48b7dcc5fd3e608",
+      "url": "http://127.0.0.1:4175/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40&journey=area"
+    }
+  ]
+}

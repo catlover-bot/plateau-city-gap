@@ -1,0 +1,630 @@
+{
+  "schema_version": "citygap.area-500-800-comparison@1",
+  "goal_id": "area-known-unknown-to-task-v1",
+  "checkpoint": "A5_PRESERVATION_AND_VALIDATION_PREP",
+  "captured_at": "2026-08-31T13:37:56.147Z",
+  "repository_head_at_capture": "d829defc54dc9417d3045d2c2ecfb9f19558e08a",
+  "comparison_policy": {
+    "same_origin": true,
+    "same_area_rule_version": "citygap-investigation-area@1.0.0",
+    "independent_axes_only": true,
+    "composite_score": null,
+    "ranking": null
+  },
+  "input_artifacts": {
+    "area_fixture": {
+      "path": "frontend/public/data/investigation_area_summary.json",
+      "sha256": "c5c078402e382495723535e741b7eff26ad6f53c00c287390ba54f050baafc6e",
+      "schema_version": "citygap.area-summary@1"
+    },
+    "browser_manifest": {
+      "path": "docs/assets/area-checkpoint/manifest.json",
+      "sha256": "2536a170cbdacb9f645959d1109f1abd73c9781eb337c08c2b75fc917c94bd7a",
+      "schema_version": "citygap.area-validation-checkpoint@1"
+    },
+    "census_mesh": {
+      "dataset": "2020国勢調査500mメッシュ",
+      "source_date": "2020-10-01",
+      "artifact": "frontend/public/data/mesh_metrics.geojson",
+      "sha256": "1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044"
+    }
+  },
+  "population_and_age_methodology": {
+    "source_table_id": "T001192",
+    "source_title": "2020年国勢調査 JGD2011 500mメッシュ 人口及び世帯",
+    "reference_date": "2020-10-01",
+    "population_field": "T001192001",
+    "age_65_plus_fields": [
+      "T001192043",
+      "T001192046",
+      "T001192049",
+      "T001192052",
+      "T001192055",
+      "T001192058",
+      "T001192061"
+    ],
+    "source_mesh_values": "official_observed_mesh_totals",
+    "area_result_semantics": "estimated",
+    "modelled": false,
+    "aggregation": "sum(value * intersection_area / source_mesh_area)",
+    "suppression": "Missing or disclosure-affected age cells are not replaced by zero, averages, neighbouring values, or building-level estimates.",
+    "city_clipping": "Requested point-radius geometry is intersected with the versioned Maizuru boundary in EPSG:6674; clipped_area_ratio is reported per area.",
+    "plateau_building_population_allocation": false,
+    "prohibited_operation": "Never disaggregate a suppression-affected census mesh to individual PLATEAU buildings.",
+    "claim_boundary": [
+      "Values are AOI area-weighted estimates, not exact AOI resident counts.",
+      "They are not household, person, or building-level population locations.",
+      "PLATEAU building footprints are used only for building-use counts and targets.",
+      "A radius is not a validated pedestrian-network reachability area."
+    ]
+  },
+  "areas": {
+    "500": {
+      "area_id": "nishi-maizuru-500m-v1",
+      "label": "西舞鶴駅周辺500m",
+      "origin": {
+        "kind": "station",
+        "source_feature_id": "station-007",
+        "label": "西舞鶴駅",
+        "coordinates": [
+          135.3305426,
+          35.4417243
+        ]
+      },
+      "radius_m": 500,
+      "radius_methodology": "mlit_elderly_walk_reference_500m",
+      "clipped_area_ratio": 1.0,
+      "metrics": {
+        "population": {
+          "status": "known",
+          "value": 3087,
+          "unit": "人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 1.0,
+          "source": {
+            "dataset": "2020国勢調査500mメッシュ",
+            "source_date": "2020-10-01",
+            "artifact": "frontend/public/data/mesh_metrics.geojson",
+            "sha256": "1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044"
+          },
+          "limitation": "500mメッシュ値をAOIとの面積重複率で按分。秘匿・欠損は0補完しません。"
+        },
+        "age_distribution": {
+          "status": "partial",
+          "value": {
+            "age_65_plus": 970,
+            "total": 3087
+          },
+          "unit": "人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 1.0,
+          "source": {
+            "dataset": "2020国勢調査500mメッシュ",
+            "source_date": "2020-10-01",
+            "artifact": "frontend/public/data/mesh_metrics.geojson",
+            "sha256": "1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044"
+          },
+          "limitation": "P0公開値は総人口と65歳以上のみ。全年齢階級の分布ではありません。"
+        },
+        "building_use": {
+          "status": "partial",
+          "value": [
+            {
+              "label": "住宅",
+              "count": 1312
+            },
+            {
+              "label": "不明",
+              "count": 288
+            },
+            {
+              "label": "商業施設",
+              "count": 124
+            },
+            {
+              "label": "店舗等併用住宅",
+              "count": 98
+            },
+            {
+              "label": "共同住宅",
+              "count": 91
+            }
+          ],
+          "unit": "棟（footprint交差）",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "observation_count",
+          "coverage_ratio": null,
+          "source": {
+            "dataset": "PLATEAU舞鶴市建築物LOD0/1 footprint",
+            "source_date": "2020-01-01",
+            "artifact": "data/raw/plateau_citygml/26202_maizuru-shi_city_2025_citygml_1_op.zip",
+            "sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff"
+          },
+          "limitation": "PLATEAU建物footprintがAOIと交差するunique GML IDを公式用途属性で集計。現在用途は保証しません。"
+        },
+        "establishments": {
+          "status": "known",
+          "value": {
+            "establishments": 266,
+            "employees": 1909
+          },
+          "unit": "件・人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 1.0,
+          "source": {
+            "dataset": "2021経済センサス500mメッシュ",
+            "source_date": "2021-06-01",
+            "artifact": "analysis/outputs/real/open_data/demographic_economic_mesh_context.geojson",
+            "sha256": "1238b258afba17bff90d241e5d711b7aa064652ad51473b2c2bfcfd6e4f0c0a2"
+          },
+          "limitation": "2021経済センサスメッシュを面積按分。現時点の営業状況を示しません。"
+        },
+        "urban_planning": {
+          "status": "partial",
+          "value": [
+            {
+              "gml_id": "urf_a950572a-0bee-480b-9ade-d0191fbfb27d",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 785319.3
+            },
+            {
+              "gml_id": "urf_dfac3d55-feef-4276-9f50-dfd1e355215d",
+              "label": "市街化区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 765958.1
+            },
+            {
+              "gml_id": "urf_c707fc17-21f6-4996-afea-1b5642eac520",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 436589.1
+            },
+            {
+              "gml_id": "urf_1cc165f5-d703-4c2d-89ca-1cc661a059a9",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 368807.5
+            },
+            {
+              "gml_id": "urf_892c218e-f205-4713-9095-cfa7aee8d788",
+              "label": "第2種住居地域",
+              "building_coverage_rate": 60.0,
+              "floor_area_rate": 200.0,
+              "clipped_area_m2": 303948.9
+            },
+            {
+              "gml_id": "urf_9caceb86-7cf7-45ed-b63d-8ade39dd2eec",
+              "label": "準防火地域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 255118.2
+            },
+            {
+              "gml_id": "urf_fd426077-4a56-4883-8b1a-b0add9ca170f",
+              "label": "商業地域",
+              "building_coverage_rate": 80.0,
+              "floor_area_rate": 400.0,
+              "clipped_area_m2": 160835.3
+            },
+            {
+              "gml_id": "urf_b77cb466-63b3-4c3e-b2fb-67cb05ed1666",
+              "label": "第1種住居地域",
+              "building_coverage_rate": 60.0,
+              "floor_area_rate": 200.0,
+              "clipped_area_m2": 101814.9
+            }
+          ],
+          "unit": "公式object",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "exact",
+          "coverage_ratio": null,
+          "source": {
+            "dataset": "PLATEAU舞鶴市都市計画決定情報",
+            "source_date": "2020-01-01",
+            "artifact": "analysis/outputs/real/maizuru_plateau_urban_planning.parquet",
+            "sha256": "ee71f1268c626751d83dc6145f580fc9e3dbc7099f6d4eb2cd651a0d421396b1"
+          },
+          "limitation": "利用可能なPLATEAU都市計画objectのみ。自治体が必要とする制約項目を網羅するとは限りません。"
+        },
+        "transport": {
+          "status": "known",
+          "value": {
+            "stations": 1,
+            "bus_stops": 4
+          },
+          "unit": "登録地点",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "observation_count",
+          "coverage_ratio": 1,
+          "source": {
+            "dataset": "国土数値情報 鉄道データ",
+            "source_date": "2025-01-01",
+            "artifact": "frontend/public/data/stations.geojson",
+            "sha256": "a3c2abfcda83a1b71a3f74de9d2c5a5eefeb45999e5bbe5d9741d8bfbb6ba17b"
+          },
+          "limitation": "駅・バス停のsource上の登録地点数。運行・利用可能性・徒歩到達性は含みません。医療施設は第一表示へ混在させません。"
+        }
+      },
+      "knowledge_counts": {
+        "known": 3,
+        "partial": 3,
+        "unknown": 0,
+        "unavailable": 0
+      },
+      "unknown_count": 3,
+      "plateau_target_ids": [
+        "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+        "bldg_155e6675-6981-450f-8e73-df0b43418cc2"
+      ],
+      "other_traceable_target_ids": [
+        "medical-026"
+      ],
+      "tasks": [
+        {
+          "uncertainty_id": "walking-connectivity",
+          "reason_code": "model_limit",
+          "target_scope": "plateau_object",
+          "target_object_type": "road",
+          "target_source_object_id": "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+          "required_check_count": 4,
+          "status": "unverified"
+        },
+        {
+          "uncertainty_id": "building-current-use",
+          "reason_code": "source_time_limit",
+          "target_scope": "plateau_object",
+          "target_object_type": "building",
+          "target_source_object_id": "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+          "required_check_count": 5,
+          "status": "unverified"
+        },
+        {
+          "uncertainty_id": "facility-availability",
+          "reason_code": "requires_field_observation",
+          "target_scope": "facility",
+          "target_object_type": "facility",
+          "target_source_object_id": "medical-026",
+          "required_check_count": 4,
+          "status": "unverified"
+        }
+      ],
+      "task_count": 3,
+      "required_checks_per_task": [
+        4,
+        5,
+        4
+      ],
+      "total_required_checks": 13,
+      "task_statuses": [
+        "unverified"
+      ],
+      "runtime": {
+        "direct_area_url_click_count": 3,
+        "landing_to_task_click_count": 4,
+        "first_meaningful_render_scope": "shared_area_entry_before_radius_selection",
+        "first_meaningful_render_samples_ms": [
+          1046,
+          712,
+          619,
+          1672,
+          3130
+        ],
+        "first_meaningful_render_median_ms": 1046
+      },
+      "census_disclosure_audit": {
+        "intersecting_mesh_count": 8,
+        "disclosure_status_counts": {
+          "unaffected": 8
+        },
+        "disclosure_affected_meshes": [],
+        "population_coverage_ratio": 1.0,
+        "age_65_plus_coverage_ratio": 1.0
+      }
+    },
+    "800": {
+      "area_id": "nishi-maizuru-800m-v1",
+      "label": "西舞鶴駅周辺800m",
+      "origin": {
+        "kind": "station",
+        "source_feature_id": "station-007",
+        "label": "西舞鶴駅",
+        "coordinates": [
+          135.3305426,
+          35.4417243
+        ]
+      },
+      "radius_m": 800,
+      "radius_methodology": "mlit_general_walk_reference_800m",
+      "clipped_area_ratio": 1.0,
+      "metrics": {
+        "population": {
+          "status": "known",
+          "value": 6755,
+          "unit": "人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 1.0,
+          "source": {
+            "dataset": "2020国勢調査500mメッシュ",
+            "source_date": "2020-10-01",
+            "artifact": "frontend/public/data/mesh_metrics.geojson",
+            "sha256": "1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044"
+          },
+          "limitation": "500mメッシュ値をAOIとの面積重複率で按分。秘匿・欠損は0補完しません。"
+        },
+        "age_distribution": {
+          "status": "partial",
+          "value": {
+            "age_65_plus": 2038,
+            "total": 6755
+          },
+          "unit": "人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 0.9725,
+          "source": {
+            "dataset": "2020国勢調査500mメッシュ",
+            "source_date": "2020-10-01",
+            "artifact": "frontend/public/data/mesh_metrics.geojson",
+            "sha256": "1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044"
+          },
+          "limitation": "P0公開値は総人口と65歳以上のみ。全年齢階級の分布ではありません。"
+        },
+        "building_use": {
+          "status": "partial",
+          "value": [
+            {
+              "label": "住宅",
+              "count": 3094
+            },
+            {
+              "label": "不明",
+              "count": 619
+            },
+            {
+              "label": "共同住宅",
+              "count": 215
+            },
+            {
+              "label": "商業施設",
+              "count": 215
+            },
+            {
+              "label": "店舗等併用住宅",
+              "count": 181
+            }
+          ],
+          "unit": "棟（footprint交差）",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "observation_count",
+          "coverage_ratio": null,
+          "source": {
+            "dataset": "PLATEAU舞鶴市建築物LOD0/1 footprint",
+            "source_date": "2020-01-01",
+            "artifact": "data/raw/plateau_citygml/26202_maizuru-shi_city_2025_citygml_1_op.zip",
+            "sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff"
+          },
+          "limitation": "PLATEAU建物footprintがAOIと交差するunique GML IDを公式用途属性で集計。現在用途は保証しません。"
+        },
+        "establishments": {
+          "status": "known",
+          "value": {
+            "establishments": 475,
+            "employees": 3684
+          },
+          "unit": "件・人（面積按分推計）",
+          "semantics": "estimated",
+          "calculation": "area_weighted_estimate",
+          "coverage_ratio": 0.9999,
+          "source": {
+            "dataset": "2021経済センサス500mメッシュ",
+            "source_date": "2021-06-01",
+            "artifact": "analysis/outputs/real/open_data/demographic_economic_mesh_context.geojson",
+            "sha256": "1238b258afba17bff90d241e5d711b7aa064652ad51473b2c2bfcfd6e4f0c0a2"
+          },
+          "limitation": "2021経済センサスメッシュを面積按分。現時点の営業状況を示しません。"
+        },
+        "urban_planning": {
+          "status": "partial",
+          "value": [
+            {
+              "gml_id": "urf_a950572a-0bee-480b-9ade-d0191fbfb27d",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 2010417.4
+            },
+            {
+              "gml_id": "urf_dfac3d55-feef-4276-9f50-dfd1e355215d",
+              "label": "市街化区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 1551130.0
+            },
+            {
+              "gml_id": "urf_c707fc17-21f6-4996-afea-1b5642eac520",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 698581.8
+            },
+            {
+              "gml_id": "urf_9caceb86-7cf7-45ed-b63d-8ade39dd2eec",
+              "label": "準防火地域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 527330.4
+            },
+            {
+              "gml_id": "urf_1cc165f5-d703-4c2d-89ca-1cc661a059a9",
+              "label": "都市計画区域",
+              "building_coverage_rate": null,
+              "floor_area_rate": null,
+              "clipped_area_m2": 386522.6
+            },
+            {
+              "gml_id": "urf_892c218e-f205-4713-9095-cfa7aee8d788",
+              "label": "第2種住居地域",
+              "building_coverage_rate": 60.0,
+              "floor_area_rate": 200.0,
+              "clipped_area_m2": 345018.2
+            },
+            {
+              "gml_id": "urf_fd426077-4a56-4883-8b1a-b0add9ca170f",
+              "label": "商業地域",
+              "building_coverage_rate": 80.0,
+              "floor_area_rate": 400.0,
+              "clipped_area_m2": 257596.5
+            },
+            {
+              "gml_id": "urf_b77cb466-63b3-4c3e-b2fb-67cb05ed1666",
+              "label": "第1種住居地域",
+              "building_coverage_rate": 60.0,
+              "floor_area_rate": 200.0,
+              "clipped_area_m2": 230562.2
+            }
+          ],
+          "unit": "公式object",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "exact",
+          "coverage_ratio": null,
+          "source": {
+            "dataset": "PLATEAU舞鶴市都市計画決定情報",
+            "source_date": "2020-01-01",
+            "artifact": "analysis/outputs/real/maizuru_plateau_urban_planning.parquet",
+            "sha256": "ee71f1268c626751d83dc6145f580fc9e3dbc7099f6d4eb2cd651a0d421396b1"
+          },
+          "limitation": "利用可能なPLATEAU都市計画objectのみ。自治体が必要とする制約項目を網羅するとは限りません。"
+        },
+        "transport": {
+          "status": "known",
+          "value": {
+            "stations": 1,
+            "bus_stops": 6
+          },
+          "unit": "登録地点",
+          "semantics": "exact_source_object_or_observation_count",
+          "calculation": "observation_count",
+          "coverage_ratio": 1,
+          "source": {
+            "dataset": "国土数値情報 鉄道データ",
+            "source_date": "2025-01-01",
+            "artifact": "frontend/public/data/stations.geojson",
+            "sha256": "a3c2abfcda83a1b71a3f74de9d2c5a5eefeb45999e5bbe5d9741d8bfbb6ba17b"
+          },
+          "limitation": "駅・バス停のsource上の登録地点数。運行・利用可能性・徒歩到達性は含みません。医療施設は第一表示へ混在させません。"
+        }
+      },
+      "knowledge_counts": {
+        "known": 3,
+        "partial": 3,
+        "unknown": 0,
+        "unavailable": 0
+      },
+      "unknown_count": 3,
+      "plateau_target_ids": [
+        "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+        "bldg_155e6675-6981-450f-8e73-df0b43418cc2"
+      ],
+      "other_traceable_target_ids": [
+        "medical-026"
+      ],
+      "tasks": [
+        {
+          "uncertainty_id": "walking-connectivity",
+          "reason_code": "model_limit",
+          "target_scope": "plateau_object",
+          "target_object_type": "road",
+          "target_source_object_id": "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21",
+          "required_check_count": 4,
+          "status": "unverified"
+        },
+        {
+          "uncertainty_id": "building-current-use",
+          "reason_code": "source_time_limit",
+          "target_scope": "plateau_object",
+          "target_object_type": "building",
+          "target_source_object_id": "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+          "required_check_count": 5,
+          "status": "unverified"
+        },
+        {
+          "uncertainty_id": "facility-availability",
+          "reason_code": "requires_field_observation",
+          "target_scope": "facility",
+          "target_object_type": "facility",
+          "target_source_object_id": "medical-026",
+          "required_check_count": 4,
+          "status": "unverified"
+        }
+      ],
+      "task_count": 3,
+      "required_checks_per_task": [
+        4,
+        5,
+        4
+      ],
+      "total_required_checks": 13,
+      "task_statuses": [
+        "unverified"
+      ],
+      "runtime": {
+        "direct_area_url_click_count": 3,
+        "landing_to_task_click_count": 4,
+        "first_meaningful_render_scope": "shared_area_entry_before_radius_selection",
+        "first_meaningful_render_samples_ms": [
+          1046,
+          712,
+          619,
+          1672,
+          3130
+        ],
+        "first_meaningful_render_median_ms": 1046
+      },
+      "census_disclosure_audit": {
+        "intersecting_mesh_count": 16,
+        "disclosure_status_counts": {
+          "aggregation_destination": 1,
+          "suppressed_source": 1,
+          "unaffected": 14
+        },
+        "disclosure_affected_meshes": [
+          {
+            "mesh_code": "533512271",
+            "overlap_ratio": 0.0007117284,
+            "disclosure_status": "aggregation_destination",
+            "primary_eligible": false,
+            "population_available": true,
+            "age_65_plus_available": false
+          },
+          {
+            "mesh_code": "533512273",
+            "overlap_ratio": 0.2099809749,
+            "disclosure_status": "suppressed_source",
+            "primary_eligible": false,
+            "population_available": true,
+            "age_65_plus_available": false
+          }
+        ],
+        "population_coverage_ratio": 1.0,
+        "age_65_plus_coverage_ratio": 0.9725
+      }
+    }
+  },
+  "validation_status": {
+    "aoi_need": "DIRECT_MUNICIPAL_NEED_CONFIRMED",
+    "area_summary_content": "DIRECT_MUNICIPAL_NEED_PARTIALLY_CONFIRMED",
+    "known_unknown_value": "DIRECT_MUNICIPAL_VALUE_SIGNAL_CONFIRMED",
+    "unknown_to_field_task_workflow": "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
+    "human": "AWAITING_HUMAN_TEST"
+  },
+  "field_evidence_present": false
+}
