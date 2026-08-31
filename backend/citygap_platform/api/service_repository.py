@@ -17,6 +17,12 @@ from typing import Any
 
 from psycopg.rows import dict_row
 
+from backend.citygap_platform.domain.investigation_area import (
+    AreaOriginKind,
+    PointRadiusDefinition,
+    RadiusMethodology,
+    build_point_radius_geometry,
+)
 from backend.citygap_platform.domain.municipal_service import (
     DatasetReleaseStatus,
     FindingStatus,
@@ -1806,6 +1812,406 @@ class MunicipalServiceRepository(PostGISRepository):
                 "saved_views": saved_views,
                 "source_timeline": source_timeline,
                 "source_contributions": source_contributions,
+            }
+
+    def create_investigation_area(
+        self, organization_id: str, investigation_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            investigation = self._one(
+                connection.execute(
+                    """SELECT id, city_id, urban_state_id FROM investigations
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, investigation_id),
+                )
+            )
+            if investigation is None:
+                return None
+            boundary = self._one(
+                connection.execute(
+                    """SELECT ST_AsGeoJSON(ST_UnaryUnion(ST_Collect(geom)))::jsonb AS geometry
+                       FROM canonical_open_data_records
+                       WHERE organization_id = %s AND city_id = %s
+                         AND record_type = 'planning_area'
+                         AND attributes->>'boundary_kind' = 'municipal_boundary'""",
+                    (organization_id, investigation["city_id"]),
+                )
+            )
+            if boundary is None or boundary["geometry"] is None:
+                raise ValueError("versioned municipal boundary is unavailable")
+
+            requested_series = payload.get("area_series_id")
+            expected_version = int(payload["expected_area_version"])
+            previous = None
+            if requested_series:
+                previous = self._one(
+                    connection.execute(
+                        """SELECT id, version FROM investigation_areas
+                           WHERE organization_id = %s AND investigation_id = %s
+                             AND area_series_id = %s
+                           ORDER BY version DESC LIMIT 1""",
+                        (organization_id, investigation_id, requested_series),
+                    )
+                )
+                if previous is None:
+                    raise ValueError("area_series_id is unavailable in this investigation")
+                if int(previous["version"]) != expected_version:
+                    raise ValueError(f"Area version changed: expected {expected_version}")
+                area_id = str(uuid.uuid4())
+                area_series_id = requested_series
+                version = expected_version + 1
+                supersedes = str(previous["id"])
+            else:
+                if expected_version != 0:
+                    raise ValueError("new area series must expect version 0")
+                area_id = str(uuid.uuid4())
+                area_series_id = area_id
+                version = 1
+                supersedes = None
+
+            source_dataset_version_id = None
+            source_feature_id = None
+            source_boundary_kind = None
+            radius_m = payload.get("radius_m")
+            radius_methodology = payload.get("radius_methodology")
+            origin_geojson = None
+            methodology_source: dict[str, Any]
+            if payload["geometry_kind"] == "point_radius":
+                origin = payload["origin"]
+                if origin["kind"] == "station":
+                    point = self._one(
+                        connection.execute(
+                            """SELECT ST_X(geom) AS longitude, ST_Y(geom) AS latitude
+                               FROM canonical_open_data_records
+                               WHERE organization_id = %s AND city_id = %s
+                                 AND dataset_version_id = %s
+                                 AND record_type = 'transport_node'
+                                 AND external_record_id = %s
+                                 AND GeometryType(geom) = 'POINT'
+                               ORDER BY reference_date DESC NULLS LAST LIMIT 1""",
+                            (
+                                organization_id,
+                                investigation["city_id"],
+                                origin["source_dataset_version_id"],
+                                origin["source_feature_id"],
+                            ),
+                        )
+                    )
+                    if point is None:
+                        raise ValueError("station is unavailable in the versioned official source")
+                    longitude = float(point["longitude"])
+                    latitude = float(point["latitude"])
+                    source_dataset_version_id = origin["source_dataset_version_id"]
+                    source_feature_id = origin["source_feature_id"]
+                else:
+                    longitude, latitude = origin["coordinates"]
+                definition = PointRadiusDefinition(
+                    origin_kind=AreaOriginKind(origin["kind"]),
+                    longitude=float(longitude),
+                    latitude=float(latitude),
+                    radius_m=int(radius_m),
+                    radius_methodology=RadiusMethodology(radius_methodology),
+                    source_dataset_version_id=(
+                        str(source_dataset_version_id) if source_dataset_version_id else None
+                    ),
+                    source_feature_id=source_feature_id,
+                )
+                geometry = build_point_radius_geometry(
+                    definition, city_boundary=boundary["geometry"]
+                )
+                requested_geometry = geometry.requested_geometry
+                effective_geometry = geometry.effective_geometry
+                clipped_area_ratio = geometry.clipped_area_ratio
+                geometry_sha256 = geometry.geometry_sha256
+                origin_geojson = {"type": "Point", "coordinates": [longitude, latitude]}
+                origin_kind = origin["kind"]
+                methodology_source = {
+                    "rule": radius_methodology,
+                    "semantics": "simple radius; never an actual walking-time isochrone",
+                }
+            else:
+                clipped = self._one(
+                    connection.execute(
+                        """WITH source AS (
+                               SELECT geom FROM canonical_open_data_records
+                               WHERE organization_id = %s AND city_id = %s
+                                 AND dataset_version_id = %s
+                                 AND record_type = 'planning_area'
+                                 AND attributes->>'boundary_kind' = 'census_2020_small_area'
+                                 AND external_record_id = %s
+                               ORDER BY reference_date DESC NULLS LAST LIMIT 1
+                           ), boundary AS (
+                               SELECT ST_SetSRID(ST_GeomFromGeoJSON(%s),4326) AS geom
+                           )
+                           SELECT ST_AsGeoJSON(source.geom)::jsonb AS requested,
+                                  ST_AsGeoJSON(ST_Intersection(source.geom,boundary.geom))::jsonb
+                                      AS effective,
+                                  ST_Area(ST_Transform(
+                                      ST_Intersection(source.geom,boundary.geom),6674
+                                  )) / ST_Area(ST_Transform(source.geom,6674)) AS ratio,
+                                  encode(digest(ST_AsEWKB(
+                                      ST_Intersection(source.geom,boundary.geom)
+                                  ),'sha256'),'hex') AS sha256
+                           FROM source,boundary
+                           WHERE NOT ST_IsEmpty(ST_Intersection(source.geom,boundary.geom))""",
+                        (
+                            organization_id,
+                            investigation["city_id"],
+                            payload["source_dataset_version_id"],
+                            payload["source_feature_id"],
+                            json.dumps(boundary["geometry"]),
+                        ),
+                    )
+                )
+                if clipped is None:
+                    raise ValueError("source boundary is unavailable or outside the city")
+                requested_geometry = clipped["requested"]
+                effective_geometry = clipped["effective"]
+                clipped_area_ratio = float(clipped["ratio"])
+                geometry_sha256 = clipped["sha256"]
+                source_dataset_version_id = payload["source_dataset_version_id"]
+                source_feature_id = payload["source_feature_id"]
+                source_boundary_kind = payload["source_boundary_kind"]
+                origin_kind = "source_feature"
+                methodology_source = {
+                    "source": "e-Stat 2020 census small-area boundary",
+                    "limitation": "not guaranteed to match current town or municipal work areas",
+                }
+
+            context = current_request_context()
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO investigation_areas (
+                           id,area_series_id,version,supersedes_area_id,
+                           organization_id,city_id,investigation_id,urban_state_id,
+                           geometry_kind,origin_kind,label,
+                           requested_geometry,effective_geometry,origin_point,
+                           radius_m,radius_methodology,methodology_source,
+                           source_boundary_kind,source_dataset_version_id,source_feature_id,
+                           clipped_area_ratio,geometry_sha256,rule_version,created_by
+                       ) VALUES (
+                           %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
+                           ST_SetSRID(ST_GeomFromGeoJSON(%s),4326),
+                           ST_SetSRID(ST_GeomFromGeoJSON(%s),4326),
+                           CASE WHEN %s::text IS NULL THEN NULL
+                                ELSE ST_SetSRID(ST_GeomFromGeoJSON(%s),4326) END,
+                           %s,%s,%s,%s,%s,%s,%s,%s,
+                           'citygap-investigation-area@1.0.0',%s
+                       )
+                       RETURNING id,area_series_id,version,supersedes_area_id,
+                                 city_id,investigation_id,urban_state_id,
+                                 geometry_kind,origin_kind,label,radius_m,radius_methodology,
+                                 source_boundary_kind,source_dataset_version_id,source_feature_id,
+                                 clipped_area_ratio,geometry_sha256,rule_version,created_at,
+                                 ST_AsGeoJSON(effective_geometry)::jsonb AS effective_geometry""",
+                    (
+                        area_id, area_series_id, version, supersedes,
+                        organization_id, investigation["city_id"], investigation_id,
+                        investigation["urban_state_id"], payload["geometry_kind"], origin_kind,
+                        payload["label"], json.dumps(requested_geometry),
+                        json.dumps(effective_geometry),
+                        json.dumps(origin_geojson) if origin_geojson else None,
+                        json.dumps(origin_geojson) if origin_geojson else None,
+                        radius_m, radius_methodology,
+                        json.dumps(methodology_source, ensure_ascii=False),
+                        source_boundary_kind, source_dataset_version_id, source_feature_id,
+                        clipped_area_ratio, geometry_sha256, context.actor,
+                    ),
+                )
+            )
+            assert result is not None
+            self._service_audit(
+                connection, organization_id, "investigation_area.create",
+                "investigation_area", str(result["id"]),
+                str(investigation["city_id"]), previous, result,
+            )
+            return result
+
+    def investigation_areas(
+        self, organization_id: str, investigation_id: str
+    ) -> list[dict[str, Any]] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            exists = connection.execute(
+                """SELECT EXISTS(
+                       SELECT 1 FROM investigations
+                       WHERE organization_id = %s AND id = %s
+                   ) AS exists""",
+                (organization_id, investigation_id),
+            ).fetchone()["exists"]
+            if not exists:
+                return None
+            return self._dicts(
+                connection.execute(
+                    """SELECT id,area_series_id,version,supersedes_area_id,
+                              city_id,investigation_id,urban_state_id,
+                              geometry_kind,origin_kind,label,radius_m,radius_methodology,
+                              source_boundary_kind,source_dataset_version_id,source_feature_id,
+                              clipped_area_ratio,geometry_sha256,rule_version,created_at,
+                              ST_AsGeoJSON(effective_geometry)::jsonb AS effective_geometry
+                       FROM investigation_areas
+                       WHERE organization_id = %s AND investigation_id = %s
+                       ORDER BY created_at DESC""",
+                    (organization_id, investigation_id),
+                )
+            )
+
+    def investigation_area_detail(
+        self, organization_id: str, area_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            return self._one(
+                connection.execute(
+                    """SELECT id,area_series_id,version,supersedes_area_id,
+                              city_id,investigation_id,urban_state_id,
+                              geometry_kind,origin_kind,label,
+                              ST_AsGeoJSON(requested_geometry)::jsonb AS requested_geometry,
+                              ST_AsGeoJSON(effective_geometry)::jsonb AS effective_geometry,
+                              ST_AsGeoJSON(origin_point)::jsonb AS origin_point,
+                              radius_m,radius_methodology,methodology_source,
+                              source_boundary_kind,source_dataset_version_id,source_feature_id,
+                              clipped_area_ratio,geometry_sha256,rule_version,created_at
+                       FROM investigation_areas
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, area_id),
+                )
+            )
+
+    def create_investigation_area_analysis(
+        self, organization_id: str, area_id: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            area = self._one(
+                connection.execute(
+                    """SELECT id,city_id,geometry_sha256 FROM investigation_areas
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, area_id),
+                )
+            )
+            if area is None:
+                return None
+            if area["geometry_sha256"] != payload["expected_geometry_sha256"]:
+                raise ValueError("Investigation Area geometry changed")
+            versions = list(dict.fromkeys(payload["source_dataset_version_ids"]))
+            available = connection.execute(
+                """SELECT count(*) AS count FROM dataset_versions
+                   WHERE organization_id = %s AND id = ANY(%s::uuid[])""",
+                (organization_id, versions),
+            ).fetchone()["count"]
+            if int(available) != len(versions):
+                raise ValueError("source dataset version is outside this organization")
+            input_contract = {
+                "area_id": area_id,
+                "geometry_sha256": area["geometry_sha256"],
+                "source_dataset_version_ids": sorted(versions),
+                "rule_version": "citygap-investigation-area@1.0.0",
+                "schema_version": "citygap.area-summary@1",
+            }
+            input_sha256 = hashlib.sha256(
+                json.dumps(input_contract, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
+            result = self._one(
+                connection.execute(
+                    """INSERT INTO area_analysis_runs (
+                           organization_id,city_id,investigation_area_id,
+                           schema_version,rule_version,input_sha256,status,
+                           source_dataset_version_ids,created_by
+                       ) VALUES (
+                           %s,%s,%s,'citygap.area-summary@1',
+                           'citygap-investigation-area@1.0.0',%s,'queued',%s,%s
+                       )
+                       ON CONFLICT (organization_id,investigation_area_id,input_sha256)
+                       DO UPDATE SET input_sha256 = EXCLUDED.input_sha256
+                       RETURNING id,city_id,investigation_area_id,schema_version,
+                                 rule_version,input_sha256,status,
+                                 source_dataset_version_ids,created_at""",
+                    (
+                        organization_id, area["city_id"], area_id, input_sha256,
+                        versions, current_request_context().actor,
+                    ),
+                )
+            )
+            assert result is not None
+            return {
+                **result,
+                "execution_boundary": (
+                    "queued deterministic analysis; Findings remain unchanged "
+                    "until a succeeded run records knowledge items"
+                ),
+            }
+
+    def investigation_area_summary(
+        self, organization_id: str, area_id: str
+    ) -> dict[str, Any] | None:
+        with self._connect() as connection:
+            connection.row_factory = dict_row
+            area = self._one(
+                connection.execute(
+                    """SELECT id,area_series_id,version,city_id,investigation_id,
+                              geometry_kind,origin_kind,label,radius_m,radius_methodology,
+                              source_boundary_kind,clipped_area_ratio,geometry_sha256,
+                              ST_AsGeoJSON(effective_geometry)::jsonb AS effective_geometry
+                       FROM investigation_areas
+                       WHERE organization_id = %s AND id = %s""",
+                    (organization_id, area_id),
+                )
+            )
+            if area is None:
+                return None
+            run = self._one(
+                connection.execute(
+                    """SELECT id,schema_version,rule_version,input_sha256,status,
+                              source_dataset_version_ids,completed_at
+                       FROM area_analysis_runs
+                       WHERE organization_id = %s AND investigation_area_id = %s
+                         AND status = 'succeeded'
+                       ORDER BY completed_at DESC LIMIT 1""",
+                    (organization_id, area_id),
+                )
+            )
+            if run is None:
+                return {
+                    "schema_version": "citygap.area-summary@1",
+                    "area": area,
+                    "analysis": None,
+                    "metrics": [],
+                    "knowledge_items": [],
+                    "status": "AWAITING_DETERMINISTIC_ANALYSIS",
+                }
+            metrics = self._dicts(
+                connection.execute(
+                    """SELECT metric_key,display_group,knowledge_status,value,
+                              calculation_semantics,source_dataset_version_id,
+                              source_date,aggregation_rule_version,coverage_ratio,
+                              freshness,source_limitation,result_sha256,display_order
+                       FROM area_metric_results
+                       WHERE organization_id = %s AND area_analysis_run_id = %s
+                       ORDER BY display_order""",
+                    (organization_id, run["id"]),
+                )
+            )
+            knowledge = self._dicts(
+                connection.execute(
+                    """SELECT id,finding_id,knowledge_key,title,known_summary,
+                              unknown_summary,importance,knowledge_status,action_type,
+                              reason_code,source_boundary,source_references,coverage_ratio,
+                              decision_impact,display_order
+                       FROM area_knowledge_items
+                       WHERE organization_id = %s AND area_analysis_run_id = %s
+                       ORDER BY display_order""",
+                    (organization_id, run["id"]),
+                )
+            )
+            return {
+                "schema_version": "citygap.area-summary@1",
+                "area": area,
+                "analysis": run,
+                "metrics": metrics,
+                "knowledge_items": knowledge,
+                "status": "unverified",
             }
 
     def create_spatial_pack(

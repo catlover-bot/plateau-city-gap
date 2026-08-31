@@ -67,6 +67,9 @@ describe("spatial URL state", () => {
     expect(serialized).toContain("buildingSource=verified-local");
     expect(spatialStateToSearch(state, new URLSearchParams("buildingSource=spatial-pack"))).toContain("buildingSource=spatial-pack");
     expect(spatialStateToSearch(state, new URLSearchParams("section=closed"))).toContain("section=closed");
+    const area = spatialStateToSearch(state, new URLSearchParams("journey=area&copy=B"));
+    expect(area).toContain("journey=area");
+    expect(area).toContain("copy=B");
     expect(serialized).not.toContain("unknown");
   });
 });

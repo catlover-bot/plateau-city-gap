@@ -208,5 +208,11 @@ export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearc
   }
   const section = passthrough?.get("section");
   if (section === "open" || section === "closed") params.set("section", section);
+  const journey = passthrough?.get("journey");
+  if (journey === "area") params.set("journey", journey);
+  const copy = passthrough?.get("copy");
+  if (copy === "A" || copy === "B" || copy === "C") {
+    params.set("copy", copy);
+  }
   return `?${params.toString()}`;
 }

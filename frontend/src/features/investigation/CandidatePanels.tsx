@@ -18,10 +18,10 @@ export function CandidateShortlist({
   return (
     <section className="candidate-shortlist" aria-labelledby="shortlist-title">
       <header className="journey-heading">
-        <span>現地調査候補 3件</span>
-        <h1 id="shortlist-title">どこを確認する？</h1>
+        <span>舞鶴市の実在候補 3件</span>
+        <h1 id="shortlist-title">地図から確認候補を選ぶ</h1>
         <p>
-          自動的な政策順位ではありません。異なる確認目的の3件から、人が次に調べる地域を選びます。
+          自動的な政策順位ではありません。実データとPLATEAU詳細の有無を確認し、人が一件を選びます。
         </p>
       </header>
       <div className="candidate-list" role="radiogroup" aria-label="舞鶴市の現地調査候補">

@@ -21,11 +21,12 @@ export function InvestigationHeader({ onRestart }: { onRestart(): void }) {
 export function ValueStatement() {
   return (
     <div className="value-statement">
-      <p className="value-eyebrow">地域公共交通・医療アクセスの現地調査準備</p>
-      <h1 id="value-heading">どこから現地確認するかを、<br />データから絞る。</h1>
+      <p className="value-eyebrow">PLATEAU FIELD VERIFICATION LOOP</p>
+      <h1 id="value-heading">地図だけでは分からないことを、<br />現地で確かめる場所とタスクに変える。</h1>
       <p className="value-lead">
-        人口・交通・医療から候補地域を見つけ、PLATEAUの建物・道路・地形まで確認して、
-        現地調査票にまとめます。
+        舞鶴市の実データから「まだ分からないこと」を取り出し、
+        PLATEAUの建物・道路と実在地点へ結び、
+        3〜5件の必須確認に絞ります。
       </p>
       <p className="primary-user">
         地域公共交通計画・デマンド交通・交通空白地域等を検討する自治体職員向け
@@ -36,10 +37,10 @@ export function ValueStatement() {
 
 export function OutputPreview({ candidate }: { candidate: InvestigationCandidate }) {
   return (
-    <article className="output-preview" aria-label="実データから作る現地調査票のプレビュー">
+    <article className="output-preview" aria-label="舞鶴実データから作る未確認タスクのプレビュー">
       <header>
-        <span>実データから作る最終成果物</span>
-        <strong>現地調査候補 + 現地調査票</strong>
+        <span>REAL MAIZURU DATA · STATUS</span>
+        <strong>不明点 → PLATEAU対象 → 未確認タスク</strong>
       </header>
       <div className="preview-location">
         <span>{candidate.typeLabel}</span>
@@ -53,13 +54,13 @@ export function OutputPreview({ candidate }: { candidate: InvestigationCandidate
         <div><dt>地形</dt><dd>実DEM</dd></div>
       </dl>
       <section>
-        <h3>現地で確認</h3>
+        <h3>まだ分からないこと · 最大4件</h3>
         <ul>
-          {candidate.fieldChecks.slice(0, 5).map((check) => <li key={check.id}>{check.label}</li>)}
+          {candidate.dataGaps.slice(0, 4).map((gap) => <li key={gap.id}>{gap.title}</li>)}
         </ul>
       </section>
       <p className="preview-boundary">
-        実データと不足情報から生成。政策推奨・危険判定・実施効果予測ではありません。
+        状態は「未確認」。写真・GPS・回答・自治体reviewのdemo値はありません。
       </p>
     </article>
   );
@@ -68,10 +69,12 @@ export function OutputPreview({ candidate }: { candidate: InvestigationCandidate
 export function InvestigationLanding({
   workspace,
   onStart,
+  onStartArea,
   onRestart,
 }: {
   workspace: InvestigationWorkspace;
   onStart(): void;
+  onStartArea?(): void;
   onRestart(): void;
 }) {
   const [methodOpen, setMethodOpen] = useState(false);
@@ -89,27 +92,30 @@ export function InvestigationLanding({
             <ValueStatement />
             <div className="value-actions">
               <button type="button" className="investigation-primary" onClick={onStart}>
-                舞鶴の現地調査候補を見る
+                地図から確認候補を選ぶ
               </button>
+              {onStartArea && <button type="button" className="investigation-secondary" onClick={onStartArea}>
+                場所と範囲から調べる（検証中）
+              </button>}
               <button type="button" className="investigation-secondary" onClick={openMethod}>
                 仕組みを見る
               </button>
             </div>
-            <ol className="three-outcomes" aria-label="CITY GAPで得られる3つの成果">
-              <li><span>1</span><strong>候補を絞る</strong><small>3〜5地域から現地確認先を考える</small></li>
-              <li><span>2</span><strong>街の構造を確認する</strong><small>PLATEAUで建物・道路・地形へ具体化</small></li>
-              <li><span>3</span><strong>現地調査票を作る</strong><small>不足情報を確認項目へ変換</small></li>
+            <ol className="three-outcomes" aria-label="不明点を現地確認タスクへ変える3段階">
+              <li><span>1</span><strong>不明点を分ける</strong><small>分かっていることと判断を変える不足を分離</small></li>
+              <li><span>2</span><strong>実在objectへ結ぶ</strong><small>建物・道路・地点のIDと出典を保持</small></li>
+              <li><span>3</span><strong>必須確認に絞る</strong><small>3〜5件、状態は未確認のまま</small></li>
             </ol>
           </div>
           <OutputPreview candidate={workspace.candidates[0]} />
         </section>
         {methodOpen && (
           <section className="method-explanation" ref={methodRef} tabIndex={-1} aria-labelledby="method-title">
-            <span>500m → PLATEAU → 現地調査票</span>
-            <h2 id="method-title">指標を見るだけで終わらせず、次に調べることまで整理します。</h2>
+            <span>分析の限界 → Finding → PLATEAU object → 現地タスク</span>
+            <h2 id="method-title">「なぜこの確認が必要か」を、対象objectまで追跡できます。</h2>
             <p>
-              500mの統計だけでは、どの建物・道路・地形が関係するか分かりません。
-              PLATEAUを使って街の構造を具体化し、公開データにない運行頻度・歩行可否・施設利用条件を現地確認項目へ変えます。
+              500m分析に残る運行・歩行・施設利用・地域サービスの不明点を、
+              舞鶴市のversion付きobjectまたは正直なmesh fallbackへ結びます。現地結果はまだ作りません。
             </p>
             <button type="button" onClick={() => setMethodOpen(false)}>閉じる</button>
           </section>

@@ -22,10 +22,11 @@ describe("public field-investigation outputs", () => {
       />,
     );
 
-    expect(html).toContain("どこから現地確認するかを、");
+    expect(html).toContain("地図だけでは分からないことを、");
     expect(html).toContain("地域公共交通計画・デマンド交通・交通空白地域等を検討する自治体職員向け");
-    expect(html).toContain("舞鶴の現地調査候補を見る");
-    expect(html).toContain("現地調査候補 + 現地調査票");
+    expect(html).toContain("地図から確認候補を選ぶ");
+    expect(html).toContain("不明点 → PLATEAU対象 → 未確認タスク");
+    expect(html).toContain("写真・GPS・回答・自治体reviewのdemo値はありません");
     expect(html).toContain("常団地前周辺");
     expect(html).toContain("296棟");
     expect(html).toContain("135面");

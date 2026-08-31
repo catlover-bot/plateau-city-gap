@@ -28,9 +28,12 @@ import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
 import { UrbanSection } from "../features/urban-section/UrbanSection";
 import { InvestigationLanding } from "../features/investigation/ValueLanding";
-import { InvestigationJourney } from "../features/investigation/InvestigationJourney";
+import { VerificationJourney } from "../features/verification/VerificationJourney";
 import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
 import type { InvestigationCandidate } from "../features/investigation/investigationTypes";
+import { AreaInvestigationJourney } from "../features/area-investigation/AreaInvestigationJourney";
+import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
+import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -88,6 +91,11 @@ export function ProductApp() {
   const [scenarioMode, setScenarioMode] = useState<"compare" | "stress">("compare");
   const [stress, setStress] = useState<FuturesStressMode>("normal");
   const [validationView, setValidationView] = useState<ValidationView>("reference");
+  const [areaFixture, setAreaFixture] = useState<InvestigationAreaFixture | null>(null);
+  const [areaError, setAreaError] = useState<string | null>(null);
+  const [areaJourneyOpen, setAreaJourneyOpen] = useState(
+    () => new URLSearchParams(window.location.search).get("journey") === "area",
+  );
   const [urbanSectionOpen, setUrbanSectionOpen] = useState(
     () => new URLSearchParams(window.location.search).get("section") !== "closed",
   );
@@ -99,6 +107,18 @@ export function ProductApp() {
     loadAppData().then((data) => !cancelled && setDatasets((current) => ({ ...current, maizuru: data }))).catch((reason: unknown) => !cancelled && setError(reason instanceof Error ? reason.message : "データを読み込めませんでした"));
     return () => { cancelled = true; };
   }, [retry]);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadInvestigationAreaFixture()
+      .then((fixture) => {
+        if (!cancelled) setAreaFixture(fixture);
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) setAreaError(reason instanceof Error ? reason.message : "調査範囲データを読み込めませんでした");
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     if (state.city !== "fujisawa" || datasets.fujisawa) return;
@@ -173,6 +193,10 @@ export function ProductApp() {
 
   useEffect(() => {
     if (state.experience !== "guided" || !guidedData || !selectedInvestigationCandidate) return;
+    if (state.guidedStep > 4) {
+      dispatch({ type: "set-guided-step", step: 4 });
+      return;
+    }
 
     const step = state.guidedStep;
     const usesPlateau = step === 3 && selectedInvestigationCandidate.plateau.status === "verified";
@@ -208,12 +232,14 @@ export function ProductApp() {
   const select = useCallback((selection: SpatialSelection | null) => dispatch({ type: "set-selection", selection }), [dispatch]);
   const startGuided = useCallback(() => {
     setEvidenceOpen(false);
+    setAreaJourneyOpen(false);
     dispatch({ type: "set-guided-step", step: 1 });
   }, [dispatch]);
   const restartGuided = useCallback(() => {
     setEvidenceOpen(false);
     setSearchOpen(false);
     setMenuOpen(false);
+    setAreaJourneyOpen(false);
     dispatch({ type: "set-experience", experience: "landing" });
   }, [dispatch]);
   const guidedBack = useCallback(() => {
@@ -224,12 +250,26 @@ export function ProductApp() {
     dispatch({ type: "set-guided-step", step: (state.guidedStep - 1) as GuidedStep });
   }, [dispatch, restartGuided, state.guidedStep]);
   const guidedNext = useCallback(() => {
-    dispatch({ type: "set-guided-step", step: Math.min(6, state.guidedStep + 1) as GuidedStep });
+    dispatch({ type: "set-guided-step", step: Math.min(4, state.guidedStep + 1) as GuidedStep });
   }, [dispatch, state.guidedStep]);
   const openGuidedAdvanced = useCallback(() => {
     setEvidenceOpen(false);
     dispatch({ type: "set-experience", experience: "advanced" });
   }, [dispatch]);
+  const startAreaJourney = useCallback(() => {
+    setAreaJourneyOpen(true);
+  }, []);
+  const closeAreaJourney = useCallback(() => {
+    setAreaJourneyOpen(false);
+  }, []);
+  const openExistingM3FromArea = useCallback(() => {
+    setAreaJourneyOpen(false);
+    startGuided();
+  }, [startGuided]);
+  const openAdvancedFromArea = useCallback(() => {
+    setAreaJourneyOpen(false);
+    openGuidedAdvanced();
+  }, [openGuidedAdvanced]);
   const selectInvestigationCandidate = useCallback((candidate: InvestigationCandidate) => {
     dispatch({ type: "set-selection", selection: investigationSelection(candidate) });
     dispatch({ type: "set-viewport", viewport: {
@@ -400,16 +440,30 @@ export function ProductApp() {
   }, [dispatch, openPlateau3D]);
 
   if (state.experience === "landing") {
+    if (areaJourneyOpen) {
+      if (areaError) return <ErrorState message={areaError} onRetry={closeAreaJourney} />;
+      if (!guidedData || !areaFixture) return <LoadingState />;
+      return <AreaInvestigationJourney
+        data={guidedData}
+        fixture={areaFixture}
+        state={state}
+        onClose={closeAreaJourney}
+        onOpenExistingM3={openExistingM3FromArea}
+        onOpenAdvanced={openAdvancedFromArea}
+        onSelectionChange={select}
+        onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })}
+      />;
+    }
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
     if (!investigationWorkspace) return <LoadingState />;
-    return <InvestigationLanding workspace={investigationWorkspace} onStart={startGuided} onRestart={restartGuided} />;
+    return <InvestigationLanding workspace={investigationWorkspace} onStart={startGuided} onStartArea={startAreaJourney} onRestart={restartGuided} />;
   }
 
   if (state.experience === "guided") {
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
     if (!guidedData || !investigationWorkspace || !selectedInvestigationCandidate) return <LoadingState />;
     return <>
-      <InvestigationJourney
+      <VerificationJourney
         data={guidedData}
         workspace={investigationWorkspace}
         candidate={selectedInvestigationCandidate}

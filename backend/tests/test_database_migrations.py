@@ -6,7 +6,7 @@ from backend.citygap_platform.database.migrations import checksum, migration_fil
 def test_migrations_have_an_immutable_order_and_sha256_checksums() -> None:
     files = migration_files("infra/migrations")
     assert [path.name for path in files] == sorted(path.name for path in files)
-    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 28)]
+    assert [path.name[:3] for path in files] == [f"{number:03d}" for number in range(1, 30)]
     assert all(len(checksum(path)) == 64 for path in files)
     assert all(path.stat().st_size > 0 for path in files)
 
@@ -22,6 +22,49 @@ def test_spatial_evidence_migration_creates_tenant_safe_saved_view_key_before_fk
     reference = "REFERENCES saved_views(organization_id, id)"
     assert prerequisite in sql
     assert sql.index(prerequisite) < sql.index(reference)
+
+
+def test_field_verification_migration_keeps_m2_core_and_later_phases_explicit() -> None:
+    sql = Path("infra/migrations/028_field_verification_loop.sql").read_text(
+        encoding="utf-8"
+    )
+    for required in (
+        "CREATE TABLE field_verification_tasks",
+        "CREATE TABLE field_verification_targets",
+        "evidence_requirements",
+        "jsonb_array_length(evidence_requirements) BETWEEN 3 AND 5",
+        "REFERENCES spatial_evidence_packs(organization_id, id)",
+        "REFERENCES spatial_pack_objects(organization_id, id)",
+        "field_validation_status",
+        "PROVISIONAL_AFTER_M3",
+    ):
+        assert required in sql
+    assert "open_data_field_tasks" not in sql
+    assert "findings.validation_status" not in sql
+    assert "automatic_confirmation boolean NOT NULL DEFAULT false CHECK (NOT automatic_confirmation)" in sql
+
+def test_investigation_area_migration_keeps_radius_and_isochrone_semantics_separate() -> None:
+    sql = Path("infra/migrations/029_investigation_areas.sql").read_text(
+        encoding="utf-8"
+    )
+    for required in (
+        "CREATE TABLE investigation_areas",
+        "CREATE TABLE area_analysis_runs",
+        "CREATE TABLE area_metric_results",
+        "CREATE TABLE area_knowledge_items",
+        "radius_m BETWEEN 100 AND 3000",
+        "mlit_general_walk_reference_800m",
+        "census_2020_small_area",
+        "citygap.area-summary@1",
+        "area_weighted_estimate",
+        "field_verification_tasks_area_knowledge_item_fk",
+        "Investigation Areas are immutable",
+    ):
+        assert required in sql
+    assert "station_radius" not in sql
+    assert "'pedestrian_isochrone'" not in sql
+    assert "'walking_isochrone'" not in sql
+    assert "ten minutes actual walking" in sql
 
 
 def test_migration_runner_is_not_mounted_as_untracked_initdb_magic() -> None:

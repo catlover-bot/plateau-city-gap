@@ -12,6 +12,7 @@ import "./features/urban-section/urban-section.css";
 import "./app/workbench.css";
 import "./features/guided/guided.css";
 import "./features/investigation/investigation.css";
+import "./features/verification/verification.css";
 import "./service/service.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

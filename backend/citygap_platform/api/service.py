@@ -14,6 +14,10 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, PlainTextResponse, StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from backend.citygap_platform.domain.investigation_area import (
+    RadiusMethodology,
+    validate_radius,
+)
 from backend.citygap_platform.domain.municipal_service import (
     DataClassification,
     DatasetReleaseStatus,
@@ -202,6 +206,78 @@ class InvestigationCreateRequest(StrictRequest):
     due_date: date | None = None
     spatial_state: dict[str, Any] = Field(default_factory=dict)
     notes: str = Field(default="", max_length=10000)
+
+
+class AreaOriginRequest(StrictRequest):
+    kind: Literal["station", "map_point"]
+    coordinates: tuple[float, float] | None = None
+    source_dataset_version_id: UUID | None = None
+    source_feature_id: str | None = Field(default=None, min_length=1, max_length=500)
+
+    @model_validator(mode="after")
+    def valid_origin(self) -> AreaOriginRequest:
+        if self.kind == "station":
+            if self.coordinates is not None:
+                raise ValueError("station coordinates are resolved from the official source")
+            if self.source_dataset_version_id is None or self.source_feature_id is None:
+                raise ValueError("station origin requires a versioned official source feature")
+        else:
+            if self.coordinates is None:
+                raise ValueError("map_point origin requires coordinates")
+            longitude, latitude = self.coordinates
+            if not -180 <= longitude <= 180 or not -90 <= latitude <= 90:
+                raise ValueError("map_point coordinates are outside EPSG:4326")
+            if self.source_dataset_version_id is not None or self.source_feature_id is not None:
+                raise ValueError("map_point cannot claim an official source feature")
+        return self
+
+
+class InvestigationAreaCreateRequest(StrictRequest):
+    geometry_kind: Literal["point_radius", "source_boundary"]
+    label: str = Field(min_length=1, max_length=500)
+    origin: AreaOriginRequest | None = None
+    radius_m: int | None = None
+    radius_methodology: Literal[
+        "mlit_elderly_walk_reference_500m",
+        "mlit_general_walk_reference_800m",
+        "broad_context_1000m",
+        "custom_radius",
+    ] | None = None
+    source_boundary_kind: Literal["census_2020_small_area"] | None = None
+    source_dataset_version_id: UUID | None = None
+    source_feature_id: str | None = Field(default=None, min_length=1, max_length=500)
+    area_series_id: UUID | None = None
+    expected_area_version: int = Field(default=0, ge=0)
+
+    @model_validator(mode="after")
+    def valid_area_definition(self) -> InvestigationAreaCreateRequest:
+        if self.geometry_kind == "point_radius":
+            if self.origin is None or self.radius_m is None or self.radius_methodology is None:
+                raise ValueError("point_radius requires origin, radius_m and radius_methodology")
+            validate_radius(self.radius_m, RadiusMethodology(self.radius_methodology))
+            if (
+                self.source_boundary_kind is not None
+                or self.source_dataset_version_id is not None
+                or self.source_feature_id is not None
+            ):
+                raise ValueError("point_radius cannot also be a source boundary")
+        else:
+            if self.origin is not None or self.radius_m is not None or self.radius_methodology is not None:
+                raise ValueError("source_boundary cannot contain point-radius fields")
+            if (
+                self.source_boundary_kind is None
+                or self.source_dataset_version_id is None
+                or self.source_feature_id is None
+            ):
+                raise ValueError("source_boundary requires a versioned source feature")
+        if self.area_series_id is None and self.expected_area_version != 0:
+            raise ValueError("a new area series must expect version 0")
+        return self
+
+
+class AreaAnalysisCreateRequest(StrictRequest):
+    source_dataset_version_ids: list[UUID] = Field(min_length=1, max_length=100)
+    expected_geometry_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
 class InvestigationTransitionRequest(StrictRequest):
@@ -1139,6 +1215,95 @@ def investigation_detail(
     result = repo.investigation_detail(organization_id, str(investigation_id))
     if result is None:
         raise _not_found("Investigation")
+    return result
+
+
+@router.post(
+    "/investigations/{investigation_id}/areas",
+    status_code=201,
+    dependencies=[Depends(require_permission("investigation:write"))],
+)
+def create_investigation_area(
+    investigation_id: UUID,
+    body: InvestigationAreaCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_investigation_area(
+            organization_id, str(investigation_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Investigation")
+    return result
+
+
+@router.get(
+    "/investigations/{investigation_id}/areas",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def investigation_areas(
+    investigation_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    items = repo.investigation_areas(organization_id, str(investigation_id))
+    if items is None:
+        raise _not_found("Investigation")
+    return {"items": items}
+
+
+@router.get(
+    "/investigation-areas/{area_id}",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def investigation_area_detail(
+    area_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.investigation_area_detail(organization_id, str(area_id))
+    if result is None:
+        raise _not_found("Investigation Area")
+    return result
+
+
+@router.post(
+    "/investigation-areas/{area_id}/analyses",
+    status_code=202,
+    dependencies=[Depends(require_permission("investigation:write"))],
+)
+def create_investigation_area_analysis(
+    area_id: UUID,
+    body: AreaAnalysisCreateRequest,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    try:
+        result = repo.create_investigation_area_analysis(
+            organization_id, str(area_id), body.model_dump(mode="json")
+        )
+    except ValueError as error:
+        raise _conflict(error) from error
+    if result is None:
+        raise _not_found("Investigation Area")
+    return result
+
+
+@router.get(
+    "/investigation-areas/{area_id}/summary",
+    dependencies=[Depends(require_permission("investigation:read"))],
+)
+def investigation_area_summary(
+    area_id: UUID,
+    organization_id: Annotated[str, Depends(require_organization)],
+    repo: Annotated[MunicipalServiceRepository, Depends(_repository)],
+) -> dict[str, Any]:
+    result = repo.investigation_area_summary(organization_id, str(area_id))
+    if result is None:
+        raise _not_found("Investigation Area")
     return result
 
 
