@@ -22,8 +22,12 @@ page.on("request", (request) => {
   if (recordInitialRequests && /CesiumMap|cesium\/Workers|cesium\/Assets/.test(request.url())) cesiumRequestsDuringInitial2d.push(request.url());
 });
 page.on("requestfailed", (request) => {
-  if (request.url().startsWith(baseUrl) || request.url().includes("cyberjapandata.gsi.go.jp")) {
-    criticalRequestFailures.push({ url: request.url(), error: request.failure()?.errorText ?? "unknown" });
+  const url = request.url();
+  const error = request.failure()?.errorText ?? "unknown";
+  const navigationCancelledMapTile =
+    url.includes("cyberjapandata.gsi.go.jp") && error === "net::ERR_ABORTED";
+  if ((url.startsWith(baseUrl) || url.includes("cyberjapandata.gsi.go.jp")) && !navigationCancelledMapTile) {
+    criticalRequestFailures.push({ url, error });
   }
 });
 
