@@ -1,30 +1,28 @@
 # Current goal
 
-Active goal: `cartographic-interaction-performance-v1`
+Active goal: `public-product-language-and-section-v1`
 
-Current milestone: P4 Automated Performance Checkpoint complete; stop
+Current milestone: H0 benchmark, language baseline, and section audit
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
-- source branch: `feat/cartographic-visual-productization-v1`
-- source HEAD: `25a19ee9ebf444fb2244de6ace625238a74bbb89`
-- execution branch: `feat/cartographic-interaction-performance-v1`
+- source branch: `feat/cartographic-interaction-performance-v1`
+- source HEAD: `a365dc04ccbcfad020d8f6ff2cd63db6e7865d60`
+- execution branch: `feat/public-product-language-section-v1`
 - baseline / origin/main: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
-- preservation: existing M3/028, A0–A5, and U0–U4 work retained; no reset, clean, rebase, squash, or force push
-- performance goal: preserve the complete C5 cartographic product while reducing only story/target interaction latency
-- scope: root-cause profiling, provenance-preserving display-derivative partitioning, bounded loading, MapLibre lifecycle stabilization, and automated performance evidence
-- excluded: UI redesign, copy changes, backend, API, migration, external datasets, new analytical facts, product P1, M4–M6, main merge, and Pages deployment
-- reference capture: 9 URLs recorded with screenshot or explicit unavailable status; third-party captures remain benchmark-only
+- preservation: existing M3/028, A0–A5, U0–U4, C0–C5, and P0–P4 work retained; no reset, clean, rebase, squash, or force push
+- goal: replace overexplained Public language and nested dashboard surfaces with concise Japanese, typographic hierarchy, and a disciplined section decision
+- scope: Public copy, visual hierarchy, the Public boundary for Urban Section, and end-to-end presentation polish only
+- excluded: backend, API, DB, migration, external data, new metric/score/ranking/recommendation, Borehole, hazards, walking isochrone, GTFS, M4–M6, new 3D capability, main merge, and Pages deployment
+- H0 benchmark: nine official public URLs captured at 1440 × 900 with explicit access status; third-party captures remain research evidence only
+- production baseline: GitHub Pages captured separately and remains unchanged
+- feature baseline: source-HEAD production preview captured at desktop and 390 × 844 mobile across intro/place/radius/result/target
+- Urban Section recommendation: Option C; do not add it to the Area Public first-run, preserve legacy M3 and Advanced
 - merge / deployment: not performed
-- C0–C4 implementation commits: `88841c2`, `cefa068`, `54c517d`, `944afe3`, `047f314`
-- C5 baseline: `docs/cartographic-validation-checkpoint.md` and `docs/assets/cartographic-checkpoint/manifest.json`
-- P0 evidence: `docs/cartographic-performance-profile.md` and `analysis/outputs/real/cartographic-performance-profile-baseline.json`
-- P1 target path: exact building/road geometry is available from a two-feature, provenance-complete derivative; facility remains a registered local position
-- P2 story path: manifest and story artifacts load independently; building/planning requests are abortable, hash-verified, and cached only after completion
-- P3 lifecycle: stable map/source/layer instances, semantic no-op source/style updates, bounded degraded-basemap behavior, and unchanged exact ready gates
-- P4 evidence: `docs/cartographic-performance-checkpoint.md`, `analysis/outputs/real/cartographic-performance-profile-after.json`, and `docs/assets/cartographic-performance-checkpoint/manifest.json`
+- inherited performance baseline: `docs/cartographic-performance-checkpoint.md` and `analysis/outputs/real/cartographic-performance-profile-after.json`
+- H0 evidence: `docs/public-product-benchmark.md`, `docs/public-product-language-audit.md`, `docs/public-copy-deck.md`, `docs/urban-section-audit.md`, and `docs/assets/public-product-audit/manifest.json`
 
 Core value hypothesis:
 

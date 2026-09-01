@@ -1,0 +1,438 @@
+{
+  "schema_version": "citygap.public-product-audit@1",
+  "repository_head": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60",
+  "production_url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "feature_url": "http://127.0.0.1:4180/plateau-city-gap/",
+  "records": [
+    {
+      "filename": "production-landing-desktop.png",
+      "kind": "product-baseline",
+      "product": "production",
+      "requested_url": "https://catlover-bot.github.io/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T19:58:46.870Z",
+      "bytes": 218051,
+      "sha256": "f3fe2263da82309ca7b7f1ae0335df7443bcd4c70286590522608f31f30c4968"
+    },
+    {
+      "filename": "production-landing-mobile.png",
+      "kind": "product-baseline",
+      "product": "production",
+      "requested_url": "https://catlover-bot.github.io/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T19:58:51.159Z",
+      "bytes": 79332,
+      "sha256": "b729a5819c14c9cd0e806e9ed7768dbc392f1c95385e16d7f6e6f267f812816a"
+    },
+    {
+      "filename": "production-guided-section.png",
+      "kind": "product-baseline",
+      "product": "production",
+      "requested_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&guide=3",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&guide=3&city=maizuru&task=detail&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building_group&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44792&z=15.20&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T19:59:17.771Z",
+      "bytes": 371311,
+      "sha256": "73f90f307c7053c45dab6d043b464439718e2bd3a2f3250a9194d74666800adb"
+    },
+    {
+      "filename": "production-guided-task.png",
+      "kind": "product-baseline",
+      "product": "production",
+      "requested_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&guide=4",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&guide=4&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=14.10&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T19:59:29.947Z",
+      "bytes": 1258304,
+      "sha256": "1abc45419ee00a59dbe2cd07908ef99691f77436ee6e2d9d4fcf85679fba559e"
+    },
+    {
+      "filename": "production-advanced-section.png",
+      "kind": "product-baseline",
+      "product": "production",
+      "requested_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&scene=plateau_detail&mesh=533513314&resolution=building_group&lens=urban-xray&mapMode=plateau3d&buildingSource=spatial-pack&section=open&inspector=open",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=detail&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building_group&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314&buildingSource=spatial-pack&section=open",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T19:59:56.704Z",
+      "bytes": 412421,
+      "sha256": "d696852a2cd0dddfddcb21ff1e383abf30d9b3bd2be39f37477d475d1c4d9bcf"
+    },
+    {
+      "filename": "feature-landing-desktop.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:13.614Z",
+      "bytes": 79623,
+      "sha256": "7027e54a47df9c25c749e8c8a38812087d8f9280b0030c496c177bc35989812e"
+    },
+    {
+      "filename": "feature-place-desktop.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:14.479Z",
+      "bytes": 710848,
+      "sha256": "7813022ea0b4e99000aecefb84e4f3f18a878d3372fef619551b2af5d15b2f72"
+    },
+    {
+      "filename": "feature-radius-desktop.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:18.112Z",
+      "bytes": 493703,
+      "sha256": "f21ec56937f94f6126b9c07fe0901a18ee5d464267f43ab8abb59985a3ba7c45"
+    },
+    {
+      "filename": "feature-result-desktop.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:22.540Z",
+      "bytes": 478053,
+      "sha256": "d90ece54b24943d20a4c91dafee21e42687899c4ac8520081afda64919b4cd3f"
+    },
+    {
+      "filename": "feature-target-desktop.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:26.504Z",
+      "bytes": 355096,
+      "sha256": "1f454fccc5a0cdfe971a9a7ba0bec1b7d9683d5f5d831967fdcbe9dd9487df5b"
+    },
+    {
+      "filename": "feature-landing-mobile.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:32.425Z",
+      "bytes": 185111,
+      "sha256": "99ea1e716ba520c13c6eb4d2da2199a447007ef65c87c395d636e174d6a37d4e"
+    },
+    {
+      "filename": "feature-place-mobile.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:32.730Z",
+      "bytes": 165606,
+      "sha256": "0a88057982738affc64ea3b052737e361c7b51f719aa818e64566cfc71d51e21"
+    },
+    {
+      "filename": "feature-radius-mobile.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:33.440Z",
+      "bytes": 130371,
+      "sha256": "b7f3d453934fdcfb43c4f3c04f73741292d854dbc2506f8551fcb28dab2cc8af"
+    },
+    {
+      "filename": "feature-result-mobile.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:36.199Z",
+      "bytes": 117923,
+      "sha256": "b82ddaf01df84038885c13282d2acd1ed0d61b984b3c5d38e88f5ec973341134"
+    },
+    {
+      "filename": "feature-target-mobile.png",
+      "kind": "product-baseline",
+      "product": "feature",
+      "requested_url": "http://127.0.0.1:4180/plateau-city-gap/",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "access_status": "OBSERVED",
+      "final_url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=16.65&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "title": "CITY GAP | まちスコープ",
+      "captured_at": "2026-09-01T20:00:37.456Z",
+      "bytes": 130265,
+      "sha256": "ad887ca2212ec0374c39bac779367b40786d2bf16675779a6fddfd081630d34d"
+    },
+    {
+      "filename": "benchmark-field-maps.png",
+      "kind": "benchmark",
+      "product": "ArcGIS Field Maps",
+      "requested_url": "https://doc.arcgis.com/en/field-maps/android/use-maps/quick-reference.htm",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "PARTIALLY_OBSERVED",
+      "http_status": 200,
+      "first_heading": "Tools and features",
+      "visible_text_sample": "Products ARCGIS ArcGIS Overview Esri's enterprise geospatial platform ArcGIS Online ArcGIS delivered as SaaS ArcGIS Pro Full-featured desktop application for ArcGIS ArcGIS Enterprise ArcGIS deployed as self-hosted software Developer Technology Build mapping & spatial analysis applications All products CAPABILITIES Mapping See & understand data spatially Analytics Bring location to analytics Data Management Integrate, edit, and share spatial data All capabilities BUY ARCGIS User Types Role-based access to ArcGIS Esri Store ArcGIS products from Esri How to Buy Esri products, partner products & d",
+      "final_url": "https://doc.arcgis.com/en/field-maps/android/use-maps/quick-reference.htm",
+      "title": "Tools and features—ArcGIS Field Maps | Documentation",
+      "captured_at": "2026-09-01T20:00:50.733Z",
+      "bytes": 174300,
+      "sha256": "38ecbf1567f846c224250b9144e1c6887e3faeb3c9bc4ce867672395260be1b2"
+    },
+    {
+      "filename": "benchmark-survey123.png",
+      "kind": "benchmark",
+      "product": "ArcGIS Survey123",
+      "requested_url": "https://doc.arcgis.com/en/survey123/capture/field-app/quickreferencegetanswers.htm",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "PARTIALLY_OBSERVED",
+      "http_status": 200,
+      "first_heading": "Quick reference",
+      "visible_text_sample": "Products ARCGIS ArcGIS Overview Esri's enterprise geospatial platform ArcGIS Online ArcGIS delivered as SaaS ArcGIS Pro Full-featured desktop application for ArcGIS ArcGIS Enterprise ArcGIS deployed as self-hosted software Developer Technology Build mapping & spatial analysis applications All products CAPABILITIES Mapping See & understand data spatially Analytics Bring location to analytics Data Management Integrate, edit, and share spatial data All capabilities BUY ARCGIS User Types Role-based access to ArcGIS Esri Store ArcGIS products from Esri How to Buy Esri products, partner products & d",
+      "final_url": "https://doc.arcgis.com/en/survey123/capture/field-app/quickreferencegetanswers.htm",
+      "title": "Quick reference—ArcGIS Survey123 | Documentation",
+      "captured_at": "2026-09-01T20:00:59.425Z",
+      "bytes": 223662,
+      "sha256": "74f75d1002650aefbbbf66d67de2346733f4f37cf074d329c15b99c20a39db9c"
+    },
+    {
+      "filename": "benchmark-arcgis-urban.png",
+      "kind": "benchmark",
+      "product": "ArcGIS Urban",
+      "requested_url": "https://doc.arcgis.com/en/urban/12.1/help/help-intro.htm",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "PARTIALLY_OBSERVED",
+      "http_status": 200,
+      "first_heading": "User interface items",
+      "visible_text_sample": "Products ARCGIS ArcGIS Overview Esri's enterprise geospatial platform ArcGIS Online ArcGIS delivered as SaaS ArcGIS Pro Full-featured desktop application for ArcGIS ArcGIS Enterprise ArcGIS deployed as self-hosted software Developer Technology Build mapping & spatial analysis applications All products CAPABILITIES Mapping See & understand data spatially Analytics Bring location to analytics Data Management Integrate, edit, and share spatial data All capabilities BUY ARCGIS User Types Role-based access to ArcGIS Esri Store ArcGIS products from Esri How to Buy Esri products, partner products & d",
+      "final_url": "https://doc.arcgis.com/en/urban/12.1/help/help-intro.htm",
+      "title": "User interface items—ArcGIS Urban | Documentation",
+      "captured_at": "2026-09-01T20:01:08.126Z",
+      "bytes": 124469,
+      "sha256": "ee630d105fd702299a3664bb9416458f2e2d1d62cf1220999924b7108896b723"
+    },
+    {
+      "filename": "benchmark-maptionnaire.png",
+      "kind": "benchmark",
+      "product": "Maptionnaire",
+      "requested_url": "https://www.maptionnaire.com/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "TEXT_ONLY",
+      "http_status": 200,
+      "first_heading": "Turn community input into defensible insights.",
+      "visible_text_sample": "Platform Inspiration Pricing About us User Login EN BOOK A DEMO September 2 webinar: Clean Maps, Clear Community Input Discover the best examples of interactive plans + learn how to copy them REGISTER THE COMMUNITY ENGAGEMENT TOOL THAT CONNECTS SPATIAL DATA COLLECTION TO LIVE MAP ANALYSIS Turn community input into defensible insights. Draw a boundary on the map and your charts update instantly. Every finding traces back to the data, so you can defend it to clients, partners, and the public. REQUEST A DEMO SEE HOW IT WORKS 15+ years in operation 25M+ community members engaged 15,000+ planning p",
+      "final_url": "https://www.maptionnaire.com/",
+      "title": "Maptionnaire: Community Engagement Platform for Planners",
+      "captured_at": "2026-09-01T20:01:18.927Z",
+      "bytes": 112192,
+      "sha256": "aebeaadbbcf5140626f94cc2c150c3e04c65c90f574ed226297156fbbf153ac9"
+    },
+    {
+      "filename": "benchmark-my-city-report.png",
+      "kind": "benchmark",
+      "product": "My City Report",
+      "requested_url": "https://web.mycityreport.jp/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "OBSERVED",
+      "http_status": 200,
+      "first_heading": "あなたのまちの不具合を報告できます。",
+      "visible_text_sample": "ログイン 新規登録 あなたのまちの不具合を報告できます。 不具合を報告する方法を選んでください。 かんたん投稿 アカウント登録なしで手軽に投稿 進捗通知は受け取れません かんたん投稿は情報提供のみとなり、 自治体等からの回答は行われません ログインして投稿 投稿履歴閲覧や進捗通知が可能です 最近のレポートを見る→",
+      "final_url": "https://web.mycityreport.jp/",
+      "title": "mcr-web",
+      "captured_at": "2026-09-01T20:01:26.897Z",
+      "bytes": 113254,
+      "sha256": "635463ea00883c9baa98f815a50f8967062ef6c6b26a2860c3f2e462a761fc20"
+    },
+    {
+      "filename": "benchmark-storymaps.png",
+      "kind": "benchmark",
+      "product": "ArcGIS StoryMaps",
+      "requested_url": "https://doc.arcgis.com/en/arcgis-storymaps/author-and-share/add-guided-tours.htm",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "PARTIALLY_OBSERVED",
+      "http_status": 200,
+      "first_heading": "Add and configure map tours",
+      "visible_text_sample": "Skip to main content Documentation ArcGIS StoryMaps Get Started Create Share and Collaborate Learn Reference Add content Introduction to content Text and basic blocks Quizzes Data visualization Media Immersive Sidecars Map tours Design Create Add content Immersive Add and configure map tours The map tour block combines a map with media and descriptive text to present a set of related places to readers. Map tour blocks fill the display and create an immersive experience in stories. You can create the following types of map tour: Type Description Guided tour A numbered set of places. Guided tour",
+      "final_url": "https://doc.esri.com/en/arcgis-storymaps/latest/author-and-share/add-map-tours.html",
+      "title": "Add and configure map tours | ArcGIS StoryMaps Help",
+      "captured_at": "2026-09-01T20:01:33.196Z",
+      "bytes": 155970,
+      "sha256": "ae255b51c14a99766825789235fb8b607feab8d73c87f8a9f0af11b5537e7aea"
+    },
+    {
+      "filename": "benchmark-felt.png",
+      "kind": "benchmark",
+      "product": "Felt",
+      "requested_url": "https://felt.com/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "TEXT_ONLY",
+      "http_status": 200,
+      "first_heading": null,
+      "visible_text_sample": "37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15.9996'' W CLOUD-NATIVE GIS HAS ARRIVED 37° 48' 15.7068'' N, 122° 16' 15",
+      "final_url": "https://felt.com/",
+      "title": "Cloud-Native GIS Software & Online Mapping Platform | Felt",
+      "captured_at": "2026-09-01T20:02:12.298Z",
+      "bytes": 724019,
+      "sha256": "7ee13937d775dec7de0c425ed8f411220df771cd093db28c86f1f52044f84fcf"
+    },
+    {
+      "filename": "benchmark-carto.png",
+      "kind": "benchmark",
+      "product": "CARTO",
+      "requested_url": "https://carto.com/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "TEXT_ONLY",
+      "http_status": 200,
+      "first_heading": "The Agentic GIS Platform\n",
+      "visible_text_sample": "Platform Solutions Customers Resources Log in Request a demo Try for free The Agentic GIS Platform Beyond traditional GIS: scalable spatial analysis for all teams with your data never leaving Snowflake| Try for free Request a demo Watch full video Trusted by world's leading geospatial analysts Bring geospatial into your cloud ecosystem The only 100% cloud-native GIS platform: no silos, no ETL, no governance compromises. Start today: One Location Intelligence platform for all users Redefine how GIS serves your organization with an end-to-end platform built for the enterprise. From data analysts",
+      "final_url": "https://carto.com/",
+      "title": "CARTO - The Agentic GIS Platform",
+      "captured_at": "2026-09-01T20:02:24.642Z",
+      "bytes": 766139,
+      "sha256": "4d30b6d08ddb0fd72a6b8351d64a24df45131c2e813b81e78d01b278101d28d5"
+    },
+    {
+      "filename": "benchmark-mapbox.png",
+      "kind": "benchmark",
+      "product": "Mapbox",
+      "requested_url": "https://www.mapbox.com/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "access_status": "TEXT_ONLY",
+      "http_status": 200,
+      "first_heading": "Do more with maps & navigation",
+      "visible_text_sample": "SEPTEMBER 15–17 | VIRTUAL R e g i s t e r EN Log in Sign up Products Solutions Developers Company Resources Pricing Contact us Do more with maps & navigation Mapbox is the location platform of choice for developers, automakers, and innovators G e t s t a r t e d f o r f r e e C o n t a c t u s R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a s e → R e a d s h o w c a",
+      "final_url": "https://www.mapbox.com/",
+      "title": "Mapbox | Maps, Navigation, Search, and Data",
+      "captured_at": "2026-09-01T20:02:32.730Z",
+      "bytes": 244373,
+      "sha256": "15103359c632bc386ec80e3328146294da2feeeb4ddee0552fc80b890d0a6eee"
+    }
+  ]
+}
