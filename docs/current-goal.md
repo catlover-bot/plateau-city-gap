@@ -1,23 +1,23 @@
 # Current goal
 
-Active goal: `public-first-run-ux-v1`
+Active goal: `citygap-cartographic-visual-productization-v1`
 
-Current milestone: U4 Automated UX Validation Checkpoint complete
+Current milestone: C0 Evidence / Branch Lock
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
-- execution branch: `feat/public-first-run-ux-v1`
-- source branch: `feat/area-known-unknown-a5`
-- Public UX revised evidence source: `9c0764b4ddb7eb26b51d1f204cd8c68722933c66`
-- product checkpoint: `d829defc54dc9417d3045d2c2ecfb9f19558e08a`
-- evidence checkpoint: `f3ae74e`
-- browser-gate checkpoint: `9dce42a`
-- baseline / origin/main at branch creation: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
-- commits since baseline: atomic product, evidence, and documentation checkpoints
-- preservation: existing M3/028 and A0–A5 work retained; no reset, clean, rebase, squash, or force
-- merge: not performed
+- source branch: `feat/public-first-run-ux-v1`
+- source HEAD: `946534c32a965654ee429af01e213cf980b8bac7`
+- execution branch: `feat/cartographic-visual-productization-v1`
+- baseline / origin/main: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
+- preservation: existing M3/028, A0–A5, and U0–U4 work retained; no reset, clean, rebase, squash, or force push
+- cartographic goal: make the map itself explain the selected Area, quantified evidence, remaining Unknown, and PLATEAU verification target
+- scope: frontend cartography, presentation-only PLATEAU display derivatives, benchmark/visual evidence, and automated validation
+- excluded: backend, migration, external datasets, new analytical facts, P1, M4–M6, main merge, and Pages deployment
+- reference capture: 9 URLs recorded with screenshot or explicit unavailable status; third-party captures remain benchmark-only
+- merge / deployment: not performed
 
 Core value hypothesis:
 
@@ -61,6 +61,11 @@ Active Public execution rules:
 - Unknown cards in the Public first view contain only what is still unknown and why it should be checked. Dataset, version, source limitation, coverage, rule, model code, and object provenance are consolidated in one collapsed `出典・データの注意点` disclosure. Only a short, material misunderstanding warning may appear inline.
 - The PLATEAU object, source/version, coverage, and WebGL checks are necessary but not sufficient for 3D. `3Dで周辺を見る` is rendered only when 3D adds understandable spatial context beyond the 2D map. A technically eligible single road point or single-building current-use check remains 2D when 3D adds no decision information.
 - A zero-button 3D result is an acceptable UX outcome. U4 records both the technical gate and the UX reason for every displayed or withheld case.
+- The Area spotlight must preserve roads, railway lines, place names, rivers, and other geographic orientation. Outside dimming is tuned from browser evidence rather than fixed at 16%; it may not hide surrounding context. The goal is to make the Area primary, not to conceal its surroundings.
+- The five Summary groups remain evidence summaries. A small contextual `地図で見る` action may change the active story and use `aria-pressed`, but the rows must not look or behave like top-level tabs or navigation.
+- Visual wow must come from spatial meaning: radius changes reveal the Area, Summary actions reveal real thematic geometry, Unknown selection isolates related real objects, and the target action moves the camera to the verified target. Decorative gradients, glow, excessive shadow, looping animation, and extra color are not substitutes for spatial meaning.
+- At most one thematic story layer is active. Invariant Area/origin context and the selected target may remain visible.
+- PLATEAU display geometry may be generated only from the same existing CityGML source/version, after checking existing public spatial packs first. It is a deterministic display derivative with source hash, generator version, provenance, and artifact hash; it may not add population allocation, inferred use, walking semantics, hazards, scores, or policy meaning.
 
 Maizuru borehole evidence:
 

@@ -1,0 +1,174 @@
+{
+  "schema_version": "citygap.cartographic-reference-evidence@1",
+  "captured_at": "2026-09-01T10:48:24.038Z",
+  "repository_head": "946534c32a965654ee429af01e213cf980b8bac7",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "third_party_assets_for_benchmark_only": true,
+  "references": [
+    {
+      "id": "pit-route-finder",
+      "name": "PIT Environmental Cost Route Finder",
+      "url": "https://www.pit-creation.com/environment-cost-route-finder/",
+      "requested_url": "https://www.pit-creation.com/environment-cost-route-finder/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "CAPTURED",
+      "http_status": 200,
+      "final_url": "https://www.pit-creation.com/environment-cost-route-finder/",
+      "title": "環境コスト経路マップビューア",
+      "body_text_length": 1124,
+      "screenshot": "pit-route-finder.png",
+      "screenshot_sha256": "7c5000228e95d1db12d99850796f902f07cf76d5aba6dc09af6805bf66dba2a0",
+      "error": null
+    },
+    {
+      "id": "municipal-wiki",
+      "name": "自治体別課題 Wiki",
+      "url": "https://github.com/azarashin/PLATEAUHackathon2006/wiki/%E8%87%AA%E6%B2%BB%E4%BD%93%E5%88%A5%E8%AA%B2%E9%A1%8C",
+      "requested_url": "https://github.com/azarashin/PLATEAUHackathon2006/wiki/%E8%87%AA%E6%B2%BB%E4%BD%93%E5%88%A5%E8%AA%B2%E9%A1%8C",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "NON_VISUAL_REFERENCE",
+      "http_status": 200,
+      "final_url": "https://github.com/azarashin/PLATEAUHackathon2006/wiki/%E8%87%AA%E6%B2%BB%E4%BD%93%E5%88%A5%E8%AA%B2%E9%A1%8C",
+      "title": "自治体別課題 · azarashin/PLATEAUHackathon2006 Wiki · GitHub",
+      "body_text_length": 5774,
+      "screenshot": "municipal-wiki.png",
+      "screenshot_sha256": "7e741a432b3419e657a203deb08d117bce78ed978ff8eb8d4e4775f2446fec7e",
+      "error": null
+    },
+    {
+      "id": "urbanor",
+      "name": "Urbanor PDF",
+      "url": "https://cdn.discordapp.com/attachments/1540472920487366799/1540624001292959755/PLATEAU_LTUrbanor.pdf",
+      "requested_url": "https://cdn.discordapp.com/attachments/1540472920487366799/1540624001292959755/PLATEAU_LTUrbanor.pdf",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "ACCESS_UNAVAILABLE",
+      "http_status": 404,
+      "final_url": "https://cdn.discordapp.com/attachments/1540472920487366799/1540624001292959755/PLATEAU_LTUrbanor.pdf",
+      "title": "",
+      "body_text_length": 36,
+      "screenshot": null,
+      "screenshot_sha256": null,
+      "error": null
+    },
+    {
+      "id": "platone",
+      "name": "PLATONE",
+      "url": "https://speakerdeck.com/toshiseisaku/no-dot-9-platone-puraton",
+      "requested_url": "https://speakerdeck.com/toshiseisaku/no-dot-9-platone-puraton",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "PRESENTATION_CAPTURED",
+      "http_status": 200,
+      "final_url": "https://speakerdeck.com/toshiseisaku/no-dot-9-platone-puraton",
+      "title": "No.9_PLATONE プラトーン - Speaker Deck",
+      "body_text_length": 6516,
+      "screenshot": "platone.png",
+      "screenshot_sha256": "59bffa54b2c58ccd5a823da2a74c5cbc0a0cc979ad4c6fe83df54bfedf7f4e03",
+      "error": null
+    },
+    {
+      "id": "tide-viewer",
+      "name": "Tide Viewer",
+      "url": "https://xr.kuwa-ya.co.jp/tide-viewer/",
+      "requested_url": "https://xr.kuwa-ya.co.jp/tide-viewer/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "SHELL_CAPTURED_RENDER_UNCONFIRMED",
+      "http_status": 200,
+      "final_url": "https://xr.kuwa-ya.co.jp/tide-viewer/",
+      "title": "潮位ビューワ（簡易）",
+      "body_text_length": 570,
+      "screenshot": "tide-viewer.png",
+      "screenshot_sha256": "c7a721673f7b0462b0d99fe0585b251d284d0f24eb0999459b511252304ada43",
+      "error": null
+    },
+    {
+      "id": "onocoro",
+      "name": "OnoCoro repository",
+      "url": "https://github.com/kuippa/OnoCoro/",
+      "requested_url": "https://github.com/kuippa/OnoCoro/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "REPOSITORY_DOCUMENTATION_CAPTURED_APP_UNCONFIRMED",
+      "http_status": 200,
+      "final_url": "https://github.com/kuippa/OnoCoro/",
+      "title": "GitHub - kuippa/OnoCoro: まちづくりタワーディフェンスゲーム、Unity, · GitHub",
+      "body_text_length": 3699,
+      "screenshot": "onocoro.png",
+      "screenshot_sha256": "8563d019ba262d47797685ae726dbf577e8d3b649a92f64453da30305fca8fa9",
+      "error": null
+    },
+    {
+      "id": "iwagaki-repository",
+      "name": "iwagaki repository",
+      "url": "https://github.com/masatomoty/iwagaki",
+      "requested_url": "https://github.com/masatomoty/iwagaki",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "REPOSITORY_DOCUMENTATION_CAPTURED",
+      "http_status": 200,
+      "final_url": "https://github.com/masatomoty/iwagaki",
+      "title": "GitHub - masatomoty/iwagaki · GitHub",
+      "body_text_length": 10679,
+      "screenshot": "iwagaki-repository.png",
+      "screenshot_sha256": "a27ed7d215c008d557d6faa097f8f0aa872c3b688b6aed055bd17656dd08dccd",
+      "error": null
+    },
+    {
+      "id": "iwagaki-viewer",
+      "name": "iwagaki viewer",
+      "url": "https://iwagaki-viewer.tonbo.workers.dev/",
+      "requested_url": "https://iwagaki-viewer.tonbo.workers.dev/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "CAPTURED",
+      "http_status": 200,
+      "final_url": "https://iwagaki-viewer.tonbo.workers.dev/",
+      "title": "iwagaki — 舞鶴・吉原 高潮浸水ビューア",
+      "body_text_length": 849,
+      "screenshot": "iwagaki-viewer.png",
+      "screenshot_sha256": "89360677f2f5e27b5451d1fb99b3fee28869a04fa8e72e7e3f55c5e9ff636130",
+      "error": null
+    },
+    {
+      "id": "plateau-transit",
+      "name": "PLATEAU Transit POC",
+      "url": "https://plateau-transit-poc.vercel.app/",
+      "requested_url": "https://plateau-transit-poc.vercel.app/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "ACCESS_UNAVAILABLE_FOR_VISUAL_CAPTURE",
+      "http_status": 200,
+      "final_url": "https://plateau-transit-poc.vercel.app/",
+      "title": "PLATEAU 交通空白地 PoC",
+      "body_text_length": 8,
+      "screenshot": null,
+      "screenshot_sha256": null,
+      "error": null
+    }
+  ]
+}
