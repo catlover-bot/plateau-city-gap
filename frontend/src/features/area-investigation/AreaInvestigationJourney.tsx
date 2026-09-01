@@ -73,14 +73,17 @@ function displayMetric(metric: AreaMetric) {
   return <strong>確認済み</strong>;
 }
 
-function MetricCard({ metric, showDetails = true }: { metric: AreaMetric; showDetails?: boolean }) {
+function MetricCard({ metric, showDetails = true, publicMode = false }: { metric: AreaMetric; showDetails?: boolean; publicMode?: boolean }) {
   return (
     <article className={`area-metric status-${metric.status}`}>
       <header>
         <h3>{metric.label}</h3>
-        <span>{metric.status === "known" ? "確認できた" : metric.status === "partial" ? "一部確認" : "未取得"}</span>
+        {!publicMode && <span>{metric.status === "known" ? "確認できた" : metric.status === "partial" ? "一部確認" : "未取得"}</span>}
       </header>
       {displayMetric(metric)}
+      {publicMode && metric.status !== "known" && (
+        <small className="area-metric-state">{metric.status === "partial" ? "一部のデータ" : "データなし"}</small>
+      )}
       {showDetails && (
         <details>
           <summary>出典と限界</summary>
@@ -122,9 +125,9 @@ export function AreaSummaryPanel({
   const visibleUnknowns = summary.unknowns.slice(0, publicMode ? 3 : 4);
   return (
     <div className="area-summary-flow">
-      <section aria-labelledby="area-known-title">
+      <section aria-labelledby={publicMode ? undefined : "area-known-title"} aria-label={publicMode ? "人口や建物などの集計" : undefined}>
         {!publicMode && <p className="area-kicker">QUANTIFIED EVIDENCE</p>}
-        <h2 id="area-known-title">{publicMode ? "この範囲で分かること" : "この範囲で、データから確認できたこと"}</h2>
+        {!publicMode && <h2 id="area-known-title">この範囲で、データから確認できたこと</h2>}
         <div className="area-metric-groups">
           {PRIMARY_METRIC_GROUPS.map((group) => (
             <section
@@ -133,7 +136,7 @@ export function AreaSummaryPanel({
             >
               <h3>{group.label}</h3>
               <div className="area-metric-grid">
-                {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
+                {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} publicMode={publicMode} />)}
               </div>
               {publicMode && onStorySelect && (
                 <button
@@ -152,7 +155,7 @@ export function AreaSummaryPanel({
           <details className="area-secondary-metrics">
             <summary>{publicMode ? "その他のデータ" : "医療・介護・公共施設などの詳細データ"}</summary>
             <div className="area-metric-grid">
-              {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
+              {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} publicMode={publicMode} />)}
             </div>
           </details>
         )}
@@ -220,11 +223,11 @@ export function AreaSummaryPanel({
 export function TargetTasks({ summary, publicMode = false }: { summary: InvestigationAreaSummary; publicMode?: boolean }) {
   return (
     <div className="area-task-flow">
-      <header>
-        {!publicMode && <p className="area-kicker">PLATEAU TARGET → VERIFICATION</p>}
-        <h2>{publicMode ? summary.unknowns[0]?.target.label : `${summary.label}の未確認タスク`}</h2>
-        {!publicMode && <p>「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。</p>}
-      </header>
+      {!publicMode && <header>
+        <p className="area-kicker">PLATEAU TARGET → VERIFICATION</p>
+        <h2>{summary.label}の未確認タスク</h2>
+        <p>「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。</p>
+      </header>}
       <div className="area-task-list">
         {summary.unknowns.map((unknown) => (
           <article key={unknown.id}>

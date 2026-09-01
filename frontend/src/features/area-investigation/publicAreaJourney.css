@@ -74,7 +74,7 @@
   max-width: min(310px, calc(100% - 96px));
   padding: 9px 11px;
   border: 1px solid rgb(77 94 88 / 42%);
-  border-radius: 6px;
+  border-radius: 4px;
   background: rgb(253 252 247 / 94%);
   color: #203d35;
   gap: 3px;
@@ -211,57 +211,22 @@
 .public-progress {
   display: flex;
   align-items: center;
-  padding: 12px 18px;
+  min-height: 46px;
+  padding: 0 22px;
   border-bottom: 1px solid #d9d7cf;
-  gap: 12px;
+  color: #294d43;
+  gap: 9px;
 }
 
 .public-progress > span {
-  color: #2e6d5d;
+  color: #60706a;
   font-size: 11px;
-  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
-.public-progress ol {
-  display: grid;
-  flex: 1;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.public-progress li {
-  display: grid;
-  justify-items: center;
-  color: #727a76;
-  gap: 4px;
-}
-
-.public-progress li span {
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border: 1px solid #aeb7b2;
-  border-radius: 50%;
-  font-size: 10px;
-}
-
-.public-progress li small {
-  font-size: 8px;
-}
-
-.public-progress li.complete span,
-.public-progress li[aria-current="step"] span {
-  border-color: #286453;
-  background: #286453;
-  color: white;
-}
-
-.public-progress li[aria-current="step"] {
-  color: #214d41;
-  font-weight: 800;
+.public-progress > strong {
+  font-size: 12px;
+  font-weight: 750;
 }
 
 .public-area-content {
@@ -278,17 +243,12 @@
   line-height: 1.18;
 }
 
-.public-area-content h2 {
-  color: #254d43;
+.public-area-content h1:focus {
+  outline: none !important;
 }
 
-.public-kicker,
-.public-intro > p:first-child {
-  margin: 0;
-  color: #2e765f;
-  font-size: 10px;
-  font-weight: 850;
-  letter-spacing: 0.08em;
+.public-area-content h2 {
+  color: #254d43;
 }
 
 .public-intro {
@@ -303,22 +263,14 @@
   line-height: 1.85;
 }
 
-.public-intro > small {
-  margin-top: 15px;
-  color: #66736f;
-  font-size: 10px;
-  line-height: 1.6;
-}
-
 .public-primary,
 .public-secondary,
-.public-tertiary,
 .public-back,
 .public-radius-grid button,
 .public-custom-radius button {
   min-height: 44px;
   border: 1px solid #24564a;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   font: inherit;
   font-weight: 750;
@@ -339,30 +291,26 @@
   color: #204d42;
 }
 
-.public-tertiary {
-  padding: 0 6px;
-  border-color: transparent;
-  background: transparent;
-  color: #52665f;
-  font-size: 10px;
-  text-decoration: underline;
-}
-
 .public-origin-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-top: 24px;
-  gap: 12px;
+  gap: 0;
 }
 
 .public-origin-grid > div {
   display: grid;
   align-content: start;
-  padding: 16px;
-  border: 1px solid #d2d6d0;
-  border-radius: 12px;
-  background: white;
-  gap: 9px;
+  padding: 0 20px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: 10px;
+}
+
+.public-origin-grid > div + div {
+  padding: 0 0 0 20px;
+  border-left: 1px solid #d6d8d2;
 }
 
 .public-origin-grid h2 {
@@ -383,7 +331,7 @@
   min-height: 44px;
   padding: 0 10px;
   border: 1px solid #9daba5;
-  border-radius: 7px;
+  border-radius: 4px;
   background: white;
   font: inherit;
 }
@@ -393,21 +341,21 @@
 }
 
 .public-boundary-note,
-.public-methodology,
-.public-secondary-data {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border: 1px solid #d0d7d2;
-  border-radius: 9px;
-  background: #f3f6f2;
+.public-methodology {
+  margin-top: 18px;
+  padding: 12px 0;
+  border: 0;
+  border-top: 1px solid #d0d4cf;
+  border-bottom: 1px solid #d0d4cf;
+  border-radius: 0;
+  background: transparent;
   color: #52635d;
   font-size: 10px;
   line-height: 1.65;
 }
 
 .public-boundary-note summary,
-.public-methodology summary,
-.public-secondary-data summary {
+.public-methodology summary {
   color: #2f5e51;
   cursor: pointer;
   font-weight: 750;
@@ -449,10 +397,11 @@
 
 .public-custom-radius {
   margin-top: 14px;
-  padding: 14px;
-  border: 1px solid #cad2cd;
-  border-radius: 9px;
-  background: white;
+  padding: 14px 0;
+  border: 0;
+  border-bottom: 1px solid #d4d6d1;
+  border-radius: 0;
+  background: transparent;
 }
 
 .public-custom-radius label {
@@ -474,7 +423,7 @@
   min-height: 42px;
   padding: 0 9px;
   border: 1px solid #99a7a1;
-  border-radius: 7px;
+  border-radius: 4px;
   font: inherit;
 }
 
@@ -484,18 +433,14 @@
 }
 
 .public-area-label {
-  display: inline-flex;
-  margin: 0 0 4px;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: #e6efe9;
-  color: #31574c;
-  font-size: 11px;
+  margin: 0 0 6px;
+  color: #53655f;
+  font-size: 12px;
 }
 
 .public-area .area-summary-flow {
-  margin-top: 20px;
-  gap: 22px;
+  margin-top: 24px;
+  gap: 32px;
 }
 
 .public-area .area-metric-groups {
@@ -506,7 +451,7 @@
 
 .public-area .area-metric-group {
   min-width: 0;
-  padding: 12px 2px 13px 10px;
+  padding: 15px 2px 16px 12px;
   border-bottom: 1px solid #d8d6cf;
   border-left: 3px solid transparent;
 }
@@ -539,6 +484,17 @@
   border-top: 0;
 }
 
+.public-area .area-metric header {
+  margin-bottom: 5px;
+}
+
+.public-area .area-metric-state {
+  display: block;
+  margin-top: 3px;
+  color: #786a48;
+  font-size: 10px;
+}
+
 .public-area .area-story-action {
   min-height: 32px;
   margin-top: 7px;
@@ -558,18 +514,21 @@
 }
 
 .public-area .area-secondary-metrics {
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid #d8d6cf;
-  border-radius: 8px;
+  margin-top: 12px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid #d8d6cf;
+  border-radius: 0;
 }
 
 .public-area .area-public-source-notes {
-  margin-top: 12px;
-  padding: 11px 12px;
-  border: 1px solid #d8d6cf;
-  border-radius: 8px;
-  background: #f7f6f1;
+  margin-top: 2px;
+  padding: 13px 0;
+  border: 0;
+  border-top: 1px solid #d8d6cf;
+  border-bottom: 1px solid #d8d6cf;
+  border-radius: 0;
+  background: transparent;
   color: #4a5752;
   font-size: 0.75rem;
   line-height: 1.5;
@@ -608,22 +567,37 @@
 
 .public-area .area-unknown-warning {
   display: block;
-  color: #ffe2a8;
+  color: #766642;
   font-weight: 700;
 }
 
 .public-area .area-unknown-section {
-  padding: 18px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #17201d;
 }
 
 .public-area .area-unknown-list {
   grid-template-columns: 1fr;
+  gap: 0;
+  border-top: 1px solid #d8d6cf;
 }
 
 .public-area .area-unknown-list article.selected {
-  border-color: #b7791f;
-  background: rgb(183 121 31 / 16%);
-  border-left-width: 3px;
+  border-color: #d8d6cf;
+  border-left-color: #2d7463;
+  background: #eef3f0;
+}
+
+.public-area .area-unknown-list article {
+  padding: 14px 11px;
+  border: 0;
+  border-bottom: 1px solid #d8d6cf;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #17201d;
 }
 
 .public-area .area-unknown-list button {
@@ -640,13 +614,47 @@
 }
 
 .public-area .area-unknown-list button strong {
-  color: white;
+  color: #173f35;
   font-size: 1rem;
   line-height: 1.35;
 }
 
+.public-area .area-unknown-list p {
+  color: #485a54;
+}
+
 .public-area .area-task-list > article {
   grid-template-columns: 1fr;
+  padding: 0;
+  border: 0;
+  border-top: 1px solid #d4d6d1;
+  border-radius: 0;
+  background: transparent;
+}
+
+.public-area .area-task-list > article > div:last-child {
+  padding: 18px 0 0;
+}
+
+.public-area .area-task-target {
+  padding: 15px 0;
+  border-bottom: 1px solid #d4d6d1;
+  border-radius: 0;
+  background: transparent;
+}
+
+.public-area .area-unverified {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #65736d;
+  font-size: 11px;
+}
+
+.public-area .area-task-list h4 {
+  margin: 18px 0 8px;
+  color: #31564d;
+  font-size: 13px;
 }
 
 .public-area .area-target-source {
@@ -663,6 +671,12 @@
 }
 
 .public-area .area-privacy-boundary {
+  margin-top: 24px;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid #d4d6d1;
+  background: transparent;
+  color: #68746f;
   font-size: 10px;
 }
 
@@ -671,10 +685,11 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 14px;
-  padding: 12px;
-  border: 1px solid #c9d1cc;
-  border-radius: 9px;
-  background: #f1f5f2;
+  padding: 12px 0;
+  border: 0;
+  border-top: 1px solid #c9d1cc;
+  border-radius: 0;
+  background: transparent;
   gap: 12px;
 }
 
@@ -779,12 +794,8 @@
   }
 
   .public-progress {
-    padding: 8px 10px;
-  }
-
-  .public-progress > span,
-  .public-progress li small {
-    display: none;
+    min-height: 40px;
+    padding: 0 15px;
   }
 
   .public-area-content {
@@ -797,6 +808,16 @@
 
   .public-origin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .public-origin-grid > div {
+    padding: 0 0 18px;
+  }
+
+  .public-origin-grid > div + div {
+    padding: 18px 0 0;
+    border-top: 1px solid #d6d8d2;
+    border-left: 0;
   }
 
   .public-radius-grid {

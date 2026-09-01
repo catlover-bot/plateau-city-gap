@@ -344,15 +344,9 @@ export function PublicAreaJourney({
 
         <article className="public-area-panel">
           {step !== "intro" && (
-            <div className="public-progress">
+            <div className="public-progress" aria-label="現在の手順">
               <span>{progressIndex + 1} / 4</span>
-              <ol aria-label="場所を選んで現地確認へ進むまでの進み具合">
-                {STEP_LABELS.map((item, index) => (
-                  <li key={item.id} aria-current={item.id === step ? "step" : undefined} className={index < progressIndex ? "complete" : ""}>
-                    <span>{index + 1}</span><small>{item.label}</small>
-                  </li>
-                ))}
-              </ol>
+              <strong>{STEP_LABELS[progressIndex]?.label}</strong>
             </div>
           )}
 
