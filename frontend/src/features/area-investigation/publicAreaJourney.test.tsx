@@ -106,7 +106,7 @@ describe("Public first-run presentation contract", () => {
     }
   });
 
-  it("renders the five summary groups and only three public unknowns", () => {
+  it("keeps public Unknown cards simple and moves rigor into one disclosure", () => {
     const html = renderToStaticMarkup(<AreaSummaryPanel summary={summary} publicMode />);
     for (const label of ["人口・年齢", "建物の使われ方", "事業所", "都市計画", "交通"]) {
       expect(html).toContain(label);
@@ -115,6 +115,19 @@ describe("Public first-run presentation contract", () => {
     expect(html).toContain("未確認事項3");
     expect(html).not.toContain("未確認事項4");
     expect(html).not.toContain("KNOWN / UNKNOWN");
+
+    const unknownFirstView = html.split('<section class="area-unknown-section"')[1]?.split("</section>")[0] ?? "";
+    expect(unknownFirstView).toContain("判断に影響するため");
+    expect(unknownFirstView).not.toContain("公開データでは現況を確認できません");
+    expect(unknownFirstView).not.toContain("official-test");
+    expect(unknownFirstView).not.toContain("bldg-real-id");
+    expect(unknownFirstView).not.toContain("未確認</span>");
+
+    expect((html.match(/<summary>出典・データの注意点<\/summary>/g) ?? [])).toHaveLength(1);
+    expect(html).not.toContain("<summary>出典と限界</summary>");
+    expect(html).toContain("公開データでは現況を確認できません");
+    expect(html).toContain("official-test");
+    expect(html).toContain("bldg-real-id");
   });
 
   it("keeps target provenance behind disclosure and excludes fake field evidence", () => {
@@ -126,14 +139,34 @@ describe("Public first-run presentation contract", () => {
     expect(html).not.toMatch(/<(input|textarea|select)\b/);
   });
 
-  it("allows contextual 3D only for resolved, version-compatible PLATEAU objects", () => {
-    expect(contextual3dEligibility(summary, target, 2025, true).eligible).toBe(true);
-    expect(contextual3dEligibility(summary, { ...target, scope: "mesh", object_type: "mesh" }, 2025, true).eligible).toBe(false);
-    expect(contextual3dEligibility(summary, { ...target, scope: "facility", object_type: "facility" }, 2025, true).eligible).toBe(false);
-    expect(contextual3dEligibility(summary, { ...target, source_object_id: "unresolved-road" }, 2025, true).eligible).toBe(false);
-    expect(contextual3dEligibility({ ...summary, content_sha256: null }, target, 2025, true).eligible).toBe(false);
-    expect(contextual3dEligibility(summary, target, undefined, true).eligible).toBe(false);
-    expect(contextual3dEligibility(summary, target, 2025, false).eligible).toBe(false);
+  it("requires UX value in addition to technical 3D eligibility", () => {
+    const roadDecision = contextual3dEligibility(
+      summary,
+      { ...target, object_type: "road", source_object_id: "tran-real-id" },
+      2025,
+      true,
+    );
+    expect(roadDecision).toMatchObject({
+      eligible: false,
+      technicalEligible: true,
+      uxValuable: false,
+      reasonCode: "single_road_point_2d_sufficient",
+    });
+
+    const buildingDecision = contextual3dEligibility(summary, target, 2025, true);
+    expect(buildingDecision).toMatchObject({
+      eligible: false,
+      technicalEligible: true,
+      uxValuable: false,
+      reasonCode: "single_building_current_use_2d_sufficient",
+    });
+
+    expect(contextual3dEligibility(summary, { ...target, scope: "mesh", object_type: "mesh" }, 2025, true).technicalEligible).toBe(false);
+    expect(contextual3dEligibility(summary, { ...target, scope: "facility", object_type: "facility" }, 2025, true).technicalEligible).toBe(false);
+    expect(contextual3dEligibility(summary, { ...target, source_object_id: "unresolved-road" }, 2025, true).technicalEligible).toBe(false);
+    expect(contextual3dEligibility({ ...summary, content_sha256: null }, target, 2025, true).technicalEligible).toBe(false);
+    expect(contextual3dEligibility(summary, target, undefined, true).technicalEligible).toBe(false);
+    expect(contextual3dEligibility(summary, target, 2025, false).technicalEligible).toBe(false);
   });
 
   it("keeps a single secondary header action", () => {

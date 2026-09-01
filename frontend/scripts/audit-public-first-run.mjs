@@ -222,6 +222,42 @@ async function ensurePublicBoundaries(page) {
   return { prohibited_copy_found: foundProhibited, evidence_inputs: evidenceInputs, internal_id_initially_visible: internalIdInitiallyVisible };
 }
 
+async function unknownFirstViewAudit(page) {
+  const cards = await page.locator(".area-unknown-list article").evaluateAll((nodes) =>
+    nodes.map((node) => ({
+      title: node.querySelector("strong, h3")?.textContent?.trim() ?? "",
+      importance: node.querySelector("p")?.textContent?.trim() ?? "",
+      source_detail_element_count: node.querySelectorAll("small, code, details").length,
+      repeated_status_count: [...node.querySelectorAll("span")].filter((item) => item.textContent?.trim() === "未確認").length,
+    })),
+  );
+  const sourceDisclosure = page.locator(".area-public-source-notes");
+  const sourceDisclosureCount = await sourceDisclosure.count();
+  const sourceDisclosureOpen = sourceDisclosureCount === 1
+    ? await sourceDisclosure.evaluate((node) => node instanceof HTMLDetailsElement && node.open)
+    : null;
+  const repeatedMetricDisclosureCount = await page.getByText("出典と限界", { exact: true }).count();
+  const invalidCards = cards.filter((card) =>
+    !card.title || !card.importance || card.source_detail_element_count !== 0 || card.repeated_status_count !== 0
+  );
+  if (cards.length === 0 || cards.length > 3 || invalidCards.length || sourceDisclosureCount !== 1 || sourceDisclosureOpen || repeatedMetricDisclosureCount) {
+    throw new Error(JSON.stringify({
+      cards,
+      invalidCards,
+      sourceDisclosureCount,
+      sourceDisclosureOpen,
+      repeatedMetricDisclosureCount,
+    }));
+  }
+  return {
+    card_count: cards.length,
+    cards,
+    source_disclosure_count: sourceDisclosureCount,
+    source_disclosure_open_initially: sourceDisclosureOpen,
+    repeated_metric_source_disclosure_count: repeatedMetricDisclosureCount,
+  };
+}
+
 await mkdir(outputDirectory, { recursive: true });
 const browser = await chromium.launch({
   executablePath,
@@ -264,6 +300,7 @@ try {
   await waitForStep(page, "result");
   layouts.desktop_result = await stateMetrics(page);
   accessibility.desktop_result = await accessibilityAudit(page);
+  const unknownFirstView = await unknownFirstViewAudit(page);
   await page.locator("#area-unknown-title").scrollIntoViewIfNeeded();
   await capture(page, "03-known-unknown-desktop.png", "known-unknown", { width: 1440, height: 900 });
   await click(page, "確認場所を見る");
@@ -274,15 +311,24 @@ try {
   const requirementCount = await page.locator(".area-task-list li").count();
   await page.waitForTimeout(1200);
   await capture(page, "04-target-task-desktop.png", "target-task", { width: 1440, height: 900 });
+  const contextual3dDecision = await page.locator(".public-3d-decision").evaluate((node) => ({
+    eligible: node.getAttribute("data-contextual-3d-eligible") === "true",
+    technical_eligible: node.getAttribute("data-contextual-3d-technical-eligible") === "true",
+    ux_valuable: node.getAttribute("data-contextual-3d-ux-valuable") === "true",
+    reason_code: node.getAttribute("data-contextual-3d-reason-code"),
+    reason: node.getAttribute("data-contextual-3d-reason"),
+  }));
   const contextual3d = {
-    eligible: await page.locator('[data-contextual-3d-eligible="true"]').count() === 1,
-    button_visible: await page.getByRole("button", { name: "3Dで場所を見る", exact: true }).isVisible().catch(() => false),
+    ...contextual3dDecision,
+    button_visible: await page.getByRole("button", { name: "3Dで周辺を見る", exact: true }).isVisible().catch(() => false),
   };
   if (contextual3d.button_visible) {
-    await click(page, "3Dで場所を見る");
+    await click(page, "3Dで周辺を見る");
     await page.locator('.public-area[data-map-mode="plateau3d"]').waitFor();
     await page.waitForTimeout(1200);
     await capture(page, "05-contextual-3d-enabled.png", "contextual-3d-enabled", { width: 1440, height: 900 });
+  } else {
+    await capture(page, "05-contextual-3d-withheld.png", "contextual-3d-withheld", { width: 1440, height: 900 });
   }
   await desktop.close();
 
@@ -334,8 +380,17 @@ try {
   await waitForStep(fallbackPage, "result");
   await click(fallbackPage, "確認場所を見る");
   await waitForStep(fallbackPage, "target");
-  const fallback3dDisabled = await fallbackPage.locator('[data-contextual-3d-eligible="false"]').count() === 1
-    && await fallbackPage.getByRole("button", { name: "3Dで場所を見る", exact: true }).count() === 0;
+  const fallback3d = await fallbackPage.locator(".public-3d-decision").evaluate((node) => ({
+    eligible: node.getAttribute("data-contextual-3d-eligible") === "true",
+    technical_eligible: node.getAttribute("data-contextual-3d-technical-eligible") === "true",
+    ux_valuable: node.getAttribute("data-contextual-3d-ux-valuable") === "true",
+    reason_code: node.getAttribute("data-contextual-3d-reason-code"),
+    reason: node.getAttribute("data-contextual-3d-reason"),
+  }));
+  const fallback3dDisabled = !fallback3d.eligible
+    && !fallback3d.technical_eligible
+    && !fallback3d.ux_valuable
+    && await fallbackPage.getByRole("button", { name: "3Dで周辺を見る", exact: true }).count() === 0;
   await capture(fallbackPage, "10-mesh-fallback-3d-disabled.png", "mesh-fallback-3d-disabled", { width: 1440, height: 900 });
   await fallbackContext.close();
 
@@ -385,8 +440,19 @@ try {
       critical_or_serious_count: criticalAccessibility.length,
     },
     privacy_and_copy: boundaries,
+    unknown_first_view: unknownFirstView,
     contextual_3d: {
-      ...contextual3d,
+      displayed_cases: contextual3d.button_visible
+        ? [{ case_id: "resolved_primary_target", ...contextual3d }]
+        : [],
+      not_displayed_cases: [
+        ...(contextual3d.button_visible
+          ? []
+          : [{ case_id: "resolved_single_road_point", ...contextual3d }]),
+        { case_id: "mesh_fallback", ...fallback3d },
+      ],
+      display_count: contextual3d.button_visible ? 1 : 0,
+      zero_display_is_not_failure: true,
       mesh_fallback_disabled: fallback3dDisabled,
     },
     routes: {

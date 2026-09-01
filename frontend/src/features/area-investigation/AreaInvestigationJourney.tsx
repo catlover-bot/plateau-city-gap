@@ -72,7 +72,7 @@ function displayMetric(metric: AreaMetric) {
   return <strong>確認済み</strong>;
 }
 
-function MetricCard({ metric }: { metric: AreaMetric }) {
+function MetricCard({ metric, showDetails = true }: { metric: AreaMetric; showDetails?: boolean }) {
   return (
     <article className={`area-metric status-${metric.status}`}>
       <header>
@@ -80,12 +80,14 @@ function MetricCard({ metric }: { metric: AreaMetric }) {
         <span>{metric.status === "known" ? "確認できた" : metric.status === "partial" ? "一部確認" : "未取得"}</span>
       </header>
       {displayMetric(metric)}
-      <details>
-        <summary>出典と限界</summary>
-        <p>{metric.source.dataset} · {metric.source.source_date}</p>
-        <p>{metric.limitation}</p>
-        {metric.coverage_ratio !== null && <p>coverage {(metric.coverage_ratio * 100).toFixed(1)}%</p>}
-      </details>
+      {showDetails && (
+        <details>
+          <summary>出典と限界</summary>
+          <p>{metric.source.dataset} · {metric.source.source_date}</p>
+          <p>{metric.limitation}</p>
+          {metric.coverage_ratio !== null && <p>coverage {(metric.coverage_ratio * 100).toFixed(1)}%</p>}
+        </details>
+      )}
     </article>
   );
 }
@@ -112,6 +114,7 @@ export function AreaSummaryPanel({
   onUnknownSelect,
 }: AreaSummaryPanelProps) {
   const secondaryMetrics = summary.metrics.filter((metric) => metric.group === "secondary");
+  const visibleUnknowns = summary.unknowns.slice(0, publicMode ? 3 : 4);
   return (
     <div className="area-summary-flow">
       <section aria-labelledby="area-known-title">
@@ -122,7 +125,7 @@ export function AreaSummaryPanel({
             <section className="area-metric-group" key={group.id}>
               <h3>{group.label}</h3>
               <div className="area-metric-grid">
-                {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} />)}
+                {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
               </div>
             </section>
           ))}
@@ -131,7 +134,7 @@ export function AreaSummaryPanel({
           <details className="area-secondary-metrics">
             <summary>医療・介護・公共施設などの詳細データ</summary>
             <div className="area-metric-grid">
-              {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} />)}
+              {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
             </div>
           </details>
         )}
@@ -140,13 +143,16 @@ export function AreaSummaryPanel({
         {!publicMode && <p className="area-kicker">KNOWN / UNKNOWN</p>}
         <h2 id="area-unknown-title">ただし、まだデータだけでは分からないことがあります</h2>
         <div className="area-unknown-list">
-          {summary.unknowns.slice(0, publicMode ? 3 : 4).map((unknown) => (
+          {visibleUnknowns.map((unknown) => (
             <article key={unknown.id} className={publicMode && selectedUnknownId === unknown.id ? "selected" : ""}>
-              {publicMode && onUnknownSelect ? (
-                <button type="button" aria-pressed={selectedUnknownId === unknown.id} onClick={() => onUnknownSelect(unknown.id)}>
-                  <span>未確認</span>
-                  <strong>{unknown.title}</strong>
-                </button>
+              {publicMode ? (
+                onUnknownSelect ? (
+                  <button type="button" aria-pressed={selectedUnknownId === unknown.id} onClick={() => onUnknownSelect(unknown.id)}>
+                    <strong>{unknown.title}</strong>
+                  </button>
+                ) : (
+                  <h3>{unknown.title}</h3>
+                )
               ) : (
                 <>
                   <span>未確認</span>
@@ -154,11 +160,43 @@ export function AreaSummaryPanel({
                 </>
               )}
               <p>{unknown.importance}</p>
-              <small>{unknown.source_boundary}</small>
+              {publicMode && unknown.status === "partial" && (
+                <small className="area-unknown-warning">この情報は一部の範囲のみ確認できています。</small>
+              )}
+              {!publicMode && <small>{unknown.source_boundary}</small>}
             </article>
           ))}
         </div>
       </section>
+      {publicMode && (
+        <details className="area-public-source-notes">
+          <summary>出典・データの注意点</summary>
+          <p>出典、時点、集計方法、対象objectの来歴は、最初に読む内容と分けてここにまとめています。</p>
+          <h3>確認できた数値</h3>
+          <ul>
+            {summary.metrics.map((metric) => (
+              <li key={metric.key}>
+                <strong>{metric.label}</strong>
+                <span>{metric.source.dataset} · {metric.source.source_date}</span>
+                <span>{metric.limitation}</span>
+                {metric.coverage_ratio !== null && <span>coverage {(metric.coverage_ratio * 100).toFixed(1)}%</span>}
+              </li>
+            ))}
+          </ul>
+          <h3>まだ分からないこと</h3>
+          <ul>
+            {visibleUnknowns.map((unknown) => (
+              <li key={unknown.id}>
+                <strong>{unknown.title}</strong>
+                <span>{unknown.source_boundary}</span>
+                <span>{unknown.target.dataset}</span>
+                <code>{unknown.target.source_object_id}</code>
+              </li>
+            ))}
+          </ul>
+          <small>Area {summary.id} · version {summary.version} · content {summary.content_sha256 ?? "unavailable"}</small>
+        </details>
+      )}
     </div>
   );
 }

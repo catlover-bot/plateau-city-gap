@@ -99,7 +99,7 @@ export function PublicAreaJourney({
   }), [data.stations]);
   const eligibility = summary && selectedUnknown
     ? contextual3dEligibility(summary, selectedUnknown.target, data.plateauMetadata?.year, hasWebgl())
-    : { eligible: false, reason: "確認場所を選んでください。" };
+    : { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "no_target", reason: "確認場所を選んでください。" };
 
   useEffect(() => {
     if (summary?.unknowns.length && !summary.unknowns.some((unknown) => unknown.id === selectedUnknownId)) {
@@ -342,12 +342,21 @@ export function PublicAreaJourney({
                 <p className="public-kicker">確認場所と未確認項目</p>
                 <h1 ref={headingRef} tabIndex={-1}>データだけでは分からないことを、場所で確かめる</h1>
                 <TargetTasks summary={{ ...summary, unknowns: [selectedUnknown] }} publicMode />
-                <div className="public-3d-choice" data-contextual-3d-eligible={eligibility.eligible}>
-                  <p>{eligibility.reason}</p>
+                <div
+                  className="public-3d-decision"
+                  data-contextual-3d-eligible={eligibility.eligible}
+                  data-contextual-3d-technical-eligible={eligibility.technicalEligible}
+                  data-contextual-3d-ux-valuable={eligibility.uxValuable}
+                  data-contextual-3d-reason-code={eligibility.reasonCode}
+                  data-contextual-3d-reason={eligibility.reason}
+                >
                   {eligibility.eligible && (
-                    <button type="button" className="public-secondary" aria-pressed={mapMode === "plateau3d"} onClick={() => setMapMode((value) => value === "map2d" ? "plateau3d" : "map2d")}>
-                      {mapMode === "plateau3d" ? "2D地図に戻す" : "3Dで場所を見る"}
-                    </button>
+                    <div className="public-3d-choice">
+                      <p>{eligibility.reason}</p>
+                      <button type="button" className="public-secondary" aria-pressed={mapMode === "plateau3d"} onClick={() => setMapMode((value) => value === "map2d" ? "plateau3d" : "map2d")}>
+                        {mapMode === "plateau3d" ? "2D地図に戻す" : "3Dで周辺を見る"}
+                      </button>
+                    </div>
                   )}
                 </div>
               </section>

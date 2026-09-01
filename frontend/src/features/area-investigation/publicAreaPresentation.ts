@@ -19,20 +19,45 @@ export function radiusExplanation(radius: number): string {
   return `${radius}mは指定した半径による分析範囲です。実際の移動可能範囲を示すものではありません。`;
 }
 
+export interface Contextual3dDecision {
+  eligible: boolean;
+  technicalEligible: boolean;
+  uxValuable: boolean;
+  reasonCode: string;
+  reason: string;
+}
+
 export function contextual3dEligibility(
   summary: InvestigationAreaSummary,
   target: AreaTarget,
   plateauYear: number | undefined,
   webgl: boolean,
-): { eligible: boolean; reason: string } {
-  if (!webgl) return { eligible: false, reason: "この端末では3D表示を利用できません。" };
-  if (target.scope !== "plateau_object") return { eligible: false, reason: "この確認場所は2D地図で表示します。" };
-  if (target.object_type !== "building" && target.object_type !== "road") return { eligible: false, reason: "この対象種別は2D地図で表示します。" };
+): Contextual3dDecision {
+  if (!webgl) return { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "webgl_unavailable", reason: "この端末では3D表示を利用できません。" };
+  if (target.scope !== "plateau_object") return { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "not_plateau_object", reason: "この確認場所は2D地図で表示します。" };
+  if (target.object_type !== "building" && target.object_type !== "road") return { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "unsupported_object_type", reason: "この対象種別は2D地図で表示します。" };
   if (!summary.content_sha256 || !target.source_object_id || target.source_object_id.startsWith("unresolved")) {
-    return { eligible: false, reason: "確認済みの対象情報がないため3Dを表示しません。" };
+    return { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "unresolved_object", reason: "確認済みの対象情報がないため3Dを表示しません。" };
   }
   if (!target.dataset.startsWith("PLATEAU舞鶴市") || plateauYear === undefined) {
-    return { eligible: false, reason: "現在のPLATEAUデータと対応を確認できないため3Dを表示しません。" };
+    return { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "dataset_mismatch", reason: "現在のPLATEAUデータと対応を確認できないため3Dを表示しません。" };
   }
-  return { eligible: true, reason: "同じ調査範囲に結び付いたPLATEAU対象を3Dで確認できます。" };
+
+  if (target.object_type === "road") {
+    return {
+      eligible: false,
+      technicalEligible: true,
+      uxValuable: false,
+      reasonCode: "single_road_point_2d_sufficient",
+      reason: "この確認は道路上の一点が対象で、2D地図の方が場所を明確に確認できます。3Dを開いても判断材料が増えないため表示しません。",
+    };
+  }
+
+  return {
+    eligible: false,
+    technicalEligible: true,
+    uxValuable: false,
+    reasonCode: "single_building_current_use_2d_sufficient",
+    reason: "この確認は単一建物の現在利用が中心で、3Dを開いても判断材料が増えないため表示しません。",
+  };
 }

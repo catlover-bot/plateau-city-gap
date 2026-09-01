@@ -484,6 +484,54 @@
   border-radius: 8px;
 }
 
+.public-area .area-public-source-notes {
+  margin-top: 12px;
+  padding: 11px 12px;
+  border: 1px solid #d8d6cf;
+  border-radius: 8px;
+  background: #f7f6f1;
+  color: #4a5752;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.public-area .area-public-source-notes summary {
+  color: #24463c;
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.public-area .area-public-source-notes h3 {
+  margin: 14px 0 6px;
+  font-size: 0.78rem;
+}
+
+.public-area .area-public-source-notes ul {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+  list-style: none;
+}
+
+.public-area .area-public-source-notes li {
+  display: grid;
+  padding-top: 8px;
+  border-top: 1px solid #dddcd5;
+  gap: 2px;
+}
+
+.public-area .area-public-source-notes li span,
+.public-area .area-public-source-notes li code {
+  overflow-wrap: anywhere;
+}
+
+.public-area .area-unknown-warning {
+  display: block;
+  color: #ffe2a8;
+  font-weight: 700;
+}
+
 .public-area .area-unknown-section {
   padding: 18px;
 }
