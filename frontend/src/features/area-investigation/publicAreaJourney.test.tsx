@@ -5,6 +5,7 @@ import { AreaSummaryPanel, TargetTasks } from "./AreaInvestigationJourney";
 import {
   PUBLIC_LANDING_COPY,
   PUBLIC_RADIUS_OPTIONS,
+  PUBLIC_URBAN_SECTION_DECISION,
   contextual3dEligibility,
   radiusExplanation,
 } from "./publicAreaPresentation";
@@ -214,5 +215,13 @@ describe("Public first-run presentation contract", () => {
     expect(html).toContain("舞鶴市");
     expect(html).toContain("詳細分析");
     expect((html.match(/<button/g) ?? [])).toHaveLength(2);
+  });
+
+  it("keeps the Urban Section out of the Public first-run contract", () => {
+    expect(PUBLIC_URBAN_SECTION_DECISION).toEqual({
+      decision: "advanced_only",
+      renderInFirstRun: false,
+      reason: "The Public Area questions are answered by the 2D Area, story, and exact target geometry.",
+    });
   });
 });

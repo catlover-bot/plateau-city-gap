@@ -15,6 +15,7 @@ import type { AreaUnknown, InvestigationAreaFixture, InvestigationAreaSummary } 
 import {
   PUBLIC_LANDING_COPY,
   PUBLIC_RADIUS_OPTIONS,
+  PUBLIC_URBAN_SECTION_DECISION,
   contextual3dEligibility,
   radiusExplanation,
 } from "./publicAreaPresentation";
@@ -290,6 +291,7 @@ export function PublicAreaJourney({
       data-target-cartography-state={targetCartography ? "ready" : targetCartographyError ? "degraded" : "idle"}
       data-presentation-target-kind={targetRender?.kind ?? "none"}
       data-presentation-target-resolution={targetRender?.resolution ?? "none"}
+      data-public-urban-section={PUBLIC_URBAN_SECTION_DECISION.decision}
     >
       <PublicHeader onRestart={restart} onOpenAdvanced={onOpenAdvanced} />
       <main className={`public-area-body step-${step}`}>

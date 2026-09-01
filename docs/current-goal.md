@@ -2,7 +2,7 @@
 
 Active goal: `public-product-language-and-section-v1`
 
-Current milestone: H0 benchmark, language baseline, and section audit
+Current milestone: H3 Urban Section Option C boundary
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -19,7 +19,7 @@ Checkpoint state:
 - H0 benchmark: nine official public URLs captured at 1440 × 900 with explicit access status; third-party captures remain research evidence only
 - production baseline: GitHub Pages captured separately and remains unchanged
 - feature baseline: source-HEAD production preview captured at desktop and 390 × 844 mobile across intro/place/radius/result/target
-- Urban Section recommendation: Option C; do not add it to the Area Public first-run, preserve legacy M3 and Advanced
+- Urban Section decision: Option C (`advanced_only`); do not add it to the Area Public first-run, preserve legacy M3 and Advanced
 - merge / deployment: not performed
 - inherited performance baseline: `docs/cartographic-performance-checkpoint.md` and `analysis/outputs/real/cartographic-performance-profile-after.json`
 - H0 evidence: `docs/public-product-benchmark.md`, `docs/public-product-language-audit.md`, `docs/public-copy-deck.md`, `docs/urban-section-audit.md`, and `docs/assets/public-product-audit/manifest.json`

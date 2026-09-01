@@ -12,6 +12,12 @@ export const PUBLIC_RADIUS_OPTIONS = [
   { value: 1000, label: "1km" },
 ] as const;
 
+export const PUBLIC_URBAN_SECTION_DECISION = {
+  decision: "advanced_only",
+  renderInFirstRun: false,
+  reason: "The Public Area questions are answered by the 2D Area, story, and exact target geometry.",
+} as const;
+
 export function radiusExplanation(radius: number): string {
   if (radius === 500) return "500mは、国土交通省の都市構造評価で高齢者徒歩圏の目安として使われる距離です。実際の徒歩時間到達圏を示すものではありません。";
   if (radius === 800) return "800mは、国土交通省の都市構造評価で一般的な徒歩圏の目安として使われる距離です。実際の徒歩10分到達圏を示すものではありません。";

@@ -1,7 +1,7 @@
 # Urban section audit
 
 Goal: `public-product-language-and-section-v1`  
-Decision recommendation after H0: **Option C — keep the section out of the Public first-run; retain it in legacy M3 and Advanced.**
+H3 decision: **Option C — keep the section out of the Public first-run; retain it in legacy M3 and Advanced.**
 
 ## Where the section exists
 
@@ -40,13 +40,13 @@ Decision recommendation after H0: **Option C — keep the section out of the Pub
 
 Option A and B both require a target-linked question, A/B cut line, orientation, selected-target hierarchy, mobile presentation, and an accessible summary. Adding those to the new Area Public would be a new visualization feature with no demonstrated first-run need. It would also risk the established performance and map-first hierarchy.
 
-Option C is therefore the disciplined product decision:
+Option C is therefore the implemented product decision:
 
 - do not add `UrbanSection` to `PublicAreaJourney`;
+- expose the `advanced_only` decision as a testable Public presentation contract;
 - preserve the existing legacy M3 and Advanced component, data, route, and verified semantics;
 - add a regression assertion that the Public first-run has no section while Advanced/M3 remain reachable;
 - do not rename or redesign the Advanced expert plot as part of Public polish;
 - reconsider only in a separately approved goal when a Public question specifically requires elevation/building-height/road cross-section evidence.
 
 This is a scope decision, not a claim that the existing section data is invalid. No section geometry or provenance is deleted.
-
