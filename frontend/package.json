@@ -14,6 +14,7 @@
     "audit:plateau-native": "node scripts/audit-plateau-native.mjs",
     "check:docs": "node scripts/check-doc-links.mjs",
     "audit:visual-identity": "node scripts/audit-visual-identity.mjs",
+    "audit:public-first-run": "node scripts/audit-public-first-run.mjs",
     "capture:current": "node scripts/capture-investigation-current.mjs",
     "capture:advanced": "node scripts/capture-current.mjs",
     "test:guided": "node scripts/test-guided.mjs",

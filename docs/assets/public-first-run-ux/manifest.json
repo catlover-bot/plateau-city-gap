@@ -1,0 +1,597 @@
+{
+  "schema_version": "citygap.public-first-run-ux-checkpoint@1",
+  "generated_at": "2026-09-01T03:05:36.900Z",
+  "repository_head": "54d0781ab0f98b7f46bd4c57204f1032dd3a558c",
+  "base_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "baseline": {
+    "1440x900": {
+      "map_share_percent": 46,
+      "panel_share_percent": 54,
+      "visible_controls": 14,
+      "map_occlusion_percent": 7.9
+    },
+    "1280x720": {
+      "map_share_percent": 46,
+      "panel_share_percent": 54,
+      "visible_controls": 13,
+      "map_occlusion_percent": 11.3
+    },
+    "390x844": {
+      "map_share_percent": 29,
+      "panel_share_percent": 73.5,
+      "visible_controls": 12,
+      "map_occlusion_percent": 38.8,
+      "overlap_px": 20
+    }
+  },
+  "after": {
+    "desktop_intro": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "intro",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "visible_controls": 6,
+      "visible_disclosures": 0,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "desktop_radius": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "radius",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "visible_controls": 11,
+      "visible_disclosures": 0,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "desktop_result": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "visible_controls": 7,
+      "visible_disclosures": 4,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "desktop_target": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "target",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "visible_controls": 6,
+      "visible_disclosures": 1,
+      "primary_cta_count": 0,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "compact_intro": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "step": "intro",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "visible_controls": 6,
+      "visible_disclosures": 0,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 0.3,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 869.734375,
+        "height": 668,
+        "right": 869.734375,
+        "bottom": 720
+      },
+      "panel": {
+        "x": 869.734375,
+        "y": 52,
+        "width": 410.265625,
+        "height": 668,
+        "right": 1280,
+        "bottom": 720
+      }
+    },
+    "mobile_intro": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "intro",
+      "map_share_percent": 44.5,
+      "panel_share_percent": 55.5,
+      "visible_controls": 5,
+      "visible_disclosures": 0,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 2.8,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 354.46875,
+        "right": 390,
+        "bottom": 402.46875
+      },
+      "panel": {
+        "x": 0,
+        "y": 402.46875,
+        "width": 390,
+        "height": 441.53125,
+        "right": 390,
+        "bottom": 844
+      }
+    },
+    "mobile_radius": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "radius",
+      "map_share_percent": 44.5,
+      "panel_share_percent": 55.5,
+      "visible_controls": 10,
+      "visible_disclosures": 0,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 2.8,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 354.46875,
+        "right": 390,
+        "bottom": 402.46875
+      },
+      "panel": {
+        "x": 0,
+        "y": 402.46875,
+        "width": 390,
+        "height": 441.53125,
+        "right": 390,
+        "bottom": 844
+      }
+    },
+    "mobile_result": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "result",
+      "map_share_percent": 31.8,
+      "panel_share_percent": 68.2,
+      "visible_controls": 6,
+      "visible_disclosures": 2,
+      "primary_cta_count": 1,
+      "map_occlusion_percent": 3.9,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 253.1875,
+        "right": 390,
+        "bottom": 301.1875
+      },
+      "panel": {
+        "x": 0,
+        "y": 301.1875,
+        "width": 390,
+        "height": 542.8125,
+        "right": 390,
+        "bottom": 844
+      }
+    },
+    "mobile_target": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "target",
+      "map_share_percent": 31.8,
+      "panel_share_percent": 68.2,
+      "visible_controls": 5,
+      "visible_disclosures": 1,
+      "primary_cta_count": 0,
+      "map_occlusion_percent": 3.9,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 253.1875,
+        "right": 390,
+        "bottom": 301.1875
+      },
+      "panel": {
+        "x": 0,
+        "y": 301.1875,
+        "width": 390,
+        "height": 542.8125,
+        "right": 390,
+        "bottom": 844
+      }
+    }
+  },
+  "journey": {
+    "landing_to_task_click_count": 5,
+    "primary_cta_counts": {
+      "intro": 1,
+      "place": 1,
+      "radius": 1,
+      "result": 1,
+      "target_terminal": 0
+    },
+    "public_top_level_primary_navigation_count": 0,
+    "header_secondary_action_count": 1,
+    "required_check_count": 4,
+    "fmr_samples_ms": [
+      1823,
+      1216,
+      2534,
+      1953,
+      1190
+    ],
+    "fmr_median_ms": 1823
+  },
+  "accessibility": {
+    "desktop_intro": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "desktop_radius": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "desktop_result": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "desktop_target": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "mobile_intro": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "mobile_radius": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "mobile_result": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "mobile_target": {
+      "critical": [],
+      "unnamed": [],
+      "duplicate_ids": [],
+      "images_without_alt": 0,
+      "h1_count": 1
+    },
+    "keyboard": {
+      "order": [
+        {
+          "label": "地図で場所を調べる",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "CITY GAP舞鶴市詳細分析Use Ctrl + scroll to zoom the mapUse two fingers to move the map5 kmCITY GAP | 地理院タイル表示密度都市：候補メッシュN ↑舞鶴市調べたい場所を選ぶ駅または地図上の任意地点から始めます舞鶴市の公開データを使った確認気になる場所を、地図とデータで確かめる。場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。地図で場所を調べる公開データの出典・時点・限界を表示します。政策判断や危険判定は行いません。",
+          "tag": "BODY"
+        },
+        {
+          "label": "CITY GAPを最初から見る",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "詳細分析",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "舞鶴市の地図。地図の中心を任意の起点にできます",
+          "tag": "CANVAS"
+        },
+        {
+          "label": "Zoom in",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "Zoom out",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "地理院タイル",
+          "tag": "A"
+        },
+        {
+          "label": "地図で場所を調べる",
+          "tag": "BUTTON"
+        },
+        {
+          "label": "CITY GAP舞鶴市詳細分析Use Ctrl + scroll to zoom the mapUse two fingers to move the map5 kmCITY GAP | 地理院タイル表示密度都市：候補メッシュN ↑舞鶴市調べたい場所を選ぶ駅または地図上の任意地点から始めます舞鶴市の公開データを使った確認気になる場所を、地図とデータで確かめる。場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。地図で場所を調べる公開データの出典・時点・限界を表示します。政策判断や危険判定は行いません。",
+          "tag": "BODY"
+        }
+      ],
+      "invisible_focus": [
+        {
+          "label": "CITY GAP舞鶴市詳細分析Use Ctrl + scroll to zoom the mapUse two fingers to move the map5 kmCITY GAP | 地理院タイル表示密度都市：候補メッシュN ↑舞鶴市調べたい場所を選ぶ駅または地図上の任意地点から始めます舞鶴市の公開データを使った確認気になる場所を、地図とデータで確かめる。場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。地図で場所を調べる公開データの出典・時点・限界を表示します。政策判断や危険判定は行いません。",
+          "tag": "BODY",
+          "visible": true,
+          "focus_visible": false
+        },
+        {
+          "label": "CITY GAP舞鶴市詳細分析Use Ctrl + scroll to zoom the mapUse two fingers to move the map5 kmCITY GAP | 地理院タイル表示密度都市：候補メッシュN ↑舞鶴市調べたい場所を選ぶ駅または地図上の任意地点から始めます舞鶴市の公開データを使った確認気になる場所を、地図とデータで確かめる。場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。地図で場所を調べる公開データの出典・時点・限界を表示します。政策判断や危険判定は行いません。",
+          "tag": "BODY",
+          "visible": true,
+          "focus_visible": false
+        }
+      ]
+    },
+    "critical_or_serious_count": 0
+  },
+  "privacy_and_copy": {
+    "prohibited_copy_found": [],
+    "evidence_inputs": 0,
+    "internal_id_initially_visible": false
+  },
+  "contextual_3d": {
+    "eligible": true,
+    "button_visible": true,
+    "mesh_fallback_disabled": true
+  },
+  "routes": {
+    "advanced": true,
+    "legacy_m3": true,
+    "municipal_surface": "verified by separate unchanged-surface build/test"
+  },
+  "diagnostics": [
+    {
+      "label": "desktop",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "mobile",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    }
+  ],
+  "critical_diagnostic_count": 0,
+  "screenshots": [
+    {
+      "filename": "01-landing-desktop.png",
+      "scene": "landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 735599,
+      "sha256": "92c6ae15f3b769bee7821f9711a3ac83b1d9c9d4163f0404d1a05b4b7af1fb40",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45"
+    },
+    {
+      "filename": "02-place-radius-desktop.png",
+      "scene": "place-radius",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 471271,
+      "sha256": "d1072027304cb5bb54ca2fb5d3389c7ca3c01550c892ba1ca8aaabc78e4ccbce",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "03-known-unknown-desktop.png",
+      "scene": "known-unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 547292,
+      "sha256": "05181834276ac541fc53f0ba8a99bc0a34c21bbc2757691ff3724808d65719d7",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "04-target-task-desktop.png",
+      "scene": "target-task",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 126873,
+      "sha256": "1fffafbc5d1140cbe2174c3a3abe6d7cf96e9f6c319831fe6afb9280f840282e",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "05-contextual-3d-enabled.png",
+      "scene": "contextual-3d-enabled",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 130159,
+      "sha256": "911baafff5480cce892d959a7355043d99c2386d1b4185040a64b63fc72327dd",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33092&lat=35.44168&z=15.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815"
+    },
+    {
+      "filename": "06-landing-mobile.png",
+      "scene": "landing-mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 174344,
+      "sha256": "98e2737295353d06d5c12d24cd158f54a6cc3504614e642f3f4edbc85e486b2a",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45"
+    },
+    {
+      "filename": "07-place-radius-mobile.png",
+      "scene": "place-radius-mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 130910,
+      "sha256": "94eb4e82448315d5305451e3a85c4071608b5e88392e41cb59d7285c8e961930",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "08-known-unknown-mobile.png",
+      "scene": "known-unknown-mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 136397,
+      "sha256": "c8342bd55fa041bf8c36726fd7f4f704f620a5d6c1a24b65bf042a5a4ffd40f4",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "09-target-task-mobile.png",
+      "scene": "target-task-mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bytes": 78671,
+      "sha256": "65d8de0c016c5aa6db31ce7ef460a14606c26194ac3d8049e9dbd3e704eae94f",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "10-mesh-fallback-3d-disabled.png",
+      "scene": "mesh-fallback-3d-disabled",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bytes": 121721,
+      "sha256": "afd2dcc7db3c13c1223a90a65a886f9e0451db0cb762253e6527ec119d1f6282",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=13.40"
+    }
+  ],
+  "status": [
+    "AUTOMATED_UX_CHECKPOINT_COMPLETE",
+    "READY_FOR_HUMAN_TEST",
+    "AWAITING_HUMAN_TEST",
+    "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
+    "HOLD_MAIN_PROMOTION",
+    "HOLD_P1_M4_M6",
+    "BOREHOLE_INTEGRATE_RESEARCH_ONLY"
+  ]
+}

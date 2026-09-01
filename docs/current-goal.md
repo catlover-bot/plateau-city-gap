@@ -2,14 +2,15 @@
 
 Active goal: `public-first-run-ux-v1`
 
-Current milestone: U0 Audit lock and municipal evidence
+Current milestone: U4 Automated UX Validation Checkpoint complete
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
-- branch: `feat/area-known-unknown-a5`
 - execution branch: `feat/public-first-run-ux-v1`
+- source branch: `feat/area-known-unknown-a5`
+- Public UX evidence build: `54d0781ab0f98b7f46bd4c57204f1032dd3a558c`
 - product checkpoint: `d829defc54dc9417d3045d2c2ecfb9f19558e08a`
 - evidence checkpoint: `f3ae74e`
 - browser-gate checkpoint: `9dce42a`
@@ -41,6 +42,8 @@ Validation status:
 - Area Summary content: `DIRECT_MUNICIPAL_NEED_PARTIALLY_CONFIRMED`
 - Known/Unknown value: `DIRECT_MUNICIPAL_VALUE_SIGNAL_CONFIRMED`
 - Unknown-to-field-task workflow: `AWAITING_MUNICIPAL_WORKFLOW_REVIEW`
+- Automated Public UX: `AUTOMATED_UX_CHECKPOINT_COMPLETE`
+- Human-test readiness: `READY_FOR_HUMAN_TEST`
 - Public copy comprehension: `AWAITING_HUMAN_TEST`
 
 Product boundary:
@@ -61,4 +64,14 @@ Maizuru borehole evidence:
 - Borehole strategy is `INTEGRATE / RESEARCH ONLY`, not an automatic P1 implementation.
 - CITY GAP will not build its own borehole viewer, 3D column viewer, or hazard-and-borehole viewer. A later, separately approved goal may only assess whether Maizuru outputs can be connected as an official Investigation Area source with provenance and source limitations intact.
 
-Next action: complete U0–U4 on the feature branch, prepare—not fabricate—the human-test package, then stop. Do not begin P1 or M4–M6 and do not promote to `main` automatically.
+Current stop state:
+
+- `AUTOMATED_UX_CHECKPOINT_COMPLETE`
+- `READY_FOR_HUMAN_TEST`
+- `AWAITING_HUMAN_TEST`
+- `AWAITING_MUNICIPAL_WORKFLOW_REVIEW`
+- `HOLD_MAIN_PROMOTION`
+- `HOLD_P1_M4_M6`
+- `BOREHOLE_INTEGRATE_RESEARCH_ONLY`
+
+Next action is a real participant study and a separate municipal workflow review. Do not begin P1 or M4–M6 and do not promote to `main` automatically.
