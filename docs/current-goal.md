@@ -1,25 +1,26 @@
 # Current goal
 
-Active goal: `citygap-cartographic-visual-productization-v1`
+Active goal: `cartographic-interaction-performance-v1`
 
-Current milestone: C5 Automated Cartographic Validation Checkpoint complete
+Current milestone: P0 Performance Profile complete; P1 Target Fast Path next
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
-- source branch: `feat/public-first-run-ux-v1`
-- source HEAD: `946534c32a965654ee429af01e213cf980b8bac7`
-- execution branch: `feat/cartographic-visual-productization-v1`
+- source branch: `feat/cartographic-visual-productization-v1`
+- source HEAD: `25a19ee9ebf444fb2244de6ace625238a74bbb89`
+- execution branch: `feat/cartographic-interaction-performance-v1`
 - baseline / origin/main: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
 - preservation: existing M3/028, A0–A5, and U0–U4 work retained; no reset, clean, rebase, squash, or force push
-- cartographic goal: make the map itself explain the selected Area, quantified evidence, remaining Unknown, and PLATEAU verification target
-- scope: frontend cartography, presentation-only PLATEAU display derivatives, benchmark/visual evidence, and automated validation
-- excluded: backend, migration, external datasets, new analytical facts, P1, M4–M6, main merge, and Pages deployment
+- performance goal: preserve the complete C5 cartographic product while reducing only story/target interaction latency
+- scope: root-cause profiling, provenance-preserving display-derivative partitioning, bounded loading, MapLibre lifecycle stabilization, and automated performance evidence
+- excluded: UI redesign, copy changes, backend, API, migration, external datasets, new analytical facts, product P1, M4–M6, main merge, and Pages deployment
 - reference capture: 9 URLs recorded with screenshot or explicit unavailable status; third-party captures remain benchmark-only
 - merge / deployment: not performed
 - C0–C4 implementation commits: `88841c2`, `cefa068`, `54c517d`, `944afe3`, `047f314`
-- C5 evidence: `docs/cartographic-validation-checkpoint.md` and `docs/assets/cartographic-checkpoint/manifest.json`
+- C5 baseline: `docs/cartographic-validation-checkpoint.md` and `docs/assets/cartographic-checkpoint/manifest.json`
+- P0 evidence: `docs/cartographic-performance-profile.md` and `analysis/outputs/real/cartographic-performance-profile-baseline.json`
 
 Core value hypothesis:
 
@@ -103,8 +104,9 @@ Automated checkpoint facts:
 
 Remaining measured risks:
 
-- Building-use story switching took `4135 ms` in the recorded cold/browser sequence.
-- Target readiness took `12336 ms` for the exact building and `5057 ms` for the registered facility position; these are not presented as immediate interactions.
-- A basemap-unavailable state correctly preserves local Area/PLATEAU vectors and an explicit notice, but needs human review for orientation quality.
+- The controlled five-sample P0 profile records building target medians of `3144.8 ms` cold / `2502.0 ms` warm and facility medians of `4450.2 ms` cold / `3602.8 ms` warm, with much larger retained outliers.
+- Every story/target action currently resubmits seven GeoJSON sources and at least 6,643 features; some cold target transitions submit the full set twice.
+- All three heavy artifacts load together after Area confirmation. Exact target lookup and the registered facility presentation remain unnecessarily coupled to Area context.
+- A basemap-unavailable state preserves local vectors, but the controlled degraded run observes hundreds of aborted external tile requests per page. Retry/readiness stabilization remains P3 work.
 
-Next action is the prepared real visual/participant study and a separate municipal workflow review. Do not begin P1 or M4–M6 and do not promote to `main` automatically.
+Next action is P1 Target Fast Path, followed only by P2 Story Loading, P3 Lifecycle/Readiness, and P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
