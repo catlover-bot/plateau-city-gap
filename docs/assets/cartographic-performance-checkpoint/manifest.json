@@ -1,0 +1,1588 @@
+{
+  "schema_version": "citygap.cartographic-performance-checkpoint@1",
+  "generated_at": "2026-09-01T18:40:48.130Z",
+  "repository_head_before_c5_commit": "e12f139e99fa800a73957b64ff2b733ed3de7139",
+  "base_url": "http://127.0.0.1:4180/plateau-city-gap/",
+  "baseline_commit": "946534c32a965654ee429af01e213cf980b8bac7",
+  "load_resume": {
+    "trigger": "500ms after Area confirmation; no pre-confirmation prefetch",
+    "initial_state_after_fast_journey": "ready",
+    "final_state": "ready",
+    "honest_loading_fallback": "reference_position or area_fallback; no invented geometry"
+  },
+  "performance": {
+    "fmr_samples_ms": [
+      5956,
+      2033,
+      1291,
+      1650,
+      1771
+    ],
+    "fmr_median_ms": 1771,
+    "area_map_ready_ms": {
+      "500m": 1439,
+      "800m": 998,
+      "1km": 796
+    },
+    "area_three_second_recognition": "READY_FOR_VISUAL_REVIEW; automated state and screenshots recorded, not substituted for a human judgment",
+    "story_switch_ms": {
+      "building_use": 2422,
+      "establishments": 803,
+      "urban_planning": 1308,
+      "transport": 1997
+    },
+    "target_camera_ms": {
+      "road": 2066,
+      "building": 2131,
+      "facility": 2371
+    }
+  },
+  "states": {
+    "landing": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "intro",
+      "cartography_state": "loading",
+      "active_story": "none",
+      "basemap_error": false,
+      "pending_sources": null,
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 5,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": null,
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "population_age": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "population-age",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 9,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "65歳以上人口の相対分布",
+        "item_count": 3,
+        "note": "500mメッシュ・2020年・舞鶴市内での相対比較"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "switch_ms": 0
+    },
+    "building_use": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "building-use",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 9,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "PLATEAU建物用途",
+        "item_count": 4,
+        "note": "公式用途属性・現在用途ではありません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "switch_ms": 2422
+    },
+    "establishments": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "establishments",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 11,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "事業所",
+        "item_count": 0,
+        "note": "範囲集計・個別事業所の位置は表示していません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "switch_ms": 803
+    },
+    "urban_planning": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "urban-planning",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 11,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "PLATEAU都市計画",
+        "item_count": 2,
+        "note": "利用可能な公式objectのみ"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "switch_ms": 1308
+    },
+    "transport": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "transport",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 11,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "交通の登録地点",
+        "item_count": 2,
+        "note": "運行・徒歩到達性は含みません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "switch_ms": 1997
+    },
+    "unknown_road": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "transport",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 12,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "交通の登録地点",
+        "item_count": 2,
+        "note": "運行・徒歩到達性は含みません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "exact_road_target": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "PLATEAU上の確認対象",
+        "item_count": 1,
+        "note": "PLATEAUの実形状"
+      },
+      "target_label": "西舞鶴駅に近いPLATEAU道路面",
+      "target_label_resolution": "exact",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "camera_ms": 2066
+    },
+    "exact_building_target": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "PLATEAU上の確認対象",
+        "item_count": 1,
+        "note": "PLATEAUの実形状"
+      },
+      "target_label": "運輸倉庫施設",
+      "target_label_resolution": "exact",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "camera_ms": 2131
+    },
+    "facility_reference": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "reference_position",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "確認対象の位置",
+        "item_count": 1,
+        "note": "登録された位置情報のみ"
+      },
+      "target_label": "医療法人　白修会　金下矯正歯科",
+      "target_label_resolution": "reference_position",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      },
+      "camera_ms": 2371
+    },
+    "area_500m": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "population-age",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "500",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 9,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "65歳以上人口の相対分布",
+        "item_count": 3,
+        "note": "500mメッシュ・2020年・舞鶴市内での相対比較"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "area_1km": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "population-age",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "1000",
+      "target_resolution": "area_fallback",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 9,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "65歳以上人口の相対分布",
+        "item_count": 3,
+        "note": "500mメッシュ・2020年・舞鶴市内での相対比較"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "area_fallback": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "area_fallback",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "確認対象の位置",
+        "item_count": 1,
+        "note": "登録された位置情報のみ"
+      },
+      "target_label": "二尾バス停周辺の500mメッシュ（正直なfallback）",
+      "target_label_resolution": "area_fallback",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "basemap_degraded": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "building-use",
+      "map_render_ready": "true",
+      "map_render_state": "degraded",
+      "basemap_error": true,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.2,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 9,
+      "visible_attribution_links": 0,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "PLATEAU建物用途",
+        "item_count": 4,
+        "note": "公式用途属性・現在用途ではありません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 978.453125,
+        "height": 848,
+        "right": 978.453125,
+        "bottom": 900
+      },
+      "panel": {
+        "x": 978.453125,
+        "y": 52,
+        "width": 461.546875,
+        "height": 848,
+        "right": 1440,
+        "bottom": 900
+      }
+    },
+    "mobile_result": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "result",
+      "cartography_state": "ready",
+      "active_story": "building-use",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 31.8,
+      "panel_share_percent": 68.2,
+      "map_occlusion_percent": 3.9,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 11,
+      "visible_attribution_links": 0,
+      "active_story_action_count": 1,
+      "legend": {
+        "title": "PLATEAU建物用途",
+        "item_count": 4,
+        "note": "公式用途属性・現在用途ではありません"
+      },
+      "target_label": null,
+      "target_label_resolution": null,
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 253.1875,
+        "right": 390,
+        "bottom": 301.1875
+      },
+      "panel": {
+        "x": 0,
+        "y": 301.1875,
+        "width": 390,
+        "height": 542.8125,
+        "right": 390,
+        "bottom": 844
+      }
+    },
+    "mobile_target": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 31.8,
+      "panel_share_percent": 68.2,
+      "map_occlusion_percent": 3.9,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 0,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "PLATEAU上の確認対象",
+        "item_count": 1,
+        "note": "PLATEAUの実形状"
+      },
+      "target_label": "西舞鶴駅に近いPLATEAU道路面",
+      "target_label_resolution": "exact",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 48,
+        "width": 390,
+        "height": 253.1875,
+        "right": 390,
+        "bottom": 301.1875
+      },
+      "panel": {
+        "x": 0,
+        "y": 301.1875,
+        "width": 390,
+        "height": 542.8125,
+        "right": 390,
+        "bottom": 844
+      }
+    },
+    "retina_target": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "step": "target",
+      "cartography_state": "ready",
+      "active_story": "none",
+      "map_render_ready": "true",
+      "map_render_state": "ready",
+      "basemap_error": false,
+      "area_visible": "true",
+      "area_radius_m": "800",
+      "target_resolution": "exact",
+      "pending_sources": "",
+      "map_share_percent": 67.9,
+      "panel_share_percent": 32.1,
+      "map_occlusion_percent": 0.3,
+      "map_panel_overlap_px2": 0,
+      "horizontal_overflow_px": 0,
+      "visible_actionable_controls": 6,
+      "visible_attribution_links": 1,
+      "active_story_action_count": 0,
+      "legend": {
+        "title": "PLATEAU上の確認対象",
+        "item_count": 1,
+        "note": "PLATEAUの実形状"
+      },
+      "target_label": "西舞鶴駅に近いPLATEAU道路面",
+      "target_label_resolution": "exact",
+      "three_d_button_count": 0,
+      "reduced_motion": true,
+      "map": {
+        "x": 0,
+        "y": 52,
+        "width": 869.734375,
+        "height": 668,
+        "right": 869.734375,
+        "bottom": 720
+      },
+      "panel": {
+        "x": 869.734375,
+        "y": 52,
+        "width": 410.265625,
+        "height": 668,
+        "right": 1280,
+        "bottom": 720
+      }
+    }
+  },
+  "provenance": {
+    "valid": true,
+    "source": {
+      "city_code": "26202",
+      "crs": "EPSG:4326",
+      "path": "data/raw/plateau_citygml/26202_maizuru-shi_city_2025_citygml_1_op.zip",
+      "sha256": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+      "version": "26202_maizuru-shi_city_2025_citygml_1_op"
+    },
+    "rule_version": "citygap-public-cartography@1.0.0",
+    "scope": {
+      "area_content_sha256": "e136d6a344921b9d7c9ae73a6ec1e28279a46712331d9b52e35041ec2b26c131",
+      "area_id": "nishi-maizuru-800m-v1",
+      "area_version": 1,
+      "origin": {
+        "coordinates": [
+          135.3305426,
+          35.4417243
+        ],
+        "kind": "station",
+        "source_feature_id": "station-007"
+      },
+      "radius_m": 800
+    },
+    "target_ids": [
+      "bldg_155e6675-6981-450f-8e73-df0b43418cc2",
+      "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21"
+    ],
+    "resolved_target_ids": {
+      "buildings": [
+        "bldg_155e6675-6981-450f-8e73-df0b43418cc2"
+      ],
+      "planning": [],
+      "roads": [
+        "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21"
+      ]
+    },
+    "prohibitions": [
+      "no_external_data",
+      "no_population_allocation",
+      "no_usage_inference",
+      "no_walking_semantics",
+      "no_hazard_or_safety_meaning",
+      "no_score"
+    ],
+    "artifacts": {
+      "buildings": {
+        "expected_sha256": "a09467ac2017708b2b89e7df66673eaebc8d2e69d27bfb7f8bea4825817639fb",
+        "actual_sha256": "a09467ac2017708b2b89e7df66673eaebc8d2e69d27bfb7f8bea4825817639fb",
+        "expected_feature_count": 4898,
+        "actual_feature_count": 4898,
+        "geometry_types": [
+          "Polygon"
+        ]
+      },
+      "planning": {
+        "expected_sha256": "d0a08acb118145ad74038b61e9d7b1894fb1e5120891f5117b4b0339f9a1b56e",
+        "actual_sha256": "d0a08acb118145ad74038b61e9d7b1894fb1e5120891f5117b4b0339f9a1b56e",
+        "expected_feature_count": 55,
+        "actual_feature_count": 55,
+        "geometry_types": [
+          "MultiPolygon",
+          "Polygon"
+        ]
+      },
+      "roads": {
+        "expected_sha256": "178abf80a8329bc3b40bebd456be9deadd8b62774dee7e63af73b6022595088a",
+        "actual_sha256": "178abf80a8329bc3b40bebd456be9deadd8b62774dee7e63af73b6022595088a",
+        "expected_feature_count": 1686,
+        "actual_feature_count": 1686,
+        "geometry_types": [
+          "Polygon"
+        ]
+      },
+      "targets": {
+        "expected_sha256": "c6c6f2ed505a66d6b4df929b87c0f62017d760ab084483267b5c3218dcb9b128",
+        "actual_sha256": "c6c6f2ed505a66d6b4df929b87c0f62017d760ab084483267b5c3218dcb9b128",
+        "expected_feature_count": 2,
+        "actual_feature_count": 2,
+        "geometry_types": [
+          "Polygon"
+        ]
+      }
+    }
+  },
+  "accessibility": {
+    "desktop": {
+      "critical": [],
+      "visible_interactive_count": 7,
+      "unnamed_control_count": 0,
+      "duplicate_ids": [],
+      "visible_h1_count": 1
+    },
+    "mobile": {
+      "critical": [],
+      "visible_interactive_count": 6,
+      "unnamed_control_count": 0,
+      "duplicate_ids": [],
+      "visible_h1_count": 1
+    },
+    "keyboard": {
+      "order": [
+        "地図で場所を調べる",
+        "CITY GAPを最初から見る",
+        "詳細分析",
+        "舞鶴市の地図。地図の中心を任意の起点にできます",
+        "Zoom in",
+        "Zoom out",
+        "地理院タイル",
+        "地図で場所を調べる",
+        "CITY GAPを最初から見る",
+        "詳細分析",
+        "舞鶴市の地図。地図の中心を任意の起点にできます",
+        "Zoom in",
+        "Zoom out",
+        "地理院タイル",
+        "地図で場所を調べる",
+        "CITY GAPを最初から見る",
+        "詳細分析",
+        "舞鶴市の地図。地図の中心を任意の起点にできます",
+        "Zoom in",
+        "Zoom out",
+        "地理院タイル",
+        "地図で場所を調べる",
+        "CITY GAPを最初から見る",
+        "詳細分析",
+        "舞鶴市の地図。地図の中心を任意の起点にできます",
+        "Zoom in",
+        "Zoom out",
+        "地理院タイル",
+        "地図で場所を調べる",
+        "CITY GAPを最初から見る",
+        "詳細分析"
+      ],
+      "failures": []
+    },
+    "critical_or_serious_count": 0
+  },
+  "public_boundary": {
+    "prohibited_copy": [],
+    "field_evidence_inputs": 0,
+    "visible_internal_ids": 0,
+    "photo_copy": true,
+    "gps_copy": true,
+    "review_copy": false
+  },
+  "routes": {
+    "advanced": true,
+    "legacy_m3": true,
+    "municipal_surface": "validated by separate municipal production build"
+  },
+  "before_after": {
+    "desktop": {
+      "absolute_error_pixels": 1086100,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 83.8
+    },
+    "mobile": {
+      "absolute_error_pixels": 245472,
+      "total_pixels": 329160,
+      "changed_pixel_percent": 74.6
+    },
+    "baseline_commit": "946534c32a965654ee429af01e213cf980b8bac7"
+  },
+  "c5_visual_regression": [
+    {
+      "scene": "landing",
+      "c5_path": "docs/assets/cartographic-checkpoint/01-landing-desktop.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/01-landing-desktop.png",
+      "absolute_error_pixels": 170131,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 13.1
+    },
+    {
+      "scene": "area-800m-population-age",
+      "c5_path": "docs/assets/cartographic-checkpoint/02-area-800m-population-age.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/02-area-800m-population-age.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "story-building-use",
+      "c5_path": "docs/assets/cartographic-checkpoint/03-story-building-use.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/03-story-building-use.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "story-establishments-aggregate",
+      "c5_path": "docs/assets/cartographic-checkpoint/04-story-establishments-aggregate.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/04-story-establishments-aggregate.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "story-urban-planning",
+      "c5_path": "docs/assets/cartographic-checkpoint/05-story-urban-planning.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/05-story-urban-planning.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "story-transport",
+      "c5_path": "docs/assets/cartographic-checkpoint/06-story-transport.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/06-story-transport.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "unknown-road-highlight",
+      "c5_path": "docs/assets/cartographic-checkpoint/07-unknown-road-highlight.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/07-unknown-road-highlight.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "target-road-exact",
+      "c5_path": "docs/assets/cartographic-checkpoint/08-target-road-exact.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/08-target-road-exact.png",
+      "absolute_error_pixels": 659500,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 50.9
+    },
+    {
+      "scene": "target-building-exact",
+      "c5_path": "docs/assets/cartographic-checkpoint/09-target-building-exact.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/09-target-building-exact.png",
+      "absolute_error_pixels": 557754,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 43
+    },
+    {
+      "scene": "target-facility-reference",
+      "c5_path": "docs/assets/cartographic-checkpoint/10-target-facility-reference.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/10-target-facility-reference.png",
+      "absolute_error_pixels": 822243,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 63.4
+    },
+    {
+      "scene": "area-500m",
+      "c5_path": "docs/assets/cartographic-checkpoint/11-area-500m.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/11-area-500m.png",
+      "absolute_error_pixels": 55,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "area-1km",
+      "c5_path": "docs/assets/cartographic-checkpoint/12-area-1km.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/12-area-1km.png",
+      "absolute_error_pixels": 69,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "target-area-fallback",
+      "c5_path": "docs/assets/cartographic-checkpoint/13-target-area-fallback.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/13-target-area-fallback.png",
+      "absolute_error_pixels": 819887,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 63.3
+    },
+    {
+      "scene": "basemap-degraded",
+      "c5_path": "docs/assets/cartographic-checkpoint/14-basemap-degraded-local-vectors.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/14-basemap-degraded-local-vectors.png",
+      "absolute_error_pixels": 1537,
+      "total_pixels": 1296000,
+      "changed_pixel_percent": 0.1
+    },
+    {
+      "scene": "mobile-result",
+      "c5_path": "docs/assets/cartographic-checkpoint/15-mobile-result.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/15-mobile-result.png",
+      "absolute_error_pixels": 0,
+      "total_pixels": 329160,
+      "changed_pixel_percent": 0
+    },
+    {
+      "scene": "mobile-target-road-exact",
+      "c5_path": "docs/assets/cartographic-checkpoint/16-mobile-target-road-exact.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/16-mobile-target-road-exact.png",
+      "absolute_error_pixels": 286181,
+      "total_pixels": 1316640,
+      "changed_pixel_percent": 21.7
+    },
+    {
+      "scene": "retina-dpr2-target-road",
+      "c5_path": "docs/assets/cartographic-checkpoint/17-retina-dpr2-target-road.png",
+      "after_path": "docs/assets/cartographic-performance-checkpoint/17-retina-dpr2-target-road.png",
+      "absolute_error_pixels": 1923780,
+      "total_pixels": 3686400,
+      "changed_pixel_percent": 52.2
+    }
+  ],
+  "diagnostics": [
+    {
+      "label": "desktop-main",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "isolated-road-target-attempt-1",
+      "page_errors": [],
+      "failed_same_origin_requests": [
+        {
+          "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "error_responses": []
+    },
+    {
+      "label": "isolated-building-target-attempt-1",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "isolated-facility-target-attempt-1",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "radius-500",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "radius-1km",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "area-fallback",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "basemap-degraded",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "mobile",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    },
+    {
+      "label": "isolated-mobile-road-target-attempt-1",
+      "page_errors": [],
+      "failed_same_origin_requests": [
+        {
+          "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "error_responses": []
+    },
+    {
+      "label": "retina-dpr2",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": []
+    }
+  ],
+  "headless_shader_warnings": [],
+  "expected_request_cancellations": [
+    {
+      "label": "isolated-road-target-attempt-1",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "label": "isolated-mobile-road-target-attempt-1",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "target_visual_signals": {
+    "road": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "map_standard_deviation": 0.113329,
+          "target_color_pixels": 1106,
+          "map_render_state": "ready",
+          "basemap_error": false,
+          "diagnostic_count": 0,
+          "headless_shader_warning_count": 0
+        }
+      ],
+      "map_standard_deviation": 0.113329,
+      "target_color_pixels": 1106
+    },
+    "building": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "map_standard_deviation": 0.109549,
+          "target_color_pixels": 616,
+          "map_render_state": "ready",
+          "basemap_error": false,
+          "diagnostic_count": 0,
+          "headless_shader_warning_count": 0
+        }
+      ],
+      "map_standard_deviation": 0.109549,
+      "target_color_pixels": 616
+    },
+    "facility": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "map_standard_deviation": 0.134485,
+          "target_color_pixels": 164,
+          "map_render_state": "ready",
+          "basemap_error": false,
+          "diagnostic_count": 0,
+          "headless_shader_warning_count": 0
+        }
+      ],
+      "map_standard_deviation": 0.134485,
+      "target_color_pixels": 164
+    },
+    "mobile_road": {
+      "attempts": [
+        {
+          "attempt": 1,
+          "map_standard_deviation": 0.169329,
+          "target_color_pixels": 3676,
+          "map_render_state": "ready",
+          "basemap_error": false,
+          "diagnostic_count": 0,
+          "headless_shader_warning_count": 0
+        }
+      ],
+      "map_standard_deviation": 0.169329,
+      "target_color_pixels": 3676
+    }
+  },
+  "screenshots": [
+    {
+      "filename": "00-before-known-unknown-desktop.png",
+      "scene": "before-desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 545911,
+      "sha256": "1f0d2357a05a029c20bc31eb59a608a2d728855961698a15dffa40ce8e5eb8dc",
+      "source_commit": "946534c32a965654ee429af01e213cf980b8bac7"
+    },
+    {
+      "filename": "00-before-known-unknown-mobile.png",
+      "scene": "before-mobile",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 131207,
+      "sha256": "4eacc4e14ed8494d24d018cf4b4ce270f18f87846f8a58a8883fc4d4886e5708",
+      "source_commit": "946534c32a965654ee429af01e213cf980b8bac7"
+    },
+    {
+      "filename": "01-landing-desktop.png",
+      "scene": "landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 721004,
+      "sha256": "792e15f5641b1e5031c68d0e560e474c95505b0b8b66a66a7b73d15bec986875",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45"
+    },
+    {
+      "filename": "02-area-800m-population-age.png",
+      "scene": "area-800m-population-age",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 478053,
+      "sha256": "d90ece54b24943d20a4c91dafee21e42687899c4ac8520081afda64919b4cd3f",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "03-story-building-use.png",
+      "scene": "story-building-use",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 604698,
+      "sha256": "17306b106f8c4c2452994058c628b79437e2c0e4697414f085e93a11b1470134",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "04-story-establishments-aggregate.png",
+      "scene": "story-establishments-aggregate",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 530904,
+      "sha256": "e8fdd382a03da88e6d2acacf982b1d2982bbee48d3f3aa24017ccad557d5361c",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "05-story-urban-planning.png",
+      "scene": "story-urban-planning",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 540559,
+      "sha256": "3f5f72d6d34dc1b718a903485a3906232b8eef269c71480c6bfd46ed0363468e",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "06-story-transport.png",
+      "scene": "story-transport",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 534471,
+      "sha256": "5ae998293ecee4072cdd0b09ae421464a6a2a7ec116a03d4b09f710537864c13",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "07-unknown-road-highlight.png",
+      "scene": "unknown-road-highlight",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 566818,
+      "sha256": "003e2a282731c52a47981201c11caa9615fe8210f281049c579f396cf9b2e4d2",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "08-target-road-exact.png",
+      "scene": "target-road-exact",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 290690,
+      "sha256": "59805259edcfc7a44b56635b8ce6e672f7469c03ac1cbc37160599a5cd08f0bb",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815"
+    },
+    {
+      "filename": "09-target-building-exact.png",
+      "scene": "target-building-exact",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 288577,
+      "sha256": "83393dbac9a0ca9f378d1369239bb195f35a2a8b4cb01e1cbd99e5de774d99f4",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=building&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33070&lat=35.44169&z=17.00&selectionType=building&selection=bldg_155e6675-6981-450f-8e73-df0b43418cc2&building=bldg_155e6675-6981-450f-8e73-df0b43418cc2&selectionLng=135.3305760&selectionLat=35.4416887"
+    },
+    {
+      "filename": "10-target-facility-reference.png",
+      "scene": "target-facility-reference",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 750716,
+      "sha256": "6af63834dc6d823dbb87dceb986343c5506b95926683c69ed1f2db756890f39d",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=site&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33205&lat=35.44144&z=15.00&selectionType=facility&selection=medical-026&facility=medical-026&selectionLng=135.3320450&selectionLat=35.4414360"
+    },
+    {
+      "filename": "11-area-500m.png",
+      "scene": "area-500m",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 870558,
+      "sha256": "7d132ab999b41676e4d4d2254333bd993a032a6885f88c9f97e530b08be788e9",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=14.98"
+    },
+    {
+      "filename": "12-area-1km.png",
+      "scene": "area-1km",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 1226339,
+      "sha256": "288745e0a850a73072ce689e4b4c63fa0f974d8fea3b62f9dc557e279b733587",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.98"
+    },
+    {
+      "filename": "13-target-area-fallback.png",
+      "scene": "target-area-fallback",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 794819,
+      "sha256": "22bb6b58a66e082882f72c5c132a4ac624b6bc32709d8c245577f31bb65ad9b5",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=14.30&selectionType=mesh&selection=533512661&mesh=533512661&selectionLng=135.3281250&selectionLat=35.4687500"
+    },
+    {
+      "filename": "14-basemap-degraded-local-vectors.png",
+      "scene": "basemap-degraded",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 225857,
+      "sha256": "98784fcc5bdbe6f9e634f44fdf798609f165ad31622444417d7e4293c8a381c7",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "15-mobile-result.png",
+      "scene": "mobile-result",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 176074,
+      "sha256": "52ad15f43f96035ade2787e023584137bbb1955262e9cc087d3183514977a467",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
+    },
+    {
+      "filename": "16-mobile-target-road-exact.png",
+      "scene": "mobile-target-road-exact",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 2,
+      "physical_dimensions": "780x1688",
+      "bytes": 304677,
+      "sha256": "8bb4f4cf4c62c8abc81a14aa3e7a5a1ca44336e9c953a30793dae983f1ed2f63",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=16.65&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815"
+    },
+    {
+      "filename": "17-retina-dpr2-target-road.png",
+      "scene": "retina-dpr2-target-road",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "device_scale_factor": 2,
+      "physical_dimensions": "2560x1440",
+      "bytes": 751048,
+      "sha256": "d775c4101b0253c0e04a7c9b544c8749504328033cccf1b81de4bf41550387de",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815"
+    }
+  ],
+  "gate_failures": [],
+  "status": [
+    "AUTOMATED_CARTOGRAPHIC_PERFORMANCE_CHECKPOINT_COMPLETE",
+    "READY_FOR_SELF_VISUAL_REVIEW",
+    "READY_FOR_HUMAN_TEST",
+    "AWAITING_HUMAN_TEST",
+    "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
+    "HOLD_MAIN_PROMOTION",
+    "HOLD_P1_M4_M6"
+  ]
+}

@@ -2,7 +2,7 @@
 
 Active goal: `cartographic-interaction-performance-v1`
 
-Current milestone: P3 Lifecycle / Readiness complete; P4 Automated Performance Checkpoint next
+Current milestone: P4 Automated Performance Checkpoint complete; stop
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -24,6 +24,7 @@ Checkpoint state:
 - P1 target path: exact building/road geometry is available from a two-feature, provenance-complete derivative; facility remains a registered local position
 - P2 story path: manifest and story artifacts load independently; building/planning requests are abortable, hash-verified, and cached only after completion
 - P3 lifecycle: stable map/source/layer instances, semantic no-op source/style updates, bounded degraded-basemap behavior, and unchanged exact ready gates
+- P4 evidence: `docs/cartographic-performance-checkpoint.md`, `analysis/outputs/real/cartographic-performance-profile-after.json`, and `docs/assets/cartographic-performance-checkpoint/manifest.json`
 
 Core value hypothesis:
 
@@ -50,7 +51,8 @@ Validation status:
 - Unknown-to-field-task workflow: `AWAITING_MUNICIPAL_WORKFLOW_REVIEW`
 - Automated Public UX: `AUTOMATED_UX_CHECKPOINT_COMPLETE`
 - Automated cartographic checkpoint: `AUTOMATED_CARTOGRAPHIC_CHECKPOINT_COMPLETE`
-- Visual-review readiness: `READY_FOR_VISUAL_REVIEW`
+- Automated cartographic performance: `AUTOMATED_CARTOGRAPHIC_PERFORMANCE_CHECKPOINT_COMPLETE`
+- Visual-review readiness: `READY_FOR_SELF_VISUAL_REVIEW`
 - Human-test readiness: `READY_FOR_HUMAN_TEST`
 - Public copy comprehension: `AWAITING_HUMAN_TEST`
 
@@ -85,32 +87,32 @@ Maizuru borehole evidence:
 
 Current stop state:
 
-- `AUTOMATED_CARTOGRAPHIC_CHECKPOINT_COMPLETE`
-- `AUTOMATED_UX_CHECKPOINT_COMPLETE`
-- `READY_FOR_VISUAL_REVIEW`
+- `AUTOMATED_CARTOGRAPHIC_PERFORMANCE_CHECKPOINT_COMPLETE`
+- `READY_FOR_SELF_VISUAL_REVIEW`
 - `READY_FOR_HUMAN_TEST`
 - `AWAITING_HUMAN_TEST`
 - `AWAITING_MUNICIPAL_WORKFLOW_REVIEW`
 - `HOLD_MAIN_PROMOTION`
 - `HOLD_P1_M4_M6`
-- `BOREHOLE_INTEGRATE_RESEARCH_ONLY`
 
 Automated checkpoint facts:
 
-- 19 versioned before/after and state screenshots were captured with hashes.
-- Public FMR samples were `3988 / 1943 / 1053 / 1071 / 1125 ms`; median `1125 ms`.
-- 500m / 800m / 1km Area render readiness was `1278 / 288 / 1242 ms`.
+- Five controlled cold/warm samples were captured without weakening the C5 story, exact-target, facility, or compositor-ready meanings.
+- Public FMR median is `1685.3 ms`; 800m Area-ready median is `174.4 ms`.
+- Building-use is `2673.4 ms` cold / `1739.5 ms` warm; exact building is `1295.0 / 1098.3 ms`; facility is `1227.9 / 938.0 ms`; exact road is `1045.3 / 1052.5 ms`. Every primary median target passes.
+- 19 versioned screenshots were captured with hashes, C5 pixel comparisons, and semantic readiness assertions. All required desktop story and mobile states are ready with no pending local source.
 - Exact PLATEAU road and building targets, a registered-position facility target, and an honest Area fallback were verified separately.
 - Desktop map/panel remained `67.9 / 32.1`; mobile result map share remained `31.8%`; overlap and horizontal overflow were zero.
-- Critical/serious accessibility violations, unnamed visible controls, capture diagnostics, prohibited copy, internal IDs, and field-evidence inputs were zero.
+- Critical/serious accessibility violations, unnamed visible controls, critical capture diagnostics, prohibited copy, internal IDs, and field-evidence inputs were zero.
 - Visual recognition and usefulness remain human judgments. No participant result has been generated or inferred.
 
 Remaining measured risks:
 
-- The controlled five-sample P0 profile records building target medians of `3144.8 ms` cold / `2502.0 ms` warm and facility medians of `4450.2 ms` cold / `3602.8 ms` warm, with much larger retained outliers.
-- Every story/target action currently resubmits seven GeoJSON sources and at least 6,643 features; some cold target transitions submit the full set twice.
-- All three heavy artifacts load together after Area confirmation. Exact target lookup and the registered facility presentation remain unnecessarily coupled to Area context.
-- A basemap-unavailable state preserves local vectors, but the controlled degraded run observes hundreds of aborted external tile requests per page. Retry/readiness stabilization remains P3 work.
+- Cold building-use retains a `5170.0 ms` outlier even though its median passes. The 3.24 MiB / 4,898-feature building derivative remains the heaviest allowed display path.
+- Two FMR samples exceeded 2 seconds even though the median passes. Initial JavaScript and headless SwiftShader variance remain observable.
+- The preview server transfers raw response bodies; profiled gzip is a deterministic comparison budget, not measured preview compression.
+- Idle building prefetch is intentionally cancelled when target intent wins and is skipped for Save-Data/slow connections, so cold performance remains device/network dependent.
+- External basemap availability remains outside CITY GAP control. The bounded degraded path and online recovery are automated, but actual device confidence remains a human-review question.
 
 P1 acceptance facts:
 
@@ -137,4 +139,4 @@ P3 acceptance facts:
 - A failed external basemap hides after 16 bounded tile attempts, preserves local vectors and the degraded notice, and waits for an `online` event. A browser recovery test restored the same raster layer to visible/ready with no map recreation.
 - Clicking the current Summary story repeats its existing request intent, allowing a failed hash/network load to retry without adding a new control or changing copy.
 
-Next action is P4 Automated Performance Checkpoint. Stop after its evidence commit and remote CI report. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
+P4 is complete locally. Stop after the evidence commit and feature-branch remote CI report. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.

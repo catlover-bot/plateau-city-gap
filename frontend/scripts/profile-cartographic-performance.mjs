@@ -324,13 +324,16 @@ async function startStationArea(page) {
   await page.getByRole("button", { name: "選んだ駅を起点にする", exact: true }).click();
   await waitForStep(page, "radius");
   await waitForMap(page);
+  const radiusStartedAt = await page.evaluate(() => performance.now());
   await page.getByRole("button", { name: "800m", exact: true }).click();
   await waitForMap(page);
+  const radiusReadyAt = await compositorTimestamp(page);
   await resetProbe(page, "asset-load");
   await page.getByRole("button", { name: "この範囲を調べる", exact: true }).click();
   await waitForStep(page, "result");
   await waitForCartography(page);
   await waitForMap(page, { story: "population-age" });
+  return Number((radiusReadyAt - radiusStartedAt).toFixed(3));
 }
 
 async function selectStory(page, label, expectedId) {
@@ -441,9 +444,10 @@ try {
     }));
     await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: waitTimeoutMs });
     await waitForStep(page, "intro");
+    const fmrMs = Number((await compositorTimestamp(page)).toFixed(3));
     await installMapProbe(page);
     process.stderr.write(`[profile] sample ${sample}: start 800m Area\n`);
-    await startStationArea(page);
+    const area800ReadyMs = await startStationArea(page);
 
     process.stderr.write(`[profile] sample ${sample}: cold building story\n`);
     const coldBuildingUse = await profileStory(page, client, "cold");
@@ -503,6 +507,8 @@ try {
     }));
     samples.push({
       sample,
+      fmr_ms: fmrMs,
+      area_800_ready_ms: area800ReadyMs,
       cold,
       warm,
       network: cartographyNetwork(pageProfile),
@@ -550,7 +556,9 @@ const profile = {
     reduced_motion: true,
     service_worker: "blocked",
     external_basemap: "intentionally blocked so local cartographic readiness is measured under the documented degraded state",
-    cold_definition: "first path activation in a fresh page after the existing C5 full derivative reaches ready",
+    fmr_definition: "navigation start to the first Public intro frame that has completed two requestAnimationFrame callbacks",
+    area_800_ready_definition: "800m radius selection to the semantically ready Area map followed by two requestAnimationFrame callbacks",
+    cold_definition: "first path activation in a fresh page after the default Area result reaches its existing semantic local-map ready gate",
     warm_definition: "second activation of the same path in the same page with the same semantic ready gate",
     ready_definition: {
       story: "requested story active, public MapLibre sources ready, and first thematic building feature rendered",
@@ -560,6 +568,10 @@ const profile = {
     },
   },
   assets: assetProfiles,
+  initial_medians: {
+    fmr_ms: median(samples.map((item) => item.fmr_ms)),
+    area_800_ready_ms: median(samples.map((item) => item.area_800_ready_ms)),
+  },
   medians,
   samples,
   garbage_collection: "not directly observable without intrusive V8 tracing; JS heap/task deltas and long tasks are retained instead",

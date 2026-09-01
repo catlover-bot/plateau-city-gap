@@ -8,7 +8,9 @@ process.env.PW_TEST_SCREENSHOT_NO_FONTS_READY = "1";
 
 const baseUrl = process.argv[2] ?? "http://127.0.0.1:4175/plateau-city-gap/";
 const repositoryRoot = path.resolve(process.cwd(), "..");
-const outputDirectory = path.join(repositoryRoot, "docs/assets/cartographic-checkpoint");
+const outputDirectoryName = process.argv[3] ?? "cartographic-checkpoint";
+const outputDirectory = path.join(repositoryRoot, "docs/assets", outputDirectoryName);
+const performanceCheckpoint = outputDirectoryName === "cartographic-performance-checkpoint";
 const baselineCommit = "946534c32a965654ee429af01e213cf980b8bac7";
 const repositoryHead = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: repositoryRoot,
@@ -27,6 +29,9 @@ const prohibitedCopy = [
   "ボーリング",
   "Ground X-Ray",
 ];
+const isHeadlessShaderWarning = (message) => message.startsWith("Could not compile fragment shader:");
+const isExpectedCartographyAbort = (item) => item.error === "net::ERR_ABORTED"
+  && item.url.includes("/data/cartography/");
 
 const sha256 = (value) => createHash("sha256").update(value).digest("hex");
 const round = (value) => Math.round(value * 10) / 10;
@@ -341,6 +346,19 @@ async function selectStory(page, label, expectedId) {
   await button.click();
   await page.locator(`.public-area[data-active-story="${expectedId}"]`).waitFor({ timeout: 30_000 });
   await waitForMap(page, { story: expectedId });
+  const renderedLayer = expectedId === "building-use"
+    ? { source: "public-buildings", layer: "public-buildings-fill" }
+    : expectedId === "urban-planning"
+      ? { source: "public-planning", layer: "public-planning-fill" }
+      : null;
+  if (renderedLayer) {
+    await page.waitForFunction((expected) => {
+      const map = document.querySelector(".analytical-map-canvas")?.__cityGapMap;
+      if (!map?.getLayer(expected.layer) || !map.isSourceLoaded(expected.source)) return false;
+      return map.queryRenderedFeatures(undefined, { layers: [expected.layer] }).length > 0;
+    }, renderedLayer, { timeout: 120_000 });
+    await waitForMap(page, { story: expectedId });
+  }
   return Date.now() - startedAt;
 }
 
@@ -370,7 +388,6 @@ async function openTarget(page, resolution, expectedKind) {
         .some((id) => map.queryRenderedFeatures(undefined, { layers: [id] }).length > 0);
     }, expectedKind, { timeout: 120_000 });
     readyMs = Date.now() - startedAt;
-    await page.waitForTimeout(5_000);
   }
   return readyMs;
 }
@@ -401,8 +418,9 @@ async function captureIsolatedTarget({
       const mapStandardDeviation = mapPixelStandardDeviation(filename, state.map, dpr);
       const targetColorPixels = targetColorPixelCount(filename, state.map, dpr);
       const diagnostic = diagnostics.at(-1);
-      const diagnosticCount = (diagnostic?.page_errors.length ?? 0)
-        + (diagnostic?.failed_same_origin_requests.length ?? 0)
+      const headlessShaderWarningCount = diagnostic?.page_errors.filter(isHeadlessShaderWarning).length ?? 0;
+      const diagnosticCount = (diagnostic?.page_errors.filter((message) => !isHeadlessShaderWarning(message)).length ?? 0)
+        + (diagnostic?.failed_same_origin_requests.filter((item) => !isExpectedCartographyAbort(item)).length ?? 0)
         + (diagnostic?.error_responses.length ?? 0);
       attempts.push({
         attempt,
@@ -411,6 +429,7 @@ async function captureIsolatedTarget({
         map_render_state: state.map_render_state,
         basemap_error: state.basemap_error,
         diagnostic_count: diagnosticCount,
+        headless_shader_warning_count: headlessShaderWarningCount,
       });
       await context.close();
       if (mapStandardDeviation >= minimumMapDeviation && targetColorPixels >= 100 * dpr * dpr && diagnosticCount === 0) {
@@ -728,12 +747,41 @@ try {
     mobile: pixelDifference(baselineMobilePath, afterMobilePath, 390, 844),
     baseline_commit: baselineCommit,
   };
+  const c5Directory = path.join(repositoryRoot, "docs/assets/cartographic-checkpoint");
+  const c5VisualRegression = [];
+  if (performanceCheckpoint) {
+    for (const screenshot of screenshots.filter((item) => !item.filename.startsWith("00-before-"))) {
+      const beforePath = path.join(c5Directory, screenshot.filename);
+      const afterPath = path.join(outputDirectory, screenshot.filename);
+      try {
+        const dimensions = execFileSync("identify", ["-format", "%w %h", afterPath], { encoding: "utf8" })
+          .trim().split(/\s+/).map(Number);
+        await readFile(beforePath);
+        c5VisualRegression.push({
+          scene: screenshot.scene,
+          c5_path: path.relative(repositoryRoot, beforePath),
+          after_path: path.relative(repositoryRoot, afterPath),
+          ...pixelDifference(beforePath, afterPath, dimensions[0], dimensions[1]),
+        });
+      } catch {
+        c5VisualRegression.push({ scene: screenshot.scene, comparison: "unavailable" });
+      }
+    }
+  }
 
   const criticalDiagnostics = diagnostics.flatMap((entry) => [
-    ...entry.page_errors,
-    ...entry.failed_same_origin_requests.map((item) => `${entry.label}: ${JSON.stringify(item)}`),
+    ...entry.page_errors.filter((message) => !isHeadlessShaderWarning(message)),
+    ...entry.failed_same_origin_requests
+      .filter((item) => !isExpectedCartographyAbort(item))
+      .map((item) => `${entry.label}: ${JSON.stringify(item)}`),
     ...entry.error_responses.map((item) => `${entry.label}: ${JSON.stringify(item)}`),
   ]);
+  const headlessShaderWarnings = diagnostics.flatMap((entry) => entry.page_errors
+    .filter(isHeadlessShaderWarning)
+    .map((message) => ({ label: entry.label, message })));
+  const expectedRequestCancellations = diagnostics.flatMap((entry) => entry.failed_same_origin_requests
+    .filter(isExpectedCartographyAbort)
+    .map((item) => ({ label: entry.label, ...item })));
   const allStates = Object.values(stateEvidence);
   const storyStates = ["population_age", "building_use", "establishments", "urban_planning", "transport"].map((key) => stateEvidence[key]);
   const expectedStories = ["population-age", "building-use", "establishments", "urban-planning", "transport"];
@@ -749,6 +797,7 @@ try {
   if (allStates.some((state) => state.three_d_button_count !== 0)) gateFailures.push("3D button was displayed");
   if (allStates.some((state) => state.visible_actionable_controls > 12 || state.horizontal_overflow_px > 0 || state.map_panel_overlap_px2 > 0)) gateFailures.push("Control/overflow/overlap gate failed");
   if (allStates.some((state) => state.map_render_ready === "true" && state.pending_sources)) gateFailures.push("Ready state retained pending sources");
+  if ([...storyStates, stateEvidence.mobile_result].some((state) => state.map_render_ready !== "true" || state.pending_sources)) gateFailures.push("Story semantic-ready state failed");
   if (stateEvidence.population_age.map_share_percent < 65 || stateEvidence.population_age.map_share_percent > 72) gateFailures.push("Desktop map share failed");
   if (stateEvidence.mobile_result.map_share_percent < 28 || stateEvidence.mobile_result.map_share_percent > 32) gateFailures.push("Mobile result map share failed");
   if (stateEvidence.population_age.map_occlusion_percent > 8 || stateEvidence.mobile_result.map_occlusion_percent > 15) gateFailures.push("Map occlusion failed");
@@ -762,7 +811,9 @@ try {
   if (!advanced || !legacyM3) gateFailures.push("Route regression failed");
 
   const manifest = {
-    schema_version: "citygap.cartographic-checkpoint@1",
+    schema_version: performanceCheckpoint
+      ? "citygap.cartographic-performance-checkpoint@1"
+      : "citygap.cartographic-checkpoint@1",
     generated_at: new Date().toISOString(),
     repository_head_before_c5_commit: repositoryHead,
     base_url: baseUrl,
@@ -787,19 +838,24 @@ try {
     public_boundary: boundaryAudit,
     routes: { advanced, legacy_m3: legacyM3, municipal_surface: "validated by separate municipal production build" },
     before_after: beforeAfter,
+    c5_visual_regression: c5VisualRegression,
     diagnostics,
+    headless_shader_warnings: headlessShaderWarnings,
+    expected_request_cancellations: expectedRequestCancellations,
     target_visual_signals: targetVisualSignals,
     screenshots,
     gate_failures: gateFailures,
-    status: gateFailures.length ? ["C5_INCOMPLETE"] : [
-      "AUTOMATED_CARTOGRAPHIC_CHECKPOINT_COMPLETE",
-      "READY_FOR_VISUAL_REVIEW",
+    status: gateFailures.length ? [performanceCheckpoint ? "P4_INCOMPLETE" : "C5_INCOMPLETE"] : [
+      performanceCheckpoint
+        ? "AUTOMATED_CARTOGRAPHIC_PERFORMANCE_CHECKPOINT_COMPLETE"
+        : "AUTOMATED_CARTOGRAPHIC_CHECKPOINT_COMPLETE",
+      performanceCheckpoint ? "READY_FOR_SELF_VISUAL_REVIEW" : "READY_FOR_VISUAL_REVIEW",
       "READY_FOR_HUMAN_TEST",
       "AWAITING_HUMAN_TEST",
       "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
       "HOLD_MAIN_PROMOTION",
       "HOLD_P1_M4_M6",
-      "BOREHOLE_INTEGRATE_RESEARCH_ONLY",
+      ...(performanceCheckpoint ? [] : ["BOREHOLE_INTEGRATE_RESEARCH_ONLY"]),
     ],
   };
   await writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
