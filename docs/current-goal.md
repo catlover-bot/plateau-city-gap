@@ -2,7 +2,7 @@
 
 Active goal: `cartographic-interaction-performance-v1`
 
-Current milestone: P1 Target Fast Path complete; P2 Story Loading next
+Current milestone: P2 Story Loading complete; P3 Lifecycle / Readiness next
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -22,6 +22,7 @@ Checkpoint state:
 - C5 baseline: `docs/cartographic-validation-checkpoint.md` and `docs/assets/cartographic-checkpoint/manifest.json`
 - P0 evidence: `docs/cartographic-performance-profile.md` and `analysis/outputs/real/cartographic-performance-profile-baseline.json`
 - P1 target path: exact building/road geometry is available from a two-feature, provenance-complete derivative; facility remains a registered local position
+- P2 story path: manifest and story artifacts load independently; building/planning requests are abortable, hash-verified, and cached only after completion
 
 Core value hypothesis:
 
@@ -117,4 +118,13 @@ P1 acceptance facts:
 - With all three Area-wide artifacts deliberately blocked, the browser still rendered the exact road polygon, exact building polygon, and facility registered-position marker. The Area loader honestly reported degraded while the target fast path reported ready.
 - A P1 smoke profile reduced target-step GeoJSON submission from `6,643` features to `4` essential Area/target features. Final latency is not claimed yet because redundant source/style work remains P3 scope.
 
-Next action is P2 Story Loading, followed only by P3 Lifecycle/Readiness and P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
+P2 acceptance facts:
+
+- Landing requested zero cartography artifacts. Result-idle requested one manifest, the two-feature target artifact, and the 800 m Area building story artifact; it did not request Area roads or planning.
+- Selecting the planning story requested only the planning artifact. Returning to building use reused the completed source/version/hash-keyed artifact; every artifact request count remained one.
+- Building use retains all 4,898 source-attributed buildings intersecting the versioned 800 m Area. No usage is inferred and no visible information is removed.
+- Save-Data, `slow-2g`, and `2g` connections skip idle prefetch. Leaving result or choosing a different story cancels a stale in-flight story request; a user-selected story takes priority.
+- Story and target artifact bytes are verified against the manifest SHA-256 before entering the completed cache. A mismatched artifact is rejected rather than reused.
+- A single P2 smoke run observed building-use `1809.1 ms` cold / `2156.5 ms` warm. This is diagnostic only; five-sample P4 values determine acceptance after P3.
+
+Next action is P3 Lifecycle/Readiness, followed only by P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.

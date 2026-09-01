@@ -7,6 +7,7 @@ export type PublicStoryId =
   | "establishments"
   | "urban-planning"
   | "transport";
+export type PublicStoryArtifactKind = "buildings" | "planning";
 
 export type TargetResolution = "exact" | "reference_position" | "area_fallback";
 export type PublicTargetKind = "building" | "road" | "facility" | "mesh";
@@ -58,9 +59,9 @@ export interface PublicCartographyManifest {
 
 export interface PublicCartographyData {
   manifest: PublicCartographyManifest;
-  buildings: GeoJsonFeatureCollection;
-  roads: GeoJsonFeatureCollection;
-  planning: GeoJsonFeatureCollection;
+  buildings?: GeoJsonFeatureCollection;
+  roads?: GeoJsonFeatureCollection;
+  planning?: GeoJsonFeatureCollection;
 }
 
 export interface PublicTargetData {
@@ -110,6 +111,7 @@ export interface PublicLegend {
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 const EARTH_RADIUS_M = 6_378_137;
 const manifestRequests = new WeakMap<object, Map<string, Promise<PublicCartographyManifest>>>();
+const completedArtifactCache = new Map<string, GeoJsonFeatureCollection>();
 
 function parseCollection(value: unknown, label: string): GeoJsonFeatureCollection {
   if (
@@ -138,6 +140,29 @@ export function parsePublicCartographyManifest(value: unknown): PublicCartograph
 function cartographyRoot(baseUrl: string) {
   const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
   return `${base}data/cartography/`;
+}
+
+function artifactCacheKey(manifest: PublicCartographyManifest, kind: string) {
+  const artifact = manifest.artifacts[kind as keyof PublicCartographyManifest["artifacts"]];
+  return [manifest.source.version, manifest.source.sha256, kind, artifact.sha256].join(":");
+}
+
+async function sha256Hex(bytes: ArrayBuffer) {
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, "0")).join("");
+}
+
+async function parseVerifiedCollection(
+  response: Response,
+  artifact: DerivativeArtifact,
+  label: string,
+) {
+  const bytes = await response.arrayBuffer();
+  const actualHash = await sha256Hex(bytes);
+  if (actualHash !== artifact.sha256 || (artifact.artifact_sha256 && actualHash !== artifact.artifact_sha256)) {
+    throw new Error(`${label} display geometryのartifact hashがmanifestと一致しません。`);
+  }
+  return parseCollection(JSON.parse(new TextDecoder().decode(bytes)), label);
 }
 
 export function loadPublicCartographyManifest(
@@ -206,11 +231,16 @@ export async function loadPublicTargetData(
   ) {
     throw new Error("Exact target display derivativeのprovenanceが一致しません。");
   }
-  const response = await fetcher(`${root}${artifact.path}`);
-  if (!response.ok) {
-    throw new Error(`Exact target display geometryを読み込めません（HTTP ${response.status}）`);
+  const cacheKey = artifactCacheKey(manifest, "targets");
+  let targets = completedArtifactCache.get(cacheKey);
+  if (!targets) {
+    const response = await fetcher(`${root}${artifact.path}`);
+    if (!response.ok) {
+      throw new Error(`Exact target display geometryを読み込めません（HTTP ${response.status}）`);
+    }
+    targets = await parseVerifiedCollection(response, artifact, "確認対象");
+    completedArtifactCache.set(cacheKey, targets);
   }
-  const targets = parseCollection(await response.json(), "確認対象");
   const featureIds = new Set<string>();
   const objectIds = new Set<string>();
   for (const feature of targets.features) {
@@ -231,6 +261,35 @@ export async function loadPublicTargetData(
     throw new Error("Exact target display geometryのmanifest scopeが一致しません。");
   }
   return { manifest, targets };
+}
+
+export async function loadPublicStoryArtifact(
+  kind: PublicStoryArtifactKind,
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL,
+  signal?: AbortSignal,
+): Promise<{ manifest: PublicCartographyManifest; kind: PublicStoryArtifactKind; collection: GeoJsonFeatureCollection }> {
+  const root = cartographyRoot(baseUrl);
+  const manifest = await loadPublicCartographyManifest(fetcher, baseUrl);
+  const artifact = manifest.artifacts[kind];
+  if (
+    artifact.source_dataset_version !== manifest.source.version
+    || artifact.source_sha256 !== manifest.source.sha256
+    || artifact.rule_version !== manifest.rule_version
+  ) {
+    throw new Error(`${kind} display derivativeのprovenanceが一致しません。`);
+  }
+  const cacheKey = artifactCacheKey(manifest, kind);
+  const cached = completedArtifactCache.get(cacheKey);
+  if (cached) return { manifest, kind, collection: cached };
+  const response = await fetcher(`${root}${artifact.path}`, { signal });
+  if (!response.ok) {
+    throw new Error(`${kind} display geometryを読み込めません（HTTP ${response.status}）`);
+  }
+  const collection = await parseVerifiedCollection(response, artifact, kind === "buildings" ? "建物" : "都市計画");
+  if (signal?.aborted) throw signal.reason ?? new DOMException("Aborted", "AbortError");
+  completedArtifactCache.set(cacheKey, collection);
+  return { manifest, kind, collection };
 }
 
 function destination(center: [number, number], radiusM: number, bearingRadians: number): [number, number] {
@@ -304,6 +363,17 @@ export function derivativeAvailableFor(
     && summary.origin.source_feature_id === origin.source_feature_id
     && Math.abs(summary.origin.coordinates[0] - origin.coordinates[0]) < 1e-7
     && Math.abs(summary.origin.coordinates[1] - origin.coordinates[1]) < 1e-7;
+}
+
+export function storyDerivativeAvailableFor(
+  data: PublicCartographyData | null,
+  summary: InvestigationAreaSummary | null,
+  story: PublicStoryId,
+) {
+  if (!derivativeAvailableFor(data, summary)) return false;
+  if (story === "building-use") return Boolean(data?.buildings);
+  if (story === "urban-planning") return Boolean(data?.planning);
+  return true;
 }
 
 export function resolvePublicTarget(

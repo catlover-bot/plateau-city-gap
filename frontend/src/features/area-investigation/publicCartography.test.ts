@@ -1,10 +1,12 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createHash, webcrypto } from "node:crypto";
 import type { GeoJsonFeatureCollection } from "../../types";
 import type { AreaTarget, InvestigationAreaSummary } from "./areaTypes";
 import {
   buildPublicAreaGeometry,
   derivativeAvailableFor,
   loadPublicCartographyData,
+  loadPublicStoryArtifact,
   loadPublicTargetData,
   publicStoryLegend,
   resolvePublicTarget,
@@ -12,6 +14,9 @@ import {
   type PublicCartographyManifest,
   type PublicTargetData,
 } from "./publicCartography";
+
+beforeAll(() => vi.stubGlobal("crypto", webcrypto));
+afterAll(() => vi.unstubAllGlobals());
 
 const empty: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 const building = {
@@ -77,6 +82,18 @@ const targetData: PublicTargetData = {
   manifest,
   targets: { type: "FeatureCollection", features: [building] },
 };
+
+function jsonBytes(value: unknown) {
+  return new TextEncoder().encode(JSON.stringify(value));
+}
+
+function bytesHash(bytes: Uint8Array) {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
+function arrayBuffer(bytes: Uint8Array) {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+}
 
 const summary = {
   radius_m: 800,
@@ -188,23 +205,137 @@ describe("Public cartography contract", () => {
   });
 
   it("loads a provenance-matched exact target artifact without Area story geometry", async () => {
+    const targetBytes = jsonBytes(targetData.targets);
+    const targetManifest = {
+      ...manifest,
+      artifacts: {
+        ...manifest.artifacts,
+        targets: {
+          ...manifest.artifacts.targets,
+          sha256: bytesHash(targetBytes),
+          artifact_sha256: bytesHash(targetBytes),
+        },
+      },
+    };
     const responses = new Map<string, unknown>([
-      ["/target/data/cartography/manifest.json", manifest],
-      ["/target/data/cartography/targets.geojson", targetData.targets],
+      ["/target/data/cartography/manifest.json", targetManifest],
     ]);
     const fetchMock = vi.fn(async (url: string | URL | Request) => ({
       ok: responses.has(String(url)),
       status: responses.has(String(url)) ? 200 : 404,
       json: async () => responses.get(String(url)),
+      arrayBuffer: async () => arrayBuffer(targetBytes),
+    }));
+    fetchMock.mockImplementation(async (url: string | URL | Request) => ({
+      ok: String(url).endsWith("targets.geojson") || responses.has(String(url)),
+      status: String(url).endsWith("targets.geojson") || responses.has(String(url)) ? 200 : 404,
+      json: async () => responses.get(String(url)),
+      arrayBuffer: async () => arrayBuffer(targetBytes),
     }));
 
     const loaded = await loadPublicTargetData(fetchMock as unknown as typeof fetch, "/target/");
 
-    expect(loaded).toEqual(targetData);
+    expect(loaded).toEqual({ manifest: targetManifest, targets: targetData.targets });
     expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([
       "/target/data/cartography/manifest.json",
       "/target/data/cartography/targets.geojson",
     ]);
+  });
+
+  it("loads and reuses one hash-verified story artifact", async () => {
+    const buildingCollection = { type: "FeatureCollection" as const, features: [building] };
+    const buildingBytes = jsonBytes(buildingCollection);
+    const storyManifest = {
+      ...manifest,
+      source: { ...manifest.source, version: "story-source-v1" },
+      artifacts: {
+        ...manifest.artifacts,
+        buildings: {
+          ...manifest.artifacts.buildings,
+          source_dataset_version: "story-source-v1",
+          source_sha256: manifest.source.sha256,
+          rule_version: manifest.rule_version,
+          sha256: bytesHash(buildingBytes),
+          artifact_sha256: bytesHash(buildingBytes),
+        },
+      },
+    };
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => storyManifest,
+      arrayBuffer: async () => arrayBuffer(buildingBytes),
+    }));
+
+    const first = await loadPublicStoryArtifact("buildings", fetchMock as unknown as typeof fetch, "/story/");
+    const second = await loadPublicStoryArtifact("buildings", fetchMock as unknown as typeof fetch, "/story/");
+
+    expect(first.collection).toEqual(buildingCollection);
+    expect(second.collection).toBe(first.collection);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("rejects stale story bytes instead of caching them", async () => {
+    const staleBytes = jsonBytes({ type: "FeatureCollection", features: [] });
+    const staleManifest = {
+      ...manifest,
+      source: { ...manifest.source, version: "stale-story-source" },
+      artifacts: {
+        ...manifest.artifacts,
+        buildings: {
+          ...manifest.artifacts.buildings,
+          source_dataset_version: "stale-story-source",
+          source_sha256: manifest.source.sha256,
+          rule_version: manifest.rule_version,
+          sha256: "0".repeat(64),
+        },
+      },
+    };
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => staleManifest,
+      arrayBuffer: async () => arrayBuffer(staleBytes),
+    }));
+
+    await expect(loadPublicStoryArtifact("buildings", fetchMock as unknown as typeof fetch, "/stale-story/"))
+      .rejects.toThrow("artifact hash");
+  });
+
+  it("passes cancellation to a stale story request", async () => {
+    const controller = new AbortController();
+    const abortManifest = {
+      ...manifest,
+      source: { ...manifest.source, version: "abort-story-source" },
+      artifacts: {
+        ...manifest.artifacts,
+        buildings: {
+          ...manifest.artifacts.buildings,
+          source_dataset_version: "abort-story-source",
+          source_sha256: manifest.source.sha256,
+          rule_version: manifest.rule_version,
+        },
+      },
+    };
+    const fetchMock = vi.fn((url: string | URL | Request, init?: RequestInit) => {
+      if (String(url).endsWith("manifest.json")) {
+        return Promise.resolve({ ok: true, status: 200, json: async () => abortManifest });
+      }
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")), { once: true });
+      });
+    });
+
+    const pending = loadPublicStoryArtifact(
+      "buildings",
+      fetchMock as unknown as typeof fetch,
+      "/abort-story/",
+      controller.signal,
+    );
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    controller.abort();
+
+    await expect(pending).rejects.toMatchObject({ name: "AbortError" });
   });
 
   it("rejects a target artifact whose provenance does not match the manifest source", async () => {

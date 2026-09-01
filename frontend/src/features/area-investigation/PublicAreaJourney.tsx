@@ -23,8 +23,10 @@ import {
   derivativeAvailableFor,
   publicStoryLegend,
   resolvePublicTarget,
+  storyDerivativeAvailableFor,
   type PublicCartographyData,
   type PublicCartographyPresentation,
+  type PublicStoryArtifactKind,
   type PublicStoryId,
   type PublicTargetData,
 } from "./publicCartography";
@@ -78,8 +80,11 @@ interface Props {
   cartographyError?: string | null;
   targetCartography: PublicTargetData | null;
   targetCartographyError?: string | null;
+  storyCartographyLoading?: PublicStoryArtifactKind | null;
   onRequestCartography(): void;
   onRequestTargetCartography(): void;
+  onRequestStoryCartography(story: PublicStoryId): void;
+  onCancelStoryCartography(): void;
   state: SpatialState;
   onOpenAdvanced(): void;
   onSelectionChange(selection: SpatialSelection | null): void;
@@ -93,8 +98,11 @@ export function PublicAreaJourney({
   cartographyError = null,
   targetCartography,
   targetCartographyError = null,
+  storyCartographyLoading = null,
   onRequestCartography,
   onRequestTargetCartography,
+  onRequestStoryCartography,
+  onCancelStoryCartography,
   state,
   onOpenAdvanced,
   onSelectionChange,
@@ -124,7 +132,7 @@ export function PublicAreaJourney({
     () => origin ? buildPublicAreaGeometry(origin.coordinates, radius) : null,
     [origin, radius],
   );
-  const derivativeAvailable = derivativeAvailableFor(cartography, summary);
+  const derivativeAvailable = storyDerivativeAvailableFor(cartography, summary, activeStory);
   const targetDerivativeAvailable = derivativeAvailableFor(targetCartography ?? cartography, summary);
   const targetRender = useMemo(
     () => resolvePublicTarget(
@@ -143,7 +151,11 @@ export function PublicAreaJourney({
     showTarget: step === "target",
     derivativeAvailable: step === "target" ? targetDerivativeAvailable : derivativeAvailable,
   }), [activeStory, areaGeometry, cartography, derivativeAvailable, step, targetDerivativeAvailable, targetRender]);
-  const cartographyStatusLegend = !cartography && step === "result" ? {
+  const activeStoryArtifact = activeStory === "building-use"
+    ? "buildings"
+    : activeStory === "urban-planning" ? "planning" : null;
+  const activeStoryPending = Boolean(activeStoryArtifact && !derivativeAvailable);
+  const cartographyStatusLegend = step === "result" && (!cartography || activeStoryPending) ? {
     title: "地図表示",
     note: cartographyError ?? "PLATEAU表示用データを準備中です",
     items: [],
@@ -173,6 +185,26 @@ export function PublicAreaJourney({
       onRequestTargetCartography();
     }
   }, [onRequestTargetCartography, selectedUnknown, step]);
+
+  useEffect(() => {
+    if (step === "result") onRequestStoryCartography(activeStory);
+    else onCancelStoryCartography();
+  }, [activeStory, onCancelStoryCartography, onRequestStoryCartography, step]);
+
+  useEffect(() => {
+    if (step !== "result" || activeStory !== "population-age") return;
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    if (connection?.saveData || connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g") return;
+    const prefetch = () => onRequestStoryCartography("building-use");
+    if ("requestIdleCallback" in window) {
+      const handle = window.requestIdleCallback(prefetch, { timeout: 1_200 });
+      return () => window.cancelIdleCallback(handle);
+    }
+    const handle = setTimeout(prefetch, 900);
+    return () => clearTimeout(handle);
+  }, [activeStory, onRequestStoryCartography, step]);
 
   useEffect(() => {
     if (step !== "target" || !summary || !selectedUnknown) return;
@@ -260,7 +292,8 @@ export function PublicAreaJourney({
       data-public-step={step}
       data-map-mode={mapMode}
       data-active-story={step === "result" ? activeStory : "none"}
-      data-cartography-state={cartography ? "ready" : cartographyError ? "degraded" : "loading"}
+      data-cartography-state={cartography && !activeStoryPending ? "ready" : cartographyError ? "degraded" : "loading"}
+      data-story-cartography-loading={storyCartographyLoading ?? "none"}
       data-target-cartography-state={targetCartography ? "ready" : targetCartographyError ? "degraded" : "idle"}
       data-presentation-target-kind={targetRender?.kind ?? "none"}
       data-presentation-target-resolution={targetRender?.resolution ?? "none"}

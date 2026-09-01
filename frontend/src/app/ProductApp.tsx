@@ -35,9 +35,12 @@ import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJour
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
 import {
-  loadPublicCartographyData,
+  loadPublicCartographyManifest,
+  loadPublicStoryArtifact,
   loadPublicTargetData,
   type PublicCartographyData,
+  type PublicStoryArtifactKind,
+  type PublicStoryId,
   type PublicTargetData,
 } from "../features/area-investigation/publicCartography";
 
@@ -103,6 +106,8 @@ export function ProductApp() {
   const [areaError, setAreaError] = useState<string | null>(null);
   const [cartographyError, setCartographyError] = useState<string | null>(null);
   const [cartographyRequested, setCartographyRequested] = useState(false);
+  const [storyCartographyRequested, setStoryCartographyRequested] = useState<PublicStoryArtifactKind | null>(null);
+  const [storyCartographyLoading, setStoryCartographyLoading] = useState<PublicStoryArtifactKind | null>(null);
   const [targetCartographyError, setTargetCartographyError] = useState<string | null>(null);
   const [targetCartographyRequested, setTargetCartographyRequested] = useState(false);
   const [areaJourneyOpen, setAreaJourneyOpen] = useState(
@@ -133,18 +138,36 @@ export function ProductApp() {
   useEffect(() => {
     if (!datasets.maizuru || !areaFixture || !cartographyRequested || publicCartography || cartographyError) return;
     let cancelled = false;
-    const timer = window.setTimeout(() => {
-      loadPublicCartographyData()
-        .then((cartography) => { if (!cancelled) setPublicCartography(cartography); })
-        .catch((reason: unknown) => {
-          if (!cancelled) setCartographyError(reason instanceof Error ? reason.message : "PLATEAU表示用データを読み込めませんでした");
-        });
-    }, 500);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-    };
+    loadPublicCartographyManifest()
+      .then((manifest) => { if (!cancelled) setPublicCartography({ manifest }); })
+      .catch((reason: unknown) => {
+        if (!cancelled) setCartographyError(reason instanceof Error ? reason.message : "PLATEAU表示用データを読み込めませんでした");
+      });
+    return () => { cancelled = true; };
   }, [areaFixture, cartographyError, cartographyRequested, datasets.maizuru, publicCartography]);
+
+  useEffect(() => {
+    const kind = storyCartographyRequested;
+    if (!kind || publicCartography?.[kind] || cartographyError) return;
+    const controller = new AbortController();
+    setStoryCartographyLoading(kind);
+    loadPublicStoryArtifact(kind, fetch, import.meta.env.BASE_URL, controller.signal)
+      .then(({ manifest, collection }) => {
+        setPublicCartography((current) => ({
+          ...(current ?? { manifest }),
+          manifest,
+          [kind]: collection,
+        }));
+      })
+      .catch((reason: unknown) => {
+        if (controller.signal.aborted) return;
+        setCartographyError(reason instanceof Error ? reason.message : "PLATEAU表示用データを読み込めませんでした");
+      })
+      .finally(() => {
+        setStoryCartographyLoading((current) => current === kind ? null : current);
+      });
+    return () => controller.abort("superseded story request");
+  }, [cartographyError, publicCartography, storyCartographyRequested]);
 
   useEffect(() => {
     if (!targetCartographyRequested || publicTargets || targetCartographyError) return;
@@ -161,6 +184,14 @@ export function ProductApp() {
     setTargetCartographyError(null);
     setTargetCartographyRequested(true);
   }, []);
+
+  const requestStoryCartography = useCallback((story: PublicStoryId) => {
+    const kind = story === "building-use" ? "buildings" : story === "urban-planning" ? "planning" : null;
+    if (!kind) return;
+    setCartographyError(null);
+    setStoryCartographyRequested(kind);
+  }, []);
+  const cancelStoryCartography = useCallback(() => setStoryCartographyRequested(null), []);
 
   useEffect(() => {
     if (state.city !== "fujisawa" || datasets.fujisawa) return;
@@ -488,11 +519,14 @@ export function ProductApp() {
         cartographyError={cartographyError}
         targetCartography={publicTargets}
         targetCartographyError={targetCartographyError}
+        storyCartographyLoading={storyCartographyLoading}
         onRequestCartography={() => {
           setCartographyError(null);
           setCartographyRequested(true);
         }}
         onRequestTargetCartography={requestTargetCartography}
+        onRequestStoryCartography={requestStoryCartography}
+        onCancelStoryCartography={cancelStoryCartography}
         state={state}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}
