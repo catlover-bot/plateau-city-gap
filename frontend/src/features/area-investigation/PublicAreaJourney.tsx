@@ -163,9 +163,12 @@ export function PublicAreaJourney({
   } : null;
   const legend = cartographyStatusLegend ?? (step === "target"
     ? {
-        title: "現地で確認する場所",
-        note: targetRender?.resolution === "exact" ? "PLATEAUの建物・道路形状" : "登録位置を表示",
-        items: [{ label: selectedUnknown?.target.label ?? "確認する場所", color: "#6b4c7d", shape: "fill" as const }],
+        title: "確認する場所",
+        items: [{
+          label: targetRender?.resolution === "exact" ? "PLATEAUの建物・道路形状" : "登録位置",
+          color: "#6b4c7d",
+          shape: "fill" as const,
+        }],
       }
     : publicStoryLegend(step === "result" ? activeStory : null, derivativeAvailable));
   const eligibility = summary && selectedUnknown
@@ -391,7 +394,7 @@ export function PublicAreaJourney({
             {step === "radius" && (
               <section>
                 <h1 ref={headingRef} tabIndex={-1}>範囲を選ぶ</h1>
-                <p>{origin?.label}</p>
+                <p>{origin?.label}を中心に</p>
                 <div className="public-radius-grid" role="group" aria-label="調べる半径">
                   {PUBLIC_RADIUS_OPTIONS.map((option) => (
                     <button

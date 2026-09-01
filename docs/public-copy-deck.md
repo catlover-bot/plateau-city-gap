@@ -2,7 +2,7 @@
 
 Goal: `public-product-language-and-section-v1`
 
-The proposed column is the H1 implementation deck. Exact source identity and dates remain available in `出典・データの注意点`; the initial reading path uses ordinary Japanese.
+The proposed column was implemented in H1–H4. Exact source identity and dates remain available in `出典・データの注意点`; the initial reading path uses ordinary Japanese.
 
 | Surface | Current | Problem | Proposed | Rationale |
 |---|---|---|---|---|
@@ -74,4 +74,3 @@ The proposed column is the H1 implementation deck. Exact source identity and dat
 - the census boundary warning continues to distinguish statistical areas from current administrative, address, neighborhood, and municipal work areas;
 - partial/missing sources are not filled with invented values;
 - Public does not imply recommendation, safety, current/latest data, real-time state, or AI judgment.
-

@@ -2,7 +2,7 @@
 
 Active goal: `public-product-language-and-section-v1`
 
-Current milestone: H3 Urban Section Option C boundary
+Current milestone: H4 Public map presentation complete; H5 automated checkpoint next
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -23,6 +23,10 @@ Checkpoint state:
 - merge / deployment: not performed
 - inherited performance baseline: `docs/cartographic-performance-checkpoint.md` and `analysis/outputs/real/cartographic-performance-profile-after.json`
 - H0 evidence: `docs/public-product-benchmark.md`, `docs/public-product-language-audit.md`, `docs/public-copy-deck.md`, `docs/urban-section-audit.md`, and `docs/assets/public-product-audit/manifest.json`
+- H1 copy: concrete Japanese stage labels, one source disclosure, no system terminology in the initial reading path, and unchanged claim boundaries
+- H2 hierarchy: one-line stage status, reduced cards/badges/rounding, neutral Unknown rows, and an un-nested target checklist
+- H3 section boundary: `advanced_only`; no section in Public, no deletion from M3 or Advanced
+- H4 presentation: consistent Area/result/target captions, 12–13px supporting text, 44px story actions, and unchanged 67.9/32.1 desktop map/panel ratio
 
 Core value hypothesis:
 

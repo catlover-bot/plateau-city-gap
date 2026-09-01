@@ -8,7 +8,10 @@ process.env.PW_TEST_SCREENSHOT_NO_FONTS_READY = "1";
 
 const baseUrl = process.argv[2] ?? "http://127.0.0.1:4174/plateau-city-gap/";
 const repositoryRoot = path.resolve(process.cwd(), "..");
-const outputDirectory = path.join(repositoryRoot, "docs/assets/public-first-run-ux");
+const outputDirectory = path.resolve(
+  repositoryRoot,
+  process.argv[3] ?? "docs/assets/public-first-run-ux",
+);
 const repositoryHead = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: repositoryRoot,
   encoding: "utf8",
@@ -373,7 +376,7 @@ try {
   await waitForStep(fallbackPage, "intro");
   await click(fallbackPage, "地図で場所を調べる");
   await waitForStep(fallbackPage, "place");
-  await click(fallbackPage, "地図中心を起点にする");
+  await click(fallbackPage, "この場所を選ぶ");
   await waitForStep(fallbackPage, "radius");
   await click(fallbackPage, "800m");
   await click(fallbackPage, "この範囲を見る");
