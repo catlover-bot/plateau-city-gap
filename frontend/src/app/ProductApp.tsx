@@ -34,7 +34,12 @@ import type { InvestigationCandidate } from "../features/investigation/investiga
 import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
-import { loadPublicCartographyData, type PublicCartographyData } from "../features/area-investigation/publicCartography";
+import {
+  loadPublicCartographyData,
+  loadPublicTargetData,
+  type PublicCartographyData,
+  type PublicTargetData,
+} from "../features/area-investigation/publicCartography";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -94,9 +99,12 @@ export function ProductApp() {
   const [validationView, setValidationView] = useState<ValidationView>("reference");
   const [areaFixture, setAreaFixture] = useState<InvestigationAreaFixture | null>(null);
   const [publicCartography, setPublicCartography] = useState<PublicCartographyData | null>(null);
+  const [publicTargets, setPublicTargets] = useState<PublicTargetData | null>(null);
   const [areaError, setAreaError] = useState<string | null>(null);
   const [cartographyError, setCartographyError] = useState<string | null>(null);
   const [cartographyRequested, setCartographyRequested] = useState(false);
+  const [targetCartographyError, setTargetCartographyError] = useState<string | null>(null);
+  const [targetCartographyRequested, setTargetCartographyRequested] = useState(false);
   const [areaJourneyOpen, setAreaJourneyOpen] = useState(
     () => new URLSearchParams(window.location.search).get("journey") !== "m3",
   );
@@ -137,6 +145,22 @@ export function ProductApp() {
       window.clearTimeout(timer);
     };
   }, [areaFixture, cartographyError, cartographyRequested, datasets.maizuru, publicCartography]);
+
+  useEffect(() => {
+    if (!targetCartographyRequested || publicTargets || targetCartographyError) return;
+    let cancelled = false;
+    loadPublicTargetData()
+      .then((targets) => { if (!cancelled) setPublicTargets(targets); })
+      .catch((reason: unknown) => {
+        if (!cancelled) setTargetCartographyError(reason instanceof Error ? reason.message : "確認対象の表示データを読み込めませんでした");
+      });
+    return () => { cancelled = true; };
+  }, [publicTargets, targetCartographyError, targetCartographyRequested]);
+
+  const requestTargetCartography = useCallback(() => {
+    setTargetCartographyError(null);
+    setTargetCartographyRequested(true);
+  }, []);
 
   useEffect(() => {
     if (state.city !== "fujisawa" || datasets.fujisawa) return;
@@ -462,10 +486,13 @@ export function ProductApp() {
         fixture={areaFixture}
         cartography={publicCartography}
         cartographyError={cartographyError}
+        targetCartography={publicTargets}
+        targetCartographyError={targetCartographyError}
         onRequestCartography={() => {
           setCartographyError(null);
           setCartographyRequested(true);
         }}
+        onRequestTargetCartography={requestTargetCartography}
         state={state}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}

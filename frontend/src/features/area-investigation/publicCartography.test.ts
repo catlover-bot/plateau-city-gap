@@ -5,10 +5,12 @@ import {
   buildPublicAreaGeometry,
   derivativeAvailableFor,
   loadPublicCartographyData,
+  loadPublicTargetData,
   publicStoryLegend,
   resolvePublicTarget,
   type PublicCartographyData,
   type PublicCartographyManifest,
+  type PublicTargetData,
 } from "./publicCartography";
 
 const empty: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
@@ -50,6 +52,18 @@ const manifest: PublicCartographyManifest = {
     buildings: { path: "buildings.geojson", feature_count: 1, geometry_types: ["Polygon"], property_allowlist: ["object_id"], sha256: "building-hash" },
     roads: { path: "roads.geojson", feature_count: 0, geometry_types: [], property_allowlist: ["object_id"], sha256: "road-hash" },
     planning: { path: "planning.geojson", feature_count: 0, geometry_types: [], property_allowlist: ["object_id"], sha256: "planning-hash" },
+    targets: {
+      artifact_kind: "exact_target_display_derivative",
+      path: "targets.geojson",
+      source_dataset_version: "plateau-maizuru-2025",
+      source_sha256: "source-hash",
+      rule_version: "test@1",
+      feature_count: 1,
+      geometry_types: ["Polygon"],
+      object_ids: ["building-1"],
+      property_allowlist: ["object_id", "object_type"],
+      sha256: "target-hash",
+    },
   },
 };
 
@@ -58,6 +72,10 @@ const data: PublicCartographyData = {
   buildings: { type: "FeatureCollection", features: [building] },
   roads: empty,
   planning: empty,
+};
+const targetData: PublicTargetData = {
+  manifest,
+  targets: { type: "FeatureCollection", features: [building] },
 };
 
 const summary = {
@@ -120,6 +138,14 @@ describe("Public cartography contract", () => {
     });
   });
 
+  it("resolves the same exact polygon from the lightweight target derivative", () => {
+    expect(resolvePublicTarget(buildingTarget, null, true, targetData)).toMatchObject({
+      resolution: "exact",
+      objectId: "building-1",
+      geometry: { features: [building] },
+    });
+  });
+
   it("keeps an honest fallback while display geometry loads in the background", () => {
     expect(derivativeAvailableFor(null, summary)).toBe(false);
     expect(resolvePublicTarget(buildingTarget, null, false)).toMatchObject({
@@ -159,5 +185,43 @@ describe("Public cartography contract", () => {
       "/base/data/cartography/roads.geojson",
       "/base/data/cartography/planning.geojson",
     ]);
+  });
+
+  it("loads a provenance-matched exact target artifact without Area story geometry", async () => {
+    const responses = new Map<string, unknown>([
+      ["/target/data/cartography/manifest.json", manifest],
+      ["/target/data/cartography/targets.geojson", targetData.targets],
+    ]);
+    const fetchMock = vi.fn(async (url: string | URL | Request) => ({
+      ok: responses.has(String(url)),
+      status: responses.has(String(url)) ? 200 : 404,
+      json: async () => responses.get(String(url)),
+    }));
+
+    const loaded = await loadPublicTargetData(fetchMock as unknown as typeof fetch, "/target/");
+
+    expect(loaded).toEqual(targetData);
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([
+      "/target/data/cartography/manifest.json",
+      "/target/data/cartography/targets.geojson",
+    ]);
+  });
+
+  it("rejects a target artifact whose provenance does not match the manifest source", async () => {
+    const staleManifest = {
+      ...manifest,
+      artifacts: {
+        ...manifest.artifacts,
+        targets: { ...manifest.artifacts.targets, source_sha256: "stale-source" },
+      },
+    };
+    const fetchMock = vi.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => staleManifest,
+    }));
+
+    await expect(loadPublicTargetData(fetchMock as unknown as typeof fetch, "/stale/"))
+      .rejects.toThrow("provenance");
   });
 });

@@ -13,16 +13,25 @@ export type PublicTargetKind = "building" | "road" | "facility" | "mesh";
 export type PublicMapRenderState = "loading" | "ready" | "degraded";
 
 interface DerivativeArtifact {
+  artifact_kind?: string;
   path: string;
+  source_dataset_version?: string;
+  source_sha256?: string;
+  generator_version?: string;
+  rule_version?: string;
+  scope?: Record<string, unknown>;
   feature_count: number;
   geometry_types: string[];
+  object_ids?: string[];
   property_allowlist: string[];
   sha256: string;
+  artifact_sha256?: string;
 }
 
 export interface PublicCartographyManifest {
   schema_version: "citygap.public-cartography@1";
   artifact_kind: "display_derivative";
+  generator_version?: string;
   rule_version: string;
   source: {
     path: string;
@@ -44,7 +53,7 @@ export interface PublicCartographyManifest {
   };
   target_ids: string[];
   resolved_target_ids: Record<string, string[]>;
-  artifacts: Record<"buildings" | "roads" | "planning", DerivativeArtifact>;
+  artifacts: Record<"buildings" | "roads" | "planning" | "targets", DerivativeArtifact>;
 }
 
 export interface PublicCartographyData {
@@ -52,6 +61,11 @@ export interface PublicCartographyData {
   buildings: GeoJsonFeatureCollection;
   roads: GeoJsonFeatureCollection;
   planning: GeoJsonFeatureCollection;
+}
+
+export interface PublicTargetData {
+  manifest: PublicCartographyManifest;
+  targets: GeoJsonFeatureCollection;
 }
 
 export interface PublicAreaMapGeometry {
@@ -95,6 +109,7 @@ export interface PublicLegend {
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 const EARTH_RADIUS_M = 6_378_137;
+const manifestRequests = new WeakMap<object, Map<string, Promise<PublicCartographyManifest>>>();
 
 function parseCollection(value: unknown, label: string): GeoJsonFeatureCollection {
   if (
@@ -120,17 +135,44 @@ export function parsePublicCartographyManifest(value: unknown): PublicCartograph
   return value as PublicCartographyManifest;
 }
 
+function cartographyRoot(baseUrl: string) {
+  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${base}data/cartography/`;
+}
+
+export function loadPublicCartographyManifest(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL,
+): Promise<PublicCartographyManifest> {
+  const root = cartographyRoot(baseUrl);
+  let requests = manifestRequests.get(fetcher);
+  if (!requests) {
+    requests = new Map();
+    manifestRequests.set(fetcher, requests);
+  }
+  const existing = requests.get(root);
+  if (existing) return existing;
+  const request = fetcher(`${root}manifest.json`)
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error(`Public cartographyを読み込めません（HTTP ${response.status}）`);
+      }
+      return parsePublicCartographyManifest(await response.json());
+    })
+    .catch((reason: unknown) => {
+      requests?.delete(root);
+      throw reason;
+    });
+  requests.set(root, request);
+  return request;
+}
+
 export async function loadPublicCartographyData(
   fetcher: typeof fetch = fetch,
   baseUrl = import.meta.env.BASE_URL,
 ): Promise<PublicCartographyData> {
-  const base = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
-  const root = `${base}data/cartography/`;
-  const manifestResponse = await fetcher(`${root}manifest.json`);
-  if (!manifestResponse.ok) {
-    throw new Error(`Public cartographyを読み込めません（HTTP ${manifestResponse.status}）`);
-  }
-  const manifest = parsePublicCartographyManifest(await manifestResponse.json());
+  const root = cartographyRoot(baseUrl);
+  const manifest = await loadPublicCartographyManifest(fetcher, baseUrl);
   const [buildingsResponse, roadsResponse, planningResponse] = await Promise.all([
     fetcher(`${root}${manifest.artifacts.buildings.path}`),
     fetcher(`${root}${manifest.artifacts.roads.path}`),
@@ -145,6 +187,50 @@ export async function loadPublicCartographyData(
     roads: parseCollection(await roadsResponse.json(), "道路"),
     planning: parseCollection(await planningResponse.json(), "都市計画"),
   };
+}
+
+export async function loadPublicTargetData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL,
+): Promise<PublicTargetData> {
+  const root = cartographyRoot(baseUrl);
+  const manifest = await loadPublicCartographyManifest(fetcher, baseUrl);
+  const artifact = manifest.artifacts.targets;
+  if (!artifact || artifact.artifact_kind !== "exact_target_display_derivative") {
+    throw new Error("Exact target display derivativeがmanifestにありません。");
+  }
+  if (
+    artifact.source_dataset_version !== manifest.source.version
+    || artifact.source_sha256 !== manifest.source.sha256
+    || artifact.rule_version !== manifest.rule_version
+  ) {
+    throw new Error("Exact target display derivativeのprovenanceが一致しません。");
+  }
+  const response = await fetcher(`${root}${artifact.path}`);
+  if (!response.ok) {
+    throw new Error(`Exact target display geometryを読み込めません（HTTP ${response.status}）`);
+  }
+  const targets = parseCollection(await response.json(), "確認対象");
+  const featureIds = new Set<string>();
+  const objectIds = new Set<string>();
+  for (const feature of targets.features) {
+    const featureId = String(feature.id ?? "");
+    const objectId = String(feature.properties?.object_id ?? "");
+    if (!featureId || featureIds.has(featureId) || !objectId) {
+      throw new Error("Exact target display geometryのobject identityが正しくありません。");
+    }
+    featureIds.add(featureId);
+    objectIds.add(objectId);
+  }
+  const declaredIds = new Set(artifact.object_ids ?? []);
+  if (
+    targets.features.length !== artifact.feature_count
+    || objectIds.size !== declaredIds.size
+    || [...objectIds].some((id) => !declaredIds.has(id))
+  ) {
+    throw new Error("Exact target display geometryのmanifest scopeが一致しません。");
+  }
+  return { manifest, targets };
 }
 
 function destination(center: [number, number], radiusM: number, bearingRadians: number): [number, number] {
@@ -205,7 +291,7 @@ function matches(feature: GeoJsonFeature, objectId: string): boolean {
 }
 
 export function derivativeAvailableFor(
-  data: PublicCartographyData | null,
+  data: PublicCartographyData | PublicTargetData | null,
   summary: InvestigationAreaSummary | null,
 ): boolean {
   if (!data || !summary || summary.origin.kind !== "station") return false;
@@ -224,6 +310,7 @@ export function resolvePublicTarget(
   target: AreaTarget | null,
   data: PublicCartographyData | null,
   derivativeAvailable: boolean,
+  targetData: PublicTargetData | null = null,
 ): PublicTargetRender | null {
   if (!target) return null;
   const base = {
@@ -234,14 +321,18 @@ export function resolvePublicTarget(
     latitude: target.latitude,
   };
   const targetKind = target.object_type === "building" ? "buildings" : "roads";
-  const manifestResolvesTarget = Boolean(data?.manifest.target_ids.includes(target.source_object_id)
-    && (data.manifest.resolved_target_ids[targetKind] ?? []).includes(target.source_object_id));
+  const manifest = targetData?.manifest ?? data?.manifest;
+  const manifestResolvesTarget = Boolean(manifest?.target_ids.includes(target.source_object_id)
+    && (manifest.resolved_target_ids[targetKind] ?? []).includes(target.source_object_id));
   if (
     derivativeAvailable && manifestResolvesTarget
     && (target.object_type === "building" || target.object_type === "road")
   ) {
+    const fastFeatures = targetData?.targets.features.filter((feature) => matches(feature, target.source_object_id)) ?? [];
     const source = target.object_type === "building" ? data?.buildings : data?.roads;
-    const features = source?.features.filter((feature) => matches(feature, target.source_object_id)) ?? [];
+    const features = fastFeatures.length
+      ? fastFeatures
+      : source?.features.filter((feature) => matches(feature, target.source_object_id)) ?? [];
     if (features.length) {
       return { ...base, resolution: "exact", geometry: { type: "FeatureCollection", features } };
     }

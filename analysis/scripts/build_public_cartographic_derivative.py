@@ -35,6 +35,7 @@ if not PACK.exists():
 ANALYSIS_CRS = "EPSG:6674"
 WEB_CRS = "EPSG:4326"
 RULE_VERSION = "citygap-public-cartography@1.0.0"
+GENERATOR_VERSION = "citygap-public-cartography-generator@1.1.0"
 GENERATED_AT = "2026-09-01T00:00:00+09:00"
 SOURCE_VERSION = "26202_maizuru-shi_city_2025_citygml_1_op"
 SOURCE_SHA256 = "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff"
@@ -43,6 +44,7 @@ FILES = {
     "roads": "plateau_roads.geojson",
     "planning": "plateau_planning.geojson",
 }
+TARGET_FILE = "plateau_targets.geojson"
 PROPERTY_ALLOWLISTS = {
     "buildings": {
         "object_id", "object_type", "usage_code", "usage_label", "geometry_source",
@@ -180,8 +182,19 @@ def build() -> dict[str, Any]:
         "roads": feature_collection(roads, sorted(PROPERTY_ALLOWLISTS["roads"])),
         "planning": feature_collection(planning, sorted(PROPERTY_ALLOWLISTS["planning"])),
     }
+    target_features = [
+        feature
+        for kind in ("buildings", "roads")
+        for feature in collections[kind]["features"]
+        if str(feature["properties"]["object_id"]) in target_ids
+    ]
+    target_features.sort(
+        key=lambda feature: (str(feature["properties"]["object_id"]), str(feature["id"]))
+    )
+    target_collection = {"type": "FeatureCollection", "features": target_features}
     for kind, collection in collections.items():
         write_json(OUTPUT / FILES[kind], collection)
+    write_json(OUTPUT / TARGET_FILE, target_collection)
 
     resolved = {}
     for kind, collection in collections.items():
@@ -192,6 +205,7 @@ def build() -> dict[str, Any]:
         "schema_version": "citygap.public-cartography@1",
         "generated_at": GENERATED_AT,
         "artifact_kind": "display_derivative",
+        "generator_version": GENERATOR_VERSION,
         "rule_version": RULE_VERSION,
         "source": {
             "path": str(ARCHIVE.relative_to(ROOT)),
@@ -222,15 +236,51 @@ def build() -> dict[str, Any]:
     }
     for kind, filename in FILES.items():
         path = OUTPUT / filename
+        artifact_hash = sha256(path)
         manifest["artifacts"][kind] = {
+            "artifact_kind": f"area_{kind}_display_derivative",
             "path": filename,
+            "source_dataset_version": SOURCE_VERSION,
+            "source_sha256": source_hash,
+            "generator_version": GENERATOR_VERSION,
+            "rule_version": RULE_VERSION,
+            "scope": {
+                "area_id": primary["id"],
+                "area_version": primary["version"],
+                "radius_m": primary["radius_m"],
+            },
             "feature_count": len(collections[kind]["features"]),
             "geometry_types": sorted({
                 feature["geometry"]["type"] for feature in collections[kind]["features"]
             }),
             "property_allowlist": sorted(PROPERTY_ALLOWLISTS[kind]),
-            "sha256": sha256(path),
+            "sha256": artifact_hash,
+            "artifact_sha256": artifact_hash,
         }
+    target_path = OUTPUT / TARGET_FILE
+    target_hash = sha256(target_path)
+    manifest["artifacts"]["targets"] = {
+        "artifact_kind": "exact_target_display_derivative",
+        "path": TARGET_FILE,
+        "source_dataset_version": SOURCE_VERSION,
+        "source_sha256": source_hash,
+        "generator_version": GENERATOR_VERSION,
+        "rule_version": RULE_VERSION,
+        "scope": {"target_ids": sorted(target_ids)},
+        "feature_count": len(target_collection["features"]),
+        "geometry_types": sorted({
+            feature["geometry"]["type"] for feature in target_collection["features"]
+        }),
+        "object_ids": sorted({
+            str(feature["properties"]["object_id"])
+            for feature in target_collection["features"]
+        }),
+        "property_allowlist": sorted(
+            PROPERTY_ALLOWLISTS["buildings"] | PROPERTY_ALLOWLISTS["roads"]
+        ),
+        "sha256": target_hash,
+        "artifact_sha256": target_hash,
+    }
     write_json(OUTPUT / "manifest.json", manifest)
     return manifest
 
@@ -273,6 +323,8 @@ def check() -> dict[str, Any]:
         raise ValueError("Display derivative source version mismatch")
     if manifest["source"]["sha256"] != SOURCE_SHA256:
         raise ValueError("Display derivative source hash does not match the pinned CityGML release")
+    if manifest.get("generator_version") != GENERATOR_VERSION:
+        raise ValueError("Display derivative generator version mismatch")
     # Raw municipal/PLATEAU archives are intentionally not tracked in Git. A
     # development checkout that has the archive must prove its bytes match the
     # pinned release; CI still verifies the pinned source identity plus every
@@ -297,16 +349,33 @@ def check() -> dict[str, Any]:
     if set(manifest.get("target_ids", [])) != target_ids:
         raise ValueError("Display derivative target scope mismatch")
 
-    resolved: dict[str, list[str]] = {}
+    loaded_collections: dict[str, dict[str, Any]] = {}
     for kind, item in manifest["artifacts"].items():
-        if kind not in PROPERTY_ALLOWLISTS:
+        if kind not in {*PROPERTY_ALLOWLISTS, "targets"}:
             raise ValueError(f"Unexpected display artifact: {kind}")
         path = OUTPUT / item["path"]
         if sha256(path) != item["sha256"]:
             raise ValueError(f"Display derivative hash mismatch: {kind}")
+        if item.get("artifact_sha256") != item["sha256"]:
+            raise ValueError(f"Display derivative artifact hash mismatch: {kind}")
+        if item.get("source_dataset_version") != SOURCE_VERSION:
+            raise ValueError(f"Display derivative source version mismatch: {kind}")
+        if item.get("source_sha256") != SOURCE_SHA256:
+            raise ValueError(f"Display derivative source hash mismatch: {kind}")
+        if item.get("generator_version") != GENERATOR_VERSION:
+            raise ValueError(f"Display derivative generator mismatch: {kind}")
+        if item.get("rule_version") != RULE_VERSION:
+            raise ValueError(f"Display derivative rule mismatch: {kind}")
         collection = json.loads(path.read_text(encoding="utf-8"))
         if len(collection["features"]) != item["feature_count"]:
             raise ValueError(f"Display derivative feature count mismatch: {kind}")
+        loaded_collections[kind] = collection
+
+    resolved: dict[str, list[str]] = {}
+    source_features: dict[str, list[dict[str, Any]]] = {}
+    for kind in PROPERTY_ALLOWLISTS:
+        item = manifest["artifacts"][kind]
+        collection = loaded_collections[kind]
         object_ids = validate_collection(kind, collection)
         geometry_types = sorted({
             feature["geometry"]["type"] for feature in collection["features"]
@@ -314,6 +383,58 @@ def check() -> dict[str, Any]:
         if geometry_types != item["geometry_types"]:
             raise ValueError(f"Display derivative geometry type mismatch: {kind}")
         resolved[kind] = sorted(target_ids.intersection(object_ids))
+        if kind in {"buildings", "roads"}:
+            for feature in collection["features"]:
+                source_features.setdefault(
+                    str(feature["properties"]["object_id"]), []
+                ).append(feature)
+
+    target_item = manifest["artifacts"].get("targets")
+    target_collection = loaded_collections.get("targets")
+    if not target_item or not target_collection:
+        raise ValueError("Exact target display derivative is missing")
+    target_feature_ids: set[str] = set()
+    target_object_ids: set[str] = set()
+    for feature in target_collection["features"]:
+        feature_id = str(feature.get("id", ""))
+        if not feature_id or feature_id in target_feature_ids:
+            raise ValueError("Duplicate or missing display feature ID: targets")
+        target_feature_ids.add(feature_id)
+        properties = feature.get("properties")
+        if not isinstance(properties, dict):
+            raise TypeError("Missing display properties: targets")
+        object_type = str(properties.get("object_type", ""))
+        source_kind = (
+            "buildings" if object_type == "building"
+            else "roads" if object_type == "road"
+            else ""
+        )
+        if not source_kind or not set(properties).issubset(PROPERTY_ALLOWLISTS[source_kind]):
+            raise ValueError("Unexpected display properties: targets")
+        object_id = str(properties.get("object_id", ""))
+        if not object_id:
+            raise ValueError("Missing source object identity: targets")
+        target_object_ids.add(object_id)
+        geometry = shape(feature.get("geometry"))
+        if geometry.is_empty or not geometry.is_valid:
+            raise ValueError(f"Invalid display geometry: targets:{feature_id}")
+    if target_object_ids != target_ids or target_item.get("object_ids") != sorted(target_ids):
+        raise ValueError("Exact target display derivative identity mismatch")
+    expected_target_features = sorted(
+        (
+            feature
+            for object_id in sorted(target_ids)
+            for feature in source_features.get(object_id, [])
+        ),
+        key=lambda feature: (str(feature["properties"]["object_id"]), str(feature["id"])),
+    )
+    if target_collection["features"] != expected_target_features:
+        raise ValueError("Exact target geometry differs from the Area source derivative")
+    target_geometry_types = sorted({
+        feature["geometry"]["type"] for feature in target_collection["features"]
+    })
+    if target_geometry_types != target_item["geometry_types"]:
+        raise ValueError("Exact target display derivative geometry type mismatch")
     if resolved != manifest.get("resolved_target_ids"):
         raise ValueError("Display derivative target resolution mismatch")
     if set(resolved["buildings"] + resolved["roads"]) != target_ids:

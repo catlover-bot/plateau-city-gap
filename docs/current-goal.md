@@ -2,7 +2,7 @@
 
 Active goal: `cartographic-interaction-performance-v1`
 
-Current milestone: P0 Performance Profile complete; P1 Target Fast Path next
+Current milestone: P1 Target Fast Path complete; P2 Story Loading next
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -21,6 +21,7 @@ Checkpoint state:
 - C0–C4 implementation commits: `88841c2`, `cefa068`, `54c517d`, `944afe3`, `047f314`
 - C5 baseline: `docs/cartographic-validation-checkpoint.md` and `docs/assets/cartographic-checkpoint/manifest.json`
 - P0 evidence: `docs/cartographic-performance-profile.md` and `analysis/outputs/real/cartographic-performance-profile-baseline.json`
+- P1 target path: exact building/road geometry is available from a two-feature, provenance-complete derivative; facility remains a registered local position
 
 Core value hypothesis:
 
@@ -109,4 +110,11 @@ Remaining measured risks:
 - All three heavy artifacts load together after Area confirmation. Exact target lookup and the registered facility presentation remain unnecessarily coupled to Area context.
 - A basemap-unavailable state preserves local vectors, but the controlled degraded run observes hundreds of aborted external tile requests per page. Retry/readiness stabilization remains P3 work.
 
-Next action is P1 Target Fast Path, followed only by P2 Story Loading, P3 Lifecycle/Readiness, and P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
+P1 acceptance facts:
+
+- `plateau_targets.geojson` contains exactly the existing building and road target features: `3,246` raw bytes / `1,324` profiled gzip bytes.
+- Generator verification requires exact feature equality with the Area building/road artifacts, matching object IDs, source version/hash, rule/generator version, scope, count, geometry types, and artifact hash.
+- With all three Area-wide artifacts deliberately blocked, the browser still rendered the exact road polygon, exact building polygon, and facility registered-position marker. The Area loader honestly reported degraded while the target fast path reported ready.
+- A P1 smoke profile reduced target-step GeoJSON submission from `6,643` features to `4` essential Area/target features. Final latency is not claimed yet because redundant source/style work remains P3 scope.
+
+Next action is P2 Story Loading, followed only by P3 Lifecycle/Readiness and P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.

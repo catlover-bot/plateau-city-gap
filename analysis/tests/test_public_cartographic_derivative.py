@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import copy
+import json
 
 import pytest
 
 from analysis.scripts.build_public_cartographic_derivative import (
+    GENERATOR_VERSION,
+    OUTPUT,
     SOURCE_SHA256,
     check,
     validate_collection,
@@ -40,12 +43,30 @@ def test_checked_in_display_derivative_has_exact_provenance() -> None:
     assert manifest["scope"]["origin"]["source_feature_id"] == "station-007"
     assert manifest["source"]["city_code"] == "26202"
     assert manifest["source"]["sha256"] == SOURCE_SHA256
+    assert manifest["generator_version"] == GENERATOR_VERSION
     assert set(manifest["resolved_target_ids"]["buildings"]) == {
         "bldg_155e6675-6981-450f-8e73-df0b43418cc2"
     }
     assert set(manifest["resolved_target_ids"]["roads"]) == {
         "tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21"
     }
+    target_artifact = manifest["artifacts"]["targets"]
+    assert target_artifact["artifact_kind"] == "exact_target_display_derivative"
+    assert target_artifact["source_sha256"] == SOURCE_SHA256
+    assert target_artifact["source_dataset_version"] == manifest["source"]["version"]
+    assert target_artifact["artifact_sha256"] == target_artifact["sha256"]
+    assert set(target_artifact["object_ids"]) == set(manifest["target_ids"])
+
+    targets = json.loads((OUTPUT / target_artifact["path"]).read_text(encoding="utf-8"))
+    source_features = {}
+    for kind in ("buildings", "roads"):
+        source = json.loads(
+            (OUTPUT / manifest["artifacts"][kind]["path"]).read_text(encoding="utf-8")
+        )
+        for feature in source["features"]:
+            source_features[feature["id"]] = feature
+    assert len(targets["features"]) == target_artifact["feature_count"]
+    assert all(feature == source_features[feature["id"]] for feature in targets["features"])
     assert {
         "no_external_data",
         "no_population_allocation",

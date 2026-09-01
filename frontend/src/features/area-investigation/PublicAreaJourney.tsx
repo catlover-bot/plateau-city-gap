@@ -26,6 +26,7 @@ import {
   type PublicCartographyData,
   type PublicCartographyPresentation,
   type PublicStoryId,
+  type PublicTargetData,
 } from "./publicCartography";
 import "./publicAreaJourney.css";
 
@@ -75,7 +76,10 @@ interface Props {
   fixture: InvestigationAreaFixture;
   cartography: PublicCartographyData | null;
   cartographyError?: string | null;
+  targetCartography: PublicTargetData | null;
+  targetCartographyError?: string | null;
   onRequestCartography(): void;
+  onRequestTargetCartography(): void;
   state: SpatialState;
   onOpenAdvanced(): void;
   onSelectionChange(selection: SpatialSelection | null): void;
@@ -87,7 +91,10 @@ export function PublicAreaJourney({
   fixture,
   cartography,
   cartographyError = null,
+  targetCartography,
+  targetCartographyError = null,
   onRequestCartography,
+  onRequestTargetCartography,
   state,
   onOpenAdvanced,
   onSelectionChange,
@@ -118,19 +125,25 @@ export function PublicAreaJourney({
     [origin, radius],
   );
   const derivativeAvailable = derivativeAvailableFor(cartography, summary);
+  const targetDerivativeAvailable = derivativeAvailableFor(targetCartography ?? cartography, summary);
   const targetRender = useMemo(
-    () => resolvePublicTarget(selectedUnknown?.target ?? null, cartography, derivativeAvailable),
-    [cartography, derivativeAvailable, selectedUnknown],
+    () => resolvePublicTarget(
+      selectedUnknown?.target ?? null,
+      cartography,
+      targetDerivativeAvailable,
+      targetCartography,
+    ),
+    [cartography, selectedUnknown, targetCartography, targetDerivativeAvailable],
   );
   const mapPresentation = useMemo<PublicCartographyPresentation>(() => ({
-    data: cartography,
+    data: step === "target" ? null : cartography,
     area: areaGeometry,
     activeStory: step === "result" ? activeStory : null,
     target: step === "result" || step === "target" ? targetRender : null,
     showTarget: step === "target",
-    derivativeAvailable,
-  }), [activeStory, areaGeometry, cartography, derivativeAvailable, step, targetRender]);
-  const cartographyStatusLegend = !cartography && (step === "result" || step === "target") ? {
+    derivativeAvailable: step === "target" ? targetDerivativeAvailable : derivativeAvailable,
+  }), [activeStory, areaGeometry, cartography, derivativeAvailable, step, targetDerivativeAvailable, targetRender]);
+  const cartographyStatusLegend = !cartography && step === "result" ? {
     title: "地図表示",
     note: cartographyError ?? "PLATEAU表示用データを準備中です",
     items: [],
@@ -151,6 +164,15 @@ export function PublicAreaJourney({
       setSelectedUnknownId(summary.unknowns[0].id);
     }
   }, [selectedUnknownId, summary]);
+
+  useEffect(() => {
+    if (
+      (step === "result" || step === "target")
+      && (selectedUnknown?.target.object_type === "building" || selectedUnknown?.target.object_type === "road")
+    ) {
+      onRequestTargetCartography();
+    }
+  }, [onRequestTargetCartography, selectedUnknown, step]);
 
   useEffect(() => {
     if (step !== "target" || !summary || !selectedUnknown) return;
@@ -239,6 +261,7 @@ export function PublicAreaJourney({
       data-map-mode={mapMode}
       data-active-story={step === "result" ? activeStory : "none"}
       data-cartography-state={cartography ? "ready" : cartographyError ? "degraded" : "loading"}
+      data-target-cartography-state={targetCartography ? "ready" : targetCartographyError ? "degraded" : "idle"}
       data-presentation-target-kind={targetRender?.kind ?? "none"}
       data-presentation-target-resolution={targetRender?.resolution ?? "none"}
     >
