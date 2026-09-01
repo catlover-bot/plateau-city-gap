@@ -62,6 +62,9 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  background: #d5ddd7;
+}
+
 .public-target-pin {
   position: absolute;
   z-index: 11;
@@ -88,8 +91,6 @@
   box-shadow: 0 0 0 2px #7d2f26;
 }
 
-  background: #d5ddd7;
-}
 
 .public-map-stage .semantic-zoom-indicator,
 .public-map-stage .north-up-indicator,
