@@ -217,6 +217,9 @@ export function PublicAreaJourney({
             />
           )}
           <div className="public-map-caption">
+          {step === "target" && selectedUnknown && mapMode === "map2d" && (
+            <div className="public-target-pin" aria-hidden="true"><span /></div>
+          )}
             <span>{mapMode === "plateau3d" ? "3Dで確認中" : "舞鶴市"}</span>
             <strong>{step === "target" && selectedUnknown ? selectedUnknown.target.label : origin?.label ?? "調べたい場所を選ぶ"}</strong>
             <small>{origin ? `半径 ${radius}mの分析範囲` : "駅または地図上の任意地点から始めます"}</small>
