@@ -106,6 +106,16 @@
   font-size: 11px;
 }
 
+.public-reference-target-marker {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #6b4c7d;
+  box-shadow: 0 0 0 2px rgb(43 33 48 / 35%);
+  pointer-events: none;
+}
+
 .public-map-legend {
   bottom: 38px;
   left: 14px;

@@ -10,6 +10,7 @@ import {
   AttributionControl,
   GeoJSONSource,
   Map as MapLibreMap,
+  Marker,
   NavigationControl,
   ScaleControl,
   setWorkerUrl,
@@ -164,6 +165,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 }, ref) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
+  const publicReferenceMarker = useRef<Marker | null>(null);
   const hoveredId = useRef<string | number | null>(null);
   const [styleReady, setStyleReady] = useState(false);
   const [publicRenderTick, setPublicRenderTick] = useState(0);
@@ -171,10 +173,20 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   const onSelectionRef = useRef(onSelectionChange);
   const onViewportRef = useRef(onViewportChange);
   const [zoom, setZoom] = useState(viewport.zoom);
+  const activeIdsKey = (activeLayerIdsOverride ?? activeLayerIds(preset)).join("\u001f");
   const activeIds = useMemo(
-    () => new Set(activeLayerIdsOverride ?? activeLayerIds(preset)),
-    [activeLayerIdsOverride, preset]
+    () => new Set(activeIdsKey ? activeIdsKey.split("\u001f") : []),
+    [activeIdsKey]
   );
+  const publicCartographyRenderKey = [
+    publicCartography?.area ? `${publicCartography.area.center.join(",")}:${publicCartography.area.radiusM}` : "no-area",
+    publicCartography?.activeStory ?? "no-story",
+    publicCartography?.target
+      ? `${publicCartography.target.kind}:${publicCartography.target.resolution}:${publicCartography.target.longitude}:${publicCartography.target.latitude}:${publicCartography.target.geometry.features.length}`
+      : "no-target",
+    publicCartography?.showTarget ? "focused" : "context",
+    publicCartography?.derivativeAvailable ? "derivative" : "fallback",
+  ].join("|");
   onSelectionRef.current = onSelectionChange;
   onViewportRef.current = onViewportChange;
 
@@ -251,9 +263,9 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       addGeoJson(map, "resilience", resilienceMap);
       addGeoJson(map, "public-area", publicCartography?.area?.polygon);
       addGeoJson(map, "public-area-mask", publicCartography?.area?.outsideMask);
-      addGeoJson(map, "public-buildings", publicCartography?.data.buildings);
-      addGeoJson(map, "public-roads", publicCartography?.data.roads);
-      addGeoJson(map, "public-planning", publicCartography?.data.planning);
+      addGeoJson(map, "public-buildings", publicCartography?.data?.buildings);
+      addGeoJson(map, "public-roads", publicCartography?.data?.roads);
+      addGeoJson(map, "public-planning", publicCartography?.data?.planning);
       addGeoJson(map, "public-target", publicCartography?.target?.geometry);
       addGeoJson(map, "public-origin", publicCartography?.area ? { type: "FeatureCollection", features: [{ type: "Feature", properties: { role: "origin" }, geometry: { type: "Point", coordinates: publicCartography.area.center } }] } : EMPTY);
 
@@ -421,6 +433,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     });
     return () => {
       setStyleReady(false);
+      publicReferenceMarker.current?.remove();
+      publicReferenceMarker.current = null;
       map.remove();
       mapRef.current = null;
     };
@@ -471,11 +485,15 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   useEffect(() => {
     const map = mapRef.current;
     if (!styleReady || !map) return;
-    if (!map.isStyleLoaded()) {
+    const publicStyleReady = ["public-area", "public-area-mask", "public-buildings", "public-roads", "public-planning", "public-target", "public-origin"]
+      .every((id) => Boolean(map.getSource(id)))
+      && ["public-area-fill", "public-area-line", "public-target-line", "public-origin-point"]
+        .every((id) => Boolean(map.getLayer(id)));
+    if (!publicStyleReady) {
       const retry = () => setPublicRenderTick((value) => value + 1);
-      const fallback = window.setTimeout(retry, 500);
-      map.once("idle", retry);
-      return () => { window.clearTimeout(fallback); map.off("idle", retry); };
+      const fallback = window.setTimeout(retry, 100);
+      map.once("styledata", retry);
+      return () => { window.clearTimeout(fallback); map.off("styledata", retry); };
     }
     const shell = containerRef.current?.parentElement;
     const presentation = primaryLayer === "public-cartography" ? publicCartography : null;
@@ -488,12 +506,33 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     const targetVisible = Boolean(target && target.resolution !== "area_fallback");
     const targetFocused = Boolean(target && presentation?.showTarget);
     const targetColor = targetFocused ? "#6b4c7d" : "#b7791f";
+    const renderKey = publicCartographyRenderKey;
+    const renderChanged = shell?.getAttribute("data-public-render-key") !== renderKey;
 
-    shell?.setAttribute("data-visual-ready", "false");
-    shell?.setAttribute("data-public-cartography-ready", "false");
+    if (renderChanged) {
+      shell?.setAttribute("data-visual-ready", "false");
+      shell?.setAttribute("data-public-cartography-ready", "false");
+      shell?.setAttribute("data-public-render-key", renderKey);
+    }
     shell?.setAttribute("data-public-story", story ?? "none");
     shell?.setAttribute("data-public-area-visible", String(areaVisible));
+    shell?.setAttribute("data-public-area-radius-m", area ? String(area.radiusM) : "none");
     shell?.setAttribute("data-target-resolution", target?.resolution ?? "none");
+
+    setSource(map, "public-area", area?.polygon);
+    setSource(map, "public-area-mask", area?.outsideMask);
+    setSource(map, "public-buildings", presentation?.data?.buildings);
+    setSource(map, "public-roads", presentation?.data?.roads);
+    setSource(map, "public-planning", presentation?.data?.planning);
+    setSource(map, "public-target", target?.geometry);
+    setSource(map, "public-origin", area ? {
+      type: "FeatureCollection",
+      features: [{
+        type: "Feature",
+        properties: { role: "origin" },
+        geometry: { type: "Point", coordinates: area.center },
+      }],
+    } : EMPTY);
 
     for (const id of ["public-area-fill", "public-area-mask", "public-area-line", "public-origin-halo", "public-origin-point"]) {
       layerVisibility(map, id, areaVisible);
@@ -519,7 +558,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       ? ["within", area.polygon.features[0].geometry]
       : true;
     const derivativeFilter = area && presentation
-      && area.radiusM < presentation.data.manifest.scope.radius_m
+      && presentation.data && area.radiusM < presentation.data.manifest.scope.radius_m
       ? areaFilter
       : true;
     for (const id of ["public-buildings-fill", "public-buildings-line", "public-planning-fill", "public-planning-line"]) {
@@ -565,20 +604,22 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     map.setPaintProperty("public-area-line", "line-color", targetFocused && target?.resolution === "area_fallback" ? targetColor : "#1e6f62");
     map.setPaintProperty("public-area-line", "line-dasharray", targetFocused && target?.resolution === "area_fallback" ? [2, 1.4] : [1, .01]);
 
-    setSource(map, "public-area", area?.polygon);
-    setSource(map, "public-area-mask", area?.outsideMask);
-    setSource(map, "public-buildings", presentation?.data.buildings);
-    setSource(map, "public-roads", presentation?.data.roads);
-    setSource(map, "public-planning", presentation?.data.planning);
-    setSource(map, "public-target", target?.geometry);
-    setSource(map, "public-origin", area ? {
-      type: "FeatureCollection",
-      features: [{
-        type: "Feature",
-        properties: { role: "origin" },
-        geometry: { type: "Point", coordinates: area.center },
-      }],
-    } : EMPTY);
+    const showReferenceMarker = Boolean(targetVisible && !targetExact && targetTypes.has("Point") && target);
+    if (showReferenceMarker && target) {
+      if (!publicReferenceMarker.current) {
+        const element = document.createElement("span");
+        element.className = "public-reference-target-marker";
+        element.setAttribute("role", "img");
+        element.setAttribute("aria-label", "確認対象として登録された位置");
+        publicReferenceMarker.current = new Marker({ element, anchor: "center" })
+          .setLngLat([target.longitude, target.latitude])
+          .addTo(map);
+      }
+      publicReferenceMarker.current.setLngLat([target.longitude, target.latitude]);
+    } else {
+      publicReferenceMarker.current?.remove();
+      publicReferenceMarker.current = null;
+    }
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const duration = reducedMotion ? 0 : 280;
@@ -609,15 +650,21 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 
     let cancelled = false;
     let readinessTimer = 0;
-    const localSourceIds = ["public-area", "public-area-mask", "public-buildings", "public-roads", "public-planning", "public-target", "public-origin"];
-    const markReady = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+    const localSourceIds = ["public-area", "public-area-mask", "public-origin"];
+    if (target?.geometry.features.length) localSourceIds.push("public-target");
+    if (story === "building-use" && presentation?.derivativeAvailable) localSourceIds.push("public-buildings");
+    if (story === "urban-planning" && presentation?.derivativeAvailable) localSourceIds.push("public-planning");
+    const markReady = () => {
       if (cancelled) return;
+      shell?.setAttribute("data-public-pending-sources", "");
       shell?.setAttribute("data-public-cartography-ready", "true");
       shell?.setAttribute("data-visual-ready", "true");
-    }));
+    };
     const awaitLocalSources = () => {
       if (cancelled) return;
-      if (localSourceIds.every((id) => map.isSourceLoaded(id))) {
+      const pendingSourceIds = localSourceIds.filter((id) => !map.isSourceLoaded(id));
+      shell?.setAttribute("data-public-pending-sources", pendingSourceIds.join(","));
+      if (!pendingSourceIds.length) {
         markReady();
         return;
       }
@@ -628,7 +675,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       cancelled = true;
       window.clearTimeout(readinessTimer);
     };
-  }, [primaryLayer, publicCartography, publicRenderTick, styleReady]);
+  }, [primaryLayer, publicCartography, publicCartographyRenderKey, publicRenderTick, styleReady]);
 
   useEffect(() => {
     const map = mapRef.current;

@@ -120,6 +120,14 @@ describe("Public cartography contract", () => {
     });
   });
 
+  it("keeps an honest fallback while display geometry loads in the background", () => {
+    expect(derivativeAvailableFor(null, summary)).toBe(false);
+    expect(resolvePublicTarget(buildingTarget, null, false)).toMatchObject({
+      resolution: "reference_position",
+      objectId: "building-1",
+    });
+  });
+
   it("provides one contextual legend without inventing establishment points", () => {
     expect(publicStoryLegend("building-use", true)?.items).toHaveLength(4);
     expect(publicStoryLegend("transport", true)?.items).toHaveLength(2);

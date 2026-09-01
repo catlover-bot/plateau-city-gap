@@ -73,7 +73,9 @@ function targetSelection(unknown: AreaUnknown, summary: InvestigationAreaSummary
 interface Props {
   data: AppData;
   fixture: InvestigationAreaFixture;
-  cartography: PublicCartographyData;
+  cartography: PublicCartographyData | null;
+  cartographyError?: string | null;
+  onRequestCartography(): void;
   state: SpatialState;
   onOpenAdvanced(): void;
   onSelectionChange(selection: SpatialSelection | null): void;
@@ -84,6 +86,8 @@ export function PublicAreaJourney({
   data,
   fixture,
   cartography,
+  cartographyError = null,
+  onRequestCartography,
   state,
   onOpenAdvanced,
   onSelectionChange,
@@ -126,13 +130,18 @@ export function PublicAreaJourney({
     showTarget: step === "target",
     derivativeAvailable,
   }), [activeStory, areaGeometry, cartography, derivativeAvailable, step, targetRender]);
-  const legend = step === "target"
+  const cartographyStatusLegend = !cartography && (step === "result" || step === "target") ? {
+    title: "地図表示",
+    note: cartographyError ?? "PLATEAU表示用データを準備中です",
+    items: [],
+  } : null;
+  const legend = cartographyStatusLegend ?? (step === "target"
     ? {
         title: targetRender?.resolution === "exact" ? "PLATEAU上の確認対象" : "確認対象の位置",
         note: targetRender?.resolution === "exact" ? "PLATEAUの実形状" : "登録された位置情報のみ",
         items: [{ label: selectedUnknown?.target.label ?? "確認対象", color: "#6b4c7d", shape: "fill" as const }],
       }
-    : publicStoryLegend(step === "result" ? activeStory : null, derivativeAvailable);
+    : publicStoryLegend(step === "result" ? activeStory : null, derivativeAvailable));
   const eligibility = summary && selectedUnknown
     ? contextual3dEligibility(summary, selectedUnknown.target, data.plateauMetadata?.year, hasWebgl())
     : { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "no_target", reason: "確認場所を選んでください。" };
@@ -229,6 +238,9 @@ export function PublicAreaJourney({
       data-public-step={step}
       data-map-mode={mapMode}
       data-active-story={step === "result" ? activeStory : "none"}
+      data-cartography-state={cartography ? "ready" : cartographyError ? "degraded" : "loading"}
+      data-presentation-target-kind={targetRender?.kind ?? "none"}
+      data-presentation-target-resolution={targetRender?.resolution ?? "none"}
     >
       <PublicHeader onRestart={restart} onOpenAdvanced={onOpenAdvanced} />
       <main className={`public-area-body step-${step}`}>
@@ -372,7 +384,10 @@ export function PublicAreaJourney({
                   type="button"
                   className="public-primary public-radius-submit"
                   disabled={customOpen && !customRadiusApplied}
-                  onClick={() => setStep("result")}
+                  onClick={() => {
+                    onRequestCartography();
+                    setStep("result");
+                  }}
                 >
                   この範囲を調べる
                 </button>

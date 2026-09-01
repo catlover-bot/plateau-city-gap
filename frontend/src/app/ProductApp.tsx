@@ -95,6 +95,8 @@ export function ProductApp() {
   const [areaFixture, setAreaFixture] = useState<InvestigationAreaFixture | null>(null);
   const [publicCartography, setPublicCartography] = useState<PublicCartographyData | null>(null);
   const [areaError, setAreaError] = useState<string | null>(null);
+  const [cartographyError, setCartographyError] = useState<string | null>(null);
+  const [cartographyRequested, setCartographyRequested] = useState(false);
   const [areaJourneyOpen, setAreaJourneyOpen] = useState(
     () => new URLSearchParams(window.location.search).get("journey") !== "m3",
   );
@@ -112,16 +114,29 @@ export function ProductApp() {
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([loadInvestigationAreaFixture(), loadPublicCartographyData()])
-      .then(([fixture, cartography]) => {
-        if (!cancelled) setAreaFixture(fixture);
-        if (!cancelled) setPublicCartography(cartography);
-      })
+    loadInvestigationAreaFixture()
+      .then((fixture) => { if (!cancelled) setAreaFixture(fixture); })
       .catch((reason: unknown) => {
         if (!cancelled) setAreaError(reason instanceof Error ? reason.message : "調査範囲データを読み込めませんでした");
       });
     return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (!datasets.maizuru || !areaFixture || !cartographyRequested || publicCartography || cartographyError) return;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      loadPublicCartographyData()
+        .then((cartography) => { if (!cancelled) setPublicCartography(cartography); })
+        .catch((reason: unknown) => {
+          if (!cancelled) setCartographyError(reason instanceof Error ? reason.message : "PLATEAU表示用データを読み込めませんでした");
+        });
+    }, 500);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [areaFixture, cartographyError, cartographyRequested, datasets.maizuru, publicCartography]);
 
   useEffect(() => {
     if (state.city !== "fujisawa" || datasets.fujisawa) return;
@@ -441,11 +456,16 @@ export function ProductApp() {
   if (state.experience === "landing") {
     if (areaJourneyOpen) {
       if (areaError) return <ErrorState message={areaError} onRetry={closeAreaJourney} />;
-      if (!guidedData || !areaFixture || !publicCartography) return <LoadingState />;
+      if (!guidedData || !areaFixture) return <LoadingState />;
       return <PublicAreaJourney
         data={guidedData}
         fixture={areaFixture}
         cartography={publicCartography}
+        cartographyError={cartographyError}
+        onRequestCartography={() => {
+          setCartographyError(null);
+          setCartographyRequested(true);
+        }}
         state={state}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}

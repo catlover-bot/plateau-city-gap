@@ -73,7 +73,7 @@ export interface PublicTargetRender {
 }
 
 export interface PublicCartographyPresentation {
-  data: PublicCartographyData;
+  data: PublicCartographyData | null;
   area: PublicAreaMapGeometry | null;
   activeStory: PublicStoryId | null;
   target: PublicTargetRender | null;
@@ -205,10 +205,10 @@ function matches(feature: GeoJsonFeature, objectId: string): boolean {
 }
 
 export function derivativeAvailableFor(
-  data: PublicCartographyData,
+  data: PublicCartographyData | null,
   summary: InvestigationAreaSummary | null,
 ): boolean {
-  if (!summary || summary.origin.kind !== "station") return false;
+  if (!data || !summary || summary.origin.kind !== "station") return false;
   const origin = data.manifest.scope.origin;
   if (!origin) {
     return summary.radius_m <= data.manifest.scope.radius_m
@@ -222,7 +222,7 @@ export function derivativeAvailableFor(
 
 export function resolvePublicTarget(
   target: AreaTarget | null,
-  data: PublicCartographyData,
+  data: PublicCartographyData | null,
   derivativeAvailable: boolean,
 ): PublicTargetRender | null {
   if (!target) return null;
@@ -234,14 +234,14 @@ export function resolvePublicTarget(
     latitude: target.latitude,
   };
   const targetKind = target.object_type === "building" ? "buildings" : "roads";
-  const manifestResolvesTarget = data.manifest.target_ids.includes(target.source_object_id)
-    && (data.manifest.resolved_target_ids[targetKind] ?? []).includes(target.source_object_id);
+  const manifestResolvesTarget = Boolean(data?.manifest.target_ids.includes(target.source_object_id)
+    && (data.manifest.resolved_target_ids[targetKind] ?? []).includes(target.source_object_id));
   if (
     derivativeAvailable && manifestResolvesTarget
     && (target.object_type === "building" || target.object_type === "road")
   ) {
-    const source = target.object_type === "building" ? data.buildings : data.roads;
-    const features = source.features.filter((feature) => matches(feature, target.source_object_id));
+    const source = target.object_type === "building" ? data?.buildings : data?.roads;
+    const features = source?.features.filter((feature) => matches(feature, target.source_object_id)) ?? [];
     if (features.length) {
       return { ...base, resolution: "exact", geometry: { type: "FeatureCollection", features } };
     }

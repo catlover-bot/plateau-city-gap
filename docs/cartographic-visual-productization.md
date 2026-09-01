@@ -56,3 +56,36 @@ AWAITING_MUNICIPAL_WORKFLOW_REVIEW
 HOLD_MAIN_PROMOTION
 HOLD_P1_M4_M6
 ```
+
+## C5 checkpoint result
+
+C0–C4 are implemented on `feat/cartographic-visual-productization-v1`. C5 captured the production build with the deterministic protocol in `frontend/scripts/capture-cartographic-checkpoint.mjs`; the machine-readable record is `assets/cartographic-checkpoint/manifest.json`.
+
+Implemented cartographic sequence:
+
+```text
+Area confirmation
+  -> deferred public cartography load
+  -> 500m / 800m / 1km Area geometry
+  -> one Summary story at a time
+  -> Unknown-to-map emphasis
+  -> exact PLATEAU object, registered reference position, or honest Area fallback
+```
+
+The initial Public route does not wait for the cartographic derivative. Loading begins 500 ms after Area confirmation. Until exact geometry is ready, the UI exposes a labelled reference-position or Area fallback and never invents an object shape.
+
+Recorded automated results:
+
+- Public FMR median: 1125 ms over five cold navigations.
+- Area readiness: 500m 1278 ms; 800m 288 ms; 1km 1242 ms.
+- Summary story switch: building use 4135 ms; establishments 1320 ms; urban planning 1077 ms; transport 1753 ms.
+- Target readiness: road 2453 ms; building 12336 ms; facility reference 5057 ms.
+- Exact target color signal: road 278 px; building 318 px; mobile road 1843 px at DPR 2.
+- Registered facility reference signal: 164 px.
+- Critical/serious accessibility violations and checkpoint gate failures: zero.
+
+The exact target geometry is the existing PLATEAU source object, not a point substitute. A non-PLATEAU facility is explicitly a registered reference position. An unresolved case stays an Area/mesh fallback. The basemap-degraded capture demonstrates that checked-in local vectors remain visible and the missing background is disclosed.
+
+The slower building story and building/facility target readiness are retained as review risks. Automated screenshots support review but do not establish three-second human recognition, comprehension, usefulness, or municipal workflow fit.
+
+See `cartographic-validation-checkpoint.md` for the reproducible evidence and `cartographic-visual-review-package.md` for the intentionally empty human-review worksheet.
