@@ -6,16 +6,19 @@ CITY GAP is a municipal operations system for turning versioned urban data into
 reviewable findings, investigations, scenario comparisons, field observations and
 human-authored decision records. Its differentiator is traceable spatial computation:
 every result remains linked to an Urban State, explicit dataset versions, algorithm
-The public product is positioned narrowly as:
-
-**CITY GAP 地域交通・医療の現地調査候補をつくるツール**
-
-`500m candidate → PLATEAU field context → data gaps → field checks → editable investigation sheet → municipal review`
-
-Its primary user is a municipal local-public-transport officer. The public output is a
-candidate shortlist, a field investigation sheet and an internal investigation
-summary—not a policy recommendation or a replacement for the wider platform.
 version, parameters, validation evidence and stated limitations.
+
+The Public first-run product is positioned as:
+
+**気になる場所を、地図とデータで確かめる。**
+
+`Investigation Area → quantified evidence → Known / Unknown → source limitation → PLATEAU target when needed → unverified checks`
+
+Its primary users are municipal officers examining a station, facility or arbitrary
+map point. The first view prioritizes population and age, building use,
+establishments, available planning context and transport context. The public output is
+an Area Summary and a traceable set of still-unverified questions—not a policy
+recommendation or a replacement for the wider platform.
 
 The primary operating loop is:
 
@@ -23,7 +26,7 @@ The primary operating loop is:
 
 The public investigation surface expresses that loop spatially:
 
-`City → District → 500m mesh → Building group → Building → Road → Site`
+`Place → versioned Area → quantified evidence → Known / Unknown → building / road / site when field confirmation is appropriate`
 
 Scene and spatial resolution remain independent. A user can change the question being
 investigated without losing the object or scale already under review.
@@ -65,9 +68,18 @@ competition dashboard.
   facilities, costs, approvals or observations.
 - The public GitHub Pages showcase remains aggregated, non-sensitive and read-only. It
   does not share the authenticated municipal API surface.
+- Area selection and aggregation are established GIS capabilities and are not claimed
+  as CITY GAP novelty.
+- Direct Maizuru evidence confirms overlap with a current-year use case combining
+  PLATEAU 3D, borehole columns, liquefaction maps and other hazard data. CITY GAP will
+  not build or claim novelty for a borehole viewer, 3D column viewer, or combined
+  hazard-and-borehole viewer.
+- Borehole work is `INTEGRATE / RESEARCH ONLY`, not an automatic P1 item. A future,
+  separately approved goal may assess Maizuru outputs as a versioned official Area
+  source; it must not recreate the specialist viewer or infer continuous geology.
 
 ## Success measures
 
 Measure adoption with non-sensitive usage events, completion of real lifecycle steps,
 time-to-review and data freshness. Do not substitute fictional satisfaction scores,
-invented municipal usage, or unmeasured SLA claims.
+invented municipal usage, unmeasured SLA claims or fabricated human-test responses.

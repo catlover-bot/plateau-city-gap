@@ -1,14 +1,15 @@
 # Current goal
 
-Active goal: `area-known-unknown-to-task-v1`
+Active goal: `public-first-run-ux-v1`
 
-Current milestone: A5 Preservation & Validation Prep complete
+Current milestone: U0 Audit lock and municipal evidence
 
-Gate: `HOLD_P1_M4_M6`
+Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
 - branch: `feat/area-known-unknown-a5`
+- execution branch: `feat/public-first-run-ux-v1`
 - product checkpoint: `d829defc54dc9417d3045d2c2ecfb9f19558e08a`
 - evidence checkpoint: `f3ae74e`
 - browser-gate checkpoint: `9dce42a`
@@ -47,9 +48,17 @@ Product boundary:
 - `Investigation Area` is the center; station is one convenient `point_radius` origin.
 - P0 supports station/map point, 500/800/1000m and bounded custom radius.
 - 800m is a policy-analysis radius, not an actual walking-time isochrone.
-- Existing M3 remains the primary public entry until first-time-user validation; Area is a secondary experimental route.
+- The feature branch makes the new Area first-run journey its Public root. `main` and GitHub Pages keep the current entry until a separate promotion decision after human and municipal review.
 - Public Area displays no photo, GPS, answer, assignee, or municipal review.
 - Area selection and aggregation are not the novelty. The provisional differentiation is the traceable Area → Known/Unknown → Finding → PLATEAU target → verification chain.
-- M4 Photo/GPS/Offline, M5 Municipal Review, M6 Finding Feedback, pedestrian isochrone, polygon drawing, and Borehole Observation Layer are not authorized by this goal.
+- M4 Photo/GPS/Offline, M5 Municipal Review, M6 Finding Feedback, pedestrian isochrone, polygon drawing, and Borehole UI are not authorized by this goal.
 
-Next action: use the prepared 30–60 second comprehension protocol and municipal workflow review artifact. Do not begin P1 or M4–M6 automatically.
+Maizuru borehole evidence:
+
+- Evidence status: `DIRECT_MUNICIPAL_USE_CASE_OVERLAP_CONFIRMED`.
+- Maizuru's current-year use case is considering borehole columns on a PLATEAU 3D city model together with liquefaction maps and landslide or other hazard data.
+- `PLATEAU 3D + borehole columns + hazard layers` is therefore not CITY GAP novelty.
+- Borehole strategy is `INTEGRATE / RESEARCH ONLY`, not an automatic P1 implementation.
+- CITY GAP will not build its own borehole viewer, 3D column viewer, or hazard-and-borehole viewer. A later, separately approved goal may only assess whether Maizuru outputs can be connected as an official Investigation Area source with provenance and source limitations intact.
+
+Next action: complete U0–U4 on the feature branch, prepare—not fabricate—the human-test package, then stop. Do not begin P1 or M4–M6 and do not promote to `main` automatically.
