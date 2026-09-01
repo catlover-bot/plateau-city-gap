@@ -2,7 +2,7 @@
 
 Goal: `public-first-run-ux-v1`
 
-Evidence build commit: `54d0781ab0f98b7f46bd4c57204f1032dd3a558c`
+Evidence source HEAD: `9c0764b4ddb7eb26b51d1f204cd8c68722933c66`
 
 Machine-readable evidence: [manifest](assets/public-first-run-ux/manifest.json)
 
@@ -33,7 +33,7 @@ After evidence:
 - [Place / radius desktop](assets/public-first-run-ux/02-place-radius-desktop.png)
 - [Known / Unknown desktop](assets/public-first-run-ux/03-known-unknown-desktop.png)
 - [Target / task desktop](assets/public-first-run-ux/04-target-task-desktop.png)
-- [Contextual 3D enabled](assets/public-first-run-ux/05-contextual-3d-enabled.png)
+- [Contextual 3D withheld by UX-value gate](assets/public-first-run-ux/05-contextual-3d-withheld.png)
 - [Landing mobile](assets/public-first-run-ux/06-landing-mobile.png)
 - [Place / radius mobile](assets/public-first-run-ux/07-place-radius-mobile.png)
 - [Known / Unknown mobile](assets/public-first-run-ux/08-known-unknown-mobile.png)
@@ -122,18 +122,16 @@ The first summary is five groups, not a 20-card dashboard:
 4. 都市計画
 5. 交通
 
-Each metric retains its source and limitation disclosure. Secondary datasets are not deleted and remain behind details when present.
+Each metric retains its source and limitation in the single bottom disclosure. Secondary datasets are not deleted and remain behind details when present.
 
 ## 16. Unknown presentation
 
-Known and Unknown remain in one continuous scroll panel. Public Unknown is limited to three items. Each selectable card contains:
+Known and Unknown remain in one continuous scroll panel. Public Unknown is limited to three items. Each selectable first-view card contains only:
 
-- `未確認`
-- the unknown in plain Japanese
-- why it matters
-- the source limitation
+- what is still unknown in plain Japanese
+- why it should be checked
 
-The fourth contract item remains in data but is not promoted into the first view.
+The cards contain no repeated status badge, dataset, version, source limitation, coverage, rule, model code, or object provenance. All three cards have zero source-detail elements in the automated audit. One collapsed `出典・データの注意点` disclosure holds metric provenance, coverage, limitations, Area version/hash, and target object provenance. The fourth contract item remains in data but is not promoted into the first view.
 
 ## 17. PLATEAU target presentation
 
@@ -148,23 +146,23 @@ The sampled West Maizuru 800m task contained four required checks. Internal sour
 
 ## 18. Contextual 3D behavior
 
-Automated positive case:
+The technical checks remain necessary but are no longer sufficient. U4 recorded zero displayed cases, which is an accepted UX outcome for the current real Public targets.
 
-- resolved PLATEAU road target
-- matching Area data
-- matching PLATEAU source/version
-- verified content hash
-- WebGL available
-- `3Dで場所を見る` displayed
+Not displayed — resolved road target:
 
-Automated negative case:
+- technical eligibility: true
+- UX value: false
+- reason code: `single_road_point_2d_sufficient`
+- reason: this is one road point, and opening 3D adds no decision information beyond the clearer 2D marker
 
-- arbitrary map-point mesh fallback
-- no resolved PLATEAU object
-- 3D control absent
+Not displayed — map-point mesh fallback:
+
+- technical eligibility: false
+- UX value: false
+- reason code: `not_plateau_object`
 - 2D target presentation retained
 
-3D is never the default.
+A future `3Dで周辺を見る` control may appear only when a real target also demonstrates useful building/road, terrain/height, multi-building, or otherwise ambiguous spatial relationships. PLATEAU presence alone cannot display it, and 3D is never the default.
 
 ## 19–20. Desktop and mobile results
 
@@ -204,10 +202,10 @@ The two terminal Tab-cycle entries that returned focus to `body` are recorded in
 ## 22–23. Clicks and performance
 
 - Landing → target: 5 clicks.
-- Cold-navigation FMR samples: 1,823 / 1,216 / 2,534 / 1,953 / 1,190 ms.
-- Median FMR: 1,823 ms.
+- Cold-navigation FMR samples: 4,885 / 1,489 / 1,858 / 1,474 / 1,801 ms.
+- Median FMR: 1,801 ms.
 - Target: median ≤3,000 ms.
-- Public Vite production build: 39.51 seconds for the final evidence build.
+- Public Vite production build: 45.97 seconds for the committed revised evidence build.
 
 ## 24. Local tests
 
@@ -219,7 +217,7 @@ Passed locally:
 - frontend typecheck
 - frontend Vitest: 89 passed
 - frontend production build
-- documentation link audit: all 73 documents resolved before adding this checkpoint; rerun is required after final docs
+- documentation link audit: all 75 documents resolved
 - npm security audit: 0 vulnerabilities
 - PLATEAU-native browser audit: passed
 - visual-identity audit: passed, no console errors or local HTTP failures
@@ -253,7 +251,7 @@ No participant response was created or inferred.
 - First-time users may understand Known/Unknown but not see a place for the verification result in an actual municipal meeting, GIS, or form.
 - Area Summary content is only partially confirmed; the exact urban-planning restrictions still require municipal clarification.
 - The target map depends on external background tiles. A deterministic center marker prevents target loss, but background detail may still arrive late.
-- Contextual 3D can add explanation cost even when technically eligible.
+- No current real Public target passes the UX-value 3D gate; a future positive case must prove that 3D adds spatial understanding without adding first-run explanation cost.
 - Some users may interpret a radius as a travel-time area despite the progressive methodology disclosure.
 - Public first-run comprehension may pass while the Unknown-to-task workflow still overlaps with existing Field Maps, Survey123, or paper practice.
 - The core differentiation is only provisional until real participants and a separate municipal workflow review evaluate the traceable reason chain.

@@ -2,7 +2,7 @@
 
 Active goal: `public-first-run-ux-v1`
 
-Current milestone: U3 refinement complete / U4 revalidation in progress
+Current milestone: U4 Automated UX Validation Checkpoint complete
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -10,7 +10,7 @@ Checkpoint state:
 
 - execution branch: `feat/public-first-run-ux-v1`
 - source branch: `feat/area-known-unknown-a5`
-- Public UX evidence build: `54d0781ab0f98b7f46bd4c57204f1032dd3a558c`
+- Public UX revised evidence source: `9c0764b4ddb7eb26b51d1f204cd8c68722933c66`
 - product checkpoint: `d829defc54dc9417d3045d2c2ecfb9f19558e08a`
 - evidence checkpoint: `f3ae74e`
 - browser-gate checkpoint: `9dce42a`

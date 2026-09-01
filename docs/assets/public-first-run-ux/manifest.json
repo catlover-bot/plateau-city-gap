@@ -1,7 +1,7 @@
 {
   "schema_version": "citygap.public-first-run-ux-checkpoint@1",
-  "generated_at": "2026-09-01T03:05:36.900Z",
-  "repository_head": "54d0781ab0f98b7f46bd4c57204f1032dd3a558c",
+  "generated_at": "2026-09-01T07:18:02.215Z",
+  "repository_head": "9c0764b4ddb7eb26b51d1f204cd8c68722933c66",
   "base_url": "http://127.0.0.1:4174/plateau-city-gap/",
   "baseline": {
     "1440x900": {
@@ -96,7 +96,7 @@
       "map_share_percent": 67.9,
       "panel_share_percent": 32.1,
       "visible_controls": 7,
-      "visible_disclosures": 4,
+      "visible_disclosures": 1,
       "primary_cta_count": 1,
       "map_occlusion_percent": 0.2,
       "map_panel_overlap_px2": 0,
@@ -126,7 +126,7 @@
       "step": "target",
       "map_share_percent": 67.9,
       "panel_share_percent": 32.1,
-      "visible_controls": 6,
+      "visible_controls": 5,
       "visible_disclosures": 1,
       "primary_cta_count": 0,
       "map_occlusion_percent": 0.2,
@@ -251,7 +251,7 @@
       "map_share_percent": 31.8,
       "panel_share_percent": 68.2,
       "visible_controls": 6,
-      "visible_disclosures": 2,
+      "visible_disclosures": 1,
       "primary_cta_count": 1,
       "map_occlusion_percent": 3.9,
       "map_panel_overlap_px2": 0,
@@ -318,13 +318,13 @@
     "header_secondary_action_count": 1,
     "required_check_count": 4,
     "fmr_samples_ms": [
-      1823,
-      1216,
-      2534,
-      1953,
-      1190
+      4885,
+      1489,
+      1858,
+      1474,
+      1801
     ],
-    "fmr_median_ms": 1823
+    "fmr_median_ms": 1801
   },
   "accessibility": {
     "desktop_intro": {
@@ -448,9 +448,55 @@
     "evidence_inputs": 0,
     "internal_id_initially_visible": false
   },
+  "unknown_first_view": {
+    "card_count": 3,
+    "cards": [
+      {
+        "title": "駅から周辺へ実際に歩いて通れる経路",
+        "importance": "半径800mは分析上の目安で、横断・階段・通行制限を含む実際の到達性は判断できません。",
+        "source_detail_element_count": 0,
+        "repeated_status_count": 0
+      },
+      {
+        "title": "PLATEAU建物の現在の使われ方",
+        "importance": "PLATEAU用途属性は基準時点の記録で、現在の利用や空き状況により周辺像の解釈が変わります。",
+        "source_detail_element_count": 0,
+        "repeated_status_count": 0
+      },
+      {
+        "title": "登録施設が現在も利用できるか",
+        "importance": "公開データ上の登録地点だけでは、開設状況・時間帯・入口を判断できません。",
+        "source_detail_element_count": 0,
+        "repeated_status_count": 0
+      }
+    ],
+    "source_disclosure_count": 1,
+    "source_disclosure_open_initially": false,
+    "repeated_metric_source_disclosure_count": 0
+  },
   "contextual_3d": {
-    "eligible": true,
-    "button_visible": true,
+    "displayed_cases": [],
+    "not_displayed_cases": [
+      {
+        "case_id": "resolved_single_road_point",
+        "eligible": false,
+        "technical_eligible": true,
+        "ux_valuable": false,
+        "reason_code": "single_road_point_2d_sufficient",
+        "reason": "この確認は道路上の一点が対象で、2D地図の方が場所を明確に確認できます。3Dを開いても判断材料が増えないため表示しません。",
+        "button_visible": false
+      },
+      {
+        "case_id": "mesh_fallback",
+        "eligible": false,
+        "technical_eligible": false,
+        "ux_valuable": false,
+        "reason_code": "not_plateau_object",
+        "reason": "この確認場所は2D地図で表示します。"
+      }
+    ],
+    "display_count": 0,
+    "zero_display_is_not_failure": true,
     "mesh_fallback_disabled": true
   },
   "routes": {
@@ -503,8 +549,8 @@
         "width": 1440,
         "height": 900
       },
-      "bytes": 547292,
-      "sha256": "05181834276ac541fc53f0ba8a99bc0a34c21bbc2757691ff3724808d65719d7",
+      "bytes": 545911,
+      "sha256": "1f0d2357a05a029c20bc31eb59a608a2d728855961698a15dffa40ce8e5eb8dc",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
@@ -514,20 +560,20 @@
         "width": 1440,
         "height": 900
       },
-      "bytes": 126873,
-      "sha256": "1fffafbc5d1140cbe2174c3a3abe6d7cf96e9f6c319831fe6afb9280f840282e",
+      "bytes": 118558,
+      "sha256": "9d3ceea81656fdad0626c0894b74dbe7053d3075a8a9e38e36778686515a292e",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
-      "filename": "05-contextual-3d-enabled.png",
-      "scene": "contextual-3d-enabled",
+      "filename": "05-contextual-3d-withheld.png",
+      "scene": "contextual-3d-withheld",
       "viewport": {
         "width": 1440,
         "height": 900
       },
-      "bytes": 130159,
-      "sha256": "911baafff5480cce892d959a7355043d99c2386d1b4185040a64b63fc72327dd",
-      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33092&lat=35.44168&z=15.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815"
+      "bytes": 119269,
+      "sha256": "82e6bf4b966d2018535a233ddf6bbf0dca8fc4118bb7f00ad58902008e530b14",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
       "filename": "06-landing-mobile.png",
@@ -536,8 +582,8 @@
         "width": 390,
         "height": 844
       },
-      "bytes": 174344,
-      "sha256": "98e2737295353d06d5c12d24cd158f54a6cc3504614e642f3f4edbc85e486b2a",
+      "bytes": 59437,
+      "sha256": "3b0ed8dc2c6e9f0519cbcc0d8dd5a4ed3aba746d246433d0db265d77d33dc916",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45"
     },
     {
@@ -547,8 +593,8 @@
         "width": 390,
         "height": 844
       },
-      "bytes": 130910,
-      "sha256": "94eb4e82448315d5305451e3a85c4071608b5e88392e41cb59d7285c8e961930",
+      "bytes": 35959,
+      "sha256": "6d885126185f117f7657b63c72cf349a24b0cdd53bcbea341a939ebf306eca61",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
@@ -558,8 +604,8 @@
         "width": 390,
         "height": 844
       },
-      "bytes": 136397,
-      "sha256": "c8342bd55fa041bf8c36726fd7f4f704f620a5d6c1a24b65bf042a5a4ffd40f4",
+      "bytes": 131207,
+      "sha256": "4eacc4e14ed8494d24d018cf4b4ce270f18f87846f8a58a8883fc4d4886e5708",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
@@ -569,8 +615,8 @@
         "width": 390,
         "height": 844
       },
-      "bytes": 78671,
-      "sha256": "65d8de0c016c5aa6db31ce7ef460a14606c26194ac3d8049e9dbd3e704eae94f",
+      "bytes": 78951,
+      "sha256": "a0bbf0094c787d423124855d94fcf9cffca185521230c17603e55d22bbf66ee0",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40"
     },
     {
@@ -580,8 +626,8 @@
         "width": 1440,
         "height": 900
       },
-      "bytes": 121721,
-      "sha256": "afd2dcc7db3c13c1223a90a65a886f9e0451db0cb762253e6527ec119d1f6282",
+      "bytes": 121038,
+      "sha256": "8b01e4c6a073a984907775f65eb05e452b37b641cf5097496210e6ba607560f6",
       "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=13.40"
     }
   ],

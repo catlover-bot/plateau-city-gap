@@ -1,15 +1,15 @@
 {
   "schemaVersion": "citygap.visual-identity-audit@1",
   "label": "current",
-  "commit": "c13b33423408ab8fad1b11d9a7a9eed46c047e6e",
-  "baseUrl": "http://localhost:4173/plateau-city-gap/",
-  "generatedAt": "2026-08-29T10:57:25.225Z",
+  "commit": "9c0764b4ddb7eb26b51d1f204cd8c68722933c66",
+  "baseUrl": "http://127.0.0.1:4174/plateau-city-gap/",
+  "generatedAt": "2026-09-01T07:19:01.614Z",
   "viewports": [
     {
       "width": 1440,
       "height": 900,
-      "productReadyMs": 3521,
-      "visibleElementCount": 265,
+      "productReadyMs": 15448,
+      "visibleElementCount": 266,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
@@ -58,8 +58,8 @@
     {
       "width": 1280,
       "height": 800,
-      "productReadyMs": 2280,
-      "visibleElementCount": 265,
+      "productReadyMs": 8385,
+      "visibleElementCount": 266,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
@@ -108,8 +108,8 @@
     {
       "width": 1024,
       "height": 768,
-      "productReadyMs": 2511,
-      "visibleElementCount": 258,
+      "productReadyMs": 7103,
+      "visibleElementCount": 259,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
@@ -158,8 +158,8 @@
     {
       "width": 768,
       "height": 1024,
-      "productReadyMs": 4593,
-      "visibleElementCount": 252,
+      "productReadyMs": 7021,
+      "visibleElementCount": 253,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 0,
@@ -208,8 +208,8 @@
     {
       "width": 390,
       "height": 844,
-      "productReadyMs": 2203,
-      "visibleElementCount": 220,
+      "productReadyMs": 7640,
+      "visibleElementCount": 221,
       "classCardCount": 0,
       "roundedSurfaceCount": 0,
       "pillCount": 1,
@@ -268,8 +268,8 @@
     "sourceCss": [
       {
         "path": "frontend/src/app/product-shell.css",
-        "bytes": 10639,
-        "gzipBytes": 2395
+        "bytes": 10898,
+        "gzipBytes": 2445
       },
       {
         "path": "frontend/src/app/workbench.css",
@@ -287,6 +287,21 @@
         "gzipBytes": 576
       },
       {
+        "path": "frontend/src/features/area-investigation/areaInvestigation.css",
+        "bytes": 8772,
+        "gzipBytes": 2176
+      },
+      {
+        "path": "frontend/src/features/area-investigation/publicAreaJourney.css",
+        "bytes": 12649,
+        "gzipBytes": 2953
+      },
+      {
+        "path": "frontend/src/features/guided/guided.css",
+        "bytes": 18219,
+        "gzipBytes": 4318
+      },
+      {
         "path": "frontend/src/features/inspector/inspector.css",
         "bytes": 10065,
         "gzipBytes": 2255
@@ -297,9 +312,19 @@
         "gzipBytes": 817
       },
       {
+        "path": "frontend/src/features/investigation/investigation.css",
+        "bytes": 24342,
+        "gzipBytes": 5338
+      },
+      {
         "path": "frontend/src/features/urban-section/urban-section.css",
-        "bytes": 4110,
-        "gzipBytes": 1272
+        "bytes": 4806,
+        "gzipBytes": 1400
+      },
+      {
+        "path": "frontend/src/features/verification/verification.css",
+        "bytes": 6553,
+        "gzipBytes": 1432
       },
       {
         "path": "frontend/src/map/map.css",
@@ -312,27 +337,32 @@
         "gzipBytes": 5552
       }
     ],
-    "sourceCssBytes": 86981,
+    "sourceCssBytes": 158471,
     "buildAssets": [
       {
-        "path": "frontend/dist/assets/CesiumMap-CEXmCi91.js",
-        "bytes": 3597034,
-        "gzipBytes": 933982
+        "path": "frontend/dist/assets/CesiumMap-CrJPZ8GF.js",
+        "bytes": 3597150,
+        "gzipBytes": 934016
       },
       {
-        "path": "frontend/dist/assets/index-1gXsZUfZ.css",
-        "bytes": 157708,
-        "gzipBytes": 24372
+        "path": "frontend/dist/assets/index-DPn590XR.css",
+        "bytes": 199875,
+        "gzipBytes": 32476
       },
       {
-        "path": "frontend/dist/assets/index-B2TvnWJE.js",
-        "bytes": 16618,
-        "gzipBytes": 5502
+        "path": "frontend/dist/assets/index-yduX9Go1.js",
+        "bytes": 17363,
+        "gzipBytes": 5762
       },
       {
-        "path": "frontend/dist/assets/ProductApp-66n_71-6.js",
-        "bytes": 129139,
-        "gzipBytes": 36460
+        "path": "frontend/dist/assets/ProductApp-BnLUANZk.js",
+        "bytes": 201230,
+        "gzipBytes": 56692
+      },
+      {
+        "path": "frontend/dist/assets/ProductApp-DKJKPUWZ.css",
+        "bytes": 17351,
+        "gzipBytes": 4107
       },
       {
         "path": "frontend/dist/assets/react-hRsyaU4r.js",
@@ -340,12 +370,12 @@
         "gzipBytes": 45800
       },
       {
-        "path": "frontend/dist/assets/ServiceApp-BzHgUxqm.js",
-        "bytes": 107017,
-        "gzipBytes": 28961
+        "path": "frontend/dist/assets/ServiceApp-CK5W4aGT.js",
+        "bytes": 107133,
+        "gzipBytes": 28977
       }
     ],
-    "screenshotCount": 11,
-    "screenshotBytes": 5011269
+    "screenshotCount": 28,
+    "screenshotBytes": 14257404
   }
 }
