@@ -93,23 +93,47 @@ function sourceData(collection: GeoJsonFeatureCollection | null | undefined): ne
 
 function addGeoJson(map: MapLibreMap, id: string, collection: GeoJsonFeatureCollection | null | undefined, cluster = false): void {
   if (map.getSource(id)) return;
+  const data = sourceData(collection);
   map.addSource(id, {
     type: "geojson",
-    data: sourceData(collection),
+    data,
     attribution: id.startsWith("validation") ? OSM_ATTRIBUTION : undefined,
     cluster,
     clusterMaxZoom: 13,
     clusterRadius: 46
   });
+  const source = map.getSource(id) as (GeoJSONSource & { __cityGapData?: never }) | undefined;
+  if (source) source.__cityGapData = data;
 }
 
-function setSource(map: MapLibreMap, id: string, collection: GeoJsonFeatureCollection | null | undefined): void {
-  const source = map.getSource(id);
-  if (source instanceof GeoJSONSource) source.setData(sourceData(collection));
+function setSource(map: MapLibreMap, id: string, collection: GeoJsonFeatureCollection | null | undefined): boolean {
+  const source = map.getSource(id) as (GeoJSONSource & { __cityGapData?: never }) | undefined;
+  const data = sourceData(collection);
+  if (!(source instanceof GeoJSONSource) || source.__cityGapData === data) return false;
+  source.setData(data);
+  source.__cityGapData = data;
+  return true;
 }
 
 function layerVisibility(map: MapLibreMap, id: string, visible: boolean): void {
-  if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", visible ? "visible" : "none");
+  if (!map.getLayer(id)) return;
+  const next = visible ? "visible" : "none";
+  const current = map.getLayoutProperty(id, "visibility") ?? "visible";
+  if (current !== next) map.setLayoutProperty(id, "visibility", next);
+}
+
+function sameStyleValue(left: unknown, right: unknown) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function setFilter(map: MapLibreMap, id: string, filter: unknown): void {
+  if (!map.getLayer(id) || sameStyleValue(map.getFilter(id), filter)) return;
+  map.setFilter(id, filter as never);
+}
+
+function setPaint(map: MapLibreMap, id: string, property: string, value: unknown): void {
+  if (!map.getLayer(id) || sameStyleValue(map.getPaintProperty(id, property as never), value)) return;
+  map.setPaintProperty(id, property as never, value as never);
 }
 
 function lngLatFromProperties(properties: Record<string, unknown>, fallback: { lng: number; lat: number }): [number, number] {
@@ -182,11 +206,19 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     publicCartography?.area ? `${publicCartography.area.center.join(",")}:${publicCartography.area.radiusM}` : "no-area",
     publicCartography?.activeStory ?? "no-story",
     publicCartography?.target
-      ? `${publicCartography.target.kind}:${publicCartography.target.resolution}:${publicCartography.target.longitude}:${publicCartography.target.latitude}:${publicCartography.target.geometry.features.length}`
+      ? `${publicCartography.target.kind}:${publicCartography.target.objectId}:${publicCartography.target.resolution}:${publicCartography.target.longitude}:${publicCartography.target.latitude}:${publicCartography.target.geometry.features.length}`
       : "no-target",
     publicCartography?.showTarget ? "focused" : "context",
     publicCartography?.derivativeAvailable ? "derivative" : "fallback",
   ].join("|");
+  const publicOrigin = useMemo<GeoJsonFeatureCollection>(() => publicCartography?.area ? {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: { role: "origin" },
+      geometry: { type: "Point", coordinates: publicCartography.area.center },
+    }],
+  } : EMPTY, [publicCartography?.area]);
   onSelectionRef.current = onSelectionChange;
   onViewportRef.current = onViewportChange;
 
@@ -248,6 +280,17 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     canvas.setAttribute("role", "application");
     canvas.setAttribute("aria-label", ariaLabel);
     let criticalError = false;
+    let basemapFailed = false;
+    const resumeBasemap = () => {
+      if (!basemapFailed || !navigator.onLine) return;
+      basemapFailed = false;
+      const shell = containerRef.current?.parentElement;
+      shell?.removeAttribute("data-basemap-error");
+      shell?.setAttribute("data-basemap-retry", "online-event");
+      shell?.setAttribute("data-map-render-state", "ready");
+      layerVisibility(map, "gsi-pale", true);
+    };
+    window.addEventListener("online", resumeBasemap);
 
     map.on("load", () => {
       addGeoJson(map, "boundary", data.boundary);
@@ -261,13 +304,13 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       addGeoJson(map, "scenario-sites", scenarioSites);
       addGeoJson(map, "scenario-meshes", scenarioMeshes);
       addGeoJson(map, "resilience", resilienceMap);
-      addGeoJson(map, "public-area", publicCartography?.area?.polygon);
-      addGeoJson(map, "public-area-mask", publicCartography?.area?.outsideMask);
-      addGeoJson(map, "public-buildings", publicCartography?.data?.buildings);
-      addGeoJson(map, "public-roads", publicCartography?.data?.roads);
-      addGeoJson(map, "public-planning", publicCartography?.data?.planning);
-      addGeoJson(map, "public-target", publicCartography?.target?.geometry);
-      addGeoJson(map, "public-origin", publicCartography?.area ? { type: "FeatureCollection", features: [{ type: "Feature", properties: { role: "origin" }, geometry: { type: "Point", coordinates: publicCartography.area.center } }] } : EMPTY);
+      addGeoJson(map, "public-area", EMPTY);
+      addGeoJson(map, "public-area-mask", EMPTY);
+      addGeoJson(map, "public-buildings", EMPTY);
+      addGeoJson(map, "public-roads", EMPTY);
+      addGeoJson(map, "public-planning", EMPTY);
+      addGeoJson(map, "public-target", EMPTY);
+      addGeoJson(map, "public-origin", EMPTY);
 
       map.addLayer({ id: "boundary-fill", type: "fill", source: "boundary", paint: { "fill-color": "#d9e4df", "fill-opacity": .11 } });
       map.addLayer({ id: "boundary-line", type: "line", source: "boundary", paint: { "line-color": "#315e5a", "line-width": 1.4, "line-opacity": .62 } });
@@ -392,7 +435,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       layerVisibility(map, "resilience-area", primaryLayer === "hazard-composite");
       layerVisibility(map, "resilience-area-outline", primaryLayer === "hazard-composite");
       setStyleReady(true);
-      containerRef.current?.parentElement?.setAttribute("data-map-render-state", "ready");
+      containerRef.current?.parentElement?.setAttribute("data-map-render-state", basemapFailed ? "degraded" : "ready");
       let stableFrames = 0;
       const settle = () => {
         if (criticalError) return;
@@ -420,9 +463,14 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       const sourceId = (event as { sourceId?: string }).sourceId;
       if (sourceId === "gsi-pale" || message.includes("cyberjapandata.gsi.go.jp")) {
         const shell = containerRef.current?.parentElement;
+        if (!basemapFailed) {
+          basemapFailed = true;
+          layerVisibility(map, "gsi-pale", false);
+        }
         shell?.setAttribute("data-map-render-state", "degraded");
         shell?.setAttribute("data-visual-ready", "true");
         shell?.setAttribute("data-basemap-error", message);
+        shell?.setAttribute("data-basemap-retry", "waiting-for-online");
         return;
       }
       criticalError = true;
@@ -432,6 +480,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       onError?.(message);
     });
     return () => {
+      window.removeEventListener("online", resumeBasemap);
       setStyleReady(false);
       publicReferenceMarker.current?.remove();
       publicReferenceMarker.current = null;
@@ -521,18 +570,14 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 
     setSource(map, "public-area", area?.polygon);
     setSource(map, "public-area-mask", area?.outsideMask);
-    setSource(map, "public-buildings", presentation?.data?.buildings);
-    setSource(map, "public-roads", presentation?.data?.roads);
-    setSource(map, "public-planning", presentation?.data?.planning);
+    if (story === "building-use" && presentation?.data?.buildings) {
+      setSource(map, "public-buildings", presentation.data.buildings);
+    }
+    if (story === "urban-planning" && presentation?.data?.planning) {
+      setSource(map, "public-planning", presentation.data.planning);
+    }
     setSource(map, "public-target", target?.geometry);
-    setSource(map, "public-origin", area ? {
-      type: "FeatureCollection",
-      features: [{
-        type: "Feature",
-        properties: { role: "origin" },
-        geometry: { type: "Point", coordinates: area.center },
-      }],
-    } : EMPTY);
+    setSource(map, "public-origin", area ? publicOrigin : EMPTY);
 
     for (const id of ["public-area-fill", "public-area-mask", "public-area-line", "public-origin-halo", "public-origin-point"]) {
       layerVisibility(map, id, areaVisible);
@@ -562,29 +607,23 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       ? areaFilter
       : true;
     for (const id of ["public-buildings-fill", "public-buildings-line", "public-planning-fill", "public-planning-line"]) {
-      if (map.getLayer(id)) map.setFilter(id, derivativeFilter as never);
+      setFilter(map, id, derivativeFilter);
     }
     for (const prefix of ["station", "bus"]) {
-      if (map.getLayer(`${prefix}-clusters`)) {
-        map.setFilter(`${prefix}-clusters`, ["all", ["has", "point_count"], areaFilter] as never);
-      }
-      if (map.getLayer(`${prefix}-cluster-count`)) {
-        map.setFilter(`${prefix}-cluster-count`, ["all", ["has", "point_count"], areaFilter] as never);
-      }
-      if (map.getLayer(`${prefix}-point`)) {
-        map.setFilter(`${prefix}-point`, ["all", ["!", ["has", "point_count"]], areaFilter] as never);
-      }
+      setFilter(map, `${prefix}-clusters`, ["all", ["has", "point_count"], areaFilter]);
+      setFilter(map, `${prefix}-cluster-count`, ["all", ["has", "point_count"], areaFilter]);
+      setFilter(map, `${prefix}-point`, ["all", ["!", ["has", "point_count"]], areaFilter]);
     }
 
     if (story === "population-age") {
-      map.setPaintProperty("mesh-fill", "fill-color", [
+      setPaint(map, "mesh-fill", "fill-color", [
         "interpolate", ["linear"],
         ["coalesce", ["to-number", ["get", "elderly_population_percentile"]], 0],
         0, "#dcebe6",
         .5, "#82b5a8",
         1, "#2f7466",
       ]);
-      map.setPaintProperty("mesh-fill", "fill-opacity", [
+      setPaint(map, "mesh-fill", "fill-opacity", [
         "case",
         ["==", ["get", "elderly_population_percentile"], null], .06,
         .54,
@@ -596,13 +635,16 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     layerVisibility(map, "public-target-halo", exactTargetVisible);
     layerVisibility(map, "public-target-line", exactTargetVisible);
     layerVisibility(map, "public-target-point", targetVisible && !targetExact && targetTypes.has("Point"));
-    map.setPaintProperty("public-target-fill", "fill-color", targetColor);
-    map.setPaintProperty("public-target-line", "line-color", targetColor);
-    map.setPaintProperty("public-target-line", "line-dasharray", targetFocused ? [1, .01] : [2, 1.4]);
-    map.setPaintProperty("public-target-point", "circle-color", targetColor);
-    map.setPaintProperty("public-target-point", "circle-radius", targetFocused ? 12 : 9);
-    map.setPaintProperty("public-area-line", "line-color", targetFocused && target?.resolution === "area_fallback" ? targetColor : "#1e6f62");
-    map.setPaintProperty("public-area-line", "line-dasharray", targetFocused && target?.resolution === "area_fallback" ? [2, 1.4] : [1, .01]);
+    if (targetExact) {
+      setPaint(map, "public-target-fill", "fill-color", targetColor);
+      setPaint(map, "public-target-line", "line-color", targetColor);
+      setPaint(map, "public-target-line", "line-dasharray", targetFocused ? [1, .01] : [2, 1.4]);
+    } else {
+      setPaint(map, "public-target-point", "circle-color", targetColor);
+      setPaint(map, "public-target-point", "circle-radius", targetFocused ? 12 : 9);
+    }
+    setPaint(map, "public-area-line", "line-color", targetFocused && target?.resolution === "area_fallback" ? targetColor : "#1e6f62");
+    setPaint(map, "public-area-line", "line-dasharray", targetFocused && target?.resolution === "area_fallback" ? [2, 1.4] : [1, .01]);
 
     const showReferenceMarker = Boolean(targetVisible && !targetExact && targetTypes.has("Point") && target);
     if (showReferenceMarker && target) {
@@ -675,13 +717,13 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       cancelled = true;
       window.clearTimeout(readinessTimer);
     };
-  }, [primaryLayer, publicCartography, publicCartographyRenderKey, publicRenderTick, styleReady]);
+  }, [primaryLayer, publicCartography, publicCartographyRenderKey, publicOrigin, publicRenderTick, styleReady]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map?.getLayer("mesh-selected")) return;
-    map.setFilter("mesh-selected", ["==", ["get", "mesh_code"], selection?.type === "mesh" ? selection.id : "__none__"]);
-    map.setFilter("validation-selected", ["==", ["get", "sample_id"], selection?.type === "validation_sample" ? selection.id : "__none__"]);
+    setFilter(map, "mesh-selected", ["==", ["get", "mesh_code"], selection?.type === "mesh" ? selection.id : "__none__"]);
+    setFilter(map, "validation-selected", ["==", ["get", "sample_id"], selection?.type === "validation_sample" ? selection.id : "__none__"]);
     if (!publicCartography?.showTarget && selection?.longitude !== undefined && selection.latitude !== undefined) {
       const center = map.getCenter();
       if (Math.abs(center.lng - selection.longitude) > .0001 || Math.abs(center.lat - selection.latitude) > .0001) {

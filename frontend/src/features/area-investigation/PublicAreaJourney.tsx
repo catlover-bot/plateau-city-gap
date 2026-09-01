@@ -209,14 +209,7 @@ export function PublicAreaJourney({
   useEffect(() => {
     if (step !== "target" || !summary || !selectedUnknown) return;
     onSelectionChange(targetSelection(selectedUnknown, summary, data));
-    onViewportChange({
-      longitude: selectedUnknown.target.longitude,
-      latitude: selectedUnknown.target.latitude,
-      zoom: selectedUnknown.target.object_type === "building" ? 16 : 15,
-      bearing: 0,
-      pitch: 0,
-    });
-  }, [data, onSelectionChange, onViewportChange, selectedUnknown, step, summary]);
+  }, [data, onSelectionChange, selectedUnknown, step, summary]);
 
   useEffect(() => {
     window.requestAnimationFrame(() => headingRef.current?.focus());
@@ -464,7 +457,10 @@ export function PublicAreaJourney({
                   publicMode
                   activeStoryId={activeStory}
                   selectedUnknownId={selectedUnknown?.id}
-                  onStorySelect={setActiveStory}
+                  onStorySelect={(story) => {
+                    setActiveStory(story);
+                    onRequestStoryCartography(story);
+                  }}
                   onUnknownSelect={setSelectedUnknownId}
                 />
               </section>

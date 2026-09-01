@@ -22,7 +22,7 @@ import { layerById } from "../map/layers/layerRegistry";
 import { sceneForLayerPreset, sceneLayerIds, SCENE_PRESETS } from "../map/core/scenePresets";
 import { loadAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, InterventionPlan, MeshMetrics, MunicipalWorkspaceData, UrbanFuturesData, ValidationWorkspaceData } from "../types";
-import { CITY_VIEWPORTS, type AnalysisLens, type GuidedStep, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection } from "../state/spatial/types";
+import { CITY_VIEWPORTS, type AnalysisLens, type GuidedStep, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection, type SpatialViewport } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
 import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
@@ -192,6 +192,9 @@ export function ProductApp() {
     setStoryCartographyRequested(kind);
   }, []);
   const cancelStoryCartography = useCallback(() => setStoryCartographyRequested(null), []);
+  const updatePublicViewport = useCallback((viewport: SpatialViewport) => {
+    dispatch({ type: "set-viewport", viewport });
+  }, [dispatch]);
 
   useEffect(() => {
     if (state.city !== "fujisawa" || datasets.fujisawa) return;
@@ -530,7 +533,7 @@ export function ProductApp() {
         state={state}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}
-        onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })}
+        onViewportChange={updatePublicViewport}
       />;
     }
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;

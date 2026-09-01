@@ -2,7 +2,7 @@
 
 Active goal: `cartographic-interaction-performance-v1`
 
-Current milestone: P2 Story Loading complete; P3 Lifecycle / Readiness next
+Current milestone: P3 Lifecycle / Readiness complete; P4 Automated Performance Checkpoint next
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -23,6 +23,7 @@ Checkpoint state:
 - P0 evidence: `docs/cartographic-performance-profile.md` and `analysis/outputs/real/cartographic-performance-profile-baseline.json`
 - P1 target path: exact building/road geometry is available from a two-feature, provenance-complete derivative; facility remains a registered local position
 - P2 story path: manifest and story artifacts load independently; building/planning requests are abortable, hash-verified, and cached only after completion
+- P3 lifecycle: stable map/source/layer instances, semantic no-op source/style updates, bounded degraded-basemap behavior, and unchanged exact ready gates
 
 Core value hypothesis:
 
@@ -127,4 +128,13 @@ P2 acceptance facts:
 - Story and target artifact bytes are verified against the manifest SHA-256 before entering the completed cache. A mismatched artifact is rejected rather than reused.
 - A single P2 smoke run observed building-use `1809.1 ms` cold / `2156.5 ms` warm. This is diagnostic only; five-sample P4 values determine acceptance after P3.
 
-Next action is P3 Lifecycle/Readiness, followed only by P4 Automated Performance Checkpoint. Stop at P4. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
+P3 acceptance facts:
+
+- Exact road/building and facility target transitions submit zero GeoJSON features after the target fast artifact is ready; they retain the existing source/layer instances and change only the necessary visibility/paint/camera values.
+- A single P3 smoke run recorded map recreation zero, target `setData` zero, and only five style calls for exact targets / four for the facility marker. Final acceptance still uses P4 five-sample medians.
+- Building story cold submits its 4,898-feature Area derivative once; warm reuse submits zero. Data fetched during result-idle is not sent to the MapLibre worker until that story is selected.
+- The target selection effect no longer re-dispatches a generic viewport on every parent render. The exact MapLibre camera completes first and its `moveend` becomes the shared viewport.
+- A failed external basemap hides after 16 bounded tile attempts, preserves local vectors and the degraded notice, and waits for an `online` event. A browser recovery test restored the same raster layer to visible/ready with no map recreation.
+- Clicking the current Summary story repeats its existing request intent, allowing a failed hash/network load to retry without adding a new control or changing copy.
+
+Next action is P4 Automated Performance Checkpoint. Stop after its evidence commit and remote CI report. Do not begin product P1 or M4–M6 and do not promote to `main` automatically.
