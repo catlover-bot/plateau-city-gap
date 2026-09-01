@@ -90,21 +90,45 @@ function MetricCard({ metric }: { metric: AreaMetric }) {
   );
 }
 
-export function AreaSummaryPanel({ summary }: { summary: InvestigationAreaSummary }) {
+const PRIMARY_METRIC_GROUPS = [
+  { id: "population-age", label: "人口・年齢", groups: ["population", "age_distribution"] },
+  { id: "building-use", label: "建物の使われ方", groups: ["building_use"] },
+  { id: "establishments", label: "事業所", groups: ["establishments"] },
+  { id: "urban-planning", label: "都市計画", groups: ["urban_planning"] },
+  { id: "transport", label: "交通", groups: ["transport"] },
+] as const;
+
+export function AreaSummaryPanel({ summary, publicMode = false }: { summary: InvestigationAreaSummary; publicMode?: boolean }) {
+  const secondaryMetrics = summary.metrics.filter((metric) => metric.group === "secondary");
   return (
     <div className="area-summary-flow">
       <section aria-labelledby="area-known-title">
-        <p className="area-kicker">QUANTIFIED EVIDENCE</p>
+        {!publicMode && <p className="area-kicker">QUANTIFIED EVIDENCE</p>}
         <h2 id="area-known-title">この範囲で、データから確認できたこと</h2>
-        <div className="area-metric-grid">
-          {summary.metrics.map((metric) => <MetricCard key={metric.key} metric={metric} />)}
+        <div className="area-metric-groups">
+          {PRIMARY_METRIC_GROUPS.map((group) => (
+            <section className="area-metric-group" key={group.id}>
+              <h3>{group.label}</h3>
+              <div className="area-metric-grid">
+                {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} />)}
+              </div>
+            </section>
+          ))}
         </div>
+        {secondaryMetrics.length > 0 && (
+          <details className="area-secondary-metrics">
+            <summary>医療・介護・公共施設などの詳細データ</summary>
+            <div className="area-metric-grid">
+              {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} />)}
+            </div>
+          </details>
+        )}
       </section>
       <section className="area-unknown-section" aria-labelledby="area-unknown-title">
-        <p className="area-kicker">KNOWN / UNKNOWN</p>
+        {!publicMode && <p className="area-kicker">KNOWN / UNKNOWN</p>}
         <h2 id="area-unknown-title">ただし、まだデータだけでは分からないことがあります</h2>
         <div className="area-unknown-list">
-          {summary.unknowns.slice(0, 4).map((unknown) => (
+          {summary.unknowns.slice(0, publicMode ? 3 : 4).map((unknown) => (
             <article key={unknown.id}>
               <span>未確認</span>
               <h3>{unknown.title}</h3>
@@ -118,22 +142,32 @@ export function AreaSummaryPanel({ summary }: { summary: InvestigationAreaSummar
   );
 }
 
-export function TargetTasks({ summary }: { summary: InvestigationAreaSummary }) {
+export function TargetTasks({ summary, publicMode = false }: { summary: InvestigationAreaSummary; publicMode?: boolean }) {
   return (
     <div className="area-task-flow">
       <header>
-        <p className="area-kicker">PLATEAU TARGET → VERIFICATION</p>
-        <h2>{summary.label}の未確認タスク</h2>
-        <p>「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。</p>
+        {!publicMode && <p className="area-kicker">PLATEAU TARGET → VERIFICATION</p>}
+        <h2>{summary.label}の{publicMode ? "確認場所" : "未確認タスク"}</h2>
+        <p>{publicMode ? "データの限界から、現地で確かめる場所と3〜5件の確認項目を示します。" : "「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。"}</p>
       </header>
       <div className="area-task-list">
         {summary.unknowns.map((unknown) => (
           <article key={unknown.id}>
             <div className="area-task-target">
-              <span>{unknown.target.scope === "mesh" ? "正直なmesh fallback" : "確認対象"}</span>
+              <span>{unknown.target.scope === "mesh" ? "範囲単位の確認" : "確認場所"}</span>
               <strong>{unknown.target.label}</strong>
-              <code>{unknown.target.source_object_id}</code>
-              <small>{unknown.target.dataset}</small>
+              {publicMode ? (
+                <details className="area-target-source">
+                  <summary>対象データの出典</summary>
+                  <code>{unknown.target.source_object_id}</code>
+                  <small>{unknown.target.dataset}</small>
+                </details>
+              ) : (
+                <>
+                  <code>{unknown.target.source_object_id}</code>
+                  <small>{unknown.target.dataset}</small>
+                </>
+              )}
             </div>
             <div>
               <span className="area-unverified">未確認</span>
@@ -146,7 +180,7 @@ export function TargetTasks({ summary }: { summary: InvestigationAreaSummary }) 
         ))}
       </div>
       <p className="area-privacy-boundary">
-        写真・GPS・回答・担当者・自治体reviewは作成も表示もしていません。
+        写真・GPS・回答・担当者・自治体の確認結果は作成も表示もしていません。
       </p>
     </div>
   );

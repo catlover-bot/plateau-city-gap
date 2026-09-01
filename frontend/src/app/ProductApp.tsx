@@ -31,7 +31,7 @@ import { InvestigationLanding } from "../features/investigation/ValueLanding";
 import { VerificationJourney } from "../features/verification/VerificationJourney";
 import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
 import type { InvestigationCandidate } from "../features/investigation/investigationTypes";
-import { AreaInvestigationJourney } from "../features/area-investigation/AreaInvestigationJourney";
+import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
 
@@ -94,7 +94,7 @@ export function ProductApp() {
   const [areaFixture, setAreaFixture] = useState<InvestigationAreaFixture | null>(null);
   const [areaError, setAreaError] = useState<string | null>(null);
   const [areaJourneyOpen, setAreaJourneyOpen] = useState(
-    () => new URLSearchParams(window.location.search).get("journey") === "area",
+    () => new URLSearchParams(window.location.search).get("journey") !== "m3",
   );
   const [urbanSectionOpen, setUrbanSectionOpen] = useState(
     () => new URLSearchParams(window.location.search).get("section") !== "closed",
@@ -239,7 +239,7 @@ export function ProductApp() {
     setEvidenceOpen(false);
     setSearchOpen(false);
     setMenuOpen(false);
-    setAreaJourneyOpen(false);
+    setAreaJourneyOpen(true);
     dispatch({ type: "set-experience", experience: "landing" });
   }, [dispatch]);
   const guidedBack = useCallback(() => {
@@ -443,11 +443,10 @@ export function ProductApp() {
     if (areaJourneyOpen) {
       if (areaError) return <ErrorState message={areaError} onRetry={closeAreaJourney} />;
       if (!guidedData || !areaFixture) return <LoadingState />;
-      return <AreaInvestigationJourney
+      return <PublicAreaJourney
         data={guidedData}
         fixture={areaFixture}
         state={state}
-        onClose={closeAreaJourney}
         onOpenExistingM3={openExistingM3FromArea}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}

@@ -133,7 +133,7 @@ describe("Investigation Area public outputs", () => {
     const html = renderToStaticMarkup(<TargetTasks summary={summary as InvestigationAreaSummary} />);
     expect((html.match(/未確認/g) ?? []).length).toBeGreaterThanOrEqual(2);
     expect(html).toContain("test-mesh");
-    expect(html).toContain("写真・GPS・回答・担当者・自治体reviewは作成も表示もしていません");
+    expect(html).toContain("写真・GPS・回答・担当者・自治体の確認結果は作成も表示もしていません");
     expect(html).not.toMatch(/<(input|textarea|select)\b/);
   });
 });
