@@ -20,6 +20,7 @@ import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&ur
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, ValidationWorkspaceData } from "../../types";
 import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import { activeLayerIds } from "../layers/layerRegistry";
+import type { PublicCartographyPresentation } from "../../features/area-investigation/publicCartography";
 import type { LayerPresetId, SpatialSelection, SpatialViewport } from "../../state/spatial/types";
 
 interface Props {
@@ -37,6 +38,7 @@ interface Props {
   dimNonSelected?: boolean;
   interactive?: boolean;
   ariaLabel?: string;
+  publicCartography?: PublicCartographyPresentation | null;
   onSelectionChange(selection: SpatialSelection | null): void;
   onViewportChange(viewport: SpatialViewport): void;
   onReady?(): void;
@@ -115,12 +117,37 @@ function lngLatFromProperties(properties: Record<string, unknown>, fallback: { l
   return [Number.isFinite(longitude) ? longitude : fallback.lng, Number.isFinite(latitude) ? latitude : fallback.lat];
 }
 
+function collectionBounds(collection: GeoJsonFeatureCollection | null | undefined) {
+  let west = Number.POSITIVE_INFINITY;
+  let south = Number.POSITIVE_INFINITY;
+  let east = Number.NEGATIVE_INFINITY;
+  let north = Number.NEGATIVE_INFINITY;
+  const visit = (value: unknown): void => {
+    if (!Array.isArray(value)) return;
+    if (
+      value.length >= 2
+      && typeof value[0] === "number"
+      && typeof value[1] === "number"
+    ) {
+      west = Math.min(west, value[0]);
+      south = Math.min(south, value[1]);
+      east = Math.max(east, value[0]);
+      north = Math.max(north, value[1]);
+      return;
+    }
+    value.forEach(visit);
+  };
+  collection?.features.forEach((feature) => visit(feature.geometry?.coordinates));
+  return Number.isFinite(west) ? { west, south, east, north } : null;
+}
+
 export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function AnalyticalMap({
   data,
   validation,
   preset,
   primaryLayer,
   activeLayerIdsOverride,
+  publicCartography,
   selection,
   viewport,
   scenarioSites,
@@ -138,6 +165,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const hoveredId = useRef<string | number | null>(null);
+  const [styleReady, setStyleReady] = useState(false);
+  const publicCameraKey = useRef("");
   const onSelectionRef = useRef(onSelectionChange);
   const onViewportRef = useRef(onViewportChange);
   const [zoom, setZoom] = useState(viewport.zoom);
@@ -219,6 +248,13 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       addGeoJson(map, "scenario-sites", scenarioSites);
       addGeoJson(map, "scenario-meshes", scenarioMeshes);
       addGeoJson(map, "resilience", resilienceMap);
+      addGeoJson(map, "public-area", publicCartography?.area?.polygon);
+      addGeoJson(map, "public-area-mask", publicCartography?.area?.outsideMask);
+      addGeoJson(map, "public-buildings", publicCartography?.data.buildings);
+      addGeoJson(map, "public-roads", publicCartography?.data.roads);
+      addGeoJson(map, "public-planning", publicCartography?.data.planning);
+      addGeoJson(map, "public-target", publicCartography?.target?.geometry);
+      addGeoJson(map, "public-origin", publicCartography?.area ? { type: "FeatureCollection", features: [{ type: "Feature", properties: { role: "origin" }, geometry: { type: "Point", coordinates: publicCartography.area.center } }] } : EMPTY);
 
       map.addLayer({ id: "boundary-fill", type: "fill", source: "boundary", paint: { "fill-color": "#d9e4df", "fill-opacity": .11 } });
       map.addLayer({ id: "boundary-line", type: "line", source: "boundary", paint: { "line-color": "#315e5a", "line-width": 1.4, "line-opacity": .62 } });
@@ -241,6 +277,20 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
         map.addLayer({ id: `${prefix}-cluster-count`, type: "symbol", source: sourceId, filter: ["has", "point_count"], minzoom: prefix === "bus" ? 13 : 10.5, layout: { "text-field": ["get", "point_count_abbreviated"], "text-size": 10, "text-allow-overlap": true }, paint: { "text-color": "#fff" } });
         map.addLayer({ id: `${prefix}-point`, type: "circle", source: sourceId, filter: ["!", ["has", "point_count"]], minzoom: prefix === "bus" ? 13 : 10.5, paint: { "circle-color": color, "circle-radius": prefix === "medical" ? 6 : 5, "circle-stroke-color": "#fff", "circle-stroke-width": 1.5, "circle-opacity": .92 } });
       }
+      map.addLayer({ id: "public-buildings-fill", type: "fill", source: "public-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "usage_label"], "住宅", "#6f9f91", "共同住宅", "#527b87", "商業施設", "#9a7a50", "#aab3ae"], "fill-opacity": .62 } });
+      map.addLayer({ id: "public-buildings-line", type: "line", source: "public-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#365b52", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .3, 17, 1.1], "line-opacity": .72 } });
+      map.addLayer({ id: "public-roads-fill", type: "fill", source: "public-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": "#789897", "fill-opacity": .3 } });
+      map.addLayer({ id: "public-roads-line", type: "line", source: "public-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#496a69", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .45, 17, 2], "line-opacity": .7 } });
+      map.addLayer({ id: "public-planning-fill", type: "fill", source: "public-planning", layout: { visibility: "none" }, paint: { "fill-color": "#78998e", "fill-opacity": .2 } });
+      map.addLayer({ id: "public-planning-line", type: "line", source: "public-planning", layout: { visibility: "none" }, paint: { "line-color": "#526b65", "line-width": 1.2, "line-dasharray": [3, 2], "line-opacity": .8 } });
+      map.addLayer({ id: "public-area-fill", type: "fill", source: "public-area", layout: { visibility: "none" }, paint: { "fill-color": "#1e6f62", "fill-opacity": .075 } });
+      map.addLayer({ id: "public-area-mask", type: "fill", source: "public-area-mask", layout: { visibility: "none" }, paint: { "fill-color": "#f2f0e8", "fill-opacity": .11 } });
+      map.addLayer({ id: "public-area-line", type: "line", source: "public-area", layout: { visibility: "none" }, paint: { "line-color": "#1e6f62", "line-width": 3, "line-opacity": .96 } });
+      map.addLayer({ id: "public-origin-halo", type: "circle", source: "public-origin", layout: { visibility: "none" }, paint: { "circle-color": "#ffffff", "circle-radius": 9, "circle-opacity": .94 } });
+      map.addLayer({ id: "public-origin-point", type: "circle", source: "public-origin", layout: { visibility: "none" }, paint: { "circle-color": "#173f38", "circle-radius": 5, "circle-stroke-color": "#ffffff", "circle-stroke-width": 1.5 } });
+      map.addLayer({ id: "public-target-fill", type: "fill", source: "public-target", layout: { visibility: "none" }, paint: { "fill-color": "#b7791f", "fill-opacity": .2 } });
+      map.addLayer({ id: "public-target-line", type: "line", source: "public-target", layout: { visibility: "none" }, paint: { "line-color": "#b7791f", "line-width": 4, "line-dasharray": [2, 1.4], "line-opacity": 1 } });
+      map.addLayer({ id: "public-target-point", type: "circle", source: "public-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": "#b7791f", "circle-radius": 9, "circle-stroke-color": "#ffffff", "circle-stroke-width": 3, "circle-opacity": .98 } });
 
       map.addLayer({ id: "validation-primary", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "primary_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#397888", "line-width": 4, "line-opacity": dimNonSelected ? .35 : .9 } });
       map.addLayer({ id: "validation-reference", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "reference_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#719b43", "line-width": 3, "line-dasharray": [2, 1.5], "line-opacity": dimNonSelected ? .35 : .9 } });
@@ -327,6 +377,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       layerVisibility(map, "resilience-network", primaryLayer === "hazard-composite");
       layerVisibility(map, "resilience-area", primaryLayer === "hazard-composite");
       layerVisibility(map, "resilience-area-outline", primaryLayer === "hazard-composite");
+      setStyleReady(true);
+      containerRef.current?.parentElement?.setAttribute("data-map-render-state", "ready");
       let stableFrames = 0;
       const settle = () => {
         if (criticalError) return;
@@ -351,12 +403,22 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     });
     map.on("error", (event) => {
       const message = event.error?.message ?? "2D地図データを読み込めませんでした";
+      const sourceId = (event as { sourceId?: string }).sourceId;
+      if (sourceId === "gsi-pale" || message.includes("cyberjapandata.gsi.go.jp")) {
+        const shell = containerRef.current?.parentElement;
+        shell?.setAttribute("data-map-render-state", "degraded");
+        shell?.setAttribute("data-visual-ready", "true");
+        shell?.setAttribute("data-basemap-error", message);
+        return;
+      }
       criticalError = true;
       containerRef.current?.parentElement?.setAttribute("data-visual-ready", "false");
+      containerRef.current?.parentElement?.setAttribute("data-map-render-state", "degraded");
       containerRef.current?.parentElement?.setAttribute("data-critical-error", message);
       onError?.(message);
     });
     return () => {
+      setStyleReady(false);
       map.remove();
       mapRef.current = null;
     };
@@ -406,16 +468,133 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 
   useEffect(() => {
     const map = mapRef.current;
+    if (!styleReady || !map?.isStyleLoaded()) return;
+    const shell = containerRef.current?.parentElement;
+    const presentation = primaryLayer === "public-cartography" ? publicCartography : null;
+    const area = presentation?.area ?? null;
+    const story = presentation?.activeStory ?? null;
+    const target = presentation?.target ?? null;
+    const areaVisible = Boolean(area);
+    const targetTypes = new Set(target?.geometry.features.map((feature) => feature.geometry?.type) ?? []);
+    const targetExact = target?.resolution === "exact";
+    const targetVisible = Boolean(target && target.resolution !== "area_fallback");
+    const targetFocused = Boolean(target && presentation?.showTarget);
+    const targetColor = targetFocused ? "#6b4c7d" : "#b7791f";
+
+    shell?.setAttribute("data-visual-ready", "false");
+    shell?.setAttribute("data-public-cartography-ready", "false");
+    shell?.setAttribute("data-public-story", story ?? "none");
+    shell?.setAttribute("data-public-area-visible", String(areaVisible));
+    shell?.setAttribute("data-target-resolution", target?.resolution ?? "none");
+
+    setSource(map, "public-area", area?.polygon);
+    setSource(map, "public-area-mask", area?.outsideMask);
+    setSource(map, "public-buildings", presentation?.data.buildings);
+    setSource(map, "public-roads", presentation?.data.roads);
+    setSource(map, "public-planning", presentation?.data.planning);
+    setSource(map, "public-target", target?.geometry);
+    setSource(map, "public-origin", area ? {
+      type: "FeatureCollection",
+      features: [{
+        type: "Feature",
+        properties: { role: "origin" },
+        geometry: { type: "Point", coordinates: area.center },
+      }],
+    } : EMPTY);
+
+    for (const id of ["public-area-fill", "public-area-mask", "public-area-line", "public-origin-halo", "public-origin-point"]) {
+      layerVisibility(map, id, areaVisible);
+    }
+    layerVisibility(map, "public-buildings-fill", story === "building-use" && Boolean(presentation?.derivativeAvailable));
+    layerVisibility(map, "public-buildings-line", story === "building-use" && Boolean(presentation?.derivativeAvailable));
+    layerVisibility(map, "public-roads-fill", false);
+    layerVisibility(map, "public-roads-line", false);
+    layerVisibility(map, "public-planning-fill", story === "urban-planning" && Boolean(presentation?.derivativeAvailable));
+    layerVisibility(map, "public-planning-line", story === "urban-planning" && Boolean(presentation?.derivativeAvailable));
+    layerVisibility(map, "mesh-fill", story === "population-age");
+    layerVisibility(map, "mesh-outline", story === "population-age");
+    layerVisibility(map, "mesh-top-fill", false);
+    layerVisibility(map, "mesh-top-outline", false);
+    layerVisibility(map, "mesh-top-label", false);
+    for (const suffix of ["clusters", "cluster-count", "point"]) {
+      layerVisibility(map, `station-${suffix}`, story === "transport");
+      layerVisibility(map, `bus-${suffix}`, story === "transport");
+      layerVisibility(map, `medical-${suffix}`, false);
+    }
+
+    if (story === "population-age") {
+      map.setPaintProperty("mesh-fill", "fill-color", [
+        "interpolate", ["linear"],
+        ["coalesce", ["to-number", ["get", "elderly_population_percentile"]], 0],
+        0, "#dcebe6",
+        .5, "#82b5a8",
+        1, "#2f7466",
+      ]);
+      map.setPaintProperty("mesh-fill", "fill-opacity", [
+        "case",
+        ["==", ["get", "elderly_population_percentile"], null], .06,
+        .54,
+      ]);
+    }
+
+    layerVisibility(map, "public-target-fill", targetVisible && targetExact && (targetTypes.has("Polygon") || targetTypes.has("MultiPolygon")));
+    layerVisibility(map, "public-target-line", targetVisible && targetExact);
+    layerVisibility(map, "public-target-point", targetVisible && !targetExact && targetTypes.has("Point"));
+    map.setPaintProperty("public-target-fill", "fill-color", targetColor);
+    map.setPaintProperty("public-target-line", "line-color", targetColor);
+    map.setPaintProperty("public-target-line", "line-dasharray", targetFocused ? [1, .01] : [2, 1.4]);
+    map.setPaintProperty("public-target-point", "circle-color", targetColor);
+    map.setPaintProperty("public-area-line", "line-color", targetFocused && target?.resolution === "area_fallback" ? targetColor : "#1e6f62");
+    map.setPaintProperty("public-area-line", "line-dasharray", targetFocused && target?.resolution === "area_fallback" ? [2, 1.4] : [1, .01]);
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = reducedMotion ? 0 : 280;
+    const cameraKey = targetFocused && target
+      ? `target:${target.objectId}:${target.resolution}`
+      : area
+        ? `area:${area.center.join(",")}:${area.radiusM}`
+        : "";
+    if (cameraKey && cameraKey !== publicCameraKey.current) {
+      publicCameraKey.current = cameraKey;
+      if (targetFocused && target?.resolution === "exact") {
+        const bounds = collectionBounds(target.geometry);
+        if (bounds) {
+          map.fitBounds(
+            [[bounds.west, bounds.south], [bounds.east, bounds.north]],
+            { padding: map.getCanvas().clientWidth < 600 ? 58 : 96, maxZoom: 17, duration },
+          );
+        }
+      } else if (targetFocused && target?.resolution === "reference_position") {
+        map.easeTo({ center: [target.longitude, target.latitude], zoom: Math.max(map.getZoom(), 15), duration });
+      } else if (area) {
+        map.fitBounds(
+          [[area.bounds.west, area.bounds.south], [area.bounds.east, area.bounds.north]],
+          { padding: map.getCanvas().clientWidth < 600 ? 34 : 58, duration },
+        );
+      }
+    }
+
+    let cancelled = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (cancelled) return;
+      shell?.setAttribute("data-public-cartography-ready", "true");
+      shell?.setAttribute("data-visual-ready", "true");
+    }));
+    return () => { cancelled = true; };
+  }, [primaryLayer, publicCartography, styleReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map?.getLayer("mesh-selected")) return;
     map.setFilter("mesh-selected", ["==", ["get", "mesh_code"], selection?.type === "mesh" ? selection.id : "__none__"]);
     map.setFilter("validation-selected", ["==", ["get", "sample_id"], selection?.type === "validation_sample" ? selection.id : "__none__"]);
-    if (selection?.longitude !== undefined && selection.latitude !== undefined) {
+    if (!publicCartography?.showTarget && selection?.longitude !== undefined && selection.latitude !== undefined) {
       const center = map.getCenter();
       if (Math.abs(center.lng - selection.longitude) > .0001 || Math.abs(center.lat - selection.latitude) > .0001) {
         map.easeTo({ center: [selection.longitude, selection.latitude], zoom: Math.max(map.getZoom(), selection.type === "mesh" ? 13 : 14), duration: 350 });
       }
     }
-  }, [selection]);
+  }, [publicCartography?.showTarget, selection]);
 
   useEffect(() => {
     const map = mapRef.current;
