@@ -9,7 +9,8 @@ for (let index = 2; index < process.argv.length; index += 1) {
   if (value && !value.startsWith("--")) index += 1;
 }
 
-const baseUrl = parameters.get("--url") ?? "http://127.0.0.1:4173/plateau-city-gap/";
+const baseUrl =
+  parameters.get('--url') ?? 'http://127.0.0.1:4173/plateau-city-gap/?journey=m3';
 const executablePath =
   process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? chromium.executablePath();
 const browser = await chromium.launch({
