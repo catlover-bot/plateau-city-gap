@@ -37,6 +37,7 @@ WEB_CRS = "EPSG:4326"
 RULE_VERSION = "citygap-public-cartography@1.0.0"
 GENERATED_AT = "2026-09-01T00:00:00+09:00"
 SOURCE_VERSION = "26202_maizuru-shi_city_2025_citygml_1_op"
+SOURCE_SHA256 = "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff"
 FILES = {
     "buildings": "plateau_buildings.geojson",
     "roads": "plateau_roads.geojson",
@@ -144,6 +145,8 @@ def write_json(path: Path, value: dict[str, Any]) -> None:
 def build() -> dict[str, Any]:
     effective, primary, target_ids = public_area()
     source_hash = sha256(ARCHIVE)
+    if source_hash != SOURCE_SHA256:
+        raise ValueError("Maizuru CityGML source hash does not match the pinned release")
 
     usage = pd.read_csv(USAGE_AUDIT, dtype={"usage_code": "string"})
     usage_labels = usage.set_index("usage_code")["official_label"]
@@ -268,8 +271,14 @@ def check() -> dict[str, Any]:
         raise ValueError("Display derivative generation checkpoint mismatch")
     if manifest["source"]["version"] != SOURCE_VERSION:
         raise ValueError("Display derivative source version mismatch")
-    if manifest["source"]["sha256"] != sha256(ARCHIVE):
-        raise ValueError("Display derivative source hash does not match CityGML")
+    if manifest["source"]["sha256"] != SOURCE_SHA256:
+        raise ValueError("Display derivative source hash does not match the pinned CityGML release")
+    # Raw municipal/PLATEAU archives are intentionally not tracked in Git. A
+    # development checkout that has the archive must prove its bytes match the
+    # pinned release; CI still verifies the pinned source identity plus every
+    # checked-in derivative hash and object relation below.
+    if ARCHIVE.exists() and sha256(ARCHIVE) != SOURCE_SHA256:
+        raise ValueError("Available CityGML archive does not match the pinned release")
 
     _, primary, target_ids = public_area()
     expected_scope = {

@@ -84,6 +84,7 @@ Target time is the recorded rendered-source arrival. The capture harness then wa
 
 - Source: `26202_maizuru-shi_city_2025_citygml_1_op.zip`
 - Source SHA-256: `13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff`
+- The source hash is pinned in both generator code and the derivative manifest. CI, which intentionally excludes raw municipal/PLATEAU archives, verifies that identity plus every derivative artifact; a checkout that has the raw archive additionally verifies its bytes.
 - Generator/rule: `citygap-public-cartography@1.0.0`
 - Buildings: 4,898 Polygon features
 - Roads: 1,686 Polygon features
@@ -123,7 +124,7 @@ Passed locally:
 - `node scripts/audit-visual-identity.mjs --url ...` — all five viewports, no console/local HTTP failure
 - `node scripts/test-guided.mjs --url ...?journey=m3` — desktop/mobile passed
 - `python analysis/scripts/build_public_cartographic_derivative.py --check`
-- `pytest analysis/tests backend/tests -q` — 413 passed, one upstream deprecation warning
+- `pytest analysis/tests backend/tests -q` — 414 passed, one upstream deprecation warning
 - `ruff check .`
 - `npm run check:docs`
 - `npm audit --audit-level=high` — zero vulnerabilities

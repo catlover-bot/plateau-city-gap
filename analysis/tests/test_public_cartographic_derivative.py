@@ -5,6 +5,7 @@ import copy
 import pytest
 
 from analysis.scripts.build_public_cartographic_derivative import (
+    SOURCE_SHA256,
     check,
     validate_collection,
 )
@@ -38,6 +39,7 @@ def test_checked_in_display_derivative_has_exact_provenance() -> None:
     assert manifest["artifact_kind"] == "display_derivative"
     assert manifest["scope"]["origin"]["source_feature_id"] == "station-007"
     assert manifest["source"]["city_code"] == "26202"
+    assert manifest["source"]["sha256"] == SOURCE_SHA256
     assert set(manifest["resolved_target_ids"]["buildings"]) == {
         "bldg_155e6675-6981-450f-8e73-df0b43418cc2"
     }
@@ -52,6 +54,20 @@ def test_checked_in_display_derivative_has_exact_provenance() -> None:
         "no_hazard_or_safety_meaning",
         "no_score",
     } == set(manifest["prohibitions"])
+
+
+def test_checked_in_derivative_can_be_verified_without_untracked_raw_archive(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path,
+) -> None:
+    monkeypatch.setattr(
+        "analysis.scripts.build_public_cartographic_derivative.ARCHIVE",
+        tmp_path / "intentionally-untracked-citygml.zip",
+    )
+
+    manifest = check()
+
+    assert manifest["source"]["sha256"] == SOURCE_SHA256
 
 
 def test_display_collection_rejects_duplicate_feature_ids() -> None:
