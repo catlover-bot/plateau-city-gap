@@ -65,32 +65,102 @@
   background: #d5ddd7;
 }
 
-.public-target-pin {
+.public-map-area-badge,
+.public-map-legend,
+.public-map-target-label {
   position: absolute;
-  z-index: 11;
-  top: 50%;
-  left: 50%;
+  z-index: 12;
   display: grid;
-  width: 38px;
-  height: 38px;
-  border: 2px solid white;
-  border-radius: 50%;
-  background: rgb(31 92 76 / 20%);
-  box-shadow: 0 0 0 8px rgb(31 92 76 / 16%), 0 5px 14px rgb(0 0 0 / 24%);
-  place-items: center;
+  max-width: min(310px, calc(100% - 96px));
+  padding: 9px 11px;
+  border: 1px solid rgb(77 94 88 / 42%);
+  border-radius: 6px;
+  background: rgb(253 252 247 / 94%);
+  color: #203d35;
+  gap: 3px;
   pointer-events: none;
-  transform: translate(-50%, -50%);
 }
 
-.public-target-pin span {
-  width: 12px;
-  height: 12px;
-  border: 2px solid white;
+.public-map-area-badge {
+  top: 14px;
+  left: 14px;
+}
+
+.public-map-area-badge span,
+.public-map-target-label span {
+  color: #3e6f62;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: .06em;
+}
+
+.public-map-area-badge strong,
+.public-map-target-label strong {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.public-map-area-badge small,
+.public-map-target-label small {
+  color: #65736e;
+  font-size: 11px;
+}
+
+.public-map-legend {
+  bottom: 38px;
+  left: 14px;
+  max-width: min(360px, calc(100% - 28px));
+  grid-template-columns: repeat(2, max-content);
+  align-items: center;
+  font-size: 12px;
+  gap: 5px 11px;
+}
+
+.public-map-legend > strong,
+.public-map-legend > small {
+  grid-column: 1 / -1;
+}
+
+.public-map-legend > strong {
+  font-size: 12px;
+}
+
+.public-map-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.public-map-legend > small {
+  color: #65736e;
+  line-height: 1.35;
+}
+
+.public-map-legend i {
+  display: inline-block;
+  width: 13px;
+  height: 9px;
+  border: 1px solid var(--legend-color);
+  background: var(--legend-color);
+}
+
+.public-map-legend i.shape-line {
+  height: 0;
+  border: 0;
+  border-top: 2px solid var(--legend-color);
+  background: transparent;
+}
+
+.public-map-legend i.shape-circle {
+  width: 9px;
   border-radius: 50%;
-  background: #b74b3d;
-  box-shadow: 0 0 0 2px #7d2f26;
 }
 
+.public-map-target-label {
+  top: 82px;
+  left: 14px;
+  border-color: #6b4c7d;
+}
 
 .public-map-stage .semantic-zoom-indicator,
 .public-map-stage .north-up-indicator,
@@ -103,37 +173,19 @@
   right: 12px;
 }
 
-.public-map-caption {
+.public-map-stage .analytical-map-shell[data-map-render-state="degraded"]::after {
   position: absolute;
+  right: 12px;
+  bottom: 52px;
   z-index: 12;
-  bottom: 18px;
-  left: 18px;
-  display: grid;
-  max-width: min(420px, calc(100% - 36px));
-  padding: 12px 15px;
-  border: 1px solid rgb(255 255 255 / 55%);
-  border-radius: 11px;
-  background: rgb(19 43 36 / 88%);
-  box-shadow: 0 12px 30px rgb(0 0 0 / 18%);
-  color: white;
-  gap: 3px;
-  pointer-events: none;
-}
-
-.public-map-caption span {
-  color: #a9e2d2;
+  max-width: 230px;
+  padding: 6px 8px;
+  border: 1px solid #9d9789;
+  background: rgb(253 252 247 / 94%);
+  color: #554f43;
+  content: "背景地図を読み込めません。分析範囲とデータ形状は表示しています。";
   font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-.public-map-caption strong {
-  font-size: 15px;
-}
-
-.public-map-caption small {
-  color: #dce9e4;
-  font-size: 10px;
+  line-height: 1.4;
 }
 
 .public-area-panel {
@@ -373,7 +425,7 @@
 .public-radius-grid button.selected {
   border-color: #1d5144;
   background: #dfeee7;
-  box-shadow: inset 0 0 0 2px #1d5144;
+  border-width: 2px;
 }
 
 .public-radius-submit {
@@ -438,43 +490,61 @@
 
 .public-area .area-metric-groups {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  grid-template-columns: 1fr;
+  border-top: 1px solid #d8d6cf;
 }
 
 .public-area .area-metric-group {
   min-width: 0;
-  padding: 12px;
-  border: 1px solid #d8d6cf;
-  border-radius: 10px;
-  background: #fff;
+  padding: 12px 2px 13px 10px;
+  border-bottom: 1px solid #d8d6cf;
+  border-left: 3px solid transparent;
 }
 
-.public-area .area-metric-group:first-child {
-  grid-column: 1 / -1;
+.public-area .area-metric-group.map-active {
+  border-left-color: #2d7463;
 }
 
 .public-area .area-metric-group > h3 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   color: #31564d;
   font-size: 12px;
 }
 
 .public-area .area-metric-grid {
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: 6px;
 }
 
 .public-area .area-metric {
-  padding: 9px 0 0;
+  padding: 5px 0 0;
   border: 0;
-  border-top: 1px solid #e7e4de;
+  border-top: 1px solid #ece9e2;
   border-radius: 0;
+  background: transparent;
 }
 
 .public-area .area-metric:first-child {
   padding-top: 0;
   border-top: 0;
+}
+
+.public-area .area-story-action {
+  min-height: 32px;
+  margin-top: 7px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentcolor;
+  background: transparent;
+  color: #2a6556;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.public-area .area-story-action[aria-pressed="true"] {
+  color: #173f35;
 }
 
 .public-area .area-secondary-metrics {
@@ -541,9 +611,9 @@
 }
 
 .public-area .area-unknown-list article.selected {
-  border-color: #8ed7c1;
-  background: rgb(142 215 193 / 14%);
-  box-shadow: inset 3px 0 #8ed7c1;
+  border-color: #b7791f;
+  background: rgb(183 121 31 / 16%);
+  border-left-width: 3px;
 }
 
 .public-area .area-unknown-list button {
@@ -670,11 +740,32 @@
     grid-template-rows: minmax(180px, 30dvh) minmax(0, 1fr);
   }
 
-  .public-map-caption {
-    bottom: 9px;
-    left: 9px;
-    max-width: calc(100% - 18px);
-    padding: 8px 10px;
+  .public-map-area-badge,
+  .public-map-target-label {
+    top: 7px;
+    left: 7px;
+    max-width: calc(100% - 68px);
+    padding: 6px 8px;
+  }
+
+  .public-area[data-public-step="target"] .public-map-area-badge {
+    display: none;
+  }
+
+  .public-map-legend {
+    bottom: 28px;
+    left: 7px;
+    max-width: calc(100% - 14px);
+    padding: 6px 8px;
+    gap: 3px 8px;
+  }
+
+  .public-map-legend > small {
+    max-width: 260px;
+  }
+
+  .public-map-stage .analytical-map-shell[data-map-render-state="degraded"]::after {
+    display: none;
   }
 
   .public-progress {

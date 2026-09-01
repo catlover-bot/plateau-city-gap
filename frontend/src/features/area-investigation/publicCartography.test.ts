@@ -136,15 +136,16 @@ describe("Public cartography contract", () => {
       ["/base/data/cartography/roads.geojson", data.roads],
       ["/base/data/cartography/planning.geojson", data.planning],
     ]);
-    const fetcher = vi.fn(async (url: string | URL | Request) => ({
+    const fetchMock = vi.fn(async (url: string | URL | Request) => ({
       ok: responses.has(String(url)),
       status: responses.has(String(url)) ? 200 : 404,
       json: async () => responses.get(String(url)),
-    })) as unknown as typeof fetch;
+    }));
+    const fetcher = fetchMock as unknown as typeof fetch;
 
     const loaded = await loadPublicCartographyData(fetcher, "/base/");
     expect(loaded).toEqual(data);
-    expect(fetcher.mock.calls.map(([url]) => String(url))).toEqual([
+    expect(fetchMock.mock.calls.map(([url]) => String(url))).toEqual([
       "/base/data/cartography/manifest.json",
       "/base/data/cartography/buildings.geojson",
       "/base/data/cartography/roads.geojson",

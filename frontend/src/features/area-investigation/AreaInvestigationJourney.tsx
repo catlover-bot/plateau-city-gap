@@ -18,6 +18,7 @@ import type {
   InvestigationAreaFixture,
   InvestigationAreaSummary,
 } from "./areaTypes";
+import type { PublicStoryId } from "./publicCartography";
 import "./areaInvestigation.css";
 
 type AreaStep = 1 | 2 | 3 | 4;
@@ -103,14 +104,18 @@ const PRIMARY_METRIC_GROUPS = [
 interface AreaSummaryPanelProps {
   summary: InvestigationAreaSummary;
   publicMode?: boolean;
+  activeStoryId?: PublicStoryId;
   selectedUnknownId?: string;
+  onStorySelect?(storyId: PublicStoryId): void;
   onUnknownSelect?(unknownId: string): void;
 }
 
 export function AreaSummaryPanel({
   summary,
   publicMode = false,
+  activeStoryId,
   selectedUnknownId,
+  onStorySelect,
   onUnknownSelect,
 }: AreaSummaryPanelProps) {
   const secondaryMetrics = summary.metrics.filter((metric) => metric.group === "secondary");
@@ -122,11 +127,24 @@ export function AreaSummaryPanel({
         <h2 id="area-known-title">この範囲で、データから確認できたこと</h2>
         <div className="area-metric-groups">
           {PRIMARY_METRIC_GROUPS.map((group) => (
-            <section className="area-metric-group" key={group.id}>
+            <section
+              className={`area-metric-group${publicMode && activeStoryId === group.id ? " map-active" : ""}`}
+              key={group.id}
+            >
               <h3>{group.label}</h3>
               <div className="area-metric-grid">
                 {summary.metrics.filter((metric) => group.groups.some((name) => name === metric.group)).map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
               </div>
+              {publicMode && onStorySelect && (
+                <button
+                  type="button"
+                  className="area-story-action"
+                  aria-pressed={activeStoryId === group.id}
+                  onClick={() => onStorySelect(group.id)}
+                >
+                  {activeStoryId === group.id ? "地図に表示中" : "地図で見る"}
+                </button>
+              )}
             </section>
           ))}
         </div>

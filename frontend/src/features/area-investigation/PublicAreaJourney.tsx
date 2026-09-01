@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { AppData, GeoJsonFeature } from "../../types";
 import type { SpatialSelection, SpatialState, SpatialViewport } from "../../state/spatial/types";
 import { AnalyticalMap } from "../../map/2d/AnalyticalMap";
@@ -18,6 +18,15 @@ import {
   contextual3dEligibility,
   radiusExplanation,
 } from "./publicAreaPresentation";
+import {
+  buildPublicAreaGeometry,
+  derivativeAvailableFor,
+  publicStoryLegend,
+  resolvePublicTarget,
+  type PublicCartographyData,
+  type PublicCartographyPresentation,
+  type PublicStoryId,
+} from "./publicCartography";
 import "./publicAreaJourney.css";
 
 export type PublicAreaStep = "intro" | "place" | "radius" | "result" | "target";
@@ -64,6 +73,7 @@ function targetSelection(unknown: AreaUnknown, summary: InvestigationAreaSummary
 interface Props {
   data: AppData;
   fixture: InvestigationAreaFixture;
+  cartography: PublicCartographyData;
   state: SpatialState;
   onOpenAdvanced(): void;
   onSelectionChange(selection: SpatialSelection | null): void;
@@ -73,6 +83,7 @@ interface Props {
 export function PublicAreaJourney({
   data,
   fixture,
+  cartography,
   state,
   onOpenAdvanced,
   onSelectionChange,
@@ -87,6 +98,7 @@ export function PublicAreaJourney({
   const [selectedUnknownId, setSelectedUnknownId] = useState("");
   const [mapMode, setMapMode] = useState<"map2d" | "plateau3d">("map2d");
   const [error, setError] = useState<string | null>(null);
+  const [activeStory, setActiveStory] = useState<PublicStoryId>("population-age");
   const headingRef = useRef<HTMLHeadingElement>(null);
   const summary = useMemo(() => origin ? resolveAreaSummary(fixture, data, origin, radius) : null, [data, fixture, origin, radius]);
   const selectedUnknown = summary?.unknowns.find((unknown) => unknown.id === selectedUnknownId) ?? summary?.unknowns[0] ?? null;
@@ -97,6 +109,30 @@ export function PublicAreaJourney({
     if (rightName === "西舞鶴駅") return 1;
     return leftName.localeCompare(rightName, "ja");
   }), [data.stations]);
+  const areaGeometry = useMemo(
+    () => origin ? buildPublicAreaGeometry(origin.coordinates, radius) : null,
+    [origin, radius],
+  );
+  const derivativeAvailable = derivativeAvailableFor(cartography, summary);
+  const targetRender = useMemo(
+    () => resolvePublicTarget(selectedUnknown?.target ?? null, cartography, derivativeAvailable),
+    [cartography, derivativeAvailable, selectedUnknown],
+  );
+  const mapPresentation = useMemo<PublicCartographyPresentation>(() => ({
+    data: cartography,
+    area: areaGeometry,
+    activeStory: step === "result" ? activeStory : null,
+    target: step === "result" || step === "target" ? targetRender : null,
+    showTarget: step === "target",
+    derivativeAvailable,
+  }), [activeStory, areaGeometry, cartography, derivativeAvailable, step, targetRender]);
+  const legend = step === "target"
+    ? {
+        title: targetRender?.resolution === "exact" ? "PLATEAU上の確認対象" : "確認対象の位置",
+        note: targetRender?.resolution === "exact" ? "PLATEAUの実形状" : "登録された位置情報のみ",
+        items: [{ label: selectedUnknown?.target.label ?? "確認対象", color: "#6b4c7d", shape: "fill" as const }],
+      }
+    : publicStoryLegend(step === "result" ? activeStory : null, derivativeAvailable);
   const eligibility = summary && selectedUnknown
     ? contextual3dEligibility(summary, selectedUnknown.target, data.plateauMetadata?.year, hasWebgl())
     : { eligible: false, technicalEligible: false, uxValuable: false, reasonCode: "no_target", reason: "確認場所を選んでください。" };
@@ -130,6 +166,7 @@ export function PublicAreaJourney({
     setCustomOpen(false);
     setSelectedUnknownId("");
     setMapMode("map2d");
+    setActiveStory("population-age");
     setError(null);
     onSelectionChange(null);
   };
@@ -138,6 +175,7 @@ export function PublicAreaJourney({
     setSelectedUnknownId("");
     setMapMode("map2d");
     setError(null);
+    setActiveStory("population-age");
     onViewportChange({ longitude: next.coordinates[0], latitude: next.coordinates[1], zoom: 13.4, bearing: 0, pitch: 0 });
     setStep("radius");
   };
@@ -156,6 +194,7 @@ export function PublicAreaJourney({
     setSelectedUnknownId("");
     setMapMode("map2d");
     setError(null);
+    setActiveStory("population-age");
   };
   const submitCustom = () => {
     const value = Number(customRadius);
@@ -184,7 +223,13 @@ export function PublicAreaJourney({
   const mapSelection = step === "target" && summary && selectedUnknown ? targetSelection(selectedUnknown, summary, data) : state.selection;
 
   return (
-    <div className="product-app public-area" data-experience="public-first-run" data-public-step={step} data-map-mode={mapMode}>
+    <div
+      className="product-app public-area"
+      data-experience="public-first-run"
+      data-public-step={step}
+      data-map-mode={mapMode}
+      data-active-story={step === "result" ? activeStory : "none"}
+    >
       <PublicHeader onRestart={restart} onOpenAdvanced={onOpenAdvanced} />
       <main className={`public-area-body step-${step}`}>
         <section className="public-map-stage" aria-label="舞鶴市の調査場所を選ぶ地図">
@@ -206,24 +251,34 @@ export function PublicAreaJourney({
               data={data}
               validation={null}
               preset="discovery"
-              primaryLayer="analysis-city-gap"
-              activeLayerIdsOverride={["reference-gsi-pale", "infra-stations"]}
+              primaryLayer="public-cartography"
+              activeLayerIdsOverride={["reference-gsi-pale"]}
               selection={mapSelection}
               viewport={state.viewport}
+              publicCartography={mapPresentation}
               interactive
               ariaLabel="舞鶴市の地図。地図の中心を任意の起点にできます"
               onSelectionChange={onSelectionChange}
               onViewportChange={onViewportChange}
             />
           )}
-          {step === "target" && selectedUnknown && mapMode === "map2d" && (
-            <div className="public-target-pin" aria-hidden="true"><span /></div>
-          )}
-          <div className="public-map-caption">
-            <span>{mapMode === "plateau3d" ? "3Dで確認中" : "舞鶴市"}</span>
-            <strong>{step === "target" && selectedUnknown ? selectedUnknown.target.label : origin?.label ?? "調べたい場所を選ぶ"}</strong>
-            <small>{origin ? `半径 ${radius}mの分析範囲` : "駅または地図上の任意地点から始めます"}</small>
+          <div className="public-map-area-badge">
+            <span>{origin ? "調査範囲" : "舞鶴市"}</span>
+            <strong>{origin?.label ?? "調べたい場所を選ぶ"}</strong>
+            <small>{origin ? `半径 ${radius}m` : "駅または地図上の任意地点から始めます"}</small>
           </div>
+          {legend && <aside className="public-map-legend" aria-label={`地図の凡例: ${legend.title}`}>
+            <strong>{legend.title}</strong>
+            {legend.items.map((item) => <span key={item.label}>
+              <i className={`shape-${item.shape ?? "fill"}`} style={{ "--legend-color": item.color } as CSSProperties} />
+              {item.label}
+            </span>)}
+            {legend.note && <small>{legend.note}</small>}
+          </aside>}
+          {step === "target" && targetRender && <div className="public-map-target-label" data-target-resolution={targetRender.resolution}>
+            <span>{targetRender.resolution === "exact" ? "実データ上の確認対象" : "確認対象の位置"}</span>
+            <strong>{targetRender.label}</strong>
+          </div>}
         </section>
 
         <article className="public-area-panel">
@@ -333,7 +388,14 @@ export function PublicAreaJourney({
                   <summary>{radius}mの分析範囲について</summary>
                   <p>{radiusExplanation(radius)}</p>
                 </details>
-                <AreaSummaryPanel summary={summary} publicMode selectedUnknownId={selectedUnknown?.id} onUnknownSelect={setSelectedUnknownId} />
+                <AreaSummaryPanel
+                  summary={summary}
+                  publicMode
+                  activeStoryId={activeStory}
+                  selectedUnknownId={selectedUnknown?.id}
+                  onStorySelect={setActiveStory}
+                  onUnknownSelect={setSelectedUnknownId}
+                />
               </section>
             )}
 

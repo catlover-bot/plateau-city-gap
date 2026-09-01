@@ -34,6 +34,7 @@ import type { InvestigationCandidate } from "../features/investigation/investiga
 import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
+import { loadPublicCartographyData, type PublicCartographyData } from "../features/area-investigation/publicCartography";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -92,6 +93,7 @@ export function ProductApp() {
   const [stress, setStress] = useState<FuturesStressMode>("normal");
   const [validationView, setValidationView] = useState<ValidationView>("reference");
   const [areaFixture, setAreaFixture] = useState<InvestigationAreaFixture | null>(null);
+  const [publicCartography, setPublicCartography] = useState<PublicCartographyData | null>(null);
   const [areaError, setAreaError] = useState<string | null>(null);
   const [areaJourneyOpen, setAreaJourneyOpen] = useState(
     () => new URLSearchParams(window.location.search).get("journey") !== "m3",
@@ -110,9 +112,10 @@ export function ProductApp() {
 
   useEffect(() => {
     let cancelled = false;
-    loadInvestigationAreaFixture()
-      .then((fixture) => {
+    Promise.all([loadInvestigationAreaFixture(), loadPublicCartographyData()])
+      .then(([fixture, cartography]) => {
         if (!cancelled) setAreaFixture(fixture);
+        if (!cancelled) setPublicCartography(cartography);
       })
       .catch((reason: unknown) => {
         if (!cancelled) setAreaError(reason instanceof Error ? reason.message : "調査範囲データを読み込めませんでした");
@@ -438,10 +441,11 @@ export function ProductApp() {
   if (state.experience === "landing") {
     if (areaJourneyOpen) {
       if (areaError) return <ErrorState message={areaError} onRetry={closeAreaJourney} />;
-      if (!guidedData || !areaFixture) return <LoadingState />;
+      if (!guidedData || !areaFixture || !publicCartography) return <LoadingState />;
       return <PublicAreaJourney
         data={guidedData}
         fixture={areaFixture}
+        cartography={publicCartography}
         state={state}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}

@@ -130,6 +130,22 @@ describe("Public first-run presentation contract", () => {
     expect(html).toContain("bldg-real-id");
   });
 
+  it("keeps Summary stories as small contextual actions rather than tabs", () => {
+    const html = renderToStaticMarkup(
+      <AreaSummaryPanel
+        summary={summary}
+        publicMode
+        activeStoryId="population-age"
+        onStorySelect={() => undefined}
+      />,
+    );
+    expect((html.match(/class="area-story-action"/g) ?? [])).toHaveLength(5);
+    expect((html.match(/aria-pressed="true"/g) ?? [])).toHaveLength(1);
+    expect(html).toContain("地図に表示中");
+    expect(html).not.toContain('role="tab"');
+    expect(html).not.toContain('role="tablist"');
+  });
+
   it("keeps target provenance behind disclosure and excludes fake field evidence", () => {
     const html = renderToStaticMarkup(<TargetTasks summary={{ ...summary, unknowns: [summary.unknowns[0]] }} publicMode />);
     expect(html).toContain("<summary>対象データの出典</summary>");
