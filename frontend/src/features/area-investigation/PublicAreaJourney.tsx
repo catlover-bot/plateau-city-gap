@@ -65,7 +65,6 @@ interface Props {
   data: AppData;
   fixture: InvestigationAreaFixture;
   state: SpatialState;
-  onOpenExistingM3(): void;
   onOpenAdvanced(): void;
   onSelectionChange(selection: SpatialSelection | null): void;
   onViewportChange(viewport: SpatialViewport): void;
@@ -75,7 +74,6 @@ export function PublicAreaJourney({
   data,
   fixture,
   state,
-  onOpenExistingM3,
   onOpenAdvanced,
   onSelectionChange,
   onViewportChange,
@@ -152,12 +150,12 @@ export function PublicAreaJourney({
     }
     chooseOrigin({ kind: "station", label: String(station.properties?.name ?? "駅"), coordinates: point, sourceFeatureId: String(station.properties?.id ?? "") });
   };
-  const chooseRadius = (value: number) => {
+  const selectRadius = (value: number, keepCustomOpen = false) => {
     setRadius(value);
+    setCustomOpen(keepCustomOpen);
     setSelectedUnknownId("");
     setMapMode("map2d");
     setError(null);
-    setStep("result");
   };
   const submitCustom = () => {
     const value = Number(customRadius);
@@ -165,8 +163,13 @@ export function PublicAreaJourney({
       setError("その他の半径は100〜3000mの整数で入力してください。");
       return;
     }
-    chooseRadius(value);
+    selectRadius(value, true);
   };
+  const customValue = Number(customRadius);
+  const customRadiusApplied = Number.isInteger(customValue)
+    && customValue >= AREA_MIN_RADIUS_M
+    && customValue <= AREA_MAX_RADIUS_M
+    && radius === customValue;
   const back = () => {
     if (step === "place") setStep("intro");
     else if (step === "radius") setStep("place");
@@ -279,8 +282,26 @@ export function PublicAreaJourney({
                 <h1 ref={headingRef} tabIndex={-1}>どの範囲を見ますか？</h1>
                 <p>{origin?.label}</p>
                 <div className="public-radius-grid" role="group" aria-label="調べる半径">
-                  {PUBLIC_RADIUS_OPTIONS.map((option) => <button type="button" key={option.value} onClick={() => chooseRadius(option.value)}>{option.label}</button>)}
-                  <button type="button" aria-expanded={customOpen} onClick={() => setCustomOpen((value) => !value)}>その他</button>
+                  {PUBLIC_RADIUS_OPTIONS.map((option) => (
+                    <button
+                      type="button"
+                      key={option.value}
+                      aria-pressed={!customOpen && radius === option.value}
+                      className={!customOpen && radius === option.value ? "selected" : ""}
+                      onClick={() => selectRadius(option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    aria-pressed={customOpen}
+                    aria-expanded={customOpen}
+                    className={customOpen ? "selected" : ""}
+                    onClick={() => setCustomOpen(true)}
+                  >
+                    その他
+                  </button>
                 </div>
                 {customOpen && (
                   <div className="public-custom-radius">
@@ -289,6 +310,14 @@ export function PublicAreaJourney({
                   </div>
                 )}
                 {error && <p role="alert" className="public-error">{error}</p>}
+                <button
+                  type="button"
+                  className="public-primary public-radius-submit"
+                  disabled={customOpen && !customRadiusApplied}
+                  onClick={() => setStep("result")}
+                >
+                  この範囲を調べる
+                </button>
               </section>
             )}
 
@@ -301,14 +330,7 @@ export function PublicAreaJourney({
                   <summary>{radius}mの分析範囲について</summary>
                   <p>{radiusExplanation(radius)}</p>
                 </details>
-                <AreaSummaryPanel summary={summary} publicMode />
-                <div className="public-unknown-selector" aria-label="確認する未確認事項">
-                  {summary.unknowns.slice(0, 3).map((unknown) => (
-                    <button type="button" key={unknown.id} aria-pressed={selectedUnknown?.id === unknown.id} className={selectedUnknown?.id === unknown.id ? "selected" : ""} onClick={() => setSelectedUnknownId(unknown.id)}>
-                      {unknown.title}
-                    </button>
-                  ))}
-                </div>
+                <AreaSummaryPanel summary={summary} publicMode selectedUnknownId={selectedUnknown?.id} onUnknownSelect={setSelectedUnknownId} />
               </section>
             )}
 
@@ -333,7 +355,6 @@ export function PublicAreaJourney({
             <footer className="public-area-actions">
               <button type="button" className="public-back" onClick={back}>戻る</button>
               {step === "result" && <button type="button" className="public-primary" onClick={() => setStep("target")}>確認場所を見る</button>}
-              {step === "target" && <button type="button" className="public-tertiary" onClick={onOpenExistingM3}>旧M3の確認フローを見る</button>}
             </footer>
           )}
         </article>

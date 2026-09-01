@@ -262,10 +262,6 @@ export function ProductApp() {
   const closeAreaJourney = useCallback(() => {
     setAreaJourneyOpen(false);
   }, []);
-  const openExistingM3FromArea = useCallback(() => {
-    setAreaJourneyOpen(false);
-    startGuided();
-  }, [startGuided]);
   const openAdvancedFromArea = useCallback(() => {
     setAreaJourneyOpen(false);
     openGuidedAdvanced();
@@ -447,7 +443,6 @@ export function ProductApp() {
         data={guidedData}
         fixture={areaFixture}
         state={state}
-        onOpenExistingM3={openExistingM3FromArea}
         onOpenAdvanced={openAdvancedFromArea}
         onSelectionChange={select}
         onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })}

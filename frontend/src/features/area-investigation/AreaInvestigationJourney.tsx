@@ -98,7 +98,19 @@ const PRIMARY_METRIC_GROUPS = [
   { id: "transport", label: "交通", groups: ["transport"] },
 ] as const;
 
-export function AreaSummaryPanel({ summary, publicMode = false }: { summary: InvestigationAreaSummary; publicMode?: boolean }) {
+interface AreaSummaryPanelProps {
+  summary: InvestigationAreaSummary;
+  publicMode?: boolean;
+  selectedUnknownId?: string;
+  onUnknownSelect?(unknownId: string): void;
+}
+
+export function AreaSummaryPanel({
+  summary,
+  publicMode = false,
+  selectedUnknownId,
+  onUnknownSelect,
+}: AreaSummaryPanelProps) {
   const secondaryMetrics = summary.metrics.filter((metric) => metric.group === "secondary");
   return (
     <div className="area-summary-flow">
@@ -129,9 +141,18 @@ export function AreaSummaryPanel({ summary, publicMode = false }: { summary: Inv
         <h2 id="area-unknown-title">ただし、まだデータだけでは分からないことがあります</h2>
         <div className="area-unknown-list">
           {summary.unknowns.slice(0, publicMode ? 3 : 4).map((unknown) => (
-            <article key={unknown.id}>
-              <span>未確認</span>
-              <h3>{unknown.title}</h3>
+            <article key={unknown.id} className={publicMode && selectedUnknownId === unknown.id ? "selected" : ""}>
+              {publicMode && onUnknownSelect ? (
+                <button type="button" aria-pressed={selectedUnknownId === unknown.id} onClick={() => onUnknownSelect(unknown.id)}>
+                  <span>未確認</span>
+                  <strong>{unknown.title}</strong>
+                </button>
+              ) : (
+                <>
+                  <span>未確認</span>
+                  <h3>{unknown.title}</h3>
+                </>
+              )}
               <p>{unknown.importance}</p>
               <small>{unknown.source_boundary}</small>
             </article>
