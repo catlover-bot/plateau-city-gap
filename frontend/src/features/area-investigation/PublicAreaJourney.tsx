@@ -37,8 +37,8 @@ export type PublicAreaStep = "intro" | "place" | "radius" | "result" | "target";
 const STEP_LABELS = [
   { id: "place", label: "場所" },
   { id: "radius", label: "範囲" },
-  { id: "result", label: "確認できたこと" },
-  { id: "target", label: "確認場所" },
+  { id: "result", label: "結果" },
+  { id: "target", label: "現地確認" },
 ] as const;
 
 function coordinates(feature: GeoJsonFeature): [number, number] | null {
@@ -157,14 +157,14 @@ export function PublicAreaJourney({
   const activeStoryPending = Boolean(activeStoryArtifact && !derivativeAvailable);
   const cartographyStatusLegend = step === "result" && (!cartography || activeStoryPending) ? {
     title: "地図表示",
-    note: cartographyError ?? "PLATEAU表示用データを準備中です",
+    note: cartographyError ? "地図のデータを読み込めませんでした" : "地図のデータを読み込んでいます",
     items: [],
   } : null;
   const legend = cartographyStatusLegend ?? (step === "target"
     ? {
-        title: targetRender?.resolution === "exact" ? "PLATEAU上の確認対象" : "確認対象の位置",
-        note: targetRender?.resolution === "exact" ? "PLATEAUの実形状" : "登録された位置情報のみ",
-        items: [{ label: selectedUnknown?.target.label ?? "確認対象", color: "#6b4c7d", shape: "fill" as const }],
+        title: "現地で確認する場所",
+        note: targetRender?.resolution === "exact" ? "PLATEAUの建物・道路形状" : "登録位置を表示",
+        items: [{ label: selectedUnknown?.target.label ?? "確認する場所", color: "#6b4c7d", shape: "fill" as const }],
       }
     : publicStoryLegend(step === "result" ? activeStory : null, derivativeAvailable));
   const eligibility = summary && selectedUnknown
@@ -239,7 +239,7 @@ export function PublicAreaJourney({
     const station = stations.find((feature) => String(feature.properties?.id ?? "") === stationId) ?? stations[0];
     const point = station && coordinates(station);
     if (!station || !point) {
-      setError("駅の位置を確認できませんでした。");
+      setError("駅の位置を読み込めませんでした。");
       return;
     }
     chooseOrigin({ kind: "station", label: String(station.properties?.name ?? "駅"), coordinates: point, sourceFeatureId: String(station.properties?.id ?? "") });
@@ -324,9 +324,9 @@ export function PublicAreaJourney({
             />
           )}
           <div className="public-map-area-badge">
-            <span>{origin ? "調査範囲" : "舞鶴市"}</span>
-            <strong>{origin?.label ?? "調べたい場所を選ぶ"}</strong>
-            <small>{origin ? `半径 ${radius}m` : "駅または地図上の任意地点から始めます"}</small>
+            <span>{origin ? "範囲" : "舞鶴市"}</span>
+            <strong>{origin?.label ?? "調べる場所を選ぶ"}</strong>
+            <small>{origin ? `半径 ${radius}m` : "駅または地図の中心から選べます"}</small>
           </div>
           {legend && <aside className="public-map-legend" aria-label={`地図の凡例: ${legend.title}`}>
             <strong>{legend.title}</strong>
@@ -337,7 +337,7 @@ export function PublicAreaJourney({
             {legend.note && <small>{legend.note}</small>}
           </aside>}
           {step === "target" && targetRender && <div className="public-map-target-label" data-target-resolution={targetRender.resolution}>
-            <span>{targetRender.resolution === "exact" ? "実データ上の確認対象" : "確認対象の位置"}</span>
+            <span>確認する場所</span>
             <strong>{targetRender.label}</strong>
           </div>}
         </section>
@@ -346,7 +346,7 @@ export function PublicAreaJourney({
           {step !== "intro" && (
             <div className="public-progress">
               <span>{progressIndex + 1} / 4</span>
-              <ol aria-label="場所を選んで確認場所を見るまでの進み具合">
+              <ol aria-label="場所を選んで現地確認へ進むまでの進み具合">
                 {STEP_LABELS.map((item, index) => (
                   <li key={item.id} aria-current={item.id === step ? "step" : undefined} className={index < progressIndex ? "complete" : ""}>
                     <span>{index + 1}</span><small>{item.label}</small>
@@ -359,37 +359,34 @@ export function PublicAreaJourney({
           <div className="public-area-content">
             {step === "intro" && (
               <section className="public-intro">
-                <p>舞鶴市の公開データを使った確認</p>
                 <h1 ref={headingRef} tabIndex={-1}>気になる場所を、<br />地図とデータで確かめる。</h1>
                 <p className="public-intro-copy">{PUBLIC_LANDING_COPY.subcopy}</p>
                 <button type="button" className="public-primary" onClick={() => setStep("place")}>{PUBLIC_LANDING_COPY.primaryCta}</button>
-                <small>公開データの出典・時点・限界を表示します。政策判断や危険判定は行いません。</small>
               </section>
             )}
 
             {step === "place" && (
               <section>
-                <p className="public-kicker">場所を選ぶ</p>
-                <h1 ref={headingRef} tabIndex={-1}>どこを調べますか？</h1>
+                <h1 ref={headingRef} tabIndex={-1}>調べる場所を選ぶ</h1>
                 <div className="public-origin-grid">
                   <div>
-                    <h2>駅から選ぶ</h2>
+                    <h2>駅を選ぶ</h2>
                     <label htmlFor="public-station">駅</label>
                     <select id="public-station" value={stationId} onChange={(event) => setStationId(event.target.value)}>
                       {stations.map((station) => <option key={String(station.properties?.id)} value={String(station.properties?.id)}>{String(station.properties?.name)}</option>)}
                     </select>
-                    <button type="button" className="public-primary" onClick={chooseStation}>選んだ駅を起点にする</button>
+                    <button type="button" className="public-primary" onClick={chooseStation}>この駅を選ぶ</button>
                   </div>
                   <div>
-                    <h2>地図上の任意地点</h2>
-                    <p>地図を動かし、現在の中心を起点にします。</p>
-                    <button type="button" className="public-secondary" onClick={() => chooseOrigin({ kind: "map_point", label: "地図上で選んだ地点", coordinates: [state.viewport.longitude, state.viewport.latitude] })}>地図中心を起点にする</button>
+                    <h2>地図から選ぶ</h2>
+                    <p>地図を動かして、中心を調べたい場所に合わせます。</p>
+                    <button type="button" className="public-secondary" onClick={() => chooseOrigin({ kind: "map_point", label: "地図で選んだ場所", coordinates: [state.viewport.longitude, state.viewport.latitude] })}>この場所を選ぶ</button>
                   </div>
                 </div>
                 <details className="public-boundary-note">
-                  <summary>2020年国勢調査小地域（町丁・字等）について</summary>
+                  <summary>国勢調査の地域区分について</summary>
                   <p>統計調査用の境界です。現在の行政上の町界、住所上の町丁目、自治会区域、自治体独自の業務区域と一致するとは限りません。</p>
-                  <p>舞鶴市のversioned境界fixtureが未登録のため、この公開版では選択できません。別境界で補完しません。</p>
+                  <p>この公開版では、舞鶴市の2020年国勢調査小地域（町丁・字等）を選択できません。別の境界で補ってはいません。</p>
                 </details>
                 {error && <p role="alert" className="public-error">{error}</p>}
               </section>
@@ -397,8 +394,7 @@ export function PublicAreaJourney({
 
             {step === "radius" && (
               <section>
-                <p className="public-kicker">範囲を選ぶ</p>
-                <h1 ref={headingRef} tabIndex={-1}>どの範囲を見ますか？</h1>
+                <h1 ref={headingRef} tabIndex={-1}>範囲を選ぶ</h1>
                 <p>{origin?.label}</p>
                 <div className="public-radius-grid" role="group" aria-label="調べる半径">
                   {PUBLIC_RADIUS_OPTIONS.map((option) => (
@@ -438,18 +434,17 @@ export function PublicAreaJourney({
                     setStep("result");
                   }}
                 >
-                  この範囲を調べる
+                  この範囲を見る
                 </button>
               </section>
             )}
 
             {step === "result" && summary && (
               <section>
-                <p className="public-kicker">選んだ範囲の結果</p>
-                <h1 ref={headingRef} tabIndex={-1}>分かっていることと、まだ分からないこと</h1>
-                <p className="public-area-label">{summary.label} · 未確認</p>
+                <h1 ref={headingRef} tabIndex={-1}>この範囲で分かること</h1>
+                <p className="public-area-label">{origin?.label}から半径{radius}m</p>
                 <details className="public-methodology">
-                  <summary>{radius}mの分析範囲について</summary>
+                  <summary>半径{radius}mについて</summary>
                   <p>{radiusExplanation(radius)}</p>
                 </details>
                 <AreaSummaryPanel
@@ -468,8 +463,7 @@ export function PublicAreaJourney({
 
             {step === "target" && summary && selectedUnknown && (
               <section>
-                <p className="public-kicker">確認場所と未確認項目</p>
-                <h1 ref={headingRef} tabIndex={-1}>データだけでは分からないことを、場所で確かめる</h1>
+                <h1 ref={headingRef} tabIndex={-1}>現地で確認する場所</h1>
                 <TargetTasks summary={{ ...summary, unknowns: [selectedUnknown] }} publicMode />
                 <div
                   className="public-3d-decision"
@@ -495,7 +489,7 @@ export function PublicAreaJourney({
           {step !== "intro" && (
             <footer className="public-area-actions">
               <button type="button" className="public-back" onClick={back}>戻る</button>
-              {step === "result" && <button type="button" className="public-primary" onClick={() => setStep("target")}>確認場所を見る</button>}
+              {step === "result" && <button type="button" className="public-primary" onClick={() => setStep("target")}>確認する場所を見る</button>}
             </footer>
           )}
         </article>

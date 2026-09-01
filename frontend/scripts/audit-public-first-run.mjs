@@ -206,7 +206,7 @@ async function click(page, name) {
 async function reachRadius(page) {
   await click(page, "地図で場所を調べる");
   await waitForStep(page, "place");
-  await click(page, "選んだ駅を起点にする");
+  await click(page, "この駅を選ぶ");
   await waitForStep(page, "radius");
 }
 
@@ -296,14 +296,14 @@ try {
   accessibility.desktop_radius = await accessibilityAudit(page);
   await capture(page, "02-place-radius-desktop.png", "place-radius", { width: 1440, height: 900 });
   await click(page, "800m");
-  await click(page, "この範囲を調べる");
+  await click(page, "この範囲を見る");
   await waitForStep(page, "result");
   layouts.desktop_result = await stateMetrics(page);
   accessibility.desktop_result = await accessibilityAudit(page);
   const unknownFirstView = await unknownFirstViewAudit(page);
   await page.locator("#area-unknown-title").scrollIntoViewIfNeeded();
   await capture(page, "03-known-unknown-desktop.png", "known-unknown", { width: 1440, height: 900 });
-  await click(page, "確認場所を見る");
+  await click(page, "確認する場所を見る");
   await waitForStep(page, "target");
   layouts.desktop_target = await stateMetrics(page);
   accessibility.desktop_target = await accessibilityAudit(page);
@@ -353,13 +353,13 @@ try {
   accessibility.mobile_radius = await accessibilityAudit(mobilePage);
   await capture(mobilePage, "07-place-radius-mobile.png", "place-radius-mobile", mobileViewport);
   await click(mobilePage, "800m");
-  await click(mobilePage, "この範囲を調べる");
+  await click(mobilePage, "この範囲を見る");
   await waitForStep(mobilePage, "result");
   layouts.mobile_result = await stateMetrics(mobilePage);
   accessibility.mobile_result = await accessibilityAudit(mobilePage);
   await mobilePage.locator("#area-unknown-title").scrollIntoViewIfNeeded();
   await capture(mobilePage, "08-known-unknown-mobile.png", "known-unknown-mobile", mobileViewport);
-  await click(mobilePage, "確認場所を見る");
+  await click(mobilePage, "確認する場所を見る");
   await waitForStep(mobilePage, "target");
   layouts.mobile_target = await stateMetrics(mobilePage);
   accessibility.mobile_target = await accessibilityAudit(mobilePage);
@@ -376,9 +376,9 @@ try {
   await click(fallbackPage, "地図中心を起点にする");
   await waitForStep(fallbackPage, "radius");
   await click(fallbackPage, "800m");
-  await click(fallbackPage, "この範囲を調べる");
+  await click(fallbackPage, "この範囲を見る");
   await waitForStep(fallbackPage, "result");
-  await click(fallbackPage, "確認場所を見る");
+  await click(fallbackPage, "確認する場所を見る");
   await waitForStep(fallbackPage, "target");
   const fallback3d = await fallbackPage.locator(".public-3d-decision").evaluate((node) => ({
     eligible: node.getAttribute("data-contextual-3d-eligible") === "true",

@@ -437,7 +437,7 @@ export function publicStoryLegend(story: PublicStoryId | null, spatialAvailable 
   };
   if (story === "building-use") return spatialAvailable ? {
     title: "PLATEAU建物用途",
-    note: "公式用途属性・現在用途ではありません",
+    note: "公式用途属性・現況の用途を示すものではありません",
     items: [
       { label: "住宅", color: "#6f9f91", shape: "fill" },
       { label: "共同住宅", color: "#527b87", shape: "fill" },
@@ -452,12 +452,12 @@ export function publicStoryLegend(story: PublicStoryId | null, spatialAvailable 
   };
   if (story === "urban-planning") return spatialAvailable ? {
     title: "PLATEAU都市計画",
-    note: "利用可能な公式objectのみ",
+    note: "利用できる公式データのみ",
     items: [
       { label: "用途地域等", color: "#78998e", shape: "fill" },
       { label: "区域・境界", color: "#526b65", shape: "line" },
     ],
-  } : { title: "都市計画", note: "この範囲の境界geometryは未登録です", items: [] };
+  } : { title: "都市計画", note: "この範囲の境界データは未登録です", items: [] };
   if (story === "transport") return {
     title: "交通の登録地点",
     note: "運行・徒歩到達性は含みません",

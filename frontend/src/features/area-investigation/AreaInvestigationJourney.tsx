@@ -124,7 +124,7 @@ export function AreaSummaryPanel({
     <div className="area-summary-flow">
       <section aria-labelledby="area-known-title">
         {!publicMode && <p className="area-kicker">QUANTIFIED EVIDENCE</p>}
-        <h2 id="area-known-title">この範囲で、データから確認できたこと</h2>
+        <h2 id="area-known-title">{publicMode ? "この範囲で分かること" : "この範囲で、データから確認できたこと"}</h2>
         <div className="area-metric-groups">
           {PRIMARY_METRIC_GROUPS.map((group) => (
             <section
@@ -142,7 +142,7 @@ export function AreaSummaryPanel({
                   aria-pressed={activeStoryId === group.id}
                   onClick={() => onStorySelect(group.id)}
                 >
-                  {activeStoryId === group.id ? "地図に表示中" : "地図で見る"}
+                  {activeStoryId === group.id ? "地図に表示" : "地図で見る"}
                 </button>
               )}
             </section>
@@ -150,7 +150,7 @@ export function AreaSummaryPanel({
         </div>
         {secondaryMetrics.length > 0 && (
           <details className="area-secondary-metrics">
-            <summary>医療・介護・公共施設などの詳細データ</summary>
+            <summary>{publicMode ? "その他のデータ" : "医療・介護・公共施設などの詳細データ"}</summary>
             <div className="area-metric-grid">
               {secondaryMetrics.map((metric) => <MetricCard key={metric.key} metric={metric} showDetails={!publicMode} />)}
             </div>
@@ -159,7 +159,7 @@ export function AreaSummaryPanel({
       </section>
       <section className="area-unknown-section" aria-labelledby="area-unknown-title">
         {!publicMode && <p className="area-kicker">KNOWN / UNKNOWN</p>}
-        <h2 id="area-unknown-title">ただし、まだデータだけでは分からないことがあります</h2>
+        <h2 id="area-unknown-title">{publicMode ? "まだ現地で確かめたいこと" : "ただし、まだデータだけでは分からないことがあります"}</h2>
         <div className="area-unknown-list">
           {visibleUnknowns.map((unknown) => (
             <article key={unknown.id} className={publicMode && selectedUnknownId === unknown.id ? "selected" : ""}>
@@ -179,7 +179,7 @@ export function AreaSummaryPanel({
               )}
               <p>{unknown.importance}</p>
               {publicMode && unknown.status === "partial" && (
-                <small className="area-unknown-warning">この情報は一部の範囲のみ確認できています。</small>
+                <small className="area-unknown-warning">確認できた範囲が限られています。</small>
               )}
               {!publicMode && <small>{unknown.source_boundary}</small>}
             </article>
@@ -189,30 +189,28 @@ export function AreaSummaryPanel({
       {publicMode && (
         <details className="area-public-source-notes">
           <summary>出典・データの注意点</summary>
-          <p>出典、時点、集計方法、対象objectの来歴は、最初に読む内容と分けてここにまとめています。</p>
-          <h3>確認できた数値</h3>
+          <h3>使用したデータ</h3>
           <ul>
             {summary.metrics.map((metric) => (
               <li key={metric.key}>
                 <strong>{metric.label}</strong>
                 <span>{metric.source.dataset} · {metric.source.source_date}</span>
                 <span>{metric.limitation}</span>
-                {metric.coverage_ratio !== null && <span>coverage {(metric.coverage_ratio * 100).toFixed(1)}%</span>}
+                {metric.coverage_ratio !== null && <span>データを確認できた範囲 {(metric.coverage_ratio * 100).toFixed(1)}%</span>}
               </li>
             ))}
           </ul>
-          <h3>まだ分からないこと</h3>
+          <h3>現地確認に使うデータ</h3>
           <ul>
             {visibleUnknowns.map((unknown) => (
               <li key={unknown.id}>
                 <strong>{unknown.title}</strong>
                 <span>{unknown.source_boundary}</span>
                 <span>{unknown.target.dataset}</span>
-                <code>{unknown.target.source_object_id}</code>
+                <span>データ上の識別子 <code>{unknown.target.source_object_id}</code></span>
               </li>
             ))}
           </ul>
-          <small>Area {summary.id} · version {summary.version} · content {summary.content_sha256 ?? "unavailable"}</small>
         </details>
       )}
     </div>
@@ -224,18 +222,19 @@ export function TargetTasks({ summary, publicMode = false }: { summary: Investig
     <div className="area-task-flow">
       <header>
         {!publicMode && <p className="area-kicker">PLATEAU TARGET → VERIFICATION</p>}
-        <h2>{summary.label}の{publicMode ? "確認場所" : "未確認タスク"}</h2>
-        <p>{publicMode ? "データの限界から、現地で確かめる場所と3〜5件の確認項目を示します。" : "「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。"}</p>
+        <h2>{publicMode ? summary.unknowns[0]?.target.label : `${summary.label}の未確認タスク`}</h2>
+        {!publicMode && <p>「なぜ必要か」と実在object IDを保ったまま、3〜5件の確認へ絞ります。</p>}
       </header>
       <div className="area-task-list">
         {summary.unknowns.map((unknown) => (
           <article key={unknown.id}>
             <div className="area-task-target">
-              <span>{unknown.target.scope === "mesh" ? "範囲単位の確認" : "確認場所"}</span>
+              <span>{unknown.target.scope === "mesh" ? "この範囲を確認" : publicMode ? "確認する場所" : "確認場所"}</span>
               <strong>{unknown.target.label}</strong>
               {publicMode ? (
                 <details className="area-target-source">
-                  <summary>対象データの出典</summary>
+                  <summary>場所データの出典</summary>
+                  <small>データ上の識別子</small>
                   <code>{unknown.target.source_object_id}</code>
                   <small>{unknown.target.dataset}</small>
                 </details>
@@ -249,6 +248,7 @@ export function TargetTasks({ summary, publicMode = false }: { summary: Investig
             <div>
               <span className="area-unverified">未確認</span>
               <h3>{unknown.title}</h3>
+              {publicMode && <h4>現地で見るポイント</h4>}
               <ol>
                 {unknown.checks.map((check) => <li key={check}>{check}</li>)}
               </ol>
@@ -257,7 +257,7 @@ export function TargetTasks({ summary, publicMode = false }: { summary: Investig
         ))}
       </div>
       <p className="area-privacy-boundary">
-        写真・GPS・回答・担当者・自治体の確認結果は作成も表示もしていません。
+        {publicMode ? "この公開画面には、写真やGPSなどの現地記録はありません。" : "写真・GPS・回答・担当者・自治体の確認結果は作成も表示もしていません。"}
       </p>
     </div>
   );

@@ -313,7 +313,7 @@ async function startStationArea(page, radiusLabel) {
   await page.getByRole("button", { name: "地図で場所を調べる", exact: true }).click();
   clicks += 1;
   await waitForStep(page, "place");
-  await page.getByRole("button", { name: "選んだ駅を起点にする", exact: true }).click();
+  await page.getByRole("button", { name: "この駅を選ぶ", exact: true }).click();
   clicks += 1;
   await waitForStep(page, "radius");
   await waitForMap(page);
@@ -323,7 +323,7 @@ async function startStationArea(page, radiusLabel) {
   const radiusM = radiusLabel === "1km" ? 1_000 : Number.parseInt(radiusLabel, 10);
   await waitForMap(page, { radius: radiusM });
   const areaRecognitionMs = Date.now() - startedAt;
-  await page.getByRole("button", { name: "この範囲を調べる", exact: true }).click();
+  await page.getByRole("button", { name: "この範囲を見る", exact: true }).click();
   clicks += 1;
   await waitForStep(page, "result");
   return { clicks, areaRecognitionMs };
@@ -335,7 +335,7 @@ async function startMapPointArea(page, radiusLabel = "800m") {
   await page.getByRole("button", { name: "地図中心を起点にする", exact: true }).click();
   await waitForStep(page, "radius");
   await page.getByRole("button", { name: radiusLabel, exact: true }).click();
-  await page.getByRole("button", { name: "この範囲を調べる", exact: true }).click();
+  await page.getByRole("button", { name: "この範囲を見る", exact: true }).click();
   await waitForStep(page, "result");
 }
 
@@ -371,7 +371,7 @@ async function selectUnknown(page, name) {
 
 async function openTarget(page, resolution, expectedKind) {
   const startedAt = Date.now();
-  await page.getByRole("button", { name: "確認場所を見る", exact: true }).click();
+  await page.getByRole("button", { name: "確認する場所を見る", exact: true }).click();
   await waitForStep(page, "target");
   await page.locator(`.public-map-target-label[data-target-resolution="${resolution}"]`).waitFor({ timeout: 120_000 });
   await waitForMap(page, { target: resolution });

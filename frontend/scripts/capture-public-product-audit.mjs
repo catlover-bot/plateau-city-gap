@@ -109,7 +109,7 @@ async function captureProductBaseline(browser, id, url) {
           viewport,
           access_status: status,
         });
-        await page.getByRole("button", { name: "選んだ駅を起点にする", exact: true }).click();
+        await page.getByRole("button", { name: "この駅を選ぶ", exact: true }).click();
         await page.locator('.public-area[data-public-step="radius"]').waitFor();
         await saveScreenshot(page, `${id}-radius-${viewport.name}.png`, {
           kind: "product-baseline",
@@ -118,7 +118,7 @@ async function captureProductBaseline(browser, id, url) {
           viewport,
           access_status: status,
         });
-        await page.getByRole("button", { name: "この範囲を調べる", exact: true }).click();
+        await page.getByRole("button", { name: "この範囲を見る", exact: true }).click();
         await page.locator('.public-area[data-public-step="result"]').waitFor({ timeout: 120_000 });
         await page.waitForTimeout(2_000);
         await saveScreenshot(page, `${id}-result-${viewport.name}.png`, {
@@ -128,7 +128,7 @@ async function captureProductBaseline(browser, id, url) {
           viewport,
           access_status: status,
         });
-        await page.getByRole("button", { name: "確認場所を見る", exact: true }).click();
+        await page.getByRole("button", { name: "確認する場所を見る", exact: true }).click();
         await page.locator('.public-area[data-public-step="target"]').waitFor({ timeout: 120_000 });
         await page.waitForTimeout(1_000);
         await saveScreenshot(page, `${id}-target-${viewport.name}.png`, {

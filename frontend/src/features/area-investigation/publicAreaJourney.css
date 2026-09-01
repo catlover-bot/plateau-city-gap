@@ -193,7 +193,7 @@
   border: 1px solid #9d9789;
   background: rgb(253 252 247 / 94%);
   color: #554f43;
-  content: "背景地図を読み込めません。分析範囲とデータ形状は表示しています。";
+  content: "背景地図を読み込めません。範囲とデータは表示しています。";
   font-size: 9px;
   line-height: 1.4;
 }

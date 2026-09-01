@@ -321,7 +321,7 @@ async function readPathProfile(page, client, readyAt, beforeMetrics) {
 async function startStationArea(page) {
   await page.getByRole("button", { name: "地図で場所を調べる", exact: true }).click();
   await waitForStep(page, "place");
-  await page.getByRole("button", { name: "選んだ駅を起点にする", exact: true }).click();
+  await page.getByRole("button", { name: "この駅を選ぶ", exact: true }).click();
   await waitForStep(page, "radius");
   await waitForMap(page);
   const radiusStartedAt = await page.evaluate(() => performance.now());
@@ -329,7 +329,7 @@ async function startStationArea(page) {
   await waitForMap(page);
   const radiusReadyAt = await compositorTimestamp(page);
   await resetProbe(page, "asset-load");
-  await page.getByRole("button", { name: "この範囲を調べる", exact: true }).click();
+  await page.getByRole("button", { name: "この範囲を見る", exact: true }).click();
   await waitForStep(page, "result");
   await waitForCartography(page);
   await waitForMap(page, { story: "population-age" });
@@ -359,7 +359,7 @@ async function selectUnknown(page, name) {
 }
 
 async function openTarget(page, resolution, kind) {
-  await page.getByRole("button", { name: "確認場所を見る", exact: true }).click();
+  await page.getByRole("button", { name: "確認する場所を見る", exact: true }).click();
   await waitForStep(page, "target");
   await page.locator(`.public-map-target-label[data-target-resolution="${resolution}"]`).waitFor({ timeout: waitTimeoutMs });
   await waitForMap(page, { target: resolution });

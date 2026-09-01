@@ -652,7 +652,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
         const element = document.createElement("span");
         element.className = "public-reference-target-marker";
         element.setAttribute("role", "img");
-        element.setAttribute("aria-label", "確認対象として登録された位置");
+        element.setAttribute("aria-label", "確認する場所として登録された位置");
         publicReferenceMarker.current = new Marker({ element, anchor: "center" })
           .setLngLat([target.longitude, target.latitude])
           .addTo(map);

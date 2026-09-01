@@ -78,7 +78,7 @@ describe("Public first-run presentation contract", () => {
   it("uses the approved landing and short radius labels", () => {
     expect(PUBLIC_LANDING_COPY).toEqual({
       heading: "気になる場所を、地図とデータで確かめる。",
-      subcopy: "場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。",
+      subcopy: "場所と範囲を選ぶと、人口や建物、事業所、都市計画、交通をまとめて見られます。データだけでは分からないことも示します。",
       primaryCta: "地図で場所を調べる",
     });
     expect(PUBLIC_LANDING_COPY.heading).not.toContain("今");
@@ -141,18 +141,41 @@ describe("Public first-run presentation contract", () => {
     );
     expect((html.match(/class="area-story-action"/g) ?? [])).toHaveLength(5);
     expect((html.match(/aria-pressed="true"/g) ?? [])).toHaveLength(1);
-    expect(html).toContain("地図に表示中");
+    expect(html).toContain("地図に表示");
     expect(html).not.toContain('role="tab"');
     expect(html).not.toContain('role="tablist"');
   });
 
   it("keeps target provenance behind disclosure and excludes fake field evidence", () => {
     const html = renderToStaticMarkup(<TargetTasks summary={{ ...summary, unknowns: [summary.unknowns[0]] }} publicMode />);
-    expect(html).toContain("<summary>対象データの出典</summary>");
+    expect(html).toContain("<summary>場所データの出典</summary>");
     expect(html).toContain("bldg-real-id");
     expect(html).toContain("未確認");
-    expect(html).toContain("写真・GPS・回答・担当者・自治体の確認結果は作成も表示もしていません");
+    expect(html).toContain("この公開画面には、写真やGPSなどの現地記録はありません");
+    expect(html).toContain("現地で見るポイント");
     expect(html).not.toMatch(/<(input|textarea|select)\b/);
+  });
+
+  it("keeps internal terms and unsupported claims out of the initial reading path", () => {
+    const markup = [
+      renderToStaticMarkup(<AreaSummaryPanel summary={summary} publicMode />),
+      renderToStaticMarkup(<TargetTasks summary={{ ...summary, unknowns: [summary.unknowns[0]] }} publicMode />),
+    ].join("\n");
+    const initialText = markup
+      .replace(/<details[\s\S]*?<\/details>/g, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ");
+
+    for (const prohibited of [
+      "KNOWN", "UNKNOWN", "EVIDENCE", "TARGET", "VERIFICATION", "Finding",
+      " task ", "coverage", "version", "rule", "object", "analysis run",
+      "最新", "リアルタイム", "おすすめ", "推奨", "最適", "AIが選定",
+      "危険度", "安全性を判定",
+    ]) {
+      expect(initialText).not.toContain(prohibited);
+    }
+    expect(initialText).not.toContain("bldg-real-id");
+    expect(initialText).not.toContain("official-test");
   });
 
   it("requires UX value in addition to technical 3D eligibility", () => {

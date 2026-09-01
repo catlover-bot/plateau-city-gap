@@ -2,7 +2,7 @@ import type { AreaTarget, InvestigationAreaSummary } from "./areaTypes";
 
 export const PUBLIC_LANDING_COPY = {
   heading: "気になる場所を、地図とデータで確かめる。",
-  subcopy: "場所と範囲を選ぶと、人口・年齢、建物の使われ方、事業所、都市計画、交通をまとめて確認できます。データだけでは判断できない点も整理します。",
+  subcopy: "場所と範囲を選ぶと、人口や建物、事業所、都市計画、交通をまとめて見られます。データだけでは分からないことも示します。",
   primaryCta: "地図で場所を調べる",
 } as const;
 
