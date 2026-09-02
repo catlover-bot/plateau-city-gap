@@ -13,6 +13,7 @@ import "./app/workbench.css";
 import "./features/guided/guided.css";
 import "./features/investigation/investigation.css";
 import "./features/verification/verification.css";
+import "./features/guided-spatial/guided-spatial.css";
 import "./service/service.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

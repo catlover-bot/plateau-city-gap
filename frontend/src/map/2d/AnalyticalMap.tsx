@@ -22,6 +22,7 @@ import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, ValidationWo
 import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import { activeLayerIds } from "../layers/layerRegistry";
 import type { PublicCartographyPresentation } from "../../features/area-investigation/publicCartography";
+import type { GuidedMapPresentation } from "../../features/guided-spatial/guidedTypes";
 import type { LayerPresetId, SpatialSelection, SpatialViewport } from "../../state/spatial/types";
 
 interface Props {
@@ -40,6 +41,9 @@ interface Props {
   interactive?: boolean;
   ariaLabel?: string;
   publicCartography?: PublicCartographyPresentation | null;
+  guidedPresentation?: GuidedMapPresentation | null;
+  onAreaHover?(meshCode: string | null): void;
+  onGuidedObjectSelect?(kind: "building" | "road", objectId: string): void;
   onSelectionChange(selection: SpatialSelection | null): void;
   onViewportChange(viewport: SpatialViewport): void;
   onReady?(): void;
@@ -173,6 +177,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   primaryLayer,
   activeLayerIdsOverride,
   publicCartography,
+  guidedPresentation,
   selection,
   viewport,
   scenarioSites,
@@ -183,6 +188,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   interactive = true,
   ariaLabel = "CITY GAP 2D分析地図。矢印キーで移動、プラスとマイナスで拡大縮小できます",
   onSelectionChange,
+  onAreaHover,
+  onGuidedObjectSelect,
   onViewportChange,
   onReady,
   onError
@@ -194,8 +201,11 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   const [styleReady, setStyleReady] = useState(false);
   const [publicRenderTick, setPublicRenderTick] = useState(0);
   const publicCameraKey = useRef("");
+  const guidedCameraKey = useRef("");
   const onSelectionRef = useRef(onSelectionChange);
   const onViewportRef = useRef(onViewportChange);
+  const onAreaHoverRef = useRef(onAreaHover);
+  const onGuidedObjectSelectRef = useRef(onGuidedObjectSelect);
   const [zoom, setZoom] = useState(viewport.zoom);
   const activeIdsKey = (activeLayerIdsOverride ?? activeLayerIds(preset)).join("\u001f");
   const activeIds = useMemo(
@@ -221,6 +231,8 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
   } : EMPTY, [publicCartography?.area]);
   onSelectionRef.current = onSelectionChange;
   onViewportRef.current = onViewportChange;
+  onAreaHoverRef.current = onAreaHover;
+  onGuidedObjectSelectRef.current = onGuidedObjectSelect;
 
   useImperativeHandle(ref, () => ({
     setViewport(next) {
@@ -311,6 +323,13 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       addGeoJson(map, "public-planning", EMPTY);
       addGeoJson(map, "public-target", EMPTY);
       addGeoJson(map, "public-origin", EMPTY);
+      addGeoJson(map, "guided-area", EMPTY);
+      addGeoJson(map, "guided-buildings", EMPTY);
+      addGeoJson(map, "guided-roads", EMPTY);
+      addGeoJson(map, "guided-planning", EMPTY);
+      addGeoJson(map, "guided-target", EMPTY);
+      addGeoJson(map, "guided-section", EMPTY);
+      addGeoJson(map, "guided-section-focus", EMPTY);
 
       map.addLayer({ id: "boundary-fill", type: "fill", source: "boundary", paint: { "fill-color": "#d9e4df", "fill-opacity": .11 } });
       map.addLayer({ id: "boundary-line", type: "line", source: "boundary", paint: { "line-color": "#315e5a", "line-width": 1.4, "line-opacity": .62 } });
@@ -322,6 +341,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       map.addLayer({ id: "mesh-top-fill", type: "fill", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "fill-color": "#c38b2c", "fill-opacity": .72 } });
       map.addLayer({ id: "mesh-top-outline", type: "line", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "line-color": "#173b39", "line-width": 1.5, "line-opacity": .9 } });
       map.addLayer({ id: "mesh-selected", type: "line", source: "meshes", minzoom: 8, paint: { "line-color": "#132f31", "line-width": 3, "line-opacity": 1 }, filter: ["==", ["get", "mesh_code"], "__none__"] });
+      map.addLayer({ id: "mesh-hovered", type: "line", source: "meshes", minzoom: 8, layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 4, "line-opacity": .96 }, filter: ["==", ["get", "mesh_code"], "__none__"] });
       map.addLayer({ id: "mesh-top-label", type: "symbol", source: "meshes", minzoom: 9.6, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], layout: { "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": ["interpolate", ["linear"], ["zoom"], 9.6, 9, 13, 11], "text-allow-overlap": false, "text-padding": 8 }, paint: { "text-color": "#173c39", "text-halo-color": "#fafaf5", "text-halo-width": 1.8 } });
       map.addLayer({ id: "plateau-road-line", type: "line", source: "plateau-roads", minzoom: 13, paint: { "line-color": "#5e6f6b", "line-width": ["interpolate", ["linear"], ["zoom"], 13, .8, 17, 2.8], "line-opacity": .7 }, layout: { visibility: "none" } });
 
@@ -348,6 +368,24 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       map.addLayer({ id: "public-target-halo", type: "line", source: "public-target", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 8, "line-opacity": .96 } });
       map.addLayer({ id: "public-target-line", type: "line", source: "public-target", layout: { visibility: "none" }, paint: { "line-color": "#b7791f", "line-width": 4, "line-dasharray": [2, 1.4], "line-opacity": 1 } });
       map.addLayer({ id: "public-target-point", type: "circle", source: "public-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": "#b7791f", "circle-radius": 9, "circle-stroke-color": "#ffffff", "circle-stroke-width": 3, "circle-opacity": .98 } });
+
+      map.addLayer({ id: "guided-planning-fill", type: "fill", source: "guided-planning", layout: { visibility: "none" }, paint: { "fill-color": "#866d9b", "fill-opacity": .13 } });
+      map.addLayer({ id: "guided-planning-line", type: "line", source: "guided-planning", layout: { visibility: "none" }, paint: { "line-color": "#665078", "line-width": 1.2, "line-dasharray": [3, 2], "line-opacity": .75 } });
+      map.addLayer({ id: "guided-roads-fill", type: "fill", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": "#628b91", "fill-opacity": .34 } });
+      map.addLayer({ id: "guided-roads-line", type: "line", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#355f67", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .5, 17, 2.1], "line-opacity": .78 } });
+      map.addLayer({ id: "guided-buildings-fill", type: "fill", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "usage_label"], "住宅", "#5f9484", "共同住宅", "#4e7685", "商業施設", "#9a7650", "#9ca9a4"], "fill-opacity": .64 } });
+      map.addLayer({ id: "guided-buildings-line", type: "line", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#284f49", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .3, 17, 1.1], "line-opacity": .76 } });
+      map.addLayer({ id: "guided-area-fill", type: "fill", source: "guided-area", layout: { visibility: "none" }, paint: { "fill-color": "#1e6f62", "fill-opacity": .08 } });
+      map.addLayer({ id: "guided-area-line", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": "#12574e", "line-width": 3.2, "line-opacity": .98 } });
+      map.addLayer({ id: "guided-area-label", type: "symbol", source: "guided-area", minzoom: 10, layout: { visibility: "none", "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": 12, "text-allow-overlap": true, "text-offset": [0, 1.2] }, paint: { "text-color": "#173f39", "text-halo-color": "#fafaf5", "text-halo-width": 2 } });
+      map.addLayer({ id: "guided-section-halo", type: "line", source: "guided-section", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 7, "line-opacity": .92 } });
+      map.addLayer({ id: "guided-section-line", type: "line", source: "guided-section", layout: { visibility: "none" }, paint: { "line-color": "#8d5f9f", "line-width": 3, "line-dasharray": [2, 1], "line-opacity": .98 } });
+      map.addLayer({ id: "guided-section-endpoints", type: "symbol", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none", "text-field": ["get", "endpoint"], "text-size": 13, "text-allow-overlap": true }, paint: { "text-color": "#634371", "text-halo-color": "#ffffff", "text-halo-width": 2 } });
+      map.addLayer({ id: "guided-section-focus", type: "circle", source: "guided-section-focus", layout: { visibility: "none" }, paint: { "circle-color": "#8d5f9f", "circle-radius": 6, "circle-stroke-color": "#ffffff", "circle-stroke-width": 2 } });
+      map.addLayer({ id: "guided-target-fill", type: "fill", source: "guided-target", layout: { visibility: "none" }, paint: { "fill-color": "#d28b24", "fill-opacity": .32 } });
+      map.addLayer({ id: "guided-target-halo", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 8, "line-opacity": .96 } });
+      map.addLayer({ id: "guided-target-line", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#a9660d", "line-width": 4, "line-opacity": 1 } });
+      map.addLayer({ id: "guided-target-point", type: "circle", source: "guided-target", layout: { visibility: "none" }, paint: { "circle-color": "#a9660d", "circle-radius": 8, "circle-stroke-color": "#ffffff", "circle-stroke-width": 4, "circle-opacity": 1 } });
 
       map.addLayer({ id: "validation-primary", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "primary_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#397888", "line-width": 4, "line-opacity": dimNonSelected ? .35 : .9 } });
       map.addLayer({ id: "validation-reference", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "reference_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#719b43", "line-width": 3, "line-dasharray": [2, 1.5], "line-opacity": dimNonSelected ? .35 : .9 } });
@@ -383,13 +421,23 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
         if (hoveredId.current !== null) map.setFeatureState({ source: "meshes", id: hoveredId.current }, { hover: false });
         hoveredId.current = event.features?.[0]?.id ?? null;
         if (hoveredId.current !== null) map.setFeatureState({ source: "meshes", id: hoveredId.current }, { hover: true });
+        const properties = event.features?.[0]?.properties as Record<string, unknown> | undefined;
+        onAreaHoverRef.current?.(properties?.mesh_code ? String(properties.mesh_code) : null);
         map.getCanvas().style.cursor = "pointer";
       });
       map.on("mouseleave", "mesh-fill", () => {
         if (hoveredId.current !== null) map.setFeatureState({ source: "meshes", id: hoveredId.current }, { hover: false });
         hoveredId.current = null;
+        onAreaHoverRef.current?.(null);
         map.getCanvas().style.cursor = "";
       });
+      const guidedObjectSelection = (kind: "building" | "road") => (event: MapLayerMouseEvent) => {
+        const feature = event.features?.[0];
+        const objectId = String(feature?.id ?? feature?.properties?.surface_id ?? feature?.properties?.object_id ?? "");
+        if (objectId) onGuidedObjectSelectRef.current?.(kind, objectId);
+      };
+      map.on("click", "guided-buildings-fill", guidedObjectSelection("building"));
+      map.on("click", "guided-roads-fill", guidedObjectSelection("road"));
       const routeSelection = (event: MapLayerMouseEvent) => {
         const properties = event.features?.[0]?.properties as Record<string, unknown> | undefined;
         if (!properties?.sample_id) return;
@@ -721,25 +769,160 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 
   useEffect(() => {
     const map = mapRef.current;
+    if (!styleReady || !map || !guidedPresentation) return;
+    const presentation = guidedPresentation;
+    const shell = containerRef.current?.parentElement;
+    const context = presentation.context;
+    const isIntro = presentation.story === "intro";
+    const isFind = presentation.story === "find";
+    const isUnderstand = presentation.story === "understand";
+    const isVerify = presentation.story === "verify";
+    const contextVisible = (isUnderstand || isVerify) && presentation.contextStatus === "ready";
+    const sectionVisible = isUnderstand && presentation.sectionLine.features.length > 0;
+    const targetVisible = isVerify && presentation.target.features.length > 0;
+
+    if (isIntro || isFind) map.setPadding({ top: 0, right: 0, bottom: 0, left: 0 });
+
+    // Invalidate the previous scene before replacing any source. Consumers
+    // must never mistake a rendered prior scene for the newly selected Area.
+    shell?.setAttribute("data-guided-visual-ready", "false");
+    shell?.setAttribute("data-visual-ready", "false");
+    shell?.setAttribute("data-guided-story", presentation.story);
+    shell?.setAttribute("data-guided-area-id", presentation.areaId);
+    shell?.setAttribute("data-guided-context-status", presentation.contextStatus);
+    shell?.setAttribute("data-guided-section-visible", String(sectionVisible));
+    shell?.setAttribute("data-guided-target-resolution", presentation.targetResolution);
+
+    setSource(map, "guided-area", presentation.area);
+    setSource(map, "guided-buildings", context?.layers.buildings);
+    setSource(map, "guided-roads", context?.layers.roads);
+    setSource(map, "guided-planning", context?.layers.planning);
+    setSource(map, "guided-target", presentation.target);
+    setSource(map, "guided-section", presentation.sectionLine);
+    setSource(map, "guided-section-focus", presentation.sectionFocus);
+
+    layerVisibility(map, "mesh-fill", isIntro || isFind);
+    layerVisibility(map, "mesh-outline", isIntro || isFind);
+    setPaint(map, "mesh-fill", "fill-opacity", isIntro ? .12 : ["case", ["boolean", ["feature-state", "hover"], false], .86, ["<=", ["coalesce", ["get", "rank"], 9999], 10], .82, ["==", ["get", "primary_eligible"], true], .37, .055]);
+    const shortlistFilter = ["in", ["get", "mesh_code"], ["literal", presentation.shortlistIds]];
+    setFilter(map, "mesh-top-fill", shortlistFilter);
+    setFilter(map, "mesh-top-outline", shortlistFilter);
+    setFilter(map, "mesh-top-label", shortlistFilter);
+    layerVisibility(map, "mesh-top-fill", isFind);
+    layerVisibility(map, "mesh-top-outline", isFind);
+    layerVisibility(map, "mesh-top-label", isFind);
+    layerVisibility(map, "mesh-selected", !isIntro);
+    layerVisibility(map, "mesh-hovered", isFind && Boolean(presentation.hoveredAreaId));
+    setFilter(map, "mesh-hovered", ["==", ["get", "mesh_code"], presentation.hoveredAreaId ?? "__none__"]);
+    layerVisibility(map, "guided-area-fill", !isIntro);
+    layerVisibility(map, "guided-area-line", !isIntro);
+    layerVisibility(map, "guided-area-label", isFind);
+    layerVisibility(map, "guided-buildings-fill", contextVisible);
+    layerVisibility(map, "guided-buildings-line", contextVisible);
+    layerVisibility(map, "guided-roads-fill", contextVisible);
+    layerVisibility(map, "guided-roads-line", contextVisible);
+    layerVisibility(map, "guided-planning-fill", contextVisible);
+    layerVisibility(map, "guided-planning-line", contextVisible);
+    layerVisibility(map, "guided-section-halo", sectionVisible);
+    layerVisibility(map, "guided-section-line", sectionVisible);
+    layerVisibility(map, "guided-section-endpoints", sectionVisible);
+    layerVisibility(map, "guided-section-focus", sectionVisible && presentation.sectionFocus.features.length > 0);
+    layerVisibility(map, "guided-target-fill", targetVisible);
+    layerVisibility(map, "guided-target-halo", targetVisible);
+    layerVisibility(map, "guided-target-line", targetVisible);
+    layerVisibility(map, "guided-target-point", targetVisible);
+    setPaint(map, "guided-buildings-fill", "fill-opacity", isVerify ? .18 : .64);
+    setPaint(map, "guided-roads-fill", "fill-opacity", isVerify ? .14 : .34);
+    setPaint(map, "guided-planning-fill", "fill-opacity", isVerify ? .055 : .13);
+    setPaint(map, "guided-area-fill", "fill-opacity", isFind ? .13 : isVerify ? .035 : .08);
+    setPaint(map, "guided-area-line", "line-color", isVerify && presentation.targetResolution === "area_fallback" ? "#a9660d" : "#12574e");
+    setPaint(map, "guided-area-line", "line-dasharray", isVerify && presentation.targetResolution === "area_fallback" ? [2, 1.4] : [1, .01]);
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = reducedMotion ? 0 : 320;
+    const cameraKey = `${presentation.story}:${presentation.areaId}:${presentation.targetResolution}:${presentation.contextStatus}:${sectionVisible}`;
+    if (!isIntro && !isFind && cameraKey !== guidedCameraKey.current) {
+      guidedCameraKey.current = cameraKey;
+      const collection = isVerify && presentation.targetResolution === "exact"
+        ? presentation.target
+        : presentation.area;
+      const bounds = collectionBounds(collection);
+      if (bounds) {
+        map.fitBounds(
+          [[bounds.west, bounds.south], [bounds.east, bounds.north]],
+          {
+            padding: map.getCanvas().clientWidth < 600
+              ? 44
+              : isUnderstand && sectionVisible
+                ? { top: 54, right: 82, bottom: map.getCanvas().clientHeight <= 700 ? 370 : 455, left: 82 }
+                : isVerify ? 112 : 82,
+            maxZoom: isVerify ? 17 : 15.7,
+            duration,
+          },
+        );
+      }
+    }
+
+    let cancelled = false;
+    let readinessTimer = 0;
+    let stableFrames = 0;
+    const sourceIds = ["guided-area"];
+    if (contextVisible) sourceIds.push("guided-buildings", "guided-roads", "guided-planning");
+    if (sectionVisible) sourceIds.push("guided-section");
+    if (targetVisible) sourceIds.push("guided-target");
+    const awaitGuidedSources = () => {
+      if (cancelled) return;
+      const pending = sourceIds.filter((id) => !map.isSourceLoaded(id));
+      shell?.setAttribute("data-guided-pending-sources", pending.join(","));
+      if (pending.length) {
+        stableFrames = 0;
+        shell?.setAttribute("data-guided-visual-ready", "false");
+        readinessTimer = window.setTimeout(awaitGuidedSources, 50);
+        return;
+      }
+
+      // A source can report loaded before MapLibre has painted the camera and
+      // freshly replaced GeoJSON together. Require a short series of stable
+      // polls and explicitly request a repaint so background/headless tabs do
+      // not depend on requestAnimationFrame scheduling.
+      stableFrames += 1;
+      if (stableFrames < 4) {
+        map.triggerRepaint();
+        readinessTimer = window.setTimeout(awaitGuidedSources, 50);
+        return;
+      }
+      shell?.setAttribute("data-guided-visual-ready", "true");
+      shell?.setAttribute("data-visual-ready", "true");
+    };
+    awaitGuidedSources();
+    return () => {
+      cancelled = true;
+      window.clearTimeout(readinessTimer);
+    };
+  }, [guidedPresentation, styleReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map?.getLayer("mesh-selected")) return;
     setFilter(map, "mesh-selected", ["==", ["get", "mesh_code"], selection?.type === "mesh" ? selection.id : "__none__"]);
     setFilter(map, "validation-selected", ["==", ["get", "sample_id"], selection?.type === "validation_sample" ? selection.id : "__none__"]);
-    if (!publicCartography?.showTarget && selection?.longitude !== undefined && selection.latitude !== undefined) {
+    if (!publicCartography?.showTarget && !guidedPresentation && selection?.longitude !== undefined && selection.latitude !== undefined) {
       const center = map.getCenter();
       if (Math.abs(center.lng - selection.longitude) > .0001 || Math.abs(center.lat - selection.latitude) > .0001) {
         map.easeTo({ center: [selection.longitude, selection.latitude], zoom: Math.max(map.getZoom(), selection.type === "mesh" ? 13 : 14), duration: 350 });
       }
     }
-  }, [publicCartography?.showTarget, selection]);
+  }, [guidedPresentation, publicCartography?.showTarget, selection]);
 
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    if (guidedPresentation && guidedPresentation.story !== "find") return;
     const center = map.getCenter();
     if (Math.abs(center.lng - viewport.longitude) > .0008 || Math.abs(center.lat - viewport.latitude) > .0008 || Math.abs(map.getZoom() - viewport.zoom) > .2) {
       map.jumpTo({ center: [viewport.longitude, viewport.latitude], zoom: viewport.zoom, bearing: 0, pitch: 0 });
     }
-  }, [viewport]);
+  }, [guidedPresentation, viewport]);
 
   const lod = zoom < 10.5 ? "都市：候補メッシュ" : zoom < 13 ? "地区：メッシュ＋主要施設" : zoom < 15 ? "街区：施設＋道路" : "詳細：建物・経路";
   return (

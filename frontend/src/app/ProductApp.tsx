@@ -22,15 +22,14 @@ import { layerById } from "../map/layers/layerRegistry";
 import { sceneForLayerPreset, sceneLayerIds, SCENE_PRESETS } from "../map/core/scenePresets";
 import { loadAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, InterventionPlan, MeshMetrics, MunicipalWorkspaceData, UrbanFuturesData, ValidationWorkspaceData } from "../types";
-import { CITY_VIEWPORTS, type AnalysisLens, type GuidedStep, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection, type SpatialViewport } from "../state/spatial/types";
+import { CITY_VIEWPORTS, type AnalysisLens, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection, type SpatialViewport } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
 import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
 import { UrbanSection } from "../features/urban-section/UrbanSection";
 import { InvestigationLanding } from "../features/investigation/ValueLanding";
-import { VerificationJourney } from "../features/verification/VerificationJourney";
+import { GuidedSpatialWorkspace } from "../features/guided-spatial/GuidedSpatialWorkspace";
 import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
-import type { InvestigationCandidate } from "../features/investigation/investigationTypes";
 import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
@@ -48,28 +47,6 @@ const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [
 
 function meshSelection(data: AppData, mesh: MeshMetrics): SpatialSelection {
   return { type: "mesh", id: mesh.mesh_code, city: data.city.id, urbanState: "2025", label: mesh.area_label ? String(mesh.area_label) : `500mメッシュ ${mesh.mesh_code}`, longitude: Number(mesh.centroid_lon), latitude: Number(mesh.centroid_lat), properties: mesh };
-}
-
-function investigationSelection(candidate: InvestigationCandidate): SpatialSelection {
-  return {
-    type: "mesh",
-    id: candidate.meshCode,
-    city: "maizuru",
-    urbanState: "2025",
-    label: candidate.name,
-    longitude: candidate.longitude,
-    latitude: candidate.latitude,
-    properties: {
-      mesh_code: candidate.meshCode,
-      area_label: candidate.name,
-      population: candidate.population,
-      elderly_population: candidate.facts[0].value,
-      nearest_public_transport_distance_m: candidate.facts[1].value,
-      nearest_medical_distance_m: candidate.facts[2].value * 1000,
-      candidate_type: candidate.type,
-      parent_mesh_code: candidate.meshCode,
-    },
-  };
 }
 
 function scenarioCollections(data: AppData, plan: InterventionPlan | null): { sites: GeoJsonFeatureCollection; meshes: GeoJsonFeatureCollection } {
@@ -238,14 +215,6 @@ export function ProductApp() {
     () => guidedData ? buildInvestigationWorkspace(guidedData) : null,
     [guidedData],
   );
-  const selectedInvestigationCandidate = useMemo(() => {
-    const selectedMeshCode = state.selection?.type === "mesh"
-      ? state.selection.id
-      : String(state.selection?.properties?.parent_mesh_code ?? "");
-    return investigationWorkspace?.candidates.find((candidate) => candidate.meshCode === selectedMeshCode)
-      ?? investigationWorkspace?.candidates[0]
-      ?? null;
-  }, [investigationWorkspace, state.selection]);
   useEffect(() => {
     if (data) recordReadinessMetric("app_shell", state.scenePreset);
   }, [data, state.scenePreset]);
@@ -267,40 +236,6 @@ export function ProductApp() {
     return { meshLongitude: state.selection.longitude, meshLatitude: state.selection.latitude, siteLongitude: plan.sites[0].longitude, siteLatitude: plan.sites[0].latitude };
   }, [plan, state.selection]);
 
-  useEffect(() => {
-    if (state.experience !== "guided" || !guidedData || !selectedInvestigationCandidate) return;
-    if (state.guidedStep > 4) {
-      dispatch({ type: "set-guided-step", step: 4 });
-      return;
-    }
-
-    const step = state.guidedStep;
-    const usesPlateau = step === 3 && selectedInvestigationCandidate.plateau.status === "verified";
-    const scenePreset: ScenePresetId = usesPlateau ? "plateau_detail" : "gap_discovery";
-    const task: ProductTask = usesPlateau ? "detail" : step >= 4 ? "operate" : "discover";
-    const resolution: SpatialResolution = usesPlateau ? "building_group" : "mesh";
-    const lens: AnalysisLens = usesPlateau ? "urban-xray" : "none";
-    const selection = investigationSelection(selectedInvestigationCandidate);
-    const viewport = {
-      longitude: selectedInvestigationCandidate.longitude,
-      latitude: selectedInvestigationCandidate.latitude,
-      zoom: usesPlateau ? 15.2 : step === 1 ? 12.8 : 14.1,
-      bearing: usesPlateau ? 14 : 0,
-      pitch: usesPlateau ? 42 : 0,
-    };
-
-    setUrbanSectionOpen(usesPlateau);
-    if (state.city !== "maizuru") dispatch({ type: "set-city", city: "maizuru" });
-    dispatch({ type: "set-task", task });
-    dispatch({ type: "set-scene-preset", scenePreset });
-    dispatch({ type: "set-selection", selection });
-    dispatch({ type: "set-resolution", resolution });
-    dispatch({ type: "set-analysis-lens", lens });
-    dispatch({ type: "set-counterfactual-state", state: "baseline" });
-    dispatch({ type: "set-scenario", scenario: null });
-    dispatch({ type: "set-viewport", viewport });
-  }, [dispatch, guidedData, selectedInvestigationCandidate, state.city, state.experience, state.guidedStep]);
-
   const selectMesh = useCallback((mesh: MeshMetrics) => {
     if (!data) return;
     dispatch({ type: "set-selection", selection: meshSelection(data, mesh) });
@@ -309,7 +244,7 @@ export function ProductApp() {
   const startGuided = useCallback(() => {
     setEvidenceOpen(false);
     setAreaJourneyOpen(false);
-    dispatch({ type: "set-guided-step", step: 1 });
+    dispatch({ type: "set-guided-story", story: "intro" });
   }, [dispatch]);
   const restartGuided = useCallback(() => {
     setEvidenceOpen(false);
@@ -318,18 +253,9 @@ export function ProductApp() {
     setAreaJourneyOpen(true);
     dispatch({ type: "set-experience", experience: "landing" });
   }, [dispatch]);
-  const guidedBack = useCallback(() => {
-    if (state.guidedStep === 1) {
-      restartGuided();
-      return;
-    }
-    dispatch({ type: "set-guided-step", step: (state.guidedStep - 1) as GuidedStep });
-  }, [dispatch, restartGuided, state.guidedStep]);
-  const guidedNext = useCallback(() => {
-    dispatch({ type: "set-guided-step", step: Math.min(4, state.guidedStep + 1) as GuidedStep });
-  }, [dispatch, state.guidedStep]);
   const openGuidedAdvanced = useCallback(() => {
     setEvidenceOpen(false);
+    dispatch({ type: "set-task", task: "operate" });
     dispatch({ type: "set-experience", experience: "advanced" });
   }, [dispatch]);
   const startAreaJourney = useCallback(() => {
@@ -342,16 +268,6 @@ export function ProductApp() {
     setAreaJourneyOpen(false);
     openGuidedAdvanced();
   }, [openGuidedAdvanced]);
-  const selectInvestigationCandidate = useCallback((candidate: InvestigationCandidate) => {
-    dispatch({ type: "set-selection", selection: investigationSelection(candidate) });
-    dispatch({ type: "set-viewport", viewport: {
-      longitude: candidate.longitude,
-      latitude: candidate.latitude,
-      zoom: 13.8,
-      bearing: 0,
-      pitch: 0,
-    } });
-  }, [dispatch]);
   const openPlateau3D = useCallback(() => {
     if (!data) return;
     const preserveSavedInvestigation = state.savedInvestigationOpen;
@@ -543,22 +459,16 @@ export function ProductApp() {
 
   if (state.experience === "guided") {
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
-    if (!guidedData || !investigationWorkspace || !selectedInvestigationCandidate) return <LoadingState />;
+    if (!guidedData || !investigationWorkspace) return <LoadingState />;
     return <>
-      <VerificationJourney
+      <GuidedSpatialWorkspace
         data={guidedData}
-        workspace={investigationWorkspace}
-        candidate={selectedInvestigationCandidate}
         state={state}
-        activeLayerIds={activeLayers}
-        onCandidateSelect={selectInvestigationCandidate}
-        onBack={guidedBack}
-        onNext={guidedNext}
+        onStoryChange={(story) => dispatch({ type: "set-guided-story", story })}
         onRestart={restartGuided}
         onOpenAdvanced={openGuidedAdvanced}
         onSelectionChange={select}
         onViewportChange={(viewport) => dispatch({ type: "set-viewport", viewport })}
-        onSelectBuilding={selectPlateauBuilding}
       />
       {error && <div className="nonblocking-error" role="alert">{error}<button type="button" onClick={() => setError(null)}>閉じる</button></div>}
     </>;

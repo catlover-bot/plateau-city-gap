@@ -3,21 +3,46 @@ import { parseSpatialUrl, spatialStateToSearch } from "./urlState";
 
 describe("spatial URL state", () => {
   it("opens the public landing unless guided or advanced is explicit", () => {
-    expect(parseSpatialUrl("")).toMatchObject({ experience: "landing", guidedStep: 1 });
+    expect(parseSpatialUrl("")).toMatchObject({ experience: "landing", guidedStep: 1, guidedStory: "intro" });
     expect(parseSpatialUrl("?scene=plateau_detail")).toMatchObject({ experience: "landing" });
-    expect(parseSpatialUrl("?experience=guided&guide=4")).toMatchObject({ experience: "guided", guidedStep: 4 });
-    expect(parseSpatialUrl("?experience=guided&guide=6")).toMatchObject({ experience: "guided", guidedStep: 6 });
-    expect(parseSpatialUrl("?experience=guided&guide=99")).toMatchObject({ experience: "guided", guidedStep: 1 });
+    expect(parseSpatialUrl("?experience=guided&guide=2")).toMatchObject({ experience: "guided", guidedStep: 2, guidedStory: "find" });
+    expect(parseSpatialUrl("?experience=guided&guide=3")).toMatchObject({ experience: "guided", guidedStep: 3, guidedStory: "understand" });
+    expect(parseSpatialUrl("?experience=guided&guide=4")).toMatchObject({ experience: "guided", guidedStep: 4, guidedStory: "verify" });
+    expect(parseSpatialUrl("?experience=guided&guide=6")).toMatchObject({ experience: "advanced", guidedStep: 6, guidedStory: "verify", task: "operate" });
+    expect(parseSpatialUrl("?experience=guided&guide=99")).toMatchObject({ experience: "guided", guidedStep: 1, guidedStory: "find" });
+    expect(parseSpatialUrl("?experience=guided&story=understand")).toMatchObject({ experience: "guided", guidedStory: "understand" });
+    expect(parseSpatialUrl("?experience=guided")).toMatchObject({ experience: "guided", guidedStep: 1, guidedStory: "intro" });
+    expect(parseSpatialUrl("?experience=guided&story=intro")).toMatchObject({ experience: "guided", guidedStep: 1, guidedStory: "intro" });
     expect(parseSpatialUrl("?experience=advanced")).toMatchObject({ experience: "advanced" });
     expect(parseSpatialUrl("?advanced=1")).toMatchObject({ experience: "advanced" });
   });
 
-  it("serializes the guided step with the shared spatial URL writer", () => {
+  it("accepts a legacy guided step and serializes the canonical story", () => {
     const state = parseSpatialUrl("?experience=guided&guide=3&mesh=533513314");
     const serialized = spatialStateToSearch(state);
     expect(serialized).toContain("experience=guided");
-    expect(serialized).toContain("guide=3");
+    expect(serialized).toContain("story=understand");
+    expect(serialized).not.toContain("guide=");
     expect(serialized).toContain("mesh=533513314");
+  });
+
+  it("maps all legacy guided links without clamping field and review views into Guided", () => {
+    const expected = [
+      ["1", "experience=guided", "story=find"],
+      ["2", "experience=guided", "detail=reason"],
+      ["3", "experience=guided", "story=understand"],
+      ["4", "experience=guided", "story=verify"],
+      ["5", "experience=advanced", "view=field-sheet"],
+      ["6", "experience=advanced", "view=municipal-review"],
+    ];
+    expected.forEach(([guide, experience, destination]) => {
+      const input = `?experience=guided&guide=${guide}&city=maizuru&mesh=533513314`;
+      const serialized = spatialStateToSearch(parseSpatialUrl(input), new URLSearchParams(input));
+      expect(serialized).toContain(experience);
+      expect(serialized).toContain(destination);
+      expect(serialized).toContain("selection=533513314");
+      expect(serialized).not.toContain("guide=");
+    });
   });
 
   it("hydrates every shareable spatial dimension", () => {

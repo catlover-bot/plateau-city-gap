@@ -4,6 +4,7 @@ import {
   type AnalysisLens,
   type CityId,
   type GuidedStep,
+  type GuidedStory,
   type LayerPresetId,
   type MapMode,
   type ProductTask,
@@ -36,6 +37,7 @@ const SELECTION_TYPES = new Set<SelectionType>([
 const ANALYSIS_LENSES = new Set<AnalysisLens>(["none", "urban-xray", "service-pulse", "changed-only", "temporal-ghost"]);
 const COUNTERFACTUAL_STATES = new Set(["baseline", "scenario", "stress"] as const);
 const GUIDED_STEPS = new Set<GuidedStep>([1, 2, 3, 4, 5, 6]);
+const GUIDED_STORIES = new Set<GuidedStory>(["intro", "find", "understand", "verify"]);
 
 const LEGACY_TASKS: Record<string, ProductTask> = {
   demo: "discover",
@@ -87,10 +89,23 @@ export function parseSpatialUrl(search: string): SpatialState {
   const guidedStep = GUIDED_STEPS.has(parsedGuidedStep as GuidedStep)
     ? parsedGuidedStep as GuidedStep
     : DEFAULT_SPATIAL_STATE.guidedStep;
+  const storyParam = params.get("story") as GuidedStory | null;
+  const guidedStory = storyParam && GUIDED_STORIES.has(storyParam)
+    ? storyParam
+    : !params.has("guide")
+      ? "intro"
+      : guidedStep <= 2
+      ? "find"
+      : guidedStep === 3
+        ? "understand"
+        : "verify";
+  const effectiveGuidedStep: GuidedStep = storyParam && GUIDED_STORIES.has(storyParam)
+    ? guidedStory === "intro" || guidedStory === "find" ? 1 : guidedStory === "understand" ? 2 : 3
+    : guidedStep;
   const requestedExperience = params.get("experience");
-  const experience = requestedExperience === "advanced" || params.get("advanced") === "1"
+  const experience = requestedExperience === "advanced" || params.get("advanced") === "1" || (!storyParam && guidedStep >= 5)
     ? "advanced" as const
-    : requestedExperience === "guided" || params.has("guide")
+    : requestedExperience === "guided" || params.has("guide") || params.has("story")
       ? "guided" as const
       : "landing" as const;
   const cityParam = params.get("city") as CityId | null;
@@ -107,7 +122,7 @@ export function parseSpatialUrl(search: string): SpatialState {
   const scene = scenePresetById(scenePreset);
   const lensParam = params.get("lens") as AnalysisLens | null;
   const twinParam = params.get("twin") as "baseline" | "scenario" | "stress" | null;
-  const task: ProductTask = explicitTask ?? (scene.intent === "discover" ? "discover" : scene.intent === "inspect" ? "detail" : scene.intent === "scenario" || scene.intent === "resilience" ? "try" : "validate");
+  const task: ProductTask = explicitTask ?? (!storyParam && guidedStep >= 5 ? "operate" : scene.intent === "discover" ? "discover" : scene.intent === "inspect" ? "detail" : scene.intent === "scenario" || scene.intent === "resilience" ? "try" : "validate");
   const mapModeParam = params.get("mapMode") as MapMode | null;
   const mapMode = mapModeParam && MAP_MODES.has(mapModeParam) ? mapModeParam : scene.recommendedMapMode;
   const presetParam = params.get("preset") as LayerPresetId | null;
@@ -117,7 +132,8 @@ export function parseSpatialUrl(search: string): SpatialState {
   return {
     ...DEFAULT_SPATIAL_STATE,
     experience,
-    guidedStep,
+    guidedStep: effectiveGuidedStep,
+    guidedStory,
     city,
     task,
     urbanState,
@@ -168,7 +184,7 @@ export function parseSpatialUrl(search: string): SpatialState {
 export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearchParams): string {
   const params = new URLSearchParams();
   params.set("experience", state.experience);
-  if (state.experience === "guided") params.set("guide", String(state.guidedStep));
+  if (state.experience === "guided") params.set("story", state.guidedStory);
   params.set("city", state.city);
   params.set("task", state.task);
   params.set("workspace", state.task === "discover" ? "demo" : state.task === "validate" ? "validation" : state.task === "try" ? "futures" : state.task === "operate" ? "workspace" : "demo");
@@ -210,6 +226,13 @@ export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearc
   if (section === "open" || section === "closed") params.set("section", section);
   const journey = passthrough?.get("journey");
   if (journey === "area" || journey === "m3") params.set("journey", journey);
+  const explicitStory = passthrough?.get("story");
+  const legacyGuide = explicitStory ? null : passthrough?.get("guide");
+  const detail = passthrough?.get("detail") ?? (legacyGuide === "2" ? "reason" : null);
+  if (state.experience === "guided" && detail === "reason") params.set("detail", detail);
+  const view = passthrough?.get("view")
+    ?? (legacyGuide === "5" ? "field-sheet" : legacyGuide === "6" ? "municipal-review" : null);
+  if (state.experience === "advanced" && (view === "field-sheet" || view === "municipal-review")) params.set("view", view);
   const copy = passthrough?.get("copy");
   if (copy === "A" || copy === "B" || copy === "C") {
     params.set("copy", copy);

@@ -32,7 +32,19 @@ export function spatialReducer(state: SpatialState, action: SpatialAction): Spat
       experience: action.experience,
       guidedStep: action.experience === "landing" ? 1 : state.guidedStep,
     };
-    case "set-guided-step": return { ...state, experience: "guided", guidedStep: action.step };
+    case "set-guided-step": return {
+      ...state,
+      experience: action.step >= 5 ? "advanced" : "guided",
+      guidedStep: action.step,
+      guidedStory: action.step <= 2 ? "find" : action.step === 3 ? "understand" : "verify",
+      task: action.step >= 5 ? "operate" : state.task,
+    };
+    case "set-guided-story": return {
+      ...state,
+      experience: "guided",
+      guidedStory: action.story,
+      guidedStep: action.story === "intro" || action.story === "find" ? 1 : action.story === "understand" ? 2 : 3,
+    };
     case "set-city": return {
       ...state,
       city: action.city,
