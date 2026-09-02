@@ -344,8 +344,8 @@ export function GuidedSpatialWorkspace({
     }
   }, [data, onSelectionChange, onViewportChange]);
   const handleMapSelection = useCallback((selection: SpatialSelection | null) => {
-    if (selection?.type === "mesh") onSelectionChange(selection);
-  }, [onSelectionChange]);
+    if (selection?.type === "mesh") selectArea(selection.id);
+  }, [selectArea]);
   const handleViewport = useCallback((viewport: SpatialViewport) => onViewportChange(viewport), [onViewportChange]);
   const handleMapHover = useCallback((meshCode: string | null) => setHoveredAreaId(meshCode), []);
   const handleGuidedObjectSelect = useCallback((kind: "building" | "road", objectId: string) => {
@@ -359,6 +359,7 @@ export function GuidedSpatialWorkspace({
     data-guided-story={state.guidedStory}
     data-area-id={selectedAreaId}
     data-area-label={areaLabel}
+    data-hovered-area-id={hoveredAreaId ?? "none"}
     data-area-geometry-hash={selectedCatalogItem?.area_geometry_sha256 ?? "pending"}
     data-context-hash={selectedCatalogItem?.context_sha256 ?? "pending"}
     data-source-hash={catalog?.source.sha256 ?? "pending"}
@@ -425,12 +426,8 @@ export function GuidedSpatialWorkspace({
       <aside className="guided-story-panel" aria-labelledby="guided-story-title">
         {catalogError && <p role="alert" className="guided-error">{catalogError}</p>}
         {state.guidedStory === "intro" && <div className="guided-intro">
-          <span className="guided-eyebrow">GUIDED STORY</span>
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>舞鶴の地域を、地図からたどる。</h1>
           <p>候補を選び、PLATEAUで街の形を見て、現地で確かめる場所まで進みます。</p>
-          <div className="guided-intro-sequence" aria-label="体験の流れ">
-            <span>01 候補を選ぶ</span><span>02 街の形を見る</span><span>03 確認場所を知る</span>
-          </div>
           <button type="button" className="guided-primary" onClick={() => onStoryChange("find")}>デモを始める</button>
         </div>}
         {state.guidedStory === "find" && <>

@@ -128,19 +128,6 @@
   line-height: 1.8;
 }
 
-.guided-intro-sequence {
-  display: grid;
-  margin-bottom: 28px;
-  border-top: 1px solid var(--cg-line);
-}
-
-.guided-intro-sequence span {
-  padding: 9px 0;
-  border-bottom: 1px solid var(--cg-line);
-  color: var(--cg-ink-soft);
-  font: 700 10px/1.4 var(--cg-mono);
-}
-
 .guided-area-list { display: grid; margin-top: 20px; gap: 7px; }
 
 .guided-area-list button {
