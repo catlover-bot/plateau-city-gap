@@ -1,0 +1,2175 @@
+{
+  "schema_version": "citygap.public-product-language-checkpoint@1",
+  "generated_at": "2026-09-01T20:30:15.592Z",
+  "branch": "feat/public-product-language-section-v1",
+  "baseline_commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60",
+  "current_commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c",
+  "urls": {
+    "before": "http://127.0.0.1:4182/plateau-city-gap/",
+    "after": "http://127.0.0.1:4180/plateau-city-gap/"
+  },
+  "conditions": {
+    "browser": "Playwright Chromium",
+    "reduced_motion": true,
+    "screenshots_are_production_build_previews": true,
+    "human_aesthetic_judgment": "not performed; counts are diagnostic evidence only",
+    "urban_section_decision": "C / advanced_only; Public section screenshots are not applicable"
+  },
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1
+    },
+    "compact": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "dpr": 1
+    },
+    "dpr2": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    }
+  },
+  "journey": {
+    "primary_clicks": 5
+  },
+  "screenshots": [
+    {
+      "filename": "before-01-landing-desktop.png",
+      "source": "before",
+      "scene": "landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 689614,
+      "sha256": "3b29e8a7c5fa58f1d5b5858dfda313800568397ef2eed7bb3614f6729291d520",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-02-place-desktop.png",
+      "source": "before",
+      "scene": "place",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 710848,
+      "sha256": "7813022ea0b4e99000aecefb84e4f3f18a878d3372fef619551b2af5d15b2f72",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-03-radius-desktop.png",
+      "source": "before",
+      "scene": "radius",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 493703,
+      "sha256": "f21ec56937f94f6126b9c07fe0901a18ee5d464267f43ab8abb59985a3ba7c45",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-04-population-desktop.png",
+      "source": "before",
+      "scene": "population-story",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 478053,
+      "sha256": "d90ece54b24943d20a4c91dafee21e42687899c4ac8520081afda64919b4cd3f",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-05-building-desktop.png",
+      "source": "before",
+      "scene": "building-story",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 604685,
+      "sha256": "22f6761dc6b76502c5e24a366f4edb4738025ce34c8305621b0f59673ccbd253",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-06-unknown-desktop.png",
+      "source": "before",
+      "scene": "unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 622230,
+      "sha256": "862e16a976f630e015461362a965c5b832fc19e7518a00465136417f7f43e9c8",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "before-07-road-target-desktop.png",
+      "source": "before",
+      "scene": "road-target",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 290687,
+      "sha256": "03734624caf1983e6bba6641b85930954fd3b8f1576dbb1428aaf0fa58bf2bcd",
+      "url": "http://127.0.0.1:4182/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "commit": "a365dc04ccbcfad020d8f6ff2cd63db6e7865d60"
+    },
+    {
+      "filename": "after-01-landing-desktop.png",
+      "source": "after",
+      "scene": "landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 683217,
+      "sha256": "86bb06e8a72bd5ce41a66bbf2a552ce555bae3859f384a4a905ee383f910e2f4",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-02-place-desktop.png",
+      "source": "after",
+      "scene": "place",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 703426,
+      "sha256": "19b3abf72cb843d658224a77d39033ecd6d976357a76635365be1fb64582cb7e",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-03-radius-desktop.png",
+      "source": "after",
+      "scene": "radius",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 484262,
+      "sha256": "ae827cd3e84f33e663c08051b07bbf53a93d1879e07d93e4d0db7d5288e3077a",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-04-population-desktop.png",
+      "source": "after",
+      "scene": "population-story",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 461247,
+      "sha256": "067d4da38059a8bb4deefb0957ab17177c5ea1203253c8bce9095b612cad6957",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-05-building-desktop.png",
+      "source": "after",
+      "scene": "building-story",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 588058,
+      "sha256": "577154f49a3d56efc537c889f6ecd64391b116310e13a4817e2420ce26eecb48",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-06-unknown-desktop.png",
+      "source": "after",
+      "scene": "unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 612758,
+      "sha256": "0472295a728046e6fed6f000745694b4d08ceca6a8157fd4850f1d11883c067f",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-07-road-target-desktop.png",
+      "source": "after",
+      "scene": "road-target",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 253127,
+      "sha256": "8c0fa49c2fd6e9977c4adcc3289a9e4e48cbb492bac4b430a2d1165b6e6d897e",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-04-population-compact.png",
+      "source": "after",
+      "scene": "population-story",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1280x720",
+      "bytes": 357416,
+      "sha256": "1dd5745b06e2753c452ec8c463ef112dffa3d3e88beaa58d89cafd862dff4b2d",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-06-unknown-compact.png",
+      "source": "after",
+      "scene": "unknown",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1280x720",
+      "bytes": 379394,
+      "sha256": "e797c55414eab027f7da8cdae03b70e4d5e0b0376d37c82e9e66965aae719460",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-07-road-target-compact.png",
+      "source": "after",
+      "scene": "road-target",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1280x720",
+      "bytes": 206175,
+      "sha256": "2eb41e86fec4e5772111c6018b3c547fee638321ea063d34bb10e9ccad2527d1",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-01-landing-mobile.png",
+      "source": "after",
+      "scene": "landing",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 161404,
+      "sha256": "d322f6951dadea1a90d1b8d756c3ab0d28987ce81d5ac34df5e49cec0349d7de",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-02-place-mobile.png",
+      "source": "after",
+      "scene": "place",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 167107,
+      "sha256": "20cd93e8c0e3f99d7d8b3f0fe3bc501a51c2c40147d0106935230bf227b47927",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-03-radius-mobile.png",
+      "source": "after",
+      "scene": "radius",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 138418,
+      "sha256": "40f38681b6171203f18657a0c0f5ff085d86ad3b48077d46638a934efffcbe7a",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-04-population-mobile.png",
+      "source": "after",
+      "scene": "population-story",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 107641,
+      "sha256": "217434d310d8a5ed5eaf26ada5302d4b315ae872fed8a4c69bbc6e9d2d28722b",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-06-unknown-mobile.png",
+      "source": "after",
+      "scene": "unknown",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 128205,
+      "sha256": "b5d65d559a57c6a347cc2c21bf24fb0da8184fe39c3ae10be81b6675e4e5d88e",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-07-road-target-mobile.png",
+      "source": "after",
+      "scene": "road-target",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "390x844",
+      "bytes": 117099,
+      "sha256": "73c2efb440f21d8330bf72c07b7d8520172300d92ffaa2bf28f3e104cd51396d",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=16.65&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-04-population-dpr2.png",
+      "source": "after",
+      "scene": "population-story",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 2,
+      "physical_dimensions": "2880x1800",
+      "bytes": 1195548,
+      "sha256": "1776c1c71a218ce7a1e559c79e6a099b352026811c87d5fde3b6e22ec2ed197c",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-06-unknown-dpr2.png",
+      "source": "after",
+      "scene": "unknown",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 2,
+      "physical_dimensions": "2880x1800",
+      "bytes": 1251107,
+      "sha256": "74e45fb041d440e4d9f125806c1d024c70c535793ea890d355c75d45889f3902",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33054&lat=35.44172&z=13.40",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-07-road-target-dpr2.png",
+      "source": "after",
+      "scene": "road-target",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 2,
+      "physical_dimensions": "2880x1800",
+      "bytes": 955729,
+      "sha256": "5d1b6675bc2f6070dcb2dc696102659a4a0d18237a44eb8949ced4b814f8f185",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=road&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33104&lat=35.44168&z=17.00&selectionType=road&selection=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&road=tran_46c7e1e5-07ba-424d-ba29-2ae7f0464a21&selectionLng=135.3309184&selectionLat=35.4416815",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-08-building-target-desktop.png",
+      "source": "after",
+      "scene": "building-target",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 252169,
+      "sha256": "70543eaf570c31a966a8ee9a440661b312177694793b607d701ec07f9a67da5a",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=building&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33070&lat=35.44169&z=17.00&selectionType=building&selection=bldg_155e6675-6981-450f-8e73-df0b43418cc2&building=bldg_155e6675-6981-450f-8e73-df0b43418cc2&selectionLng=135.3305760&selectionLat=35.4416887",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-09-facility-reference-desktop.png",
+      "source": "after",
+      "scene": "facility-target",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 713199,
+      "sha256": "796c2f52faa439121443c6b3856680d44149884c3cd559d2427a96678ad7a3d2",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=site&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33205&lat=35.44144&z=15.00&selectionType=facility&selection=medical-026&facility=medical-026&selectionLng=135.3320450&selectionLat=35.4414360",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    },
+    {
+      "filename": "after-10-area-fallback-desktop.png",
+      "source": "after",
+      "scene": "area-fallback",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "device_scale_factor": 1,
+      "physical_dimensions": "1440x900",
+      "bytes": 754201,
+      "sha256": "98a1ffa153dc0acda0d51f3dc2486f3cc804c8522cf82bef53edf59f7619fc45",
+      "url": "http://127.0.0.1:4180/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=14.30&selectionType=mesh&selection=533512661&mesh=533512661&selectionLng=135.3281250&selectionLat=35.4687500",
+      "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c"
+    }
+  ],
+  "inventories": {
+    "before": {
+      "desktop.intro": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "intro",
+        "visible_controls": 6,
+        "cards": 0,
+        "measured_surfaces": 0,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 0,
+        "headings": 1,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [
+          "任意地点"
+        ],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "地図で場所を調べる"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "desktop.place": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "place",
+        "visible_controls": 10,
+        "cards": 2,
+        "measured_surfaces": 5,
+        "nested_surfaces": 0,
+        "pills_badges": 4,
+        "shadows": 0,
+        "rounded_containers": 3,
+        "bordered_containers": 9,
+        "headings": 3,
+        "explanatory_paragraphs": 4,
+        "technical_terms": [
+          "version",
+          "起点",
+          "任意地点"
+        ],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "選んだ駅を起点にする"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.radius": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "radius",
+        "visible_controls": 11,
+        "cards": 0,
+        "measured_surfaces": 2,
+        "nested_surfaces": 0,
+        "pills_badges": 4,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 6,
+        "headings": 1,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この範囲を調べる"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "desktop.result": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 10,
+        "cards": 7,
+        "measured_surfaces": 9,
+        "nested_surfaces": 4,
+        "pills_badges": 13,
+        "shadows": 0,
+        "rounded_containers": 2,
+        "bordered_containers": 12,
+        "headings": 9,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 7
+      },
+      "desktop.building-story": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 10,
+        "cards": 7,
+        "measured_surfaces": 9,
+        "nested_surfaces": 4,
+        "pills_badges": 13,
+        "shadows": 0,
+        "rounded_containers": 2,
+        "bordered_containers": 12,
+        "headings": 9,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 7
+      },
+      "desktop.unknown": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 13,
+        "cards": 8,
+        "measured_surfaces": 10,
+        "nested_surfaces": 6,
+        "pills_badges": 8,
+        "shadows": 0,
+        "rounded_containers": 4,
+        "bordered_containers": 13,
+        "headings": 5,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 10
+      },
+      "desktop.road-target": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 5,
+        "shadows": 0,
+        "rounded_containers": 2,
+        "bordered_containers": 8,
+        "headings": 3,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      }
+    },
+    "after": {
+      "desktop.intro": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "intro",
+        "visible_controls": 6,
+        "cards": 0,
+        "measured_surfaces": 0,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 0,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "地図で場所を調べる"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "desktop.place": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "place",
+        "visible_controls": 10,
+        "cards": 2,
+        "measured_surfaces": 4,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 4,
+        "headings": 3,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この駅を選ぶ"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.radius": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "radius",
+        "visible_controls": 11,
+        "cards": 0,
+        "measured_surfaces": 2,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 2,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この範囲を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "desktop.result": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 11,
+        "cards": 8,
+        "measured_surfaces": 9,
+        "nested_surfaces": 5,
+        "pills_badges": 5,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 9,
+        "headings": 9,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.building-story": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 11,
+        "cards": 8,
+        "measured_surfaces": 9,
+        "nested_surfaces": 5,
+        "pills_badges": 5,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 9,
+        "headings": 9,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.unknown": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 13,
+        "cards": 8,
+        "measured_surfaces": 12,
+        "nested_surfaces": 7,
+        "pills_badges": 2,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 12,
+        "headings": 6,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 8
+      },
+      "desktop.road-target": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "compact.place": {
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "device_pixel_ratio": 1
+        },
+        "step": "place",
+        "visible_controls": 10,
+        "cards": 2,
+        "measured_surfaces": 4,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 4,
+        "headings": 3,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この駅を選ぶ"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.3,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "compact.radius": {
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "device_pixel_ratio": 1
+        },
+        "step": "radius",
+        "visible_controls": 11,
+        "cards": 0,
+        "measured_surfaces": 2,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 2,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この範囲を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.3,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "compact.result": {
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 10,
+        "cards": 5,
+        "measured_surfaces": 7,
+        "nested_surfaces": 3,
+        "pills_badges": 4,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 7,
+        "headings": 6,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.3,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "compact.unknown": {
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 12,
+        "cards": 7,
+        "measured_surfaces": 9,
+        "nested_surfaces": 5,
+        "pills_badges": 2,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 9,
+        "headings": 3,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.3,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 7
+      },
+      "compact.road-target": {
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.3,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "mobile.intro": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "intro",
+        "visible_controls": 5,
+        "cards": 0,
+        "measured_surfaces": 0,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 0,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "地図で場所を調べる"
+        ],
+        "map_share_percent": 44.5,
+        "panel_share_percent": 55.5,
+        "map_occlusion_percent": 2.8,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 0
+      },
+      "mobile.place": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "place",
+        "visible_controls": 8,
+        "cards": 2,
+        "measured_surfaces": 4,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 4,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この駅を選ぶ"
+        ],
+        "map_share_percent": 44.5,
+        "panel_share_percent": 55.5,
+        "map_occlusion_percent": 2.8,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 0
+      },
+      "mobile.radius": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "radius",
+        "visible_controls": 10,
+        "cards": 0,
+        "measured_surfaces": 2,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 2,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この範囲を見る"
+        ],
+        "map_share_percent": 44.5,
+        "panel_share_percent": 55.5,
+        "map_occlusion_percent": 2.8,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 0
+      },
+      "mobile.result": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 8,
+        "cards": 5,
+        "measured_surfaces": 7,
+        "nested_surfaces": 3,
+        "pills_badges": 4,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 7,
+        "headings": 6,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 31.8,
+        "panel_share_percent": 68.2,
+        "map_occlusion_percent": 3.9,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 1
+      },
+      "mobile.unknown": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "result",
+        "visible_controls": 11,
+        "cards": 9,
+        "measured_surfaces": 10,
+        "nested_surfaces": 6,
+        "pills_badges": 3,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 10,
+        "headings": 5,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 31.8,
+        "panel_share_percent": 68.2,
+        "map_occlusion_percent": 3.9,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 0
+      },
+      "mobile.road-target": {
+        "viewport": {
+          "width": 390,
+          "height": 844,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 6,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 31.8,
+        "panel_share_percent": 68.2,
+        "map_occlusion_percent": 3.9,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 1
+      },
+      "dpr2.place": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 2
+        },
+        "step": "place",
+        "visible_controls": 10,
+        "cards": 2,
+        "measured_surfaces": 4,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 4,
+        "headings": 3,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この駅を選ぶ"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "dpr2.radius": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 2
+        },
+        "step": "radius",
+        "visible_controls": 11,
+        "cards": 0,
+        "measured_surfaces": 2,
+        "nested_surfaces": 0,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 2,
+        "headings": 1,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "この範囲を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 4
+      },
+      "dpr2.result": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 2
+        },
+        "step": "result",
+        "visible_controls": 11,
+        "cards": 8,
+        "measured_surfaces": 9,
+        "nested_surfaces": 5,
+        "pills_badges": 5,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 9,
+        "headings": 9,
+        "explanatory_paragraphs": 2,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "dpr2.unknown": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 2
+        },
+        "step": "result",
+        "visible_controls": 13,
+        "cards": 8,
+        "measured_surfaces": 12,
+        "nested_surfaces": 7,
+        "pills_badges": 2,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 12,
+        "headings": 6,
+        "explanatory_paragraphs": 3,
+        "technical_terms": [],
+        "primary_ctas": 1,
+        "primary_cta_labels": [
+          "確認する場所を見る"
+        ],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 8
+      },
+      "dpr2.road-target": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 2
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.building-target": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.facility-target": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      },
+      "desktop.fallback": {
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "device_pixel_ratio": 1
+        },
+        "step": "target",
+        "visible_controls": 7,
+        "cards": 1,
+        "measured_surfaces": 5,
+        "nested_surfaces": 1,
+        "pills_badges": 0,
+        "shadows": 0,
+        "rounded_containers": 0,
+        "bordered_containers": 5,
+        "headings": 3,
+        "explanatory_paragraphs": 1,
+        "technical_terms": [],
+        "primary_ctas": 0,
+        "primary_cta_labels": [],
+        "map_share_percent": 67.9,
+        "panel_share_percent": 32.1,
+        "map_occlusion_percent": 0.2,
+        "map_panel_overlap_px2": 0,
+        "horizontal_overflow_px": 0,
+        "section_count": 0,
+        "section_labels": 0,
+        "section_legend_items": 0,
+        "touch_targets_under_44px": 5
+      }
+    }
+  },
+  "comparisons": {
+    "desktop.intro": {
+      "visible_controls": {
+        "before": 6,
+        "after": 6,
+        "delta": 0
+      },
+      "cards": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "measured_surfaces": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "nested_surfaces": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "pills_badges": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "bordered_containers": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "headings": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 2,
+        "after": 1,
+        "delta": -1
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.place": {
+      "visible_controls": {
+        "before": 10,
+        "after": 10,
+        "delta": 0
+      },
+      "cards": {
+        "before": 2,
+        "after": 2,
+        "delta": 0
+      },
+      "measured_surfaces": {
+        "before": 5,
+        "after": 4,
+        "delta": -1
+      },
+      "nested_surfaces": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "pills_badges": {
+        "before": 4,
+        "after": 0,
+        "delta": -4
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 3,
+        "after": 0,
+        "delta": -3
+      },
+      "bordered_containers": {
+        "before": 9,
+        "after": 4,
+        "delta": -5
+      },
+      "headings": {
+        "before": 3,
+        "after": 3,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 4,
+        "after": 3,
+        "delta": -1
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.radius": {
+      "visible_controls": {
+        "before": 11,
+        "after": 11,
+        "delta": 0
+      },
+      "cards": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "measured_surfaces": {
+        "before": 2,
+        "after": 2,
+        "delta": 0
+      },
+      "nested_surfaces": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "pills_badges": {
+        "before": 4,
+        "after": 0,
+        "delta": -4
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "bordered_containers": {
+        "before": 6,
+        "after": 2,
+        "delta": -4
+      },
+      "headings": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 2,
+        "after": 1,
+        "delta": -1
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.result": {
+      "visible_controls": {
+        "before": 10,
+        "after": 11,
+        "delta": 1
+      },
+      "cards": {
+        "before": 7,
+        "after": 8,
+        "delta": 1
+      },
+      "measured_surfaces": {
+        "before": 9,
+        "after": 9,
+        "delta": 0
+      },
+      "nested_surfaces": {
+        "before": 4,
+        "after": 5,
+        "delta": 1
+      },
+      "pills_badges": {
+        "before": 13,
+        "after": 5,
+        "delta": -8
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 2,
+        "after": 0,
+        "delta": -2
+      },
+      "bordered_containers": {
+        "before": 12,
+        "after": 9,
+        "delta": -3
+      },
+      "headings": {
+        "before": 9,
+        "after": 9,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 3,
+        "after": 2,
+        "delta": -1
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.building-story": {
+      "visible_controls": {
+        "before": 10,
+        "after": 11,
+        "delta": 1
+      },
+      "cards": {
+        "before": 7,
+        "after": 8,
+        "delta": 1
+      },
+      "measured_surfaces": {
+        "before": 9,
+        "after": 9,
+        "delta": 0
+      },
+      "nested_surfaces": {
+        "before": 4,
+        "after": 5,
+        "delta": 1
+      },
+      "pills_badges": {
+        "before": 13,
+        "after": 5,
+        "delta": -8
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 2,
+        "after": 0,
+        "delta": -2
+      },
+      "bordered_containers": {
+        "before": 12,
+        "after": 9,
+        "delta": -3
+      },
+      "headings": {
+        "before": 9,
+        "after": 9,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 3,
+        "after": 2,
+        "delta": -1
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.unknown": {
+      "visible_controls": {
+        "before": 13,
+        "after": 13,
+        "delta": 0
+      },
+      "cards": {
+        "before": 8,
+        "after": 8,
+        "delta": 0
+      },
+      "measured_surfaces": {
+        "before": 10,
+        "after": 12,
+        "delta": 2
+      },
+      "nested_surfaces": {
+        "before": 6,
+        "after": 7,
+        "delta": 1
+      },
+      "pills_badges": {
+        "before": 8,
+        "after": 2,
+        "delta": -6
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 4,
+        "after": 0,
+        "delta": -4
+      },
+      "bordered_containers": {
+        "before": 13,
+        "after": 12,
+        "delta": -1
+      },
+      "headings": {
+        "before": 5,
+        "after": 6,
+        "delta": 1
+      },
+      "explanatory_paragraphs": {
+        "before": 3,
+        "after": 3,
+        "delta": 0
+      },
+      "primary_ctas": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    },
+    "desktop.road-target": {
+      "visible_controls": {
+        "before": 7,
+        "after": 7,
+        "delta": 0
+      },
+      "cards": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "measured_surfaces": {
+        "before": 5,
+        "after": 5,
+        "delta": 0
+      },
+      "nested_surfaces": {
+        "before": 1,
+        "after": 1,
+        "delta": 0
+      },
+      "pills_badges": {
+        "before": 5,
+        "after": 0,
+        "delta": -5
+      },
+      "shadows": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "rounded_containers": {
+        "before": 2,
+        "after": 0,
+        "delta": -2
+      },
+      "bordered_containers": {
+        "before": 8,
+        "after": 5,
+        "delta": -3
+      },
+      "headings": {
+        "before": 3,
+        "after": 3,
+        "delta": 0
+      },
+      "explanatory_paragraphs": {
+        "before": 3,
+        "after": 1,
+        "delta": -2
+      },
+      "primary_ctas": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "map_share_percent": {
+        "before": 67.9,
+        "after": 67.9,
+        "delta": 0
+      },
+      "map_occlusion_percent": {
+        "before": 0.2,
+        "after": 0.2,
+        "delta": 0
+      },
+      "horizontal_overflow_px": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_labels": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      },
+      "section_legend_items": {
+        "before": 0,
+        "after": 0,
+        "delta": 0
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "label": "before-core",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-core",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-compact",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-mobile",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-dpr2",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-building-target",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-facility-target",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-fallback",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    },
+    {
+      "label": "after-click-count",
+      "page_errors": [],
+      "failed_same_origin_requests": [],
+      "error_responses": [],
+      "headless_shader_warning_count": 0
+    }
+  ],
+  "failures": [],
+  "passed": true
+}

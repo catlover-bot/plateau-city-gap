@@ -2,7 +2,7 @@
 
 Active goal: `public-product-language-and-section-v1`
 
-Current milestone: H4 Public map presentation complete; H5 automated checkpoint next
+Current milestone: H5 local automated checkpoint complete; feature-branch remote CI pending
 
 Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
 
@@ -27,6 +27,7 @@ Checkpoint state:
 - H2 hierarchy: one-line stage status, reduced cards/badges/rounding, neutral Unknown rows, and an un-nested target checklist
 - H3 section boundary: `advanced_only`; no section in Public, no deletion from M3 or Advanced
 - H4 presentation: consistent Area/result/target captions, 12–13px supporting text, 44px story actions, and unchanged 67.9/32.1 desktop map/panel ratio
+- H5 evidence: same-protocol before/after inventory, 29 comparison screenshots, 19 cartographic screenshots, four required viewport classes including DPR 2, and a blank human-review sheet
 
 Core value hypothesis:
 

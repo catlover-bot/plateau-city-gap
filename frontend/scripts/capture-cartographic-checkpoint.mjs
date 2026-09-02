@@ -332,7 +332,7 @@ async function startStationArea(page, radiusLabel) {
 async function startMapPointArea(page, radiusLabel = "800m") {
   await page.getByRole("button", { name: "地図で場所を調べる", exact: true }).click();
   await waitForStep(page, "place");
-  await page.getByRole("button", { name: "地図中心を起点にする", exact: true }).click();
+  await page.getByRole("button", { name: "この場所を選ぶ", exact: true }).click();
   await waitForStep(page, "radius");
   await page.getByRole("button", { name: radiusLabel, exact: true }).click();
   await page.getByRole("button", { name: "この範囲を見る", exact: true }).click();

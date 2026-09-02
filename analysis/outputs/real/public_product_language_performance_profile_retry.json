@@ -1,0 +1,3615 @@
+{
+  "schema_version": "citygap.cartographic-performance-profile@1",
+  "generated_at": "2026-09-02T07:27:50.321Z",
+  "branch": "feat/public-product-language-section-v1",
+  "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c",
+  "base_url": "http://127.0.0.1:4180/plateau-city-gap/",
+  "sample_count": 5,
+  "conditions": {
+    "browser_context_per_sample": "fresh",
+    "reduced_motion": true,
+    "service_worker": "blocked",
+    "external_basemap": "intentionally blocked so local cartographic readiness is measured under the documented degraded state",
+    "fmr_definition": "navigation start to the first Public intro frame that has completed two requestAnimationFrame callbacks",
+    "area_800_ready_definition": "800m radius selection to the semantically ready Area map followed by two requestAnimationFrame callbacks",
+    "cold_definition": "first path activation in a fresh page after the default Area result reaches its existing semantic local-map ready gate",
+    "warm_definition": "second activation of the same path in the same page with the same semantic ready gate",
+    "ready_definition": {
+      "story": "requested story active, public MapLibre sources ready, and first thematic building feature rendered",
+      "exact_target": "target step active, exact source geometry in public-target, MapLibre source ready, and exact feature rendered",
+      "facility_reference": "target step active, registered-position marker visible, and essential local Area sources ready",
+      "compositor": "two animation frames after ready; reported separately"
+    }
+  },
+  "assets": {
+    "buildings": {
+      "path": "plateau_buildings.geojson",
+      "uncompressed_bytes": 3243343,
+      "gzip_bytes": 643914,
+      "feature_count": 4898,
+      "parse_samples_ms": [
+        49.817,
+        61.145,
+        75.785,
+        116.504,
+        86.177
+      ],
+      "parse_median_ms": 75.785
+    },
+    "planning": {
+      "path": "plateau_planning.geojson",
+      "uncompressed_bytes": 164707,
+      "gzip_bytes": 48501,
+      "feature_count": 55,
+      "parse_samples_ms": [
+        5.5,
+        5.4,
+        6.109,
+        4.483,
+        6.504
+      ],
+      "parse_median_ms": 5.5
+    },
+    "roads": {
+      "path": "plateau_roads.geojson",
+      "uncompressed_bytes": 1416995,
+      "gzip_bytes": 302846,
+      "feature_count": 1686,
+      "parse_samples_ms": [
+        44.715,
+        53.944,
+        54.015,
+        42.181,
+        35.39
+      ],
+      "parse_median_ms": 44.715
+    },
+    "targets": {
+      "path": "plateau_targets.geojson",
+      "uncompressed_bytes": 3246,
+      "gzip_bytes": 1324,
+      "feature_count": 2,
+      "parse_samples_ms": [
+        0.183,
+        0.1,
+        0.129,
+        0.139,
+        0.116
+      ],
+      "parse_median_ms": 0.129
+    },
+    "manifest": {
+      "path": "manifest.json",
+      "uncompressed_bytes": 4937,
+      "gzip_bytes": 1305,
+      "feature_count": null,
+      "parse_samples_ms": [
+        0.199,
+        0.081,
+        0.054,
+        0.05,
+        0.049
+      ],
+      "parse_median_ms": 0.054
+    }
+  },
+  "initial_medians": {
+    "fmr_ms": 1549.8,
+    "area_800_ready_ms": 135.8
+  },
+  "medians": {
+    "cold": {
+      "building_use": {
+        "ready_ms": 2366.9,
+        "compositor_stable_ms": 2387.6,
+        "first_source_ready_ms": 1315.3,
+        "map_idle_ms": 7.9,
+        "set_data_count": 2,
+        "set_data_feature_count": 4899,
+        "paint_layout_filter_count": 4,
+        "map_recreation_count": 0
+      },
+      "building": {
+        "ready_ms": 1063.9,
+        "compositor_stable_ms": 1091.4,
+        "first_source_ready_ms": 88.4,
+        "camera_complete_ms": 84.2,
+        "map_idle_ms": 899.5,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 5,
+        "map_recreation_count": 0
+      },
+      "facility": {
+        "ready_ms": 1081.2,
+        "compositor_stable_ms": 1100.6,
+        "first_source_ready_ms": 112.4,
+        "camera_complete_ms": 107.6,
+        "map_idle_ms": 901,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 4,
+        "map_recreation_count": 0
+      },
+      "road": {
+        "ready_ms": 928,
+        "compositor_stable_ms": 951.8,
+        "first_source_ready_ms": 87.7,
+        "camera_complete_ms": 82.6,
+        "map_idle_ms": 779,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 5,
+        "map_recreation_count": 0
+      }
+    },
+    "warm": {
+      "building_use": {
+        "ready_ms": 1336.3,
+        "compositor_stable_ms": 1716.3,
+        "first_source_ready_ms": 77.2,
+        "map_idle_ms": 1287.6,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 4,
+        "map_recreation_count": 0
+      },
+      "building": {
+        "ready_ms": 1016.1,
+        "compositor_stable_ms": 1049.1,
+        "first_source_ready_ms": 112.6,
+        "camera_complete_ms": 102.7,
+        "map_idle_ms": 833.3,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 5,
+        "map_recreation_count": 0
+      },
+      "facility": {
+        "ready_ms": 1022.1,
+        "compositor_stable_ms": 1032.8,
+        "first_source_ready_ms": 94.1,
+        "camera_complete_ms": 90.9,
+        "map_idle_ms": 866.3,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 4,
+        "map_recreation_count": 0
+      },
+      "road": {
+        "ready_ms": 961,
+        "compositor_stable_ms": 966,
+        "first_source_ready_ms": 87.8,
+        "camera_complete_ms": 84.4,
+        "map_idle_ms": 792.9,
+        "set_data_count": 0,
+        "set_data_feature_count": 0,
+        "paint_layout_filter_count": 5,
+        "map_recreation_count": 0
+      }
+    }
+  },
+  "samples": [
+    {
+      "sample": 1,
+      "fmr_ms": 3628.8,
+      "area_800_ready_ms": 101.1,
+      "cold": {
+        "building_use": {
+          "ready_ms": 13578.9,
+          "compositor_stable_ms": 13607.9,
+          "first_source_ready_ms": 8014.6,
+          "camera_complete_ms": null,
+          "map_idle_ms": 4358.2,
+          "readiness_attribute_ms": 3406.7,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 14727.599999964237,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 3405.899999976158
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 14727.699999988079,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 3406
+            },
+            {
+              "method": "setData",
+              "at_ms": 15941.799999952316,
+              "id": "public-buildings",
+              "completed_at_ms": 15941.699999988079,
+              "feature_count": 4898,
+              "started_at_ms": 15941.599999964237,
+              "relative_ms": 4620.099999964237
+            },
+            {
+              "method": "setData",
+              "at_ms": 15941.799999952316,
+              "id": "public-target",
+              "completed_at_ms": 15941.799999952316,
+              "feature_count": 1,
+              "started_at_ms": 15941.799999952316,
+              "relative_ms": 4620.099999964237
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15941.799999952316,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 4620.099999964237
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15941.899999976158,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 4620.199999988079
+            }
+          ],
+          "event_count": 46,
+          "mutation_count": 107,
+          "browser_metric_delta": {
+            "Nodes": -13,
+            "LayoutCount": 2,
+            "RecalcStyleCount": 7,
+            "ScriptDuration": 0.382621,
+            "TaskDuration": 9.183893,
+            "JSHeapUsedSize": 8282208
+          }
+        },
+        "road": {
+          "ready_ms": 1088.6,
+          "compositor_stable_ms": 1103.7,
+          "first_source_ready_ms": 122.7,
+          "camera_complete_ms": 118.8,
+          "map_idle_ms": null,
+          "readiness_attribute_ms": 119.1,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 25425,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 116.10000002384186
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 25425.099999964237,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 116.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 25425.599999964237,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 116.69999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 25425.69999998808,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 116.80000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 25425.69999998808,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 116.80000001192093
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 25426.5,
+              "id": null,
+              "property": null,
+              "relative_ms": 117.60000002384186
+            }
+          ],
+          "event_count": 11,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.080565,
+            "TaskDuration": 1.013463,
+            "JSHeapUsedSize": 4417192
+          }
+        },
+        "building": {
+          "ready_ms": 1059.2,
+          "compositor_stable_ms": 1091.4,
+          "first_source_ready_ms": 87.8,
+          "camera_complete_ms": 83.8,
+          "map_idle_ms": 885.7,
+          "readiness_attribute_ms": 83.9,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31169,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 81.10000002384186
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31169.099999964237,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 81.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31169.5,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 81.60000002384186
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31169.799999952316,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 81.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31169.799999952316,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 81.89999997615814
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 31170.299999952316,
+              "id": null,
+              "property": null,
+              "relative_ms": 82.39999997615814
+            }
+          ],
+          "event_count": 59,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.128227,
+            "TaskDuration": 1.002541,
+            "JSHeapUsedSize": 8253412
+          }
+        },
+        "facility": {
+          "ready_ms": 3310.9,
+          "compositor_stable_ms": 3327.6,
+          "first_source_ready_ms": 1187.9,
+          "camera_complete_ms": 1185.5,
+          "map_idle_ms": 3164.2,
+          "readiness_attribute_ms": 3296.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 35319,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 1184.300000011921
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 35319,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 1184.300000011921
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 35319.09999996424,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 1184.3999999761581
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 35319.19999998808,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 1184.5
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 35319.39999997616,
+              "id": null,
+              "property": null,
+              "relative_ms": 1184.699999988079
+            }
+          ],
+          "event_count": 55,
+          "mutation_count": 25,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.841473,
+            "TaskDuration": 2.945124,
+            "JSHeapUsedSize": 7711100
+          }
+        }
+      },
+      "warm": {
+        "building_use": {
+          "ready_ms": 1712.1,
+          "compositor_stable_ms": 1725.6,
+          "first_source_ready_ms": 86.2,
+          "camera_complete_ms": null,
+          "map_idle_ms": 1287.6,
+          "readiness_attribute_ms": 80.9,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 40349.59999996424,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 79.59999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 40349.69999998808,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 79.69999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 40349.799999952316,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 79.79999995231628
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 40349.799999952316,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 79.79999995231628
+            }
+          ],
+          "event_count": 13,
+          "mutation_count": 11,
+          "browser_metric_delta": {
+            "Nodes": 16,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 5,
+            "ScriptDuration": 0.056282,
+            "TaskDuration": 1.656703,
+            "JSHeapUsedSize": 5808396
+          }
+        },
+        "road": {
+          "ready_ms": 940.6,
+          "compositor_stable_ms": 961.5,
+          "first_source_ready_ms": 93.6,
+          "camera_complete_ms": 89.7,
+          "map_idle_ms": 737.1,
+          "readiness_attribute_ms": 89.8,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 43071.19999998808,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 87.30000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 43071.299999952316,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 87.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 43071.799999952316,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 87.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 43071.89999997616,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 88
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 43072,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 88.10000002384186
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 43072.39999997616,
+              "id": null,
+              "property": null,
+              "relative_ms": 88.5
+            }
+          ],
+          "event_count": 32,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -245,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.093508,
+            "TaskDuration": 0.899779,
+            "JSHeapUsedSize": -11252796
+          }
+        },
+        "building": {
+          "ready_ms": 796.1,
+          "compositor_stable_ms": 816.2,
+          "first_source_ready_ms": 52.8,
+          "camera_complete_ms": 47.9,
+          "map_idle_ms": 607.2,
+          "readiness_attribute_ms": 48,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 45408.299999952316,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 45.59999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 45408.39999997616,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 45.69999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 45408.799999952316,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 46.09999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 45408.89999997616,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 46.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 45408.89999997616,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 46.19999998807907
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 45409.299999952316,
+              "id": null,
+              "property": null,
+              "relative_ms": 46.59999996423721
+            }
+          ],
+          "event_count": 32,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.071138,
+            "TaskDuration": 0.764732,
+            "JSHeapUsedSize": 5363296
+          }
+        },
+        "facility": {
+          "ready_ms": 1175.3,
+          "compositor_stable_ms": 1207.3,
+          "first_source_ready_ms": 202.1,
+          "camera_complete_ms": 197.9,
+          "map_idle_ms": 912.7,
+          "readiness_attribute_ms": 198.2,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 49016.799999952316,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 195.5999999642372
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 49016.89999997616,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 195.69999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 49017.39999997616,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 196.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 49017.39999997616,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 196.19999998807907
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 49017.59999996424,
+              "id": null,
+              "property": null,
+              "relative_ms": 196.39999997615814
+            }
+          ],
+          "event_count": 16,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.212718,
+            "TaskDuration": 1.04224,
+            "JSHeapUsedSize": 3935932
+          }
+        }
+      },
+      "network": {
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "start_time_ms": 9905.799999952316,
+            "response_start_ms": 9965.399999976158,
+            "response_end_ms": 9967.5,
+            "duration_ms": 61.700000047683716,
+            "transfer_size": 1605,
+            "encoded_body_size": 1305,
+            "decoded_body_size": 4937
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "start_time_ms": 10558.299999952316,
+            "response_start_ms": 10566.299999952316,
+            "response_end_ms": 10569.599999964237,
+            "duration_ms": 11.300000011920929,
+            "transfer_size": 3546,
+            "encoded_body_size": 3246,
+            "decoded_body_size": 3246
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "start_time_ms": 11379.799999952316,
+            "response_start_ms": 11441.599999964237,
+            "response_end_ms": 14951.399999976158,
+            "duration_ms": 3571.600000023842,
+            "transfer_size": 3243643,
+            "encoded_body_size": 3243343,
+            "decoded_body_size": 3243343
+          }
+        ],
+        "fetches": [
+          {
+            "url": "/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 9904.5,
+            "headers_at_ms": 10083.199999988079,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "started_at_ms": 10557.599999964237,
+            "headers_at_ms": 10581.599999964237,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "started_at_ms": 11378.899999976158,
+            "headers_at_ms": 11699.5,
+            "status": 200
+          }
+        ],
+        "json": [
+          {
+            "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 10083.399999976158,
+            "completed_at_ms": 10557.399999976158,
+            "ok": true
+          }
+        ],
+        "duplicate_fetches": []
+      },
+      "page_errors": [],
+      "request_failures": [],
+      "basemap_failures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ]
+    },
+    {
+      "sample": 2,
+      "fmr_ms": 1564.8,
+      "area_800_ready_ms": 135.8,
+      "cold": {
+        "building_use": {
+          "ready_ms": 2366.9,
+          "compositor_stable_ms": 2387.6,
+          "first_source_ready_ms": 1378.5,
+          "camera_complete_ms": null,
+          "map_idle_ms": 5.2,
+          "readiness_attribute_ms": 226.2,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5501.699999988079,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 225.19999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5501.800000011921,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 225.30000001192093
+            },
+            {
+              "method": "setData",
+              "at_ms": 6184.300000011921,
+              "id": "public-buildings",
+              "completed_at_ms": 6184.300000011921,
+              "feature_count": 4898,
+              "started_at_ms": 6184.100000023842,
+              "relative_ms": 907.8000000119209
+            },
+            {
+              "method": "setData",
+              "at_ms": 6184.300000011921,
+              "id": "public-target",
+              "completed_at_ms": 6184.300000011921,
+              "feature_count": 1,
+              "started_at_ms": 6184.300000011921,
+              "relative_ms": 907.8000000119209
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6184.300000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 907.8000000119209
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6184.400000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 907.9000000357628
+            }
+          ],
+          "event_count": 47,
+          "mutation_count": 27,
+          "browser_metric_delta": {
+            "Nodes": -24,
+            "LayoutCount": 2,
+            "RecalcStyleCount": 7,
+            "ScriptDuration": 0.169954,
+            "TaskDuration": 2.318665,
+            "JSHeapUsedSize": 4222324
+          }
+        },
+        "road": {
+          "ready_ms": 938,
+          "compositor_stable_ms": 951.8,
+          "first_source_ready_ms": 91.1,
+          "camera_complete_ms": 86.5,
+          "map_idle_ms": 801.9,
+          "readiness_attribute_ms": 86.7,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7844.900000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 82.60000002384186
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7845.100000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 82.80000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7845.699999988079,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 83.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7845.900000035763,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 83.60000002384186
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7846,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 83.69999998807907
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 7847.300000011921,
+              "id": null,
+              "property": null,
+              "relative_ms": 85
+            }
+          ],
+          "event_count": 57,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.124525,
+            "TaskDuration": 0.917895,
+            "JSHeapUsedSize": 7756920
+          }
+        },
+        "building": {
+          "ready_ms": 1063.9,
+          "compositor_stable_ms": 1074.5,
+          "first_source_ready_ms": 88.4,
+          "camera_complete_ms": 84.2,
+          "map_idle_ms": 924.7,
+          "readiness_attribute_ms": 84.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 11885.800000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 79.60000002384186
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 11885.900000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 79.70000004768372
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11886.800000011921,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 80.60000002384186
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11887,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 80.80000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11887.199999988079,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 81
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 11888.699999988079,
+              "id": null,
+              "property": null,
+              "relative_ms": 82.5
+            }
+          ],
+          "event_count": 33,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.09703,
+            "TaskDuration": 1.012407,
+            "JSHeapUsedSize": 6301632
+          }
+        },
+        "facility": {
+          "ready_ms": 1407.8,
+          "compositor_stable_ms": 1430.8,
+          "first_source_ready_ms": 121.8,
+          "camera_complete_ms": 115.4,
+          "map_idle_ms": 1302.8,
+          "readiness_attribute_ms": 115.8,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15396.5,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 111.39999997615814
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15396.600000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 111.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 15397.300000011921,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 112.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 15397.400000035763,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 112.30000001192093
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 15397.699999988079,
+              "id": null,
+              "property": null,
+              "relative_ms": 112.59999996423721
+            }
+          ],
+          "event_count": 38,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.150843,
+            "TaskDuration": 1.412608,
+            "JSHeapUsedSize": -5311588
+          }
+        }
+      },
+      "warm": {
+        "building_use": {
+          "ready_ms": 1261.1,
+          "compositor_stable_ms": 2088.2,
+          "first_source_ready_ms": 77.2,
+          "camera_complete_ms": null,
+          "map_idle_ms": 1658.4,
+          "readiness_attribute_ms": 71.1,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 18654.900000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 70
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 18654.900000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 70
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 18654.900000035763,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 70
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 18654.900000035763,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 70
+            }
+          ],
+          "event_count": 14,
+          "mutation_count": 11,
+          "browser_metric_delta": {
+            "Nodes": 16,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 5,
+            "ScriptDuration": 0.07729,
+            "TaskDuration": 2.06974,
+            "JSHeapUsedSize": -6651796
+          }
+        },
+        "road": {
+          "ready_ms": 927.8,
+          "compositor_stable_ms": 936.9,
+          "first_source_ready_ms": 53,
+          "camera_complete_ms": 49.6,
+          "map_idle_ms": 748.8,
+          "readiness_attribute_ms": 49.7,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 22174,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 47.39999997615814
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 22174.100000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 47.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 22174.5,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 47.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 22174.69999998808,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 48.09999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 22174.69999998808,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 48.09999996423721
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 22175,
+              "id": null,
+              "property": null,
+              "relative_ms": 48.39999997615814
+            }
+          ],
+          "event_count": 33,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.073641,
+            "TaskDuration": 0.893452,
+            "JSHeapUsedSize": 6124188
+          }
+        },
+        "building": {
+          "ready_ms": 1672.8,
+          "compositor_stable_ms": 1697.1,
+          "first_source_ready_ms": 164.1,
+          "camera_complete_ms": 159.4,
+          "map_idle_ms": 1477.9,
+          "readiness_attribute_ms": 159.5,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27006.400000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 155.20000004768372
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27006.600000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 155.4000000357628
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27007.19999998808,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 156
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27007.400000035763,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 156.20000004768372
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27007.600000023842,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 156.4000000357628
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 27009.100000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 157.9000000357628
+            }
+          ],
+          "event_count": 31,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -33,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.222692,
+            "TaskDuration": 1.625,
+            "JSHeapUsedSize": 601948
+          }
+        },
+        "facility": {
+          "ready_ms": 1228.1,
+          "compositor_stable_ms": 1238.3,
+          "first_source_ready_ms": 175.7,
+          "camera_complete_ms": 170.2,
+          "map_idle_ms": 993.6,
+          "readiness_attribute_ms": 170.6,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31536.100000023842,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 161.19999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31536.100000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 161.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31536.900000035763,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 162
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31537.100000023842,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 162.19999998807907
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 31537.400000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 162.5
+            }
+          ],
+          "event_count": 15,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -547,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.114002,
+            "TaskDuration": 1.14675,
+            "JSHeapUsedSize": 3793508
+          }
+        }
+      },
+      "network": {
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "start_time_ms": 3718.300000011921,
+            "response_start_ms": 3770.100000023842,
+            "response_end_ms": 3772.300000011921,
+            "duration_ms": 54,
+            "transfer_size": 1605,
+            "encoded_body_size": 1305,
+            "decoded_body_size": 4937
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "start_time_ms": 4380,
+            "response_start_ms": 4386.600000023842,
+            "response_end_ms": 4388.900000035763,
+            "duration_ms": 8.900000035762787,
+            "transfer_size": 3546,
+            "encoded_body_size": 3246,
+            "decoded_body_size": 3246
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "start_time_ms": 5434,
+            "response_start_ms": 5441.100000023842,
+            "response_end_ms": 5532.900000035763,
+            "duration_ms": 98.90000003576279,
+            "transfer_size": 3243643,
+            "encoded_body_size": 3243343,
+            "decoded_body_size": 3243343
+          }
+        ],
+        "fetches": [
+          {
+            "url": "/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3717.600000023842,
+            "headers_at_ms": 3893.300000011921,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "started_at_ms": 4379.300000011921,
+            "headers_at_ms": 4404.5,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "started_at_ms": 5433.199999988079,
+            "headers_at_ms": 5445,
+            "status": 200
+          }
+        ],
+        "json": [
+          {
+            "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3893.400000035763,
+            "completed_at_ms": 4379.100000023842,
+            "ok": true
+          }
+        ],
+        "duplicate_fetches": []
+      },
+      "page_errors": [],
+      "request_failures": [],
+      "basemap_failures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ]
+    },
+    {
+      "sample": 3,
+      "fmr_ms": 1296.7,
+      "area_800_ready_ms": 92.2,
+      "cold": {
+        "building_use": {
+          "ready_ms": 2420.3,
+          "compositor_stable_ms": 2432.6,
+          "first_source_ready_ms": 144.9,
+          "camera_complete_ms": null,
+          "map_idle_ms": 496.2,
+          "readiness_attribute_ms": 322,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setData",
+              "at_ms": 6886.200000047684,
+              "id": "public-target",
+              "completed_at_ms": 6886.200000047684,
+              "feature_count": 1,
+              "started_at_ms": 6886.200000047684,
+              "relative_ms": 134.80000001192093
+            },
+            {
+              "method": "setData",
+              "at_ms": 7437,
+              "id": "public-buildings",
+              "completed_at_ms": 7437,
+              "feature_count": 4898,
+              "started_at_ms": 7436.900000035763,
+              "relative_ms": 685.5999999642372
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7437,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 685.5999999642372
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7437,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 685.5999999642372
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7437.100000023842,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 685.6999999880791
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7437.100000023842,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 685.6999999880791
+            }
+          ],
+          "event_count": 43,
+          "mutation_count": 27,
+          "browser_metric_delta": {
+            "Nodes": -87,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 6,
+            "ScriptDuration": 0.152666,
+            "TaskDuration": 2.269227,
+            "JSHeapUsedSize": 4275464
+          }
+        },
+        "road": {
+          "ready_ms": 871.7,
+          "compositor_stable_ms": 910.3,
+          "first_source_ready_ms": 87.7,
+          "camera_complete_ms": 82.6,
+          "map_idle_ms": 704.3,
+          "readiness_attribute_ms": 82.8,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 9370.400000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 79.80000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 9370.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 79.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 9370.900000035763,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 80.30000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 9371.100000023842,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 80.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 9371.200000047684,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 80.60000002384186
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 9371.900000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 81.30000001192093
+            }
+          ],
+          "event_count": 57,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.109999,
+            "TaskDuration": 0.839742,
+            "JSHeapUsedSize": 8203832
+          }
+        },
+        "building": {
+          "ready_ms": 1102.7,
+          "compositor_stable_ms": 1109.5,
+          "first_source_ready_ms": 78.3,
+          "camera_complete_ms": 71.1,
+          "map_idle_ms": 923,
+          "readiness_attribute_ms": 71.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 12808.900000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 68
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 12809.100000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 68.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 12809.800000011921,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 68.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 12809.900000035763,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 69
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 12809.900000035763,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 69
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 12810.400000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 69.5
+            }
+          ],
+          "event_count": 34,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.090459,
+            "TaskDuration": 1.074735,
+            "JSHeapUsedSize": -3826404
+          }
+        },
+        "facility": {
+          "ready_ms": 1081.2,
+          "compositor_stable_ms": 1100.6,
+          "first_source_ready_ms": 112.4,
+          "camera_complete_ms": 107.6,
+          "map_idle_ms": 849.1,
+          "readiness_attribute_ms": 108,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 16638.30000001192,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 102.80000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 16638.400000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 102.90000003576279
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 16638.900000035763,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 103.40000003576279
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 16639.100000023842,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 103.60000002384186
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 16639.600000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 104.10000002384186
+            }
+          ],
+          "event_count": 34,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -937,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.098723,
+            "TaskDuration": 1.059895,
+            "JSHeapUsedSize": -9442012
+          }
+        }
+      },
+      "warm": {
+        "building_use": {
+          "ready_ms": 1539.6,
+          "compositor_stable_ms": 1573.3,
+          "first_source_ready_ms": 87.1,
+          "camera_complete_ms": null,
+          "map_idle_ms": 1022.6,
+          "readiness_attribute_ms": 83.2,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 19698.30000001192,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 81.59999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 19698.400000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 81.69999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 19698.600000023842,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 81.89999997615814
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 19698.600000023842,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 81.89999997615814
+            }
+          ],
+          "event_count": 12,
+          "mutation_count": 11,
+          "browser_metric_delta": {
+            "Nodes": -83,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 5,
+            "ScriptDuration": 0.055669,
+            "TaskDuration": 1.51974,
+            "JSHeapUsedSize": -6071752
+          }
+        },
+        "road": {
+          "ready_ms": 1338.7,
+          "compositor_stable_ms": 1350.6,
+          "first_source_ready_ms": 122.2,
+          "camera_complete_ms": 108.6,
+          "map_idle_ms": 889.2,
+          "readiness_attribute_ms": 115.3,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 23754.5,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 105
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 23754.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 105
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23755.200000047684,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 105.70000004768372
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23755.400000035763,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 105.90000003576279
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23755.5,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 106
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 23756.100000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 106.60000002384186
+            }
+          ],
+          "event_count": 30,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.157431,
+            "TaskDuration": 1.083932,
+            "JSHeapUsedSize": 5258744
+          }
+        },
+        "building": {
+          "ready_ms": 1016.1,
+          "compositor_stable_ms": 1049.1,
+          "first_source_ready_ms": 91.5,
+          "camera_complete_ms": 87.3,
+          "map_idle_ms": 833.3,
+          "readiness_attribute_ms": 87.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 28102.200000047684,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 84.80000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 28102.400000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 85
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 28102.80000001192,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 85.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 28102.80000001192,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 85.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 28102.80000001192,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 85.39999997615814
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 28103.30000001192,
+              "id": null,
+              "property": null,
+              "relative_ms": 85.89999997615814
+            }
+          ],
+          "event_count": 33,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -296,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.084746,
+            "TaskDuration": 0.984054,
+            "JSHeapUsedSize": 5957148
+          }
+        },
+        "facility": {
+          "ready_ms": 923.7,
+          "compositor_stable_ms": 930.6,
+          "first_source_ready_ms": 84.2,
+          "camera_complete_ms": 81,
+          "map_idle_ms": 786.9,
+          "readiness_attribute_ms": 81.2,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31148,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 78.69999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 31148.100000023842,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 78.80000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31148.5,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 79.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 31148.5,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 79.19999998807907
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 31148.80000001192,
+              "id": null,
+              "property": null,
+              "relative_ms": 79.5
+            }
+          ],
+          "event_count": 19,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.058841,
+            "TaskDuration": 0.87171,
+            "JSHeapUsedSize": 4613592
+          }
+        }
+      },
+      "network": {
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "start_time_ms": 3560.400000035763,
+            "response_start_ms": 3628.400000035763,
+            "response_end_ms": 3632.600000023842,
+            "duration_ms": 72.19999998807907,
+            "transfer_size": 1605,
+            "encoded_body_size": 1305,
+            "decoded_body_size": 4937
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "start_time_ms": 4689.800000011921,
+            "response_start_ms": 4699.100000023842,
+            "response_end_ms": 4704.200000047684,
+            "duration_ms": 14.400000035762787,
+            "transfer_size": 3546,
+            "encoded_body_size": 3246,
+            "decoded_body_size": 3246
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "start_time_ms": 5424.800000011921,
+            "response_start_ms": 5444.900000035763,
+            "response_end_ms": 6307,
+            "duration_ms": 882.1999999880791,
+            "transfer_size": 3243643,
+            "encoded_body_size": 3243343,
+            "decoded_body_size": 3243343
+          }
+        ],
+        "fetches": [
+          {
+            "url": "/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3559.100000023842,
+            "headers_at_ms": 3850.600000023842,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "started_at_ms": 4688.700000047684,
+            "headers_at_ms": 4739.900000035763,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "started_at_ms": 5423.800000011921,
+            "headers_at_ms": 5870.5,
+            "status": 200
+          }
+        ],
+        "json": [
+          {
+            "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3850.7000000476837,
+            "completed_at_ms": 4688.100000023842,
+            "ok": true
+          }
+        ],
+        "duplicate_fetches": []
+      },
+      "page_errors": [],
+      "request_failures": [],
+      "basemap_failures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ]
+    },
+    {
+      "sample": 4,
+      "fmr_ms": 1370,
+      "area_800_ready_ms": 307.2,
+      "cold": {
+        "building_use": {
+          "ready_ms": 2174.4,
+          "compositor_stable_ms": 2186.2,
+          "first_source_ready_ms": 1315.3,
+          "camera_complete_ms": null,
+          "map_idle_ms": 4.4,
+          "readiness_attribute_ms": 266.9,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5017.800000011921,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 266
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5017.800000011921,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 266
+            },
+            {
+              "method": "setData",
+              "at_ms": 5558.200000047684,
+              "id": "public-buildings",
+              "completed_at_ms": 5558.200000047684,
+              "feature_count": 4898,
+              "started_at_ms": 5558,
+              "relative_ms": 806.4000000357628
+            },
+            {
+              "method": "setData",
+              "at_ms": 5558.300000011921,
+              "id": "public-target",
+              "completed_at_ms": 5558.300000011921,
+              "feature_count": 1,
+              "started_at_ms": 5558.200000047684,
+              "relative_ms": 806.5
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5558.300000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 806.5
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 5558.300000011921,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 806.5
+            }
+          ],
+          "event_count": 46,
+          "mutation_count": 26,
+          "browser_metric_delta": {
+            "Nodes": -23,
+            "LayoutCount": 2,
+            "RecalcStyleCount": 7,
+            "ScriptDuration": 0.176591,
+            "TaskDuration": 2.116107,
+            "JSHeapUsedSize": 4707528
+          }
+        },
+        "road": {
+          "ready_ms": 879.1,
+          "compositor_stable_ms": 908.4,
+          "first_source_ready_ms": 80.8,
+          "camera_complete_ms": 76.6,
+          "map_idle_ms": 731.7,
+          "readiness_attribute_ms": 76.9,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7103.400000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 73.69999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 7103.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 73.79999995231628
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7103.900000035763,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 74.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7104.100000023842,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 74.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 7104.100000023842,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 74.39999997615814
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 7104.800000011921,
+              "id": null,
+              "property": null,
+              "relative_ms": 75.09999996423721
+            }
+          ],
+          "event_count": 57,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.105438,
+            "TaskDuration": 0.846187,
+            "JSHeapUsedSize": 8203604
+          }
+        },
+        "building": {
+          "ready_ms": 1126.9,
+          "compositor_stable_ms": 1137,
+          "first_source_ready_ms": 92.8,
+          "camera_complete_ms": 88,
+          "map_idle_ms": 899.5,
+          "readiness_attribute_ms": 88.2,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 10486.400000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 84.69999998807907
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 10486.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 84.79999995231628
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 10487.100000023842,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 85.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 10487.300000011921,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 85.59999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 10487.300000011921,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 85.59999996423721
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 10488.100000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 86.39999997615814
+            }
+          ],
+          "event_count": 32,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.085881,
+            "TaskDuration": 1.076639,
+            "JSHeapUsedSize": 5999512
+          }
+        },
+        "facility": {
+          "ready_ms": 1031.4,
+          "compositor_stable_ms": 1065.4,
+          "first_source_ready_ms": 106.6,
+          "camera_complete_ms": 98,
+          "map_idle_ms": 873.1,
+          "readiness_attribute_ms": 98.3,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 14416.400000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 93.80000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 14416.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 93.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 14417.100000023842,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 94.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 14417.300000011921,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 94.69999998807907
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 14417.700000047684,
+              "id": null,
+              "property": null,
+              "relative_ms": 95.10000002384186
+            }
+          ],
+          "event_count": 34,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.123973,
+            "TaskDuration": 0.969089,
+            "JSHeapUsedSize": 5167468
+          }
+        }
+      },
+      "warm": {
+        "building_use": {
+          "ready_ms": 1241.7,
+          "compositor_stable_ms": 1266.1,
+          "first_source_ready_ms": 64.5,
+          "camera_complete_ms": null,
+          "map_idle_ms": 921.8,
+          "readiness_attribute_ms": 60.8,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17849,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 59.799999952316284
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17849.30000001192,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 60.09999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17849.30000001192,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 60.09999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17849.30000001192,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 60.09999996423721
+            }
+          ],
+          "event_count": 12,
+          "mutation_count": 11,
+          "browser_metric_delta": {
+            "Nodes": -370,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 5,
+            "ScriptDuration": 0.044742,
+            "TaskDuration": 1.233057,
+            "JSHeapUsedSize": 407964
+          }
+        },
+        "road": {
+          "ready_ms": 1022.5,
+          "compositor_stable_ms": 1052.5,
+          "first_source_ready_ms": 54.5,
+          "camera_complete_ms": 51.1,
+          "map_idle_ms": 852.8,
+          "readiness_attribute_ms": 51.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 20200.80000001192,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 48.89999997615814
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 20200.900000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 49
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 20201.30000001192,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 49.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 20201.5,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 49.59999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 20201.600000023842,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 49.69999998807907
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 20202,
+              "id": null,
+              "property": null,
+              "relative_ms": 50.09999996423721
+            }
+          ],
+          "event_count": 34,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.078015,
+            "TaskDuration": 0.993019,
+            "JSHeapUsedSize": 6393360
+          }
+        },
+        "building": {
+          "ready_ms": 1203.7,
+          "compositor_stable_ms": 1228.9,
+          "first_source_ready_ms": 112.6,
+          "camera_complete_ms": 102.7,
+          "map_idle_ms": 1034.9,
+          "readiness_attribute_ms": 103.1,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 23325,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 99.79999995231628
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 23325,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 99.79999995231628
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23325.600000023842,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 100.39999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23325.700000047684,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 100.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 23325.80000001192,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 100.59999996423721
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 23326.400000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 101.19999998807907
+            }
+          ],
+          "event_count": 33,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.112564,
+            "TaskDuration": 1.145645,
+            "JSHeapUsedSize": 5912344
+          }
+        },
+        "facility": {
+          "ready_ms": 1022.1,
+          "compositor_stable_ms": 1032.8,
+          "first_source_ready_ms": 53.3,
+          "camera_complete_ms": 49.5,
+          "map_idle_ms": 866.3,
+          "readiness_attribute_ms": 49.7,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27718.200000047684,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 46.90000003576279
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27718.200000047684,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 46.90000003576279
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27718.600000023842,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 47.30000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27718.700000047684,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 47.40000003576279
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 27718.900000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 47.60000002384186
+            }
+          ],
+          "event_count": 18,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 80,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.073425,
+            "TaskDuration": 0.999938,
+            "JSHeapUsedSize": 4393132
+          }
+        }
+      },
+      "network": {
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "start_time_ms": 3392.900000035763,
+            "response_start_ms": 3442.300000011921,
+            "response_end_ms": 3447.2000000476837,
+            "duration_ms": 54.30000001192093,
+            "transfer_size": 1605,
+            "encoded_body_size": 1305,
+            "decoded_body_size": 4937
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "start_time_ms": 4070,
+            "response_start_ms": 4074.800000011921,
+            "response_end_ms": 4076.300000011921,
+            "duration_ms": 6.300000011920929,
+            "transfer_size": 3546,
+            "encoded_body_size": 3246,
+            "decoded_body_size": 3246
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "start_time_ms": 4946.100000023842,
+            "response_start_ms": 4953.900000035763,
+            "response_end_ms": 4991.300000011921,
+            "duration_ms": 45.19999998807907,
+            "transfer_size": 3243643,
+            "encoded_body_size": 3243343,
+            "decoded_body_size": 3243343
+          }
+        ],
+        "fetches": [
+          {
+            "url": "/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3391.7000000476837,
+            "headers_at_ms": 3575.900000035763,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "started_at_ms": 4069.5,
+            "headers_at_ms": 4113,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "started_at_ms": 4945.300000011921,
+            "headers_at_ms": 4957.600000023842,
+            "status": 200
+          }
+        ],
+        "json": [
+          {
+            "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 3576.100000023842,
+            "completed_at_ms": 4069.300000011921,
+            "ok": true
+          }
+        ],
+        "duplicate_fetches": []
+      },
+      "page_errors": [],
+      "request_failures": [],
+      "basemap_failures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ]
+    },
+    {
+      "sample": 5,
+      "fmr_ms": 1549.8,
+      "area_800_ready_ms": 140.8,
+      "cold": {
+        "building_use": {
+          "ready_ms": 2291.5,
+          "compositor_stable_ms": 2297.1,
+          "first_source_ready_ms": 1048.9,
+          "camera_complete_ms": null,
+          "map_idle_ms": 7.9,
+          "readiness_attribute_ms": 382.3,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6070.200000047684,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 381.30000001192093
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6070.200000047684,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 381.30000001192093
+            },
+            {
+              "method": "setData",
+              "at_ms": 6341.700000047684,
+              "id": "public-buildings",
+              "completed_at_ms": 6341.700000047684,
+              "feature_count": 4898,
+              "started_at_ms": 6341.600000023842,
+              "relative_ms": 652.8000000119209
+            },
+            {
+              "method": "setData",
+              "at_ms": 6341.700000047684,
+              "id": "public-target",
+              "completed_at_ms": 6341.700000047684,
+              "feature_count": 1,
+              "started_at_ms": 6341.700000047684,
+              "relative_ms": 652.8000000119209
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6341.800000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 652.8999999761581
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 6341.800000011921,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 652.8999999761581
+            }
+          ],
+          "event_count": 46,
+          "mutation_count": 27,
+          "browser_metric_delta": {
+            "Nodes": -87,
+            "LayoutCount": 2,
+            "RecalcStyleCount": 7,
+            "ScriptDuration": 0.194042,
+            "TaskDuration": 2.25913,
+            "JSHeapUsedSize": 5765816
+          }
+        },
+        "road": {
+          "ready_ms": 928,
+          "compositor_stable_ms": 957,
+          "first_source_ready_ms": 85.9,
+          "camera_complete_ms": 81,
+          "map_idle_ms": 779,
+          "readiness_attribute_ms": 81.3,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 8157.800000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 78.5
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 8157.800000011921,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 78.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 8158.300000011921,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 79
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 8158.5,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 79.19999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 8158.600000023842,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 79.30000001192093
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 8159.300000011921,
+              "id": null,
+              "property": null,
+              "relative_ms": 80
+            }
+          ],
+          "event_count": 57,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.116932,
+            "TaskDuration": 0.895171,
+            "JSHeapUsedSize": 8271592
+          }
+        },
+        "building": {
+          "ready_ms": 1034.9,
+          "compositor_stable_ms": 1048.3,
+          "first_source_ready_ms": 90.4,
+          "camera_complete_ms": 87.2,
+          "map_idle_ms": 895.5,
+          "readiness_attribute_ms": 87.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 11822.900000035763,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 84.90000003576279
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 11823,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 85
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11823.300000011921,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 85.30000001192093
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11823.400000035763,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 85.40000003576279
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 11823.5,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 85.5
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 11824,
+              "id": null,
+              "property": null,
+              "relative_ms": 86
+            }
+          ],
+          "event_count": 34,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 79,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.083494,
+            "TaskDuration": 0.98955,
+            "JSHeapUsedSize": -3855964
+          }
+        },
+        "facility": {
+          "ready_ms": 1063,
+          "compositor_stable_ms": 1090,
+          "first_source_ready_ms": 64,
+          "camera_complete_ms": 60.2,
+          "map_idle_ms": 901,
+          "readiness_attribute_ms": 60.4,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15228.300000011921,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 57.59999996423721
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 15228.5,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 57.799999952316284
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 15228.800000011921,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 58.09999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 15228.900000035763,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 58.19999998807907
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 15229.200000047684,
+              "id": null,
+              "property": null,
+              "relative_ms": 58.5
+            }
+          ],
+          "event_count": 35,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -936,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.09062,
+            "TaskDuration": 1.076669,
+            "JSHeapUsedSize": -9257052
+          }
+        }
+      },
+      "warm": {
+        "building_use": {
+          "ready_ms": 1336.3,
+          "compositor_stable_ms": 1716.3,
+          "first_source_ready_ms": 45,
+          "camera_complete_ms": null,
+          "map_idle_ms": 1716.3,
+          "readiness_attribute_ms": 41.8,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17678,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 41
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17678,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 41
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17678,
+              "id": "mesh-fill",
+              "property": "visibility",
+              "relative_ms": 41
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 17678,
+              "id": "mesh-outline",
+              "property": "visibility",
+              "relative_ms": 41
+            }
+          ],
+          "event_count": 16,
+          "mutation_count": 11,
+          "browser_metric_delta": {
+            "Nodes": 16,
+            "LayoutCount": 1,
+            "RecalcStyleCount": 5,
+            "ScriptDuration": 0.056026,
+            "TaskDuration": 1.995237,
+            "JSHeapUsedSize": -5530856
+          }
+        },
+        "road": {
+          "ready_ms": 961,
+          "compositor_stable_ms": 966,
+          "first_source_ready_ms": 87.8,
+          "camera_complete_ms": 84.4,
+          "map_idle_ms": 792.9,
+          "readiness_attribute_ms": 84.6,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 21019.100000023842,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 82.39999997615814
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 21019.200000047684,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 82.5
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 21019.600000023842,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 82.89999997615814
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 21019.80000001192,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 83.09999996423721
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 21019.80000001192,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 83.09999996423721
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 21020.100000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 83.39999997615814
+            }
+          ],
+          "event_count": 32,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": 76,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.082448,
+            "TaskDuration": 0.900473,
+            "JSHeapUsedSize": 5800016
+          }
+        },
+        "building": {
+          "ready_ms": 960.2,
+          "compositor_stable_ms": 991.7,
+          "first_source_ready_ms": 115,
+          "camera_complete_ms": 110.8,
+          "map_idle_ms": 751.2,
+          "readiness_attribute_ms": 111,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 24285.30000001192,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 108
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 24285.400000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 108.10000002384186
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 24286,
+              "id": "public-target-fill",
+              "property": "fill-color",
+              "relative_ms": 108.69999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 24286,
+              "id": "public-target-line",
+              "property": "line-color",
+              "relative_ms": 108.69999998807907
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 24286,
+              "id": "public-target-line",
+              "property": "line-dasharray",
+              "relative_ms": 108.69999998807907
+            },
+            {
+              "method": "fitBounds",
+              "at_ms": 24286.400000035763,
+              "id": null,
+              "property": null,
+              "relative_ms": 109.10000002384186
+            }
+          ],
+          "event_count": 33,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -33,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.163701,
+            "TaskDuration": 0.932046,
+            "JSHeapUsedSize": -10848744
+          }
+        },
+        "facility": {
+          "ready_ms": 941,
+          "compositor_stable_ms": 958.9,
+          "first_source_ready_ms": 94.1,
+          "camera_complete_ms": 90.9,
+          "map_idle_ms": 826.2,
+          "readiness_attribute_ms": 91.1,
+          "map_recreated": false,
+          "source_count_before_after": [
+            19,
+            19
+          ],
+          "layer_count_before_after": [
+            47,
+            47
+          ],
+          "calls": [
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27631.80000001192,
+              "id": "public-buildings-fill",
+              "property": "visibility",
+              "relative_ms": 88.5
+            },
+            {
+              "method": "setLayoutProperty",
+              "at_ms": 27631.900000035763,
+              "id": "public-buildings-line",
+              "property": "visibility",
+              "relative_ms": 88.60000002384186
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27632.30000001192,
+              "id": "public-target-point",
+              "property": "circle-color",
+              "relative_ms": 89
+            },
+            {
+              "method": "setPaintProperty",
+              "at_ms": 27632.400000035763,
+              "id": "public-target-point",
+              "property": "circle-radius",
+              "relative_ms": 89.10000002384186
+            },
+            {
+              "method": "easeTo",
+              "at_ms": 27632.600000023842,
+              "id": null,
+              "property": null,
+              "relative_ms": 89.30000001192093
+            }
+          ],
+          "event_count": 18,
+          "mutation_count": 12,
+          "browser_metric_delta": {
+            "Nodes": -547,
+            "LayoutCount": 3,
+            "RecalcStyleCount": 8,
+            "ScriptDuration": 0.06548,
+            "TaskDuration": 0.912252,
+            "JSHeapUsedSize": -8654728
+          }
+        }
+      },
+      "network": {
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "start_time_ms": 4041.900000035763,
+            "response_start_ms": 4108.900000035763,
+            "response_end_ms": 4110.800000011921,
+            "duration_ms": 68.89999997615814,
+            "transfer_size": 1605,
+            "encoded_body_size": 1305,
+            "decoded_body_size": 4937
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "start_time_ms": 5027.100000023842,
+            "response_start_ms": 5034.400000035763,
+            "response_end_ms": 5037.700000047684,
+            "duration_ms": 10.600000023841858,
+            "transfer_size": 3546,
+            "encoded_body_size": 3246,
+            "decoded_body_size": 3246
+          },
+          {
+            "name": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "start_time_ms": 5887.300000011921,
+            "response_start_ms": 5893.600000023842,
+            "response_end_ms": 5942.300000011921,
+            "duration_ms": 55,
+            "transfer_size": 3243643,
+            "encoded_body_size": 3243343,
+            "decoded_body_size": 3243343
+          }
+        ],
+        "fetches": [
+          {
+            "url": "/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 4040.100000023842,
+            "headers_at_ms": 4328.200000047684,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_targets.geojson",
+            "started_at_ms": 5026.5,
+            "headers_at_ms": 5053.100000023842,
+            "status": 200
+          },
+          {
+            "url": "/plateau-city-gap/data/cartography/plateau_buildings.geojson",
+            "started_at_ms": 5886.800000011921,
+            "headers_at_ms": 5897.5,
+            "status": 200
+          }
+        ],
+        "json": [
+          {
+            "url": "http://127.0.0.1:4180/plateau-city-gap/data/cartography/manifest.json",
+            "started_at_ms": 4328.300000011921,
+            "completed_at_ms": 5026.100000023842,
+            "ok": true
+          }
+        ],
+        "duplicate_fetches": []
+      },
+      "page_errors": [],
+      "request_failures": [],
+      "basemap_failures": [
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1793/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/807.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1794/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/808.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1792/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/806.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        },
+        {
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/11/1795/809.png",
+          "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector"
+        }
+      ]
+    }
+  ],
+  "garbage_collection": "not directly observable without intrusive V8 tracing; JS heap/task deltas and long tasks are retained instead"
+}

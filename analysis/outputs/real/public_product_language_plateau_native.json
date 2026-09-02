@@ -1,0 +1,39 @@
+{
+  "schema_version": "citygap.plateau-native-browser-audit@1",
+  "generated_at": "2026-09-02T07:33:37.183Z",
+  "commit": "e6bf538af15e8b6d9ef25cdd3693490b4f67df3c",
+  "production_url": "http://127.0.0.1:4180/plateau-city-gap/",
+  "automated_browser_walkthrough": true,
+  "human_usability_study": false,
+  "checks": {
+    "city_discovery_ready": true,
+    "resolution_has_seven_levels": true,
+    "initial_2d_lazy_loads_cesium": true,
+    "no_legacy_demo_ui": true,
+    "scene_resolution_independent": true,
+    "object_lens_present": true,
+    "finding_bidirectional_trace": true,
+    "plateau_off_audit": true,
+    "public_building_population_boundary": true,
+    "road_claim_boundary": true,
+    "road_to_finding_trace": true,
+    "temporal_actual_points_visible": true,
+    "mobile_no_horizontal_overflow": true,
+    "mobile_map_retained": true,
+    "mobile_touch_targets": true,
+    "reduced_motion_active": true,
+    "keyboard_focus_reachable": true,
+    "critical_requests_clean": true,
+    "console_clean": true
+  },
+  "mobile": {
+    "viewport": 390,
+    "scrollWidth": 390,
+    "mapWidth": 390,
+    "touchTargets": true
+  },
+  "initial_2d_cesium_requests": [],
+  "critical_request_failures": [],
+  "console_errors": [],
+  "passed": true
+}
