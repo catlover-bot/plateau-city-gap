@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import type { AnalysisLens, CounterfactualState, SpatialSelection } from "../../state/spatial/types";
 
 interface TerrainSample {
@@ -28,7 +28,7 @@ interface SectionBand {
   hazards?: Array<Record<string, unknown>>;
 }
 
-interface SectionData {
+export interface SectionData {
   transect_id: string;
   pack_id: string;
   geometry: { type: "LineString"; coordinates: Array<[number, number]> };
@@ -88,6 +88,11 @@ interface Props {
   analysisLens: AnalysisLens;
   onSelectBuilding(id: string, properties: Record<string, unknown>): void;
   onClose(): void;
+  dataOverride?: SectionData | null;
+  sourcePath?: string | null;
+  expectedPackId?: string;
+  areaLabel?: string;
+  onFocusPosition?(position: { longitude: number; latitude: number } | null): void;
 }
 
 function moveSectionFocus(event: ReactKeyboardEvent<SVGRectElement>) {
@@ -100,20 +105,44 @@ function moveSectionFocus(event: ReactKeyboardEvent<SVGRectElement>) {
   objects[(index + direction + objects.length) % objects.length]?.focus();
 }
 
-export function UrbanSection({ open, mode = "advanced", selection, counterfactualState, analysisLens, onSelectBuilding, onClose }: Props) {
-  const [data, setData] = useState<SectionData | null>(null);
+export function UrbanSection({ open, mode = "advanced", selection, counterfactualState, analysisLens, onSelectBuilding, onClose, dataOverride, sourcePath, expectedPackId, areaLabel = "常団地前周辺", onFocusPosition }: Props) {
+  const [loadedData, setLoadedData] = useState<SectionData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [guidedSampleIndex, setGuidedSampleIndex] = useState(0);
+  const [compactSection, setCompactSection] = useState(false);
   useEffect(() => {
-    let cancelled = false;
-    fetch(publicUrl(`data/spatial-packs/${PACK_ID}/sections.json`))
+    if (mode !== "guided") return;
+    const media = window.matchMedia("(max-width: 900px)");
+    const update = () => setCompactSection(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [mode]);
+  useEffect(() => {
+    if (dataOverride !== undefined) return;
+    const resolvedPath = sourcePath === undefined
+      ? `data/spatial-packs/${PACK_ID}/sections.json`
+      : sourcePath;
+    if (!resolvedPath) return;
+    const controller = new AbortController();
+    setLoadedData(null);
+    setError(null);
+    fetch(publicUrl(resolvedPath), { signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return response.json() as Promise<SectionData>;
       })
-      .then((value) => { if (!cancelled) setData(value); })
-      .catch((reason: unknown) => { if (!cancelled) setError(reason instanceof Error ? reason.message : "断面を読み込めません"); });
-    return () => { cancelled = true; };
-  }, []);
+      .then((value) => {
+        if (expectedPackId && value.pack_id !== expectedPackId) throw new Error("断面とAreaのpackが一致しません");
+        setLoadedData(value);
+      })
+      .catch((reason: unknown) => {
+        if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "断面を読み込めません");
+      });
+    return () => controller.abort();
+  }, [dataOverride, expectedPackId, sourcePath]);
+  const data = dataOverride !== undefined ? dataOverride : loadedData;
+  const guided = mode === "guided";
 
   const plot = useMemo(() => {
     if (!data) return null;
@@ -130,22 +159,48 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
       ...covered.map((sample) => sample.elevation_m),
     );
     const elevationSpan = Math.max(maximumBuildingTop - minimumElevation, 20);
-    const x = (distance: number) => 38 + distance / maxDistance * (VIEW_WIDTH - 58);
+    const viewWidth = guided && compactSection ? 390 : VIEW_WIDTH;
+    const x = (distance: number) => 38 + distance / maxDistance * (viewWidth - 58);
     const y = (elevation: number) => TERRAIN_BOTTOM - (elevation - minimumElevation) / elevationSpan * (TERRAIN_BOTTOM - TERRAIN_TOP);
-    return { covered, maxDistance, minimumElevation, maximumElevation, x, y, terrainPaths: lineSegments(data.terrain_samples, x, y) };
-  }, [data]);
+    return { covered, maxDistance, minimumElevation, maximumElevation, viewWidth, x, y, terrainPaths: lineSegments(data.terrain_samples, x, y) };
+  }, [compactSection, data, guided]);
 
-  const guided = mode === "guided";
+  const focusSection = (event: ReactPointerEvent<SVGSVGElement>) => {
+    if (!data || !plot || !onFocusPosition) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const viewX = (event.clientX - bounds.left) / Math.max(bounds.width, 1) * VIEW_WIDTH;
+    const distance = Math.max(0, Math.min(plot.maxDistance, (viewX - 38) / (VIEW_WIDTH - 58) * plot.maxDistance));
+    const sample = data.terrain_samples.reduce((best, candidate) =>
+      Math.abs(candidate.distance_m - distance) < Math.abs(best.distance_m - distance) ? candidate : best,
+    );
+    onFocusPosition({ longitude: sample.longitude, latitude: sample.latitude });
+  };
+  const focusSectionByKeyboard = (event: ReactKeyboardEvent<SVGSVGElement>) => {
+    if (!guided || !data?.terrain_samples.length || !onFocusPosition) return;
+    const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    if (!direction && event.key !== "Home" && event.key !== "End") return;
+    event.preventDefault();
+    const next = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? data.terrain_samples.length - 1
+        : Math.max(0, Math.min(data.terrain_samples.length - 1, guidedSampleIndex + direction));
+    setGuidedSampleIndex(next);
+    const sample = data.terrain_samples[next];
+    onFocusPosition({ longitude: sample.longitude, latitude: sample.latitude });
+  };
 
   if (!open && !guided) return <button type="button" className="urban-section-open" onClick={onClose}>都市断面を開く</button>;
   return (
     <section
       className={`urban-section ${guided ? "guided" : ""}`.trim()}
-      aria-label={guided ? "常団地前周辺の街の断面" : "PLATEAU Urban Section"}
+      aria-label={guided ? `${areaLabel}の街の断面` : "PLATEAU Urban Section"}
       data-ui-mode={mode}
       data-transect-ready={Boolean(data)}
       data-building-count={data?.buildings.length ?? 0}
+      data-direct-building-count={data?.buildings.filter((item) => item.relation === "direct").length ?? 0}
       data-road-count={data?.roads.length ?? 0}
+      data-direct-road-count={data?.roads.filter((item) => item.relation === "direct").length ?? 0}
       data-terrain-samples={data?.terrain_samples.length ?? 0}
       data-terrain-covered={data?.terrain_samples.filter((sample) => sample.elevation_m !== null).length ?? 0}
       data-pack-id={data?.pack_id ?? "none"}
@@ -170,9 +225,31 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
             高さ不明は補完せず、施設は断面からのoffsetを表示します。
           </>}
         </p>
-        <svg viewBox={`0 0 ${VIEW_WIDTH} 220`} role="img" aria-labelledby="section-title section-description">
-          <title id="section-title">{guided ? "常団地前周辺の街の断面" : "常団地前500mメッシュのPLATEAU都市断面"}</title>
+        <svg
+          viewBox={`0 0 ${plot.viewWidth} 220`}
+          role="img"
+          tabIndex={guided ? 0 : undefined}
+          aria-labelledby="section-title section-description"
+          aria-describedby={guided ? "guided-section-keyboard-help" : undefined}
+          onPointerMove={focusSection}
+          onPointerLeave={() => onFocusPosition?.(null)}
+          onFocus={() => {
+            const sample = data.terrain_samples[guidedSampleIndex];
+            if (guided && sample) onFocusPosition?.({ longitude: sample.longitude, latitude: sample.latitude });
+          }}
+          onBlur={() => guided && onFocusPosition?.(null)}
+          onKeyDown={focusSectionByKeyboard}
+        >
+          <title id="section-title">{guided ? `${areaLabel}の街の断面` : "常団地前500mメッシュのPLATEAU都市断面"}</title>
           <desc id="section-description">{guided ? "PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。" : `${data.terrain_source}を三角形内で補間した地形、直接交差と近傍を区別した建物、PLATEAU道路、計画・災害帯を表示。人口や建物高さの補完は行っていません。`}</desc>
+          <g className="section-axis" aria-hidden="true">
+            <text className="endpoint" x="38" y="16">A</text>
+            <text className="endpoint" x={plot.viewWidth - 20} y="16">B</text>
+            <text x="35" y={TERRAIN_TOP + 3} textAnchor="end">{plot.maximumElevation.toFixed(1)}m</text>
+            <text x="35" y={TERRAIN_BOTTOM} textAnchor="end">{plot.minimumElevation.toFixed(1)}m</text>
+            <text x="10" y="108" transform="rotate(-90 10 108)" textAnchor="middle">標高</text>
+            <text x={plot.viewWidth / 2} y="207" textAnchor="middle">Aからの距離（m）</text>
+          </g>
           <g className="section-grid" aria-hidden="true">
             {[0, .25, .5, .75, 1].map((fraction) => <g key={fraction}><line x1={plot.x(plot.maxDistance * fraction)} x2={plot.x(plot.maxDistance * fraction)} y1="20" y2="205" /><text x={plot.x(plot.maxDistance * fraction)} y="216">{Math.round(plot.maxDistance * fraction)}m</text></g>)}
           </g>
@@ -233,6 +310,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
           </g>}
           {counterfactualState === "stress" && <text className="section-counterfactual-note" x="660" y="18">{guided ? "この断面には災害条件による形の変化を加えていません" : "STRESS · このpackに断面固有stress relationなし · geometry不変"}</text>}
         </svg>
+        {guided && <span id="guided-section-keyboard-help" className="guided-section-keyboard-help">左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。</span>}
         <footer>
           {guided ? <>
             <span>地形・建物・道路：PLATEAU 舞鶴市2025</span>

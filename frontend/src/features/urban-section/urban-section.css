@@ -30,6 +30,8 @@
 .section-load-message.error { color: #7b3f2e; }
 .section-grid line { stroke: #d4d5ce; stroke-width: 1; }
 .section-grid text { fill: #68716e; font: 7px var(--cg-mono); text-anchor: middle; }
+.section-axis text { fill: #4c5e59; font: 7px var(--cg-mono); }
+.section-axis text.endpoint { fill: #634371; font-size: 12px; font-weight: 900; }
 .section-terrain path { fill: none; stroke: #384b47; stroke-width: 2.2; }
 .section-buildings rect { fill: #778b86; stroke: #314743; stroke-width: 1; }
 .urban-section:not(.guided) .section-buildings rect { cursor: pointer; }
