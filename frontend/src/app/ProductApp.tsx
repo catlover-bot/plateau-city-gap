@@ -20,7 +20,7 @@ import { LoadingState, ErrorState } from "../components/AppStates";
 import { useSpatialContext } from "./context/SpatialContext";
 import { layerById } from "../map/layers/layerRegistry";
 import { sceneForLayerPreset, sceneLayerIds, SCENE_PRESETS } from "../map/core/scenePresets";
-import { loadAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
+import { loadAppData, loadGuidedAppData, loadMunicipalWorkspaceData, loadUrbanFuturesData, loadValidationCityData, loadValidationWorkspaceData } from "../lib/data";
 import type { AppData, FuturesStressMode, GeoJsonFeatureCollection, InterventionPlan, MeshMetrics, MunicipalWorkspaceData, UrbanFuturesData, ValidationWorkspaceData } from "../types";
 import { CITY_VIEWPORTS, type AnalysisLens, type ProductTask, type ScenePresetId, type SpatialResolution, type SpatialSelection, type SpatialViewport } from "../state/spatial/types";
 import type { MapEngineAdapter } from "../map/core/MapEngineAdapter";
@@ -29,8 +29,8 @@ import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
 import { UrbanSection } from "../features/urban-section/UrbanSection";
 import { InvestigationLanding } from "../features/investigation/ValueLanding";
 import { GuidedSpatialWorkspace } from "../features/guided-spatial/GuidedSpatialWorkspace";
-import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
 import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
+import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
 import type { InvestigationAreaFixture } from "../features/area-investigation/areaTypes";
 import {
@@ -64,6 +64,8 @@ function MapModeSwitch({ value, onChange }: { value: "map2d" | "plateau3d"; onCh
 export function ProductApp() {
   const { state, dispatch, shareUrl } = useSpatialContext();
   const [datasets, setDatasets] = useState<Partial<Record<"maizuru" | "fujisawa", AppData>>>({});
+  const initialMaizuruMode = useRef<"guided" | "full">(state.experience === "guided" ? "guided" : "full");
+  const [maizuruDataMode, setMaizuruDataMode] = useState<"none" | "guided" | "full" | "loading-full" | "full-error">("none");
   const [validation, setValidation] = useState<ValidationWorkspaceData | null>(null);
   const [municipal, setMunicipal] = useState<MunicipalWorkspaceData | null>(null);
   const [futures, setFutures] = useState<UrbanFuturesData | null>(null);
@@ -98,9 +100,35 @@ export function ProductApp() {
 
   useEffect(() => {
     let cancelled = false; setError(null);
-    loadAppData().then((data) => !cancelled && setDatasets((current) => ({ ...current, maizuru: data }))).catch((reason: unknown) => !cancelled && setError(reason instanceof Error ? reason.message : "データを読み込めませんでした"));
+    setMaizuruDataMode("none");
+    const mode = initialMaizuruMode.current;
+    const loader = mode === "guided" ? loadGuidedAppData : loadAppData;
+    loader().then((data) => {
+      if (cancelled) return;
+      setDatasets((current) => ({ ...current, maizuru: data }));
+      setMaizuruDataMode(mode);
+    }).catch((reason: unknown) => !cancelled && setError(reason instanceof Error ? reason.message : "データを読み込めませんでした"));
     return () => { cancelled = true; };
   }, [retry]);
+
+  useEffect(() => {
+    if (state.experience === "guided" || maizuruDataMode !== "guided") return;
+    let cancelled = false;
+    setError(null);
+    setMaizuruDataMode("loading-full");
+    loadAppData()
+      .then((data) => {
+        if (cancelled) return;
+        setDatasets((current) => ({ ...current, maizuru: data }));
+        setMaizuruDataMode("full");
+      })
+      .catch((reason: unknown) => {
+        if (cancelled) return;
+        setError(reason instanceof Error ? reason.message : "詳細分析データを読み込めませんでした");
+        setMaizuruDataMode("full-error");
+      });
+    return () => { cancelled = true; };
+  }, [maizuruDataMode, state.experience]);
 
   useEffect(() => {
     let cancelled = false;
@@ -459,7 +487,7 @@ export function ProductApp() {
 
   if (state.experience === "guided") {
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
-    if (!guidedData || !investigationWorkspace) return <LoadingState />;
+    if (!guidedData) return <LoadingState />;
     return <>
       <GuidedSpatialWorkspace
         data={guidedData}
@@ -473,6 +501,9 @@ export function ProductApp() {
       {error && <div className="nonblocking-error" role="alert">{error}<button type="button" onClick={() => setError(null)}>閉じる</button></div>}
     </>;
   }
+
+  if (maizuruDataMode === "loading-full") return <LoadingState />;
+  if (maizuruDataMode === "full-error" && error) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
 
   if (error && !data) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
   if (!data) return <LoadingState />;

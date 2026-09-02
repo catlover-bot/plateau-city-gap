@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { GeoJsonFeatureCollection, MeshMetrics } from "../types";
 import {
   loadAppData,
+  loadGuidedAppData,
   loadMunicipalWorkspaceData,
   loadUrbanFuturesData,
   loadValidationWorkspaceData,
@@ -96,6 +97,30 @@ describe("data loading", () => {
     expect(data.manifest.analysis_version).toBe("test");
     expect(data.warnings).toEqual([]);
     expect(fetcher).toHaveBeenCalledWith("/plateau-city-gap/data/manifest.json");
+  });
+
+  it("keeps scenario and legacy PLATEAU bundles out of the Guided first load", async () => {
+    const fetcher = mockFetch({
+      "manifest.json": { analysis_version: "test" },
+      "mesh_metrics.geojson": EMPTY_COLLECTION,
+      "top10.json": { items: [] },
+      "summary.json": {},
+      "stations.geojson": EMPTY_COLLECTION,
+      "bus_stops.geojson": EMPTY_COLLECTION,
+      "medical_facilities.geojson": EMPTY_COLLECTION,
+      "maizuru_boundary.geojson": EMPTY_COLLECTION,
+    });
+    const data = await loadGuidedAppData(fetcher, "/plateau-city-gap/");
+    const requests = vi.mocked(fetcher).mock.calls.map(([input]) => String(input));
+    expect(data.meshes).toEqual(EMPTY_COLLECTION);
+    expect(data.interventions).toBeNull();
+    expect(data.plateauBuildings).toBeNull();
+    expect(requests).not.toEqual(expect.arrayContaining([
+      expect.stringContaining("intervention_scenarios.json"),
+      expect.stringContaining("robustness.json"),
+      expect.stringContaining("plateau_buildings.geojson"),
+      expect.stringContaining("plateau_roads.geojson"),
+    ]));
   });
 
   it("keeps the app usable when optional layers are absent", async () => {

@@ -174,6 +174,54 @@ export async function loadAppData(
   };
 }
 
+/**
+ * Loads only the citywide geometry and point context required by the Guided
+ * spatial story. Scenario, evidence and legacy PLATEAU display bundles stay
+ * out of the first request path; the selected Area context is loaded lazily by
+ * the Guided feature itself.
+ */
+export async function loadGuidedAppData(
+  fetcher: typeof fetch = fetch,
+  baseUrl = import.meta.env.BASE_URL,
+): Promise<AppData> {
+  const [manifestRaw, meshesRaw, top10Raw, summaryRaw] = await Promise.all([
+    fetchJson(fetcher, dataUrl(baseUrl, "manifest.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "mesh_metrics.geojson")),
+    fetchJson(fetcher, dataUrl(baseUrl, "top10.json")),
+    fetchJson(fetcher, dataUrl(baseUrl, "summary.json")),
+  ]);
+  if (!isRecord(manifestRaw)) throw new Error("manifest.json の形式が正しくありません");
+  if (!isRecord(summaryRaw)) throw new Error("summary.json の形式が正しくありません");
+
+  const warnings: string[] = [];
+  const [stations, busStops, medicalFacilities, boundary] = await Promise.all([
+    optionalGeoJson(fetcher, dataUrl(baseUrl, "stations.geojson"), "駅", warnings),
+    optionalGeoJson(fetcher, dataUrl(baseUrl, "bus_stops.geojson"), "バス停", warnings),
+    optionalGeoJson(fetcher, dataUrl(baseUrl, "medical_facilities.geojson"), "医療施設", warnings),
+    optionalGeoJson(fetcher, dataUrl(baseUrl, "maizuru_boundary.geojson"), "舞鶴市境界", warnings),
+  ]);
+
+  return {
+    city: MAIZURU,
+    manifest: manifestRaw as Manifest,
+    summary: summaryRaw as Summary,
+    meshes: assertFeatureCollection(meshesRaw, "mesh_metrics.geojson"),
+    top10: normalizeTop10(top10Raw),
+    stations,
+    busStops,
+    medicalFacilities,
+    boundary,
+    plateauBuildings: null,
+    plateauRoads: null,
+    plateauMetadata: null,
+    finalDemo: null,
+    robustness: null,
+    interventions: null,
+    evidence: null,
+    warnings,
+  };
+}
+
 export async function loadValidationCityData(
   fetcher: typeof fetch = fetch,
   baseUrl = import.meta.env.BASE_URL
