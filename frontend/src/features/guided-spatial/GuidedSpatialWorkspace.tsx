@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppData, GeoJsonFeature, GeoJsonFeatureCollection } from "../../types";
+import { loadGuidedReferenceData, type GuidedReferenceData } from "../../lib/data";
 import type { GuidedStory, SpatialSelection, SpatialState, SpatialViewport } from "../../state/spatial/types";
 import { AnalyticalMap } from "../../map/2d/AnalyticalMap";
 import { UrbanSection, type SectionData } from "../urban-section/UrbanSection";
@@ -71,7 +72,7 @@ function collectionBoundsValue(area: GeoJsonFeatureCollection): [number, number,
   ];
 }
 
-function firstFacilityInArea(data: AppData, area: GeoJsonFeatureCollection): GeoJsonFeature | null {
+function firstFacilityInArea(data: Pick<GuidedReferenceData, "stations" | "busStops" | "medicalFacilities">, area: GeoJsonFeatureCollection): GeoJsonFeature | null {
   const bounds = collectionBoundsValue(area);
   if (!bounds) return null;
   const [west, south, east, north] = bounds;
@@ -179,8 +180,15 @@ export function GuidedSpatialWorkspace({
   const [sectionFocus, setSectionFocus] = useState<{ longitude: number; latitude: number } | null>(null);
   const [mobileSurface, setMobileSurface] = useState<"map" | "section">("map");
   const [selectedTargetKey, setSelectedTargetKey] = useState<string | null>(null);
+  const [referenceData, setReferenceData] = useState<GuidedReferenceData | null>(() => (
+    data.stations || data.busStops || data.medicalFacilities
+      ? { stations: data.stations, busStops: data.busStops, medicalFacilities: data.medicalFacilities, warnings: [] }
+      : null
+  ));
   const requestSequence = useRef(0);
   const contextCache = useRef(new Map<string, GuidedAreaContext>());
+  const activeContextRef = useRef<GuidedAreaContext | null>(null);
+  const sectionDataRef = useRef<SectionData | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   const validSelectedArea = state.selection?.type === "mesh"
@@ -204,6 +212,15 @@ export function GuidedSpatialWorkspace({
   }, []);
 
   useEffect(() => {
+    if (state.guidedStory === "intro" || state.guidedStory === "find" || referenceData) return;
+    let cancelled = false;
+    loadGuidedReferenceData(fetch, import.meta.env.BASE_URL)
+      .then((value) => { if (!cancelled) setReferenceData(value); })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [referenceData, state.guidedStory]);
+
+  useEffect(() => {
     if (validSelectedArea || !selectedArea) return;
     onSelectionChange(selectedArea);
   }, [onSelectionChange, selectedArea, validSelectedArea]);
@@ -211,15 +228,23 @@ export function GuidedSpatialWorkspace({
   useEffect(() => {
     const item = catalog?.items.find((candidate) => candidate.mesh_code === selectedAreaId);
     const sequence = ++requestSequence.current;
-    setContext(null);
     setContextError(null);
-    setSectionData(null);
-    setSectionError(null);
-    setSectionFocus(null);
-    setMobileSurface("map");
-    setSelectedTargetKey(null);
+    if (activeContextRef.current?.mesh_code !== selectedAreaId) {
+      activeContextRef.current = null;
+      sectionDataRef.current = null;
+      setContext(null);
+      setSectionData(null);
+      setSectionError(null);
+      setSectionFocus(null);
+      setMobileSurface("map");
+      setSelectedTargetKey(null);
+    }
     if (state.guidedStory === "intro" || state.guidedStory === "find") {
       setContextStatus("idle");
+      return;
+    }
+    if (activeContextRef.current?.mesh_code === selectedAreaId) {
+      setContextStatus("ready");
       return;
     }
     if (!item) {
@@ -229,6 +254,7 @@ export function GuidedSpatialWorkspace({
     }
     const cached = contextCache.current.get(selectedAreaId);
     if (cached) {
+      activeContextRef.current = cached;
       setContext(cached);
       setContextStatus("ready");
       return;
@@ -239,6 +265,7 @@ export function GuidedSpatialWorkspace({
       .then((value) => {
         if (requestSequence.current !== sequence) return;
         contextCache.current.set(selectedAreaId, value);
+        activeContextRef.current = value;
         setContext(value);
         setContextStatus("ready");
       })
@@ -251,13 +278,20 @@ export function GuidedSpatialWorkspace({
   }, [catalog, selectedAreaId, state.guidedStory]);
 
   useEffect(() => {
-    setSectionData(null);
     setSectionError(null);
-    setSectionFocus(null);
     if (state.guidedStory !== "understand" || activeContext?.section.status !== "available") return;
+    if (sectionDataRef.current?.pack_id === activeContext.section.pack_id) {
+      setSectionData(sectionDataRef.current);
+      return;
+    }
+    setSectionData(null);
+    setSectionFocus(null);
     const controller = new AbortController();
     loadGuidedSectionData(activeContext.section, controller.signal)
-      .then(setSectionData)
+      .then((value) => {
+        sectionDataRef.current = value;
+        setSectionData(value);
+      })
       .catch((reason: unknown) => {
         if (!controller.signal.aborted) setSectionError(reason instanceof Error ? reason.message : "断面を読み込めません");
       });
@@ -295,7 +329,7 @@ export function GuidedSpatialWorkspace({
       resolution: "exact",
       checks: BUILDING_CHECKS,
     });
-    const facility = firstFacilityInArea(data, selectedAreaFeature);
+    const facility = firstFacilityInArea(referenceData ?? data, selectedAreaFeature);
     if (facility) choices.push({
       key: `facility:${String(facility.id ?? facility.properties?.id)}`,
       kind: "facility",
@@ -317,7 +351,7 @@ export function GuidedSpatialWorkspace({
     if (choices[0]?.kind === "road") choices.push(areaChoice);
     else choices.unshift(areaChoice);
     return choices;
-  }, [activeContext, areaLabel, data, selectedAreaFeature, selectedAreaId]);
+  }, [activeContext, areaLabel, data, referenceData, selectedAreaFeature, selectedAreaId]);
   const target = targetChoices.find((choice) => choice.key === selectedTargetKey) ?? targetChoices[0];
   const activeSectionData = activeContext?.section.pack_id === sectionData?.pack_id ? sectionData : null;
   const section = useMemo(() => sectionCollections(activeSectionData, sectionFocus), [activeSectionData, sectionFocus]);

@@ -3,6 +3,7 @@ import type { GeoJsonFeatureCollection, MeshMetrics } from "../types";
 import {
   loadAppData,
   loadGuidedAppData,
+  loadGuidedReferenceData,
   loadMunicipalWorkspaceData,
   loadUrbanFuturesData,
   loadValidationWorkspaceData,
@@ -103,12 +104,7 @@ describe("data loading", () => {
     const fetcher = mockFetch({
       "manifest.json": { analysis_version: "test" },
       "mesh_metrics.geojson": EMPTY_COLLECTION,
-      "top10.json": { items: [] },
       "summary.json": {},
-      "stations.geojson": EMPTY_COLLECTION,
-      "bus_stops.geojson": EMPTY_COLLECTION,
-      "medical_facilities.geojson": EMPTY_COLLECTION,
-      "maizuru_boundary.geojson": EMPTY_COLLECTION,
     });
     const data = await loadGuidedAppData(fetcher, "/plateau-city-gap/");
     const requests = vi.mocked(fetcher).mock.calls.map(([input]) => String(input));
@@ -120,6 +116,25 @@ describe("data loading", () => {
       expect.stringContaining("robustness.json"),
       expect.stringContaining("plateau_buildings.geojson"),
       expect.stringContaining("plateau_roads.geojson"),
+      expect.stringContaining("top10.json"),
+      expect.stringContaining("maizuru_boundary.geojson"),
+      expect.stringContaining("stations.geojson"),
+    ]));
+  });
+
+  it("loads Guided reference points separately from the first render", async () => {
+    const fetcher = mockFetch({
+      "stations.geojson": EMPTY_COLLECTION,
+      "bus_stops.geojson": EMPTY_COLLECTION,
+      "medical_facilities.geojson": EMPTY_COLLECTION,
+    });
+    const data = await loadGuidedReferenceData(fetcher, "/plateau-city-gap/");
+    const requests = vi.mocked(fetcher).mock.calls.map(([input]) => String(input));
+    expect(data.stations).toEqual(EMPTY_COLLECTION);
+    expect(requests).toEqual(expect.arrayContaining([
+      "/plateau-city-gap/data/stations.geojson",
+      "/plateau-city-gap/data/bus_stops.geojson",
+      "/plateau-city-gap/data/medical_facilities.geojson",
     ]));
   });
 
