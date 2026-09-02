@@ -781,7 +781,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     const sectionVisible = isUnderstand && presentation.sectionLine.features.length > 0;
     const targetVisible = isVerify && presentation.target.features.length > 0;
 
-    if (isIntro || isFind) map.setPadding({ top: 0, right: 0, bottom: 0, left: 0 });
+    if (isIntro || isFind || isVerify) map.setPadding({ top: 0, right: 0, bottom: 0, left: 0 });
 
     // Invalidate the previous scene before replacing any source. Consumers
     // must never mistake a rendered prior scene for the newly selected Area.
@@ -848,18 +848,26 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
         : presentation.area;
       const bounds = collectionBounds(collection);
       if (bounds) {
-        map.fitBounds(
-          [[bounds.west, bounds.south], [bounds.east, bounds.north]],
-          {
-            padding: map.getCanvas().clientWidth < 600
-              ? 44
-              : isUnderstand && sectionVisible
-                ? { top: 54, right: 82, bottom: map.getCanvas().clientHeight <= 700 ? 370 : 455, left: 82 }
-                : isVerify ? 112 : 82,
-            maxZoom: isVerify ? 17 : 15.7,
-            duration,
-          },
-        );
+        const currentBounds = map.getBounds();
+        const exactTargetAlreadyLegible = isVerify
+          && presentation.targetResolution === "exact"
+          && map.getZoom() >= 14.5
+          && currentBounds.contains([bounds.west, bounds.south])
+          && currentBounds.contains([bounds.east, bounds.north]);
+        if (!exactTargetAlreadyLegible) {
+          map.fitBounds(
+            [[bounds.west, bounds.south], [bounds.east, bounds.north]],
+            {
+              padding: map.getCanvas().clientWidth < 600
+                ? 44
+                : isUnderstand && sectionVisible
+                  ? { top: 54, right: 82, bottom: map.getCanvas().clientHeight <= 700 ? 370 : 455, left: 82 }
+                  : isVerify ? 112 : 82,
+              maxZoom: isVerify ? 17 : 15.7,
+              duration,
+            },
+          );
+        }
       }
     }
 
