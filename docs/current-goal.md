@@ -2,9 +2,9 @@
 
 Active goal: `guided-spatial-storytelling-v1`
 
-Current milestone: G0 baseline and evidence lock
+Current milestone: G6 automated Guided spatial storytelling checkpoint complete
 
-Gate: `HOLD_MAIN_PROMOTION / HOLD_PAGES_DEPLOY / HOLD_HUMAN_TEST / HOLD_P1_M4_M6`
+Gate: `READY_FOR_HUMAN_TEST / AWAITING_HUMAN_TEST / AWAITING_MUNICIPAL_WORKFLOW_REVIEW / HOLD_MAIN_PROMOTION / HOLD_PAGES_DEPLOY / HOLD_P1_M4_M6`
 
 Checkpoint state:
 
@@ -22,6 +22,12 @@ Checkpoint state:
 - section boundary: optional and verified only for the Area/source pair that owns it; a missing section never blocks the Area context scene
 - Scene 3 boundary: the 3–5 primary checks describe urban conditions that data cannot decide; photo/GPS/evidence-capture steps remain outside the Guided core
 - implementation stops after G6; no main merge, Pages deploy, Human Test, P1, or M4–M6
+- evidence product HEAD: `92bcad25a5b13e9cc81d488f9b023a1482381898`
+- production build: passed (`1m 33s` on the final local run)
+- Guided browser checkpoint: passed with one persistent MapLibre instance, six-area switch proof, legacy-route regression, desktop/mobile captures, keyboard checks, and no product errors
+- production-preview medians: FMR `851.3 ms`; Area context cold `1835.6 ms`; exact road `1467.5 ms`; exact building `556.2 ms`; return to Scene 2 `794.0 ms`
+- remote CI: not run because this goal has no push authorization
+- next action: stop for real human comprehension testing and separate municipal workflow review
 
 Prior completed checkpoint retained:
 
@@ -107,13 +113,15 @@ Maizuru borehole evidence:
 
 Current stop state:
 
-- `AUTOMATED_CARTOGRAPHIC_PERFORMANCE_CHECKPOINT_COMPLETE`
-- `READY_FOR_SELF_VISUAL_REVIEW`
+- `AUTOMATED_GUIDED_CHECKPOINT_COMPLETE`
 - `READY_FOR_HUMAN_TEST`
 - `AWAITING_HUMAN_TEST`
 - `AWAITING_MUNICIPAL_WORKFLOW_REVIEW`
 - `HOLD_MAIN_PROMOTION`
+- `HOLD_PAGES_DEPLOY`
 - `HOLD_P1_M4_M6`
+
+`GUIDED_UX_PASS`, `HUMAN_COMPREHENSION_PASS`, and `VISUAL_QUALITY_PASS` are not claimed. The automated checkpoint supports testing readiness only.
 
 Automated checkpoint facts:
 

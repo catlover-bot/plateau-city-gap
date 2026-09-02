@@ -17,7 +17,8 @@
     "audit:public-first-run": "node scripts/audit-public-first-run.mjs",
     "capture:current": "node scripts/capture-investigation-current.mjs",
     "capture:advanced": "node scripts/capture-current.mjs",
-    "test:guided": "node scripts/test-guided.mjs",
+    "test:guided": "node scripts/test-guided-spatial.mjs",
+    "profile:guided": "node scripts/profile-guided-spatial.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc -b --pretty false"
