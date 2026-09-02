@@ -240,8 +240,8 @@ export function ProductApp() {
   const data = datasets[state.city] ?? datasets.maizuru;
   const guidedData = datasets.maizuru ?? null;
   const investigationWorkspace = useMemo(
-    () => guidedData ? buildInvestigationWorkspace(guidedData) : null,
-    [guidedData],
+    () => guidedData && maizuruDataMode === "full" ? buildInvestigationWorkspace(guidedData) : null,
+    [guidedData, maizuruDataMode],
   );
   useEffect(() => {
     if (data) recordReadinessMetric("app_shell", state.scenePreset);
@@ -455,6 +455,11 @@ export function ProductApp() {
     dispatch({ type: "set-analysis-lens", lens });
   }, [dispatch, openPlateau3D]);
 
+  if (state.experience !== "guided" && maizuruDataMode !== "full") {
+    if (maizuruDataMode === "full-error" && error) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
+    return <LoadingState />;
+  }
+
   if (state.experience === "landing") {
     if (areaJourneyOpen) {
       if (areaError) return <ErrorState message={areaError} onRetry={closeAreaJourney} />;
@@ -501,9 +506,6 @@ export function ProductApp() {
       {error && <div className="nonblocking-error" role="alert">{error}<button type="button" onClick={() => setError(null)}>閉じる</button></div>}
     </>;
   }
-
-  if (maizuruDataMode === "loading-full") return <LoadingState />;
-  if (maizuruDataMode === "full-error" && error) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
 
   if (error && !data) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
   if (!data) return <LoadingState />;
