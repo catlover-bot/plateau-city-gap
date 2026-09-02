@@ -28,7 +28,7 @@ import type { UrbanObjectNode } from "../map/core/urbanObjectGraph";
 import { recordReadinessMetric } from "../map/3d/readiness/performanceMetrics";
 import { UrbanSection } from "../features/urban-section/UrbanSection";
 import { InvestigationLanding } from "../features/investigation/ValueLanding";
-import { GuidedSpatialWorkspace } from "../features/guided-spatial/GuidedSpatialWorkspace";
+import { GuidedSpatialLoadingWorkspace, GuidedSpatialWorkspace } from "../features/guided-spatial/GuidedSpatialWorkspace";
 import { PublicAreaJourney } from "../features/area-investigation/PublicAreaJourney";
 import { buildInvestigationWorkspace } from "../features/investigation/investigationModel";
 import { loadInvestigationAreaFixture } from "../features/area-investigation/areaModel";
@@ -492,7 +492,7 @@ export function ProductApp() {
 
   if (state.experience === "guided") {
     if (error && !guidedData) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
-    if (!guidedData) return <LoadingState />;
+    if (!guidedData) return <GuidedSpatialLoadingWorkspace />;
     return <>
       <GuidedSpatialWorkspace
         data={guidedData}

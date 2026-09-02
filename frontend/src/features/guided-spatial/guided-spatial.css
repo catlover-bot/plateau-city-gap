@@ -57,6 +57,31 @@
   border-right: 1px solid var(--cg-line-strong);
 }
 
+.guided-map-skeleton {
+  display: grid;
+  place-items: center;
+  background: #e3e9e3;
+}
+
+.guided-map-skeleton-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(34deg, transparent 46%, rgb(55 91 83 / 16%) 47%, rgb(55 91 83 / 16%) 49%, transparent 50%),
+    linear-gradient(118deg, transparent 46%, rgb(55 91 83 / 12%) 47%, rgb(55 91 83 / 12%) 49%, transparent 50%);
+  background-size: 94px 74px, 118px 92px;
+}
+
+.guided-map-skeleton > p {
+  position: relative;
+  z-index: 1;
+  padding: 9px 12px;
+  border: 1px solid var(--cg-line-strong);
+  background: rgb(250 250 245 / 92%);
+  color: var(--cg-ink-soft);
+  font-size: 12px;
+}
+
 .guided-map-stage > .analytical-map-shell,
 .guided-map-stage .analytical-map-canvas {
   width: 100%;

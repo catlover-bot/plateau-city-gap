@@ -160,6 +160,32 @@ interface Props {
   onOpenAdvanced(): void;
 }
 
+export function GuidedSpatialLoadingWorkspace() {
+  return <div
+    className="guided-spatial-app"
+    data-guided-story="intro"
+    data-context-status="loading"
+    aria-busy="true"
+  >
+    <header className="guided-spatial-header">
+      <span className="guided-brand">CITY GAP</span>
+      <span>舞鶴市</span>
+    </header>
+    <main className="guided-spatial-workspace">
+      <section className="guided-map-stage guided-map-skeleton" aria-label="舞鶴市の地図を準備中">
+        <div className="guided-map-skeleton-grid" aria-hidden="true" />
+        <p role="status">舞鶴市の500m範囲を読み込んでいます</p>
+      </section>
+      <aside className="guided-story-panel">
+        <div className="guided-intro">
+          <h1>舞鶴の地域を、地図からたどる。</h1>
+          <p>候補を選び、PLATEAUで街の形を見て、現地で確かめる場所まで進みます。</p>
+        </div>
+      </aside>
+    </main>
+  </div>;
+}
+
 export function GuidedSpatialWorkspace({
   data,
   state,
