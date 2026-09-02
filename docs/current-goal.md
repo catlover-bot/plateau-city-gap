@@ -1,12 +1,29 @@
 # Current goal
 
-Active goal: `public-product-language-and-section-v1`
+Active goal: `guided-spatial-storytelling-v1`
 
-Current milestone: H5 local automated checkpoint complete; feature-branch remote CI pending
+Current milestone: G0 baseline and evidence lock
 
-Gate: `HOLD_MAIN_PROMOTION / HOLD_P1_M4_M6`
+Gate: `HOLD_MAIN_PROMOTION / HOLD_PAGES_DEPLOY / HOLD_HUMAN_TEST / HOLD_P1_M4_M6`
 
 Checkpoint state:
+
+- source branch: `feat/public-product-language-section-v1`
+- source HEAD: `356dd90d49e7d736553de7596bb9cee619d1b692`
+- execution branch: `feat/guided-spatial-storytelling-v1`
+- baseline CI: Municipal Pilot CI run `33606249675`, completed successfully with all nine required jobs green
+- worktree at G0: clean; no reset, clean, rebase, squash, or force push used
+- goal: replace the current Guided card/wizard flow with one persistent MapLibre workspace whose camera, layers, selection, inspector, and optional section dock change across three internal scenes
+- core story: `地域を見つける -> 街の形を空間的に理解する -> 現地で確かめる場所を特定する`
+- default demo: 常団地前周辺; this is a default selection, not a product-wide fixed case
+- Area contract: one canonical selected Area drives its polygon, label, metrics, capability state, lazy PLATEAU context, optional section, target, checks, and provenance
+- payload boundary: a light 495-Area citywide catalog is initial; building, road, planning, target, section, and detailed source context load only for the selected Area
+- PLATEAU source priority: use the pinned Maizuru 2025 citywide CityGML source for deterministic display membership where available; do not patch unrelated local artifacts together
+- section boundary: optional and verified only for the Area/source pair that owns it; a missing section never blocks the Area context scene
+- Scene 3 boundary: the 3–5 primary checks describe urban conditions that data cannot decide; photo/GPS/evidence-capture steps remain outside the Guided core
+- implementation stops after G6; no main merge, Pages deploy, Human Test, P1, or M4–M6
+
+Prior completed checkpoint retained:
 
 - source branch: `feat/cartographic-interaction-performance-v1`
 - source HEAD: `a365dc04ccbcfad020d8f6ff2cd63db6e7865d60`
