@@ -428,6 +428,18 @@
   .guided-map-caption strong { font-size: 13px; }
   .guided-map-caption small { font-size: 9px; }
   .guided-section-dock .urban-section { bottom: 0; left: 0; height: 100%; }
+  .guided-spatial-app[data-guided-story="find"] .guided-story-panel,
+  .guided-spatial-app[data-guided-story="understand"] .guided-story-panel { padding-bottom: 88px; }
+  .guided-spatial-app[data-guided-story="find"] .guided-primary,
+  .guided-spatial-app[data-guided-story="understand"] .guided-primary {
+    position: fixed;
+    z-index: 40;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+    box-shadow: 0 7px 20px rgb(20 57 52 / 24%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
