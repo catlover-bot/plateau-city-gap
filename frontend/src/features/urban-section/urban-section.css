@@ -18,20 +18,22 @@
 .urban-section > header dt { color: #71807b; font: 6px var(--cg-mono); }
 .urban-section > header dd { margin: 2px 0 0; font: 8px var(--cg-mono); }
 .urban-section > header button { height: 100%; padding: 0 12px; border: 0; border-left: 1px solid #b4bab5; background: transparent; font-size: 9px; }
-.urban-section.guided > header { grid-template-columns: 230px 1fr; }
-.urban-section.guided > header span { font-family: inherit; font-size: 9px; letter-spacing: .04em; }
+.urban-section.guided > header { grid-template-columns: 250px 1fr; background: #f8f8f3; }
+.urban-section.guided > header > div:first-child { padding: 0 16px; }
+.urban-section.guided > header span { color: var(--cg-teal); font-family: inherit; font-size: 11px; font-weight: 800; letter-spacing: .01em; }
+.urban-section.guided > header strong { font-size: 13px; }
 .urban-section.guided > header .guided-section-facts { justify-self: end; }
 .urban-section.guided > header .guided-section-facts dt,
-.urban-section.guided > header .guided-section-facts dd { font-family: inherit; font-size: 9px; }
+.urban-section.guided > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
 .urban-section.guided svg { height: 162px; }
 .urban-section.guided footer { font-family: inherit; font-size: 8px; }
 .urban-section svg { display: block; width: 100%; height: 178px; background: #eeede5; }
 .section-load-message { margin: 16px; font-size: 10px; line-height: 1.7; }
 .section-load-message.error { color: #7b3f2e; }
 .section-grid line { stroke: #d4d5ce; stroke-width: 1; }
-.section-grid text { fill: #68716e; font: 7px var(--cg-mono); text-anchor: middle; }
-.section-axis text { fill: #4c5e59; font: 7px var(--cg-mono); }
-.section-axis text.endpoint { fill: #634371; font-size: 12px; font-weight: 900; }
+.urban-section.guided .section-grid text { font-family: var(--cg-font); font-size: 8px; }
+.urban-section.guided .section-axis text { font-family: var(--cg-font); font-size: 9px; }
+.urban-section.guided .section-axis text.endpoint { fill: var(--cg-section); font-size: 14px; font-weight: 900; }
 .section-terrain path { fill: none; stroke: #384b47; stroke-width: 2.2; }
 .section-buildings rect { fill: #778b86; stroke: #314743; stroke-width: 1; }
 .urban-section:not(.guided) .section-buildings rect { cursor: pointer; }
