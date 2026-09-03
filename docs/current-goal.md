@@ -2,7 +2,7 @@
 
 Active goal: `final-visual-polish-and-demo-video-v1`
 
-Current milestone: V3 automated UX and regression checkpoint
+Current milestone: V5 production demo-video package complete; V6 final verification pending
 
 Execution lock:
 
@@ -15,7 +15,14 @@ Execution lock:
 - exclude: backend, database, migrations, datasets, analysis, Borehole, isochrone, GTFS, hazard additions, M4–M6, main merge, and force push
 - baseline evidence: `docs/final-visual-demo-baseline.md`
 - local final UX evidence: `docs/final-ux-checkpoint.md`
-- next gate: V4 feature-branch push, required CI 9/9, Pages deployment, and production recapture
+- V4 feature push: commit `33466bd97a20d96fafa7cf2906a1e89676e7da07`
+- V4 Municipal Pilot CI: run `33756406111`, all nine required jobs passed
+- V4 Pages deployment: run `33756795063`, build and deploy passed
+- production capture: 13 required states, diagnostics zero, source commit and Pages run recorded in `docs/assets/final-visual-checkpoint/manifest.json`
+- production browser audit: Guided scenes, six Area switches, exact/fallback targets, mobile, keyboard, PLATEAU-native checks, and production Guided-to-Advanced flows passed
+- production demo package: captioned 1080p, clean 1080p, 15-second backup, poster, VTT captions, manifest, script, and runbook in `docs/assets/demo-video/` and `docs/`
+- V5 video source: the already deployed UI commit `33466bd97a20d96fafa7cf2906a1e89676e7da07`; recording diagnostics zero
+- next gate: V6 commit/push, feature-branch CI, decide whether Pages redeployment is necessary, reverify production/UI-video relationship, report, and stop
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.

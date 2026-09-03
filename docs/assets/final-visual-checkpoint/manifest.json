@@ -1,11 +1,11 @@
 {
   "schema_version": "citygap.final-visual-checkpoint@1",
-  "generated_at": "2026-09-03T12:32:26.127Z",
-  "environment": "production-preview",
-  "source_url": "http://127.0.0.1:4173/plateau-city-gap/",
+  "generated_at": "2026-09-03T12:45:52.253Z",
+  "environment": "production",
+  "source_url": "https://catlover-bot.github.io/plateau-city-gap/",
   "source_branch": "feat/guided-spatial-storytelling-v1",
-  "source_commit": "66eb7f74fc3554b6b19d2b28e040842beb91ee11",
-  "pages_run_id": null,
+  "source_commit": "33466bd97a20d96fafa7cf2906a1e89676e7da07",
+  "pages_run_id": "33756795063",
   "capture_protocol": "Playwright Chromium; readiness attributes + fonts + compositor frames; reduced motion",
   "capture_scope": "all",
   "runtime": {
@@ -69,9 +69,9 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
-      "bytes": 720946,
-      "sha256": "4413128439a3c79367c3f914491e602838478f67cdb115af5d22a74197054170",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 743517,
+      "sha256": "e5ef86c4856c89d7ad684e5ceb3f9a967bd5e8b3f6b50ea09586e6ce364fae2f",
       "metrics": {
         "viewport": {
           "width": 1440,
@@ -106,7 +106,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 712395,
       "sha256": "cbf7d53345961e92219ff9f551b64e6dad9d4c5cedf6220cd8dd72c576433c11",
       "metrics": {
@@ -143,7 +143,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 731937,
       "sha256": "bad386dfac54aad71a522d4b71a50bd9d0db1b567559a48d2dfbc2c7c040b5aa",
       "metrics": {
@@ -180,7 +180,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 672064,
       "sha256": "4b9fc754bc79ab0509a5886a3dd18ad12e591847484e1eb0640cad8a2d1dea5d",
       "metrics": {
@@ -226,7 +226,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 45690,
       "sha256": "233057558e74008e0fc6077924472848fadd3b78207a3dec45a1a6bcb99454c2",
       "metrics": {
@@ -272,9 +272,9 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
-      "bytes": 640526,
-      "sha256": "237f3a7ae3eabe1f031c8dc0aa7f9b610968aa76bd2c5ea28eb60602f7fee86d",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=16.37&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 907214,
+      "sha256": "fb44037c62b66a94d8703e082b1dad204f10a352b74c0c86ac36e45834a31692",
       "metrics": {
         "viewport": {
           "width": 1440,
@@ -283,7 +283,7 @@
         "orientation": "horizontal",
         "map_share_percent": 73,
         "panel_share_percent": 27,
-        "map_occlusion_percent": 3.8,
+        "map_occlusion_percent": 3.7,
         "visible_actionable_controls": 8,
         "primary_cta_count": 0,
         "visible_h1_count": 1,
@@ -310,7 +310,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.34688&lat=35.52292&z=15.70&selectionType=mesh&selection=533522274&mesh=533522274",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.34688&lat=35.52292&z=15.70&selectionType=mesh&selection=533522274&mesh=533522274",
       "bytes": 687221,
       "sha256": "c3a9f8388086d69cd47ae3f37696d532e7c4c1026523a1173d87e6f2b7d0f77c",
       "metrics": {
@@ -348,7 +348,7 @@
         "height": 900
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.31562&lat=35.48125&z=16.37&selectionType=mesh&selection=533512753&mesh=533512753",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.31562&lat=35.48125&z=16.37&selectionType=mesh&selection=533512753&mesh=533512753",
       "bytes": 543314,
       "sha256": "53147e93d125964f6013c0f95c8b06d820c3c31bf8d5711375abdb1d91f5b9f2",
       "metrics": {
@@ -385,7 +385,7 @@
         "height": 844
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 179249,
       "sha256": "4e9e5a79e18a11119f364841bd29808d9ea230b13940e3e8d9084729144a26c6",
       "metrics": {
@@ -422,7 +422,7 @@
         "height": 844
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 241033,
       "sha256": "0fe32198241d0f1dc39b63d1b2e86d9c4187e60f0a74b91c1eff5a97c709ca0a",
       "metrics": {
@@ -468,7 +468,7 @@
         "height": 844
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 61678,
       "sha256": "98e8908c0e185063cb9053d097d7547cb819689b6dc640a00ce44e822fbff5e8",
       "metrics": {
@@ -514,7 +514,7 @@
         "height": 844
       },
       "dpr": 1,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
       "bytes": 227879,
       "sha256": "f12571fd90068a971549d9e9592a99c49ab83459882c020970595f7cb155d125",
       "metrics": {
@@ -560,9 +560,9 @@
         "height": 900
       },
       "dpr": 2,
-      "final_url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
-      "bytes": 1856055,
-      "sha256": "7cd8d473a34738b8d23b13fff22cbbfaa7feb2a6340adc9951240dce793fba1c",
+      "final_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 1856457,
+      "sha256": "558f196e9b4364eee91a7e19877878824ceea31779f5d857b6bbde0fbe9b44d6",
       "metrics": {
         "viewport": {
           "width": 1440,

@@ -18,6 +18,8 @@
     "capture:current": "node scripts/capture-investigation-current.mjs",
     "capture:advanced": "node scripts/capture-current.mjs",
     "capture:final-visual": "node scripts/capture-final-visual-checkpoint.mjs",
+    "record:demo": "node scripts/record-presentation-demo.mjs",
+    "verify:demo": "node scripts/verify-demo-video.mjs",
     "test:guided": "node scripts/test-guided-spatial.mjs && node scripts/test-guided-advanced-transition.mjs",
     "test:data-upgrade": "node scripts/test-guided-advanced-transition.mjs",
     "profile:guided": "node scripts/profile-guided-spatial.mjs",

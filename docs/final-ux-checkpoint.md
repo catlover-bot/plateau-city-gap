@@ -2,7 +2,7 @@
 
 Goal: `final-visual-polish-and-demo-video-v1`
 
-Checkpoint: V3 local production-preview audit
+Checkpoint: V3 local audit plus V4 production recapture
 
 The visual and interaction changes are complete on `feat/guided-spatial-storytelling-v1`. This checkpoint is automated evidence, not a human aesthetic, comprehension, or municipal-workflow result.
 
@@ -13,13 +13,13 @@ The visual and interaction changes are complete on `feat/guided-spatial-storytel
 | Starting HEAD | `dad536e87019f3e1b54dfca50fac9405adb23aac` |
 | Visual source commit | `66eb7f74fc3554b6b19d2b28e040842beb91ee11` |
 | `origin/main` at checkpoint | `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff` |
-| Capture environment | local production preview |
+| Capture environment | GitHub Pages production; run `33756795063` |
 | Viewports | 1440 x 900, 1280 x 720, 390 x 844, DPR 2 |
 | Automated image set | [manifest and 13 captures](assets/final-visual-checkpoint/manifest.json) |
 | Before reference | [retained Guided checkpoint](assets/guided-spatial-checkpoint/manifest.json) |
 | Performance | [`final-visual-performance.json`](../analysis/outputs/real/final-visual-performance.json) |
 
-The final capture waits for the app's public or Guided visual-readiness signal, font readiness, and compositor frames. Each record includes its URL, viewport, DPR, file hash, control count, map/panel ratio, map occlusion, map state, and spatial identity. All 13 local captures reported `map_render_state=ready`; browser diagnostics were empty. The same script will be run against GitHub Pages after V4 deployment, so these local files are not represented as the final production capture yet.
+The final capture waits for the app's public or Guided visual-readiness signal, font readiness, and compositor frames. Each record includes its URL, viewport, DPR, file hash, control count, map/panel ratio, map occlusion, map state, and spatial identity. All 13 production captures reported `map_render_state=ready`; browser diagnostics were empty. The manifest records production URL, deployed UI commit `33466bd97a20d96fafa7cf2906a1e89676e7da07`, and Pages run `33756795063`.
 
 ## Before and after
 
@@ -131,7 +131,7 @@ The first sample was slower than the median (FMR 4,301.9ms), so the result is re
 | Guided-to-Advanced browser audit | pass; all flows and diagnostics clean |
 | `git diff --check` | rerun required before commit |
 
-Remote CI, feature Pages deployment, and production capture remain V4 work. The source branch has not been merged to `main`.
+Remote CI run `33756406111` passed all nine required jobs. Feature Pages run `33756795063` passed build and deploy, and the production recapture and browser audits succeeded. The source branch has not been merged to `main`; `origin/main` remains unchanged.
 
 ## Review boundary
 
