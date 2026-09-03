@@ -521,8 +521,8 @@
   .guided-intro h1 { font-size: 32px; }
   .guided-map-caption strong { font-size: 14px; }
   .guided-map-caption small { font-size: 11px; }
+  .guided-spatial-app .guided-context-legend { display: none; }
   .guided-section-dock .urban-section { bottom: 0; left: 0; height: 100%; }
-  .guided-spatial-app[data-guided-story="understand"] .guided-context-legend { display: none; }
   .guided-spatial-app[data-guided-story="find"] .guided-story-panel,
   .guided-spatial-app[data-guided-story="understand"] .guided-story-panel { padding-bottom: 84px; }
   .guided-spatial-app[data-guided-story="find"] .guided-primary,
