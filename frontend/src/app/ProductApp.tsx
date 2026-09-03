@@ -42,6 +42,12 @@ import {
   type PublicStoryId,
   type PublicTargetData,
 } from "../features/area-investigation/publicCartography";
+import {
+  createFullDataUpgradeController,
+  FULL_MAIZURU_DATA_TIMEOUT_MS,
+  FullDataUpgradeTimeoutError,
+  type FullDataUpgradeController,
+} from "./fullDataUpgrade";
 
 const EMPTY: GeoJsonFeatureCollection = { type: "FeatureCollection", features: [] };
 
@@ -97,38 +103,77 @@ export function ProductApp() {
   );
   const mapRef = useRef<MapEngineAdapter>(null);
   const visual2dParts = useRef(new Set<string>());
+  const mountedRef = useRef(true);
+  const fullDataUpgradeRef = useRef<FullDataUpgradeController<AppData> | null>(null);
+
+  if (!fullDataUpgradeRef.current) {
+    fullDataUpgradeRef.current = createFullDataUpgradeController<AppData>({
+      // The current full public bundle is about 2.4 MiB and the unchanged
+      // production build completed a fresh load in about 5.5 seconds locally.
+      // Thirty seconds leaves more than a 5x margin while bounding the wait.
+      timeoutMs: FULL_MAIZURU_DATA_TIMEOUT_MS,
+      load: (signal) => {
+        const fetchWithSignal: typeof fetch = (input, init) => fetch(input, { ...init, signal });
+        return loadAppData(fetchWithSignal);
+      },
+      onTransition: (snapshot) => {
+        window.__cityGapFullDataUpgrade = snapshot;
+      },
+    });
+  }
 
   useEffect(() => {
-    let cancelled = false; setError(null);
-    setMaizuruDataMode("none");
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
+  const ensureFullMaizuruData = useCallback((): Promise<AppData> => {
+    const controller = fullDataUpgradeRef.current;
+    if (!controller) return Promise.reject(new Error("詳細分析データのloaderを初期化できませんでした"));
+    setError(null);
+    setMaizuruDataMode("loading-full");
+    return controller.ensure().then(
+      (data) => {
+        if (mountedRef.current) {
+          setDatasets((current) => ({ ...current, maizuru: data }));
+          setMaizuruDataMode("full");
+        }
+        return data;
+      },
+      (reason: unknown) => {
+        if (mountedRef.current) {
+          const message = reason instanceof FullDataUpgradeTimeoutError
+            ? `詳細分析データの読み込みが${Math.round(reason.timeoutMs / 1000)}秒以内に完了しませんでした。通信状態を確認して、もう一度お試しください。`
+            : reason instanceof Error ? reason.message : "詳細分析データを読み込めませんでした";
+          setError(message);
+          setMaizuruDataMode("full-error");
+        }
+        throw reason;
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    setError(null);
     const mode = initialMaizuruMode.current;
-    const loader = mode === "guided" ? loadGuidedAppData : loadAppData;
-    loader().then((data) => {
+    if (mode === "full") {
+      void ensureFullMaizuruData().catch(() => undefined);
+      return;
+    }
+    let cancelled = false;
+    setMaizuruDataMode("none");
+    loadGuidedAppData().then((data) => {
       if (cancelled) return;
       setDatasets((current) => ({ ...current, maizuru: data }));
       setMaizuruDataMode(mode);
     }).catch((reason: unknown) => !cancelled && setError(reason instanceof Error ? reason.message : "データを読み込めませんでした"));
     return () => { cancelled = true; };
-  }, [retry]);
+  }, [ensureFullMaizuruData, retry]);
 
   useEffect(() => {
     if (state.experience === "guided" || maizuruDataMode !== "guided") return;
-    let cancelled = false;
-    setError(null);
-    setMaizuruDataMode("loading-full");
-    loadAppData()
-      .then((data) => {
-        if (cancelled) return;
-        setDatasets((current) => ({ ...current, maizuru: data }));
-        setMaizuruDataMode("full");
-      })
-      .catch((reason: unknown) => {
-        if (cancelled) return;
-        setError(reason instanceof Error ? reason.message : "詳細分析データを読み込めませんでした");
-        setMaizuruDataMode("full-error");
-      });
-    return () => { cancelled = true; };
-  }, [maizuruDataMode, state.experience]);
+    void ensureFullMaizuruData().catch(() => undefined);
+  }, [ensureFullMaizuruData, maizuruDataMode, state.experience]);
 
   useEffect(() => {
     let cancelled = false;
@@ -456,7 +501,9 @@ export function ProductApp() {
   }, [dispatch, openPlateau3D]);
 
   if (state.experience !== "guided" && maizuruDataMode !== "full") {
-    if (maizuruDataMode === "full-error" && error) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
+    if (maizuruDataMode === "full-error" && error) {
+      return <ErrorState message={error} onRetry={() => { void ensureFullMaizuruData().catch(() => undefined); }} />;
+    }
     return <LoadingState />;
   }
 
