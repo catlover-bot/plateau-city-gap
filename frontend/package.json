@@ -17,6 +17,7 @@
     "audit:public-first-run": "node scripts/audit-public-first-run.mjs",
     "capture:current": "node scripts/capture-investigation-current.mjs",
     "capture:advanced": "node scripts/capture-current.mjs",
+    "capture:final-visual": "node scripts/capture-final-visual-checkpoint.mjs",
     "test:guided": "node scripts/test-guided-spatial.mjs && node scripts/test-guided-advanced-transition.mjs",
     "test:data-upgrade": "node scripts/test-guided-advanced-transition.mjs",
     "profile:guided": "node scripts/profile-guided-spatial.mjs",

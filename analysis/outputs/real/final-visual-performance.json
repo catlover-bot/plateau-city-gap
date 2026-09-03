@@ -1,0 +1,75 @@
+{
+  "schema_version": "citygap.guided-spatial-performance@1",
+  "generated_at": "2026-09-03T12:33:36.923Z",
+  "branch": "feat/guided-spatial-storytelling-v1",
+  "commit": "66eb7f74fc3554b6b19d2b28e040842beb91ee11",
+  "protocol": "production-preview; 1440x900; DPR1; reduced motion; five fresh browser contexts",
+  "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=intro",
+  "samples": [
+    {
+      "sample": 1,
+      "first_meaningful_render_ms": 4301.9,
+      "area_context_cold_ms": 3280.1,
+      "exact_road_warm_ms": 1315.7,
+      "exact_building_warm_ms": 847.7,
+      "building_story_warm_ms": 1032.6
+    },
+    {
+      "sample": 2,
+      "first_meaningful_render_ms": 1148.2,
+      "area_context_cold_ms": 3210.1,
+      "exact_road_warm_ms": 1386,
+      "exact_building_warm_ms": 1079.7,
+      "building_story_warm_ms": 1932.9
+    },
+    {
+      "sample": 3,
+      "first_meaningful_render_ms": 1632.7,
+      "area_context_cold_ms": 2072.9,
+      "exact_road_warm_ms": 2575.7,
+      "exact_building_warm_ms": 631.5,
+      "building_story_warm_ms": 879.6
+    },
+    {
+      "sample": 4,
+      "first_meaningful_render_ms": 1837.7,
+      "area_context_cold_ms": 1673.2,
+      "exact_road_warm_ms": 1423.6,
+      "exact_building_warm_ms": 601.3,
+      "building_story_warm_ms": 1252.9
+    },
+    {
+      "sample": 5,
+      "first_meaningful_render_ms": 1051.3,
+      "area_context_cold_ms": 2243.4,
+      "exact_road_warm_ms": 2130,
+      "exact_building_warm_ms": 719.7,
+      "building_story_warm_ms": 1466.9
+    }
+  ],
+  "medians": {
+    "first_meaningful_render_ms": 1632.7,
+    "area_context_cold_ms": 2243.4,
+    "exact_road_warm_ms": 1423.6,
+    "exact_building_warm_ms": 719.7,
+    "building_story_warm_ms": 1252.9
+  },
+  "gates": {
+    "first_meaningful_render": {
+      "target_ms": 2000,
+      "pass": true
+    },
+    "exact_road_warm": {
+      "target_ms": 1800,
+      "pass": true
+    },
+    "exact_building_warm": {
+      "target_ms": 2500,
+      "pass": true
+    },
+    "building_story_warm": {
+      "target_ms": 2000,
+      "pass": true
+    }
+  }
+}

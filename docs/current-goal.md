@@ -2,7 +2,7 @@
 
 Active goal: `final-visual-polish-and-demo-video-v1`
 
-Current milestone: V0 baseline and benchmark
+Current milestone: V3 automated UX and regression checkpoint
 
 Execution lock:
 
@@ -14,6 +14,8 @@ Execution lock:
 - preserve: selected Area, 495-Area switching, exact PLATEAU targets, A–B Section, target-specific checks, upgrade controller, provenance, accessibility, performance, and deep links
 - exclude: backend, database, migrations, datasets, analysis, Borehole, isochrone, GTFS, hazard additions, M4–M6, main merge, and force push
 - baseline evidence: `docs/final-visual-demo-baseline.md`
+- local final UX evidence: `docs/final-ux-checkpoint.md`
+- next gate: V4 feature-branch push, required CI 9/9, Pages deployment, and production recapture
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.
