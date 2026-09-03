@@ -311,10 +311,14 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
           {counterfactualState === "stress" && <text className="section-counterfactual-note" x="660" y="18">{guided ? "この断面には災害条件による形の変化を加えていません" : "STRESS · このpackに断面固有stress relationなし · geometry不変"}</text>}
         </svg>
         {guided && <span id="guided-section-keyboard-help" className="guided-section-keyboard-help">左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。</span>}
-        <footer>
+        <footer className={guided ? "guided-section-footer" : undefined}>
           {guided ? <>
-            <span>地形・建物・道路：PLATEAU 舞鶴市2025</span>
-            <span>データにない建物高さは補っていません</span>
+            <div className="section-visual-legend" aria-label="断面の凡例">
+              <span><i className="terrain" aria-hidden="true" />地形</span>
+              <span><i className="building" aria-hidden="true" />建物</span>
+              <span><i className="road" aria-hidden="true" />道路</span>
+            </div>
+            <span className="guided-section-source">PLATEAU 舞鶴市2025 · 高さのない建物は補完なし</span>
           </> : <>
             <span>高さ基準: {data.vertical_datum}</span>
             <span>断面: TIN barycentric / exaggeration 1.0</span>

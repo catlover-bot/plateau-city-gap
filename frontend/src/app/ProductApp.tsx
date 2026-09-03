@@ -504,7 +504,9 @@ export function ProductApp() {
     if (maizuruDataMode === "full-error" && error) {
       return <ErrorState message={error} onRetry={() => { void ensureFullMaizuruData().catch(() => undefined); }} />;
     }
-    return <LoadingState />;
+    return state.experience === "advanced"
+      ? <LoadingState message="詳細分析のデータを読み込んでいます" detail="選んだ地域と表示状態を保ったまま準備しています" />
+      : <LoadingState />;
   }
 
   if (state.experience === "landing") {

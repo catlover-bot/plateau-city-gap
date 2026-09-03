@@ -27,6 +27,19 @@
 .urban-section.guided > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
 .urban-section.guided svg { height: 162px; }
 .urban-section.guided footer { font-family: inherit; font-size: 8px; }
+.urban-section.guided .guided-section-footer {
+  justify-content: space-between;
+  padding: 0 14px;
+  font-size: 11px;
+  gap: 16px;
+}
+.section-visual-legend { display: flex; align-items: center; gap: 14px; }
+.section-visual-legend span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.section-visual-legend i { display: block; width: 17px; height: 8px; }
+.section-visual-legend .terrain { height: 0; border-top: 2px solid #384b47; }
+.section-visual-legend .building { border: 1px solid #314743; background: #8fa09c; }
+.section-visual-legend .road { height: 0; border-top: 3px solid #5b6763; }
+.guided-section-source { color: #5d6865; white-space: nowrap; }
 .urban-section svg { display: block; width: 100%; height: 178px; background: #eeede5; }
 .section-load-message { margin: 16px; font-size: 10px; line-height: 1.7; }
 .section-load-message.error { color: #7b3f2e; }
@@ -73,4 +86,7 @@
   .urban-section svg { height: 122px; }
   .urban-section footer span:nth-child(n+2) { display: none; }
   .product-app:has(.urban-section) .analysis-lens-rail { display: none; }
+  .urban-section.guided .guided-section-footer { padding: 0 8px; }
+  .section-visual-legend { width: 100%; justify-content: space-around; gap: 8px; }
+  .guided-section-source { display: none; }
 }

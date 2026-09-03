@@ -3,8 +3,8 @@
   height: 100dvh;
   grid-template-rows: 52px minmax(0, 1fr);
   overflow: hidden;
-  background: #f3f1e9;
-  color: #17201d;
+  background: var(--cg-canvas);
+  color: var(--cg-ink);
 }
 
 .public-header {
@@ -15,8 +15,8 @@
   grid-template-columns: 1fr auto auto;
   align-items: center;
   padding: 0 20px;
-  border-bottom: 1px solid #96a39e;
-  background: rgb(250 249 244 / 98%);
+  border-bottom: 1px solid var(--cg-line);
+  background: var(--cg-surface);
   gap: 18px;
 }
 
@@ -34,7 +34,7 @@
   padding: 0;
   font-size: 17px;
   font-weight: 900;
-  letter-spacing: 0.13em;
+  letter-spacing: .04em;
 }
 
 .public-header strong {
@@ -53,7 +53,7 @@
 .public-area-body {
   display: grid;
   min-height: 0;
-  grid-template-columns: minmax(0, 2.12fr) minmax(370px, 1fr);
+  grid-template-columns: minmax(0, 73fr) minmax(360px, 27fr);
   overflow: hidden;
 }
 
@@ -62,7 +62,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: #d5ddd7;
+  background: var(--cg-canvas);
 }
 
 .public-map-area-badge,
@@ -204,8 +204,8 @@
   min-height: 0;
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  border-left: 1px solid #aeb7b2;
-  background: #fbfaf6;
+  border-left: 1px solid var(--cg-line);
+  background: var(--cg-surface);
 }
 
 .public-progress {
@@ -238,13 +238,16 @@
 
 .public-area-content h1 {
   margin: 7px 0 15px;
-  color: #173c34;
-  font-size: clamp(1.75rem, 2.5vw, 2.8rem);
-  line-height: 1.18;
+  color: var(--cg-teal-dark);
+  font-size: var(--cg-heading-scene);
+  line-height: 1.3;
+  letter-spacing: -.02em;
 }
 
 .public-area-content h1:focus {
   outline: none !important;
+  box-shadow: inset 3px 0 var(--cg-context);
+  padding-left: 12px;
 }
 
 .public-area-content h2 {
@@ -259,9 +262,11 @@
 
 .public-intro-copy {
   color: #405d55;
-  font-size: 15px;
-  line-height: 1.85;
+  font-size: 16px;
+  line-height: 1.7;
 }
+
+.public-intro h1 { font-size: clamp(32px, 2.25vw, 36px); }
 
 .public-primary,
 .public-secondary,
