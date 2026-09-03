@@ -519,8 +519,9 @@
   .guided-spatial-header > span { padding-left: 9px; }
   .guided-story-panel h1 { font-size: 25px; }
   .guided-intro h1 { font-size: 32px; }
-  .guided-map-caption strong { font-size: 14px; }
-  .guided-map-caption small { font-size: 11px; }
+  .guided-map-caption { padding: 7px 10px 8px; gap: 0; }
+  .guided-map-caption strong { font-size: 14px; line-height: 1.3; }
+  .guided-map-caption small { font-size: 11px; line-height: 1.35; }
   .guided-spatial-app .guided-context-legend { display: none; }
   .guided-section-dock .urban-section { bottom: 0; left: 0; height: 100%; }
   .guided-spatial-app[data-guided-story="find"] .guided-story-panel,
