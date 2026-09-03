@@ -1,6 +1,26 @@
 # Current goal
 
-Active goal: `guided-spatial-storytelling-v1`
+Active goal: `final-visual-polish-and-demo-video-v1`
+
+Current milestone: V0 baseline and benchmark
+
+Execution lock:
+
+- branch: `feat/guided-spatial-storytelling-v1`
+- starting HEAD: `dad536e87019f3e1b54dfca50fac9405adb23aac`
+- remote feature HEAD at start: `dad536e87019f3e1b54dfca50fac9405adb23aac`
+- origin/main at start: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
+- scope: Public / Guided visual polish, production demo route, and production browser demo video only
+- preserve: selected Area, 495-Area switching, exact PLATEAU targets, A–B Section, target-specific checks, upgrade controller, provenance, accessibility, performance, and deep links
+- exclude: backend, database, migrations, datasets, analysis, Borehole, isochrone, GTFS, hazard additions, M4–M6, main merge, and force push
+- baseline evidence: `docs/final-visual-demo-baseline.md`
+- human and municipal validation remain pending
+
+Prior Guided checkpoint retained below.
+
+---
+
+Active goal at retained checkpoint: `guided-spatial-storytelling-v1`
 
 Current milestone: G6 automated Guided spatial storytelling checkpoint complete
 
