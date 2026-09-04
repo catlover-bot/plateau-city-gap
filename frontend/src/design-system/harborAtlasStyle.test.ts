@@ -8,6 +8,8 @@ const guided = read("../features/guided-spatial/guided-spatial.css");
 const publicJourney = read("../features/area-investigation/publicAreaJourney.css");
 const urbanSection = read("../features/urban-section/urban-section.css");
 const analyticalMap = read("../map/2d/AnalyticalMap.tsx");
+const guidedCartography = read("../features/guided-spatial/guidedCartography.ts");
+const mapSource = `${analyticalMap}\n${guidedCartography}`;
 
 function token(name: string, value: string) {
   expect(tokens).toContain(`${name}: ${value};`);
@@ -61,11 +63,11 @@ describe("Harbor Atlas style contract", () => {
   });
 
   it("keeps selection distinguishable from context in grayscale", () => {
-    expect(analyticalMap).toContain('id: "guided-area-halo"');
-    expect(analyticalMap).toMatch(/id: "guided-area-line"[\s\S]*?"line-width": 3\.8/);
-    expect(analyticalMap).toContain('id: "guided-area-label"');
-    expect(analyticalMap).toContain('id: "guided-target-halo"');
-    expect(analyticalMap).toMatch(/id: "guided-target-line"[\s\S]*?"line-width": 5/);
+    expect(mapSource).toContain('id: "guided-area-halo"');
+    expect(mapSource).toMatch(/id: "guided-area-line"[\s\S]*?"line-width": 3\.8/);
+    expect(mapSource).toContain('id: "guided-area-label"');
+    expect(mapSource).toContain('id: "guided-target-halo"');
+    expect(mapSource).toMatch(/id: "guided-target-line"[\s\S]*?"line-width": 5/);
     expect(urbanSection).toContain("stroke-dasharray: 3 2");
   });
 
@@ -74,7 +76,7 @@ describe("Harbor Atlas style contract", () => {
     const deuteranopia = [.625, .375, 0, .7, .3, 0, 0, .3, .7];
     expect(simulatedDistance(protanopia)).toBeGreaterThan(40);
     expect(simulatedDistance(deuteranopia)).toBeGreaterThan(40);
-    expect(analyticalMap).toContain('id: "guided-target-label"');
+    expect(mapSource).toContain('id: "guided-target-label"');
   });
 
   it("keeps primary CTA text at WCAG AA contrast", () => {
@@ -98,14 +100,14 @@ describe("Harbor Atlas style contract", () => {
   it("gives map labels a readable halo", () => {
     expect(contrast(tokenHex("--cg-brand-strong"), tokenHex("--cg-bg-elevated"))).toBeGreaterThanOrEqual(4.5);
     expect(contrast(tokenHex("--cg-target-strong"), tokenHex("--cg-bg-elevated"))).toBeGreaterThanOrEqual(4.5);
-    expect(analyticalMap).toMatch(/id: "guided-area-label"[\s\S]*?"text-halo-width": 3/);
-    expect(analyticalMap).toMatch(/id: "guided-target-label"[\s\S]*?"text-halo-width": 3/);
+    expect(mapSource).toMatch(/id: "guided-area-label"[\s\S]*?"text-halo-width": 3/);
+    expect(mapSource).toMatch(/id: "guided-target-label"[\s\S]*?"text-halo-width": 3/);
   });
 
   it("keeps the A-B line readable over light and dark map portions", () => {
     expect(contrast(tokenHex("--cg-brand"), tokenHex("--cg-bg-elevated"))).toBeGreaterThanOrEqual(3);
-    expect(analyticalMap).toMatch(/id: "guided-section-halo"[\s\S]*?"line-width": 7/);
-    expect(analyticalMap).toMatch(/id: "guided-section-line"[\s\S]*?"line-width": 4/);
+    expect(mapSource).toMatch(/id: "guided-section-halo"[\s\S]*?"line-width": 7/);
+    expect(mapSource).toMatch(/id: "guided-section-line"[\s\S]*?"line-width": 4/);
     expect(urbanSection).toContain("fill: var(--cg-transect-endpoint)");
   });
 

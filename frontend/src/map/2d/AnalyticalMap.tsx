@@ -23,6 +23,7 @@ import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import { activeLayerIds } from "../layers/layerRegistry";
 import type { PublicCartographyPresentation } from "../../features/area-investigation/publicCartography";
 import type { GuidedMapPresentation } from "../../features/guided-spatial/guidedTypes";
+import { GUIDED_LAYER_DEFINITIONS, GUIDED_SOURCE_IDS } from "../../features/guided-spatial/guidedCartography";
 import type { LayerPresetId, SpatialSelection, SpatialViewport } from "../../state/spatial/types";
 import { HARBOR_ATLAS_CARTOGRAPHY as atlas } from "../../design-system/harborAtlas";
 
@@ -324,13 +325,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       addGeoJson(map, "public-planning", EMPTY);
       addGeoJson(map, "public-target", EMPTY);
       addGeoJson(map, "public-origin", EMPTY);
-      addGeoJson(map, "guided-area", EMPTY);
-      addGeoJson(map, "guided-buildings", EMPTY);
-      addGeoJson(map, "guided-roads", EMPTY);
-      addGeoJson(map, "guided-planning", EMPTY);
-      addGeoJson(map, "guided-target", EMPTY);
-      addGeoJson(map, "guided-section", EMPTY);
-      addGeoJson(map, "guided-section-focus", EMPTY);
+      GUIDED_SOURCE_IDS.forEach((id) => addGeoJson(map, id, EMPTY));
 
       map.addLayer({ id: "boundary-fill", type: "fill", source: "boundary", paint: { "fill-color": "#d9e4df", "fill-opacity": .11 } });
       map.addLayer({ id: "boundary-line", type: "line", source: "boundary", paint: { "line-color": "#315e5a", "line-width": 1.4, "line-opacity": .62 } });
@@ -370,26 +365,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       map.addLayer({ id: "public-target-line", type: "line", source: "public-target", layout: { visibility: "none" }, paint: { "line-color": atlas.targetStrong, "line-width": 4.5, "line-dasharray": [2, 1.4], "line-opacity": 1 } });
       map.addLayer({ id: "public-target-point", type: "circle", source: "public-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": atlas.target, "circle-radius": 9, "circle-stroke-color": atlas.white, "circle-stroke-width": 3, "circle-opacity": .98 } });
 
-      map.addLayer({ id: "guided-planning-fill", type: "fill", source: "guided-planning", layout: { visibility: "none" }, paint: { "fill-color": atlas.seaGlass, "fill-opacity": .09 } });
-      map.addLayer({ id: "guided-planning-line", type: "line", source: "guided-planning", layout: { visibility: "none" }, paint: { "line-color": atlas.harborSoft, "line-width": 1.1, "line-dasharray": [3, 2], "line-opacity": .48 } });
-      map.addLayer({ id: "guided-roads-fill", type: "fill", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": atlas.road, "fill-opacity": .42 } });
-      map.addLayer({ id: "guided-roads-line", type: "line", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": atlas.roadOutline, "line-width": ["interpolate", ["linear"], ["zoom"], 12, .55, 17, 2.2], "line-opacity": .72 } });
-      map.addLayer({ id: "guided-buildings-fill", type: "fill", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": atlas.building, "fill-opacity": .46 } });
-      map.addLayer({ id: "guided-buildings-line", type: "line", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": atlas.buildingOutline, "line-width": ["interpolate", ["linear"], ["zoom"], 12, .3, 17, 1.05], "line-opacity": .6 } });
-      map.addLayer({ id: "guided-area-fill", type: "fill", source: "guided-area", layout: { visibility: "none" }, paint: { "fill-color": atlas.seaGlass, "fill-opacity": .14 } });
-      map.addLayer({ id: "guided-area-halo", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": atlas.white, "line-width": 7, "line-opacity": .94 } });
-      map.addLayer({ id: "guided-area-line", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": atlas.harborStrong, "line-width": 3.8, "line-opacity": 1 } });
-      map.addLayer({ id: "guided-area-label", type: "symbol", source: "guided-area", minzoom: 9.4, layout: { visibility: "none", "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": 15, "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"], "text-allow-overlap": true, "text-offset": [0, 1.25] }, paint: { "text-color": atlas.harborStrong, "text-halo-color": atlas.white, "text-halo-width": 3 } });
-      map.addLayer({ id: "guided-section-halo", type: "line", source: "guided-section", layout: { visibility: "none" }, paint: { "line-color": atlas.white, "line-width": 7, "line-opacity": .94 } });
-      map.addLayer({ id: "guided-section-line", type: "line", source: "guided-section", layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": atlas.harbor, "line-width": 4, "line-opacity": 1 } });
-      map.addLayer({ id: "guided-section-endpoint-dots", type: "circle", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": atlas.harborStrong, "circle-radius": 6.5, "circle-stroke-color": atlas.white, "circle-stroke-width": 2.5 } });
-      map.addLayer({ id: "guided-section-endpoints", type: "symbol", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none", "text-field": ["get", "endpoint"], "text-size": 15, "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"], "text-offset": [0, -1.2], "text-allow-overlap": true }, paint: { "text-color": atlas.harborStrong, "text-halo-color": atlas.white, "text-halo-width": 2.5 } });
-      map.addLayer({ id: "guided-section-focus", type: "circle", source: "guided-section-focus", layout: { visibility: "none" }, paint: { "circle-color": atlas.target, "circle-radius": 6, "circle-stroke-color": atlas.white, "circle-stroke-width": 2 } });
-      map.addLayer({ id: "guided-target-fill", type: "fill", source: "guided-target", layout: { visibility: "none" }, paint: { "fill-color": atlas.target, "fill-opacity": .42 } });
-      map.addLayer({ id: "guided-target-halo", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": atlas.white, "line-width": 11, "line-opacity": .98 } });
-      map.addLayer({ id: "guided-target-line", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": atlas.targetStrong, "line-width": 5, "line-opacity": 1 } });
-      map.addLayer({ id: "guided-target-point", type: "circle", source: "guided-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": atlas.target, "circle-radius": 11, "circle-stroke-color": atlas.white, "circle-stroke-width": 4, "circle-opacity": 1 } });
-      map.addLayer({ id: "guided-target-label", type: "symbol", source: "guided-target", layout: { visibility: "none", "text-field": ["get", "map_label"], "text-size": 14, "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"], "text-offset": [0, 1.5], "text-padding": 12, "text-allow-overlap": true, "text-ignore-placement": true }, paint: { "text-color": atlas.targetStrong, "text-halo-color": atlas.white, "text-halo-width": 3 } });
+      GUIDED_LAYER_DEFINITIONS.forEach((layer) => map.addLayer(layer));
 
       map.addLayer({ id: "validation-primary", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "primary_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#397888", "line-width": 4, "line-opacity": dimNonSelected ? .35 : .9 } });
       map.addLayer({ id: "validation-reference", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "reference_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#719b43", "line-width": 3, "line-dasharray": [2, 1.5], "line-opacity": dimNonSelected ? .35 : .9 } });
