@@ -1,29 +1,68 @@
 :root {
-  --cg-ink: #17312f;
-  --cg-ink-soft: #506461;
-  --cg-paper: #f4f5f0;
-  --cg-panel: #fbfcf8;
-  --cg-line: #d4dad5;
-  --cg-line-strong: #899a94;
-  --cg-teal: #1e7068;
-  --cg-teal-dark: #114e49;
-  --cg-teal-pale: #deece7;
+  /* Harbor Atlas: UI neutrals */
+  --cg-bg-page: #f5f5f1;
+  --cg-bg-panel: #fcfcf9;
+  --cg-bg-elevated: #ffffff;
+  --cg-bg-muted: #eef1ef;
+  --cg-text-primary: #15242b;
+  --cg-text-secondary: #526269;
+  --cg-border: #d7ddda;
+  --cg-border-strong: #87959a;
+
+  /* Harbor Atlas: navigation, Area, and spatial continuity */
+  --cg-brand-strong: #164f63;
+  --cg-brand: #26758a;
+  --cg-brand-soft: #77aeb6;
+  --cg-brand-pale: #e8f2ef;
+  --cg-area-selected: #164f63;
+  --cg-area-selected-fill: #c9e1de;
+  --cg-area-candidate: #77aeb6;
+  --cg-area-candidate-fill: #e8f2ef;
+  --cg-area-context: #87959a;
+
+  /* Harbor Atlas: map and Urban Section materials */
+  --cg-building: #9ba9ad;
+  --cg-building-outline: #596970;
+  --cg-road: #e5ddd1;
+  --cg-road-outline: #667279;
+  --cg-transect-terrain: #5d7476;
+  --cg-transect-building: #9ba9ad;
+  --cg-transect-building-outline: #596970;
+  --cg-transect-road: #667279;
+  --cg-transect-line: #26758a;
+  --cg-transect-endpoint: #164f63;
+
+  /* Harbor Atlas: exact target, decisive action, and system states */
+  --cg-target-strong: #a94736;
+  --cg-target: #d9664d;
+  --cg-target-soft: #f1a085;
+  --cg-target-pale: #f7e4de;
+  --cg-focus-ring: #f0b84b;
+  --cg-error: #b34e49;
+
+  /* Compatibility aliases for Advanced and retained feature surfaces. */
+  --cg-ink: var(--cg-text-primary);
+  --cg-ink-soft: var(--cg-text-secondary);
+  --cg-paper: var(--cg-bg-page);
+  --cg-panel: var(--cg-bg-panel);
+  --cg-line: var(--cg-border);
+  --cg-line-strong: var(--cg-border-strong);
+  --cg-teal: var(--cg-brand);
+  --cg-teal-dark: var(--cg-brand-strong);
+  --cg-teal-pale: var(--cg-brand-pale);
   --cg-amber: #a86c21;
   --cg-amber-pale: #f2e9da;
   --cg-brick: #945442;
   --cg-bluegray: #526f7e;
   --cg-hazard: #68617e;
-  --cg-selected: #113d3b;
-  --cg-good: #1e7068;
-  --cg-error: #9a443d;
-  --cg-canvas: #edf0eb;
-  --cg-surface: #fbfcf8;
-  --cg-surface-muted: #f1f3ee;
-  --cg-context: #627873;
-  --cg-target: #9b681f;
-  --cg-target-pale: #f3eadb;
-  --cg-section: #694d76;
-  --cg-focus: #d8962f;
+  --cg-selected: var(--cg-area-selected);
+  --cg-good: var(--cg-brand);
+  --cg-canvas: var(--cg-bg-muted);
+  --cg-surface: var(--cg-bg-panel);
+  --cg-surface-muted: var(--cg-bg-muted);
+  --cg-context: var(--cg-transect-terrain);
+  --cg-section: var(--cg-transect-line);
+  --cg-focus: var(--cg-focus-ring);
   --cg-space-1: 4px;
   --cg-space-2: 8px;
   --cg-space-3: 12px;
@@ -32,7 +71,7 @@
   --cg-space-6: 32px;
   --cg-radius: 5px;
   --cg-shadow-panel: none;
-  --cg-shadow-control: 0 2px 10px rgb(21 47 44 / 14%);
+  --cg-shadow-control: 0 2px 10px rgb(21 36 43 / 14%);
   --cg-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Yu Gothic UI", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   --cg-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --cg-text-caption: 12px;
@@ -41,13 +80,18 @@
   --cg-heading-scene: clamp(24px, 2vw, 30px);
   --cg-heading-landing: clamp(32px, 3vw, 42px);
   --cg-ease: cubic-bezier(.2, .75, .25, 1);
-  --cg-duration-fast: 140ms;
-  --cg-duration-scene: 240ms;
+  --cg-duration-hover: 140ms;
+  --cg-duration-selection: 190ms;
+  --cg-duration-inspector: 170ms;
+  --cg-duration-section: 220ms;
+  --cg-duration-camera: 420ms;
+  --cg-duration-fast: var(--cg-duration-hover);
+  --cg-duration-scene: var(--cg-duration-section);
   --cg-z-map: 1;
   --cg-z-map-ui: 20;
   --cg-z-inspector: 40;
   --cg-z-modal: 100;
-  color: var(--cg-ink);
+  color: var(--cg-text-primary);
   font-family: var(--cg-font);
   font-synthesis: none;
 }
@@ -55,5 +99,5 @@
 * { box-sizing: border-box; }
 button, select, input { font: inherit; }
 button { color: inherit; }
-:focus-visible { outline: 3px solid var(--cg-focus) !important; outline-offset: 2px; }
-::selection { background: #c9dfd8; color: var(--cg-ink); }
+:focus-visible { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; }
+::selection { background: var(--cg-area-selected-fill); color: var(--cg-text-primary); }

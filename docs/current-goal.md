@@ -2,7 +2,7 @@
 
 Active goal: `harbor-atlas-visual-identity-ux-v2`
 
-Current milestone: S0 Harbor Atlas baseline locked; S1 semantic visual identity next
+Current milestone: S1 Harbor Atlas semantic visual identity complete; S2 cartography next
 
 Execution lock:
 
@@ -18,7 +18,11 @@ Execution lock:
 - baseline medians: FMR `314.9 ms`, Area cold `477.7 ms`, road `270.8 ms`, building `270.6 ms`, return/story warm `272.8 ms`; all V2 limits pass
 - baseline Section: desktop/mobile annotations `6`/`4`, named roads `4`/`2`, zero overlap/outside/endpoint/tick conflicts, zero horizontal overflow, and calculations below `16 ms` in the capture matrix
 - evidence: `docs/harbor-atlas-visual-baseline.md` and `docs/assets/harbor-atlas-v2/`
-- next gate: implement the semantic UI token layer and style assertions, validate Public/Guided/Advanced compatibility, and commit S1 as `feat: introduce Harbor Atlas visual identity`
+- S1 identity: UI neutrals, Harbor Area/navigation roles, Signal exact-target/action roles, map material roles, Urban Section roles, focus/error roles, and five motion timings are defined separately with retained compatibility aliases
+- S1 composition: Public and Guided headings, selected rows, target summaries, primary/secondary actions, overlays, loading shell, and responsive surface switch now consume semantic roles; decorative Guided loading gradients and legacy purple Public/Guided accents are removed
+- S1 style gates: ten Harbor Atlas source assertions pass, including locked seed values, UI/cartography separation, primary-action hierarchy, timing bands, reduced motion, no Public/Guided gradient, no runtime theme selector, and no legacy purple Section accent
+- S1 regression: lint, typecheck, production build, `29` test files / `127` tests, Public/Guided/Advanced five-state browser capture with zero diagnostics, and the complete Guided-to-Advanced direct/cached/Back-Forward/error/retry suite pass
+- next gate: implement the Harbor Atlas map paint hierarchy and prove exact target > selected Area/A-B > context > basemap without changing map lifecycle or data semantics
 - no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
 
 Prior deployed map/Section refinement checkpoint retained below.
