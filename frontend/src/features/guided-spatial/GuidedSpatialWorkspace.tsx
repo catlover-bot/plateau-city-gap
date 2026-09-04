@@ -511,9 +511,9 @@ export function GuidedSpatialWorkspace({
           onGuidedObjectSelect={handleGuidedObjectSelect}
         />
         <div className="guided-map-caption" aria-live="polite">
-          <span>{state.guidedStory === "intro" ? "舞鶴市を一つの地図でたどる" : state.guidedStory === "find" ? "舞鶴市 495の500m範囲" : state.guidedStory === "understand" ? "PLATEAUで街の形を確認" : "確認する場所"}</span>
-          <strong>{state.guidedStory === "intro" ? "舞鶴市全域" : areaLabel}</strong>
-          <small>{state.guidedStory === "intro" ? "候補を選ぶ前の市全体表示" : state.guidedStory === "verify" ? target?.resolution === "exact" ? `実在する${target.kind === "road" ? "PLATEAU道路面" : target.kind === "building" ? "PLATEAU建物" : "登録地点"}` : "個別対象は未解決・選んだ範囲で確認" : "選んだ500m範囲"}</small>
+          <span>{state.guidedStory === "intro" ? "舞鶴市全域" : state.guidedStory === "find" ? "地域を選ぶ" : state.guidedStory === "understand" ? "街の形" : "確認する場所"}</span>
+          <strong>{state.guidedStory === "intro" ? "地域を地図からたどる" : state.guidedStory === "verify" ? target?.label ?? areaLabel : areaLabel}</strong>
+          <small>{state.guidedStory === "intro" ? "495の500m範囲から調べる地域を選べます" : state.guidedStory === "find" ? "選んだ500m範囲" : state.guidedStory === "understand" ? "PLATEAU 舞鶴市2025" : target?.resolution === "exact" ? `実在する${target.kind === "road" ? "PLATEAU道路面" : target.kind === "building" ? "PLATEAU建物" : "登録地点"}` : "個別対象は未解決・選んだ範囲で確認"}</small>
         </div>
         {mapLegend && <aside className="guided-context-legend" aria-label={mapLegend.title}>
           <strong>{mapLegend.title}</strong>
@@ -540,7 +540,7 @@ export function GuidedSpatialWorkspace({
         </div>}
       </section>
 
-      <aside className="guided-story-panel" aria-labelledby="guided-story-title">
+      <aside className="guided-story-panel" aria-labelledby="guided-story-title" data-inspector-story={state.guidedStory}>
         {catalogError && <p role="alert" className="guided-error">{catalogError}</p>}
         {state.guidedStory === "intro" && <div className="guided-intro">
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>舞鶴の地域を、<br />地図からたどる。</h1>
@@ -548,9 +548,9 @@ export function GuidedSpatialWorkspace({
           <button type="button" className="guided-primary" onClick={() => onStoryChange("find")}>デモを始める</button>
         </div>}
         {state.guidedStory === "find" && <div className="guided-scene-content">
-          <span className="guided-eyebrow">地域を選ぶ</span>
+          <div className="guided-panel-kicker"><span className="guided-eyebrow">地域を選ぶ</span></div>
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>どの地域を詳しく見る？</h1>
-          <p>地域を選ぶと、人口・交通・医療の情報と街の形をたどれます。</p>
+          <p className="guided-scene-lead">地域を選ぶと、人口・交通・医療の情報と街の形をたどれます。</p>
           <div className="guided-area-list" aria-label="代表的な調査範囲">
             {shortlisted.map((area) => <button
               key={area.id}
@@ -578,14 +578,16 @@ export function GuidedSpatialWorkspace({
         </div>}
 
         {state.guidedStory === "understand" && <div className="guided-scene-content">
-          <button type="button" className="guided-back" onClick={() => onStoryChange("find")}>範囲選択へ戻る</button>
-          <span className="guided-eyebrow">データから見える地域の姿</span>
-          <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{areaLabel}の地形と建物</h1>
-          <div className="guided-known-summary">
-            <p><strong>人口 {Math.round(number(properties.population) ?? 0).toLocaleString("ja-JP")}人</strong><span>うち65歳以上 {Math.round(number(properties.elderly_population) ?? 0).toLocaleString("ja-JP")}人（国勢調査2020）</span></p>
-            <p><strong>街の形</strong><span>範囲と交差するPLATEAU建物 {selectedCatalogItem?.counts.buildings.toLocaleString("ja-JP") ?? "—"}棟・道路面 {selectedCatalogItem?.counts.roads.toLocaleString("ja-JP") ?? "—"}件</span></p>
-            <p><strong>都市計画・交通</strong><span>範囲と交差する公式の都市計画形状 {selectedCatalogItem?.counts.planning.toLocaleString("ja-JP") ?? "—"}件・収録駅/バス停まで直線 {formatDistance(properties.nearest_public_transport_distance_m)}</span></p>
+          <div className="guided-panel-kicker">
+            <button type="button" className="guided-back" onClick={() => onStoryChange("find")}>範囲選択へ戻る</button>
+            <span className="guided-eyebrow">データから見える地域の姿</span>
           </div>
+          <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{areaLabel}の地形と建物</h1>
+          <dl className="guided-known-summary">
+            <div><dt>人口 {Math.round(number(properties.population) ?? 0).toLocaleString("ja-JP")}人</dt><dd>うち65歳以上 {Math.round(number(properties.elderly_population) ?? 0).toLocaleString("ja-JP")}人（国勢調査2020）</dd></div>
+            <div><dt>街の形</dt><dd>範囲と交差するPLATEAU建物 {selectedCatalogItem?.counts.buildings.toLocaleString("ja-JP") ?? "—"}棟・道路面 {selectedCatalogItem?.counts.roads.toLocaleString("ja-JP") ?? "—"}件</dd></div>
+            <div><dt>都市計画・交通</dt><dd>範囲と交差する公式の都市計画形状 {selectedCatalogItem?.counts.planning.toLocaleString("ja-JP") ?? "—"}件・収録駅/バス停まで直線 {formatDistance(properties.nearest_public_transport_distance_m)}</dd></div>
+          </dl>
           {contextStatus === "loading" && <p role="status" className="guided-loading">選択した範囲のPLATEAU建物・道路を読み込んでいます</p>}
           {contextError && <p role="alert" className="guided-error">{contextError}</p>}
           {activeSectionData ? <p className="guided-section-note">地図上の紫のA–B線を横から見た断面です。</p>
@@ -600,20 +602,22 @@ export function GuidedSpatialWorkspace({
         </div>}
 
         {state.guidedStory === "verify" && <div className="guided-scene-content">
-          <button type="button" className="guided-back" onClick={() => onStoryChange("understand")}>街の形へ戻る</button>
-          <span className="guided-eyebrow">データだけでは判断できないこと</span>
+          <div className="guided-panel-kicker">
+            <button type="button" className="guided-back" onClick={() => onStoryChange("understand")}>街の形へ戻る</button>
+            <span className="guided-eyebrow">データだけでは判断できないこと</span>
+          </div>
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>ここで何を確かめる？</h1>
           {targetChoices.length > 1 && <label className="guided-target-select">確認対象
             <select value={target?.key} onChange={(event) => setSelectedTargetKey(event.target.value)}>
               {targetChoices.map((choice) => <option key={choice.key} value={choice.key}>{choice.label}</option>)}
             </select>
           </label>}
-          <div className="guided-target-summary">
+          <section className="guided-target-summary" aria-labelledby="guided-target-title">
             <span>{target?.resolution === "exact" ? target.kind === "facility" ? "登録施設" : target.kind === "building" ? "PLATEAU建物" : "PLATEAU道路" : "500mの確認範囲"}</span>
-            <strong>{target?.label ?? areaLabel}</strong>
+            <h2 id="guided-target-title">{target?.label ?? areaLabel}</h2>
             <p>{target?.reason}</p>
-          </div>
-          <div className="guided-task-heading"><strong>未確認</strong><span>現地で確かめること · {target?.checks.length ?? 0}件</span></div>
+          </section>
+          <div className="guided-task-heading"><span>未確認</span><h2>現地で確かめること <small>{target?.checks.length ?? 0}件</small></h2></div>
           <ol className="guided-check-list">
             {target?.checks.map(([id, label, reason]) => <li key={id}><strong>{label}</strong><span>{reason}</span></li>)}
           </ol>

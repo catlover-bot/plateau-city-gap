@@ -2,7 +2,7 @@
 
 Active goal: `deployed-map-ux-section-refinement-v1`
 
-Current milestone: M0 baseline locked; M1 map readability implemented and under checkpoint verification
+Current milestone: M1 map readability committed; M2 spatial-product UI refinement in progress
 
 Execution lock:
 
@@ -28,7 +28,9 @@ Execution lock:
 - existing demo videos: preserved unchanged; mark as visually stale after this refinement and recapture only after production visual approval
 - M0 evidence commit: `a8f342391441fa3d9e039d5173cdb7a3c16840b3`
 - M1 implementation: scene-aware basemap tuning, restrained candidate hierarchy, selected-Area halo/label, neutral PLATEAU context, stronger verified A–B line/endpoints, exact-target emphasis/label, and distinct honest fallback styling
-- next gate: finish M1 regression checks and commit, then refine the Guided inspector/UI in M2
+- M1 evidence commit: `cc52b06`; 113 unit tests, full Guided browser journey, exact/fallback targets, six-Area switching, legacy routes, and Guided-to-Advanced upgrade/retry checks passed
+- M2 implementation: clarify inspector hierarchy, map-caption state, back-navigation separation, semantic evidence/target summaries, status treatment, type scale, and legend fidelity without adding workflow steps
+- next gate: visually verify and commit M2, then implement Urban Section annotation clarity in M3
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.
