@@ -1,5 +1,30 @@
 # Current goal
 
+Active goal: `harbor-atlas-visual-identity-ux-v2`
+
+Current milestone: S0 Harbor Atlas baseline locked; S1 semantic visual identity next
+
+Execution lock:
+
+- branch: `feat/guided-spatial-storytelling-v1`
+- starting HEAD / upstream: `7e75a132e7f135db2dcdcf2b26e4b1d833381586`
+- origin/main at start: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
+- initial worktree: clean
+- scope: Harbor Atlas semantic tokens, cartographic hierarchy, map-first Guided refinement, unified Urban Section language, responsive polish, automated comparison, feature-branch CI, feature-branch Pages deploy, and production audit
+- preserve: one persistent MapLibre instance, canonical selection, 495 Areas, lazy context, Area switching and stale rejection, exact road/building and facility/fallback targets, A-B Section provenance/focus, Guided deep links and navigation, Guided-to-Advanced single-flight loading/retry, legacy/Public/Advanced/Municipal routes, accessibility, claims, and performance
+- exclude: backend, database, migrations, new datasets or analysis, scores/ranking, hazards, walking semantics, Borehole, M4-M6, new 3D, AI features, external fonts, runtime themes, dark mode, fake evidence, main merge/push, and Pages workflow/environment changes
+- baseline: production build passed; 22 product captures and 21 palette-study captures complete; diagnostics zero
+- palette decision: candidate A, Harbor Atlas; capture-only study with no runtime selector
+- baseline medians: FMR `314.9 ms`, Area cold `477.7 ms`, road `270.8 ms`, building `270.6 ms`, return/story warm `272.8 ms`; all V2 limits pass
+- baseline Section: desktop/mobile annotations `6`/`4`, named roads `4`/`2`, zero overlap/outside/endpoint/tick conflicts, zero horizontal overflow, and calculations below `16 ms` in the capture matrix
+- evidence: `docs/harbor-atlas-visual-baseline.md` and `docs/assets/harbor-atlas-v2/`
+- next gate: implement the semantic UI token layer and style assertions, validate Public/Guided/Advanced compatibility, and commit S1 as `feat: introduce Harbor Atlas visual identity`
+- no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
+
+Prior deployed map/Section refinement checkpoint retained below.
+
+---
+
 Active goal: `deployed-map-ux-section-refinement-v1`
 
 Current milestone: M4 automated checkpoint verified; M5 feature-branch push and remote CI next

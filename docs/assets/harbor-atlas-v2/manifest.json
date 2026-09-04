@@ -1,0 +1,58 @@
+{
+  "schema_version": "citygap.harbor-atlas-visual-checkpoint@1",
+  "goal": "harbor-atlas-visual-identity-ux-v2",
+  "milestone": "S0",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "7e75a132e7f135db2dcdcf2b26e4b1d833381586",
+  "origin_main": "2f28cd1089eda576c3002ebb2fb3e0f2b62123ff",
+  "environment": "local-production-preview",
+  "palette_decision": "harbor-atlas",
+  "runtime_theme_selector_added": false,
+  "baseline": {
+    "capture_manifest": {
+      "path": "before/manifest.json",
+      "sha256": "ac7c48095ff461925d250aa458c691af2df4bb82854a6cb69b8087b0d481fa79",
+      "records": 17,
+      "diagnostics": 0
+    },
+    "supplement_manifest": {
+      "path": "before/supplement-manifest.json",
+      "sha256": "2d644abf80a578fbd032992c92f9b59e7f11de1d1006ff2bb8aabfa1bfaf72e4",
+      "records": 5,
+      "diagnostics": 0
+    },
+    "inventory": {
+      "path": "before/inventory.json",
+      "sha256": "d49eb060b2abd9585eb00418482ea6e88da81bfc56e89707b1a5b337fc9f29ef",
+      "viewports": 5
+    },
+    "performance": {
+      "path": "before/performance.json",
+      "sha256": "7feb2b603e4f46e768082b7987bb0dd91fea980dad842b186368f70be7d8f99a",
+      "samples": 5
+    }
+  },
+  "palette_study": {
+    "path": "palette-study/manifest.json",
+    "sha256": "a90c83dcbd9a754967c2329b5bf86d8584ea3c0ce388b951ae17c64ad34a68f6",
+    "candidates": 3,
+    "records": 21,
+    "diagnostics": 0,
+    "simulations": [
+      "grayscale",
+      "protanopia",
+      "deuteranopia"
+    ]
+  },
+  "after": {
+    "status": "pending",
+    "path": "after/"
+  },
+  "claims": {
+    "automated_baseline": "complete",
+    "human_visual_quality": "not_claimed",
+    "human_comprehension": "not_claimed",
+    "accessibility_acceptance": "not_claimed",
+    "municipal_workflow": "not_claimed"
+  }
+}
