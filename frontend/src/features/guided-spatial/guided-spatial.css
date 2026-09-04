@@ -444,7 +444,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: min(48%, 400px);
+  height: min(52.2%, 450px);
   border-top: 1px solid var(--cg-line-strong);
   background: #f3f3ec;
 }
@@ -473,7 +473,7 @@
 }
 
 @media (min-width: 901px) and (max-height: 760px) {
-  .guided-section-dock { height: 328px; }
+  .guided-section-dock { height: 375px; }
   .guided-section-dock .urban-section.guided > header { height: 48px; }
   .guided-section-dock .urban-section.guided svg { height: calc(100% - 74px); }
   .guided-section-dock .urban-section.guided footer { height: 26px; }

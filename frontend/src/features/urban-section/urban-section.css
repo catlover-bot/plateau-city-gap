@@ -25,7 +25,8 @@
 .urban-section.guided > header .guided-section-facts { justify-self: end; }
 .urban-section.guided > header .guided-section-facts dt,
 .urban-section.guided > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
-.urban-section.guided svg { height: 162px; }
+.urban-section.guided svg { height: 162px; cursor: crosshair; }
+.urban-section.guided svg:focus-visible { outline: 2px solid var(--cg-focus); outline-offset: -3px; }
 .urban-section.guided footer { font-family: inherit; font-size: 8px; }
 .urban-section.guided .guided-section-footer {
   justify-content: space-between;
@@ -40,13 +41,15 @@
 .section-visual-legend .building { border: 1px solid #314743; background: #8fa09c; }
 .section-visual-legend .road { height: 0; border-top: 3px solid #5b6763; }
 .guided-section-source { color: #5d6865; white-space: nowrap; }
-.urban-section svg { display: block; width: 100%; height: 178px; background: #eeede5; }
+.urban-section svg { display: block; width: 100%; height: 178px; background: #f1f1e9; }
 .section-load-message { margin: 16px; font-size: 10px; line-height: 1.7; }
 .section-load-message.error { color: #7b3f2e; }
-.section-grid line { stroke: #d4d5ce; stroke-width: 1; }
-.urban-section.guided .section-grid text { font-family: var(--cg-font); font-size: 8px; }
-.urban-section.guided .section-axis text { font-family: var(--cg-font); font-size: 9px; }
-.urban-section.guided .section-axis text.endpoint { fill: var(--cg-section); font-size: 14px; font-weight: 900; }
+.section-grid line { stroke: #d6d8d1; stroke-width: .8; }
+.urban-section.guided .section-axis text { fill: #53635f; font-family: var(--cg-font); font-size: 10px; font-variant-numeric: tabular-nums; }
+.urban-section.guided .section-axis text.axis-title { fill: #344944; font-size: 11px; font-weight: 700; }
+.urban-section.guided .section-axis text.endpoint { fill: var(--cg-section); font-size: 15px; font-weight: 900; }
+.urban-section.guided .section-axis .endpoint-dot { fill: var(--cg-section); stroke: #fff; stroke-width: 1.5; }
+.section-terrain-area path { fill: rgb(74 106 98 / 8%); }
 .section-terrain path { fill: none; stroke: #384b47; stroke-width: 2.2; }
 .section-buildings rect { fill: #778b86; stroke: #314743; stroke-width: 1; }
 .urban-section:not(.guided) .section-buildings rect { cursor: pointer; }
@@ -54,9 +57,31 @@
 .section-buildings rect.selected { fill: #b47a21; stroke: #563a11; stroke-width: 2; }
 .section-buildings rect:focus { outline: none; stroke: #bd642c; stroke-width: 2; }
 .section-roads path { fill: #f0eee7; stroke: #5b6763; stroke-width: 1.5; }
+.urban-section.guided .section-buildings rect { fill: #8e9c98; stroke: #52635f; stroke-width: .9; }
+.urban-section.guided .section-buildings rect.nearby { fill: rgb(126 143 138 / 13%); stroke: #71817c; stroke-dasharray: 3 2; }
+.urban-section.guided .section-buildings rect.selected,
+.urban-section.guided .section-buildings rect.focused { fill: #c58a36; stroke: #764b0f; stroke-width: 2; }
+.urban-section.guided .section-roads path { fill: #f8f7f1; stroke: #435d63; stroke-width: 1.8; }
+.urban-section.guided .section-roads path.focused { fill: #d79b3f; stroke: #74490e; stroke-width: 2.2; }
+.section-road-annotations line { stroke: #6b7b77; stroke-width: .75; stroke-dasharray: 2 2; }
+.section-road-annotations text {
+  fill: #344f55;
+  stroke: #f7f7f1;
+  stroke-width: 3.5px;
+  paint-order: stroke fill;
+  font-family: var(--cg-font);
+  font-size: 11px;
+  font-weight: 750;
+}
+.section-focus-callout > line { stroke: #9a6417; stroke-width: 1.2; }
+.section-focus-callout > circle { fill: #b7791f; stroke: #fff; stroke-width: 2; }
+.section-focus-callout > rect { fill: rgb(255 253 246 / 97%); stroke: #a66c19; stroke-width: 1; }
+.section-focus-callout text { font-family: var(--cg-font); text-anchor: start; }
+.section-focus-callout .focus-name { fill: #493814; font-size: 11.5px; font-weight: 800; }
+.section-focus-callout .focus-meta { fill: #655b47; font-size: 9.5px; }
 .section-services circle { fill: #416f75; }
 .section-services text { fill: #39514e; font: 6px var(--cg-mono); }
-.section-text-summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.section-text-summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 .section-planning rect { fill: #617f79; opacity: .48; }
 .section-hazard rect { fill: #9c6047; opacity: .58; }
 .section-counterfactual-note { fill: #8c5c22; font: 7px var(--cg-mono); }
@@ -84,7 +109,7 @@
   .urban-section > header { grid-template-columns: 1fr auto; }
   .urban-section > header dl { display: none; }
   .urban-section svg { height: 122px; }
-  .urban-section footer span:nth-child(n+2) { display: none; }
+  .urban-section:not(.guided) footer > span:nth-child(n+2) { display: none; }
   .product-app:has(.urban-section) .analysis-lens-rail { display: none; }
   .urban-section.guided .guided-section-footer { padding: 0 8px; }
   .section-visual-legend { width: 100%; justify-content: space-around; gap: 8px; }

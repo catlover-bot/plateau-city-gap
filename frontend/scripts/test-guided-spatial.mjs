@@ -39,6 +39,7 @@ const screenshots = [];
 const snapshots = [];
 const accessibility = [];
 const routeRegressions = [];
+const sectionAudits = [];
 
 function attachDiagnostics(page, label) {
   page.on("pageerror", (error) => errors.push(`${label}: pageerror: ${error.message}`));
@@ -149,6 +150,50 @@ async function mapSnapshot(page, label) {
     };
   }, label);
   snapshots.push(result);
+  return result;
+}
+
+async function auditGuidedSection(page, label, { maxAnnotations, minHeight }) {
+  const result = await page.evaluate((auditLabel) => {
+    const section = document.querySelector(".urban-section.guided");
+    const labels = [...document.querySelectorAll('[data-section-annotation-kind="road"]')];
+    const distanceTicks = document.querySelectorAll('[data-section-axis-tick="distance"]').length;
+    const elevationTicks = document.querySelectorAll('[data-section-axis-tick="elevation"]').length;
+    const summary = document.querySelector("#section-accessible-summary")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+    return {
+      label: auditLabel,
+      height: document.querySelector(".guided-section-dock svg")?.getBoundingClientRect().height ?? 0,
+      annotations: Number(section?.getAttribute("data-static-annotation-count")),
+      roadAnnotations: Number(section?.getAttribute("data-road-annotation-count")),
+      hidden: Number(section?.getAttribute("data-hidden-low-priority-annotations")),
+      calculationMs: Number(section?.getAttribute("data-annotation-calculation-ms")),
+      internalOverlaps: Number(section?.getAttribute("data-annotation-overlap-count")),
+      uniqueRoadLabels: new Set(labels.map((node) => node.textContent?.trim())).size,
+      distanceTicks,
+      elevationTicks,
+      tabStops: section?.querySelectorAll('[tabindex="0"]').length ?? 0,
+      legendItems: section?.querySelectorAll(".section-visual-legend > span").length ?? 0,
+      summary,
+    };
+  }, label);
+  sectionAudits.push(result);
+  if (
+    result.height < minHeight
+    || result.annotations > maxAnnotations
+    || result.roadAnnotations > maxAnnotations - 2
+    || result.roadAnnotations !== result.uniqueRoadLabels
+    || result.internalOverlaps !== 0
+    || result.calculationMs > 50
+    || result.distanceTicks < 3
+    || result.distanceTicks > 6
+    || result.elevationTicks < 3
+    || result.elevationTicks > 5
+    || result.tabStops !== 1
+    || result.legendItems !== 3
+    || !/AからBまで約\d+m/.test(result.summary)
+    || !/標高は\d+\.\d+mから\d+\.\d+m/.test(result.summary)
+    || !/直接交差する建物は17棟、道路は14本/.test(result.summary)
+  ) throw new Error(`guided Section audit failure: ${JSON.stringify(result)}`);
   return result;
 }
 
@@ -297,6 +342,7 @@ try {
       }
       const sectionSnapshot = await mapSnapshot(page, `${meshCode}:section-ready`);
       if (!sectionSnapshot.sectionVisible) throw new Error("verified section line is not visible on its owning Area");
+      await auditGuidedSection(page, "desktop", { maxAnnotations: 6, minHeight: 360 });
     } else if (understand.sectionPack !== "none" || await page.locator(".guided-section-dock").count()) {
       throw new Error(`stale section leaked into ${meshCode}`);
     }
@@ -393,7 +439,8 @@ try {
   await ready(compactPage, "533513314");
   await compactPage.locator('.guided-spatial-app[data-section-pack="maizuru-533513314-plateau-2025-v1"]').waitFor({ timeout: 120_000 });
   const compactSectionHeight = await compactPage.locator(".guided-section-dock svg").evaluate((node) => node.getBoundingClientRect().height);
-  if (compactSectionHeight < 250 || compactSectionHeight > 270) throw new Error(`1280 section plot height outside 250-270px: ${compactSectionHeight}`);
+  if (compactSectionHeight < 300 || compactSectionHeight > 320) throw new Error(`1280 section plot height outside 300-320px: ${compactSectionHeight}`);
+  await auditGuidedSection(compactPage, "compact", { maxAnnotations: 6, minHeight: 300 });
   await auditAccessibility(compactPage, "compact-understand");
   await shot(compactPage, "compact-understand-section.png");
   await compact.close();
@@ -428,6 +475,31 @@ try {
   await mobilePage.waitForFunction(() => (document.querySelector(".guided-section-dock svg")?.getBoundingClientRect().height ?? 0) >= 300);
   const sectionHeight = await mobilePage.locator(".guided-section-dock svg").evaluate((node) => node.getBoundingClientRect().height);
   if (sectionHeight < 300) throw new Error(`mobile section plot is too short: ${sectionHeight}`);
+  await auditGuidedSection(mobilePage, "mobile", { maxAnnotations: 4, minHeight: 300 });
+  const sectionSvg = mobilePage.locator(".urban-section.guided svg");
+  await sectionSvg.focus();
+  await mobilePage.keyboard.press("ArrowRight");
+  await mobilePage.waitForFunction(() => {
+    const section = document.querySelector(".urban-section.guided");
+    const map = document.querySelector(".analytical-map-canvas")?.__cityGapMap;
+    const focusSource = map?.getSource("guided-section-focus")?.serialize?.().data;
+    return section?.getAttribute("data-selected-annotation-visible") === "true"
+      && focusSource?.features?.length === 1;
+  });
+  const focusAudit = await mobilePage.evaluate(() => {
+    const section = document.querySelector(".urban-section.guided");
+    const callout = section?.querySelector("[data-section-focus-annotation]");
+    return {
+      selectedVisible: section?.getAttribute("data-selected-annotation-visible"),
+      focusedKind: section?.getAttribute("data-focused-object-kind"),
+      callout: callout?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+      mapInitCount: window.__cityGapMapInitCount,
+    };
+  });
+  sectionAudits.push({ label: "mobile-focus", ...focusAudit });
+  if (focusAudit.selectedVisible !== "true" || !/building|road/.test(focusAudit.focusedKind ?? "") || !/標高/.test(focusAudit.callout) || focusAudit.mapInitCount !== initialMapCount) {
+    throw new Error(`Section focus synchronization failure: ${JSON.stringify(focusAudit)}`);
+  }
   await auditAccessibility(mobilePage, "mobile-understand-section");
   await shot(mobilePage, "mobile-understand-section.png");
 
@@ -472,6 +544,7 @@ try {
     area_switch_sequence: sequence,
     snapshots,
     accessibility,
+    section_audits: sectionAudits,
     keyboard,
     route_regressions: routeRegressions,
     screenshots,

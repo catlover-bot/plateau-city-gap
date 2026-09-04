@@ -2,7 +2,7 @@
 
 Active goal: `deployed-map-ux-section-refinement-v1`
 
-Current milestone: M1 map readability committed; M2 spatial-product UI refinement in progress
+Current milestone: M3 Urban Section clarity verified; M4 automated after checkpoint next
 
 Execution lock:
 
@@ -30,7 +30,12 @@ Execution lock:
 - M1 implementation: scene-aware basemap tuning, restrained candidate hierarchy, selected-Area halo/label, neutral PLATEAU context, stronger verified A–B line/endpoints, exact-target emphasis/label, and distinct honest fallback styling
 - M1 evidence commit: `cc52b06`; 113 unit tests, full Guided browser journey, exact/fallback targets, six-Area switching, legacy routes, and Guided-to-Advanced upgrade/retry checks passed
 - M2 implementation: clarify inspector hierarchy, map-caption state, back-navigation separation, semantic evidence/target summaries, status treatment, type scale, and legend fidelity without adding workflow steps
-- next gate: visually verify and commit M2, then implement Urban Section annotation clarity in M3
+- M2 evidence commit: `90c4271`; 17-state production-preview visual pass and zero capture diagnostics, with the dedicated Guided-to-Advanced transition suite passing in isolation
+- M3 implementation: deduplicated and distributed road labels, measured two-rail collision placement, four-road desktop/two-road mobile limits plus A/B, responsive plot height, clear axes/units/endpoints, subtle terrain hierarchy, focused-object accent/callout, accessible summary, one SVG tab stop, and corrected compact pointer projection
+- M3 current measurements: total static annotations `6` desktop / `4` mobile; overlaps `0`; outside-plot labels `0`; endpoint/tick conflicts `0`; plot height `361.47 px` at `1440 × 900`, `300 px` at `1280 × 720`, `373 px` at `1920 × 1080`, and `303.19 px` mobile
+- M3 performance/interaction: annotation calculation `7.8–11.9 ms` desktop/DPR2 and `1 ms` mobile; focused road/building callout, elevation/relation text, matching map focus source, one SVG tab stop, and one persistent map all verified
+- M3 regression: production build, lint, typecheck, `117` unit tests, full Guided six-Area journey, exact/fallback/facility targets, legacy routes, and Guided-to-Advanced load/cache/error/retry suite passed
+- next gate: commit M3, then capture and document the automated after checkpoint in M4
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.
