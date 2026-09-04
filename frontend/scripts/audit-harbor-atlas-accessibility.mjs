@@ -131,6 +131,14 @@ const allStates = [
   { label: "guided-intro", experience: "guided", story: "intro", section: false, viewport: { width: 1440, height: 900 } },
   { label: "guided-find", experience: "guided", story: "find", section: false, viewport: { width: 1440, height: 900 } },
   { label: "guided-understand", experience: "guided", story: "understand", section: false, viewport: { width: 1440, height: 900 } },
+  {
+    label: "guided-understand-200pct-reflow",
+    experience: "guided",
+    story: "understand",
+    section: false,
+    viewport: { width: 720, height: 450 },
+    zoom_equivalent: "1440x900 at 200% browser zoom",
+  },
   { label: "guided-verify", experience: "guided", story: "verify", section: false, viewport: { width: 1440, height: 900 } },
   { label: "guided-section-mobile", experience: "guided", story: "understand", section: true, viewport: { width: 390, height: 844 } },
 ];
@@ -158,7 +166,7 @@ const report = {
   source_commit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim(),
   source_url: rootUrl.toString(),
   axe_core_version: JSON.parse(await readFile(require.resolve("axe-core/package.json"), "utf8")).version,
-  protocol: "axe-core WCAG 2 A/AA, 2.1 A/AA, and 2.2 AA tags; production build; reduced motion; font and map readiness",
+  protocol: "axe-core WCAG 2 A/AA, 2.1 A/AA, and 2.2 AA tags; production build; reduced motion; font and map readiness; 720x450 CSS viewport as 1440x900 at 200% zoom reflow equivalent",
   state_count: records.length,
   critical_or_serious_count: criticalOrSeriousCount,
   structural_failure_count: structuralFailures.length,

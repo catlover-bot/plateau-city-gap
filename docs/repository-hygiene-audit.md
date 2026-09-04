@@ -1,6 +1,6 @@
 # Repository hygiene audit
 
-Status: `R1_BASELINE_RECORDED`
+Status: `R4_CONSOLIDATION_VERIFIED_LOCAL`
 
 This audit records the repository before the refinement pass on
 `feat/guided-spatial-storytelling-v1`. It distinguishes current product assets,
@@ -385,5 +385,8 @@ output:
   removed. `docs/README.md` now routes current documentation, and stable data,
   claim, and presentation-retention boundaries have dedicated documents.
 
-Final tracked counts will be recorded in the refactor checkpoint after the
-verified production slide and video packages are installed.
+Final tracked counts, including the verified production slide and replacement
+video packages, will be recorded with the presentation-asset commit.
+
+The complete local validation result before the first remote push is recorded
+in [repository-refactor-checkpoint.md](repository-refactor-checkpoint.md).

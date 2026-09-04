@@ -42,7 +42,7 @@ const viewport = { width: 1920, height: 1080 };
 const rawVideoSize = { width: 960, height: 540 };
 const selectedArea = "533513314";
 const sectionArtifactId = "maizuru-533513314-plateau-2025-v1";
-const durationSeconds = 54;
+const durationSeconds = 55;
 const rawDirectory = path.join(tmpdir(), `citygap-demo-${process.pid}-${Date.now()}`);
 const profileDirectory = path.join(rawDirectory, "chromium-profile");
 const chromiumArgs = [
@@ -60,13 +60,13 @@ const variants = [
 ];
 const diagnostics = [];
 const choreography = [
-  { start: 0, end: 3, scene: "Guided intro", caption: "舞鶴市の地域を、地図からたどる" },
-  { start: 3, end: 10, scene: "citywide candidates and focus", caption: "詳しく見る地域を選ぶ" },
-  { start: 10, end: 16, scene: "select 常団地前周辺", caption: "人口・交通・医療から候補を確認" },
-  { start: 16, end: 30, scene: "PLATEAU context and A–B Section", caption: "500mの統計を、建物・道路・地形へ" },
-  { start: 30, end: 42, scene: "exact PLATEAU road target", caption: "データだけでは分からない場所を特定" },
-  { start: 42, end: 50, scene: "four required checks", caption: "現地で確認するポイントへ" },
-  { start: 50, end: 54, scene: "final hold", caption: "データから、現地確認の入口をつくる" },
+  { start: 0, end: 4, scene: "Guided intro", caption: "舞鶴市の地域を、地図からたどる" },
+  { start: 4, end: 8, scene: "citywide candidates and focus", caption: "詳しく見る地域を選ぶ" },
+  { start: 8, end: 12, scene: "select 常団地前周辺", caption: "人口・交通・医療から候補を確認" },
+  { start: 12, end: 29, scene: "PLATEAU context and A–B Section", caption: "地域の統計を、建物・道路・地形までたどる" },
+  { start: 29, end: 43, scene: "exact PLATEAU road target", caption: "データだけでは分からない場所を見つける" },
+  { start: 43, end: 52, scene: "four required checks", caption: "現地で確かめるポイントへ" },
+  { start: 52, end: 55, scene: "final hold", caption: "データから、現地確認の入口をつくる" },
 ];
 
 function phase(message) {
@@ -324,58 +324,58 @@ async function recordVariant(variant) {
   };
 
   phase(`${variant.id}: record ${durationSeconds}s choreography`);
-  await holdUntil(3000);
+  await holdUntil(4000);
   await setSceneCaption(1);
   await clickLocator(page, page.getByRole("button", { name: "地域を選ぶ", exact: true }), variant.captioned);
   await waitState(page, "find", { pending });
   phase(`${variant.id}: Scene 1 ready at ${elapsed()}s`);
-  await holdUntil(5200);
+  await holdUntil(6000);
   await moveTo(page, page.getByRole("button", { name: /二尾バス停周辺/ }).first(), variant.captioned);
-  await holdUntil(7200);
+  await holdUntil(8000);
   const tsune = page.getByRole("button", { name: /常団地前周辺/ }).first();
   await moveTo(page, tsune, variant.captioned);
-  await holdUntil(10_000);
+  await holdUntil(8000);
   await setSceneCaption(2);
   await clickLocator(page, tsune, variant.captioned);
   await waitState(page, "find", { pending });
   phase(`${variant.id}: Area selected at ${elapsed()}s`);
   const areaReadyAt = Date.now() - recordingStart;
-  await holdUntil(Math.max(16_000, areaReadyAt + 4000));
+  await holdUntil(Math.max(12_000, areaReadyAt + 1500));
   await setSceneCaption(3);
   await clickLocator(page, page.getByRole("button", { name: "街の形を見る", exact: true }), variant.captioned);
   await waitState(page, "understand", { pending });
   phase(`${variant.id}: Scene 2 and Section ready at ${elapsed()}s`);
   const sectionReadyAt = Date.now() - recordingStart;
-  await holdUntil(Math.max(24_000, sectionReadyAt + 3500));
+  await holdUntil(Math.max(22_000, sectionReadyAt + 3500));
   const section = page.locator(".guided-section-dock .urban-section svg");
   const sectionBox = await section.boundingBox();
   if (!sectionBox) throw new Error("A–B Section is not visible during recording");
   await moveCursor(page, sectionBox.x + sectionBox.width * 0.62, sectionBox.y + sectionBox.height * 0.42, variant.captioned);
   await section.focus();
   await page.keyboard.press("ArrowRight");
-  await holdUntil(Math.max(27_000, sectionReadyAt + 5500));
+  await holdUntil(Math.max(26_000, sectionReadyAt + 5500));
   const targetButton = page.getByRole("button", { name: "確認場所を見る", exact: true });
   await moveTo(page, targetButton, variant.captioned);
-  await holdUntil(Math.max(30_000, sectionReadyAt + 7000));
+  await holdUntil(Math.max(29_000, sectionReadyAt + 7000));
   await setSceneCaption(4);
   await clickLocator(page, targetButton, variant.captioned);
   await waitState(page, "verify", { pending, exact: true });
   phase(`${variant.id}: Scene 3 exact target ready at ${elapsed()}s`);
   const targetReadyAt = Date.now() - recordingStart;
-  const targetCaptionEnd = Math.max(42_000, targetReadyAt + 4000);
+  const targetCaptionEnd = Math.max(43_000, targetReadyAt + 4000);
   await holdUntil(targetCaptionEnd);
   await setSceneCaption(5);
   const checks = page.locator(".guided-check-list > li");
   const secondCheck = await checks.nth(1).boundingBox();
   if (secondCheck) await moveCursor(page, secondCheck.x + secondCheck.width / 2, secondCheck.y + secondCheck.height / 2, variant.captioned);
-  await holdUntil(Math.max(46_000, targetCaptionEnd + 3000));
+  await holdUntil(Math.max(47_000, targetCaptionEnd + 3000));
   const fourthCheck = await checks.nth(3).boundingBox();
   if (fourthCheck) await moveCursor(page, fourthCheck.x + fourthCheck.width / 2, fourthCheck.y + fourthCheck.height / 2, variant.captioned);
-  const checksCaptionEnd = Math.max(50_000, targetCaptionEnd + 6000);
+  const checksCaptionEnd = Math.max(52_000, targetCaptionEnd + 7000);
   await holdUntil(checksCaptionEnd);
   await setSceneCaption(6);
   await moveCursor(page, 960, 660, variant.captioned);
-  const finalEnd = Math.max(durationSeconds * 1000, checksCaptionEnd + 3000);
+  const finalEnd = Math.max(durationSeconds * 1000 - 250, checksCaptionEnd + 2500);
   await holdUntil(finalEnd);
   const choreographyElapsedSeconds = (Date.now() - recordingStart) / 1000;
   observedChoreography[observedChoreography.length - 1].end = Number(choreographyElapsedSeconds.toFixed(3));
@@ -462,41 +462,101 @@ async function recordVariant(variant) {
   };
 }
 
-await mkdir(outputDirectory, { recursive: true });
-await mkdir(rawDirectory, { recursive: true });
-let videoRecords;
-videoRecords = [];
-for (const variant of variants) videoRecords.push(await recordVariant(variant));
+async function runDryValidation() {
+  const browser = await chromium.launch({ executablePath, headless: true, args: chromiumArgs });
+  const context = await browser.newContext({
+    viewport,
+    deviceScaleFactor: 1,
+    locale: "ja-JP",
+    reducedMotion: "reduce",
+    serviceWorkers: "block",
+  });
+  const page = await context.newPage();
+  page.setDefaultTimeout(180_000);
+  const pending = attachDiagnostics(page, "dry-run");
+  try {
+    await page.goto(guidedUrl("intro"), { waitUntil: "domcontentloaded", timeout: 180_000 });
+    await waitState(page, "intro", { pending });
+    await page.goto(guidedUrl("understand"), { waitUntil: "domcontentloaded", timeout: 180_000 });
+    await waitState(page, "understand", { pending });
+    await page.locator('.urban-section[data-annotation-overlap-count="0"]').waitFor({ timeout: 180_000 });
+    await page.goto(guidedUrl("verify"), { waitUntil: "domcontentloaded", timeout: 180_000 });
+    await waitState(page, "verify", { pending, exact: true });
+    const contract = await page.evaluate(() => {
+      const root = document.querySelector(".guided-spatial-app");
+      return {
+        story: root?.getAttribute("data-guided-story"),
+        area: root?.getAttribute("data-area-id"),
+        targetKind: root?.getAttribute("data-target-kind"),
+        targetResolution: root?.getAttribute("data-target-resolution"),
+        checks: document.querySelectorAll(".guided-check-list > li").length,
+        mapInitializationCount: window.__cityGapMapInitCount,
+      };
+    });
+    if (contract.story !== "verify" || contract.area !== selectedArea || contract.targetKind !== "road" || contract.targetResolution !== "exact" || contract.checks !== 4 || contract.mapInitializationCount !== 1) {
+      throw new Error(`video dry-run contract failed: ${JSON.stringify(contract)}`);
+    }
+    if (diagnostics.length) throw new Error(`video dry-run diagnostics are not empty: ${JSON.stringify(diagnostics)}`);
+    return {
+      dry_run: true,
+      source_url: sourceUrl.toString(),
+      source_commit: sourceCommit,
+      source_branch: sourceBranch,
+      planned_duration_seconds: durationSeconds,
+      choreography,
+      contract,
+      diagnostics: diagnostics.length,
+      tools: {
+        ffmpeg: versionLine(ffmpeg),
+        ffprobe: versionLine(ffprobe),
+        playwright: playwrightPackage.version,
+      },
+      passed: true,
+    };
+  } finally {
+    await context.close();
+    await browser.close();
+  }
+}
 
-const presentationPath = path.join(outputDirectory, variants[0].filename);
-const presentationChoreography = videoRecords.find((item) => item.id === "presentation")?.observed_choreography ?? choreography;
-const posterSecond = (presentationChoreography[3]?.end ?? 30) - 1;
-const posterPath = path.join(outputDirectory, "city-gap-demo-poster.png");
-execFileSync(ffmpeg, [
+if (parameters.has("--dry-run")) {
+  process.stdout.write(`${JSON.stringify(await runDryValidation(), null, 2)}\n`);
+} else {
+  await mkdir(outputDirectory, { recursive: true });
+  await mkdir(rawDirectory, { recursive: true });
+  let videoRecords;
+  videoRecords = [];
+  for (const variant of variants) videoRecords.push(await recordVariant(variant));
+
+  const presentationPath = path.join(outputDirectory, variants[0].filename);
+  const presentationChoreography = videoRecords.find((item) => item.id === "presentation")?.observed_choreography ?? choreography;
+  const posterSecond = (presentationChoreography[3]?.end ?? 29) - 1;
+  const posterPath = path.join(outputDirectory, "city-gap-demo-poster.png");
+  execFileSync(ffmpeg, [
   "-y", "-hide_banner", "-loglevel", "error", "-ss", String(posterSecond), "-i", presentationPath,
   "-frames:v", "1", "-vf", "scale=1920:1080:flags=lanczos", posterPath,
 ], { stdio: "inherit" });
-const poster = await readFile(posterPath);
+  const poster = await readFile(posterPath);
 
-const captionsPath = path.join(outputDirectory, "city-gap-demo-captions.vtt");
-const timestamp = (value) => {
+  const captionsPath = path.join(outputDirectory, "city-gap-demo-captions.vtt");
+  const timestamp = (value) => {
   const milliseconds = Math.round(value * 1000);
   const seconds = Math.floor(milliseconds / 1000);
   return `00:00:${String(seconds).padStart(2, "0")}.${String(milliseconds % 1000).padStart(3, "0")}`;
-};
-const captions = `WEBVTT\n\n${presentationChoreography.map((item, index) => `${index + 1}\n${timestamp(item.start)} --> ${timestamp(item.end)}\n${item.caption}`).join("\n\n")}\n`;
-await writeFile(captionsPath, captions);
+  };
+  const captions = `WEBVTT\n\n${presentationChoreography.map((item, index) => `${index + 1}\n${timestamp(item.start)} --> ${timestamp(item.end)}\n${item.caption}`).join("\n\n")}\n`;
+  await writeFile(captionsPath, captions);
 
-const shortPath = path.join(outputDirectory, "city-gap-demo-short-15s.mp4");
-execFileSync(ffmpeg, [
-  "-y", "-hide_banner", "-loglevel", "error", "-ss", String(Math.max(0, (presentationChoreography[3]?.start ?? 16) - 1)), "-i", presentationPath, "-t", "15",
+  const shortPath = path.join(outputDirectory, "city-gap-demo-short-15s.mp4");
+  execFileSync(ffmpeg, [
+  "-y", "-hide_banner", "-loglevel", "error", "-ss", String(Math.max(0, (presentationChoreography[3]?.start ?? 12) - 1)), "-i", presentationPath, "-t", "15",
   "-vf", "fps=30,scale=1920:1080:flags=lanczos,unsharp=5:5:0.45:5:5:0", "-c:v", "libx264", "-preset", "slow", "-crf", "24",
   "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", shortPath,
 ], { stdio: "inherit" });
-let shortRecord = null;
-const mainVideoBytes = videoRecords.reduce((sum, item) => sum + item.bytes, 0);
-const shortBuffer = await readFile(shortPath);
-if (mainVideoBytes + shortBuffer.length <= 35 * 1024 * 1024) {
+  let shortRecord = null;
+  const mainVideoBytes = videoRecords.reduce((sum, item) => sum + item.bytes, 0);
+  const shortBuffer = await readFile(shortPath);
+  if (mainVideoBytes + shortBuffer.length <= 35 * 1024 * 1024) {
   const shortProbe = JSON.parse(execFileSync(ffprobe, ["-v", "error", "-show_streams", "-show_format", "-of", "json", shortPath], { encoding: "utf8" }));
   const shortStream = shortProbe.streams.find((candidate) => candidate.codec_type === "video");
   shortRecord = {
@@ -514,13 +574,13 @@ if (mainVideoBytes + shortBuffer.length <= 35 * 1024 * 1024) {
     frame_rate: shortStream?.avg_frame_rate,
     audio_streams: shortProbe.streams.filter((candidate) => candidate.codec_type === "audio").length,
   };
-  videoRecords.push(shortRecord);
-} else {
-  await rm(shortPath);
-}
+    videoRecords.push(shortRecord);
+  } else {
+    await rm(shortPath);
+  }
 
-const captionBuffer = await readFile(captionsPath);
-const manifest = {
+  const captionBuffer = await readFile(captionsPath);
+  const manifest = {
   schema_version: "citygap.production-demo-video@1",
   generated_at: new Date().toISOString(),
   source_production_url: sourceUrl.toString(),
@@ -585,9 +645,10 @@ const manifest = {
     human_test: "AWAITING_HUMAN_TEST",
     municipal_workflow: "AWAITING_MUNICIPAL_WORKFLOW_REVIEW",
   },
-};
-await writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
+  };
+  await writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 
-await rm(rawDirectory, { recursive: true, force: true });
-phase(`complete: ${videoRecords.length} videos, ${(manifest.repository_video_bytes / 1024 / 1024).toFixed(1)} MiB`);
-process.stdout.write(`${JSON.stringify({ outputDirectory, sourceCommit, pagesRunId, videoRecords, diagnostics: diagnostics.length }, null, 2)}\n`);
+  await rm(rawDirectory, { recursive: true, force: true });
+  phase(`complete: ${videoRecords.length} videos, ${(manifest.repository_video_bytes / 1024 / 1024).toFixed(1)} MiB`);
+  process.stdout.write(`${JSON.stringify({ outputDirectory, sourceCommit, pagesRunId, videoRecords, diagnostics: diagnostics.length }, null, 2)}\n`);
+}

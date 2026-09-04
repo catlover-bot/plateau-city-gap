@@ -2,7 +2,7 @@
 
 Active goal: `repository-refinement-and-presentation-assets-v1`
 
-Status: implementation refactor complete locally; consolidation, remote validation, deployment, and final presentation recapture in progress.
+Status: local refactor and consolidation gates passed; remote validation, deployment, and production presentation recapture remain.
 
 ## Execution lock
 
@@ -29,7 +29,8 @@ Status: implementation refactor complete locally; consolidation, remote validati
 - `3b633ad`: repository, asset, duplicate, documentation, CSS, export, and script audit recorded.
 - `fbdf276`: Guided workspace decomposed into content, targets, selection, async Area context, map stage, inspector, and typed cartography modules.
 - `90b698f`: Urban Section data types, plot/focus layout, pointer projection, and async loading isolated; pure layout tests added.
-- local validation after those checkpoints: ESLint and TypeScript pass; 31 test files / 133 tests pass; production build passes.
+- `926a667`: obsolete source, stylesheet, one-off scripts, duplicate evidence, and superseded documentation consolidated; current documentation indexed.
+- [local refactor checkpoint](repository-refactor-checkpoint.md): ESLint, docs, TypeScript, 31 test files / 133 tests, Public and Municipal builds, Ruff, 414 Python tests, dependency audits, browser audits, 200% reflow, and video dry run pass.
 - Guided browser regression: six Areas, exact road/building, registered facility, fallback, Section, mobile, keyboard, legacy routes, failure/retry, and Guided → Advanced pass with zero diagnostics and one map initialization.
 - Urban Section capture: desktop/mobile annotations `6`/`4`, named roads `4`/`2`, zero label conflicts; deterministic Section screenshots remain unchanged.
 
@@ -42,12 +43,10 @@ Status: implementation refactor complete locally; consolidation, remote validati
 
 ## Remaining gates
 
-1. Finish source, script, documentation, and superseded-asset consolidation.
-2. Record the final local refactor checkpoint and complete the full local validation matrix.
-3. Push only this feature branch and require all nine CI jobs to pass for the exact UI-refactor HEAD.
-4. Deploy that exact green HEAD to GitHub Pages; audit the production URL.
-5. Capture production slide images and the replacement demo video into temporary directories.
-6. Verify dimensions, duration, codecs, captions, hashes, diagnostics, temporal content, and source commit before replacing the canonical presentation package.
-7. Commit final assets, push normally, and require a second all-green nine-job CI run.
+1. Push only this feature branch and require all nine CI jobs to pass for the exact refactor-checkpoint HEAD.
+2. Deploy that exact green HEAD to GitHub Pages; audit the production URL.
+3. Capture production slide images and the replacement demo video into temporary directories.
+4. Verify dimensions, duration, codecs, captions, hashes, diagnostics, temporal content, and source commit before replacing the canonical presentation package.
+5. Commit final assets, push normally, and require a second all-green nine-job CI run.
 
 No human comprehension, aesthetic preference, accessibility acceptance, or municipal workflow result is claimed by automated validation.

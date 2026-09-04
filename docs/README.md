@@ -22,6 +22,7 @@ This index separates current product and operating documents from retained resea
 - [PLATEAU context](plateau-context.md) and [3D rendering](3d-rendering.md)
 - [Current automated UX checkpoint](harbor-atlas-ux-checkpoint.md)
 - [Repository hygiene audit](repository-hygiene-audit.md)
+- [Repository refactor checkpoint](repository-refactor-checkpoint.md)
 - [Presentation assets](presentation-assets.md)
 
 ## Build, QA, and release
