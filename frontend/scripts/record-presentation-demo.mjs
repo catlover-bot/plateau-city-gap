@@ -653,8 +653,8 @@ if (parameters.has("--dry-run")) {
   if (temporaryRelative.startsWith("..") || path.isAbsolute(temporaryRelative) || !path.basename(outputDirectory).startsWith("citygap-")) {
     throw new Error(`demo recording output must be a named citygap-* directory under ${temporaryRoot}`);
   }
-  await mkdir(outputDirectory, { recursive: true });
-  await mkdir(rawDirectory, { recursive: true });
+  await mkdir(outputDirectory);
+  await mkdir(rawDirectory);
   const liveBuild = await verifyLiveBuild();
   let videoRecords;
   videoRecords = [];
@@ -785,7 +785,6 @@ if (parameters.has("--dry-run")) {
   };
   await writeFile(path.join(outputDirectory, "manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
 
-  await rm(rawDirectory, { recursive: true, force: true });
   phase(`complete: ${videoRecords.length} videos, ${(manifest.repository_video_bytes / 1024 / 1024).toFixed(1)} MiB`);
   process.stdout.write(`${JSON.stringify({ outputDirectory, sourceCommit, pagesRunId, videoRecords, diagnostics: diagnostics.length }, null, 2)}\n`);
 }

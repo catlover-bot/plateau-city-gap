@@ -2,7 +2,7 @@
 
 Active goal: `repository-refinement-and-presentation-assets-v1`
 
-Status: refactor, remote validation, deployment, production audits, and presentation recapture passed; final asset commit, push, and second remote CI remain.
+Status: refactor, remote validation, deployment, production audits, and presentation media commits are complete; finalization is limited to preservation, capture-disclosure and cleanup-safety updates, one exact-HEAD remote CI run, and handoff.
 
 ## Execution lock
 
@@ -36,6 +36,8 @@ Status: refactor, remote validation, deployment, production audits, and presenta
 - Remote UI checkpoint `9c8a99c530ca375758686c6d6431e76d80c5c748`: nine of nine CI jobs passed in run `33909411156`; Pages build and deploy passed in run `33909833987`.
 - Production audits: Public, five visual viewports, eight accessibility states, PLATEAU-native 19/19, Guided spatial, Guided → Advanced, and strict Advanced readiness passed with zero product diagnostics.
 - Production media commit `c9bed550d06ed1aa6adbf93296e3daacaa042db6`: verified slide and demo packages plus capture/verification tooling and presentation documentation.
+- Media provenance commit `1b85469091884e186289c764f56207733ecb00d6`: both canonical manifests identify the immutable media commit; the feature branch and upstream matched this commit before finalization.
+- The video delivery files are encoded at 1920 x 1080/30fps but derive from variable 800 x 450 DevTools frames, so their status is `CAPTURE_SPEC_DEVIATION_AWAITING_USER_REVIEW`, not user-approved native 1080p capture.
 
 ## Evidence state
 
@@ -45,11 +47,11 @@ Status: refactor, remote validation, deployment, production audits, and presenta
 - repository audit: [repository-hygiene-audit.md](repository-hygiene-audit.md)
 - presentation asset policy: [presentation-assets.md](presentation-assets.md)
 
-## Remaining gates
+## Finalization gates
 
-1. Commit the verified production presentation assets, tooling, and documentation without changing runtime application source or lockfiles.
-2. Record the media commit in the demo manifest through a small follow-up provenance commit.
-3. Push only this feature branch normally and require a second all-green nine-job CI run for the exact final HEAD.
-4. Confirm final branch/upstream/main invariants, repository integrity, and a clean worktree.
+1. Preserve both canonical media directories outside the repository before final edits; retain the incident remnant and all temporary evidence.
+2. Change only the existing capture/verification cleanup safety and the documentation of capture limitations, user-review status, and recovery boundaries.
+3. Push only this feature branch normally and require one all-green nine-job CI run for the exact final delivery HEAD.
+4. Confirm final branch/upstream/main invariants, repository integrity, and a clean worktree. Do not redeploy Pages because the deployed application source and output are unchanged.
 
 No human comprehension, aesthetic preference, accessibility acceptance, or municipal workflow result is claimed by automated validation.

@@ -124,3 +124,11 @@ No slide or video in this checkpoint is called production evidence. Final media 
 The remaining mechanical gate is a second nine-job CI run for the final presentation-asset HEAD. No merge, rebase, or push to `main` is part of this work.
 
 Automated checks do not establish human comprehension, aesthetic preference, or municipal workflow acceptance.
+
+## Local cleanup incident and recovery boundary
+
+During presentation-tooling work, a malformed cleanup invocation deleted the local checkout's `.git` directory and tracked files. The presentation-image files that remained in a permission-blocked directory were preserved. Because the deleted checkout no longer contained Git metadata, the exact pre-incident set of ignored or untracked files cannot be enumerated or proven complete.
+
+The exact remote feature state at `9c8a99c530ca375758686c6d6431e76d80c5c748` was recovered with a new single-branch clone. Known in-session presentation tooling and documentation changes were reconstructed, the surviving image package and retained demo package were restored, and those results were committed as `c9bed550d06ed1aa6adbf93296e3daacaa042db6` with provenance follow-up `1b85469091884e186289c764f56207733ecb00d6`. This confirms recovery of the tracked remote feature state and the known presentation deliverables; it does not claim lossless recovery of every possible pre-incident ignored or untracked file.
+
+The untouched incident remnant is retained at `/home/mhirotaka/workspace/plateau-city-gap.accidental-delete-backup-20260905T1049Z`. A separate non-overwriting final-delivery copy of both canonical media directories was created at `/home/mhirotaka/workspace/citygap-final-delivery-backup-1b854690`; all 16 copied files matched their sources by SHA-256 at creation time. Neither location is part of the repository or the remote deliverable.

@@ -56,8 +56,8 @@ LD_LIBRARY_PATH=/path/to/ffmpeg/lib npm run record:demo -- \
   --ffprobe /path/to/ffprobe
 ```
 
-The temporary JPEG sequence and browser profile use the OS temporary directory and are removed after a successful package build. No FFmpeg package or binary is added to the application dependencies.
+The temporary JPEG sequence and browser profile use a unique OS temporary directory. The recorder retains that directory after a successful package build so an automatic cleanup cannot remove evidence. No FFmpeg package or binary is added to the application dependencies.
 
 ## Review boundary
 
-Automated metadata, decode, frame, and browser checks passed. The captioned/clean timeline sheets and poster also passed self visual and presentation-readiness review. First-run comprehension and municipal workflow fit remain untested human decisions.
+Automated metadata, decode, frame, and browser checks passed. The captioned/clean timeline sheets and poster also passed self visual and presentation-readiness review. The package remains `CAPTURE_SPEC_DEVIATION_AWAITING_USER_REVIEW` because its 1920 x 1080 output was upscaled and frame-normalized from variable 800 x 450 DevTools screencast frames (171 captioned, 44 clean), not captured natively at 1080p/30fps. User approval, first-run comprehension, and municipal workflow fit remain untested human decisions.

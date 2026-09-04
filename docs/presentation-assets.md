@@ -9,6 +9,8 @@ Presentation media is evidence derived from a verified production deployment. It
 - `docs/assets/harbor-atlas-v2/before/`: the retained direct comparison baseline for that checkpoint.
 - `docs/assets/demo-video/`: current six-file production demo package captured from deployed UI source `9c8a99c530ca375758686c6d6431e76d80c5c748` after Pages run `33909833987`; full captioned, clean, short, poster, captions, and manifest are all present.
 
+The demo package is preserved with status `CAPTURE_SPEC_DEVIATION_AWAITING_USER_REVIEW`. The browser viewport was 1600 x 900 CSS pixels at DPR 1, while Chromium DevTools emitted variable, event-driven JPEG frames at up to 800 x 450 (171 presentation frames and 44 clean frames). FFmpeg upscaled those frames with Lanczos, applied light sharpening and range conversion, and normalized the output to 1920 x 1080 at 30fps. The files satisfy the encoded delivery format but are not native 1080p captures, and no user approval is claimed.
+
 The repository does not treat every historical screenshot run as canonical. Superseded packages are recoverable through Git history instead of remaining duplicated in the current checkout.
 
 ## Production slide set

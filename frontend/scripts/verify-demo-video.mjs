@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdir, readFile, readdir, rm } from "node:fs/promises";
+import { mkdir, readFile, readdir } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -58,8 +58,7 @@ if (auditDirectory) {
   if (temporaryRelative.startsWith("..") || path.isAbsolute(temporaryRelative) || !path.basename(auditDirectory).startsWith("citygap-")) {
     throw new Error(`timeline audit output must be a named citygap-* directory under ${temporaryRoot}`);
   }
-  await rm(auditDirectory, { recursive: true, force: true });
-  await mkdir(auditDirectory, { recursive: true });
+  await mkdir(auditDirectory);
 }
 
 for (const expected of manifest.files.videos) {

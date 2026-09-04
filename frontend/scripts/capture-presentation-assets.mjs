@@ -236,8 +236,7 @@ const temporaryRelative = path.relative(temporaryRoot, outputDirectory);
 if (temporaryRelative.startsWith("..") || path.isAbsolute(temporaryRelative) || !path.basename(outputDirectory).startsWith("citygap-")) {
   throw new Error(`presentation capture output must be a named citygap-* directory under ${temporaryRoot}`);
 }
-await rm(outputDirectory, { recursive: true, force: true });
-await mkdir(outputDirectory, { recursive: true });
+await mkdir(outputDirectory);
 const liveBuild = await verifyLiveBuild();
 const browser = await chromium.launch({ executablePath, headless: true, args: ["--no-sandbox", "--disable-dev-shm-usage", "--enable-webgl", "--ignore-gpu-blocklist", "--enable-unsafe-swiftshader", "--use-gl=angle", "--use-angle=swiftshader"] });
 let contactSheet;

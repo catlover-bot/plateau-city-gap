@@ -6,6 +6,8 @@ Open <https://catlover-bot.github.io/plateau-city-gap/?experience=guided> in a c
 
 The current package records UI source `9c8a99c530ca375758686c6d6431e76d80c5c748` from successful Pages run `33909833987`.
 
+Capture status: `CAPTURE_SPEC_DEVIATION_AWAITING_USER_REVIEW`. The full videos are 1920 x 1080 H.264 delivery files derived from variable, event-driven Chromium frames captured at up to 800 x 450, rather than native fixed-rate 1080p source frames. Use only after user review; automated and self visual checks are not user approval.
+
 ## Primary and backup media
 
 - [Captioned 1080p MP4](assets/demo-video/city-gap-demo-presentation-1080p.mp4): default slide-embedded backup

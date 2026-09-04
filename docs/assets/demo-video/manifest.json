@@ -8,6 +8,7 @@
   "asset_package_commit": "c9bed550d06ed1aa6adbf93296e3daacaa042db6",
   "asset_package_commit_note": "Commit that introduced the verified canonical media; this field is recorded in its follow-up provenance commit.",
   "pages_run_id": "33909833987",
+  "capture_spec_status": "CAPTURE_SPEC_DEVIATION_AWAITING_USER_REVIEW",
   "capture_clock": {
     "source": "Windows host clock",
     "executable": "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
@@ -49,6 +50,10 @@
       "width": 800,
       "height": 450
     },
+    "native_1080p_capture": false,
+    "output_upscaled_to_1080p": true,
+    "raw_frame_cadence": "Variable event-driven Chromium compositor frames, not a native fixed-rate 30fps source",
+    "output_normalization": "FFmpeg Lanczos upscale, light unsharp filter, full-range-to-TV-range conversion, and frame duplication/normalization to 30fps",
     "device_pixel_ratio": 1,
     "output_fps": 30,
     "prewarmed": true,
@@ -401,6 +406,7 @@
     "reviewed_at": "2026-09-04T20:48:25.604Z",
     "visual_quality": "PASSED_SELF_VISUAL_REVIEW",
     "presentation": "PASSED_DEMO_READINESS_REVIEW",
+    "user_approval": "AWAITING_USER_REVIEW",
     "human_test": "AWAITING_HUMAN_TEST",
     "municipal_workflow": "AWAITING_MUNICIPAL_WORKFLOW_REVIEW"
   }
