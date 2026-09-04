@@ -124,6 +124,14 @@
 .guided-map-caption strong { font-size: 16px; line-height: 1.4; }
 .guided-map-caption small { color: var(--cg-text-secondary); font-size: 12px; line-height: 1.45; }
 
+.guided-spatial-app[data-guided-story="verify"][data-target-resolution="exact"] .guided-map-caption {
+  border-left-color: var(--cg-target);
+}
+
+.guided-spatial-app[data-guided-story="verify"][data-target-resolution="exact"] .guided-map-caption span {
+  color: var(--cg-target-strong);
+}
+
 .guided-spatial-app .maplibregl-ctrl-top-right { top: 14px; right: 12px; }
 .guided-spatial-app .maplibregl-ctrl-group {
   overflow: hidden;
@@ -233,7 +241,7 @@
 
 .guided-intro h1 { font-size: var(--cg-heading-landing); line-height: 1.3; }
 
-.guided-area-list { display: grid; margin-top: 20px; border-top: 1px solid var(--cg-border); }
+.guided-area-list { display: grid; margin: 8px 0 18px; border-top: 1px solid var(--cg-border); }
 
 .guided-area-list button {
   display: grid;
@@ -254,6 +262,8 @@
 
 .guided-area-list button.selected { background: var(--cg-brand-pale); }
 
+.guided-area-list button.selected.hovered { background: var(--cg-area-selected-fill); }
+
 .guided-area-list button.selected::before {
   position: absolute;
   inset: 8px auto 8px 0;
@@ -267,7 +277,7 @@
 
 .guided-area-select {
   display: grid;
-  margin: 15px 0;
+  margin: 15px 0 8px;
   color: var(--cg-text-secondary);
   font-size: 13px;
   font-weight: 800;
@@ -409,6 +419,17 @@
 .guided-target-summary h2 { margin: 4px 0 0; color: var(--cg-text-primary); font-size: 17px; line-height: 1.45; }
 .guided-target-summary p { margin: 7px 0 0; color: var(--cg-text-secondary); font-size: 13px; line-height: 1.6; }
 
+.guided-spatial-app[data-target-resolution="area_fallback"] .guided-target-summary {
+  border-left-color: var(--cg-area-selected);
+  background: var(--cg-brand-pale);
+}
+
+.guided-spatial-app[data-target-resolution="area_fallback"] .guided-target-summary span,
+.guided-spatial-app[data-target-resolution="area_fallback"] .guided-task-heading > span,
+.guided-spatial-app[data-target-resolution="area_fallback"] .guided-check-list li::before {
+  color: var(--cg-brand-strong);
+}
+
 .guided-task-heading { display: grid; gap: 3px; }
 .guided-task-heading > span { color: var(--cg-target-strong); font-size: 13px; font-weight: 800; }
 .guided-task-heading h2 { margin: 0; color: var(--cg-text-primary); font-size: 16px; line-height: 1.45; }
@@ -535,6 +556,9 @@
   .guided-map-caption { padding: 7px 10px 8px; gap: 0; }
   .guided-map-caption strong { font-size: 14px; line-height: 1.3; }
   .guided-map-caption small { font-size: 11px; line-height: 1.35; }
+  .guided-area-select { margin: 8px 0 5px; }
+  .guided-area-list { margin: 5px 0 14px; }
+  .guided-area-list button { min-height: 54px; padding: 8px 10px 8px 14px; }
   .guided-spatial-app .guided-context-legend { display: none; }
   .guided-section-dock .urban-section { bottom: 0; left: 0; height: 100%; }
   .guided-spatial-app[data-guided-story="find"] .guided-story-panel,

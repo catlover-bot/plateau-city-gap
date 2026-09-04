@@ -165,7 +165,7 @@ async function primeRecordingPage(page, pending, variant) {
   let sectionContract = null;
   await page.goto(guidedUrl("intro"), { waitUntil: "domcontentloaded", timeout: 180_000 });
   await waitState(page, "intro", { pending });
-  await page.getByRole("button", { name: "デモを始める", exact: true }).evaluate((element) => element.click());
+  await page.getByRole("button", { name: "地域を選ぶ", exact: true }).evaluate((element) => element.click());
   await waitState(page, "find", { pending });
   await page.getByRole("button", { name: "街の形を見る", exact: true }).evaluate((element) => element.click());
   await waitState(page, "understand", { pending });
@@ -326,7 +326,7 @@ async function recordVariant(variant) {
   phase(`${variant.id}: record ${durationSeconds}s choreography`);
   await holdUntil(3000);
   await setSceneCaption(1);
-  await clickLocator(page, page.getByRole("button", { name: "デモを始める", exact: true }), variant.captioned);
+  await clickLocator(page, page.getByRole("button", { name: "地域を選ぶ", exact: true }), variant.captioned);
   await waitState(page, "find", { pending });
   phase(`${variant.id}: Scene 1 ready at ${elapsed()}s`);
   await holdUntil(5200);

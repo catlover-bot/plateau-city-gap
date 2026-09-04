@@ -53,7 +53,7 @@
 .public-area-body {
   display: grid;
   min-height: 0;
-  grid-template-columns: minmax(0, 73fr) minmax(360px, 27fr);
+  grid-template-columns: minmax(0, 1fr) clamp(360px, 27vw, 440px);
   overflow: hidden;
 }
 
@@ -289,6 +289,8 @@
   background: var(--cg-target-strong);
   color: white;
 }
+
+.public-primary:hover { border-color: #8f392d; background: #8f392d; }
 
 .public-secondary,
 .public-back {

@@ -441,7 +441,7 @@ export function GuidedSpatialWorkspace({
     if (state.guidedStory === "verify") return {
       title: "確認する場所",
       items: [
-        { label: target?.resolution === "exact" ? "選んだ対象" : "確認する範囲", symbol: "target" },
+        { label: target?.resolution === "exact" ? "選んだ対象" : "確認する範囲", symbol: target?.resolution === "exact" ? "target" : "area" },
         { label: "選んだ地域", symbol: "context" },
       ],
     };
@@ -545,26 +545,13 @@ export function GuidedSpatialWorkspace({
         {state.guidedStory === "intro" && <div className="guided-intro">
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>舞鶴の地域を、<br />地図からたどる。</h1>
           <p>地域を選び、街の形と、データだけでは判断できない場所を地図でたどります。</p>
-          <button type="button" className="guided-primary" onClick={() => onStoryChange("find")}>デモを始める</button>
+          <button type="button" className="guided-primary" onClick={() => onStoryChange("find")}>地域を選ぶ</button>
         </div>}
         {state.guidedStory === "find" && <div className="guided-scene-content">
           <div className="guided-panel-kicker"><span className="guided-eyebrow">地域を選ぶ</span></div>
           <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>どの地域を詳しく見る？</h1>
           <p className="guided-scene-lead">地域を選ぶと、人口・交通・医療の情報と街の形をたどれます。</p>
-          <div className="guided-area-list" aria-label="代表的な調査範囲">
-            {shortlisted.map((area) => <button
-              key={area.id}
-              type="button"
-              className={[area.id === selectedAreaId ? "selected" : "", area.id === hoveredAreaId ? "hovered" : ""].filter(Boolean).join(" ")}
-              aria-pressed={area.id === selectedAreaId}
-              onClick={() => selectArea(area.id)}
-              onPointerEnter={() => setHoveredAreaId(area.id)}
-              onPointerLeave={() => setHoveredAreaId(null)}
-              onFocus={() => setHoveredAreaId(area.id)}
-              onBlur={() => setHoveredAreaId(null)}
-            ><strong>{area.label}</strong><span>65歳以上 {Math.round(number(area.properties?.elderly_population) ?? 0).toLocaleString("ja-JP")}人 · 交通 {formatDistance(area.properties?.nearest_public_transport_distance_m)} · 医療 {formatDistance(area.properties?.nearest_medical_distance_m)}</span></button>)}
-          </div>
-          <label className="guided-area-select">舞鶴市内のほかの地域から選ぶ
+          <label className="guided-area-select">選んだ地域
             <select aria-label="495の範囲から選ぶ" value={selectedAreaId} onChange={(event) => selectArea(event.target.value)}>
               {data.meshes.features.map((feature) => {
                 const meshCode = String(feature.properties?.mesh_code ?? "");
@@ -573,7 +560,21 @@ export function GuidedSpatialWorkspace({
               })}
             </select>
           </label>
-          <div className="guided-current-area"><span>選んだ地域</span><strong>{areaLabel}</strong></div>
+          <div className="guided-area-list" aria-label="代表的な調査範囲">
+            {shortlisted.map((area) => <button
+              key={area.id}
+              type="button"
+              data-area-row={area.id}
+              className={[area.id === selectedAreaId ? "selected" : "", area.id === hoveredAreaId ? "hovered" : ""].filter(Boolean).join(" ")}
+              aria-pressed={area.id === selectedAreaId}
+              aria-current={area.id === selectedAreaId ? "true" : undefined}
+              onClick={() => selectArea(area.id)}
+              onPointerEnter={() => setHoveredAreaId(area.id)}
+              onPointerLeave={() => setHoveredAreaId(null)}
+              onFocus={() => setHoveredAreaId(area.id)}
+              onBlur={() => setHoveredAreaId(null)}
+            ><strong>{area.label}</strong><span>65歳以上 {Math.round(number(area.properties?.elderly_population) ?? 0).toLocaleString("ja-JP")}人 · 交通 {formatDistance(area.properties?.nearest_public_transport_distance_m)} · 医療 {formatDistance(area.properties?.nearest_medical_distance_m)}</span></button>)}
+          </div>
           <button type="button" className="guided-primary" onClick={() => onStoryChange("understand")}>街の形を見る</button>
         </div>}
 
@@ -590,7 +591,7 @@ export function GuidedSpatialWorkspace({
           </dl>
           {contextStatus === "loading" && <p role="status" className="guided-loading">選択した範囲のPLATEAU建物・道路を読み込んでいます</p>}
           {contextError && <p role="alert" className="guided-error">{contextError}</p>}
-          {activeSectionData ? <p className="guided-section-note">地図上の紫のA–B線を横から見た断面です。</p>
+          {activeSectionData ? <p className="guided-section-note">地図上のA–B線を横から見た断面です。</p>
             : sectionError ? <p className="guided-boundary">断面は読み込めません。範囲内の建物・道路・都市計画は引き続き確認できます。</p>
               : <p className="guided-boundary">{context?.section.reason?.replaceAll("Area", "範囲") ?? "この範囲では検証済みの街の断面を表示していません。"}</p>}
           <div className="guided-unknown-bridge">
@@ -612,7 +613,7 @@ export function GuidedSpatialWorkspace({
               {targetChoices.map((choice) => <option key={choice.key} value={choice.key}>{choice.label}</option>)}
             </select>
           </label>}
-          <section className="guided-target-summary" aria-labelledby="guided-target-title">
+          <section className="guided-target-summary" data-resolution={target?.resolution} aria-labelledby="guided-target-title">
             <span>{target?.resolution === "exact" ? target.kind === "facility" ? "登録施設" : target.kind === "building" ? "PLATEAU建物" : "PLATEAU道路" : "500mの確認範囲"}</span>
             <h2 id="guided-target-title">{target?.label ?? areaLabel}</h2>
             <p>{target?.reason}</p>

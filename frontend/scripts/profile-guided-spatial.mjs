@@ -78,7 +78,7 @@ try {
     await page.locator('.guided-spatial-app[data-guided-story="intro"]').waitFor({ timeout: 120_000 });
     const firstMeaningfulRenderMs = Number((await compositorTimestamp(page)).toFixed(1));
 
-    await page.getByRole("button", { name: "デモを始める", exact: true }).click();
+    await page.getByRole("button", { name: "地域を選ぶ", exact: true }).click();
     await waitForVisual(page, "find");
 
     const contextStarted = await browserNow(page);

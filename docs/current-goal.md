@@ -2,7 +2,7 @@
 
 Active goal: `harbor-atlas-visual-identity-ux-v2`
 
-Current milestone: S2 Harbor Atlas cartography complete; S3 map-first Guided UX next
+Current milestone: S3 map-first Guided UX complete; S4 Urban Section visual language next
 
 Execution lock:
 
@@ -27,7 +27,13 @@ Execution lock:
 - S2 map readability: selected Area labels increase to `15 px`, target labels to `14 px`, A/B endpoints to `15 px`; 495 Areas and non-selected context are quieter while buildings and roads remain distinguishable by material fill, outline, and geometry
 - S2 motion: Public camera transitions move to `380 ms`; Guided remains `320 ms`; reduced motion continues to resolve at `0 ms`
 - S2 regression: cartography/style tests, lint, typecheck, production build, 17-state core and five-state supplemental raster checks with zero diagnostics, and the full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy Guided contract all pass with one map initialization
-- next gate: streamline the Guided inspector and action hierarchy, make hover and fallback presentation unambiguous, and preserve the three-scene/deep-link flow
+- S3 flow: the single intro CTA now says `地域を選ぶ`; Scene 1 presents the selected 495-Area switch before three compact reference rows, then one `街の形を見る` action; the three-scene journey remains three deliberate forward actions
+- S3 row/map sync: representative rows expose `aria-pressed`, `aria-current`, stable Area identity, focus/blur hover synchronization, and quieter transient hover than persistent selection
+- S3 target hierarchy: exact-target captions and task summaries use Signal; fallback captions, legend, summary, numbering, and dashed geometry stay Harbor and never imply an exact object
+- S3 responsive result: the Inspector uses `clamp(360px, 27vw, 440px)` on desktop; at 390 x 844 the selected Area name/switch and fixed 44px+ action are immediately visible, horizontal overflow is zero, and the remaining rows scroll below
+- S3 copy: the stale `purple A-B line` phrase is removed; map and Section are described as the same A-B place without color-dependent language
+- S3 regression: lint, typecheck, production build, 17-state raster capture with zero diagnostics, full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy browser journey, and complete Guided-to-Advanced transition/retry suite pass
+- next gate: unify the SVG Urban Section with Harbor materials and Signal focus, raise annotation contrast/type, retain collision layout, and prove map/Section focus equality
 - no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
 
 Prior deployed map/Section refinement checkpoint retained below.

@@ -283,7 +283,7 @@ try {
   }
   const initialDataRequestSnapshot = initialDataRequests.filter((url, index) => initialDataRequests.indexOf(url) === index);
   const introSnapshot = await mapSnapshot(page, "intro");
-  await page.getByRole("button", { name: "デモを始める", exact: true }).click();
+  await page.getByRole("button", { name: "地域を選ぶ", exact: true }).click();
   await waitShell(page, "find", "533513314");
   const findSnapshot = await mapSnapshot(page, "find-start");
   if (findSnapshot.mapInitCount !== introSnapshot.mapInitCount || contextRequests.length || introSnapshot.shortlistVisible || !findSnapshot.shortlistVisible) {
