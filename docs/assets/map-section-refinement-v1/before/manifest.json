@@ -1,0 +1,681 @@
+{
+  "schema_version": "citygap.map-section-refinement-capture@1",
+  "generated_at": "2026-09-04T12:26:09.400Z",
+  "phase": "before",
+  "environment": "production-preview",
+  "source_url": "http://127.0.0.1:4173/plateau-city-gap/",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "8701df282da1b60049e9806e6b13f4ddceeecadc",
+  "pages_run_id": null,
+  "protocol": "Playwright Chromium; production build; fonts and four compositor frames; reduced motion; identical before/after state matrix",
+  "runtime": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36",
+    "playwright": true
+  },
+  "records": [
+    {
+      "filename": "01-public-landing-desktop.png",
+      "state": "public-landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 721314,
+      "sha256": "62b4e077cbe2fb669e8d57e57c98ea9625fff65583c605e39a66845ee3aaf591",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 6,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": null,
+        "target_resolution": null,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "02-guided-intro-desktop.png",
+      "state": "guided-intro",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 713824,
+      "sha256": "469093a436a494f8e5527d7f79c0e7dcec124d345ce23b4fca201a5eef41b4c2",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 6,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "03-scene1-find-desktop.png",
+      "state": "scene-1-find",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 736688,
+      "sha256": "58425ad631cd1a9d2770d8403c36fcb9bf7679dbab2fba48572847e2c16cce21",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 10,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "04-scene2-map-desktop.png",
+      "state": "scene-2-map",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 504527,
+      "sha256": "8783dcb72fa41790238a7139daed613345693829f9668db2e1399e6c760d9159",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 323,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "05-scene2-combined-desktop.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 674814,
+      "sha256": "a4ab8429763042e1467340bf41f9264bc0a53f5b1ab871e0b6d80156d565ecde",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 323,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "06-scene2-section-closeup.png",
+      "state": "scene-2-section",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 46844,
+      "sha256": "114e9ca8f622a191327d52103f5c39d83b21c159d6106ee8820b8bea3db3ee23",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 323,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "07-scene3-exact-road.png",
+      "state": "scene-3-exact-road",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 623272,
+      "sha256": "050815b6e1697d83de61dbbd3205335a8da4381f21b735c880e781bff8213aa5",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "08-scene3-exact-building.png",
+      "state": "scene-3-exact-building",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 639598,
+      "sha256": "948fdd1533b6c9efc212406175793230d60134353763912f098d5c92bb99e892",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "building",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "09-another-area.png",
+      "state": "another-area",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.34687&lat=35.52292&z=15.70&selectionType=mesh&selection=533522274&mesh=533522274",
+      "bytes": 450302,
+      "sha256": "296c3aa50f78383bef10c4fad84fd7b0f4d0fc9bfe36475e780f92cb75106f7b",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "10-fallback-area.png",
+      "state": "fallback-area",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.31563&lat=35.48125&z=16.37&selectionType=mesh&selection=533512753&mesh=533512753",
+      "bytes": 268743,
+      "sha256": "217017c0b1b33ae0f3788c09cdb406643e77258eba2c5fd1a76143e03a2f1f4f",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "1280-scene2-combined.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44513&z=14.99&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 262337,
+      "sha256": "77df321aef1b0ee18afe7f0ec997f87052939abd8a5d048eeac42be1ae92377a",
+      "metrics": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 71.9,
+        "panel_share_percent": 28.1,
+        "section_height_px": 253,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "1920-scene2-combined.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 636641,
+      "sha256": "898a737efb38073ce94846fe1a90e8047fd03e3ca762774e72544c1aa4a50afe",
+      "metrics": {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 323,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "11-mobile-scene1.png",
+      "state": "mobile-scene-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 183105,
+      "sha256": "74f3b74b229bd8a6c5b7a88d2696bbdc5ebdf86076490b64f702144cd99e3e57",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 43,
+        "panel_share_percent": 57,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 10,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "12-mobile-scene2-map.png",
+      "state": "mobile-scene-2-map",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 235720,
+      "sha256": "d61b98b75199daf756f1ffe11a0116eb95bb56486baff7fc6766f5a2e0b3d586",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 55,
+        "panel_share_percent": 45,
+        "section_height_px": 0,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 9,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "13-mobile-scene2-section.png",
+      "state": "mobile-scene-2-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 64239,
+      "sha256": "1d84952c3da54154c9633b6b49d5defbd2949f738a94f2415591db6e77e8bc11",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 55,
+        "panel_share_percent": 45,
+        "section_height_px": 303.1875,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 9,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "14-mobile-scene3.png",
+      "state": "mobile-scene-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 230520,
+      "sha256": "15945510e7df091181661396a9777003eb62d1f08a679786acfa2bc2ec8f2ff7",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 42,
+        "panel_share_percent": 58,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    },
+    {
+      "filename": "15-dpr2-section.png",
+      "state": "dpr2-section",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 2,
+      "url": "http://127.0.0.1:4173/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 95936,
+      "sha256": "9c3834f06a6ecaf78cef1548f0b582d2462f193834829012b23f2320303fd180",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 323,
+        "annotation_count": 6,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "label_overlap_count": 5,
+        "labels_outside_plot": 6,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1
+      }
+    }
+  ],
+  "diagnostics": []
+}

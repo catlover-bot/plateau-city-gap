@@ -1,19 +1,19 @@
 # Current goal
 
-Active goal: `final-visual-polish-and-demo-video-v1`
+Active goal: `deployed-map-ux-section-refinement-v1`
 
-Current milestone: V5 production demo-video package complete; V6 final verification pending
+Current milestone: M0 baseline locked; M1 map readability next
 
 Execution lock:
 
 - branch: `feat/guided-spatial-storytelling-v1`
-- starting HEAD: `dad536e87019f3e1b54dfca50fac9405adb23aac`
-- remote feature HEAD at start: `dad536e87019f3e1b54dfca50fac9405adb23aac`
+- starting HEAD: `8701df282da1b60049e9806e6b13f4ddceeecadc`
+- remote feature HEAD at start: `8701df282da1b60049e9806e6b13f4ddceeecadc`
 - origin/main at start: `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`
-- scope: Public / Guided visual polish, production demo route, and production browser demo video only
+- scope: Guided map readability, spatial-product UI polish, Urban Section annotation clarity, automated comparison, feature-branch CI, feature-branch Pages deployment, and production browser audit
 - preserve: selected Area, 495-Area switching, exact PLATEAU targets, A–B Section, target-specific checks, upgrade controller, provenance, accessibility, performance, and deep links
-- exclude: backend, database, migrations, datasets, analysis, Borehole, isochrone, GTFS, hazard additions, M4–M6, main merge, and force push
-- baseline evidence: `docs/final-visual-demo-baseline.md`
+- exclude: backend, database, migrations, new datasets, scores, ranking, analysis, Borehole, isochrone, GTFS, hazard additions, new M4–M6 product features, new 3D capability, main merge, and force push
+- baseline evidence: `docs/map-section-refinement-baseline.md` and `docs/assets/map-section-refinement-v1/before/`
 - local final UX evidence: `docs/final-ux-checkpoint.md`
 - V4 feature push: commit `33466bd97a20d96fafa7cf2906a1e89676e7da07`
 - V4 Municipal Pilot CI: run `33756406111`, all nine required jobs passed
@@ -22,7 +22,11 @@ Execution lock:
 - production browser audit: Guided scenes, six Area switches, exact/fallback targets, mobile, keyboard, PLATEAU-native checks, and production Guided-to-Advanced flows passed
 - production demo package: captioned 1080p, clean 1080p, 15-second backup, poster, VTT captions, manifest, script, and runbook in `docs/assets/demo-video/` and `docs/`
 - V5 video source: the already deployed UI commit `33466bd97a20d96fafa7cf2906a1e89676e7da07`; recording diagnostics zero
-- next gate: V6 commit/push, feature-branch CI, decide whether Pages redeployment is necessary, reverify production/UI-video relationship, report, and stop
+- M0 facts: clean start, exact branch/upstream/head verified, production build passed, 17-view capture complete, capture diagnostics zero, one MapLibre initialization preserved, and five-context performance gates passed
+- map baseline: basemap and multi-theme context compete with selection; exact targets lack a map label; Scene 1 Area labels are small
+- Section baseline: no visible road-name annotations, `5` measured overlaps, `6` annotations outside the plot, tiny axis typography, and clipped mobile services
+- existing demo videos: preserved unchanged; mark as visually stale after this refinement and recapture only after production visual approval
+- next gate: commit M0, then implement and commit M1 map readability
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.
