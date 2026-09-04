@@ -2,7 +2,7 @@
 
 Active goal: `harbor-atlas-visual-identity-ux-v2`
 
-Current milestone: S3 map-first Guided UX complete; S4 Urban Section visual language next
+Current milestone: S4 Urban Section visual language complete; S5 automated visual checkpoint next
 
 Execution lock:
 
@@ -33,7 +33,13 @@ Execution lock:
 - S3 responsive result: the Inspector uses `clamp(360px, 27vw, 440px)` on desktop; at 390 x 844 the selected Area name/switch and fixed 44px+ action are immediately visible, horizontal overflow is zero, and the remaining rows scroll below
 - S3 copy: the stale `purple A-B line` phrase is removed; map and Section are described as the same A-B place without color-dependent language
 - S3 regression: lint, typecheck, production build, 17-state raster capture with zero diagnostics, full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy browser journey, and complete Guided-to-Advanced transition/retry suite pass
-- next gate: unify the SVG Urban Section with Harbor materials and Signal focus, raise annotation contrast/type, retain collision layout, and prove map/Section focus equality
+- S4 material language: the SVG Section now shares the map's neutral terrain, building, and road roles; Harbor identifies A/B and annotation rails, while Signal is reserved for the active building/road focus and callout
+- S4 readability: named-road annotations are `12 px`, axis ticks `11 px`, axis titles `12 px`, A/B endpoints `16 px`, and focused callout text `13 px` / `12 px`; matching text measurement prevents the larger labels from clipping
+- S4 structure: background, grid, header, footer, legend, terrain, buildings, roads, focus, planning, hazard, and scenario states consume semantic Harbor Atlas tokens; the legacy Section-specific accent and raw local color literals are removed
+- S4 collision result: the existing placement algorithm is unchanged; desktop/mobile retain `6`/`4` total annotations and `4`/`2` road labels with zero overlap, outside-plot, endpoint, tick, or legend conflicts and zero horizontal overflow
+- S4 interaction: desktop and mobile pointer/keyboard Section focus continues to produce the matching map focus with one SVG tab stop and one persistent MapLibre initialization; the selected callout remains visible
+- S4 regression: lint, typecheck, production build, `30` test files / `130` tests, 17-state desktop/compact/presentation/mobile/DPR2 raster capture with zero diagnostics, full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy browser journey, and complete Guided-to-Advanced direct/cached/Back-Forward/error/retry suite pass
+- next gate: capture the final 20-state evidence set, record inventory/contrast/color-vision/performance/a11y results, run the complete local matrix, and document the automated before/after checkpoint
 - no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
 
 Prior deployed map/Section refinement checkpoint retained below.

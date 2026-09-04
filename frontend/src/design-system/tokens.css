@@ -28,8 +28,10 @@
   --cg-transect-terrain: #5d7476;
   --cg-transect-building: #9ba9ad;
   --cg-transect-building-outline: #596970;
-  --cg-transect-road: #667279;
+  --cg-transect-road: #e5ddd1;
+  --cg-transect-road-outline: #667279;
   --cg-transect-line: #26758a;
+  --cg-transect-halo: #fcfcf9;
   --cg-transect-endpoint: #164f63;
 
   /* Harbor Atlas: exact target, decisive action, and system states */

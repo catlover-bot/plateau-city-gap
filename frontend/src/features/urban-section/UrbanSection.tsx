@@ -243,7 +243,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
 
   const roadAnnotations = useMemo<SectionAnnotationLayout & { calculationMs: number }>(() => {
     if (!guided || !data || !plot) return { placed: [], hiddenCount: 0, overlapCount: 0, calculationMs: 0 };
-    const measureText = browserSectionTextMeasurer("600 11px system-ui, sans-serif");
+    const measureText = browserSectionTextMeasurer("750 12px system-ui, sans-serif");
     const started = performance.now();
     const layout = layoutSectionAnnotations({
       candidates: data.roads
@@ -281,11 +281,11 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
     const relation = focusedDetail.relation === "direct"
       ? "直接交差"
       : `断面から約${Math.round(focusedDetail.offsetDistanceM)}m`;
-    const measureName = browserSectionTextMeasurer("800 11.5px system-ui, sans-serif");
-    const measureMeta = browserSectionTextMeasurer("500 9.5px system-ui, sans-serif");
+    const measureName = browserSectionTextMeasurer("800 13px system-ui, sans-serif");
+    const measureMeta = browserSectionTextMeasurer("600 12px system-ui, sans-serif");
     const labelWidth = Math.min(
-      compactSection ? 180 : 220,
-      Math.max(132, measureName(focusedDetail.label) + 16, measureMeta(meta) + 14, measureMeta(relation) + 14),
+      compactSection ? 210 : 250,
+      Math.max(156, measureName(focusedDetail.label) + 18, measureMeta(meta) + 16, measureMeta(relation) + 16),
     );
     const labelX = Math.min(plot.viewWidth - 20 - labelWidth, Math.max(38, anchorX - labelWidth / 2));
     const anchorY = focusedDetail.elevationM === null ? TERRAIN_BOTTOM : plot.y(focusedDetail.elevationM);
@@ -489,12 +489,12 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
             </g>)}
           </g>}
           {guided && focusedDetail && focusedCallout && <g className="section-focus-callout" aria-hidden="true" data-section-focus-annotation="true" data-section-annotation-selected="true">
-            <line x1={focusedCallout.anchorX} x2={focusedCallout.labelX + focusedCallout.labelWidth / 2} y1={focusedCallout.anchorY} y2="62" />
+            <line x1={focusedCallout.anchorX} x2={focusedCallout.labelX + focusedCallout.labelWidth / 2} y1={focusedCallout.anchorY} y2="59" />
             <circle cx={focusedCallout.anchorX} cy={focusedCallout.anchorY} r="4" />
-            <rect x={focusedCallout.labelX} y="58" width={focusedCallout.labelWidth} height="44" rx="3" />
-            <text className="focus-name" x={focusedCallout.labelX + 7} y="70">{focusedDetail.label}</text>
-            <text className="focus-meta" x={focusedCallout.labelX + 7} y="83">{focusedCallout.meta}</text>
-            <text className="focus-meta" x={focusedCallout.labelX + 7} y="96">{focusedCallout.relation}</text>
+            <rect x={focusedCallout.labelX} y="55" width={focusedCallout.labelWidth} height="51" rx="3" />
+            <text className="focus-name" x={focusedCallout.labelX + 8} y="69">{focusedDetail.label}</text>
+            <text className="focus-meta" x={focusedCallout.labelX + 8} y="85">{focusedCallout.meta}</text>
+            <text className="focus-meta" x={focusedCallout.labelX + 8} y="100">{focusedCallout.relation}</text>
           </g>}
           {analysisLens === "service-pulse" && <text className="section-pulse-note" x="610" y="18">{guided ? "施設の位置は断面上への投影です。徒歩時間ではありません。" : "3D: experimental network距離 · 断面: 実施設のoffset投影（徒歩時間ではない）"}</text>}
           {counterfactualState === "scenario" && <g className="section-counterfactual" aria-label={guided ? "現在と仮想地点を加えた条件の比較" : `Counterfactual comparison ${data.counterfactual.plan_id}`}>

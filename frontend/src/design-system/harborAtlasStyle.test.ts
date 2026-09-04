@@ -6,6 +6,7 @@ const tokens = read("./tokens.css");
 const foundation = read("./foundation.css");
 const guided = read("../features/guided-spatial/guided-spatial.css");
 const publicJourney = read("../features/area-investigation/publicAreaJourney.css");
+const urbanSection = read("../features/urban-section/urban-section.css");
 
 function token(name: string, value: string) {
   expect(tokens).toContain(`${name}: ${value};`);
@@ -76,9 +77,12 @@ describe("Harbor Atlas style contract", () => {
   });
 
   it("adds no runtime theme selector or legacy purple Section accent", () => {
-    const publicGuided = `${tokens}\n${foundation}\n${guided}\n${publicJourney}`;
+    const publicGuided = `${tokens}\n${foundation}\n${guided}\n${publicJourney}\n${urbanSection}`;
     expect(publicGuided).not.toMatch(/data-theme|theme-toggle|theme-selector/);
     expect(publicGuided).not.toContain("#6b4c7d");
     expect(publicGuided).not.toContain("var(--cg-section)");
+    expect(urbanSection).toContain("fill: var(--cg-transect-building)");
+    expect(urbanSection).toContain("fill: var(--cg-transect-road)");
+    expect(urbanSection).toContain("stroke: var(--cg-target-strong)");
   });
 });
