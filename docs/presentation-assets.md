@@ -4,11 +4,31 @@ Presentation media is evidence derived from a verified production deployment. It
 
 ## Current sets
 
+- `docs/assets/presentation-images/`: current production slide set, contact sheet, and machine-verifiable manifest captured from deployed UI source `9c8a99c530ca375758686c6d6431e76d80c5c748` after Pages run `33909833987`.
 - `docs/assets/harbor-atlas-v2/after/`: current automated Harbor Atlas visual checkpoint, including desktop, mobile, DPR2, accessibility, performance, and color-vision evidence.
 - `docs/assets/harbor-atlas-v2/before/`: the retained direct comparison baseline for that checkpoint.
-- `docs/assets/demo-video/`: the existing six-file demo package. Until its replacement is fully verified, it remains historical evidence from deployed source `33466bd97a20d96fafa7cf2906a1e89676e7da07`.
+- `docs/assets/demo-video/`: current six-file production demo package captured from deployed UI source `9c8a99c530ca375758686c6d6431e76d80c5c748` after Pages run `33909833987`; full captioned, clean, short, poster, captions, and manifest are all present.
 
 The repository does not treat every historical screenshot run as canonical. Superseded packages are recoverable through Git history instead of remaining duplicated in the current checkout.
+
+## Production slide set
+
+[![Contact sheet for the eight production presentation images](assets/presentation-images/contact-sheet.png)](assets/presentation-images/contact-sheet.png)
+
+The slide set is ordered as a spatial story. Use the first five images in the main narrative, image 07 when explaining responsive use, and images 06 and 08 as appendix evidence unless the audience needs those details earlier.
+
+| File | Intended use | Suggested caption | Placement |
+| --- | --- | --- | --- |
+| [`01-city-gap-overview-16x9.png`](assets/presentation-images/01-city-gap-overview-16x9.png) | Opening product view | Start with the city, then move from candidates to evidence. | Main |
+| [`02-area-selection-16x9.png`](assets/presentation-images/02-area-selection-16x9.png) | Area discovery | The map and ranked Area list keep selection spatially grounded. | Main |
+| [`03-plateau-section-hero-16x9.png`](assets/presentation-images/03-plateau-section-hero-16x9.png) | Core spatial evidence | One view connects PLATEAU buildings and roads, the A–B transect, Urban Section, and local context. | Main |
+| [`04-urban-section-closeup-16x9.png`](assets/presentation-images/04-urban-section-closeup-16x9.png) | Section explanation | Terrain, buildings, road crossings, endpoints, and named roads remain readable as a presentation figure. | Main |
+| [`05-exact-field-target-16x9.png`](assets/presentation-images/05-exact-field-target-16x9.png) | Field handoff | An exact PLATEAU road target turns map evidence into four explicit on-site checks. | Main |
+| [`06-area-switching-16x9.png`](assets/presentation-images/06-area-switching-16x9.png) | Breadth of coverage | A second real Area preserves the workflow while changing local geometry and context capability. | Appendix |
+| [`07-mobile-workflow-portrait.png`](assets/presentation-images/07-mobile-workflow-portrait.png) | Responsive workflow | The same map-to-Section story remains usable in a real 390 × 844 CSS-pixel mobile viewport at DPR2. | Main or appendix |
+| [`08-advanced-evidence-16x9.png`](assets/presentation-images/08-advanced-evidence-16x9.png) | Specialist workflow | Guided context transfers into the loaded Advanced analysis and evidence surface. | Appendix |
+
+The [`manifest.json`](assets/presentation-images/manifest.json) records every state URL, viewport, DPR, selected Area and target, readiness result, diagnostics, SHA-256, production URL, source commit, and Pages run. Landscape assets are 1920 × 1080. The mobile asset is a native 780 × 1688 DPR2 capture. Image 04 is the only derived framing operation: the production Section dock was proportionally scaled and padded, without altering its plotted content.
 
 ## Capture policy
 

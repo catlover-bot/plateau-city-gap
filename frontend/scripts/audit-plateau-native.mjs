@@ -24,9 +24,8 @@ page.on("request", (request) => {
 page.on("requestfailed", (request) => {
   const url = request.url();
   const error = request.failure()?.errorText ?? "unknown";
-  const navigationCancelledMapTile =
-    url.includes("cyberjapandata.gsi.go.jp") && error === "net::ERR_ABORTED";
-  if ((url.startsWith(baseUrl) || url.includes("cyberjapandata.gsi.go.jp")) && !navigationCancelledMapTile) {
+  const navigationCancelledRequest = error === "net::ERR_ABORTED";
+  if ((url.startsWith(baseUrl) || url.includes("cyberjapandata.gsi.go.jp")) && !navigationCancelledRequest) {
     criticalRequestFailures.push({ url, error });
   }
 });

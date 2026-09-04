@@ -1,19 +1,53 @@
 {
   "schema_version": "citygap.production-demo-video@1",
-  "generated_at": "2026-09-03T13:58:09.877Z",
+  "generated_at": "2026-09-04T20:46:44.333Z",
   "source_production_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided",
   "recording_start_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=intro&mesh=533513314",
   "source_branch": "feat/guided-spatial-storytelling-v1",
-  "source_commit": "33466bd97a20d96fafa7cf2906a1e89676e7da07",
-  "pages_run_id": "33756795063",
+  "source_commit": "9c8a99c530ca375758686c6d6431e76d80c5c748",
+  "asset_package_commit": null,
+  "asset_package_commit_note": "Recorded in the follow-up provenance commit after the media commit exists.",
+  "pages_run_id": "33909833987",
+  "capture_clock": {
+    "source": "Windows host clock",
+    "executable": "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "note": "Environment wall-clock discontinuities were observed; generated_at is the host UTC value returned at final package generation. Choreography uses process.hrtime.bigint()."
+  },
+  "live_build": {
+    "index": {
+      "bytes": 1072,
+      "sha256": "1738f3e1613296baef6641f5ed375d11bdc6bf4629c999ed63ba012ea167ee3f",
+      "matches_local_build": true
+    },
+    "assets": [
+      {
+        "path": "/plateau-city-gap/assets/index-BMF6s_eK.js",
+        "bytes": 18295,
+        "sha256": "6f70698d73295e57a8a263bd9d64b8d88bf7f3054b9c4b5ca6692c0f3bd52bcc",
+        "matches_local_build": true
+      },
+      {
+        "path": "/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+        "matches_local_build": true
+      },
+      {
+        "path": "/plateau-city-gap/assets/index-7i-oCguR.css",
+        "bytes": 207058,
+        "sha256": "ef506c49d276b708c83ea9edcbdbc04a75260a40f2fe6238a952ce03968e6bf3",
+        "matches_local_build": true
+      }
+    ]
+  },
   "recording": {
     "viewport": {
-      "width": 1920,
-      "height": 1080
+      "width": 1600,
+      "height": 900
     },
     "raw_video_size": {
-      "width": 960,
-      "height": 540
+      "width": 800,
+      "height": 450
     },
     "device_pixel_ratio": 1,
     "output_fps": 30,
@@ -26,43 +60,43 @@
     "planned_choreography": [
       {
         "start": 0,
-        "end": 3,
+        "end": 4,
         "scene": "Guided intro",
         "caption": "舞鶴市の地域を、地図からたどる"
       },
       {
-        "start": 3,
-        "end": 10,
+        "start": 4,
+        "end": 8,
         "scene": "citywide candidates and focus",
         "caption": "詳しく見る地域を選ぶ"
       },
       {
-        "start": 10,
-        "end": 16,
+        "start": 8,
+        "end": 12,
         "scene": "select 常団地前周辺",
         "caption": "人口・交通・医療から候補を確認"
       },
       {
-        "start": 16,
-        "end": 30,
+        "start": 12,
+        "end": 29,
         "scene": "PLATEAU context and A–B Section",
-        "caption": "500mの統計を、建物・道路・地形へ"
+        "caption": "地域の統計を、建物・道路・地形までたどる"
       },
       {
-        "start": 30,
-        "end": 42,
+        "start": 29,
+        "end": 43,
         "scene": "exact PLATEAU road target",
-        "caption": "データだけでは分からない場所を特定"
+        "caption": "データだけでは分からない場所を見つける"
       },
       {
-        "start": 42,
-        "end": 50,
+        "start": 43,
+        "end": 52,
         "scene": "four required checks",
-        "caption": "現地で確認するポイントへ"
+        "caption": "現地で確かめるポイントへ"
       },
       {
-        "start": 50,
-        "end": 54,
+        "start": 52,
+        "end": 55,
         "scene": "final hold",
         "caption": "データから、現地確認の入口をつくる"
       }
@@ -70,43 +104,43 @@
     "exact_choreography": [
       {
         "start": 0,
-        "end": 3.006,
+        "end": 4.002,
         "scene": "Guided intro",
         "caption": "舞鶴市の地域を、地図からたどる"
       },
       {
-        "start": 3.006,
-        "end": 10.025,
+        "start": 4.002,
+        "end": 8.485,
         "scene": "citywide candidates and focus",
         "caption": "詳しく見る地域を選ぶ"
       },
       {
-        "start": 10.025,
-        "end": 18.117,
+        "start": 8.485,
+        "end": 12.003,
         "scene": "select 常団地前周辺",
         "caption": "人口・交通・医療から候補を確認"
       },
       {
-        "start": 18.117,
-        "end": 33.392,
+        "start": 12.003,
+        "end": 29.003,
         "scene": "PLATEAU context and A–B Section",
-        "caption": "500mの統計を、建物・道路・地形へ"
+        "caption": "地域の統計を、建物・道路・地形までたどる"
       },
       {
-        "start": 33.392,
-        "end": 42.102,
+        "start": 29.003,
+        "end": 43.002,
         "scene": "exact PLATEAU road target",
-        "caption": "データだけでは分からない場所を特定"
+        "caption": "データだけでは分からない場所を見つける"
       },
       {
-        "start": 42.102,
-        "end": 50.002,
+        "start": 43.002,
+        "end": 52.003,
         "scene": "four required checks",
-        "caption": "現地で確認するポイントへ"
+        "caption": "現地で確かめるポイントへ"
       },
       {
-        "start": 50.002,
-        "end": 54.012,
+        "start": 52.003,
+        "end": 54.752,
         "scene": "final hold",
         "caption": "データから、現地確認の入口をつくる"
       }
@@ -122,10 +156,10 @@
     ]
   },
   "tools": {
-    "ffmpeg": "ffmpeg version n9.0.1-11-ge47273f4d9-20260902 Copyright (c) 2000-2026 the FFmpeg developers",
-    "ffprobe": "ffprobe version n9.0.1-11-ge47273f4d9-20260902 Copyright (c) 2007-2026 the FFmpeg developers",
+    "ffmpeg": "ffmpeg version N-126390-g9fc8c785e2-20260903 Copyright (c) 2000-2026 the FFmpeg developers",
+    "ffprobe": "ffprobe version N-126390-g9fc8c785e2-20260903 Copyright (c) 2007-2026 the FFmpeg developers",
     "playwright": "1.61.1",
-    "chromium_executable": "/home/catlover/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome"
+    "chromium_executable": "/home/mhirotaka/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome"
   },
   "diagnostics": {
     "console_errors": 0,
@@ -140,61 +174,63 @@
         "filename": "city-gap-demo-presentation-1080p.mp4",
         "captioned": true,
         "path": "docs/assets/demo-video/city-gap-demo-presentation-1080p.mp4",
-        "bytes": 5355138,
-        "sha256": "904d6478c5352f48bedf42f4529a6601200650b20fe92f4d017441c21f32abb7",
-        "duration_seconds": 54,
+        "bytes": 2380627,
+        "sha256": "5436ccb8241c99a96436e1fc49b19d5bb1bd62080f67bb12b56781377f8798a3",
+        "duration_seconds": 54.766667,
         "codec": "h264",
         "pixel_format": "yuv420p",
         "width": 1920,
         "height": 1080,
         "frame_rate": "30/1",
         "audio_streams": 0,
-        "raw_lead_trim_seconds": 43.028,
-        "raw_wall_lead_seconds": 58.112,
-        "raw_duration_seconds": 97.04,
-        "raw_video_width": 960,
-        "raw_video_height": 540,
-        "choreography_elapsed_seconds": 54.012,
+        "raw_lead_trim_seconds": 0,
+        "raw_wall_lead_seconds": 6.914,
+        "raw_duration_seconds": 54.752,
+        "raw_video_width": 800,
+        "raw_video_height": 450,
+        "raw_capture_method": "Chromium DevTools Page.screencastFrame JPEG sequence",
+        "raw_frame_count": 171,
+        "choreography_elapsed_seconds": 54.752,
         "observed_choreography": [
           {
             "start": 0,
-            "end": 3.006,
+            "end": 4.002,
             "scene": "Guided intro",
             "caption": "舞鶴市の地域を、地図からたどる"
           },
           {
-            "start": 3.006,
-            "end": 10.025,
+            "start": 4.002,
+            "end": 8.485,
             "scene": "citywide candidates and focus",
             "caption": "詳しく見る地域を選ぶ"
           },
           {
-            "start": 10.025,
-            "end": 18.117,
+            "start": 8.485,
+            "end": 12.003,
             "scene": "select 常団地前周辺",
             "caption": "人口・交通・医療から候補を確認"
           },
           {
-            "start": 18.117,
-            "end": 33.392,
+            "start": 12.003,
+            "end": 29.003,
             "scene": "PLATEAU context and A–B Section",
-            "caption": "500mの統計を、建物・道路・地形へ"
+            "caption": "地域の統計を、建物・道路・地形までたどる"
           },
           {
-            "start": 33.392,
-            "end": 42.102,
+            "start": 29.003,
+            "end": 43.002,
             "scene": "exact PLATEAU road target",
-            "caption": "データだけでは分からない場所を特定"
+            "caption": "データだけでは分からない場所を見つける"
           },
           {
-            "start": 42.102,
-            "end": 50.002,
+            "start": 43.002,
+            "end": 52.003,
             "scene": "four required checks",
-            "caption": "現地で確認するポイントへ"
+            "caption": "現地で確かめるポイントへ"
           },
           {
-            "start": 50.002,
-            "end": 54.012,
+            "start": 52.003,
+            "end": 54.752,
             "scene": "final hold",
             "caption": "データから、現地確認の入口をつくる"
           }
@@ -228,7 +264,8 @@
           "checks": 4,
           "fakeEvidence": false,
           "internalIdVisible": false,
-          "mapInitializationCount": 1
+          "mapInitializationCount": 1,
+          "pendingRequests": 0
         }
       },
       {
@@ -236,61 +273,63 @@
         "filename": "city-gap-demo-clean-1080p.mp4",
         "captioned": false,
         "path": "docs/assets/demo-video/city-gap-demo-clean-1080p.mp4",
-        "bytes": 5664974,
-        "sha256": "e587931ac9ba358a9869ff2e18acc8abe6711fde1dab6f6cb8f7e15c60bb9ef3",
-        "duration_seconds": 54,
+        "bytes": 2280190,
+        "sha256": "a215fa439bcc2e757896c20d9fe4d86770b8ce1633e7e90e1628f6caa7ae27fe",
+        "duration_seconds": 54.766667,
         "codec": "h264",
         "pixel_format": "yuv420p",
         "width": 1920,
         "height": 1080,
         "frame_rate": "30/1",
         "audio_streams": 0,
-        "raw_lead_trim_seconds": 28.354,
-        "raw_wall_lead_seconds": 38.684,
-        "raw_duration_seconds": 82.36,
-        "raw_video_width": 960,
-        "raw_video_height": 540,
-        "choreography_elapsed_seconds": 54.006,
+        "raw_lead_trim_seconds": 0,
+        "raw_wall_lead_seconds": 5.235,
+        "raw_duration_seconds": 54.753,
+        "raw_video_width": 800,
+        "raw_video_height": 450,
+        "raw_capture_method": "Chromium DevTools Page.screencastFrame JPEG sequence",
+        "raw_frame_count": 44,
+        "choreography_elapsed_seconds": 54.753,
         "observed_choreography": [
           {
             "start": 0,
-            "end": 3.028,
+            "end": 4.001,
             "scene": "Guided intro",
             "caption": "舞鶴市の地域を、地図からたどる"
           },
           {
-            "start": 3.028,
-            "end": 10.003,
+            "start": 4.001,
+            "end": 8.023,
             "scene": "citywide candidates and focus",
             "caption": "詳しく見る地域を選ぶ"
           },
           {
-            "start": 10.003,
-            "end": 16.016,
+            "start": 8.023,
+            "end": 12.002,
             "scene": "select 常団地前周辺",
             "caption": "人口・交通・医療から候補を確認"
           },
           {
-            "start": 16.016,
-            "end": 30.016,
+            "start": 12.002,
+            "end": 29.003,
             "scene": "PLATEAU context and A–B Section",
-            "caption": "500mの統計を、建物・道路・地形へ"
+            "caption": "地域の統計を、建物・道路・地形までたどる"
           },
           {
-            "start": 30.016,
-            "end": 42.77,
+            "start": 29.003,
+            "end": 43.008,
             "scene": "exact PLATEAU road target",
-            "caption": "データだけでは分からない場所を特定"
+            "caption": "データだけでは分からない場所を見つける"
           },
           {
-            "start": 42.77,
-            "end": 50.003,
+            "start": 43.008,
+            "end": 52.001,
             "scene": "four required checks",
-            "caption": "現地で確認するポイントへ"
+            "caption": "現地で確かめるポイントへ"
           },
           {
-            "start": 50.003,
-            "end": 54.006,
+            "start": 52.001,
+            "end": 54.753,
             "scene": "final hold",
             "caption": "データから、現地確認の入口をつくる"
           }
@@ -324,7 +363,8 @@
           "checks": 4,
           "fakeEvidence": false,
           "internalIdVisible": false,
-          "mapInitializationCount": 1
+          "mapInitializationCount": 1,
+          "pendingRequests": 0
         }
       },
       {
@@ -332,9 +372,9 @@
         "filename": "city-gap-demo-short-15s.mp4",
         "path": "docs/assets/demo-video/city-gap-demo-short-15s.mp4",
         "captioned": true,
-        "bytes": 1295230,
-        "sha256": "bd01085bb8805a3f674b66a0e88d8bce2bef774fbb20de26accb385cd6acbdd1",
-        "duration_seconds": 15,
+        "bytes": 700059,
+        "sha256": "e13ef23fc8227c4a28c82f4400c0cb3862c71c4e9c3cdd68fc47727563814aea",
+        "duration_seconds": 14.966667,
         "codec": "h264",
         "pixel_format": "yuv420p",
         "width": 1920,
@@ -345,21 +385,22 @@
     ],
     "poster": {
       "path": "docs/assets/demo-video/city-gap-demo-poster.png",
-      "bytes": 1577417,
-      "sha256": "328d58d1da74d0c4a961e8a7db6e86710d4d22e2a8f8b6fc9318522f56e17e42",
-      "source_second": 32.392
+      "bytes": 1254147,
+      "sha256": "93228d59adf12616e5482d817ee3c7cd6dfb4ae545afff7983870bfc91fba0da",
+      "source_second": 28.003
     },
     "captions": {
       "path": "docs/assets/demo-video/city-gap-demo-captions.vtt",
-      "bytes": 549,
-      "sha256": "9255069347ae86d593ffae52e5c9eb11827940a650b6d2e8437f6202bbaf7590",
+      "bytes": 569,
+      "sha256": "5d6102446b3f578471659cea2782a878a7f136ac0b657e1aa0ee6fb90c227d9f",
       "cues": 7
     }
   },
-  "repository_video_bytes": 12315342,
+  "repository_video_bytes": 5360876,
   "human_review": {
-    "visual_quality": "READY_FOR_SELF_VISUAL_REVIEW",
-    "presentation": "READY_FOR_DEMO_REVIEW",
+    "reviewed_at": "2026-09-04T20:48:25.604Z",
+    "visual_quality": "PASSED_SELF_VISUAL_REVIEW",
+    "presentation": "PASSED_DEMO_READINESS_REVIEW",
     "human_test": "AWAITING_HUMAN_TEST",
     "municipal_workflow": "AWAITING_MUNICIPAL_WORKFLOW_REVIEW"
   }

@@ -17,7 +17,7 @@ for (let index = 2; index < process.argv.length; index += 1) {
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const outputDirectory = path.resolve(
   process.cwd(),
-  parameters.get("--output") ?? "../docs/assets/demo-video",
+  parameters.get("--output") ?? path.join(tmpdir(), "citygap-demo-video-next"),
 );
 const sourceUrl = new URL(
   parameters.get("--url") ?? "https://catlover-bot.github.io/plateau-city-gap/?experience=guided",
@@ -32,14 +32,18 @@ const sourceBranch = execFileSync("git", ["branch", "--show-current"], {
   encoding: "utf8",
 }).trim();
 const pagesRunId = parameters.get("--pages-run-id") ?? null;
+const captureClockSource = parameters.get("--clock-source") ?? "runtime";
+const hostPowershellExecutable = parameters.get("--host-powershell") ?? "powershell.exe";
+const manifestPackageDirectory = parameters.get("--manifest-directory") ?? "docs/assets/demo-video";
 const ffmpeg = parameters.get("--ffmpeg") ?? "ffmpeg";
 const ffprobe = parameters.get("--ffprobe") ?? "ffprobe";
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? chromium.executablePath();
 const playwrightPackage = JSON.parse(
   await readFile(path.resolve(process.cwd(), "node_modules/playwright-core/package.json"), "utf8"),
 );
-const viewport = { width: 1920, height: 1080 };
-const rawVideoSize = { width: 960, height: 540 };
+const viewport = { width: 1600, height: 900 };
+const rawVideoSize = { width: 800, height: 450 };
+const outputVideoSize = { width: 1920, height: 1080 };
 const selectedArea = "533513314";
 const sectionArtifactId = "maizuru-533513314-plateau-2025-v1";
 const durationSeconds = 55;
@@ -69,12 +73,54 @@ const choreography = [
   { start: 52, end: 55, scene: "final hold", caption: "データから、現地確認の入口をつくる" },
 ];
 
+if (!new Set(["runtime", "host-powershell"]).has(captureClockSource)) throw new Error("--clock-source must be runtime or host-powershell");
+
+function captureTimestamp() {
+  if (captureClockSource === "host-powershell") {
+    const hostTimestamp = execFileSync(hostPowershellExecutable, ["-NoProfile", "-NonInteractive", "-Command", "[DateTimeOffset]::UtcNow.ToString('o')"], { encoding: "utf8" }).trim();
+    const parsed = new Date(hostTimestamp);
+    if (!Number.isFinite(parsed.valueOf())) throw new Error(`host clock returned an invalid timestamp: ${hostTimestamp}`);
+    return parsed.toISOString();
+  }
+  return new Date().toISOString();
+}
+
+function timingNow() {
+  return Number(process.hrtime.bigint() / 1_000_000n);
+}
+
+function packagePath(filename) {
+  return path.posix.join(manifestPackageDirectory.replaceAll("\\\\", "/"), filename);
+}
+
 function phase(message) {
   process.stderr.write(`[demo-video] ${message}\n`);
 }
 
+function pause(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest("hex");
+}
+
+async function verifyLiveBuild() {
+  const rootUrl = new URL(sourceUrl);
+  rootUrl.search = "";
+  rootUrl.hash = "";
+  const liveIndex = Buffer.from(await (await fetch(rootUrl)).arrayBuffer());
+  const localIndex = await readFile(path.join(process.cwd(), "dist/index.html"));
+  if (!liveIndex.equals(localIndex)) throw new Error("live index does not match the local build of the declared source commit");
+  const assetPaths = [...liveIndex.toString("utf8").matchAll(/(?:src|href)="([^"]+\.(?:js|css))"/g)].map((match) => match[1]);
+  const assets = [];
+  for (const assetPath of assetPaths) {
+    const live = Buffer.from(await (await fetch(new URL(assetPath, rootUrl))).arrayBuffer());
+    const local = await readFile(path.join(process.cwd(), "dist", assetPath.replace("/plateau-city-gap/", "")));
+    if (!live.equals(local)) throw new Error(`live asset does not match local build: ${assetPath}`);
+    assets.push({ path: assetPath, bytes: live.length, sha256: sha256(live), matches_local_build: true });
+  }
+  return { index: { bytes: liveIndex.length, sha256: sha256(liveIndex), matches_local_build: true }, assets };
 }
 
 function versionLine(command) {
@@ -127,12 +173,12 @@ async function settle(page) {
 
 async function waitForPending(page, pending) {
   await page.waitForFunction(() => document.readyState === "complete", null, { timeout: 180_000 });
-  const started = Date.now();
+  const started = timingNow();
   while (pending.size > 0) {
-    if (Date.now() - started > 30_000) {
+    if (timingNow() - started > 30_000) {
       throw new Error(`critical requests did not settle: ${[...pending].map((request) => request.url()).join(", ")}`);
     }
-    await page.waitForTimeout(50);
+    await pause(50);
   }
   await settle(page);
 }
@@ -165,10 +211,13 @@ async function primeRecordingPage(page, pending, variant) {
   let sectionContract = null;
   await page.goto(guidedUrl("intro"), { waitUntil: "domcontentloaded", timeout: 180_000 });
   await waitState(page, "intro", { pending });
+  phase(`${variant}: prewarm intro ready`);
   await page.getByRole("button", { name: "地域を選ぶ", exact: true }).evaluate((element) => element.click());
   await waitState(page, "find", { pending });
+  phase(`${variant}: prewarm candidates ready`);
   await page.getByRole("button", { name: "街の形を見る", exact: true }).evaluate((element) => element.click());
   await waitState(page, "understand", { pending });
+  phase(`${variant}: prewarm Section ready`);
   sectionContract = await page.evaluate(() => {
     const root = document.querySelector(".guided-spatial-app");
     const map = document.querySelector(".analytical-map-canvas")?.__cityGapMap;
@@ -179,6 +228,7 @@ async function primeRecordingPage(page, pending, variant) {
   });
   await page.getByRole("button", { name: "確認場所を見る", exact: true }).evaluate((element) => element.click());
   await waitState(page, "verify", { pending, exact: true });
+  phase(`${variant}: prewarm exact target ready`);
   const contract = await page.evaluate(() => {
     const root = document.querySelector(".guided-spatial-app");
     const map = document.querySelector(".analytical-map-canvas")?.__cityGapMap;
@@ -202,14 +252,13 @@ async function primeRecordingPage(page, pending, variant) {
   }
   await page.getByRole("button", { name: "街の形へ戻る", exact: true }).evaluate((element) => element.click());
   await waitState(page, "understand", { pending });
+  phase(`${variant}: prewarm returned to Section`);
   await page.getByRole("button", { name: "範囲選択へ戻る", exact: true }).evaluate((element) => element.click());
   await waitState(page, "find", { pending });
-  await page.evaluate((url) => {
-    const target = new URL(url);
-    history.replaceState(null, "", `${target.pathname}${target.search}${target.hash}`);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  }, guidedUrl("intro"));
+  phase(`${variant}: prewarm returned to candidates`);
+  await page.goto(guidedUrl("intro"), { waitUntil: "domcontentloaded", timeout: 180_000 });
   await waitState(page, "intro", { pending });
+  phase(`${variant}: prewarm complete at intro`);
   return contract;
 }
 
@@ -270,7 +319,7 @@ async function moveTo(page, locator, captioned) {
       ({ x, y }) => window.__cityGapRecording?.move(x, y),
       { x: box.x + box.width / 2, y: box.y + box.height / 2 },
     );
-    await page.waitForTimeout(460);
+    await pause(460);
   }
   await locator.focus();
 }
@@ -278,7 +327,7 @@ async function moveTo(page, locator, captioned) {
 async function clickLocator(page, locator, captioned) {
   await moveTo(page, locator, captioned);
   if (captioned) await page.evaluate(() => window.__cityGapRecording?.press(true));
-  await page.waitForTimeout(110);
+  await pause(110);
   await locator.evaluate((element) => element.click());
   if (captioned) await page.evaluate(() => window.__cityGapRecording?.press(false));
 }
@@ -286,7 +335,81 @@ async function clickLocator(page, locator, captioned) {
 async function moveCursor(page, x, y, captioned) {
   if (!captioned) return;
   await page.evaluate(({ left, top }) => window.__cityGapRecording?.move(left, top), { left: x, top: y });
-  await page.waitForTimeout(460);
+  await pause(460);
+}
+
+async function createScreencast(context, page) {
+  const session = await context.newCDPSession(page);
+  const frames = [];
+  let accepting = false;
+  let startMilliseconds = 0;
+  let frameError = null;
+  const screenshot = async () => {
+    const result = await session.send("Page.captureScreenshot", {
+      format: "jpeg",
+      quality: 88,
+      fromSurface: true,
+      captureBeyondViewport: false,
+      optimizeForSpeed: true,
+      clip: { x: 0, y: 0, width: viewport.width, height: viewport.height, scale: 0.5 },
+    });
+    return Buffer.from(result.data, "base64");
+  };
+  session.on("Page.screencastFrame", (event) => {
+    void session.send("Page.screencastFrameAck", { sessionId: event.sessionId }).catch((error) => {
+      frameError ??= error;
+    });
+    if (accepting) {
+      frames.push({
+        offsetSeconds: Math.max(0, (timingNow() - startMilliseconds) / 1000),
+        buffer: Buffer.from(event.data, "base64"),
+      });
+    }
+  });
+  await session.send("Page.startScreencast", {
+    format: "jpeg",
+    quality: 88,
+    maxWidth: rawVideoSize.width,
+    maxHeight: rawVideoSize.height,
+    everyNthFrame: 2,
+  });
+  return {
+    async begin(start) {
+      startMilliseconds = start;
+      frames.push({ offsetSeconds: 0, buffer: await screenshot() });
+      accepting = true;
+    },
+    async stop(durationSeconds) {
+      accepting = false;
+      frames.push({ offsetSeconds: durationSeconds, buffer: await screenshot() });
+      await session.send("Page.stopScreencast");
+      await session.detach();
+      if (frameError) throw frameError;
+      const ordered = frames
+        .filter((frame) => frame.offsetSeconds >= 0 && frame.offsetSeconds <= durationSeconds)
+        .sort((left, right) => left.offsetSeconds - right.offsetSeconds);
+      if (ordered.length < 10) throw new Error(`screencast produced only ${ordered.length} retained frames`);
+      return ordered;
+    },
+  };
+}
+
+async function writeScreencastInput(variant, frames, durationSeconds) {
+  const frameDirectory = path.join(rawDirectory, `${variant.id}-frames`);
+  await mkdir(frameDirectory, { recursive: true });
+  const concatLines = ["ffconcat version 1.0"];
+  for (let index = 0; index < frames.length; index += 1) {
+    const filename = `frame-${String(index).padStart(5, "0")}.jpg`;
+    const framePath = path.join(frameDirectory, filename);
+    await writeFile(framePath, frames[index].buffer);
+    const nextOffset = frames[index + 1]?.offsetSeconds ?? durationSeconds;
+    const frameDuration = Math.max(1 / 30, nextOffset - frames[index].offsetSeconds);
+    concatLines.push(`file '${framePath}'`, `duration ${frameDuration.toFixed(6)}`);
+  }
+  concatLines.push(`file '${path.join(frameDirectory, `frame-${String(frames.length - 1).padStart(5, "0")}.jpg`)}'`);
+  const concatPath = path.join(frameDirectory, "frames.ffconcat");
+  await writeFile(concatPath, `${concatLines.join("\n")}\n`);
+  return concatPath;
 }
 
 async function recordVariant(variant) {
@@ -298,36 +421,38 @@ async function recordVariant(variant) {
     deviceScaleFactor: 1,
     locale: "ja-JP",
     reducedMotion: "reduce",
-    recordVideo: { dir: rawDirectory, size: rawVideoSize },
+    serviceWorkers: "block",
   });
   const page = context.pages()[0] ?? await context.newPage();
   page.setDefaultTimeout(180_000);
   const pending = attachDiagnostics(page, variant.id);
-  const pageCreatedAt = Date.now();
+  const pageCreatedAt = timingNow();
   const contract = await primeRecordingPage(page, pending, variant.id);
   await installOverlay(page, variant.captioned);
   await caption(page, choreography[0].caption, variant.captioned);
-  await moveCursor(page, 960, 540, variant.captioned);
+  await moveCursor(page, viewport.width / 2, viewport.height / 2, variant.captioned);
   await settle(page);
-  const recordingStart = Date.now();
-  const elapsed = () => ((Date.now() - recordingStart) / 1000).toFixed(1);
+  const screencast = await createScreencast(context, page);
+  const recordingStart = timingNow();
+  await screencast.begin(recordingStart);
+  const elapsed = () => ((timingNow() - recordingStart) / 1000).toFixed(1);
   const observedChoreography = [{ ...choreography[0], start: 0, end: null }];
   const setSceneCaption = async (index) => {
-    const start = Number(((Date.now() - recordingStart) / 1000).toFixed(3));
+    const start = Number(((timingNow() - recordingStart) / 1000).toFixed(3));
     observedChoreography[observedChoreography.length - 1].end = start;
     observedChoreography.push({ ...choreography[index], start, end: null });
     await caption(page, choreography[index].caption, variant.captioned);
   };
   const holdUntil = async (milliseconds) => {
-    const remaining = recordingStart + milliseconds - Date.now();
-    if (remaining > 0) await page.waitForTimeout(remaining);
+    const remaining = recordingStart + milliseconds - timingNow();
+    if (remaining > 0) await pause(remaining);
   };
 
   phase(`${variant.id}: record ${durationSeconds}s choreography`);
   await holdUntil(4000);
   await setSceneCaption(1);
   await clickLocator(page, page.getByRole("button", { name: "地域を選ぶ", exact: true }), variant.captioned);
-  await waitState(page, "find", { pending });
+  await waitState(page, "find");
   phase(`${variant.id}: Scene 1 ready at ${elapsed()}s`);
   await holdUntil(6000);
   await moveTo(page, page.getByRole("button", { name: /二尾バス停周辺/ }).first(), variant.captioned);
@@ -337,15 +462,15 @@ async function recordVariant(variant) {
   await holdUntil(8000);
   await setSceneCaption(2);
   await clickLocator(page, tsune, variant.captioned);
-  await waitState(page, "find", { pending });
+  await waitState(page, "find");
   phase(`${variant.id}: Area selected at ${elapsed()}s`);
-  const areaReadyAt = Date.now() - recordingStart;
+  const areaReadyAt = timingNow() - recordingStart;
   await holdUntil(Math.max(12_000, areaReadyAt + 1500));
   await setSceneCaption(3);
   await clickLocator(page, page.getByRole("button", { name: "街の形を見る", exact: true }), variant.captioned);
-  await waitState(page, "understand", { pending });
+  await waitState(page, "understand");
   phase(`${variant.id}: Scene 2 and Section ready at ${elapsed()}s`);
-  const sectionReadyAt = Date.now() - recordingStart;
+  const sectionReadyAt = timingNow() - recordingStart;
   await holdUntil(Math.max(22_000, sectionReadyAt + 3500));
   const section = page.locator(".guided-section-dock .urban-section svg");
   const sectionBox = await section.boundingBox();
@@ -359,29 +484,34 @@ async function recordVariant(variant) {
   await holdUntil(Math.max(29_000, sectionReadyAt + 7000));
   await setSceneCaption(4);
   await clickLocator(page, targetButton, variant.captioned);
-  await waitState(page, "verify", { pending, exact: true });
+  await waitState(page, "verify", { exact: true });
   phase(`${variant.id}: Scene 3 exact target ready at ${elapsed()}s`);
-  const targetReadyAt = Date.now() - recordingStart;
+  const targetReadyAt = timingNow() - recordingStart;
   const targetCaptionEnd = Math.max(43_000, targetReadyAt + 4000);
   await holdUntil(targetCaptionEnd);
+  phase(`${variant.id}: exact target hold complete at ${elapsed()}s`);
   await setSceneCaption(5);
   const checks = page.locator(".guided-check-list > li");
   const secondCheck = await checks.nth(1).boundingBox();
   if (secondCheck) await moveCursor(page, secondCheck.x + secondCheck.width / 2, secondCheck.y + secondCheck.height / 2, variant.captioned);
+  phase(`${variant.id}: field checks visible at ${elapsed()}s`);
   await holdUntil(Math.max(47_000, targetCaptionEnd + 3000));
   const fourthCheck = await checks.nth(3).boundingBox();
   if (fourthCheck) await moveCursor(page, fourthCheck.x + fourthCheck.width / 2, fourthCheck.y + fourthCheck.height / 2, variant.captioned);
   const checksCaptionEnd = Math.max(52_000, targetCaptionEnd + 7000);
   await holdUntil(checksCaptionEnd);
+  phase(`${variant.id}: field-check hold complete at ${elapsed()}s`);
   await setSceneCaption(6);
-  await moveCursor(page, 960, 660, variant.captioned);
+  await moveCursor(page, viewport.width / 2, viewport.height * 0.61, variant.captioned);
   const finalEnd = Math.max(durationSeconds * 1000 - 250, checksCaptionEnd + 2500);
   await holdUntil(finalEnd);
-  const choreographyElapsedSeconds = (Date.now() - recordingStart) / 1000;
+  phase(`${variant.id}: final hold complete at ${elapsed()}s`);
+  const choreographyElapsedSeconds = (timingNow() - recordingStart) / 1000;
   observedChoreography[observedChoreography.length - 1].end = Number(choreographyElapsedSeconds.toFixed(3));
   if (choreographyElapsedSeconds > 55) {
     throw new Error(`recorded choreography exceeded 55 seconds: ${choreographyElapsedSeconds.toFixed(3)}s`);
   }
+  const rawFrames = await screencast.stop(choreographyElapsedSeconds);
 
   const terminal = await page.evaluate(() => {
     const root = document.querySelector(".guided-spatial-app");
@@ -399,30 +529,23 @@ async function recordVariant(variant) {
       mapInitializationCount: window.__cityGapMapInitCount,
     };
   });
-  if (terminal.story !== "verify" || terminal.area !== selectedArea || terminal.targetKind !== "road" || terminal.targetResolution !== "exact" || terminal.checks !== 4 || terminal.fakeEvidence || terminal.internalIdVisible || terminal.mapInitializationCount !== contract.mapInitializationCount) {
+  terminal.pendingRequests = pending.size;
+  if (terminal.story !== "verify" || terminal.area !== selectedArea || terminal.targetKind !== "road" || terminal.targetResolution !== "exact" || terminal.checks !== 4 || terminal.fakeEvidence || terminal.internalIdVisible || terminal.mapInitializationCount !== contract.mapInitializationCount || terminal.pendingRequests !== 0) {
     throw new Error(`terminal recording contract failed: ${JSON.stringify(terminal)}`);
   }
   if (diagnostics.some((item) => item.variant === variant.id || item.variant === `${variant.id}-prewarm`)) {
     throw new Error(`recording diagnostics are not empty for ${variant.id}`);
   }
 
-  const video = page.video();
-  if (!video) throw new Error("Playwright video handle is unavailable");
   await context.close();
-  const rawPath = await video.path();
   const outputPath = path.join(outputDirectory, variant.filename);
   const wallLeadSeconds = Math.max(0, (recordingStart - pageCreatedAt) / 1000);
-  const rawProbe = JSON.parse(execFileSync(ffprobe, [
-    "-v", "error", "-show_format", "-of", "json", rawPath,
-  ], { encoding: "utf8" }));
-  const rawDurationSeconds = Number(rawProbe.format.duration);
-  const leadSeconds = Math.max(0, rawDurationSeconds - choreographyElapsedSeconds);
+  const concatPath = await writeScreencastInput(variant, rawFrames, choreographyElapsedSeconds);
   execFileSync(ffmpeg, [
     "-y", "-hide_banner", "-loglevel", "error",
-    "-i", rawPath,
-    "-ss", leadSeconds.toFixed(3),
+    "-f", "concat", "-safe", "0", "-i", concatPath,
     "-t", choreographyElapsedSeconds.toFixed(3),
-    "-vf", "fps=30,scale=1920:1080:flags=lanczos,unsharp=5:5:0.45:5:5:0",
+    "-vf", "fps=30,scale=1920:1080:flags=lanczos:in_range=pc:out_range=tv,format=yuv420p,unsharp=5:5:0.45:5:5:0",
     "-c:v", "libx264", "-preset", "slow", "-crf", "24",
     "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an",
     outputPath,
@@ -434,13 +557,13 @@ async function recordVariant(variant) {
   const stream = probe.streams.find((candidate) => candidate.codec_type === "video");
   const audioStreams = probe.streams.filter((candidate) => candidate.codec_type === "audio");
   const duration = Number(probe.format.duration);
-  if (!stream || stream.codec_name !== "h264" || stream.width !== viewport.width || stream.height !== viewport.height || stream.pix_fmt !== "yuv420p" || audioStreams.length || duration < 42 || duration > 55) {
+  if (!stream || stream.codec_name !== "h264" || stream.width !== outputVideoSize.width || stream.height !== outputVideoSize.height || stream.pix_fmt !== "yuv420p" || audioStreams.length || duration < 42 || duration > 55) {
     throw new Error(`encoded video quality gate failed: ${JSON.stringify({ stream, audioStreams: audioStreams.length, duration })}`);
   }
   const buffer = await readFile(outputPath);
   return {
     ...variant,
-    path: path.relative(repositoryRoot, outputPath).replaceAll(path.sep, "/"),
+    path: packagePath(variant.filename),
     bytes: buffer.length,
     sha256: sha256(buffer),
     duration_seconds: duration,
@@ -450,11 +573,13 @@ async function recordVariant(variant) {
     height: stream.height,
     frame_rate: stream.avg_frame_rate,
     audio_streams: audioStreams.length,
-    raw_lead_trim_seconds: Number(leadSeconds.toFixed(3)),
+    raw_lead_trim_seconds: 0,
     raw_wall_lead_seconds: Number(wallLeadSeconds.toFixed(3)),
-    raw_duration_seconds: rawDurationSeconds,
+    raw_duration_seconds: Number(choreographyElapsedSeconds.toFixed(3)),
     raw_video_width: rawVideoSize.width,
     raw_video_height: rawVideoSize.height,
+    raw_capture_method: "Chromium DevTools Page.screencastFrame JPEG sequence",
+    raw_frame_count: rawFrames.length,
     choreography_elapsed_seconds: Number(choreographyElapsedSeconds.toFixed(3)),
     observed_choreography: observedChoreography,
     contract,
@@ -522,8 +647,15 @@ async function runDryValidation() {
 if (parameters.has("--dry-run")) {
   process.stdout.write(`${JSON.stringify(await runDryValidation(), null, 2)}\n`);
 } else {
+  if (!pagesRunId) throw new Error("--pages-run-id is required for production demo recording");
+  const temporaryRoot = path.resolve(tmpdir());
+  const temporaryRelative = path.relative(temporaryRoot, outputDirectory);
+  if (temporaryRelative.startsWith("..") || path.isAbsolute(temporaryRelative) || !path.basename(outputDirectory).startsWith("citygap-")) {
+    throw new Error(`demo recording output must be a named citygap-* directory under ${temporaryRoot}`);
+  }
   await mkdir(outputDirectory, { recursive: true });
   await mkdir(rawDirectory, { recursive: true });
+  const liveBuild = await verifyLiveBuild();
   let videoRecords;
   videoRecords = [];
   for (const variant of variants) videoRecords.push(await recordVariant(variant));
@@ -550,7 +682,7 @@ if (parameters.has("--dry-run")) {
   const shortPath = path.join(outputDirectory, "city-gap-demo-short-15s.mp4");
   execFileSync(ffmpeg, [
   "-y", "-hide_banner", "-loglevel", "error", "-ss", String(Math.max(0, (presentationChoreography[3]?.start ?? 12) - 1)), "-i", presentationPath, "-t", "15",
-  "-vf", "fps=30,scale=1920:1080:flags=lanczos,unsharp=5:5:0.45:5:5:0", "-c:v", "libx264", "-preset", "slow", "-crf", "24",
+  "-vf", "fps=30,scale=1920:1080:flags=lanczos:in_range=tv:out_range=tv,format=yuv420p,unsharp=5:5:0.45:5:5:0", "-c:v", "libx264", "-preset", "slow", "-crf", "24",
   "-pix_fmt", "yuv420p", "-movflags", "+faststart", "-an", shortPath,
 ], { stdio: "inherit" });
   let shortRecord = null;
@@ -562,7 +694,7 @@ if (parameters.has("--dry-run")) {
   shortRecord = {
     id: "short",
     filename: path.basename(shortPath),
-    path: path.relative(repositoryRoot, shortPath).replaceAll(path.sep, "/"),
+    path: packagePath(path.basename(shortPath)),
     captioned: true,
     bytes: shortBuffer.length,
     sha256: sha256(shortBuffer),
@@ -582,12 +714,17 @@ if (parameters.has("--dry-run")) {
   const captionBuffer = await readFile(captionsPath);
   const manifest = {
   schema_version: "citygap.production-demo-video@1",
-  generated_at: new Date().toISOString(),
+  generated_at: captureTimestamp(),
   source_production_url: sourceUrl.toString(),
   recording_start_url: guidedUrl("intro"),
   source_branch: sourceBranch,
   source_commit: sourceCommit,
   pages_run_id: pagesRunId,
+  capture_clock: {
+    source: captureClockSource === "host-powershell" ? "Windows host clock" : "runtime clock",
+    executable: captureClockSource === "host-powershell" ? hostPowershellExecutable : null,
+  },
+  live_build: liveBuild,
   recording: {
     viewport,
     raw_video_size: rawVideoSize,
@@ -626,13 +763,13 @@ if (parameters.has("--dry-run")) {
   files: {
     videos: videoRecords,
     poster: {
-      path: path.relative(repositoryRoot, posterPath).replaceAll(path.sep, "/"),
+      path: packagePath(path.basename(posterPath)),
       bytes: poster.length,
       sha256: sha256(poster),
       source_second: posterSecond,
     },
     captions: {
-      path: path.relative(repositoryRoot, captionsPath).replaceAll(path.sep, "/"),
+      path: packagePath(path.basename(captionsPath)),
       bytes: captionBuffer.length,
       sha256: sha256(captionBuffer),
       cues: choreography.length,

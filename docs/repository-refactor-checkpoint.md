@@ -1,6 +1,6 @@
 # Repository refactor checkpoint
 
-Status: `R4_LOCAL_GATES_PASSED`
+Status: `R6_PRODUCTION_MEDIA_PASSED`
 
 This checkpoint freezes the local result of the repository-refinement pass before the feature branch is pushed, run through the remote nine-job CI matrix, and deployed for production presentation capture.
 
@@ -112,14 +112,14 @@ The production video recorder now has a non-writing `--dry-run` contract and the
 
 No slide or video in this checkpoint is called production evidence. Final media must be captured into temporary directories from the exact green GitHub Pages deployment, fully verified, and only then installed at its canonical path.
 
-## Remaining remote gates
+## Remote, deployment, and production result
 
-1. Push this feature branch normally; do not force-push or integrate `main`.
-2. Require all nine Municipal Pilot CI jobs to pass for the exact checkpoint SHA.
-3. Deploy that exact SHA through `deploy-pages.yml` and verify build, deploy, artifact, and live-source identity.
-4. Audit Public, Guided Scenes 1–3, and Advanced on production.
-5. Capture and verify the eight-image presentation package and contact sheet from production.
-6. Record and verify the captioned, clean, short, poster, captions, and manifest package in `/tmp/citygap-demo-video-next/` before atomic replacement.
-7. Commit only presentation assets/docs, push normally, and require a second 9/9 CI result.
+- The exact UI checkpoint `9c8a99c530ca375758686c6d6431e76d80c5c748` passed all nine Municipal Pilot CI jobs in [run 33909411156](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33909411156).
+- Its Pages build and deploy passed in [run 33909833987](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33909833987). The deployed index, entry JS, React chunk, and CSS were byte-identical to the local production build.
+- Public first run, five visual viewports, eight accessibility states including 200% reflow, PLATEAU-native 19/19, full Guided spatial behavior, Guided → Advanced, and strict Advanced readiness passed on production with zero product diagnostics.
+- The production image package contains eight ordered captures, a contact sheet, and a manifest. All dimensions, hashes, state contracts, source commit, Pages run, Section provenance, exact target, and diagnostics gates passed; the exact package then passed self visual and presentation-readiness review.
+- The production video package contains captioned and clean 54.7667-second MP4s, a 14.9667-second short, poster, WebVTT captions, and manifest. All videos decode as silent 1920×1080 H.264/yuv420p/30fps, total 5,360,876 bytes, and the sampled timelines passed visual review without loading/error/debug frames.
+
+The remaining mechanical gate is a second nine-job CI run for the final presentation-asset HEAD. No merge, rebase, or push to `main` is part of this work.
 
 Automated checks do not establish human comprehension, aesthetic preference, or municipal workflow acceptance.

@@ -4,6 +4,8 @@
 
 Open <https://catlover-bot.github.io/plateau-city-gap/?experience=guided> in a clean Chromium/Chrome window at 1920×1080 and 100% zoom. Before the event, confirm that the deployed commit and Pages run match the canonical media manifest.
 
+The current package records UI source `9c8a99c530ca375758686c6d6431e76d80c5c748` from successful Pages run `33909833987`.
+
 ## Primary and backup media
 
 - [Captioned 1080p MP4](assets/demo-video/city-gap-demo-presentation-1080p.mp4): default slide-embedded backup

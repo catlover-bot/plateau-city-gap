@@ -1,0 +1,451 @@
+{
+  "schema_version": "citygap.production-presentation-images@1",
+  "generated_at": "2026-09-05T10:45:06.497Z",
+  "source_production_url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "9c8a99c530ca375758686c6d6431e76d80c5c748",
+  "pages_run_id": "33909833987",
+  "protocol": "production-only; browser chrome hidden; reduced motion; fonts, map, Area, Section, target and strict Advanced readiness; stable compositor frames",
+  "capture_clock": {
+    "source": "Windows host clock queried for each timestamp",
+    "offset_seconds": null,
+    "executable": "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+  },
+  "tools": {
+    "playwright": "1.61.1",
+    "chromium_executable": "/home/mhirotaka/.cache/ms-playwright/chromium-1228/chrome-linux64/chrome",
+    "ffmpeg": "ffmpeg version N-126390-g9fc8c785e2-20260903 Copyright (c) 2000-2026 the FFmpeg developers"
+  },
+  "live_build": {
+    "index": {
+      "bytes": 1072,
+      "sha256": "1738f3e1613296baef6641f5ed375d11bdc6bf4629c999ed63ba012ea167ee3f",
+      "matches_local_build": true
+    },
+    "assets": [
+      {
+        "path": "/plateau-city-gap/assets/index-BMF6s_eK.js",
+        "bytes": 18295,
+        "sha256": "6f70698d73295e57a8a263bd9d64b8d88bf7f3054b9c4b5ca6692c0f3bd52bcc",
+        "matches_local_build": true
+      },
+      {
+        "path": "/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+        "matches_local_build": true
+      },
+      {
+        "path": "/plateau-city-gap/assets/index-7i-oCguR.css",
+        "bytes": 207058,
+        "sha256": "ef506c49d276b708c83ea9edcbdbc04a75260a40f2fe6238a952ce03968e6bf3",
+        "matches_local_build": true
+      }
+    ]
+  },
+  "images": [
+    {
+      "filename": "01-city-gap-overview-16x9.png",
+      "purpose": "Service overview and first spatial impression",
+      "state": "guided-intro",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:43:45.053Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": "area:533513314",
+      "bytes": 939290,
+      "sha256": "ee746112080d05a61b473bf0dac0f9ae86b8827c2e4bb20ad9156b4912213c52",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "intro",
+        "area": "533513314",
+        "context_status": "idle",
+        "target_kind": "area",
+        "target_key": "area:533513314",
+        "target_resolution": "area_fallback",
+        "section_pack": "none",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": null,
+        "section_terrain_samples": null,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "02-area-selection-16x9.png",
+      "purpose": "Map and Area list selection relationship",
+      "state": "guided-scene-1-selected-area",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:43:53.707Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": "area:533513314",
+      "bytes": 903357,
+      "sha256": "f4261775fafe8b125d94b05ca79e791d5141a574b5655f66b7dbb27b4d78c736",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "find",
+        "area": "533513314",
+        "context_status": "idle",
+        "target_kind": "area",
+        "target_key": "area:533513314",
+        "target_resolution": "area_fallback",
+        "section_pack": "none",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": null,
+        "section_terrain_samples": null,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "03-plateau-section-hero-16x9.png",
+      "purpose": "PLATEAU buildings, roads, A–B line, Urban Section, and inspector",
+      "state": "guided-scene-2-section-hero",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:44:05.747Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "bytes": 846698,
+      "sha256": "4301240beb845cb7b3150388d69552d3417a6a26c55fb821aa8a11f12921a6f3",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "understand",
+        "area": "533513314",
+        "context_status": "ready",
+        "target_kind": "road",
+        "target_key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "target_resolution": "exact",
+        "section_pack": "maizuru-533513314-plateau-2025-v1",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": 0,
+        "section_terrain_samples": 94,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "04-urban-section-closeup-16x9.png",
+      "purpose": "Urban Section axes, endpoints, terrain, buildings, and named roads",
+      "state": "guided-scene-2-section-closeup",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:44:17.600Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "bytes": 244078,
+      "sha256": "5e2794475c547cb44bf19b21e033ec49c3df2540b915508e061dd778fc725dbd",
+      "derived_crop": {
+        "method": "production DOM Section dock screenshot, proportionally scaled and padded to 1920x1080",
+        "background": "#f7f6ef"
+      },
+      "readiness": {
+        "experience": "guided",
+        "story": "understand",
+        "area": "533513314",
+        "context_status": "ready",
+        "target_kind": "road",
+        "target_key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "target_resolution": "exact",
+        "section_pack": "maizuru-533513314-plateau-2025-v1",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": 0,
+        "section_terrain_samples": 94,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "05-exact-field-target-16x9.png",
+      "purpose": "Exact PLATEAU road target and four unverified field checks",
+      "state": "guided-scene-3-exact-road",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:44:27.551Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "bytes": 789564,
+      "sha256": "1ff14f0c3ee05f546c7f3e229bc11618e81c8ec0ba2f1b2aeb1b437b3deefc4f",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "verify",
+        "area": "533513314",
+        "context_status": "ready",
+        "target_kind": "road",
+        "target_key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "target_resolution": "exact",
+        "section_pack": "none",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": null,
+        "section_terrain_samples": null,
+        "field_check_count": 4,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "06-area-switching-16x9.png",
+      "purpose": "A second real Area with different geometry and context capability",
+      "state": "guided-scene-2-another-area",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33437&lat=35.44375&z=15.70&selectionType=mesh&selection=533512362&mesh=533512362",
+      "captured_at": "2026-09-05T10:44:42.815Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533512362",
+      "selected_target": "area:533512362",
+      "bytes": 1030875,
+      "sha256": "b01948a79ff6d904d79a2e00bc39ecce92f34eaeff55d2a86e579d87d943d4de",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "understand",
+        "area": "533512362",
+        "context_status": "ready",
+        "target_kind": "area",
+        "target_key": "area:533512362",
+        "target_resolution": "area_fallback",
+        "section_pack": "none",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": null,
+        "section_terrain_samples": null,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1479,
+        "map_height": 1020,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "07-mobile-workflow-portrait.png",
+      "purpose": "Mobile map-to-Section workflow",
+      "state": "guided-scene-2-mobile-section",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:44:52.275Z",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "output_dimensions": {
+        "width": 780,
+        "height": 1688
+      },
+      "selected_area": "533513314",
+      "selected_target": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "bytes": 154676,
+      "sha256": "b5332143639e83d307d9cc9d575fb86ee70f5d36ac332b077e9366401293d7be",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "guided",
+        "story": "understand",
+        "area": "533513314",
+        "context_status": "ready",
+        "target_kind": "road",
+        "target_key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "target_resolution": "exact",
+        "section_pack": "maizuru-533513314-plateau-2025-v1",
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": 0,
+        "section_terrain_samples": 94,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 390,
+        "map_height": 430,
+        "fonts_ready": true,
+        "strict_ready": "false",
+        "visual_ready": "false",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    },
+    {
+      "filename": "08-advanced-evidence-16x9.png",
+      "purpose": "Loaded specialist analysis and evidence surface",
+      "state": "advanced-evidence-ready",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "captured_at": "2026-09-05T10:45:04.116Z",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "output_dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "selected_area": "533513314",
+      "selected_target": null,
+      "bytes": 1170820,
+      "sha256": "1b0ef7d9528ced0b8b2768aa4f8cd3cb6b5fcc8f9ceb93f765f79dac71ef4634",
+      "derived_crop": null,
+      "readiness": {
+        "experience": "advanced",
+        "story": null,
+        "area": "533513314",
+        "context_status": null,
+        "target_kind": null,
+        "target_key": null,
+        "target_resolution": null,
+        "section_pack": null,
+        "expected_section_pack": "maizuru-533513314-plateau-2025-v1",
+        "section_overlap_count": null,
+        "section_terrain_samples": null,
+        "field_check_count": 0,
+        "map_initialization_count": 1,
+        "map_style_loaded": true,
+        "map_render_state": "ready",
+        "map_width": 1920,
+        "map_height": 1028,
+        "fonts_ready": true,
+        "strict_ready": "true",
+        "visual_ready": "true",
+        "loading_surface_count": 0,
+        "horizontal_overflow_px": 0,
+        "unfinished_loading_copy": false,
+        "debug_surface_count": 0
+      },
+      "diagnostics": []
+    }
+  ],
+  "contact_sheet": {
+    "filename": "contact-sheet.png",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 691361,
+    "sha256": "13efae859fd76c0a6eca5182a5fd562b829b40d094b634d8c6ff2d997fe04fd0"
+  },
+  "diagnostics": [],
+  "passed": true,
+  "human_review": {
+    "reviewed_at": "2026-09-05T10:46:10.706Z",
+    "visual_quality": "PASSED_SELF_VISUAL_REVIEW",
+    "presentation": "PASSED_PRESENTATION_READINESS_REVIEW",
+    "human_test": "AWAITING_HUMAN_TEST",
+    "municipal_workflow": "AWAITING_MUNICIPAL_WORKFLOW_REVIEW"
+  }
+}
