@@ -1,0 +1,171 @@
+{
+  "schema_version": "citygap.harbor-atlas-supplement@1",
+  "generated_at": "2026-09-04T16:12:36.650Z",
+  "phase": "after",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "046cc261a870847955d3910a02668aa4960b227a",
+  "source_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "records": [
+    {
+      "filename": "16-scene1-hover-area.png",
+      "state": "scene-1-hover",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 589051,
+      "sha256": "9b24d0ece74cbfdcffeba55d3d02fc6943b1446efd6aac2ce1c66274868f64e4",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "visible_controls": 10,
+        "primary_actions": 1,
+        "card_count": 0,
+        "pill_count": 0,
+        "shadow_count": 4,
+        "border_count": 16,
+        "heading_count": 1,
+        "paragraph_count": 1,
+        "map_label_count": 0,
+        "legend_item_count": 2,
+        "section_annotation_count": 0,
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "experience": "guided",
+        "target_kind": "area",
+        "target_resolution": "area_fallback"
+      }
+    },
+    {
+      "filename": "17-facility-reference.png",
+      "state": "facility-reference",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39063&lat=35.46875&z=16.37&selectionType=mesh&selection=533513611&mesh=533513611",
+      "bytes": 739470,
+      "sha256": "030d386c846352aeae4bcbbf36c5a9fa1853697873ed5b90370a5dad98ae4398",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "visible_controls": 8,
+        "primary_actions": 0,
+        "card_count": 0,
+        "pill_count": 0,
+        "shadow_count": 4,
+        "border_count": 17,
+        "heading_count": 3,
+        "paragraph_count": 2,
+        "map_label_count": 0,
+        "legend_item_count": 2,
+        "section_annotation_count": 0,
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "experience": "guided",
+        "target_kind": "facility",
+        "target_resolution": "exact"
+      }
+    },
+    {
+      "filename": "18-public-landing-1920.png",
+      "state": "public-landing-1920",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 1025799,
+      "sha256": "7a352124425714a71b606c0c42ecabf0a4ef333347a183a5b82cd9103bfdefdc",
+      "metrics": {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "map_share_percent": 77.1,
+        "panel_share_percent": 22.9,
+        "visible_controls": 6,
+        "primary_actions": 1,
+        "card_count": 0,
+        "pill_count": 0,
+        "shadow_count": 2,
+        "border_count": 7,
+        "heading_count": 1,
+        "paragraph_count": 1,
+        "map_label_count": 0,
+        "legend_item_count": 0,
+        "section_annotation_count": 0,
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "experience": "public-first-run",
+        "target_kind": null,
+        "target_resolution": null
+      }
+    },
+    {
+      "filename": "19-advanced-loading.png",
+      "state": "advanced-loading",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 21990,
+      "sha256": "9193927b425e98ad926bdd14c7f567e9c1651cb32045fedcd2bdc708044cd7ae",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "map_share_percent": null,
+        "panel_share_percent": null,
+        "visible_controls": 0,
+        "primary_actions": 0,
+        "card_count": 0,
+        "pill_count": 0,
+        "shadow_count": 0,
+        "border_count": 0,
+        "heading_count": 1,
+        "paragraph_count": 1,
+        "map_label_count": 0,
+        "legend_item_count": 0,
+        "section_annotation_count": 0,
+        "map_initialization_count": null,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "experience": "loading",
+        "target_kind": null,
+        "target_resolution": null
+      }
+    },
+    {
+      "filename": "20-advanced-ready.png",
+      "state": "advanced-ready",
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 117951,
+      "sha256": "f6201fe388812cc7d49f499245d59fca560e2efe1605ec57dfac3f26230f198b",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "map_share_percent": 100,
+        "panel_share_percent": 20.8,
+        "visible_controls": 42,
+        "primary_actions": 1,
+        "card_count": 0,
+        "pill_count": 0,
+        "shadow_count": 2,
+        "border_count": 64,
+        "heading_count": 4,
+        "paragraph_count": 6,
+        "map_label_count": 0,
+        "legend_item_count": 0,
+        "section_annotation_count": 0,
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 0,
+        "experience": "advanced",
+        "target_kind": null,
+        "target_resolution": null
+      }
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,0 +1,151 @@
+{
+  "schema_version": "citygap.harbor-atlas-simulations@1",
+  "generated_at": "2026-09-04T16:12:37.956Z",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "046cc261a870847955d3910a02668aa4960b227a",
+  "source_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "protocol": "Playwright Chromium; final source styles; grayscale/CVD document filter; reduced motion; font and compositor readiness",
+  "records": [
+    {
+      "simulation": "grayscale",
+      "state": "scene-2",
+      "filename": "21-grayscale-scene2.png",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 383287,
+      "sha256": "50c6176faf8700d818c60c758835468540baf4c6e0424d76bdb27addf9a06a58",
+      "metrics": {
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "target_resolution": "exact",
+        "selected_area": {
+          "halo_visible": true,
+          "line_visible": true,
+          "line_width": 3.6,
+          "label_visible": false
+        },
+        "transect": {
+          "line_visible": true,
+          "line_width": 4,
+          "endpoints": "6"
+        },
+        "exact_target": {
+          "halo_visible": false,
+          "line_visible": false,
+          "line_width": 5,
+          "label_visible": false,
+          "label_size": 14
+        }
+      },
+      "automated_color_separation": {
+        "pass": true,
+        "basis": "selected Area halo/outline/label and A-B line/endpoints remain visible without hue"
+      }
+    },
+    {
+      "simulation": "protanopia",
+      "state": "scene-3-exact-road",
+      "filename": "22-protanopia-scene3.png",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 521496,
+      "sha256": "8fac6e68d4867424b0a15ae07acd13e94bb59a5dc7dd4623c59848b7346abe07",
+      "metrics": {
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "target_resolution": "exact",
+        "selected_area": {
+          "halo_visible": true,
+          "line_visible": true,
+          "line_width": 3.6,
+          "label_visible": false
+        },
+        "transect": {
+          "line_visible": false,
+          "line_width": 4,
+          "endpoints": null
+        },
+        "exact_target": {
+          "halo_visible": true,
+          "line_visible": true,
+          "line_width": 5,
+          "label_visible": true,
+          "label_size": 14
+        }
+      },
+      "automated_color_separation": {
+        "area_outline_rgb": [
+          47,
+          47,
+          94
+        ],
+        "target_outline_rgb": [
+          127,
+          126,
+          58
+        ],
+        "rgb_distance": 118.1,
+        "pass": true
+      }
+    },
+    {
+      "simulation": "deuteranopia",
+      "state": "scene-3-exact-road",
+      "filename": "23-deuteranopia-scene3.png",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 548310,
+      "sha256": "7150157e3cfc00bd7d5ebe9aa6858a4b2f36cea398e104b1c65688cd5c7e9ada",
+      "metrics": {
+        "map_initialization_count": 1,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "target_resolution": "exact",
+        "selected_area": {
+          "halo_visible": true,
+          "line_visible": true,
+          "line_width": 3.6,
+          "label_visible": false
+        },
+        "transect": {
+          "line_visible": false,
+          "line_width": 4,
+          "endpoints": null
+        },
+        "exact_target": {
+          "halo_visible": true,
+          "line_visible": true,
+          "line_width": 5,
+          "label_visible": true,
+          "label_size": 14
+        }
+      },
+      "automated_color_separation": {
+        "area_outline_rgb": [
+          43,
+          39,
+          93
+        ],
+        "target_outline_rgb": [
+          132,
+          140,
+          59
+        ],
+        "rgb_distance": 138.8,
+        "pass": true
+      }
+    }
+  ],
+  "diagnostics": []
+}

@@ -1,0 +1,149 @@
+{
+  "schema_version": "citygap.harbor-atlas-accessibility@1",
+  "generated_at": "2026-09-04T16:13:09.858Z",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "046cc261a870847955d3910a02668aa4960b227a",
+  "source_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "axe_core_version": "4.10.3",
+  "protocol": "axe-core WCAG 2 A/AA, 2.1 A/AA, and 2.2 AA tags; production build; reduced motion; font and map readiness",
+  "state_count": 7,
+  "critical_or_serious_count": 0,
+  "structural_failure_count": 0,
+  "diagnostics": [],
+  "records": [
+    {
+      "label": "public-desktop",
+      "experience": "public",
+      "story": null,
+      "section": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 2,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "public-mobile",
+      "experience": "public",
+      "story": null,
+      "section": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 1,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "guided-intro",
+      "experience": "guided",
+      "story": "intro",
+      "section": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 2,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "guided-find",
+      "experience": "guided",
+      "story": "find",
+      "section": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 3,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "guided-understand",
+      "experience": "guided",
+      "story": "understand",
+      "section": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 3,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "guided-verify",
+      "experience": "guided",
+      "story": "verify",
+      "section": false,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 2,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    },
+    {
+      "label": "guided-section-mobile",
+      "experience": "guided",
+      "story": "understand",
+      "section": true,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "violation_count": 0,
+      "critical_or_serious_count": 0,
+      "violations": [],
+      "incomplete_count": 3,
+      "visible_h1_count": 1,
+      "duplicate_id_count": 0,
+      "horizontal_overflow_px": 0,
+      "map_initialization_count": 1
+    }
+  ],
+  "passed": true
+}

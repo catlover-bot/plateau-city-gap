@@ -1,0 +1,131 @@
+{
+  "schema_version": "citygap.guided-spatial-performance@1",
+  "generated_at": "2026-09-05T07:18:17.460Z",
+  "branch": "feat/guided-spatial-storytelling-v1",
+  "commit": "046cc261a870847955d3910a02668aa4960b227a",
+  "protocol": "production-preview; 1440x900; DPR1; reduced motion; five fresh browser contexts",
+  "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided",
+  "samples": [
+    {
+      "sample": 1,
+      "first_meaningful_render_ms": 914.1,
+      "area_context_cold_ms": 609.6,
+      "exact_road_warm_ms": 314.4,
+      "exact_building_warm_ms": 252.5,
+      "building_story_warm_ms": 238
+    },
+    {
+      "sample": 2,
+      "first_meaningful_render_ms": 350.7,
+      "area_context_cold_ms": 490.7,
+      "exact_road_warm_ms": 249.4,
+      "exact_building_warm_ms": 251.9,
+      "building_story_warm_ms": 257.8
+    },
+    {
+      "sample": 3,
+      "first_meaningful_render_ms": 286.4,
+      "area_context_cold_ms": 405.4,
+      "exact_road_warm_ms": 238.5,
+      "exact_building_warm_ms": 257.6,
+      "building_story_warm_ms": 240.3
+    },
+    {
+      "sample": 4,
+      "first_meaningful_render_ms": 283,
+      "area_context_cold_ms": 455.9,
+      "exact_road_warm_ms": 291,
+      "exact_building_warm_ms": 299.6,
+      "building_story_warm_ms": 293.8
+    },
+    {
+      "sample": 5,
+      "first_meaningful_render_ms": 299.8,
+      "area_context_cold_ms": 467.5,
+      "exact_road_warm_ms": 264,
+      "exact_building_warm_ms": 247.3,
+      "building_story_warm_ms": 261.5
+    }
+  ],
+  "medians": {
+    "first_meaningful_render_ms": 299.8,
+    "area_context_cold_ms": 467.5,
+    "exact_road_warm_ms": 264,
+    "exact_building_warm_ms": 252.5,
+    "building_story_warm_ms": 257.8
+  },
+  "gates": {
+    "first_meaningful_render": {
+      "target_ms": 2000,
+      "pass": true
+    },
+    "area_context_cold": {
+      "target_ms": 1500,
+      "pass": true
+    },
+    "exact_road_warm": {
+      "target_ms": 1200,
+      "pass": true
+    },
+    "exact_building_warm": {
+      "target_ms": 1200,
+      "pass": true
+    },
+    "building_story_warm": {
+      "target_ms": 1200,
+      "pass": true
+    },
+    "baseline_non_regression": {
+      "target_percent": 20,
+      "pass": true
+    }
+  },
+  "baseline": {
+    "path": "/home/mhirotaka/workspace/plateau-city-gap/docs/assets/harbor-atlas-v2/before/performance.json",
+    "commit": "7e75a132e7f135db2dcdcf2b26e4b1d833381586",
+    "medians": {
+      "first_meaningful_render_ms": 314.9,
+      "area_context_cold_ms": 477.7,
+      "exact_road_warm_ms": 270.8,
+      "exact_building_warm_ms": 270.6,
+      "building_story_warm_ms": 272.8
+    }
+  },
+  "baseline_comparison": {
+    "first_meaningful_render_ms": {
+      "baseline_ms": 314.9,
+      "after_ms": 299.8,
+      "regression_percent": -4.8,
+      "maximum_regression_percent": 20,
+      "pass": true
+    },
+    "area_context_cold_ms": {
+      "baseline_ms": 477.7,
+      "after_ms": 467.5,
+      "regression_percent": -2.1,
+      "maximum_regression_percent": 20,
+      "pass": true
+    },
+    "exact_road_warm_ms": {
+      "baseline_ms": 270.8,
+      "after_ms": 264,
+      "regression_percent": -2.5,
+      "maximum_regression_percent": 20,
+      "pass": true
+    },
+    "exact_building_warm_ms": {
+      "baseline_ms": 270.6,
+      "after_ms": 252.5,
+      "regression_percent": -6.7,
+      "maximum_regression_percent": 20,
+      "pass": true
+    },
+    "building_story_warm_ms": {
+      "baseline_ms": 272.8,
+      "after_ms": 257.8,
+      "regression_percent": -5.5,
+      "maximum_regression_percent": 20,
+      "pass": true
+    }
+  }
+}

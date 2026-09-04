@@ -2,7 +2,7 @@
 
 Active goal: `harbor-atlas-visual-identity-ux-v2`
 
-Current milestone: S4 Urban Section visual language complete; S5 automated visual checkpoint next
+Current milestone: S5 automated Harbor Atlas checkpoint complete; S6 feature-branch CI and deployment next
 
 Execution lock:
 
@@ -39,7 +39,13 @@ Execution lock:
 - S4 collision result: the existing placement algorithm is unchanged; desktop/mobile retain `6`/`4` total annotations and `4`/`2` road labels with zero overlap, outside-plot, endpoint, tick, or legend conflicts and zero horizontal overflow
 - S4 interaction: desktop and mobile pointer/keyboard Section focus continues to produce the matching map focus with one SVG tab stop and one persistent MapLibre initialization; the selected callout remains visible
 - S4 regression: lint, typecheck, production build, `30` test files / `130` tests, 17-state desktop/compact/presentation/mobile/DPR2 raster capture with zero diagnostics, full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy browser journey, and complete Guided-to-Advanced direct/cached/Back-Forward/error/retry suite pass
-- next gate: capture the final 20-state evidence set, record inventory/contrast/color-vision/performance/a11y results, run the complete local matrix, and document the automated before/after checkpoint
+- S5 accessibility fix: an automated axe run found one `4.36:1` supporting-text contrast miss; the semantic token was corrected, the prescribed gold focus ring gained a dark perimeter, and the exact final rerun reports zero total violations, zero critical/serious violations, and zero structural failures across seven states
+- S5 evidence: 17 core, five supplemental, and three grayscale/color-vision captures produce 25 final PNGs from source `046cc261a870847955d3910a02668aa4960b227a`; all capture diagnostics are zero, every state has one map initialization and no horizontal overflow, and Public/Guided states use exactly Harbor and Signal as strong accent families
+- S5 Section: capture median `9.9 ms`, maximum `11.1 ms`, desktop/mobile annotations `6`/`4`, named roads `4`/`2`, and zero overlap, outside, endpoint, or tick conflicts
+- S5 performance medians: FMR `299.8 ms`, Area cold `467.5 ms`, exact road `264.0 ms`, exact building `252.5 ms`, and return/story warm `257.8 ms`; all absolute gates pass and every median improves against the locked baseline
+- S5 local gates: lint, 100-file documentation-link check, typecheck, default and Municipal production builds, `30` test files / `130` frontend tests, Ruff, `414` Python tests with `3` skips, npm audit, pip-audit, all required browser suites, and final axe audit pass
+- S5 checkpoint: `docs/harbor-atlas-ux-checkpoint.md` and `docs/assets/harbor-atlas-v2/after/`; the existing demo video package remains unchanged historical evidence
+- next gate: commit S5, push only the feature branch, require all nine remote CI jobs green, then deploy the exact feature HEAD and run the production audit
 - no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
 
 Prior deployed map/Section refinement checkpoint retained below.

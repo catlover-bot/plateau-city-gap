@@ -1,7 +1,7 @@
 {
   "schema_version": "citygap.harbor-atlas-visual-checkpoint@1",
   "goal": "harbor-atlas-visual-identity-ux-v2",
-  "milestone": "S0",
+  "milestone": "S5",
   "source_branch": "feat/guided-spatial-storytelling-v1",
   "source_commit": "7e75a132e7f135db2dcdcf2b26e4b1d833381586",
   "origin_main": "2f28cd1089eda576c3002ebb2fb3e0f2b62123ff",
@@ -45,11 +45,57 @@
     ]
   },
   "after": {
-    "status": "pending",
-    "path": "after/"
+    "status": "complete",
+    "path": "after/",
+    "source_commit": "046cc261a870847955d3910a02668aa4960b227a",
+    "capture_manifest": {
+      "path": "after/manifest.json",
+      "sha256": "a39094d18f87f993739ce89b61eb6e0c2255b1cfa09cbec452a35c69386d26f6",
+      "records": 17,
+      "diagnostics": 0
+    },
+    "supplement_manifest": {
+      "path": "after/supplement-manifest.json",
+      "sha256": "c8af802188bb6aca0add2931e1b0007445fbe97ba8981662b7b681ca52c6e618",
+      "records": 5,
+      "diagnostics": 0
+    },
+    "simulation_manifest": {
+      "path": "after/simulation-manifest.json",
+      "sha256": "6131060f470759f7827410c999f2ccf9961dcb6e50992a649d241453c26daf8f",
+      "records": 3,
+      "diagnostics": 0
+    },
+    "inventory": {
+      "path": "after/inventory.json",
+      "sha256": "c0163f6370ae4def6b1657b1d6a965808832d4791b9ecb826afe6f48a20849f1",
+      "viewports": 5,
+      "console_errors": 0,
+      "local_http_failures": 0
+    },
+    "performance": {
+      "path": "after/performance.json",
+      "sha256": "67c5a010e081990d84296d196c37fc30defbefe5a8157d1f88b667513874c009",
+      "samples": 5,
+      "all_gates_pass": true
+    },
+    "accessibility": {
+      "path": "after/accessibility.json",
+      "sha256": "cf8513a6bbd411363eb9d69441f5ae091542601c1633a546fb363c83e4a73e4b",
+      "states": 7,
+      "critical_or_serious": 0,
+      "structural_failures": 0
+    },
+    "png_records": 25,
+    "section_performance": {
+      "median_ms": 9.9,
+      "maximum_ms": 11.1,
+      "all_gates_pass": true
+    }
   },
   "claims": {
     "automated_baseline": "complete",
+    "automated_after_checkpoint": "complete",
     "human_visual_quality": "not_claimed",
     "human_comprehension": "not_claimed",
     "accessibility_acceptance": "not_claimed",

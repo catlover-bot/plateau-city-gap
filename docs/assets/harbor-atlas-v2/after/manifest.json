@@ -1,0 +1,1808 @@
+{
+  "schema_version": "citygap.map-section-refinement-capture@1",
+  "generated_at": "2026-09-04T16:12:13.869Z",
+  "phase": "after",
+  "environment": "production-preview",
+  "source_url": "http://127.0.0.1:4174/plateau-city-gap/",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "source_commit": "046cc261a870847955d3910a02668aa4960b227a",
+  "pages_run_id": null,
+  "protocol": "Playwright Chromium; production build; fonts and four compositor frames; reduced motion; identical before/after state matrix",
+  "runtime": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.0.0 Safari/537.36",
+    "playwright": true
+  },
+  "records": [
+    {
+      "filename": "01-public-landing-desktop.png",
+      "state": "public-landing",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+      "bytes": 663749,
+      "sha256": "d7b9cc7beb0cbf94c29d2a99eeead91e1d5e1eb6b4720c768df3950cfd5a3af1",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 6,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.72,
+          "selected_area_fill_visible": false,
+          "selected_area_halo_visible": false,
+          "selected_area_line_visible": false,
+          "selected_area_line_width": 3.8,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": false,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": false,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": false,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": null,
+        "target_resolution": null,
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "02-guided-intro-desktop.png",
+      "state": "guided-intro",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=intro&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 604500,
+      "sha256": "673a2522258f64d5cf55c1abb7e0d6a03d74fdf86f6859f5b8b7c9f757499bf2",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 6,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.68,
+          "selected_area_fill_visible": false,
+          "selected_area_halo_visible": false,
+          "selected_area_line_visible": false,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": false,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": false,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": false,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#164F63",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "03-scene1-find-desktop.png",
+      "state": "scene-1-find",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 589068,
+      "sha256": "998a893c64dbdaba3c9e11108886fd5c16766c1ae86d7752bd9e6e82784edd61",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 10,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.58,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": true,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": true,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": true,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": false,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": false,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": false,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#164F63",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "04-scene2-map-desktop.png",
+      "state": "scene-2-map",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 471567,
+      "sha256": "f95527df2237dedbd17dcaae56aa73e8b03833e356b882d5c9b0f77e57e02a46",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 361.46875,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 11.1,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "05-scene2-combined-desktop.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 569590,
+      "sha256": "a92b239bcd9848fa2e89ccdf471730f359fbea38498f314750e238650df5cff0",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 361.46875,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 11.1,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "06-scene2-section-closeup.png",
+      "state": "scene-2-section",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 63771,
+      "sha256": "814cf6ce3876771bc7bf9b0e88dd0a46943d03eb69c1187f05360278fc41ff9b",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 361.46875,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 11.1,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": 13,
+        "focus_meta_min_font_px": 12,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": true,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": "rgb(217, 102, 77)",
+          "focus_outline": "rgb(169, 71, 54)",
+          "callout_outline": "rgb(169, 71, 54)"
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "07-scene3-exact-road.png",
+      "state": "scene-3-exact-road",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 572991,
+      "sha256": "185be552fec8cf3f987977269113ed987bfe3c524b92da19c17ace8558feb823",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.42,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": true,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": true,
+          "target_line_visible": true,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": true,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "08-scene3-exact-building.png",
+      "state": "scene-3-exact-building",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39847&lat=35.44785&z=17.00&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 567222,
+      "sha256": "ea4566439e6639b3c65d71d5effd75acafd26ddfcfd98cf0ca50c156b7cdb5bf",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.42,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": true,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": true,
+          "target_line_visible": true,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": true,
+          "target_label_size": 14
+        },
+        "target_kind": "building",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "09-another-area.png",
+      "state": "another-area",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.34687&lat=35.52292&z=15.70&selectionType=mesh&selection=533522274&mesh=533522274",
+      "bytes": 553833,
+      "sha256": "1b94d6e91d15fa0227af6d1aabbbd249ff571b72333a9805ff05ac47165016a2",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#164F63",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "10-fallback-area.png",
+      "state": "fallback-area",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.31563&lat=35.48125&z=16.37&selectionType=mesh&selection=533512753&mesh=533512753",
+      "bytes": 491814,
+      "sha256": "451f1811abff150b75d9ea2d6fee67c7926737addbe03ec295164c5346ecb4f4",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.42,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 4.5,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": true,
+          "target_line_width": 5,
+          "target_line_color": "#164F63",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "1280-scene2-combined.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44513&z=14.99&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 366346,
+      "sha256": "2315cbd89f9b52e62af3d1f25c7e0110fe3a183a76b247fdd8d9a9d29ff31219",
+      "metrics": {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 71.9,
+        "panel_share_percent": 28.1,
+        "section_height_px": 300,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 8.7,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "1920-scene2-combined.png",
+      "state": "scene-2-combined",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 812038,
+      "sha256": "3891e24031aaedc3ef59cc645a9dc4f27ecb8feabf72dd184ebdd176a8041241",
+      "metrics": {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 77.1,
+        "panel_share_percent": 22.9,
+        "section_height_px": 373,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 9.9,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "11-mobile-scene1.png",
+      "state": "mobile-scene-1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 162958,
+      "sha256": "5736be8b2d2ca1b5200bfe2b79bc8321426ba4b82922d2145de410405fc916e6",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 43,
+        "panel_share_percent": 57,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 10,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.58,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": true,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": true,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": true,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": false,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": false,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": false,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#164F63",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "area",
+        "target_resolution": "area_fallback",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "12-mobile-scene2-map.png",
+      "state": "mobile-scene-2-map",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 217840,
+      "sha256": "76e13ef7003d360533c8c884aef614fca6a91228b044189d870d2b21ad2d9df0",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 55,
+        "panel_share_percent": 45,
+        "section_height_px": 0,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": 8,
+        "annotation_calculation_ms": 1.3,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 9,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "13-mobile-scene2-section.png",
+      "state": "mobile-scene-2-section",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 75848,
+      "sha256": "71f9c7765e8d44a6b82a4e1cfde198584fa524ee86039948e6569f58517b4dbd",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 55,
+        "panel_share_percent": 45,
+        "section_height_px": 303.1875,
+        "annotation_count": 4,
+        "road_annotation_count": 2,
+        "hidden_low_priority_annotations": 8,
+        "annotation_calculation_ms": 1.3,
+        "static_annotation_labels": [
+          "椿２号線",
+          "京月二号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 9,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "14-mobile-scene3.png",
+      "state": "mobile-scene-3",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 1,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 192278,
+      "sha256": "91b1c1e138b20d976a1cea5fac6bcd4880f2fe3c72f193a77bbafae81c1e381d",
+      "metrics": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "orientation": "vertical",
+        "map_share_percent": 42,
+        "panel_share_percent": 58,
+        "section_height_px": null,
+        "annotation_count": 0,
+        "road_annotation_count": 0,
+        "hidden_low_priority_annotations": null,
+        "annotation_calculation_ms": null,
+        "static_annotation_labels": [],
+        "endpoint_labels": [],
+        "static_annotation_min_font_px": null,
+        "axis_tick_min_font_px": null,
+        "endpoint_min_font_px": null,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": null,
+        "visible_controls": 8,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.42,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": false,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": true,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": true,
+          "target_line_visible": true,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": true,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    },
+    {
+      "filename": "15-dpr2-section.png",
+      "state": "dpr2-section",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 2,
+      "url": "http://127.0.0.1:4174/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+      "bytes": 119497,
+      "sha256": "6135928114dbd634bb411fee1459855be6e66cc30278a34508630fd7220ee7a1",
+      "metrics": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "orientation": "horizontal",
+        "map_share_percent": 73,
+        "panel_share_percent": 27,
+        "section_height_px": 361.46875,
+        "annotation_count": 6,
+        "road_annotation_count": 4,
+        "hidden_low_priority_annotations": 6,
+        "annotation_calculation_ms": 8.6,
+        "static_annotation_labels": [
+          "東椿線",
+          "椿川通線",
+          "青山一号通線",
+          "京月一号線"
+        ],
+        "endpoint_labels": [
+          "A",
+          "B"
+        ],
+        "static_annotation_min_font_px": 12,
+        "axis_tick_min_font_px": 11,
+        "endpoint_min_font_px": 16,
+        "focus_name_min_font_px": null,
+        "focus_meta_min_font_px": null,
+        "label_overlap_count": 0,
+        "labels_outside_plot": 0,
+        "labels_covering_endpoints": 0,
+        "labels_covering_axis_ticks": 0,
+        "legend_overlap_count": 0,
+        "selected_annotation_visible": null,
+        "section_palette": {
+          "terrain_stroke": "rgb(93, 116, 118)",
+          "building_fill": "rgb(155, 169, 173)",
+          "building_outline": "rgb(89, 105, 112)",
+          "road_fill": "rgb(229, 221, 209)",
+          "road_outline": "rgb(102, 114, 121)",
+          "endpoint_fill": "rgb(22, 79, 99)",
+          "focus_fill": null,
+          "focus_outline": null,
+          "callout_outline": null
+        },
+        "visible_controls": 7,
+        "map_initialization_count": 1,
+        "map_render_state": "ready",
+        "map_hierarchy": {
+          "basemap_opacity": 0.5,
+          "selected_area_fill_visible": true,
+          "selected_area_halo_visible": true,
+          "selected_area_line_visible": true,
+          "selected_area_line_width": 3.6,
+          "selected_area_fill_color": "#C9E1DE",
+          "selected_area_line_color": "#164F63",
+          "selected_area_label_visible": false,
+          "selected_area_label_size": 15,
+          "candidate_fill_visible": false,
+          "candidate_fill_color": "#E8F2EF",
+          "candidate_label_visible": false,
+          "candidate_label_size": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9.4,
+            12,
+            13,
+            13.5
+          ],
+          "buildings_visible": true,
+          "buildings_fill_color": "#9BA9AD",
+          "roads_visible": true,
+          "roads_fill_color": "#E5DDD1",
+          "roads_line_color": "#667279",
+          "planning_visible": true,
+          "section_line_visible": true,
+          "section_line_width": 4,
+          "section_line_color": "#26758A",
+          "target_fill_visible": false,
+          "target_fill_color": "#D9664D",
+          "target_halo_visible": false,
+          "target_line_visible": false,
+          "target_line_width": 5,
+          "target_line_color": "#A94736",
+          "target_label_visible": false,
+          "target_label_size": 14
+        },
+        "target_kind": "road",
+        "target_resolution": "exact",
+        "horizontal_overflow_px": 0,
+        "visible_h1_count": 1,
+        "strong_accent_family_count": 2,
+        "strong_accent_families": [
+          "Harbor",
+          "Signal"
+        ]
+      }
+    }
+  ],
+  "section_performance": {
+    "samples_ms": [
+      11.1,
+      11.1,
+      11.1,
+      8.7,
+      9.9,
+      1.3,
+      1.3,
+      8.6
+    ],
+    "median_ms": 9.9,
+    "maximum_ms": 11.1,
+    "gates": {
+      "median": {
+        "target_ms": 16,
+        "pass": true
+      },
+      "hard_maximum": {
+        "target_ms": 50,
+        "pass": true
+      }
+    }
+  },
+  "diagnostics": []
+}
