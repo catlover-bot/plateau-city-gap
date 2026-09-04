@@ -2,7 +2,7 @@
 
 Active goal: `deployed-map-ux-section-refinement-v1`
 
-Current milestone: M3 Urban Section clarity verified; M4 automated after checkpoint next
+Current milestone: M4 automated checkpoint verified; M5 feature-branch push and remote CI next
 
 Execution lock:
 
@@ -33,9 +33,15 @@ Execution lock:
 - M2 evidence commit: `90c4271`; 17-state production-preview visual pass and zero capture diagnostics, with the dedicated Guided-to-Advanced transition suite passing in isolation
 - M3 implementation: deduplicated and distributed road labels, measured two-rail collision placement, four-road desktop/two-road mobile limits plus A/B, responsive plot height, clear axes/units/endpoints, subtle terrain hierarchy, focused-object accent/callout, accessible summary, one SVG tab stop, and corrected compact pointer projection
 - M3 current measurements: total static annotations `6` desktop / `4` mobile; overlaps `0`; outside-plot labels `0`; endpoint/tick conflicts `0`; plot height `361.47 px` at `1440 × 900`, `300 px` at `1280 × 720`, `373 px` at `1920 × 1080`, and `303.19 px` mobile
-- M3 performance/interaction: annotation calculation `7.8–11.9 ms` desktop/DPR2 and `1 ms` mobile; focused road/building callout, elevation/relation text, matching map focus source, one SVG tab stop, and one persistent map all verified
+- M3 performance/interaction: annotation calculation remained below the `16 ms` target in the versioned checkpoint; focused road/building callout, elevation/relation text, matching map focus source, one SVG tab stop, and one persistent map all verified
 - M3 regression: production build, lint, typecheck, `117` unit tests, full Guided six-Area journey, exact/fallback/facility targets, legacy routes, and Guided-to-Advanced load/cache/error/retry suite passed
-- next gate: commit M3, then capture and document the automated after checkpoint in M4
+- M3 evidence commit: `5172427a2dffcf2fff751a3db633592c6f239943`
+- M4 evidence: 17 matching after captures, zero browser diagnostics, explicit map-hierarchy gates, one map initialization, zero horizontal overflow, and fixed before/after manifest in `docs/assets/map-section-refinement-v1/`
+- M4 Section result: desktop/mobile annotations `6`/`4`, visible named roads `4`/`2`, hidden lower-priority labels `6`/`8`, overlaps/outside/endpoint/tick conflicts all `0`, and maximum capture calculation `12.9 ms`
+- M4 performance medians: FMR `325.0 ms`, Area context `455.0 ms`, exact road `266.2 ms`, exact building `261.6 ms`, and return to Scene 2 `254.1 ms`; all required gates passed
+- M4 local gates: lint, docs, typecheck, production build, `117` frontend tests, Ruff, `414` Python tests with `3` skips, npm audit, pip-audit, Public/PLATEAU/visual audits, full Guided and Guided-to-Advanced browser suites passed
+- M4 checkpoint: `docs/map-section-refinement-checkpoint.md`; existing videos remain preserved and are explicitly held for recapture until production visual approval
+- next gate: commit M4, push only the feature branch, dispatch remote CI, and require all nine jobs green before Pages deployment
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.

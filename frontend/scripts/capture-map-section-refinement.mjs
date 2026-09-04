@@ -166,6 +166,17 @@ async function visualMetrics(page) {
     const selectedAnnotation = svg?.querySelector('[data-section-annotation-selected="true"]') ?? null;
     const root = document.querySelector(".guided-spatial-app");
     const mapShell = document.querySelector(".analytical-map-shell");
+    const mapCanvas = document.querySelector(".analytical-map-canvas");
+    const mapInstance = mapCanvas?.__cityGapMap ?? null;
+    const layerVisible = (id) => mapInstance?.getLayer(id)
+      ? mapInstance.getLayoutProperty(id, "visibility") !== "none"
+      : null;
+    const paint = (id, property) => mapInstance?.getLayer(id)
+      ? mapInstance.getPaintProperty(id, property) ?? null
+      : null;
+    const layout = (id, property) => mapInstance?.getLayer(id)
+      ? mapInstance.getLayoutProperty(id, property) ?? null
+      : null;
     const metrics = window.__cityGapSectionAnnotationMetrics ?? null;
     return {
       viewport: { width: innerWidth, height: innerHeight },
@@ -177,6 +188,8 @@ async function visualMetrics(page) {
       road_annotation_count: staticLabels.filter((node) => node.getAttribute("data-section-annotation-kind") === "road").length,
       hidden_low_priority_annotations: metrics?.hiddenCount ?? null,
       annotation_calculation_ms: metrics?.calculationMs ?? null,
+      static_annotation_labels: staticLabels.map((node) => node.textContent?.trim() ?? ""),
+      endpoint_labels: endpoints.map((node) => node.textContent?.trim() ?? ""),
       label_overlap_count: pairOverlaps.length,
       labels_outside_plot: outsidePlot,
       labels_covering_endpoints: labelRects.filter(({ rect }) => overlapsAny(rect, endpoints)).length,
@@ -186,12 +199,97 @@ async function visualMetrics(page) {
       visible_controls: actionables.length,
       map_initialization_count: window.__cityGapMapInitCount ?? null,
       map_render_state: mapShell?.getAttribute("data-map-render-state") ?? null,
+      map_hierarchy: mapInstance ? {
+        basemap_opacity: paint("gsi-pale", "raster-opacity"),
+        selected_area_fill_visible: layerVisible("guided-area-fill"),
+        selected_area_halo_visible: layerVisible("guided-area-halo"),
+        selected_area_line_visible: layerVisible("guided-area-line"),
+        selected_area_line_width: paint("guided-area-line", "line-width"),
+        selected_area_label_visible: layerVisible("guided-area-label"),
+        selected_area_label_size: layout("guided-area-label", "text-size"),
+        candidate_fill_visible: layerVisible("mesh-top-fill"),
+        candidate_label_visible: layerVisible("mesh-top-label"),
+        candidate_label_size: layout("mesh-top-label", "text-size"),
+        buildings_visible: layerVisible("guided-buildings-fill"),
+        roads_visible: layerVisible("guided-roads-line"),
+        planning_visible: layerVisible("guided-planning-line"),
+        section_line_visible: layerVisible("guided-section-line"),
+        section_line_width: paint("guided-section-line", "line-width"),
+        target_fill_visible: layerVisible("guided-target-fill"),
+        target_halo_visible: layerVisible("guided-target-halo"),
+        target_line_visible: layerVisible("guided-target-line"),
+        target_line_width: paint("guided-target-line", "line-width"),
+        target_label_visible: layerVisible("guided-target-label"),
+        target_label_size: layout("guided-target-label", "text-size"),
+      } : null,
       target_kind: root?.getAttribute("data-target-kind") ?? null,
       target_resolution: root?.getAttribute("data-target-resolution") ?? null,
       horizontal_overflow_px: Math.max(0, document.documentElement.scrollWidth - innerWidth),
       visible_h1_count: [...document.querySelectorAll("h1")].filter(visible).length,
     };
   });
+}
+
+function assertAfterCaptureContract(filename, state, viewport, metrics) {
+  if (phase === "before") return;
+
+  const failures = [];
+  const expect = (condition, message) => {
+    if (!condition) failures.push(message);
+  };
+  const sectionVisible = Number(metrics.section_height_px ?? 0) > 0;
+  if (sectionVisible) {
+    const mobile = viewport.width <= 600;
+    expect(metrics.annotation_count <= (mobile ? 4 : 6), `annotation budget ${metrics.annotation_count}`);
+    expect(metrics.road_annotation_count <= (mobile ? 2 : 4), `road annotation budget ${metrics.road_annotation_count}`);
+    expect(new Set(metrics.static_annotation_labels).size === metrics.static_annotation_labels.length, "duplicate static annotation");
+    expect(JSON.stringify(metrics.endpoint_labels) === JSON.stringify(["A", "B"]), `endpoint labels ${JSON.stringify(metrics.endpoint_labels)}`);
+    expect(metrics.label_overlap_count === 0, `label overlaps ${metrics.label_overlap_count}`);
+    expect(metrics.labels_outside_plot === 0, `outside labels ${metrics.labels_outside_plot}`);
+    expect(metrics.labels_covering_endpoints === 0, `endpoint conflicts ${metrics.labels_covering_endpoints}`);
+    expect(metrics.labels_covering_axis_ticks === 0, `axis conflicts ${metrics.labels_covering_axis_ticks}`);
+    expect(metrics.legend_overlap_count === 0, `legend conflicts ${metrics.legend_overlap_count}`);
+    expect(metrics.annotation_calculation_ms <= 50, `annotation calculation ${metrics.annotation_calculation_ms}ms`);
+    if (mobile) {
+      expect(metrics.section_height_px >= 300 && metrics.section_height_px <= 340, `mobile section height ${metrics.section_height_px}px`);
+    } else if (viewport.width === 1440) {
+      expect(metrics.section_height_px >= 360 && metrics.section_height_px <= 410, `desktop section height ${metrics.section_height_px}px`);
+    } else {
+      expect(metrics.section_height_px >= 300, `compact section height ${metrics.section_height_px}px`);
+    }
+    if (state === "scene-2-section") expect(metrics.selected_annotation_visible === true, "focused annotation is not visible");
+  }
+
+  const hierarchy = metrics.map_hierarchy;
+  if (state === "guided-intro") {
+    expect(hierarchy?.basemap_opacity === 0.7, `intro basemap opacity ${hierarchy?.basemap_opacity}`);
+  }
+  if (state === "scene-1-find" || state === "mobile-scene-1") {
+    expect(hierarchy?.basemap_opacity === 0.61, `find basemap opacity ${hierarchy?.basemap_opacity}`);
+    expect(hierarchy?.selected_area_line_visible === true && hierarchy?.selected_area_halo_visible === true, "selected Area hierarchy is hidden");
+    expect(hierarchy?.selected_area_label_visible === true && hierarchy?.selected_area_label_size === 14, "selected Area label hierarchy is missing");
+    expect(hierarchy?.candidate_fill_visible === true && hierarchy?.candidate_label_visible === true, "candidate hierarchy is hidden");
+    expect(hierarchy?.selected_area_line_width > 3, `selected Area line width ${hierarchy?.selected_area_line_width}`);
+  }
+  if (state === "scene-2-map" || state === "scene-2-combined" || state === "scene-2-section" || state === "mobile-scene-2-map" || state === "mobile-scene-2-section" || state === "dpr2-section") {
+    expect(hierarchy?.basemap_opacity === 0.54, `understand basemap opacity ${hierarchy?.basemap_opacity}`);
+    expect(hierarchy?.buildings_visible === true && hierarchy?.roads_visible === true, "PLATEAU context is hidden");
+    expect(hierarchy?.section_line_visible === true && hierarchy?.section_line_width >= 3.8, "A–B hierarchy is missing");
+    expect(hierarchy?.target_line_visible === false, "target should not compete in Scene 2");
+  }
+  if (state === "scene-3-exact-road" || state === "scene-3-exact-building" || state === "mobile-scene-3") {
+    expect(hierarchy?.basemap_opacity === 0.46, `verify basemap opacity ${hierarchy?.basemap_opacity}`);
+    expect(metrics.target_resolution === "exact", `target resolution ${metrics.target_resolution}`);
+    expect(hierarchy?.target_fill_visible === true && hierarchy?.target_halo_visible === true && hierarchy?.target_line_visible === true, "exact target hierarchy is incomplete");
+    expect(hierarchy?.target_label_visible === true && hierarchy?.target_label_size === 13, "exact target label is missing");
+    expect(hierarchy?.target_line_width > hierarchy?.selected_area_line_width, "exact target is not stronger than its Area");
+  }
+  if (state === "fallback-area") {
+    expect(metrics.target_resolution === "area_fallback", `fallback resolution ${metrics.target_resolution}`);
+    expect(hierarchy?.target_line_visible === true && hierarchy?.target_halo_visible === false && hierarchy?.target_label_visible === false, "fallback is presented as an exact target");
+  }
+
+  if (failures.length) throw new Error(`after contract failed for ${filename}: ${failures.join("; ")}`);
 }
 
 async function saveScreenshot(page, filename, state, viewport, dpr, locator = null) {
@@ -204,6 +302,7 @@ async function saveScreenshot(page, filename, state, viewport, dpr, locator = nu
   if (metrics.visible_h1_count !== 1 || metrics.horizontal_overflow_px > 0 || metrics.map_initialization_count !== 1) {
     throw new Error(`capture contract failed for ${filename}: ${JSON.stringify(metrics)}`);
   }
+  assertAfterCaptureContract(filename, state, viewport, metrics);
   records.push({ filename, state, viewport, dpr, url: page.url(), bytes: buffer.length, sha256: sha256(buffer), metrics });
   phaseLog(`saved ${filename}`);
 }
