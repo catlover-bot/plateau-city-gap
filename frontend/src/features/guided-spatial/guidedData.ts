@@ -4,7 +4,7 @@ import type {
   GuidedAreaContext,
   GuidedAreaContextCatalog,
 } from "./guidedTypes";
-import type { SectionData } from "../urban-section/UrbanSection";
+import type { SectionData } from "../urban-section/sectionTypes";
 
 export const GUIDED_DEFAULT_AREA = "533513314";
 export const GUIDED_SHORTLIST = ["533513314", "533512753", "533522274"] as const;

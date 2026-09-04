@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import type { AppData } from "../../types";
 import type { SpatialSelection, SpatialState, SpatialViewport } from "../../state/spatial/types";
 import { AnalyticalMap } from "../../map/2d/AnalyticalMap";
-import { UrbanSection, type SectionData } from "../urban-section/UrbanSection";
+import { UrbanSection } from "../urban-section/UrbanSection";
+import type { SectionData } from "../urban-section/sectionTypes";
 import type { GuidedMapPresentation } from "./guidedTypes";
 import type { GuidedTargetChoice } from "./guidedTargets";
 

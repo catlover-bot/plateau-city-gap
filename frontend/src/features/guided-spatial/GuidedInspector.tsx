@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import type { AppData } from "../../types";
 import type { GuidedStory, SpatialSelection } from "../../state/spatial/types";
-import type { SectionData } from "../urban-section/UrbanSection";
+import type { SectionData } from "../urban-section/sectionTypes";
 import { GUIDED_DEFAULT_AREA } from "./guidedData";
 import { GUIDED_CONTENT } from "./guidedContent";
 import type { GuidedAreaCatalogItem, GuidedAreaContext } from "./guidedTypes";

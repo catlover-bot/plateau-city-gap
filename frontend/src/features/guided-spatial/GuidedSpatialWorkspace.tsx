@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppData, GeoJsonFeatureCollection } from "../../types";
 import type { GuidedStory, SpatialSelection, SpatialState, SpatialViewport } from "../../state/spatial/types";
-import type { SectionData } from "../urban-section/UrbanSection";
+import type { SectionData } from "../urban-section/sectionTypes";
 import { EMPTY_GUIDED_COLLECTION, GUIDED_SHORTLIST } from "./guidedData";
 import { GUIDED_CONTENT } from "./guidedContent";
 import { GuidedInspector } from "./GuidedInspector";

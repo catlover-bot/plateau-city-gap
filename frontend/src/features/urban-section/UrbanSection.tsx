@@ -5,142 +5,16 @@ import {
   layoutSectionAnnotations,
   type SectionAnnotationLayout,
 } from "./sectionAnnotations";
+import {
+  buildSectionFocusCallout,
+  buildSectionPlot,
+  nearestSectionObject,
+  sectionSampleIndexAtViewX,
+} from "./sectionLayout";
+import type { SectionData } from "./sectionTypes";
+import { useSectionData } from "./useSectionData";
 
-interface TerrainSample {
-  sample_order: number;
-  distance_m: number;
-  longitude: number;
-  latitude: number;
-  elevation_m: number | null;
-  source_triangle_id: string | null;
-  quality: "direct_tin" | "boundary" | "no_coverage";
-}
-
-interface SectionRelation {
-  source_object_id: string;
-  relation: "direct" | "nearby";
-  start_distance_m: number;
-  end_distance_m: number;
-  offset_distance_m: number;
-  properties: Record<string, unknown>;
-}
-
-interface SectionBand {
-  source_object_id: string;
-  start_distance_m: number;
-  end_distance_m: number;
-  planning?: Record<string, unknown>;
-  hazards?: Array<Record<string, unknown>>;
-}
-
-export interface SectionData {
-  transect_id: string;
-  pack_id: string;
-  geometry: { type: "LineString"; coordinates: Array<[number, number]> };
-  buffer_m: number;
-  sample_interval_m: number;
-  vertical_datum: string;
-  terrain_source: string;
-  terrain_interpolation: string;
-  terrain_samples: TerrainSample[];
-  buildings: SectionRelation[];
-  roads: SectionRelation[];
-  service_locations: SectionRelation[];
-  scenario_sites: SectionRelation[];
-  counterfactual: {
-    plan_id: string;
-    building_group_count: number;
-    baseline: { distance_m: number; score_c: number };
-    scenario: { distance_m: number; score_c: number; distance_reduction_m: number; score_c_reduction: number };
-    distance_semantics: string;
-    geometry_policy: string;
-    limitations: string[];
-  };
-  planning_bands: SectionBand[];
-  hazard_bands: SectionBand[];
-}
-
-const PACK_ID = "maizuru-533513314-plateau-2025-v1";
-const VIEW_WIDTH = 1000;
-const TERRAIN_TOP = 32;
-const TERRAIN_BOTTOM = 174;
-
-function publicUrl(path: string): string {
-  const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
-  return `${base}${path}`;
-}
-
-interface TerrainSegment {
-  line: string;
-  area: string;
-}
-
-function terrainSegments(samples: TerrainSample[], x: (value: number) => number, y: (value: number) => number): TerrainSegment[] {
-  const segments: TerrainSegment[] = [];
-  let current: Array<[number, number]> = [];
-  const finish = () => {
-    if (current.length > 1) {
-      const line = current.map(([pointX, pointY], index) => `${index ? "L" : "M"}${pointX.toFixed(2)},${pointY.toFixed(2)}`).join(" ");
-      const first = current[0];
-      const last = current[current.length - 1];
-      segments.push({ line, area: `${line} L${last[0].toFixed(2)},${TERRAIN_BOTTOM} L${first[0].toFixed(2)},${TERRAIN_BOTTOM} Z` });
-    }
-    current = [];
-  };
-  samples.forEach((sample) => {
-    if (sample.elevation_m === null) {
-      finish();
-      return;
-    }
-    current.push([x(sample.distance_m), y(sample.elevation_m)]);
-  });
-  finish();
-  return segments;
-}
-
-interface SectionFocusDetail {
-  id: string;
-  kind: "building" | "road";
-  kindLabel: "建物" | "道路";
-  label: string;
-  distanceM: number;
-  elevationM: number | null;
-  relation: SectionRelation["relation"];
-  offsetDistanceM: number;
-}
-
-function distanceFromRelation(relation: SectionRelation, distanceM: number): number {
-  if (distanceM < relation.start_distance_m) return relation.start_distance_m - distanceM;
-  if (distanceM > relation.end_distance_m) return distanceM - relation.end_distance_m;
-  return 0;
-}
-
-function nearestSectionObject(data: SectionData, distanceM: number, elevationM: number | null): SectionFocusDetail | null {
-  const candidates = [
-    ...data.buildings.map((relation) => ({ relation, kind: "building" as const })),
-    ...data.roads.map((relation) => ({ relation, kind: "road" as const })),
-  ];
-  candidates.sort((left, right) => (
-    distanceFromRelation(left.relation, distanceM) - distanceFromRelation(right.relation, distanceM)
-    || Number(right.relation.relation === "direct") - Number(left.relation.relation === "direct")
-    || left.relation.start_distance_m - right.relation.start_distance_m
-  ));
-  const nearest = candidates[0];
-  if (!nearest) return null;
-  const relation = nearest.relation;
-  return {
-    id: relation.source_object_id,
-    kind: nearest.kind,
-    kindLabel: nearest.kind === "road" ? "道路" : "建物",
-    label: nearest.kind === "road"
-      ? String(relation.properties.road_name ?? "名称不明の道路")
-      : String(relation.properties.usage_label ?? relation.properties.usage ?? "用途不明の建物"),
-    distanceM: (relation.start_distance_m + relation.end_distance_m) / 2,
-    elevationM,
-    relation: relation.relation,
-    offsetDistanceM: relation.offset_distance_m,
-  };
-}
+export type { SectionData } from "./sectionTypes";
 
 interface Props {
   open: boolean;
@@ -168,11 +42,10 @@ function moveSectionFocus(event: ReactKeyboardEvent<SVGRectElement>) {
 }
 
 export function UrbanSection({ open, mode = "advanced", selection, counterfactualState, analysisLens, onSelectBuilding, onClose, dataOverride, sourcePath, expectedPackId, areaLabel = "常団地前周辺", onFocusPosition }: Props) {
-  const [loadedData, setLoadedData] = useState<SectionData | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [guidedSampleIndex, setGuidedSampleIndex] = useState(0);
   const [guidedFocusActive, setGuidedFocusActive] = useState(false);
   const [compactSection, setCompactSection] = useState(false);
+  const { data, error } = useSectionData({ dataOverride, sourcePath, expectedPackId });
   useEffect(() => {
     if (mode !== "guided") return;
     const media = window.matchMedia("(max-width: 900px)");
@@ -181,65 +54,12 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, [mode]);
-  useEffect(() => {
-    if (dataOverride !== undefined) return;
-    const resolvedPath = sourcePath === undefined
-      ? `data/spatial-packs/${PACK_ID}/sections.json`
-      : sourcePath;
-    if (!resolvedPath) return;
-    const controller = new AbortController();
-    setLoadedData(null);
-    setError(null);
-    fetch(publicUrl(resolvedPath), { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json() as Promise<SectionData>;
-      })
-      .then((value) => {
-        if (expectedPackId && value.pack_id !== expectedPackId) throw new Error("断面とAreaのpackが一致しません");
-        setLoadedData(value);
-      })
-      .catch((reason: unknown) => {
-        if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "断面を読み込めません");
-      });
-    return () => controller.abort();
-  }, [dataOverride, expectedPackId, sourcePath]);
-  const data = dataOverride !== undefined ? dataOverride : loadedData;
   const guided = mode === "guided";
 
-  const plot = useMemo(() => {
-    if (!data) return null;
-    const covered = data.terrain_samples.filter((sample): sample is TerrainSample & { elevation_m: number } => sample.elevation_m !== null);
-    const maxDistance = Math.max(...data.terrain_samples.map((sample) => sample.distance_m), 1);
-    const minimumElevation = Math.min(...covered.map((sample) => sample.elevation_m));
-    const maximumElevation = Math.max(...covered.map((sample) => sample.elevation_m));
-    const maximumBuildingTop = Math.max(
-      ...data.buildings.map((building) => {
-        const height = typeof building.properties.measured_height_m === "number" ? building.properties.measured_height_m : 0;
-        const nearest = covered.reduce((best, sample) => Math.abs(sample.distance_m - building.start_distance_m) < Math.abs(best.distance_m - building.start_distance_m) ? sample : best, covered[0]);
-        return nearest.elevation_m + height;
-      }),
-      ...covered.map((sample) => sample.elevation_m),
-    );
-    const elevationSpan = Math.max(maximumBuildingTop - minimumElevation, 20);
-    const viewWidth = guided && compactSection ? 390 : VIEW_WIDTH;
-    const x = (distance: number) => 38 + distance / maxDistance * (viewWidth - 58);
-    const y = (elevation: number) => TERRAIN_BOTTOM - (elevation - minimumElevation) / elevationSpan * (TERRAIN_BOTTOM - TERRAIN_TOP);
-    const firstCovered = data.terrain_samples.find((sample) => sample.elevation_m !== null);
-    const lastCovered = [...data.terrain_samples].reverse().find((sample) => sample.elevation_m !== null);
-    return {
-      covered,
-      maxDistance,
-      minimumElevation,
-      maximumElevation,
-      viewWidth,
-      x,
-      y,
-      terrainSegments: terrainSegments(data.terrain_samples, x, y),
-      endpointAY: y(firstCovered?.elevation_m ?? minimumElevation),
-      endpointBY: y(lastCovered?.elevation_m ?? minimumElevation),
-    };
-  }, [compactSection, data, guided]);
+  const plot = useMemo(
+    () => data ? buildSectionPlot(data, guided && compactSection) : null,
+    [compactSection, data, guided],
+  );
 
   const roadAnnotations = useMemo<SectionAnnotationLayout & { calculationMs: number }>(() => {
     if (!guided || !data || !plot) return { placed: [], hiddenCount: 0, overlapCount: 0, calculationMs: 0 };
@@ -275,21 +95,9 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
   const yTickValues = plot ? [plot.minimumElevation, (plot.minimumElevation + plot.maximumElevation) / 2, plot.maximumElevation] : [];
   const focusedCallout = useMemo(() => {
     if (!focusedDetail || !plot) return null;
-    const anchorX = plot.x(focusedDetail.distanceM);
-    const elevationLabel = focusedDetail.elevationM === null ? "—" : `${focusedDetail.elevationM.toFixed(1)}m`;
-    const meta = `${focusedDetail.kindLabel} · ${Math.round(focusedDetail.distanceM)}m · 標高${elevationLabel}`;
-    const relation = focusedDetail.relation === "direct"
-      ? "直接交差"
-      : `断面から約${Math.round(focusedDetail.offsetDistanceM)}m`;
     const measureName = browserSectionTextMeasurer("800 13px system-ui, sans-serif");
     const measureMeta = browserSectionTextMeasurer("600 12px system-ui, sans-serif");
-    const labelWidth = Math.min(
-      compactSection ? 210 : 250,
-      Math.max(156, measureName(focusedDetail.label) + 18, measureMeta(meta) + 16, measureMeta(relation) + 16),
-    );
-    const labelX = Math.min(plot.viewWidth - 20 - labelWidth, Math.max(38, anchorX - labelWidth / 2));
-    const anchorY = focusedDetail.elevationM === null ? TERRAIN_BOTTOM : plot.y(focusedDetail.elevationM);
-    return { anchorX, anchorY, labelX, labelWidth, meta, relation };
+    return buildSectionFocusCallout(focusedDetail, plot, compactSection, measureName, measureMeta);
   }, [compactSection, focusedDetail, plot]);
 
   useEffect(() => {
@@ -312,10 +120,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
     if (!data || !plot || !onFocusPosition) return;
     const bounds = event.currentTarget.getBoundingClientRect();
     const viewX = (event.clientX - bounds.left) / Math.max(bounds.width, 1) * plot.viewWidth;
-    const distance = Math.max(0, Math.min(plot.maxDistance, (viewX - 38) / (plot.viewWidth - 58) * plot.maxDistance));
-    const sampleIndex = data.terrain_samples.reduce((bestIndex, candidate, index) =>
-      Math.abs(candidate.distance_m - distance) < Math.abs(data.terrain_samples[bestIndex].distance_m - distance) ? index : bestIndex,
-    0);
+    const sampleIndex = sectionSampleIndexAtViewX(data, plot, viewX);
     const sample = data.terrain_samples[sampleIndex];
     setGuidedSampleIndex(sampleIndex);
     setGuidedFocusActive(true);

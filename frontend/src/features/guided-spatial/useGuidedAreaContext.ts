@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { loadGuidedReferenceData, type GuidedReferenceData } from "../../lib/data";
 import type { GuidedStory } from "../../state/spatial/types";
 import type { AppData } from "../../types";
-import type { SectionData } from "../urban-section/UrbanSection";
+import type { SectionData } from "../urban-section/sectionTypes";
 import {
   loadGuidedAreaCatalog,
   loadGuidedAreaContext,
