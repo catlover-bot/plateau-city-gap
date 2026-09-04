@@ -69,7 +69,7 @@ const BASE_STYLE: StyleSpecification = {
   },
   layers: [
     { id: "product-background", type: "background", paint: { "background-color": "#e9ebe7" } },
-    { id: "gsi-pale", type: "raster", source: "gsi-pale", paint: { "raster-opacity": .78, "raster-saturation": -.72, "raster-contrast": -.08 } }
+    { id: "gsi-pale", type: "raster", source: "gsi-pale", paint: { "raster-opacity": .72, "raster-saturation": -.88, "raster-contrast": -.12, "raster-brightness-min": .18, "raster-brightness-max": .98, "raster-fade-duration": 80 } }
   ]
 };
 
@@ -338,11 +338,11 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
         "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], .86, ["<=", ["coalesce", ["get", "rank"], 9999], 10], dimNonSelected ? .46 : .82, ["==", ["get", "primary_eligible"], true], dimNonSelected ? .11 : .37, .055]
       } });
       map.addLayer({ id: "mesh-outline", type: "line", source: "meshes", minzoom: 10, maxzoom: 16.5, paint: { "line-color": "#506a65", "line-width": ["interpolate", ["linear"], ["zoom"], 10, .12, 14, .55], "line-opacity": ["interpolate", ["linear"], ["zoom"], 10, .08, 14, .28] } });
-      map.addLayer({ id: "mesh-top-fill", type: "fill", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "fill-color": "#c38b2c", "fill-opacity": .72 } });
-      map.addLayer({ id: "mesh-top-outline", type: "line", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "line-color": "#173b39", "line-width": 1.5, "line-opacity": .9 } });
+      map.addLayer({ id: "mesh-top-fill", type: "fill", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "fill-color": "#c38b2c", "fill-opacity": .32 } });
+      map.addLayer({ id: "mesh-top-outline", type: "line", source: "meshes", minzoom: 8, maxzoom: 13.2, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], paint: { "line-color": "#76561f", "line-width": 1.25, "line-opacity": .78 } });
       map.addLayer({ id: "mesh-selected", type: "line", source: "meshes", minzoom: 8, paint: { "line-color": "#132f31", "line-width": 3, "line-opacity": 1 }, filter: ["==", ["get", "mesh_code"], "__none__"] });
-      map.addLayer({ id: "mesh-hovered", type: "line", source: "meshes", minzoom: 8, layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 4, "line-opacity": .96 }, filter: ["==", ["get", "mesh_code"], "__none__"] });
-      map.addLayer({ id: "mesh-top-label", type: "symbol", source: "meshes", minzoom: 9.6, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], layout: { "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": ["interpolate", ["linear"], ["zoom"], 9.6, 9, 13, 11], "text-allow-overlap": false, "text-padding": 8 }, paint: { "text-color": "#173c39", "text-halo-color": "#fafaf5", "text-halo-width": 1.8 } });
+      map.addLayer({ id: "mesh-hovered", type: "line", source: "meshes", minzoom: 8, layout: { visibility: "none" }, paint: { "line-color": "#8c641c", "line-width": 3.5, "line-opacity": .96 }, filter: ["==", ["get", "mesh_code"], "__none__"] });
+      map.addLayer({ id: "mesh-top-label", type: "symbol", source: "meshes", minzoom: 9.4, filter: ["<=", ["coalesce", ["get", "rank"], 9999], 10], layout: { "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": ["interpolate", ["linear"], ["zoom"], 9.4, 11.5, 13, 13], "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"], "text-allow-overlap": false, "text-padding": 12 }, paint: { "text-color": "#493a1d", "text-halo-color": "#fbfaf6", "text-halo-width": 2.2 } });
       map.addLayer({ id: "plateau-road-line", type: "line", source: "plateau-roads", minzoom: 13, paint: { "line-color": "#5e6f6b", "line-width": ["interpolate", ["linear"], ["zoom"], 13, .8, 17, 2.8], "line-opacity": .7 }, layout: { visibility: "none" } });
 
       const pointLayers = [
@@ -369,23 +369,26 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
       map.addLayer({ id: "public-target-line", type: "line", source: "public-target", layout: { visibility: "none" }, paint: { "line-color": "#b7791f", "line-width": 4, "line-dasharray": [2, 1.4], "line-opacity": 1 } });
       map.addLayer({ id: "public-target-point", type: "circle", source: "public-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": "#b7791f", "circle-radius": 9, "circle-stroke-color": "#ffffff", "circle-stroke-width": 3, "circle-opacity": .98 } });
 
-      map.addLayer({ id: "guided-planning-fill", type: "fill", source: "guided-planning", layout: { visibility: "none" }, paint: { "fill-color": "#866d9b", "fill-opacity": .13 } });
-      map.addLayer({ id: "guided-planning-line", type: "line", source: "guided-planning", layout: { visibility: "none" }, paint: { "line-color": "#665078", "line-width": 1.2, "line-dasharray": [3, 2], "line-opacity": .75 } });
-      map.addLayer({ id: "guided-roads-fill", type: "fill", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": "#628b91", "fill-opacity": .34 } });
-      map.addLayer({ id: "guided-roads-line", type: "line", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#355f67", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .5, 17, 2.1], "line-opacity": .78 } });
-      map.addLayer({ id: "guided-buildings-fill", type: "fill", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": ["match", ["get", "usage_label"], "住宅", "#5f9484", "共同住宅", "#4e7685", "商業施設", "#9a7650", "#9ca9a4"], "fill-opacity": .64 } });
-      map.addLayer({ id: "guided-buildings-line", type: "line", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#284f49", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .3, 17, 1.1], "line-opacity": .76 } });
+      map.addLayer({ id: "guided-planning-fill", type: "fill", source: "guided-planning", layout: { visibility: "none" }, paint: { "fill-color": "#8f7d97", "fill-opacity": .07 } });
+      map.addLayer({ id: "guided-planning-line", type: "line", source: "guided-planning", layout: { visibility: "none" }, paint: { "line-color": "#76647e", "line-width": 1.1, "line-dasharray": [3, 2], "line-opacity": .46 } });
+      map.addLayer({ id: "guided-roads-fill", type: "fill", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": "#6f8e96", "fill-opacity": .2 } });
+      map.addLayer({ id: "guided-roads-line", type: "line", source: "guided-roads", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#476b74", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .55, 17, 2.2], "line-opacity": .68 } });
+      map.addLayer({ id: "guided-buildings-fill", type: "fill", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "fill-color": "#7f918b", "fill-opacity": .4 } });
+      map.addLayer({ id: "guided-buildings-line", type: "line", source: "guided-buildings", minzoom: 12, layout: { visibility: "none" }, paint: { "line-color": "#526761", "line-width": ["interpolate", ["linear"], ["zoom"], 12, .3, 17, 1.05], "line-opacity": .56 } });
       map.addLayer({ id: "guided-area-fill", type: "fill", source: "guided-area", layout: { visibility: "none" }, paint: { "fill-color": "#1e6f62", "fill-opacity": .08 } });
-      map.addLayer({ id: "guided-area-line", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": "#12574e", "line-width": 3.2, "line-opacity": .98 } });
-      map.addLayer({ id: "guided-area-label", type: "symbol", source: "guided-area", minzoom: 10, layout: { visibility: "none", "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": 12, "text-allow-overlap": true, "text-offset": [0, 1.2] }, paint: { "text-color": "#173f39", "text-halo-color": "#fafaf5", "text-halo-width": 2 } });
+      map.addLayer({ id: "guided-area-halo", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 7, "line-opacity": .9 } });
+      map.addLayer({ id: "guided-area-line", type: "line", source: "guided-area", layout: { visibility: "none" }, paint: { "line-color": "#12574e", "line-width": 3.6, "line-opacity": 1 } });
+      map.addLayer({ id: "guided-area-label", type: "symbol", source: "guided-area", minzoom: 9.4, layout: { visibility: "none", "text-field": ["coalesce", ["get", "area_label"], ["get", "mesh_code"]], "text-size": 14, "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"], "text-allow-overlap": true, "text-offset": [0, 1.25] }, paint: { "text-color": "#123f38", "text-halo-color": "#ffffff", "text-halo-width": 2.8 } });
       map.addLayer({ id: "guided-section-halo", type: "line", source: "guided-section", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 7, "line-opacity": .92 } });
-      map.addLayer({ id: "guided-section-line", type: "line", source: "guided-section", layout: { visibility: "none" }, paint: { "line-color": "#8d5f9f", "line-width": 3, "line-dasharray": [2, 1], "line-opacity": .98 } });
-      map.addLayer({ id: "guided-section-endpoints", type: "symbol", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none", "text-field": ["get", "endpoint"], "text-size": 13, "text-allow-overlap": true }, paint: { "text-color": "#634371", "text-halo-color": "#ffffff", "text-halo-width": 2 } });
+      map.addLayer({ id: "guided-section-line", type: "line", source: "guided-section", layout: { visibility: "none", "line-cap": "round" }, paint: { "line-color": "#7b4b91", "line-width": 3.8, "line-opacity": 1 } });
+      map.addLayer({ id: "guided-section-endpoint-dots", type: "circle", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": "#7b4b91", "circle-radius": 6.5, "circle-stroke-color": "#ffffff", "circle-stroke-width": 2.5 } });
+      map.addLayer({ id: "guided-section-endpoints", type: "symbol", source: "guided-section", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none", "text-field": ["get", "endpoint"], "text-size": 14, "text-font": ["Open Sans Bold", "Arial Unicode MS Regular"], "text-offset": [0, -1.2], "text-allow-overlap": true }, paint: { "text-color": "#5d306f", "text-halo-color": "#ffffff", "text-halo-width": 2.5 } });
       map.addLayer({ id: "guided-section-focus", type: "circle", source: "guided-section-focus", layout: { visibility: "none" }, paint: { "circle-color": "#8d5f9f", "circle-radius": 6, "circle-stroke-color": "#ffffff", "circle-stroke-width": 2 } });
-      map.addLayer({ id: "guided-target-fill", type: "fill", source: "guided-target", layout: { visibility: "none" }, paint: { "fill-color": "#d28b24", "fill-opacity": .32 } });
-      map.addLayer({ id: "guided-target-halo", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 8, "line-opacity": .96 } });
-      map.addLayer({ id: "guided-target-line", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#a9660d", "line-width": 4, "line-opacity": 1 } });
-      map.addLayer({ id: "guided-target-point", type: "circle", source: "guided-target", layout: { visibility: "none" }, paint: { "circle-color": "#a9660d", "circle-radius": 8, "circle-stroke-color": "#ffffff", "circle-stroke-width": 4, "circle-opacity": 1 } });
+      map.addLayer({ id: "guided-target-fill", type: "fill", source: "guided-target", layout: { visibility: "none" }, paint: { "fill-color": "#d28b24", "fill-opacity": .36 } });
+      map.addLayer({ id: "guided-target-halo", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#ffffff", "line-width": 10, "line-opacity": .98 } });
+      map.addLayer({ id: "guided-target-line", type: "line", source: "guided-target", layout: { visibility: "none" }, paint: { "line-color": "#a9660d", "line-width": 4.5, "line-opacity": 1 } });
+      map.addLayer({ id: "guided-target-point", type: "circle", source: "guided-target", filter: ["==", ["geometry-type"], "Point"], layout: { visibility: "none" }, paint: { "circle-color": "#a9660d", "circle-radius": 10, "circle-stroke-color": "#ffffff", "circle-stroke-width": 4, "circle-opacity": 1 } });
+      map.addLayer({ id: "guided-target-label", type: "symbol", source: "guided-target", layout: { visibility: "none", "text-field": ["get", "map_label"], "text-size": 13, "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"], "text-offset": [0, 1.5], "text-padding": 12, "text-allow-overlap": true, "text-ignore-placement": true }, paint: { "text-color": "#704505", "text-halo-color": "#ffffff", "text-halo-width": 2.8 } });
 
       map.addLayer({ id: "validation-primary", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "primary_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#397888", "line-width": 4, "line-opacity": dimNonSelected ? .35 : .9 } });
       map.addLayer({ id: "validation-reference", type: "line", source: "validation-routes", filter: ["==", ["get", "route_model"], "reference_model"], minzoom: 9, layout: { visibility: "none", "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#719b43", "line-width": 3, "line-dasharray": [2, 1.5], "line-opacity": dimNonSelected ? .35 : .9 } });
@@ -780,6 +783,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     const contextVisible = (isUnderstand || isVerify) && presentation.contextStatus === "ready";
     const sectionVisible = isUnderstand && presentation.sectionLine.features.length > 0;
     const targetVisible = isVerify && presentation.target.features.length > 0;
+    const exactTargetVisible = targetVisible && presentation.targetResolution === "exact";
 
     if (isIntro || isFind || isVerify) map.setPadding({ top: 0, right: 0, bottom: 0, left: 0 });
 
@@ -792,6 +796,11 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     shell?.setAttribute("data-guided-context-status", presentation.contextStatus);
     shell?.setAttribute("data-guided-section-visible", String(sectionVisible));
     shell?.setAttribute("data-guided-target-resolution", presentation.targetResolution);
+    shell?.setAttribute("data-guided-target-kind", presentation.targetKind);
+
+    setPaint(map, "gsi-pale", "raster-opacity", isIntro ? .7 : isFind ? .61 : isUnderstand ? .54 : .46);
+    setPaint(map, "gsi-pale", "raster-saturation", isIntro ? -.86 : -.95);
+    setPaint(map, "gsi-pale", "raster-contrast", isIntro ? -.1 : -.16);
 
     setSource(map, "guided-area", presentation.area);
     setSource(map, "guided-buildings", context?.layers.buildings);
@@ -803,18 +812,20 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
 
     layerVisibility(map, "mesh-fill", isIntro || isFind);
     layerVisibility(map, "mesh-outline", isIntro || isFind);
-    setPaint(map, "mesh-fill", "fill-opacity", isIntro ? .12 : ["case", ["boolean", ["feature-state", "hover"], false], .86, ["<=", ["coalesce", ["get", "rank"], 9999], 10], .82, ["==", ["get", "primary_eligible"], true], .37, .055]);
-    const shortlistFilter = ["in", ["get", "mesh_code"], ["literal", presentation.shortlistIds]];
+    setPaint(map, "mesh-fill", "fill-opacity", isIntro ? .1 : ["case", ["boolean", ["feature-state", "hover"], false], .24, ["==", ["get", "primary_eligible"], true], .12, .035]);
+    const unselectedShortlist = presentation.shortlistIds.filter((id) => id !== presentation.areaId);
+    const shortlistFilter = ["in", ["get", "mesh_code"], ["literal", unselectedShortlist]];
     setFilter(map, "mesh-top-fill", shortlistFilter);
     setFilter(map, "mesh-top-outline", shortlistFilter);
     setFilter(map, "mesh-top-label", shortlistFilter);
     layerVisibility(map, "mesh-top-fill", isFind);
     layerVisibility(map, "mesh-top-outline", isFind);
     layerVisibility(map, "mesh-top-label", isFind);
-    layerVisibility(map, "mesh-selected", !isIntro);
+    layerVisibility(map, "mesh-selected", false);
     layerVisibility(map, "mesh-hovered", isFind && Boolean(presentation.hoveredAreaId));
     setFilter(map, "mesh-hovered", ["==", ["get", "mesh_code"], presentation.hoveredAreaId ?? "__none__"]);
     layerVisibility(map, "guided-area-fill", !isIntro);
+    layerVisibility(map, "guided-area-halo", !isIntro);
     layerVisibility(map, "guided-area-line", !isIntro);
     layerVisibility(map, "guided-area-label", isFind);
     layerVisibility(map, "guided-buildings-fill", contextVisible);
@@ -825,17 +836,28 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     layerVisibility(map, "guided-planning-line", contextVisible);
     layerVisibility(map, "guided-section-halo", sectionVisible);
     layerVisibility(map, "guided-section-line", sectionVisible);
+    layerVisibility(map, "guided-section-endpoint-dots", sectionVisible);
     layerVisibility(map, "guided-section-endpoints", sectionVisible);
     layerVisibility(map, "guided-section-focus", sectionVisible && presentation.sectionFocus.features.length > 0);
-    layerVisibility(map, "guided-target-fill", targetVisible);
-    layerVisibility(map, "guided-target-halo", targetVisible);
+    layerVisibility(map, "guided-target-fill", exactTargetVisible);
+    layerVisibility(map, "guided-target-halo", exactTargetVisible);
+    // The fallback target remains the selected Area itself. Keep the target
+    // line active for the existing target-state contract while the Area
+    // styling communicates that this is a range, not a resolved object.
     layerVisibility(map, "guided-target-line", targetVisible);
-    layerVisibility(map, "guided-target-point", targetVisible);
-    setPaint(map, "guided-buildings-fill", "fill-opacity", isVerify ? .18 : .64);
-    setPaint(map, "guided-roads-fill", "fill-opacity", isVerify ? .14 : .34);
-    setPaint(map, "guided-planning-fill", "fill-opacity", isVerify ? .055 : .13);
-    setPaint(map, "guided-area-fill", "fill-opacity", isFind ? .13 : isVerify ? .035 : .08);
+    layerVisibility(map, "guided-target-point", exactTargetVisible);
+    layerVisibility(map, "guided-target-label", exactTargetVisible);
+    setPaint(map, "guided-buildings-fill", "fill-opacity", isVerify ? .1 : .4);
+    setPaint(map, "guided-buildings-line", "line-opacity", isVerify ? .24 : .56);
+    setPaint(map, "guided-roads-fill", "fill-opacity", isVerify ? .08 : .2);
+    setPaint(map, "guided-roads-line", "line-opacity", isVerify ? .3 : .68);
+    setPaint(map, "guided-planning-fill", "fill-opacity", isVerify ? .025 : .07);
+    setPaint(map, "guided-planning-line", "line-opacity", isVerify ? .18 : .46);
+    setPaint(map, "guided-target-line", "line-dasharray", presentation.targetResolution === "area_fallback" ? [2, 1.4] : [1, .01]);
+    setPaint(map, "guided-area-fill", "fill-opacity", isFind ? .2 : isVerify ? presentation.targetResolution === "area_fallback" ? .15 : .025 : .055);
+    setPaint(map, "guided-area-halo", "line-width", isVerify && presentation.targetResolution === "area_fallback" ? 9 : 7);
     setPaint(map, "guided-area-line", "line-color", isVerify && presentation.targetResolution === "area_fallback" ? "#a9660d" : "#12574e");
+    setPaint(map, "guided-area-line", "line-width", isVerify && presentation.targetResolution === "area_fallback" ? 4.5 : 3.6);
     setPaint(map, "guided-area-line", "line-dasharray", isVerify && presentation.targetResolution === "area_fallback" ? [2, 1.4] : [1, .01]);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

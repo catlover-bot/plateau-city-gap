@@ -69,6 +69,7 @@ export interface GuidedMapPresentation {
   context: GuidedAreaContext | null;
   contextStatus: "idle" | "loading" | "ready" | "error";
   target: GeoJsonFeatureCollection;
+  targetKind: "road" | "building" | "facility" | "area";
   targetResolution: "exact" | "area_fallback";
   sectionLine: GeoJsonFeatureCollection;
   sectionFocus: GeoJsonFeatureCollection;

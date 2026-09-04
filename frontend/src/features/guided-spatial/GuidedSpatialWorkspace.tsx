@@ -57,6 +57,24 @@ function collection(feature: GeoJsonFeature): GeoJsonFeatureCollection {
   return { type: "FeatureCollection", features: [feature] };
 }
 
+function labeledTarget(
+  geometry: GeoJsonFeatureCollection,
+  label: string,
+  kind: GuidedTargetChoice["kind"],
+): GeoJsonFeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: geometry.features.map((feature) => ({
+      ...feature,
+      properties: {
+        ...(feature.properties ?? {}),
+        map_label: label,
+        target_kind: kind,
+      },
+    })),
+  };
+}
+
 function collectionBoundsValue(area: GeoJsonFeatureCollection): [number, number, number, number] | null {
   const coordinates: number[][] = [];
   const visit = (value: unknown): void => {
@@ -384,6 +402,10 @@ export function GuidedSpatialWorkspace({
     return choices;
   }, [activeContext, areaLabel, data, referenceData, selectedAreaFeature, selectedAreaId]);
   const target = targetChoices.find((choice) => choice.key === selectedTargetKey) ?? targetChoices[0];
+  const mapTarget = useMemo(
+    () => target ? labeledTarget(target.geometry, target.label, target.kind) : EMPTY_GUIDED_COLLECTION,
+    [target],
+  );
   const activeSectionData = activeContext?.section.pack_id === sectionData?.pack_id ? sectionData : null;
   const section = useMemo(() => sectionCollections(activeSectionData, sectionFocus), [activeSectionData, sectionFocus]);
   const presentation = useMemo<GuidedMapPresentation>(() => ({
@@ -393,12 +415,13 @@ export function GuidedSpatialWorkspace({
     hoveredAreaId,
     context: activeContext,
     contextStatus,
-    target: target?.geometry ?? EMPTY_GUIDED_COLLECTION,
+    target: mapTarget,
+    targetKind: target?.kind ?? "area",
     targetResolution: target?.resolution ?? "area_fallback",
     sectionLine: section.line,
     sectionFocus: section.point,
     shortlistIds: [...GUIDED_SHORTLIST],
-  }), [activeContext, contextStatus, hoveredAreaId, section.line, section.point, selectedAreaFeature, selectedAreaId, state.guidedStory, target?.geometry, target?.resolution]);
+  }), [activeContext, contextStatus, hoveredAreaId, mapTarget, section.line, section.point, selectedAreaFeature, selectedAreaId, state.guidedStory, target?.kind, target?.resolution]);
   const mapLegend = useMemo<{ title: string; items: GuidedLegendItem[] } | null>(() => {
     if (state.guidedStory === "find") return {
       title: "地図の見方",

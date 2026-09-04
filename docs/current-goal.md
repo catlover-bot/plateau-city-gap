@@ -2,7 +2,7 @@
 
 Active goal: `deployed-map-ux-section-refinement-v1`
 
-Current milestone: M0 baseline locked; M1 map readability next
+Current milestone: M0 baseline locked; M1 map readability implemented and under checkpoint verification
 
 Execution lock:
 
@@ -26,7 +26,9 @@ Execution lock:
 - map baseline: basemap and multi-theme context compete with selection; exact targets lack a map label; Scene 1 Area labels are small
 - Section baseline: no visible road-name annotations, `5` measured overlaps, `6` annotations outside the plot, tiny axis typography, and clipped mobile services
 - existing demo videos: preserved unchanged; mark as visually stale after this refinement and recapture only after production visual approval
-- next gate: commit M0, then implement and commit M1 map readability
+- M0 evidence commit: `a8f342391441fa3d9e039d5173cdb7a3c16840b3`
+- M1 implementation: scene-aware basemap tuning, restrained candidate hierarchy, selected-Area halo/label, neutral PLATEAU context, stronger verified A–B line/endpoints, exact-target emphasis/label, and distinct honest fallback styling
+- next gate: finish M1 regression checks and commit, then refine the Guided inspector/UI in M2
 - human and municipal validation remain pending
 
 Prior Guided checkpoint retained below.
