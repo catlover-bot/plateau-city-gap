@@ -2,7 +2,7 @@
 
 Active goal: `harbor-atlas-visual-identity-ux-v2`
 
-Current milestone: S1 Harbor Atlas semantic visual identity complete; S2 cartography next
+Current milestone: S2 Harbor Atlas cartography complete; S3 map-first Guided UX next
 
 Execution lock:
 
@@ -22,7 +22,12 @@ Execution lock:
 - S1 composition: Public and Guided headings, selected rows, target summaries, primary/secondary actions, overlays, loading shell, and responsive surface switch now consume semantic roles; decorative Guided loading gradients and legacy purple Public/Guided accents are removed
 - S1 style gates: ten Harbor Atlas source assertions pass, including locked seed values, UI/cartography separation, primary-action hierarchy, timing bands, reduced motion, no Public/Guided gradient, no runtime theme selector, and no legacy purple Section accent
 - S1 regression: lint, typecheck, production build, `29` test files / `127` tests, Public/Guided/Advanced five-state browser capture with zero diagnostics, and the complete Guided-to-Advanced direct/cached/Back-Forward/error/retry suite pass
-- next gate: implement the Harbor Atlas map paint hierarchy and prove exact target > selected Area/A-B > context > basemap without changing map lifecycle or data semantics
+- S2 cartography: typed MapLibre colors now mirror the CSS semantic source; Signal exact targets, Harbor selected Area/A-B, neutral buildings/roads, quiet Harbor shortlist/context, and subdued basemap/other-Area layers implement the required visual priority
+- S2 target states: exact road/building polygons and registered facility point use Signal with white halo plus labels; fallback remains a dashed Harbor Area with no exact-target fill, point, or label
+- S2 map readability: selected Area labels increase to `15 px`, target labels to `14 px`, A/B endpoints to `15 px`; 495 Areas and non-selected context are quieter while buildings and roads remain distinguishable by material fill, outline, and geometry
+- S2 motion: Public camera transitions move to `380 ms`; Guided remains `320 ms`; reduced motion continues to resolve at `0 ms`
+- S2 regression: cartography/style tests, lint, typecheck, production build, 17-state core and five-state supplemental raster checks with zero diagnostics, and the full six-Area/exact/facility/fallback/Section/mobile/keyboard/legacy Guided contract all pass with one map initialization
+- next gate: streamline the Guided inspector and action hierarchy, make hover and fallback presentation unambiguous, and preserve the three-scene/deep-link flow
 - no human visual, comprehension, accessibility-acceptance, or municipal-workflow pass is claimed
 
 Prior deployed map/Section refinement checkpoint retained below.
