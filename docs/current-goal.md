@@ -35,6 +35,7 @@ Status: refactor, remote validation, deployment, production audits, and presenta
 - Urban Section capture: desktop/mobile annotations `6`/`4`, named roads `4`/`2`, zero label conflicts; deterministic Section screenshots remain unchanged.
 - Remote UI checkpoint `9c8a99c530ca375758686c6d6431e76d80c5c748`: nine of nine CI jobs passed in run `33909411156`; Pages build and deploy passed in run `33909833987`.
 - Production audits: Public, five visual viewports, eight accessibility states, PLATEAU-native 19/19, Guided spatial, Guided → Advanced, and strict Advanced readiness passed with zero product diagnostics.
+- Production media commit `c9bed550d06ed1aa6adbf93296e3daacaa042db6`: verified slide and demo packages plus capture/verification tooling and presentation documentation.
 
 ## Evidence state
 

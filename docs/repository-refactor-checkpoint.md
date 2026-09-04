@@ -119,6 +119,7 @@ No slide or video in this checkpoint is called production evidence. Final media 
 - Public first run, five visual viewports, eight accessibility states including 200% reflow, PLATEAU-native 19/19, full Guided spatial behavior, Guided → Advanced, and strict Advanced readiness passed on production with zero product diagnostics.
 - The production image package contains eight ordered captures, a contact sheet, and a manifest. All dimensions, hashes, state contracts, source commit, Pages run, Section provenance, exact target, and diagnostics gates passed; the exact package then passed self visual and presentation-readiness review.
 - The production video package contains captioned and clean 54.7667-second MP4s, a 14.9667-second short, poster, WebVTT captions, and manifest. All videos decode as silent 1920×1080 H.264/yuv420p/30fps, total 5,360,876 bytes, and the sampled timelines passed visual review without loading/error/debug frames.
+- Media, tooling, and presentation documentation were committed in `c9bed550d06ed1aa6adbf93296e3daacaa042db6`; both package manifests identify that immutable asset commit.
 
 The remaining mechanical gate is a second nine-job CI run for the final presentation-asset HEAD. No merge, rebase, or push to `main` is part of this work.
 

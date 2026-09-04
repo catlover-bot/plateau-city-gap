@@ -5,8 +5,8 @@
   "recording_start_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=intro&mesh=533513314",
   "source_branch": "feat/guided-spatial-storytelling-v1",
   "source_commit": "9c8a99c530ca375758686c6d6431e76d80c5c748",
-  "asset_package_commit": null,
-  "asset_package_commit_note": "Recorded in the follow-up provenance commit after the media commit exists.",
+  "asset_package_commit": "c9bed550d06ed1aa6adbf93296e3daacaa042db6",
+  "asset_package_commit_note": "Commit that introduced the verified canonical media; this field is recorded in its follow-up provenance commit.",
   "pages_run_id": "33909833987",
   "capture_clock": {
     "source": "Windows host clock",
