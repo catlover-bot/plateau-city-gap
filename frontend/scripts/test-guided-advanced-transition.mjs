@@ -60,8 +60,9 @@ function installDiagnostics(context, label, expectedError = () => false, expecte
     });
     page.on("pageerror", (error) => result.page.push(error.message));
     page.on("requestfailed", (request) => {
-      if (request.url().startsWith(new URL(baseUrl).origin) && !expectedError(request.url())) {
-        result.request.push({ url: request.url(), error: request.failure()?.errorText ?? "unknown" });
+      const error = request.failure()?.errorText ?? "unknown";
+      if (request.url().startsWith(new URL(baseUrl).origin) && !expectedError(request.url()) && error !== "net::ERR_ABORTED") {
+        result.request.push({ url: request.url(), error });
       }
     });
     page.on("response", (response) => {

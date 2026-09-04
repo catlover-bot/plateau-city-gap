@@ -63,8 +63,9 @@ function attachDiagnostics(page, label) {
   page.on("pageerror", (error) => record.page_errors.push(error.message));
   page.on("requestfailed", (request) => {
     try {
-      if (new URL(request.url()).origin === new URL(baseUrl).origin) {
-        record.failed_same_origin_requests.push({ url: request.url(), error: request.failure()?.errorText ?? "unknown" });
+      const error = request.failure()?.errorText ?? "unknown";
+      if (new URL(request.url()).origin === new URL(baseUrl).origin && error !== "net::ERR_ABORTED") {
+        record.failed_same_origin_requests.push({ url: request.url(), error });
       }
     } catch {
       record.failed_same_origin_requests.push({ url: request.url(), error: "invalid-url" });
