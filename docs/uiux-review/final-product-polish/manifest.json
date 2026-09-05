@@ -1,0 +1,1687 @@
+{
+  "schema": "citygap.final-uiux-review@1",
+  "purpose": "Six review-only before/after pairs; not adopted presentation replacements or human approval.",
+  "review_status": "VISUAL_CORRECTION_REQUIRED_BEFORE_PUBLICATION",
+  "observed_remaining_defects": [
+    "Public headline splits the word 地図 across lines at1440x900.",
+    "Automatic Public/Guided heading still has a thin gold outline from foundation.css; the black outer focus box was removed, not the entire heading outline.",
+    "Readable Section elevation-axis label bounding box starts at x=-3 CSSpx, clipping its left edge. Font-size and overlap tests did not check viewport containment."
+  ],
+  "generated_utc": "2026-09-05T11:33:40.080Z",
+  "app_source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+  "pairs": [
+    {
+      "issue": "Public entry hierarchy, explanatory duplication and discoverable3D entry",
+      "before": {
+        "path": "before/01-public.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T10:35:26.751Z",
+        "bytes": 666975,
+        "sha256": "df2912c03ca3bd562ab6a5f7b1ca6de68d0db5288a2a0b76c557ad6e07502b72",
+        "state": {
+          "roots": {
+            "public": {
+              "experience": "public-first-run",
+              "publicStep": "intro",
+              "mapMode": "map2d",
+              "activeStory": "none",
+              "cartographyState": "loading",
+              "storyCartographyLoading": "none",
+              "targetCartographyState": "idle",
+              "presentationTargetKind": "none",
+              "presentationTargetResolution": "none",
+              "publicUrbanSection": "advanced_only"
+            },
+            "guided": {},
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "false",
+            "visualComplete": "false",
+            "captureStrictReady": "false",
+            "visualReady": "false",
+            "visualScene": "gap_discovery",
+            "perfAppShellMs": "2478"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/01-public.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T11:27:39.430Z",
+        "bytes": 647972,
+        "sha256": "64c6ec807a3ae4b68ad629d659c0c58f6d963479dc5c5d1ce65d3202048eda98",
+        "state": {
+          "roots": {
+            "public": {
+              "experience": "public-first-run",
+              "publicStep": "intro",
+              "mapMode": "map2d",
+              "activeStory": "none",
+              "cartographyState": "loading",
+              "storyCartographyLoading": "none",
+              "targetCartographyState": "idle",
+              "presentationTargetKind": "none",
+              "presentationTargetResolution": "none",
+              "publicUrbanSection": "advanced_only"
+            },
+            "guided": {},
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "false",
+            "visualComplete": "false",
+            "captureStrictReady": "false",
+            "visualReady": "false",
+            "visualScene": "gap_discovery",
+            "perfAppShellMs": "1065"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      }
+    },
+    {
+      "issue": "Area choice map/readability and action hierarchy at1280x720",
+      "before": {
+        "path": "before/02-guided-area.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "captured_utc": "2026-09-05T10:35:27.686Z",
+        "bytes": 440913,
+        "sha256": "befd4a83a3cd346a39e743e35c209e8d888e2f95cebdc7ae8825d0292285cf4d",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "find",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "none",
+              "contextStatus": "idle",
+              "contextBuildings": "0",
+              "contextRoads": "0",
+              "contextPlanning": "0",
+              "sectionPack": "none",
+              "targetResolution": "area_fallback",
+              "targetKind": "area",
+              "targetKey": "area:533513314",
+              "objectKind": "none",
+              "objectId": "none"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "false",
+            "visualComplete": "false",
+            "captureStrictReady": "false",
+            "visualReady": "false",
+            "visualScene": "gap_discovery",
+            "perfAppShellMs": "109"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/02-guided-area.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "captured_utc": "2026-09-05T11:27:40.222Z",
+        "bytes": 445104,
+        "sha256": "644eb651f97b9bb214ae17e8ea0e38064a6076d2b71bd672989aa15b7645589e",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "find",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "none",
+              "contextStatus": "idle",
+              "contextBuildings": "0",
+              "contextRoads": "0",
+              "contextPlanning": "0",
+              "sectionPack": "none",
+              "targetResolution": "area_fallback",
+              "targetKind": "area",
+              "targetKey": "area:533513314",
+              "objectKind": "none",
+              "objectId": "none"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "false",
+            "visualComplete": "false",
+            "captureStrictReady": "false",
+            "visualReady": "false",
+            "visualScene": "gap_discovery",
+            "perfAppShellMs": "111"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      }
+    },
+    {
+      "issue": "Actual picked building attributes vs region facts and repeated explanation panels",
+      "before": {
+        "path": "before/03-guided-3d-attributes.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T10:35:37.447Z",
+        "bytes": 546834,
+        "sha256": "54e1a1f55eb441f2782af87bc70a8e5cf89ea8f9ea738751e5ce497e11106451",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "building",
+              "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "objectKind": "building",
+              "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "85",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "895",
+            "perfPackInteractionMs": "1338",
+            "perfVisualCompleteMs": "1551",
+            "perfCaptureStrictMs": "1578"
+          },
+          "object_attributes": {
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building"
+          },
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/03-guided-3d-attributes.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T11:27:45.915Z",
+        "bytes": 748259,
+        "sha256": "54d722668b48b7a7b1b2b0abd12856a1183b476d60f632b170a4363104d0d5d3",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "building",
+              "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "objectKind": "building",
+              "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "114",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "937",
+            "perfPackInteractionMs": "1634",
+            "perfVisualCompleteMs": "1653",
+            "perfCaptureStrictMs": "1750"
+          },
+          "object_attributes": {
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building"
+          },
+          "target": {},
+          "checks": [],
+          "section": {},
+          "overflow_pixels": 0
+        }
+      }
+    },
+    {
+      "issue": "SameA–B Section size/annotation readability with selected building retained",
+      "before": {
+        "path": "before/04-guided-3d-section.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T10:35:38.555Z",
+        "bytes": 559504,
+        "sha256": "23f37acb13aaab35e9d402f7283e963428cc779e3fbedf04efba732e3a199622",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "building",
+              "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "objectKind": "building",
+              "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "85",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "895",
+            "perfPackInteractionMs": "1338",
+            "perfVisualCompleteMs": "1551",
+            "perfCaptureStrictMs": "1578"
+          },
+          "object_attributes": {
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building"
+          },
+          "target": {},
+          "checks": [],
+          "section": {
+            "uiMode": "guided",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "6",
+            "roadAnnotationCount": "4",
+            "hiddenLowPriorityAnnotations": "6",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0.3",
+            "selectedAnnotationVisible": "false",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true"
+          },
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/04-guided-3d-section.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "captured_utc": "2026-09-05T11:27:46.963Z",
+        "bytes": 544237,
+        "sha256": "a0036aae1ee060dc53703e4c193df961dfb7b5c323b79f344fe07b23d03abae8",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "building",
+              "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "objectKind": "building",
+              "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "114",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "937",
+            "perfPackInteractionMs": "1634",
+            "perfVisualCompleteMs": "1653",
+            "perfCaptureStrictMs": "1750"
+          },
+          "object_attributes": {
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building"
+          },
+          "target": {},
+          "checks": [],
+          "section": {
+            "uiMode": "guided",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "6",
+            "roadAnnotationCount": "4",
+            "hiddenLowPriorityAnnotations": "6",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0.2",
+            "selectedAnnotationVisible": "true",
+            "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true",
+            "sectionContainerWidth": "1050.203125"
+          },
+          "overflow_pixels": 0
+        }
+      }
+    },
+    {
+      "issue": "Advanced sameobject attributes/fieldchecks/Section hierarchy and map header prominence",
+      "before": {
+        "path": "before/05-advanced-3d.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.7228678&selectionLat=35.9583400",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "captured_utc": "2026-09-05T10:35:43.476Z",
+        "bytes": 836884,
+        "sha256": "307557b8258085988da987901b7e2424a036a2657ffa89a87e8e16d977d2c5bb",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {},
+            "advanced": {
+              "experience": "advanced",
+              "areaId": "533513314",
+              "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "targetResolution": "exact",
+              "contextStatus": "ready"
+            }
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "85",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "895",
+            "perfPackInteractionMs": "1338",
+            "perfVisualCompleteMs": "1551",
+            "perfCaptureStrictMs": "1578"
+          },
+          "object_attributes": {},
+          "target": {
+            "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "unconfirmed": "3"
+          },
+          "checks": [
+            "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+            "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+            "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+          ],
+          "section": {
+            "uiMode": "advanced",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "6",
+            "roadAnnotationCount": "4",
+            "hiddenLowPriorityAnnotations": "6",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0.2",
+            "selectedAnnotationVisible": "false",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true"
+          },
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/05-advanced-3d.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "captured_utc": "2026-09-05T11:27:51.764Z",
+        "bytes": 809937,
+        "sha256": "6b7e03e8d2cd59253b138a5bb7f44b83c33d200139a147ea2c6c397550ae951d",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {},
+            "advanced": {
+              "experience": "advanced",
+              "areaId": "533513314",
+              "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+              "targetResolution": "exact",
+              "contextStatus": "ready"
+            }
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "114",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "937",
+            "perfPackInteractionMs": "1634",
+            "perfVisualCompleteMs": "1653",
+            "perfCaptureStrictMs": "1750"
+          },
+          "object_attributes": {},
+          "target": {
+            "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "unconfirmed": "3"
+          },
+          "checks": [
+            "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+            "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+            "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+          ],
+          "section": {
+            "uiMode": "advanced",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "6",
+            "roadAnnotationCount": "4",
+            "hiddenLowPriorityAnnotations": "6",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0.2",
+            "selectedAnnotationVisible": "true",
+            "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true",
+            "sectionContainerWidth": "1500"
+          },
+          "overflow_pixels": 0
+        }
+      }
+    },
+    {
+      "issue": "Mobile390x844 true3D/Section controls, selectedobject context and reflow",
+      "before": {
+        "path": "before/06-mobile-3d-section.png",
+        "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "captured_utc": "2026-09-05T10:35:45.133Z",
+        "bytes": 74408,
+        "sha256": "bc033233b1bf3f5bcca9574d9f0c5d927d26811f638890ccb7f13c6c0155f105",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "road",
+              "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+              "objectKind": "none",
+              "objectId": "none"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "96",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "335",
+            "perfPackInteractionMs": "683",
+            "perfVisualCompleteMs": "875",
+            "perfCaptureStrictMs": "908"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {
+            "uiMode": "guided",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "4",
+            "roadAnnotationCount": "2",
+            "hiddenLowPriorityAnnotations": "8",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0.3",
+            "selectedAnnotationVisible": "false",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true"
+          },
+          "overflow_pixels": 0
+        }
+      },
+      "after": {
+        "path": "after/06-mobile-3d-section.png",
+        "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "captured_utc": "2026-09-05T11:27:53.426Z",
+        "bytes": 71093,
+        "sha256": "f0daa6c71c3a78a9f763bd08d08f24005bb46afffe4f83a38b7ad0a01f0142ed",
+        "state": {
+          "roots": {
+            "public": {},
+            "guided": {
+              "guidedStory": "understand",
+              "areaId": "533513314",
+              "areaLabel": "常団地前周辺",
+              "hoveredAreaId": "none",
+              "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+              "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+              "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+              "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+              "contextStatus": "ready",
+              "contextBuildings": "303",
+              "contextRoads": "135",
+              "contextPlanning": "8",
+              "sectionPack": "maizuru-533513314-plateau-2025-v1",
+              "targetResolution": "exact",
+              "targetKind": "road",
+              "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+              "objectKind": "none",
+              "objectId": "none"
+            },
+            "advanced": {}
+          },
+          "readiness": {
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualReady": "true",
+            "visualScene": "plateau_detail",
+            "perfAppShellMs": "104",
+            "visualUnmet": "",
+            "perfThreeDFirstMeaningfulMs": "345",
+            "perfPackInteractionMs": "873",
+            "perfVisualCompleteMs": "898",
+            "perfCaptureStrictMs": "993"
+          },
+          "object_attributes": {},
+          "target": {},
+          "checks": [],
+          "section": {
+            "uiMode": "guided",
+            "readable": "true",
+            "transectReady": "true",
+            "buildingCount": "63",
+            "directBuildingCount": "17",
+            "roadCount": "14",
+            "directRoadCount": "14",
+            "terrainSamples": "94",
+            "terrainCovered": "94",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "staticAnnotationCount": "4",
+            "roadAnnotationCount": "2",
+            "hiddenLowPriorityAnnotations": "8",
+            "annotationOverlapCount": "0",
+            "annotationCalculationMs": "0",
+            "selectedAnnotationVisible": "false",
+            "selectionAnnotationId": "none",
+            "focusedObjectKind": "none",
+            "focusedObjectId": "none",
+            "counterfactualReady": "true",
+            "serviceSectionReady": "true",
+            "sectionContainerWidth": "390"
+          },
+          "overflow_pixels": 0
+        }
+      }
+    }
+  ],
+  "diagnostics_and_provenance": [
+    {
+      "phase": "before",
+      "source_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952",
+      "original_path": "/mnt/c/Users/m.hirotaka/AppData/Local/Temp/citygap-judging-3d-uiux-baseline-31924-1788604522372/uiux-review.json",
+      "sha256": "68797a554bda33bd4efca7946bd474c2c262f218261b1747518f774f36b79f1a",
+      "unexpected_diagnostics": [],
+      "console_errors": [],
+      "requests_failed": [
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3590/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.938Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3590/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3232.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:27.971Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7178/3232.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.006Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.006Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.006Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.006Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.007Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6463.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.007Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6463.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.007Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.007Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.043Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12929.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.043Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12929.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12928.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12928.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12929.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.044Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12929.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T10:35:28.165Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25860.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.381Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3585/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.381Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3585/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.398Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.399Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3590/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.399Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3590/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.429Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3232.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.430Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.430Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.431Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.431Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.431Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.431Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.431Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7178/3232.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6463.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.522Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_measurement_once",
+          "at": "2026-09-05T10:35:35.575Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "advanced_3d",
+          "at": "2026-09-05T10:35:40.494Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57413/25859.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "advanced_3d",
+          "at": "2026-09-05T10:35:40.494Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57413/25860.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "advanced_3d",
+          "at": "2026-09-05T10:35:40.494Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57413/25857.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "timings": {
+        "warm_guided_3d_ready_ms": 1160.2578999996185,
+        "real_pick_ready_ms": 689.4124999940395,
+        "conditions": "One prewarm visit of Guided3D, actual featured-building pick and sameSection; then one reload to Guided find and one measured ready/pick/Section sequence. Same retained hardware Chrome,1440x900,DPR1. No measurement retries.",
+        "same_section_ready_ms": 773.8184000104666
+      },
+      "timing_comparison_allowed": true,
+      "timing_scope": "Production warm baseline; final comparable production sample is in the release handoff."
+    },
+    {
+      "phase": "after",
+      "source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+      "original_path": "/mnt/c/Users/m.hirotaka/AppData/Local/Temp/citygap-judging-3d-uiux-after-local-11800-1788607656207/uiux-review.json",
+      "sha256": "7e292263c5caf0dbbfa132d7db5b0df4224d43849478e1ec72e6ed87d1e4383b",
+      "unexpected_diagnostics": [],
+      "console_errors": [],
+      "requests_failed": [
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.476Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.477Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.477Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.477Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.477Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.528Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3230.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.528Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3230.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.528Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7174/3232.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.528Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3234.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.528Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7174/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.585Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.585Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6464.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.585Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.585Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.585Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.623Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.623Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.623Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.643Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.643Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warmup",
+          "at": "2026-09-05T11:27:40.643Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12928.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.571Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3585/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.577Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3590/1615.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.594Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3588/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.594Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1616.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.594Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1617.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.594Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1614.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7178/3231.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3230.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3230.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7178/3233.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3234.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.612Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3234.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6465.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6463.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6463.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.644Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6466.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.680Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12927.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.680Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28710/12929.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.727Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.727Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.727Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.727Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12928.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.727Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "warm_after_review_not_timed",
+          "at": "2026-09-05T11:27:43.734Z",
+          "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12931.png",
+          "resource_type": "fetch",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "timings": {
+        "comparison_sample_taken": false,
+        "reason": "Local UI review only. The single matched after performance sample runs on production after deployment."
+      },
+      "timing_comparison_allowed": false,
+      "timing_scope": "Local preview only; not comparable with production baseline."
+    }
+  ],
+  "unchanged_adopted_reference": "4d724f32e7c286ae8e8335d7c1b3d54ab5682ef2",
+  "adopted_hashes_before": [
+    {
+      "path": "docs/assets/judging-3d/01-plateau-3d-hero.png",
+      "sha256": "dd2c1b9b19547affba5f4dd082a3db69f5e885189ea45f0cb8cc4a5bb06145c1",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/02-area-to-3d.png",
+      "sha256": "cf425c69cf885c240cb5d74dfe0467665b58a9477f424801ab8a6a749c3d6131",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/03-3d-and-section.png",
+      "sha256": "48f398baec0ed18f5e55ce99b2b90b3c71239d81e4a64ec559718584312ce527",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/04-3d-field-target.png",
+      "sha256": "3aa626aef048255027067d36ace335bb0f81b4a28ca456695ad891ab302ec0bd",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/captions.vtt",
+      "sha256": "5405926a46e209a5a9bbad55ce491697c712ad94dbdd8145c8b341549eb322b2",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/city-gap-3d-demo-captioned.mp4",
+      "sha256": "4e9bb610d4adb3d348ef6a5bb282ec79e42f31a6d7b56c0209f00b4b3da8c3b1",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/city-gap-3d-demo-clean.mp4",
+      "sha256": "ac144f66df32b965cda15beb1745305048c1b8d67a8a63eaf50e290a16163d0e",
+      "matches_reference": true
+    },
+    {
+      "path": "docs/assets/judging-3d/manifest.json",
+      "sha256": "d3a2c5de0c5094b5d352e19c7b5c27fce8193f108562ddac6967a1ae841f8f16",
+      "matches_reference": true
+    }
+  ],
+  "protected_roots": [
+    {
+      "root": "/home/mhirotaka/workspace/plateau-city-gap/docs/assets",
+      "files": 125
+    },
+    {
+      "root": "/home/mhirotaka/workspace/plateau-city-gap.accidental-delete-backup-20260905T1049Z",
+      "files": 10
+    },
+    {
+      "root": "/home/mhirotaka/workspace/citygap-final-delivery-backup-1b854690",
+      "files": 17
+    }
+  ],
+  "user_worktree_before": " D docs/assets/presentation-images/01-city-gap-overview-16x9.png\n D docs/assets/presentation-images/02-area-selection-16x9.png\n?? \"docs/assets/presentation-images/01-city-gap-overview-16x9 copy.png\"\n?? \"docs/assets/presentation-images/02-area-selection-16x9 copy.png\"\n",
+  "publication_gate": "This review was packaged before final exact-HEAD CI and Pages. The release handoff must identify final HEAD, successful nine-job CI/Pages, production interaction, matching live bytes and final preservation inventory; this manifest does not preclaim those outcomes.",
+  "limits": [
+    "Guided building URL reload restores Area; in-memory target retention is separately tested.",
+    "Advanced URL restores identity; model attributes can require a real re-pick.",
+    "Direct 3D road mouse picking remains unverified.",
+    "Automated accessibility and agent visual review are not full WCAG or human acceptance."
+  ]
+}

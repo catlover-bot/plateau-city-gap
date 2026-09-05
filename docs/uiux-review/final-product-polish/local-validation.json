@@ -1,0 +1,394 @@
+{
+  "schema_version": "citygap.uiux-local-final-summary@1",
+  "generated_at": "2026-09-05T11:29:55.539Z",
+  "url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "ui_source_commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+  "delivery_commit": null,
+  "no_images": true,
+  "generated_png_count": 0,
+  "source_boundaries": {
+    "released": {
+      "commit": "061c940e22229f7bb37d0fa2adb0d77141bbd8ce",
+      "assets": [
+        "index-B3Oh6ZcF.js",
+        "ProductApp-BVmT2BQG.js",
+        "Guided3DView-C5utZbKA.js",
+        "CesiumMap-BlzMLOB2.js",
+        "ProductApp-uVN4Dnxq.css",
+        "index-Bbh7eHpG.css"
+      ]
+    },
+    "preceding_second_build": {
+      "commit": null,
+      "description": "Precommit second-loop frozen working tree, before the narrow Section first-visible compact-label correction; not represented as tests of the released commit.",
+      "assets": [
+        "index-DoCzS9x1.js",
+        "ProductApp-BZn16QnO.js",
+        "Guided3DView-BENPFzjj.js",
+        "CesiumMap-BQoATBzq.js",
+        "ProductApp-uVN4Dnxq.css",
+        "index-Bbh7eHpG.css"
+      ]
+    },
+    "script_boundary": "The explicit final visible/non-inert return wait is audit-only and was added after the released UI build; no application source or bundle changed for this diagnostic."
+  },
+  "gates": {
+    "guided_spatial": {
+      "passed": true,
+      "report": "guided-spatial-released.stdout",
+      "areas": 6,
+      "snapshots": 29,
+      "accessibility_checks": 13,
+      "section_audits": 4,
+      "legacy_routes": 7,
+      "errors": 0,
+      "mobile_section": {
+        "height_css_px": 301,
+        "static_annotations": 4,
+        "road_labels": 2,
+        "text_overlaps": 0,
+        "tab_stops": 1
+      }
+    },
+    "legacy_spatial_pack_02": {
+      "passed": true,
+      "report": "legacy02-released/manifest.json",
+      "strict_checks": 20,
+      "capture_status": "readiness-only",
+      "capture_bytes": 0,
+      "loaded_target_building_count": 296,
+      "target_building_count": 296,
+      "target_coverage_ratio": 1,
+      "building_feature_count": 856,
+      "pack_artifact_bytes": 4777932,
+      "terrain_tile_count": 5,
+      "road_objects_ready": true,
+      "readiness": {
+        "interaction_ready": true,
+        "visual_complete": true,
+        "capture_strict_ready": true,
+        "stable_frames": 4,
+        "outstanding_critical_requests": 0,
+        "optional_globe_requests": 77,
+        "optional_building_requests": 0
+      }
+    },
+    "public_first_run": {
+      "passed": true,
+      "tested_build": "preceding_second_build",
+      "report": "public-final-retry/manifest.json",
+      "layout_states": 9,
+      "serious_critical": 0,
+      "critical_diagnostics": 0,
+      "screenshots": 0
+    },
+    "guided_advanced_loading": {
+      "passed": true,
+      "tested_build": "preceding_second_build",
+      "report": "transition-final.stdout",
+      "named_flow_groups": 5,
+      "includes": [
+        "direct Advanced",
+        "single-flight/cached Guided upgrade/back-forward",
+        "long URL/reload",
+        "legacy routes",
+        "finite failure/retry"
+      ]
+    },
+    "classic_advanced": {
+      "passed": true,
+      "tested_build": "preceding_second_build",
+      "reports": [
+        "plateau-native-final.json",
+        "visual-identity-final.json"
+      ],
+      "native_checks": 19,
+      "identity_viewports": 5
+    },
+    "polish_320_390": {
+      "passed": true,
+      "qualification": "Composite evidence, not a claim that the combined released run exited zero.",
+      "reports": [
+        "polish-section-released.stdout",
+        "guided390-return-diagnostic.stdout"
+      ],
+      "combined_run_passed": false,
+      "combined_run_failures": 1,
+      "resolved_failure": "Single immediate visibility snapshot after Guided390 return. Same-UI bounded diagnostic passed the added actual post-interaction visibility contract; no app change and no assertion removal."
+    },
+    "actual_200_percent": {
+      "passed": true,
+      "released_section_report": "actual200-section-released.stdout",
+      "public_report": "actual200-final.json",
+      "public_tested_build": "preceding_second_build",
+      "method": "Temporary MV3 chrome.tabs.setZoom(2), automatic/per-tab, fresh isolated Chromium149 profile",
+      "browser_zoom_before": 1,
+      "browser_zoom_after": 2,
+      "css_viewport_before": [
+        1440,
+        900
+      ],
+      "css_viewport_after": [
+        720,
+        450
+      ],
+      "dpr_before": 1,
+      "dpr_after": 2,
+      "visual_viewport_scale": 1,
+      "not_a_dpr_or_pinch_substitute": true
+    },
+    "return_to_3d": {
+      "passed": true,
+      "report": "guided390-return-diagnostic.stdout",
+      "immediate_and_settled": {
+        "inert": false,
+        "aria_hidden": null,
+        "stage_expanded": "false",
+        "computed_visibility": "visible",
+        "computed_display": "block",
+        "rect_css_px": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 383
+        }
+      },
+      "visible_wait_ms": 12
+    }
+  },
+  "layout_metrics": [
+    {
+      "report": "polish-final.json",
+      "passed": true,
+      "failures": 0,
+      "layout_states": 10,
+      "minimum_rendered_section_font_px": 12,
+      "axe_incomplete_total": 17,
+      "max_horizontal_overflow_px": 0
+    },
+    {
+      "report": "actual200-final.json",
+      "passed": true,
+      "failures": 0,
+      "layout_states": 5,
+      "minimum_rendered_section_font_px": 12,
+      "axe_incomplete_total": 9,
+      "max_horizontal_overflow_px": 0
+    },
+    {
+      "report": "polish-section-released.stdout",
+      "passed": false,
+      "failures": 1,
+      "layout_states": 8,
+      "minimum_rendered_section_font_px": 12,
+      "axe_incomplete_total": 15,
+      "max_horizontal_overflow_px": 0
+    },
+    {
+      "report": "actual200-section-released.stdout",
+      "passed": true,
+      "failures": 0,
+      "layout_states": 4,
+      "minimum_rendered_section_font_px": 12,
+      "axe_incomplete_total": 7,
+      "max_horizontal_overflow_px": 0
+    },
+    {
+      "report": "guided390-return-diagnostic.stdout",
+      "passed": true,
+      "failures": 0,
+      "layout_states": 2,
+      "minimum_rendered_section_font_px": 12,
+      "axe_incomplete_total": 4,
+      "max_horizontal_overflow_px": 0
+    }
+  ],
+  "preserved_failures": [
+    {
+      "reports": [
+        "guided-spatial-first.stderr"
+      ],
+      "failure": "Initial mobile Section SVG height was below the unchanged >=300px requirement; fixed in app layout, not by changing the assertion."
+    },
+    {
+      "reports": [
+        "actual200-first.json",
+        "polish-wsl-first.json"
+      ],
+      "failure": "Public zoom control beneath header, hidden Cesium credit keyboard reachability, and focused Section geometry covered by later paint.",
+      "resolution": "Scoped UI position/inert handling and exact last-painted focused outline; later checks passed. The new test distinguishes spatial geometry overlap from visible focus without altering old tests."
+    },
+    {
+      "reports": [
+        "public-first.stderr"
+      ],
+      "failure": "Public audit retained the old approved heading literal.",
+      "resolution": "Expected heading updated to the new approved Public copy; all original operations and assertions retained."
+    },
+    {
+      "reports": [
+        "polish-wsl-first.json"
+      ],
+      "failure": "Immediate selected-object URL assertion preceded committed URL state once.",
+      "resolution": "Wait for the same exact selected ID and parentMesh URL contract before asserting; no alternate ID or fallback accepted."
+    },
+    {
+      "reports": [
+        "public-final.stderr",
+        "legacy02-final-diagnostics/02-resolution-lift.json"
+      ],
+      "failure": "Root's redundant preview rebuild overlapped running checks: Public HTTP navigation failure and eight required legacy data404 responses followed by app timeout.",
+      "resolution": "Root acknowledged overlap; one unchanged retry of each affected check passed after build completion. Required-data failures were not exempted as ordinary cancellation."
+    },
+    {
+      "reports": [
+        "guided-spatial-final.stderr"
+      ],
+      "failure": "First visible mobile Section used desktop fallback width before ResizeObserver, yielding4 road labels instead of the existing max2.",
+      "resolution": "Synchronous compact policy at mobile viewport or narrow measured container; unchanged Guided suite passed height301/2roads/4annotations."
+    },
+    {
+      "reports": [
+        "polish-section-released.stdout",
+        "guided390-return-diagnostic.stdout"
+      ],
+      "failure": "A single return snapshot reported visible=false while inert=false and aria-hidden=null.",
+      "resolution": "Not reproduced as a persistent CSS defect. One bounded same-UI diagnostic showed both immediate and final visible state; audit now additionally waits for actual stage=false/visible/non-inert and records timings. Original failed aggregate report remains intact."
+    }
+  ],
+  "limitations": [
+    "Automated accessibility evidence is not full WCAG conformance; axe incomplete results are retained per report.",
+    "WSL software-rendered layout tests are not native-GPU performance measurements. Hardware real-pick and before/after performance evidence is owned separately by capture_path.",
+    "Unchanged legacy scripts retain their pre-existing request exclusions; the new polish runner records cancellations by phase and exempts only intentional owned-context closure from its same-origin cancellation failure gate.",
+    "Earlier Public/classic/transition reports are explicitly identified with their actual preceding tested build, not mislabeled as the released commit.",
+    "No production validation, CI success or Pages deployment is claimed by this local-only summary."
+  ],
+  "reports": [
+    {
+      "name": "guided-spatial-released.stdout",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/guided-spatial-released.stdout",
+      "bytes": 47886,
+      "sha256": "f340a284e725cb81bf42a1b00cbd54ee90d0c27361016abc59739a645b4decbe",
+      "tested_build": "released"
+    },
+    {
+      "name": "legacy02-released/manifest.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/legacy02-released/manifest.json",
+      "bytes": 5330,
+      "sha256": "a81b75b07e5f92c4a2978cfa43ea9d0d8e3ad6f032143afb8e6557387a2c6a20",
+      "tested_build": "released"
+    },
+    {
+      "name": "polish-section-released.stdout",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/polish-section-released.stdout",
+      "bytes": 108435,
+      "sha256": "bca2fa19ff30e2317b33e09bdb310a1eb060b089dc62e9d2683a09ca646b9b11",
+      "tested_build": "released"
+    },
+    {
+      "name": "actual200-section-released.stdout",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/actual200-section-released.stdout",
+      "bytes": 55635,
+      "sha256": "712403800a9b9e2eef028992249853d2017d7dc2ede3481b799b6c8952773b54",
+      "tested_build": "released"
+    },
+    {
+      "name": "guided390-return-diagnostic.stdout",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/guided390-return-diagnostic.stdout",
+      "bytes": 26773,
+      "sha256": "ff39fb2aa934bd838ba48779945c2efea3093575649858263102a39de7709599",
+      "tested_build": "released"
+    },
+    {
+      "name": "public-final-retry/manifest.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/public-final-retry/manifest.json",
+      "bytes": 13772,
+      "sha256": "07c15a21c9dd794c90ac3bbdb243b729317de7a5cac7c48dc3da0276a970d03c",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "transition-final.stdout",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/transition-final.stdout",
+      "bytes": 3809,
+      "sha256": "4ff882f6353857d3a0db2e0c6e9434ed0e95da2e28b0c959d8ae05a37e4abd8b",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "plateau-native-final.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/plateau-native-final.json",
+      "bytes": 1249,
+      "sha256": "e55533e9f26a3e8e75085b2ceee95d2e8f3cd16e0088291fd9ff774996c94c40",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "visual-identity-final.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/visual-identity-final.json",
+      "bytes": 10270,
+      "sha256": "7caa51a792b3f3fe4a8a02858bc88eda9b590964ccc30d635991aad654d5520b",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "polish-final.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/polish-final.json",
+      "bytes": 128888,
+      "sha256": "c2cb0fcf60e54fbcbfe6c6144500700556b0872ff02f7b9dac53db30b6354233",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "actual200-final.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/actual200-final.json",
+      "bytes": 71551,
+      "sha256": "8aafcc866c48e58f90b2c057afe6bc0873833e59953e12d7670ac64ea9ee998a",
+      "tested_build": "preceding_second_build"
+    },
+    {
+      "name": "guided-spatial-first.stderr",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/guided-spatial-first.stderr",
+      "bytes": 510,
+      "sha256": "1cbb70fd8352b6c57353b4a3b0365fa77b1d3e1eeb7a356cf0056485e8bcd516",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "actual200-first.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/actual200-first.json",
+      "bytes": 49114,
+      "sha256": "3fabe684003c2f56f3a1e3a411d5a8fdabf0e2b3a21d0fca266005728f6025c5",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "polish-wsl-first.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/polish-wsl-first.json",
+      "bytes": 156527,
+      "sha256": "f4e4216d634b95a3b154c0831c845920940d922c29c115c970a6f9834c7200ad",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "public-first.stderr",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/public-first.stderr",
+      "bytes": 553,
+      "sha256": "0f20fc0b310369531cc1761c1d415a0208139b00c9fe0396a5a8af4a5fbca32d",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "guided-spatial-final.stderr",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/guided-spatial-final.stderr",
+      "bytes": 1121,
+      "sha256": "80c724c9a1146f7f74004df6f7c8bdbe49a6e8b688ca7adbf0cd2017b2c2f58c",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "public-final.stderr",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/public-final.stderr",
+      "bytes": 529,
+      "sha256": "d8f00b54f37048738a620714d52734c6431e5bebb55120a37841a6b225b2bbdb",
+      "tested_build": "preserved_failure_build_as_described"
+    },
+    {
+      "name": "legacy02-final-diagnostics/02-resolution-lift.json",
+      "path": "/tmp/citygap-uiux-polish-tests.SAG8wLlJ/legacy02-final-diagnostics/02-resolution-lift.json",
+      "bytes": 5816,
+      "sha256": "e4ffc8a3a2f8ed48d5d98a35ac9986107af65f7c623f61fe0839588ad2b4cd44",
+      "tested_build": "preserved_failure_build_as_described"
+    }
+  ]
+}

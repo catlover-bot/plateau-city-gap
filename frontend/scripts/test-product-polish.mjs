@@ -220,8 +220,26 @@ async function audit(experience, width) {
         phase = "user-returns-to-3d";
         await page.getByRole("button", { name: "PLATEAU 3D", exact: true }).click();
         await waitForReal3D(page, 60_000);
-        const restored = await page.locator(".guided-3d-view").evaluate((node) => ({ inert: node.inert, aria_hidden: node.getAttribute("aria-hidden"), visible: node.checkVisibility({ checkVisibilityCSS: true }) }));
-        check(!restored.inert && restored.aria_hidden !== "true" && restored.visible, `${label}: returning to 3D restores its accessibility`, restored);
+        const returnEvidence = () => page.locator(".guided-3d-view").evaluate((node) => ({
+          inert: node.inert, aria_hidden: node.getAttribute("aria-hidden"), visible: node.checkVisibility({ checkVisibilityCSS: true }),
+          stage_expanded: node.closest(".guided-map-stage")?.getAttribute("data-section-expanded"),
+          mobile_viewport: matchMedia("(max-width: 900px)").matches,
+          computed_visibility: getComputedStyle(node).visibility, computed_display: getComputedStyle(node).display,
+          client_rects: [...node.getClientRects()].map((rect) => ({ x: rect.x, y: rect.y, width: rect.width, height: rect.height })),
+        }));
+        const immediate = await returnEvidence();
+        const visibleStarted = performance.now();
+        // Engine readiness can still describe the mounted previous frame.
+        // Also require the actual post-interaction UI visibility contract.
+        await page.waitForFunction(() => {
+          const node = document.querySelector(".guided-3d-view");
+          return node && !node.inert && node.getAttribute("aria-hidden") !== "true"
+            && node.closest(".guided-map-stage")?.getAttribute("data-section-expanded") === "false"
+            && getComputedStyle(node).visibility === "visible" && node.checkVisibility({ checkVisibilityCSS: true });
+        }, null, { timeout: 5_000 });
+        const restored = await returnEvidence();
+        report.records.push({ label, return_to_3d: { immediate, settled: restored, visible_wait_ms: Math.round(performance.now() - visibleStarted) } });
+        check(!restored.inert && restored.aria_hidden !== "true" && restored.visible && restored.stage_expanded === "false", `${label}: returning to 3D restores its accessibility`, restored);
       }
     }
   } catch (error) {

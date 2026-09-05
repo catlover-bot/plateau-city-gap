@@ -1,6 +1,12 @@
 # Current goal
 
-Active goal: `advanced-3d-judging-presentation-v1` (Advanced UI and additional presentation media).
+Active goal: `final-product-uiux-polish-v1`. Continue from `bb41d3c1aff385953b65d61c20f040d9c007d952`; the [short final UI/UX checkpoint](final-uiux-checkpoint.md) records the eight observed issues, bounded changes, review evidence and final gates. Adopted Guided 3D media and all previous presentation assets/provenance/backups are read-only. Preserve the existing two image deletions and two untracked copies. No new recording, palette, feature, repository cleanup or main promotion.
+
+Application refinement is preserved in `061c940e22229f7bb37d0fa2adb0d77141bbd8ce` with passing local source/regression gates and six before/after review pairs. Actual visual review still finds the Public headline split/automatic outline and 3px-clipped Section axis label. A narrow additional correction and replacement captures require the requested user direction beyond the bounded pass/capture plan. Final CI and Pages are on hold; this goal is not complete or production-verified.
+
+## Previous Advanced 3D delivery
+
+Completed goal: `advanced-3d-judging-presentation-v1` (Advanced UI and additional presentation media). Final delivery `bb41d3c1aff385953b65d61c20f040d9c007d952` passed nine-job CI `33947551476` attempt 2 and Pages `33947973445`; production interactions and live/raw hashes matched. The original CI shader-console failure remains recorded. The details below are retained provenance, not the active goal.
 
 Starting audit for the expanded UI scope: local HEAD, upstream and remote feature are `fcbd45151dbba65d0bc2682ddf096d39472deaa5` on `feat/guided-spatial-storytelling-v1`; remote main remains `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`. The only initial worktree changes are the two existing presentation-image deletions and their untracked, byte-identical `copy.png` counterparts. Preserve these without staging, and preserve all prior media and temporary evidence. The preceding narrow media supplement started at `4d724f32e7c286ae8e8335d7c1b3d54ab5682ef2` and is preserved in `fcbd451` (nine-job CI `33944399276` passed).
 
