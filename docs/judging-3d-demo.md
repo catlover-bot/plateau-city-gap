@@ -1,8 +1,12 @@
 # CITY GAP: PLATEAUを現地確認につなぐ3Dデモ
 
-## Advanced 3Dの追加改善（進行中）
+## Advanced 3Dの追加改善（UI公開済み・追加素材完成）
 
-拡張依頼の起点は `fcbd45151dbba65d0bc2682ddf096d39472deaa5`。以下の既存納品記録・素材は保全し、Advanced用の画像4枚と20〜45秒の新しいclean/captioned動画を別セットで追加します。最終の公開元SHA、CI、Pages、hashは新セットのmanifestと納品報告で特定します。
+拡張依頼の起点は `fcbd45151dbba65d0bc2682ddf096d39472deaa5`。以下の既存納品記録・素材は保全し、Advanced用の画像4枚と40秒の新しいclean/captioned動画を別セットで追加しました。撮影時の公開元SHA、CI、Pages、個別hashは新セットのmanifestに記録しています。最終素材commitのCI・Pages・raw URL照合結果は納品報告で特定します。
+
+公開入口：[Advanced PLATEAU 3D](https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&task=detail&scene=plateau_detail&mapMode=plateau3d&selectionType=mesh&selection=533513314)。UI sourceは `49a8d02a308908d9bd3950e5d7429d051a67a678`、[CI 33946246589](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33946246589) は9/9、[Pages 33946478209](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33946478209) はbuild/deployとも成功。公開entryと全10 JS/CSSのSHA-256はローカルproduction buildと一致しています。
+
+ローカル検証はESLint、TypeScript、36 test files / 183 tests、production build、既存Guided 6 Area・29 snapshot、Guided→Advanced 6 flow、Public first-run、PLATEAU-native 19/19、5 viewport表示、従来Spatial Pack/X-Ray strict captureを通過しました。Guided実3Dの建物選択・断面/focus・対象別項目・2D往復・非対応/古いArea拒否・390px失敗/再試行も通過しています。新Advancedでは実建物の選択、同じA–B、exact target、親メッシュ付きURL再読込、390px表示を確認済みです。デスクトップ/390px・断面開閉4状態でaxeのserious/criticalと検出されたcontrast違反は0。ただしcanvas/SVG等のcontrast判定にはincompleteが残り、全画素の自動アクセシビリティ保証ではありません。視覚確認はagentによるもので、人間の利用テストではありません。
 
 Advancedの常団地前周辺では、地域の集計 → 3D → 同じA–B断面 → 選んだ対象の公式属性・未確認項目を一画面で対応させます。「分析ツール」から従来の操作へ戻れ、明示的なSpatial Pack/X-Ray直リンクや別地域・別sceneは従来の表示を保ちます。Guided→Advancedのfull-data single-flight loaderは変更していません。新画面の地域・断面の取得と3D readinessにも有限の待ち時間、再試行、地図への戻り口があります。
 
@@ -15,6 +19,27 @@ Advancedの常団地前周辺では、地域の集計 → 3D → 同じA–B断�
 | 地域課題への貢献度 | 地域を探す材料と、入口・利用状況・通行条件を現地で確認する具体的対象を提示する | 自治体採用、時間削減、課題解決効果、人間テスト結果 |
 
 exact targetは、選択地物IDが同じ地域のhash照合済みgeometryに一致した場合だけ表示します。道路面の配布表記差（末尾 `-0` / `:0`）は実ID対応として扱い、描画側IDと対象IDを分けて保持します。共有URLは既存の親メッシュを明示的に保持し、未登録・別地域のIDをexactと推定しません。URLだけで復元した建物は、Area contextに高さ・階数がない場合「データなし」と表示し、モデルを再選択すると実属性を読みます。
+
+### 新しいAdvanced発表素材
+
+保存先は `docs/assets/judging-advanced-3d/`。前の2セットは上書きしていません。次の4枚は公開UIのnative 1920×1080の実画面で、合成・切り抜き・拡大はありません。
+
+| 画像 | 発表で伝えること |
+| --- | --- |
+| [01 · Advanced 3D Hero](assets/judging-advanced-3d/01-advanced-3d-hero.png) | 立体を読む目的、同じ地域の集計、建物・地形の位置関係 |
+| [02 · Advanced 3D + Urban Section](assets/judging-advanced-3d/02-advanced-3d-section.png) | 3D上のA–Bと同じ断面、建物・道路名・標高・距離の対応 |
+| [03 · Advanced 3D + Exact Target](assets/judging-advanced-3d/03-advanced-3d-exact-target.png) | 実際に選んだ建物の公式属性と、その建物の未確認3項目 |
+| [04 · Guided → Advanced](assets/judging-advanced-3d/04-guided-to-advanced.png) | 実際のGuidedからの移動後、同じ常団地前周辺を深掘りする画面 |
+
+[40秒・字幕なし原本](assets/judging-advanced-3d/city-gap-advanced-3d-clean.mp4) / [同じ原本からの字幕付き版](assets/judging-advanced-3d/city-gap-advanced-3d-captioned.mp4) / [字幕VTT](assets/judging-advanced-3d/captions.vtt) / [個別hash・出典・描画証拠manifest](assets/judging-advanced-3d/manifest.json)
+
+動画は1回収録した原本です。二尾周辺から常団地前周辺への実選択が1.093秒、Guided 3Dが3.444秒、Guided断面が6.365秒、詳細分析への実クリックが9.279秒、Advanced 3Dが11.267秒、実建物選択が19.993秒、Advanced断面が26.036秒、同じexact targetの確認が35.533秒。途中の画面遷移や読み込みを削除していません。収録は単調増加時計で40.0008365秒、全1,435取得フレームがnative 1920×1080。原本・字幕版の出力はいずれも40.000秒、1,200フレーム、H.264 / yuv420p / 30fps / 音声なしです。可変間隔の取得を30fpsへ正規化しており、静止holdの複製と余剰フレームのdropがあります。AI補間や拡大はありません。250ms間隔の実レンダラー/canvas観測で3D表示を確認できた割合は約89.65%で、連続全画素判定やcold-load性能を意味しません。
+
+1回目の収録と画像04は完了しましたが、その後の画像用ズームでstrict撮影条件の待機が完了しませんでした。原本・元の報告・画像04を保全し、別の新しい実ブラウザcontextで画像01〜03と親メッシュURL/390px確認だけを取得しました。再録画や条件フラグの書き換えはしていません。字幕調整前の版、取得フレーム、失敗時の一時記録も削除していません。
+
+既存のnative capture helperを使う追加driverは `frontend/scripts/capture-advanced-3d.mjs` です。収録時driverと、収録後に実測時刻に合わせた8字幕cue・以後の静止画操作を調整した納品driverは別のhashとしてmanifestへ記録しています。納品driverを使って過去の原本を収録したとは扱いません。素材commit自身のSHAは循環参照を避けてmanifestへ埋め込まず、immutableなraw URLを含む最終報告で確定します。
+
+公開版でも既存Guided spatial、Guided→Advanced、Public first-run、PLATEAU-native、5 viewport表示を通過し、予期しないconsole/page/request/HTTP診断は0でした。追加のAdvanced実建物選択、A–B、exact target、URL再読込、390px確認も通過しました。道路135面のID対応は実データを使うunit testで確認済みですが、この追加確認では3D画面上の道路直接クリックを成立させられず、手動ピック成功は主張しません。公開サービス・原本・字幕版・静止画はagentが確認したもので、利用者理解度や自治体受入れの検証ではありません。
 
 以下は変更せず保持する、以前のGuided 3Dと13秒補足素材の納品記録です。
 
