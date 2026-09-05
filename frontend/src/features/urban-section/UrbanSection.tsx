@@ -191,7 +191,7 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
         </p>
         <svg
           viewBox={`0 0 ${plot.viewWidth} 220`}
-          role="img"
+          role={guided ? "img" : "group"}
           tabIndex={readableSection ? 0 : undefined}
           aria-labelledby="section-title"
           aria-describedby={readableSection ? "section-description section-accessible-summary guided-section-keyboard-help" : "section-description"}
@@ -234,13 +234,13 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
           <g className="section-terrain-area" aria-hidden="true">
             {plot.terrainSegments.map((segment, index) => <path key={index} d={segment.area} />)}
           </g>
-          {!guided && <g className="section-planning" aria-label="都市計画帯">
+          {!guided && <g className="section-planning" role="group" aria-label="都市計画帯">
             {data.planning_bands.map((band) => <rect key={band.source_object_id} x={plot.x(band.start_distance_m)} y="184" width={Math.max(2, plot.x(band.end_distance_m) - plot.x(band.start_distance_m))} height="7"><title>{String(band.planning?.districts_and_zones ?? "都市計画属性")}</title></rect>)}
           </g>}
-          {!guided && <g className="section-hazard" aria-label="災害帯">
+          {!guided && <g className="section-hazard" role="group" aria-label="災害帯">
             {data.hazard_bands.map((band) => <rect key={band.source_object_id} x={plot.x(band.start_distance_m)} y="194" width={Math.max(2, plot.x(band.end_distance_m) - plot.x(band.start_distance_m))} height="7"><title>公式属性に記録された災害範囲</title></rect>)}
           </g>}
-          <g className="section-buildings" aria-label={guided ? undefined : "PLATEAU建物"} aria-hidden={guided ? true : undefined}>
+          <g className="section-buildings" role={guided ? undefined : "group"} aria-label={guided ? undefined : "PLATEAU建物"} aria-hidden={guided ? true : undefined}>
             {data.buildings.map((building) => {
               const height = typeof building.properties.measured_height_m === "number" ? building.properties.measured_height_m : null;
               const midpoint = (building.start_distance_m + building.end_distance_m) / 2;
@@ -270,7 +270,7 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
               ><title>{guided ? `${String(building.properties.usage ?? "用途不明")} · ${height === null ? "高さはデータなし" : `高さ${height}m`}` : `${building.source_object_id} · ${String(building.properties.usage ?? "用途不明")} · ${height === null ? "高さ不明（補完なし）" : `${height}m`}`}</title></rect>;
             })}
           </g>
-          <g className="section-roads" aria-label={guided ? undefined : "PLATEAU道路"} aria-hidden={guided ? true : undefined}>
+          <g className="section-roads" role={guided ? undefined : "group"} aria-label={guided ? undefined : "PLATEAU道路"} aria-hidden={guided ? true : undefined}>
             {data.roads.filter((road) => !guided || road.relation === "direct").map((road) => <path
               key={road.source_object_id}
               className={focusedDetail?.kind === "road" && focusedDetail.id === road.source_object_id ? "focused" : undefined}
@@ -278,10 +278,10 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
               d={`M${plot.x((road.start_distance_m + road.end_distance_m) / 2) - 4},180 h8 l-2,-8 h-4 z`}
             ><title>{String(road.properties.road_name ?? (guided ? "名称不明の道路" : road.source_object_id))}</title></path>)}
           </g>
-          {!guided && <g className="section-services" aria-label="施設位置">
+          {!guided && <g className="section-services" role="group" aria-label="施設位置">
             {data.service_locations.slice(0, 6).map((facility, index) => <g key={facility.source_object_id} transform={`translate(${plot.x(facility.start_distance_m)},${24 + index * 8})`}><circle r="2.5" />{readableSection ? <title>{`${String(facility.properties.name ?? facility.source_object_id)} · offset ${Math.round(facility.offset_distance_m)}m`}</title> : <text x="5" y="2">{`${String(facility.properties.name ?? facility.source_object_id)} · offset ${Math.round(facility.offset_distance_m)}m`}</text>}</g>)}
           </g>}
-          <g className="section-terrain" aria-label={guided ? undefined : "PLATEAU DEM TIN地形"} aria-hidden={guided ? true : undefined}>
+          <g className="section-terrain" role={guided ? undefined : "group"} aria-label={guided ? undefined : "PLATEAU DEM TIN地形"} aria-hidden={guided ? true : undefined}>
             {plot.terrainSegments.map((segment, index) => <path key={index} d={segment.line} />)}
           </g>
           {readableSection && <g className="section-road-annotations" aria-hidden="true">
@@ -308,7 +308,7 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
             <text className="focus-meta" x={focusedCallout.labelX + 8} y="100">{focusedCallout.relation}</text>
           </g>}
           {analysisLens === "service-pulse" && <text className="section-pulse-note" x="610" y="18">{guided ? "施設の位置は断面上への投影です。徒歩時間ではありません。" : "3D: experimental network距離 · 断面: 実施設のoffset投影（徒歩時間ではない）"}</text>}
-          {counterfactualState === "scenario" && <g className="section-counterfactual" aria-label={guided ? "現在と仮想地点を加えた条件の比較" : `Counterfactual comparison ${data.counterfactual.plan_id}`}>
+          {counterfactualState === "scenario" && <g className="section-counterfactual" role={guided ? undefined : "group"} aria-label={guided ? "現在と仮想地点を加えた条件の比較" : `Counterfactual comparison ${data.counterfactual.plan_id}`}>
             <rect className="affected-group" x={plot.x(0)} y="3" width={plot.x(plot.maxDistance) - plot.x(0)} height="12"><title>{data.counterfactual.building_group_count}棟に関連する500m集計値。建物固有の改善ではありません。</title></rect>
             <text x="42" y="12">{guided ? "変わるのは距離の関係です。建物・道路の形は変えていません" : "CHANGED RELATION · 建物/道路geometry固定"}</text>
             <line className="baseline" x1="664" x2="940" y1="8" y2="8" />

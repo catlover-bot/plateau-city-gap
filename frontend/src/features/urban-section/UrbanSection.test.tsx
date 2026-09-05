@@ -65,7 +65,10 @@ describe("readable Advanced Urban Section", () => {
       "data-annotation-overlap-count": 0,
     });
     expect(Number(view[0].props["data-road-annotation-count"])).toBeGreaterThan(0);
-    expect(view.find((item) => item.type === "svg")?.props.tabIndex).toBe(0);
+    expect(view.find((item) => item.type === "svg")?.props).toMatchObject({ role: "group", tabIndex: 0 });
+    for (const group of view.filter((item) => item.type === "g" && item.props["aria-label"])) {
+      expect(group.props.role).toBe("group");
+    }
     expect(view.filter((item) => item.props["data-section-building"])).toHaveLength(data.buildings.length);
     expect(view.filter((item) => item.props["data-section-road"])).toHaveLength(data.roads.length);
   });
@@ -124,9 +127,14 @@ describe("readable Advanced Urban Section", () => {
     expect(advanced[0].props.className).toBe("urban-section");
     expect(advanced[0].props["data-road-annotation-count"]).toBe(0);
     expect(advanced.find((item) => item.type === "svg")?.props.tabIndex).toBeUndefined();
+    expect(advanced.find((item) => item.type === "svg")?.props.role).toBe("group");
+    for (const group of render({ counterfactualState: "scenario" }).filter((item) => item.type === "g" && item.props["aria-label"])) {
+      expect(group.props.role).toBe("group");
+    }
     const guided = render({ mode: "guided", open: false });
     expect(guided[0].props.className).toBe("urban-section guided");
     expect(guided[0].props["data-ui-mode"]).toBe("guided");
+    expect(guided.find((item) => item.type === "svg")?.props.role).toBe("img");
     expect(guided.some((item) => item.props["aria-label"] === "都市断面を閉じる")).toBe(false);
     for (const building of guided.filter((item) => item.props["data-section-building"])) {
       expect(building.props["aria-hidden"]).toBe(true);
