@@ -133,6 +133,47 @@ describe("readable Advanced Urban Section", () => {
     expect(render({ mode: "guided", selection: { ...selection, id: "not-in-this-section" } })[0].props["data-selection-annotation-id"]).toBe("none");
   });
 
+  it.each([320, 390, 720, 919, 1050.2, 1480])("leaves a positive native-font gap in bounded focus callouts at %ipx", (width) => {
+    const beforeData = JSON.stringify(data);
+    hooks.values[2] = width;
+    const assertCalloutSpacing = (view: Element[]) => {
+      const callout = view.find((item) => item.props["data-section-focus-annotation"])!;
+      expect(callout).toBeDefined();
+      const children = elements(callout.props.children as ReactNode);
+      const box = children.find((item) => item.type === "rect")!;
+      const name = children.find((item) => item.props.className === "focus-name")!;
+      const detailRows = children.filter((item) => item.props.className === "focus-meta");
+      expect(name.props.y).toBe("69");
+      expect(detailRows.map((item) => Number(item.props.y))).toEqual([85, 103]);
+      // Native Chrome measured each unchanged 12px metadata row as a 16px box.
+      // An 18-unit baseline step leaves 2px at scale 1, not merely touching boxes.
+      const step = Number(detailRows[1].props.y) - Number(detailRows[0].props.y);
+      expect(step - 16).toBe(2);
+      expect(box.props).toMatchObject({ y: "55", height: "54" });
+      expect(Number(box.props.y) + Number(box.props.height)).toBe(109);
+      expect(Number(box.props.x)).toBeGreaterThanOrEqual(54);
+      expect(Number(box.props.x) + Number(box.props.width)).toBeLessThanOrEqual(width - 20);
+      expect(Number(box.props.y) + Number(box.props.height)).toBeLessThan(174);
+      expect(view[0].props["data-annotation-overlap-count"]).toBe(0);
+    };
+    for (const options of [{ mode: "guided" as const }, { readable: true }]) {
+      const target = {};
+      const onFocusPosition = vi.fn();
+      const initial = render({ ...options, onFocusPosition });
+      fire(initial.find((item) => item.type === "svg")!, "onKeyDown", { key: "ArrowRight", target, currentTarget: target, preventDefault: vi.fn() });
+      const transient = render({ ...options, onFocusPosition });
+      expect(transient.find((item) => item.props["data-section-focus-annotation"])?.props["data-section-annotation-selected"]).toBe(false);
+      assertCalloutSpacing(transient);
+      for (const relation of ["direct", "nearby"]) {
+        const building = data.buildings.find((item) => item.relation === relation)!;
+        const selected = render({ ...options, selection: { type: "building", id: building.source_object_id, city: "maizuru", urbanState: "2025", properties: {} } });
+        expect(selected[0].props["data-selection-annotation-id"]).toBe(building.source_object_id);
+        assertCalloutSpacing(selected);
+      }
+    }
+    expect(JSON.stringify(data)).toBe(beforeData);
+  });
+
   it("uses the measured container width and keeps legacy Advanced viewBox unchanged", () => {
     hooks.values[2] = 320;
     const view = render({ readable: true });

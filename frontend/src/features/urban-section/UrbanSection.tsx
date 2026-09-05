@@ -348,10 +348,10 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
           {readableSection && annotationDetail && focusedCallout && <g className={`section-focus-callout ${selectedDetail ? "selected" : "transient"}`} aria-hidden="true" data-section-focus-annotation="true" data-section-annotation-selected={Boolean(selectedDetail)}>
             <line x1={focusedCallout.anchorX} x2={focusedCallout.labelX + focusedCallout.labelWidth / 2} y1={focusedCallout.anchorY} y2="59" />
             <circle cx={focusedCallout.anchorX} cy={focusedCallout.anchorY} r="4" />
-            <rect x={focusedCallout.labelX} y="55" width={focusedCallout.labelWidth} height="51" rx="3" />
+            <rect x={focusedCallout.labelX} y="55" width={focusedCallout.labelWidth} height="54" rx="3" />
             <text className="focus-name" x={focusedCallout.labelX + 8} y="69">{annotationLabel}</text>
             <text className="focus-meta" x={focusedCallout.labelX + 8} y="85">{focusedCallout.meta}</text>
-            <text className="focus-meta" x={focusedCallout.labelX + 8} y="100">{focusedCallout.relation}</text>
+            <text className="focus-meta" x={focusedCallout.labelX + 8} y="103">{focusedCallout.relation}</text>
           </g>}
           {analysisLens === "service-pulse" && <text className="section-pulse-note" x="610" y="18">{guided ? "施設の位置は断面上への投影です。徒歩時間ではありません。" : "3D: experimental network距離 · 断面: 実施設のoffset投影（徒歩時間ではない）"}</text>}
           {counterfactualState === "scenario" && <g className="section-counterfactual" role={guided ? undefined : "group"} aria-label={guided ? "現在と仮想地点を加えた条件の比較" : `Counterfactual comparison ${data.counterfactual.plan_id}`}>

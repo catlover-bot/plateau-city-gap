@@ -67,6 +67,18 @@ async function layout(page, label) {
     });
     const textOverlaps = texts.flatMap((a, index) => texts.slice(index + 1).filter((b) => overlap(a.rect, b.rect) > 1).map((b) => [a.text, b.text]));
     const clippedTexts = texts.filter((item) => Object.values(item.containment_margins_css_px).some((margin) => margin < 0));
+    const callouts = [...(section?.querySelectorAll(".section-focus-callout") ?? [])].filter(visible).map((node) => {
+      const box = rect(node.querySelector("rect"));
+      const matrix = node.getScreenCTM();
+      const rows = [...node.querySelectorAll("text")].map((text) => {
+        const row = rect(text);
+        return { text: text.textContent, class: text.getAttribute("class"), rect: row,
+          containment_margins_css_px: { left: row.x - box.x, right: box.right - row.right, top: row.y - box.y, bottom: box.bottom - row.bottom } };
+      });
+      const metadata = rows.filter((row) => row.class === "focus-meta");
+      return { rect: box, rows, screen_ctm: { a: matrix.a, b: matrix.b, c: matrix.c, d: matrix.d, e: matrix.e, f: matrix.f },
+        metadata_row_count: metadata.length, metadata_relation_gap_css_px: metadata.length === 2 ? metadata[1].rect.y - metadata[0].rect.bottom : null };
+    });
     let publicHeadingWord = null;
     if (root.matches(".public-area")) {
       const heading = root.querySelector("h1");
@@ -100,7 +112,7 @@ async function layout(page, label) {
       reduced_motion: matchMedia("(prefers-reduced-motion: reduce)").matches,
       public_heading_word: publicHeadingWord,
       active_motion: activeMotion, small_controls: smallControls, panel_overlaps: panelOverlaps,
-      section: section && visible(section) ? { pack: section.dataset.packId, declared_overlap_count: Number(section.dataset.annotationOverlapCount), svg_rect: svgRect, texts, text_overlaps: textOverlaps, clipped_texts: clippedTexts,
+      section: section && visible(section) ? { pack: section.dataset.packId, declared_overlap_count: Number(section.dataset.annotationOverlapCount), svg_rect: svgRect, texts, text_overlaps: textOverlaps, clipped_texts: clippedTexts, callouts,
         hidden_texts: allTextNodes.filter((node) => !visible(node)).map((node) => node.textContent),
         required_labels: { endpoint_a: [...section.querySelectorAll('[data-section-endpoint="A"]')].some(visible), endpoint_b: [...section.querySelectorAll('[data-section-endpoint="B"]')].some(visible),
           elevation_axis: [...section.querySelectorAll("svg text.axis-title")].some((node) => visible(node) && node.textContent.includes("標高")), distance_axis: [...section.querySelectorAll("svg text.axis-title")].some((node) => visible(node) && node.textContent.includes("距離")) } } : null,
@@ -119,6 +131,10 @@ async function layout(page, label) {
     check(evidence.section.clipped_texts.length === 0, `${label}: all Section text bounds are contained by its SVG`, evidence.section.clipped_texts);
     check(evidence.section.hidden_texts.length === 0, `${label}: Section text is not hidden to satisfy containment`, evidence.section.hidden_texts);
     check(Object.values(evidence.section.required_labels).every(Boolean), `${label}: visible Section A/B and both axis labels retained`, evidence.section.required_labels);
+    check(evidence.section.callouts.length > 0 && evidence.section.callouts.every((callout) => callout.metadata_row_count === 2 && callout.metadata_relation_gap_css_px > 0),
+      `${label}: Section metadata and relation have positive rendered separation`, evidence.section.callouts);
+    check(evidence.section.callouts.every((callout) => callout.rows.length === 3 && callout.rows.every((row) => Object.values(row.containment_margins_css_px).every((margin) => margin >= 0))),
+      `${label}: all callout text is contained by its own background`, evidence.section.callouts);
   }
 }
 
@@ -184,45 +200,129 @@ async function keyboard(page, label) {
   check(records.every((item) => item.visible_focus && item.in_view && item.focus_not_obscured), `${label}: visible unobscured keyboard focus`, records);
 }
 
-async function desktopSectionLayoutReady(page, label) {
+async function desktopSectionLayoutReady(page, label, deadline) {
+  const remaining = () => {
+    const milliseconds = Math.ceil(deadline - performance.now());
+    if (milliseconds <= 0) throw new Error(`${label}: shared 60s Section readiness budget exhausted`);
+    return milliseconds;
+  };
   const evidence = () => page.evaluate(() => {
     const stage = document.querySelector(".guided-map-stage");
     const view = stage?.querySelector(".guided-3d-view");
     const dock = stage?.querySelector(".guided-section-dock");
+    const canvas = view?.querySelector(".cesium-widget canvas");
     const rect = (node) => {
       const box = node?.getBoundingClientRect();
       return box ? { x: box.x, y: box.y, width: box.width, height: box.height, bottom: box.bottom } : null;
     };
+    const viewBox = view?.getBoundingClientRect();
+    const dockBox = dock?.getBoundingClientRect();
+    const canvasBox = canvas?.getBoundingClientRect();
     return { stage_expanded: stage?.dataset.sectionExpanded, map_mode: stage?.dataset.guidedMapMode,
-      view: rect(view), dock: rect(dock),
+      view: rect(view), dock: rect(dock), canvas: rect(canvas),
+      view_inert: view?.inert, view_aria_hidden: view?.getAttribute("aria-hidden"),
+      predicates: {
+        expanded: stage?.dataset.sectionExpanded === "true", map3d: stage?.dataset.guidedMapMode === "plateau3d",
+        view_visible: Boolean(view?.checkVisibility({ checkVisibilityCSS: true })),
+        dock_visible: Boolean(dock?.checkVisibility({ checkVisibilityCSS: true })),
+        accessible_scene: Boolean(view && !view.inert && view.getAttribute("aria-hidden") !== "true"),
+        positive_view: Boolean(viewBox && viewBox.width > 0 && viewBox.height > 0),
+        positive_dock: Boolean(dockBox && dockBox.width > 0 && dockBox.height > 0),
+        separate_regions: Boolean(viewBox && dockBox && viewBox.bottom <= dockBox.y),
+        canvas_contained: Boolean(viewBox && canvasBox && canvasBox.width > 0 && canvasBox.height > 0
+          && canvasBox.x >= viewBox.x && canvasBox.right <= viewBox.right && canvasBox.y >= viewBox.y && canvasBox.bottom <= viewBox.bottom),
+      },
+      data_readiness: { ...view?.querySelector("[data-building-source][data-local-dem]")?.dataset },
       credit_rects: [...(view?.querySelectorAll('a[href="https://cesium.com/"]') ?? [])].map(rect) };
   });
   const immediate = await evidence();
   const started = performance.now();
-  const readiness = { immediate, settled: null, ready_wait_ms: null };
+  const readiness = { immediate, settled: null, ready_wait_ms: null, shared_budget_remaining_ms: remaining() };
   report.records.push({ label, desktop_section_layout: readiness });
-  // A mounted Section can be ready before the desktop split-layout update.
-  // Require its actual non-overlapping current layout, without exempting any
-  // credit/control from the subsequent visible keyboard-focus assertions.
-  await page.waitForFunction(() => {
-    const stage = document.querySelector(".guided-map-stage");
-    const view = stage?.querySelector(".guided-3d-view");
-    const dock = stage?.querySelector(".guided-section-dock");
-    const viewBox = view?.getBoundingClientRect();
-    const dockBox = dock?.getBoundingClientRect();
-    return stage?.dataset.sectionExpanded === "true" && stage.dataset.guidedMapMode === "plateau3d"
-      && view?.checkVisibility({ checkVisibilityCSS: true }) && dock?.checkVisibility({ checkVisibilityCSS: true })
-      && viewBox.width > 0 && viewBox.height > 0 && dockBox.width > 0 && dockBox.height > 0
-      && viewBox.bottom <= dockBox.y;
-  }, null, { timeout: 5_000 });
-  await waitForReal3D(page, 60_000);
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  // Do not interact with Section while the previous full-height scene is still
+  // being presented. Renderer, current split geometry, and post-focus renderer
+  // checks share ONE finite stage budget, including font/frame waits.
+  let deadlineTimer;
+  try {
+    await Promise.race([
+      (async () => {
+        await waitForReal3D(page, remaining());
+        await page.waitForFunction(() => {
+          const stage = document.querySelector(".guided-map-stage");
+          const view = stage?.querySelector(".guided-3d-view");
+          const dock = stage?.querySelector(".guided-section-dock");
+          const canvas = view?.querySelector(".cesium-widget canvas");
+          const viewBox = view?.getBoundingClientRect();
+          const dockBox = dock?.getBoundingClientRect();
+          const canvasBox = canvas?.getBoundingClientRect();
+          return stage?.dataset.sectionExpanded === "true" && stage.dataset.guidedMapMode === "plateau3d"
+            && view?.checkVisibility({ checkVisibilityCSS: true }) && dock?.checkVisibility({ checkVisibilityCSS: true })
+            && !view.inert && view.getAttribute("aria-hidden") !== "true"
+            && viewBox.width > 0 && viewBox.height > 0 && dockBox.width > 0 && dockBox.height > 0
+            && viewBox.bottom <= dockBox.y && canvasBox?.width > 0 && canvasBox.height > 0
+            && canvasBox.x >= viewBox.x && canvasBox.right <= viewBox.right
+            && canvasBox.y >= viewBox.y && canvasBox.bottom <= viewBox.bottom;
+        }, null, { timeout: remaining() });
+        await waitForReal3D(page, remaining());
+        await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      })(),
+      new Promise((_, reject) => { deadlineTimer = setTimeout(() => reject(new Error(`${label}: shared 60s Section readiness budget exhausted`)), remaining()); }),
+    ]);
+  } finally { clearTimeout(deadlineTimer); }
   const settled = await evidence();
   readiness.settled = settled;
   readiness.ready_wait_ms = Math.round(performance.now() - started);
-  check(settled.stage_expanded === "true" && settled.map_mode === "plateau3d"
-    && settled.view?.height > 0 && settled.dock?.height > 0 && settled.view.bottom <= settled.dock.y,
+  readiness.shared_budget_remaining_ms = remaining();
+  check(Object.values(settled.predicates).every(Boolean),
   `${label}: desktop Section and ready 3D occupy separate visible regions`, settled);
+}
+
+async function sectionPaintReady(page, label, deadline) {
+  const remaining = () => {
+    const milliseconds = Math.ceil(deadline - performance.now());
+    if (milliseconds <= 0) throw new Error(`${label}: shared 60s Section readiness budget exhausted`);
+    return milliseconds;
+  };
+  const evidence = () => page.evaluate(() => {
+    const section = document.querySelector(".urban-section");
+    const background = section?.querySelector(".section-focus-callout > rect");
+    const box = background?.getBoundingClientRect();
+    return { focused_object_id: section?.getAttribute("data-focused-object-id"),
+      selected_annotation_id: section?.getAttribute("data-selection-annotation-id"),
+      fonts: document.fonts.status, rect_dom_x: background?.getAttribute("x"),
+      rect_computed_x: background ? getComputedStyle(background).x : null,
+      rect: box ? { x: box.x, y: box.y, width: box.width, height: box.height } : null,
+      active_animations: section?.getAnimations({ subtree: true }).filter((animation) => animation.pending || animation.playState === "running").length ?? 0 };
+  });
+  const started = performance.now();
+  const readiness = { immediate: await evidence(), settled: null, ready_wait_ms: null, shared_budget_remaining_ms: remaining() };
+  report.records.push({ label, section_paint: readiness });
+  let deadlineTimer;
+  try {
+    await Promise.race([
+      (async () => {
+        // Even the existing reduced-motion 0.01ms transition needs a presented
+        // frame. Wait for paint/animations, NOT for containment to become true.
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+          await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        });
+        await page.waitForFunction(() => {
+          const section = document.querySelector(".urban-section");
+          return document.fonts.status === "loaded" && section?.checkVisibility({ checkVisibilityCSS: true })
+            && section.getAnimations({ subtree: true }).every((animation) => !animation.pending && animation.playState !== "running");
+        }, null, { timeout: remaining() });
+        await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      })(),
+      new Promise((_, reject) => { deadlineTimer = setTimeout(() => reject(new Error(`${label}: shared 60s Section readiness budget exhausted`)), remaining()); }),
+    ]);
+  } finally { clearTimeout(deadlineTimer); }
+  readiness.settled = await evidence();
+  readiness.ready_wait_ms = Math.round(performance.now() - started);
+  readiness.shared_budget_remaining_ms = remaining();
+  check(readiness.immediate.focused_object_id === readiness.settled.focused_object_id
+    && readiness.immediate.selected_annotation_id === readiness.settled.selected_annotation_id,
+  `${label}: Section paint settles without changing focused or selected identity`, readiness);
 }
 
 async function audit(experience, width) {
@@ -280,12 +380,17 @@ async function audit(experience, width) {
     await keyboard(page, `${label}-closed`);
     if (experience !== "public") {
       phase = "user-opens-section";
+      const sectionReadyDeadline = performance.now() + 60_000;
       await page.getByRole("button", { name: experience === "guided" ? "街の断面" : "A–B断面", exact: true }).click();
       const section = page.locator(`.urban-section[data-ui-mode="${experience}"][data-transect-ready="true"]`);
       await section.waitFor();
       if (experience === "guided" && await page.evaluate(() => matchMedia("(max-width: 900px)").matches)) {
         const hiddenScene = await page.locator(".guided-3d-view").evaluate((node) => ({ inert: node.inert, aria_hidden: node.getAttribute("aria-hidden") }));
         check(hiddenScene.inert && hiddenScene.aria_hidden === "true", `${label}: replaced 3D scene is not keyboard reachable`, hiddenScene);
+      }
+      const desktopGuidedSection = experience === "guided" && await page.evaluate(() => !matchMedia("(max-width: 900px)").matches);
+      if (desktopGuidedSection) {
+        await desktopSectionLayoutReady(page, `${label}-section-before-keyboard`, sectionReadyDeadline);
       }
       const svg = section.locator("svg");
       await svg.focus();
@@ -307,9 +412,10 @@ async function audit(experience, width) {
         check(selectedUrl.searchParams.get("parentMesh") === "533513314" && selectedUrl.searchParams.get("selection") === id, `${label}: exact object URL parent`, selectedUrl.href);
       }
       phase = "ready-section";
-      if (experience === "guided" && await page.evaluate(() => !matchMedia("(max-width: 900px)").matches)) {
-        await desktopSectionLayoutReady(page, `${label}-section`);
+      if (desktopGuidedSection) {
+        await desktopSectionLayoutReady(page, `${label}-section`, sectionReadyDeadline);
       }
+      await sectionPaintReady(page, `${label}-section`, sectionReadyDeadline);
       await layout(page, `${label}-section`);
       await keyboard(page, `${label}-section`);
       if (experience === "guided") {
