@@ -24,14 +24,14 @@
 .urban-section:is(.guided, .readable) > header strong { font-size: 13px; }
 .urban-section:is(.guided, .readable) > header .guided-section-facts { justify-self: end; }
 .urban-section:is(.guided, .readable) > header .guided-section-facts dt,
-.urban-section:is(.guided, .readable) > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
-.urban-section:is(.guided, .readable) svg { height: 162px; cursor: crosshair; }
+.urban-section:is(.guided, .readable) > header .guided-section-facts dd { font-family: inherit; font-size: 12px; }
+.urban-section:is(.guided, .readable) svg { height: 220px; min-height: 220px; cursor: crosshair; }
 .urban-section:is(.guided, .readable) svg:focus-visible { outline: 3px solid var(--cg-focus-ring); outline-offset: -4px; }
-.urban-section:is(.guided, .readable) footer { font-family: inherit; font-size: 8px; }
+.urban-section:is(.guided, .readable) footer { font-family: inherit; font-size: 12px; }
 .urban-section:is(.guided, .readable) .guided-section-footer {
   justify-content: space-between;
   padding: 0 14px;
-  font-size: 11px;
+  font-size: 12px;
   gap: 16px;
 }
 .section-visual-legend { display: flex; align-items: center; gap: 14px; }
@@ -43,9 +43,10 @@
 .guided-section-source { color: var(--cg-text-secondary); white-space: nowrap; }
 .urban-section svg { display: block; width: 100%; height: 178px; background: var(--cg-bg-muted); }
 .section-load-message { margin: 16px; font-size: 10px; line-height: 1.7; }
+.urban-section:is(.guided, .readable) .section-load-message { font-size: 14px; }
 .section-load-message.error { color: var(--cg-error); }
 .section-grid line { stroke: var(--cg-border); stroke-width: .8; }
-.urban-section:is(.guided, .readable) .section-axis text { fill: var(--cg-text-secondary); font-family: var(--cg-font); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.urban-section:is(.guided, .readable) .section-axis text { fill: var(--cg-text-secondary); font-family: var(--cg-font); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .urban-section:is(.guided, .readable) .section-axis text.axis-title { fill: var(--cg-text-primary); font-size: 12px; font-weight: 750; }
 .urban-section:is(.guided, .readable) .section-axis text.endpoint { fill: var(--cg-transect-endpoint); font-size: 16px; font-weight: 900; }
 .urban-section:is(.guided, .readable) .section-axis .endpoint-dot { fill: var(--cg-transect-endpoint); stroke: var(--cg-transect-halo); stroke-width: 2; }
@@ -59,13 +60,18 @@
 .section-roads path { fill: var(--cg-transect-road); stroke: var(--cg-transect-road-outline); stroke-width: 1.5; }
 .urban-section:is(.guided, .readable) .section-buildings rect { fill: var(--cg-transect-building); stroke: var(--cg-transect-building-outline); stroke-width: 1; }
 .urban-section:is(.guided, .readable) .section-buildings rect.nearby { fill: color-mix(in srgb, var(--cg-transect-building) 18%, transparent); stroke: var(--cg-transect-building-outline); stroke-dasharray: 3 2; }
-.urban-section:is(.guided, .readable) .section-buildings rect.selected,
-.urban-section:is(.guided, .readable) .section-buildings rect.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2; }
+.urban-section:is(.guided, .readable) .section-buildings rect.focused:not(.selected) { stroke: var(--cg-brand-strong); stroke-width: 2; }
+.urban-section:is(.guided, .readable) .section-buildings rect.selected { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2; }
 .urban-section:is(.guided, .readable) .section-roads path { fill: var(--cg-transect-road); stroke: var(--cg-transect-road-outline); stroke-width: 1.8; }
-.urban-section:is(.guided, .readable) .section-roads path.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2.2; }
+.urban-section:is(.guided, .readable) .section-roads path.focused:not(.selected) { stroke: var(--cg-brand-strong); stroke-width: 2.2; }
+.urban-section:is(.guided, .readable) .section-roads path.selected { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2.2; }
 .urban-section.readable > header { min-height: 48px; height: auto; grid-template-columns: minmax(180px, 250px) 1fr auto; }
 .urban-section.readable > header button { min-width: 64px; min-height: 44px; font-size: 12px; font-weight: 700; }
-.urban-section.readable .section-buildings rect:focus-visible { stroke: var(--cg-focus-ring); stroke-width: 3; }
+.urban-section.readable .section-buildings rect:focus-visible { stroke: var(--cg-brand-strong); stroke-width: 3; }
+.section-keyboard-focus { pointer-events: none; }
+.section-keyboard-focus rect { fill: none; vector-effect: non-scaling-stroke; }
+.section-keyboard-focus .focus-halo { stroke: var(--cg-transect-halo); stroke-width: 5; }
+.section-keyboard-focus .focus-outline { stroke: var(--cg-brand-strong); stroke-width: 2; }
 .urban-section.readable .guided-section-keyboard-help { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .section-road-annotations line { stroke: var(--cg-brand-soft); stroke-width: 1; stroke-dasharray: 2 2; }
 .section-road-annotations text {
@@ -83,6 +89,10 @@
 .section-focus-callout text { font-family: var(--cg-font); text-anchor: start; }
 .section-focus-callout .focus-name { fill: var(--cg-target-strong); font-size: 13px; font-weight: 800; }
 .section-focus-callout .focus-meta { fill: var(--cg-text-primary); font-size: 12px; font-weight: 600; }
+.section-focus-callout.transient > line,
+.section-focus-callout.transient > rect { stroke: var(--cg-brand-strong); stroke-dasharray: 3 2; }
+.section-focus-callout.transient > circle,
+.section-focus-callout.transient .focus-name { fill: var(--cg-brand-strong); }
 .section-services circle { fill: var(--cg-brand); }
 .section-services text { fill: var(--cg-text-primary); font: 6px var(--cg-mono); }
 .section-text-summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }

@@ -1,4 +1,5 @@
 import type { SectionData, SectionRelation, TerrainSample } from "./sectionTypes";
+import type { SpatialSelection } from "../../state/spatial/types";
 
 export const SECTION_VIEW_WIDTH = 1000;
 export const SECTION_PLOT_LEFT = 38;
@@ -19,6 +20,7 @@ export interface SectionPlot {
   minimumElevation: number;
   maximumElevation: number;
   viewWidth: number;
+  plotLeft: number;
   x(distance: number): number;
   y(elevation: number): number;
   terrainSegments: TerrainSegment[];
@@ -78,7 +80,7 @@ function terrainSegments(
   return segments;
 }
 
-export function buildSectionPlot(data: SectionData, compact: boolean): SectionPlot {
+export function buildSectionPlot(data: SectionData, compact: boolean, containerWidth?: number): SectionPlot {
   const covered = data.terrain_samples.filter(
     (sample): sample is CoveredTerrainSample => sample.elevation_m !== null,
   );
@@ -100,8 +102,10 @@ export function buildSectionPlot(data: SectionData, compact: boolean): SectionPl
     ...covered.map((sample) => sample.elevation_m),
   );
   const elevationSpan = Math.max(maximumBuildingTop - minimumElevation, 20);
-  const viewWidth = compact ? 390 : SECTION_VIEW_WIDTH;
-  const x = (distance: number) => SECTION_PLOT_LEFT + distance / maxDistance * (viewWidth - 58);
+  const measured = typeof containerWidth === "number" && Number.isFinite(containerWidth) && containerWidth > 0;
+  const viewWidth = measured ? containerWidth : compact ? 390 : SECTION_VIEW_WIDTH;
+  const plotLeft = measured ? 54 : SECTION_PLOT_LEFT;
+  const x = (distance: number) => plotLeft + distance / maxDistance * (viewWidth - plotLeft - SECTION_PLOT_RIGHT_GUTTER);
   const y = (elevation: number) => SECTION_TERRAIN_BOTTOM
     - (elevation - minimumElevation) / elevationSpan * (SECTION_TERRAIN_BOTTOM - SECTION_TERRAIN_TOP);
   const firstCovered = data.terrain_samples.find((sample) => sample.elevation_m !== null);
@@ -112,11 +116,38 @@ export function buildSectionPlot(data: SectionData, compact: boolean): SectionPl
     minimumElevation,
     maximumElevation,
     viewWidth,
+    plotLeft,
     x,
     y,
     terrainSegments: terrainSegments(data.terrain_samples, x, y),
     endpointAY: y(firstCovered?.elevation_m ?? minimumElevation),
     endpointBY: y(lastCovered?.elevation_m ?? minimumElevation),
+  };
+}
+
+/** A selected annotation exists only for an exact object recorded in this section. */
+export function selectedSectionObject(data: SectionData, selection: SpatialSelection | null): SectionFocusDetail | null {
+  if (!selection || (selection.type !== "building" && selection.type !== "road")) return null;
+  const kind = selection.type;
+  const rendererId = kind === "road" && typeof selection.properties?.renderer_road_id === "string"
+    ? selection.properties.renderer_road_id : null;
+  const ids = [selection.id, rendererId, kind === "road" ? selection.id.replace(/:(\d+)$/, "-$1") : null];
+  const relation = (kind === "building" ? data.buildings : data.roads).find((item) => ids.includes(item.source_object_id));
+  if (!relation) return null;
+  const distanceM = (relation.start_distance_m + relation.end_distance_m) / 2;
+  const sample = data.terrain_samples.reduce<TerrainSample | null>((best, item) => (
+    !best || Math.abs(item.distance_m - distanceM) < Math.abs(best.distance_m - distanceM) ? item : best
+  ), null);
+  return {
+    id: relation.source_object_id,
+    kind,
+    kindLabel: kind === "road" ? "道路" : "建物",
+    label: kind === "road" ? String(relation.properties.road_name ?? "名称不明の道路")
+      : String(relation.properties.usage_label ?? relation.properties.usage ?? "用途不明の建物"),
+    distanceM,
+    elevationM: sample?.elevation_m ?? null,
+    relation: relation.relation,
+    offsetDistanceM: relation.offset_distance_m,
   };
 }
 
@@ -171,12 +202,13 @@ export function buildSectionFocusCallout(
     ? "直接交差"
     : `断面から約${Math.round(detail.offsetDistanceM)}m`;
   const labelWidth = Math.min(
+    plot.viewWidth - plot.plotLeft - SECTION_PLOT_RIGHT_GUTTER,
     compact ? 210 : 250,
     Math.max(156, measureName(detail.label) + 18, measureMeta(meta) + 16, measureMeta(relation) + 16),
   );
   const labelX = Math.min(
     plot.viewWidth - SECTION_PLOT_RIGHT_GUTTER - labelWidth,
-    Math.max(SECTION_PLOT_LEFT, anchorX - labelWidth / 2),
+    Math.max(plot.plotLeft, anchorX - labelWidth / 2),
   );
   const anchorY = detail.elevationM === null ? SECTION_TERRAIN_BOTTOM : plot.y(detail.elevationM);
   return { anchorX, anchorY, labelX, labelWidth, meta, relation };
@@ -191,7 +223,7 @@ export function sectionSampleIndexAtViewX(
     0,
     Math.min(
       plot.maxDistance,
-      (viewX - SECTION_PLOT_LEFT) / (plot.viewWidth - 58) * plot.maxDistance,
+      (viewX - plot.plotLeft) / (plot.viewWidth - plot.plotLeft - SECTION_PLOT_RIGHT_GUTTER) * plot.maxDistance,
     ),
   );
   return data.terrain_samples.reduce((bestIndex, candidate, index) => (

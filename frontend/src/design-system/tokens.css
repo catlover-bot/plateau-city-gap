@@ -104,5 +104,7 @@
 * { box-sizing: border-box; }
 button, select, input { font: inherit; }
 button { color: inherit; }
-:focus-visible { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; box-shadow: 0 0 0 7px var(--cg-text-primary) !important; }
+/* Programmatic story-heading focus is not an interactive control. Keep the full
+   keyboard ring on buttons, links, inputs, disclosures and focusable graphics. */
+:focus-visible:not(h1[tabindex="-1"]) { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; box-shadow: 0 0 0 7px var(--cg-text-primary) !important; }
 ::selection { background: var(--cg-area-selected-fill); color: var(--cg-text-primary); }

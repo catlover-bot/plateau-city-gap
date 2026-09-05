@@ -22,7 +22,7 @@
 
 .public-brand,
 .public-advanced-link {
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   background: transparent;
   color: var(--cg-brand-strong);
@@ -183,6 +183,8 @@
   right: 12px;
 }
 
+.public-map-stage .maplibregl-ctrl-group button { width: 44px; height: 44px; }
+
 .public-map-stage .analytical-map-shell[data-map-render-state="degraded"]::after {
   position: absolute;
   right: 12px;
@@ -245,10 +247,10 @@
 }
 
 .public-area-content h1:focus {
-  outline: none !important;
-  box-shadow: inset 3px 0 var(--cg-brand-soft);
-  padding-left: 12px;
+  outline: none;
 }
+
+.public-area :is(button, a, input, select, summary, h1) { scroll-margin-block: 76px; }
 
 .public-area-content h2 {
   color: var(--cg-brand-strong);
@@ -266,7 +268,7 @@
   line-height: 1.7;
 }
 
-.public-intro h1 { font-size: clamp(32px, 2.25vw, 36px); }
+.public-intro h1 { font-size: clamp(26px, 2vw, 30px); line-height: 1.5; text-wrap: balance; }
 
 .public-primary,
 .public-secondary,
@@ -730,23 +732,28 @@
 }
 
 @media (max-width: 900px) {
+  .public-area { height: auto; min-height: 100dvh; overflow: visible; }
+  .public-header { position: sticky; top: 0; min-height: 52px; }
   .public-area-body {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(250px, 42dvh) minmax(0, 1fr);
+    grid-template-rows: minmax(250px, 42svh) auto;
+    overflow: visible;
   }
 
   .public-area-body.step-result,
   .public-area-body.step-target {
-    grid-template-rows: minmax(190px, 30dvh) minmax(0, 1fr);
+    grid-template-rows: minmax(220px, 35svh) auto;
   }
 
   .public-area-panel {
+    overflow: visible;
     border-top: 1px solid #aeb7b2;
     border-left: 0;
   }
 
   .public-area-content {
     padding: 22px;
+    overflow: visible;
   }
 }
 
@@ -765,12 +772,12 @@
   }
 
   .public-area-body {
-    grid-template-rows: minmax(250px, 42dvh) minmax(0, 1fr);
+    grid-template-rows: minmax(250px, 42svh) auto;
   }
 
   .public-area-body.step-result,
   .public-area-body.step-target {
-    grid-template-rows: minmax(180px, 30dvh) minmax(0, 1fr);
+    grid-template-rows: minmax(220px, 35svh) auto;
   }
 
   .public-map-area-badge,
@@ -862,9 +869,9 @@
   min-height: 60px;
   margin-top: 18px;
   padding: 12px 14px;
-  border: 1px solid var(--cg-brand-strong);
+  border: 1px solid var(--cg-border-strong);
   border-radius: var(--cg-radius);
-  background: var(--cg-brand-pale);
+  background: var(--cg-bg-panel);
   color: var(--cg-brand-strong);
   font-size: 15px;
   font-weight: 750;

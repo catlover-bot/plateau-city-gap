@@ -22,6 +22,17 @@ const baseUrl = parameters.get("--url") ?? "http://127.0.0.1:4173/plateau-city-g
 const outputDirectory = path.resolve(process.cwd(), parameters.get("--output") ?? "../analysis/outputs/real/advanced-captures");
 const diagnosticDirectory = path.resolve(process.cwd(), parameters.get("--diagnostics") ?? "../analysis/outputs/real/visual-readiness-failures");
 const only = parameters.get("--only") ?? null;
+const screenshotsEnabled = parameters.get("--screenshots") !== "false";
+if (!screenshotsEnabled) {
+  const outsideRepository = (directory) => {
+    const relative = path.relative(repositoryRoot, directory);
+    return relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative);
+  };
+  if (!only || !parameters.has("--output") || !parameters.has("--diagnostics")
+      || !outsideRepository(outputDirectory) || !outsideRepository(diagnosticDirectory)) {
+    throw new Error("Readiness-only checks require --only and explicit output/diagnostic directories outside the repository");
+  }
+}
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? chromium.executablePath();
 const repositoryHead = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim();
 const renderSourceCommit = process.env.CITYGAP_RENDER_SOURCE_COMMIT ?? repositoryHead;
@@ -261,8 +272,8 @@ for (const specification of scenes) {
       })
       : { globeHidden: false, incompleteFallbackHidden: false, fastStartVisible: false };
     const target = path.join(outputDirectory, `${specification.id}.png`);
-    await page.screenshot({ path: target, fullPage: false, animations: "disabled", timeout: 180_000 });
-    const captureBytes = await readFile(target);
+    if (screenshotsEnabled) await page.screenshot({ path: target, fullPage: false, animations: "disabled", timeout: 180_000 });
+    const captureBytes = screenshotsEnabled ? await readFile(target) : null;
     const runtimeMetrics = await page.evaluate(() => {
       const resources = performance.getEntriesByType("resource");
       const b3dm = resources.filter((entry) => entry.name.endsWith(".b3dm"));
@@ -340,15 +351,15 @@ for (const specification of scenes) {
       runtime_metrics: runtimeMetrics,
       capture_wall_time_ms: Date.now() - captureStartedAt,
       capture_stabilization: captureStabilization,
-      capture_sha256: sha256(captureBytes),
-      capture_bytes: captureBytes.byteLength,
+      capture_sha256: captureBytes ? sha256(captureBytes) : null,
+      capture_bytes: captureBytes?.byteLength ?? 0,
       incomplete_capture_rejection: {
         fast_start_15_rejected: specification.requirePack,
         terrain_fallback_rejected: specification.mode === "plateau3d",
         empty_section_rejected: Boolean(specification.requireSection),
         external_stream_timeout_nonblocking: specification.mode === "plateau3d",
       },
-      capture_status: "complete",
+      capture_status: screenshotsEnabled ? "complete" : "readiness-only",
     });
   } catch (error) {
     failed = true;
@@ -408,12 +419,12 @@ if (failed) {
   };
   await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
   const pngFiles = (await readdir(outputDirectory)).filter((name) => name.endsWith(".png"));
-  if (pngFiles.length !== manifestCaptures.length) throw new Error("Current screenshot directory contains stale or missing PNG files");
-  for (const capture of manifestCaptures) {
+  if (pngFiles.length !== (screenshotsEnabled ? manifestCaptures.length : 0)) throw new Error("Current screenshot directory contains stale or missing PNG files");
+  for (const capture of screenshotsEnabled ? manifestCaptures : []) {
     const filename = path.join(outputDirectory, `${capture.capture_id}.png`);
     if ((await stat(filename)).size !== capture.capture_bytes || await sha256File(filename) !== capture.capture_sha256) {
       throw new Error(`Screenshot integrity mismatch: ${capture.capture_id}`);
     }
   }
-  process.stdout.write(`${captures.length} strict current captures written to ${outputDirectory}\n`);
+  process.stdout.write(`${captures.length} strict current ${screenshotsEnabled ? "captures" : "readiness-only checks"} written to ${outputDirectory}\n`);
 }

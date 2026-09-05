@@ -3,6 +3,7 @@ import {
   buildSectionFocusCallout,
   buildSectionPlot,
   nearestSectionObject,
+  selectedSectionObject,
   sectionSampleIndexAtViewX,
 } from "./sectionLayout";
 import type { SectionData } from "./sectionTypes";
@@ -94,5 +95,45 @@ describe("urban section plot layout", () => {
     const data = sectionFixture();
     const plot = buildSectionPlot(data, true);
     expect(sectionSampleIndexAtViewX(data, plot, plot.x(30))).toBe(3);
+  });
+
+  it.each([320, 390, 640, 720, 919, 1050.2, 1480])("uses %ipx container coordinates without shrinking text or changing data", (width) => {
+    const data = sectionFixture();
+    const before = JSON.stringify(data);
+    const plot = buildSectionPlot(data, width < 600, width);
+    expect(plot.viewWidth).toBe(width);
+    expect(plot.x(0)).toBe(54);
+    expect(plot.x(40)).toBe(width - 20);
+    expect(sectionSampleIndexAtViewX(data, plot, plot.x(30))).toBe(3);
+    expect(plot.minimumElevation).toBe(80);
+    expect(plot.maximumElevation).toBe(100);
+    const detail = selectedSectionObject(data, { type: "building", id: "building-nearby", city: "maizuru", urbanState: "2025", properties: {} })!;
+    const callout = buildSectionFocusCallout(detail, plot, width < 600, () => 180, () => 200);
+    expect(callout.labelX).toBeGreaterThanOrEqual(plot.plotLeft);
+    expect(callout.labelX + callout.labelWidth).toBeLessThanOrEqual(width - 20);
+    expect(JSON.stringify(data)).toBe(before);
+  });
+
+  it("requires exact typed section membership, preserves nearby/zero and never infers a missing selection", () => {
+    const data = sectionFixture();
+    const selection = { type: "building" as const, id: "building-nearby", city: "maizuru" as const, urbanState: "2025" as const, properties: {} };
+    expect(selectedSectionObject(data, selection)).toMatchObject({ id: selection.id, kind: "building", relation: "nearby", offsetDistanceM: 2, elevationM: 90 });
+    expect(selectedSectionObject(data, { ...selection, id: "not-recorded" })).toBeNull();
+    expect(selectedSectionObject(data, { ...selection, type: "road" })).toBeNull();
+    expect(selectedSectionObject(data, { ...selection, type: "mesh" })).toBeNull();
+    expect(selectedSectionObject(data, null)).toBeNull();
+    data.terrain_samples[1].elevation_m = 0;
+    expect(selectedSectionObject(data, selection)?.elevationM).toBe(0);
+    data.terrain_samples[1].elevation_m = null;
+    expect(selectedSectionObject(data, selection)?.elevationM).toBeNull();
+  });
+
+  it("matches road ID aliases only against real road relations", () => {
+    const data = sectionFixture();
+    data.roads[0].source_object_id = "tran_recorded-0";
+    const selection = { type: "road" as const, id: "tran_recorded:0", city: "maizuru" as const, urbanState: "2025" as const, properties: {} };
+    expect(selectedSectionObject(data, selection)?.id).toBe("tran_recorded-0");
+    expect(selectedSectionObject(data, { ...selection, id: "tran_missing:0" })).toBeNull();
+    expect(selectedSectionObject(data, { ...selection, type: "building" })).toBeNull();
   });
 });

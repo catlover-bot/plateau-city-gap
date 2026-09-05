@@ -6,11 +6,13 @@ import { chromium } from "playwright-core";
 
 process.env.PW_TEST_SCREENSHOT_NO_FONTS_READY = "1";
 
-const baseUrl = process.argv[2] ?? "http://127.0.0.1:4174/plateau-city-gap/";
+const screenshotsEnabled = !process.argv.includes("--no-screenshots");
+const positional = process.argv.slice(2).filter((value) => value !== "--no-screenshots");
+const baseUrl = positional[0] ?? "http://127.0.0.1:4174/plateau-city-gap/";
 const repositoryRoot = path.resolve(process.cwd(), "..");
 const outputDirectory = path.resolve(
   repositoryRoot,
-  process.argv[3] ?? "docs/assets/public-first-run-ux",
+  positional[1] ?? "docs/assets/public-first-run-ux",
 );
 const repositoryHead = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: repositoryRoot,
@@ -43,6 +45,7 @@ async function waitForStep(page, step) {
 }
 
 async function capture(page, filename, scene, viewport) {
+  if (!screenshotsEnabled) return;
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
   const target = path.join(outputDirectory, filename);
@@ -276,7 +279,7 @@ try {
     const page = await context.newPage();
     await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 90_000 });
     await waitForStep(page, "intro");
-    await page.getByRole("heading", { name: "気になる場所を、 地図とデータで確かめる。" }).waitFor();
+    await page.getByRole("heading", { name: "舞鶴を、地図で調べる。", exact: true }).waitFor();
     fmrSamples.push(await page.evaluate(() => Math.round(performance.now())));
     await context.close();
   }
@@ -466,6 +469,7 @@ try {
     },
     diagnostics,
     critical_diagnostic_count: criticalDiagnostics.length,
+    screenshots_enabled: screenshotsEnabled,
     screenshots,
     status: [
       "AUTOMATED_UX_CHECKPOINT_COMPLETE",

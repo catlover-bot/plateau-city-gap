@@ -11,6 +11,7 @@ vi.mock("react", async (importOriginal) => {
   return {
     ...actual,
     useEffect: () => undefined,
+    useRef: () => ({ current: null }),
     useMemo: (factory: () => unknown) => factory(),
     useState: (initial: unknown) => {
       const index = hooks.cursor++;
@@ -50,7 +51,7 @@ function fire(element: Element, handler: string, event?: unknown) {
   (element.props[handler] as (value?: unknown) => void)(event);
 }
 
-beforeEach(() => { hooks.values = []; hooks.cursor = 0; });
+beforeEach(() => { hooks.values = []; hooks.cursor = 0; vi.unstubAllGlobals(); });
 
 describe("readable Advanced Urban Section", () => {
   it("opts into readable annotations without changing the Advanced mode or geometry counts", () => {
@@ -109,6 +110,73 @@ describe("readable Advanced Urban Section", () => {
     const focused = render({ readable: true, onFocusPosition });
     expect(focused[0].props["data-selected-annotation-visible"]).toBe(true);
     expect(focused.some((item) => item.props["data-section-focus-annotation"])).toBe(true);
+    expect(focused.find((item) => item.props["data-section-focus-annotation"])?.props).toMatchObject({
+      className: "section-focus-callout transient", "data-section-annotation-selected": false,
+    });
+  });
+
+  it("keeps only the exact selected member's callout through hover and pointer leave", () => {
+    const selection = { type: "building" as const, id: data.buildings[6].source_object_id, city: "maizuru" as const, urbanState: "2025" as const, properties: {} };
+    const onFocusPosition = vi.fn();
+    const initial = render({ mode: "guided", selection, onFocusPosition });
+    expect(initial[0].props["data-selection-annotation-id"]).toBe(selection.id);
+    expect(initial.find((item) => item.props["data-section-focus-annotation"])?.props).toMatchObject({
+      className: "section-focus-callout selected", "data-section-annotation-selected": true,
+    });
+    expect(onFocusPosition).not.toHaveBeenCalled();
+    const svg = initial.find((item) => item.type === "svg")!;
+    const target = {};
+    fire(svg, "onKeyDown", { key: "End", target, currentTarget: target, preventDefault: vi.fn() });
+    expect(render({ mode: "guided", selection, onFocusPosition })[0].props["data-selection-annotation-id"]).toBe(selection.id);
+    fire(svg, "onPointerLeave");
+    expect(render({ mode: "guided", selection, onFocusPosition })[0].props["data-selection-annotation-id"]).toBe(selection.id);
+    expect(render({ mode: "guided", selection: { ...selection, id: "not-in-this-section" } })[0].props["data-selection-annotation-id"]).toBe("none");
+  });
+
+  it("uses the measured container width and keeps legacy Advanced viewBox unchanged", () => {
+    hooks.values[2] = 320;
+    const view = render({ readable: true });
+    expect(view.find((item) => item.type === "svg")?.props.viewBox).toBe("0 0 320 220");
+    expect(view.find((item) => item.props["data-section-endpoint"] === "A")?.props.x).toBe(54);
+    expect(view[0].props["data-annotation-overlap-count"]).toBe(0);
+    expect(render().find((item) => item.type === "svg")?.props.viewBox).toBe("0 0 1000 220");
+  });
+
+  it.each([320, 390, 720, 900])("keeps the mobile annotation cap at viewport %ipx before a hidden SVG is measured", (width) => {
+    vi.stubGlobal("window", { innerWidth: width });
+    const initial = render({ mode: "guided" });
+    expect(Number(initial[0].props["data-road-annotation-count"])).toBeLessThanOrEqual(2);
+    expect(Number(initial[0].props["data-static-annotation-count"])).toBeLessThanOrEqual(4);
+    expect(initial.filter((item) => item.props["data-section-axis-tick"] === "distance")).toHaveLength(4);
+    hooks.values[2] = width;
+    const measured = render({ mode: "guided" });
+    expect(Number(measured[0].props["data-road-annotation-count"])).toBeLessThanOrEqual(2);
+    expect(measured.find((item) => item.type === "svg")?.props.viewBox).toBe(`0 0 ${width} 220`);
+    expect(measured[0].props["data-annotation-overlap-count"]).toBe(0);
+  });
+
+  it("paints keyboard focus last with exactly the original geometry and no selection or camera change", () => {
+    const onSelectBuilding = vi.fn();
+    const onFocusPosition = vi.fn();
+    const view = render({ readable: true, onSelectBuilding, onFocusPosition });
+    const originals = view.filter((item) => item.props["data-section-building"]);
+    const focused = originals[6];
+    fire(focused, "onFocus");
+    const after = render({ readable: true, onSelectBuilding, onFocusPosition });
+    const overlay = after.find((item) => item.props["data-section-keyboard-focus"])!;
+    expect(overlay.props).toMatchObject({ "data-section-keyboard-focus": data.buildings[6].source_object_id, pointerEvents: "none", "aria-hidden": "true" });
+    const svg = after.find((item) => item.type === "svg")!;
+    expect((svg.props.children as ReactNode[]).filter(Boolean).at(-1)).toBe(overlay);
+    for (const rect of elements(overlay.props.children as ReactNode)) {
+      for (const coordinate of ["x", "y", "width", "height"]) expect(rect.props[coordinate]).toBe(focused.props[coordinate]);
+      expect(rect.props.tabIndex).toBeUndefined();
+      expect(rect.props.onClick).toBeUndefined();
+    }
+    expect(after.filter((item) => item.props["data-section-building"]).map((item) => item.props["data-section-building-id"])).toEqual(originals.map((item) => item.props["data-section-building-id"]));
+    expect(onSelectBuilding).not.toHaveBeenCalled();
+    expect(onFocusPosition).not.toHaveBeenCalled();
+    fire(focused, "onBlur");
+    expect(render({ readable: true }).some((item) => item.props["data-section-keyboard-focus"])).toBe(false);
   });
 
   it("retains Advanced close and reopen actions when readable", () => {

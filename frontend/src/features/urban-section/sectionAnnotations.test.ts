@@ -57,4 +57,24 @@ describe("section annotation layout", () => {
     expect(estimateSectionTextWidth("京月通線", 11)).toBe(44);
     expect(estimateSectionTextWidth("AB", 11)).toBeCloseTo(12.76, 5);
   });
+
+  it.each([320, 390, 640, 720, 919, 1050.2, 1480])("retains collision-free 12px annotations in a %ipx container", (width) => {
+    const result = layoutSectionAnnotations({
+      candidates: roads,
+      maxDistance: 462,
+      maxVisible: width < 600 ? 2 : 4,
+      plotLeft: 54,
+      plotRight: width - 20,
+      railYs: [32, 50],
+      minGap: width < 600 ? 6 : 8,
+      measureText: (label) => estimateSectionTextWidth(label, 12),
+    });
+    expect(result.overlapCount).toBe(0);
+    expect(result.placed.length).toBeGreaterThan(0);
+    result.placed.forEach((item) => {
+      expect(item.labelX).toBeGreaterThanOrEqual(54);
+      expect(item.labelX + item.labelWidth).toBeLessThanOrEqual(width - 20);
+      expect(item.labelWidth).toBeGreaterThanOrEqual(estimateSectionTextWidth(item.label, 12));
+    });
+  });
 });

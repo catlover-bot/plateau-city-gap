@@ -20,6 +20,11 @@ function formatDistance(value: unknown): string {
   return parsed >= 1000 ? `${(parsed / 1000).toFixed(2)}km` : `${Math.round(parsed)}m`;
 }
 
+function formatPeople(value: unknown): string {
+  const parsed = numberValue(value);
+  return parsed === null ? "データなし" : `${Math.round(parsed).toLocaleString("ja-JP")}人`;
+}
+
 interface SharedProps {
   titleRef: RefObject<HTMLHeadingElement>;
   onStoryChange(story: GuidedStory): void;
@@ -57,7 +62,6 @@ function AreaSelectionInspector({
   onAreaHover,
 }: AreaSelectionProps) {
   return <div className="guided-scene-content">
-    <div className="guided-panel-kicker"><span className="guided-eyebrow">{GUIDED_CONTENT.find.eyebrow}</span></div>
     <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{GUIDED_CONTENT.find.title}</h1>
     <p className="guided-scene-lead">{GUIDED_CONTENT.find.lead}</p>
     <label className="guided-area-select">選んだ地域
@@ -86,9 +90,10 @@ function AreaSelectionInspector({
         onBlur={() => onAreaHover(null)}
       >
         <strong>{area.label}</strong>
-        <span>65歳以上 {Math.round(numberValue(area.properties?.elderly_population) ?? 0).toLocaleString("ja-JP")}人 · 交通 {formatDistance(area.properties?.nearest_public_transport_distance_m)} · 医療 {formatDistance(area.properties?.nearest_medical_distance_m)}</span>
+        <span>65歳以上 {formatPeople(area.properties?.elderly_population)} · 交通 {formatDistance(area.properties?.nearest_public_transport_distance_m)} · 医療 {formatDistance(area.properties?.nearest_medical_distance_m)}</span>
       </button>)}
     </div>
+    <p className="guided-data-note">人口は国勢調査2020の500m集計。交通・医療はメッシュ中心からの直線距離で、徒歩時間ではありません。</p>
     <button type="button" className="guided-primary" onClick={() => onStoryChange("understand")}>
       {GUIDED_CONTENT.find.action}
     </button>
@@ -144,25 +149,21 @@ function AreaUnderstandingInspector({
   return <div className={`guided-scene-content ${threeDActive ? "guided-3d-inspector" : ""}`}>
     <div className="guided-panel-kicker">
       <button type="button" className="guided-back" onClick={() => onStoryChange("find")}>{GUIDED_CONTENT.understand.back}</button>
-      <span className="guided-eyebrow">{GUIDED_CONTENT.understand.eyebrow}</span>
     </div>
-    <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{areaLabel}の地形と建物</h1>
+    <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{areaLabel}</h1>
     {selectedObject && <SelectedPlateauObject object={selectedObject} />}
     {threeDActive && !selectedObject && <p className="guided-section-note">3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。</p>}
     <dl className="guided-known-summary">
-      <div><dt>人口 {Math.round(numberValue(properties.population) ?? 0).toLocaleString("ja-JP")}人</dt><dd>うち65歳以上 {Math.round(numberValue(properties.elderly_population) ?? 0).toLocaleString("ja-JP")}人（国勢調査2020・500m集計）</dd></div>
-      <div><dt>{threeDActive ? "2D地物の範囲交差集計" : "街の形"}</dt><dd>範囲と交差するPLATEAU建物 {catalogItem?.counts.buildings.toLocaleString("ja-JP") ?? "—"}棟・道路面 {catalogItem?.counts.roads.toLocaleString("ja-JP") ?? "—"}件</dd></div>
+      <div><dt>この地域の人口 {formatPeople(properties.population)}</dt><dd>うち65歳以上 {formatPeople(properties.elderly_population)}（国勢調査2020・500m集計）</dd></div>
+      <div><dt>この範囲の建物・道路</dt><dd>{catalogItem ? `PLATEAU建物 ${catalogItem.counts.buildings.toLocaleString("ja-JP")}棟・道路面 ${catalogItem.counts.roads.toLocaleString("ja-JP")}件` : contextStatus === "loading" ? "読み込み中" : "データなし"}<small>範囲と交差する2D地物の集計。3D画面内の描画数ではありません。</small></dd></div>
       {!threeDActive && <div><dt>都市計画・交通</dt><dd>範囲と交差する公式の都市計画形状 {catalogItem?.counts.planning.toLocaleString("ja-JP") ?? "—"}件・収録駅/バス停まで直線 {formatDistance(properties.nearest_public_transport_distance_m)}</dd></div>}
     </dl>
     {contextStatus === "loading" && <p role="status" className="guided-loading">{GUIDED_CONTENT.loading.context}</p>}
     {contextError && <p role="alert" className="guided-error">{contextError}</p>}
-    {activeSectionData
-      ? <p className="guided-section-note">地図上のA–B線を横から見た断面です。</p>
-      : sectionError
+    {!activeSectionData && (sectionError
         ? <p className="guided-boundary">断面は読み込めません。範囲内の建物・道路・都市計画は引き続き確認できます。</p>
-        : <p className="guided-boundary">{context?.section.reason?.replaceAll("Area", "範囲") ?? "この範囲では検証済みの街の断面を表示していません。"}</p>}
+        : <p className="guided-boundary">{context?.section.reason?.replaceAll("Area", "範囲") ?? "この範囲では検証済みの街の断面を表示していません。"}</p>)}
     <div className="guided-unknown-bridge">
-      <span>{GUIDED_CONTENT.understand.unknownLabel}</span>
       <strong>{threeDActive ? "出入口や通行条件は、現地で確認" : GUIDED_CONTENT.understand.unknownTitle}</strong>
       <p>{threeDActive ? "LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。" : GUIDED_CONTENT.understand.unknownReason}</p>
     </div>
@@ -192,7 +193,6 @@ function TargetVerificationInspector({
   return <div className="guided-scene-content">
     <div className="guided-panel-kicker">
       <button type="button" className="guided-back" onClick={() => onStoryChange("understand")}>{GUIDED_CONTENT.verify.back}</button>
-      <span className="guided-eyebrow">{GUIDED_CONTENT.verify.eyebrow}</span>
     </div>
     <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{GUIDED_CONTENT.verify.title}</h1>
     {targetChoices.length > 1 && <label className="guided-target-select">確認対象
@@ -205,7 +205,7 @@ function TargetVerificationInspector({
       <h2 id="guided-target-title">{target?.label ?? areaLabel}</h2>
       <p>{target?.reason}</p>
     </section>
-    <div className="guided-task-heading"><span>未確認</span><h2>現地で確かめること <small>{target?.checks.length ?? 0}件</small></h2></div>
+    <div className="guided-task-heading"><h2>確認項目 <small>{target?.checks.length ?? 0}件・未確認</small></h2></div>
     <ol className="guided-check-list">
       {target?.checks.map(([id, label, reason]) => <li key={id}><strong>{label}</strong><span>{reason}</span></li>)}
     </ol>

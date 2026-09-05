@@ -8,7 +8,7 @@ import { loadGuided3DData } from "./guided3d";
 
 const LAYERS = ["plateau-buildings", "plateau-roads", "plateau-terrain"];
 
-export function Guided3DView({ data, selection, viewport, sectionData, sectionFocus, onSelectionChange, onReturnTo2D }: {
+export function Guided3DView({ data, selection, viewport, sectionData, sectionFocus, onSelectionChange, onReturnTo2D, inactive = false }: {
   data: AppData;
   selection: SpatialSelection;
   viewport: SpatialViewport;
@@ -16,6 +16,7 @@ export function Guided3DView({ data, selection, viewport, sectionData, sectionFo
   sectionFocus: { longitude: number; latitude: number } | null;
   onSelectionChange(selection: SpatialSelection | null): void;
   onReturnTo2D(): void;
+  inactive?: boolean;
 }) {
   const [threeDData, setThreeDData] = useState<AppData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export function Guided3DView({ data, selection, viewport, sectionData, sectionFo
   const onReadiness = useCallback((_snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => {
     if (result.captureStrictReady) setRendered(true);
   }, []);
-  return <div className="guided-3d-view" data-guided-3d-state={error ? "error" : rendered ? "ready" : "loading"}>
+  return <div className="guided-3d-view" ref={(element) => { if (element) element.inert = inactive; }} aria-hidden={inactive || undefined} data-guided-3d-state={error ? "error" : rendered ? "ready" : "loading"}>
     {threeDData && !error && <Plateau3DMap
       key={attempt}
       data={threeDData}

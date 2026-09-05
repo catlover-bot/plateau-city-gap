@@ -78,8 +78,8 @@ const summary: InvestigationAreaSummary = {
 describe("Public first-run presentation contract", () => {
   it("uses the approved landing and short radius labels", () => {
     expect(PUBLIC_LANDING_COPY).toEqual({
-      heading: "気になる場所を、地図とデータで確かめる。",
-      subcopy: "場所と範囲を選ぶと、人口や建物、事業所、都市計画、交通をまとめて見られます。データだけでは分からないことも示します。",
+      heading: "舞鶴を、地図で調べる。",
+      subcopy: "場所と範囲を選び、人口・建物・交通などを確認します。",
       primaryCta: "地図で場所を調べる",
     });
     expect(PUBLIC_LANDING_COPY.heading).not.toContain("今");

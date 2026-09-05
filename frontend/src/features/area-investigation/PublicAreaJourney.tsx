@@ -121,6 +121,7 @@ export function PublicAreaJourney({
   const [error, setError] = useState<string | null>(null);
   const [activeStory, setActiveStory] = useState<PublicStoryId>("population-age");
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const initialFocusComplete = useRef(false);
   const summary = useMemo(() => origin ? resolveAreaSummary(fixture, data, origin, radius) : null, [data, fixture, origin, radius]);
   const selectedUnknown = summary?.unknowns.find((unknown) => unknown.id === selectedUnknownId) ?? summary?.unknowns[0] ?? null;
   const stations = useMemo(() => [...(data.stations?.features ?? [])].sort((left, right) => {
@@ -217,7 +218,11 @@ export function PublicAreaJourney({
   }, [data, onSelectionChange, selectedUnknown, step, summary]);
 
   useEffect(() => {
-    window.requestAnimationFrame(() => headingRef.current?.focus());
+    const frame = window.requestAnimationFrame(() => {
+      headingRef.current?.focus({ preventScroll: !initialFocusComplete.current });
+      initialFocusComplete.current = true;
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [step]);
 
   const restart = () => {
@@ -330,8 +335,8 @@ export function PublicAreaJourney({
             />
           )}
           <div className="public-map-area-badge">
-            <span>{origin ? "範囲" : "舞鶴市"}</span>
-            <strong>{origin?.label ?? "調べる場所を選ぶ"}</strong>
+            <span>{origin ? "範囲" : "京都府"}</span>
+            <strong>{origin?.label ?? "舞鶴市"}</strong>
             <small>{origin ? `半径 ${radius}m` : "駅または地図の中心から選べます"}</small>
           </div>
           {legend && <aside className="public-map-legend" aria-label={`地図の凡例: ${legend.title}`}>
@@ -359,7 +364,7 @@ export function PublicAreaJourney({
           <div className="public-area-content">
             {step === "intro" && (
               <section className="public-intro">
-                <h1 ref={headingRef} tabIndex={-1}>気になる場所を、<br />地図とデータで確かめる。</h1>
+                <h1 ref={headingRef} tabIndex={-1}>{PUBLIC_LANDING_COPY.heading}</h1>
                 <p className="public-intro-copy">{PUBLIC_LANDING_COPY.subcopy}</p>
                 <button type="button" className="public-primary" onClick={() => setStep("place")}>{PUBLIC_LANDING_COPY.primaryCta}</button>
                 <a className="public-3d-example" href={`${import.meta.env.BASE_URL}${GUIDED_3D_EXAMPLE_QUERY}`}>PLATEAUで街を3Dで見る<small>常団地前周辺の実例</small></a>

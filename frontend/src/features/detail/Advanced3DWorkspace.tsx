@@ -65,13 +65,13 @@ export function Advanced3DWorkspace({ data, area, selection, viewport, onSelecti
   return <div className="product-app advanced-3d-product" data-experience="advanced" data-area-id={area.id}
     data-selected-object={object?.id ?? ""} data-target-resolution={target?.resolution ?? "area_fallback"} data-context-status={error ? "error" : bundle ? "ready" : "loading"}>
     <header className="advanced-3d-header">
-      <a className="advanced-wordmark" href={import.meta.env.BASE_URL}>CITY GAP<span>街を読み、確かめる。</span></a>
-      <div className="advanced-journey" aria-label="同じ地域を深掘り"><span>Guided · 場所を知る</span><i aria-hidden="true">→</i><strong>Advanced · 対象を確かめる</strong></div>
+      <a className="advanced-wordmark" href={import.meta.env.BASE_URL}>CITY GAP</a>
+      <div className="advanced-journey" aria-label="同じ地域を深掘り"><span>Guided</span><i aria-hidden="true">→</i><strong>詳細分析</strong></div>
       <nav aria-label="表示の切り替え"><button type="button" onClick={onGuided}>Guidedへ戻る</button><button type="button" onClick={onTools}>分析ツール</button><button type="button" onClick={onShare}>URLを共有</button></nav>
     </header>
     <main className="advanced-3d-layout">
       <section className={`advanced-3d-stage${sectionOpen ? " section-open" : ""}`} aria-label="選択地域のPLATEAU 3DとA–B断面">
-        <div className="advanced-scene-heading"><span>PLATEAU 3D · 舞鶴市</span><h1>地域の集計から、一つの建物へ。</h1><p>高さと地形を立体で読み、確かめる場所を選ぶ。</p></div>
+        <div className="advanced-scene-heading"><h1>{area.label}</h1><p>PLATEAU 3D · 舞鶴市 {String(data.plateauMetadata?.year ?? "—")}</p></div>
         <div className="advanced-scene-controls"><button type="button" onClick={onReturnTo2D}>地図に戻る</button><button type="button" aria-pressed={sectionOpen} onClick={() => { setSectionOpen((value) => !value); setSectionFocus(null); }}>A–B断面</button></div>
         {bundle && section ? <div className="advanced-3d-viewport"><Plateau3DMap data={data} selection={object ?? selection ?? area} viewport={viewport}
           activeLayerIds={["plateau-buildings", "plateau-roads", "plateau-terrain"]} scenePreset="plateau_detail" analysisLens="none" counterfactualState="baseline"
@@ -85,26 +85,24 @@ export function Advanced3DWorkspace({ data, area, selection, viewport, onSelecti
         <p className="advanced-map-source">PLATEAU 舞鶴市 {String(data.plateauMetadata?.year ?? "—")} · LOD1 / 地理院地図・標高データ</p>
       </section>
       <aside className="advanced-reading-panel" aria-label="同じ地域と選択対象の分析">
-        <section className="advanced-area-context"><span className="advanced-eyebrow">同じ地域を深掘り</span><h2>{area.label}</h2><p className="advanced-area-code">500mメッシュ {area.id}</p>
-          <dl className="advanced-area-stats"><div><dt>65歳以上</dt><dd>{advancedNumber(areaProperties.elderly_population, "人", true)}</dd></div><div><dt>駅・バス停まで</dt><dd>{advancedNumber(areaProperties.nearest_public_transport_distance_m, "m", true)}</dd></div></dl>
-          <p className="advanced-source-note">人口は国勢調査2020。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。</p>
-        </section>
         <section className={`advanced-target-card${target ? " exact" : ""}`} data-target-key={target?.key ?? `area:${area.id}`} data-object-id={object?.id ?? ""} data-unconfirmed={target?.checks.length ?? 0} aria-live="polite">
-          <span className="advanced-eyebrow">{target ? "EXACT TARGET · 対象を特定" : "3Dで対象を選ぶ"}</span>
-          <h2>{target ? object?.type === "building" ? "この建物を確かめる" : "この道路面を確かめる" : "集計だけでは見えない、街の形。"}</h2>
+          {target && <span className="advanced-eyebrow">対象を特定</span>}
+          <h2>{target ? object?.type === "building" ? "選択した建物" : "選択した道路面" : "建物を選ぶ"}</h2>
           {target && object ? <>
-            <p>3Dで選んだ対象と、この分析パネルがつながっています。</p>
-            {object.type === "building" ? <dl className="advanced-object-stats"><div><dt>用途</dt><dd>{String(properties.usage ?? properties.usage_label ?? "データなし")}</dd></div><div><dt>高さ</dt><dd>{advancedNumber(properties.measured_height_m, "m")}</dd></div><div><dt>地上 / 地下</dt><dd>{advancedNumber(properties.storeys_above_ground, "階")} / {advancedNumber(properties.storeys_below_ground, "階")}</dd></div></dl> : <p>{String(properties.road_name ?? object.label ?? "名称データなし")}</p>}
+            {object.type === "building" ? <dl className="advanced-object-stats"><div><dt>用途</dt><dd>{String(properties.usage ?? properties.usage_label ?? "データなし")}</dd></div><div><dt>建物高さ</dt><dd>{advancedNumber(properties.measured_height_m, "m")}</dd></div><div><dt>地上階数</dt><dd>{advancedNumber(properties.storeys_above_ground, "階")}</dd></div><div><dt>地下階数</dt><dd>{advancedNumber(properties.storeys_below_ground, "階")}</dd></div></dl> : <p>{String(properties.road_name ?? object.label ?? "名称データなし")}</p>}
             <p className="advanced-source-note">公式PLATEAU属性 · 舞鶴市 {String(data.plateauMetadata?.year ?? "—")}{properties.lod ? ` · ${String(properties.lod)}` : ""}</p>
-            <details className="advanced-object-identity"><summary>対象IDと出典</summary><code>{object.id}</code><p>{context?.source.dataset} / {context?.source.version}</p></details>
-            <div className="advanced-field-checks"><h3>次は、現地で確かめる <span>{target.checks.length}件・未確認</span></h3><ul>{target.checks.map(([id, title, reason]) => <li key={id} data-check-id={id} data-status="unconfirmed"><span aria-hidden="true">○</span><div><strong>{title}</strong><small>{reason}</small></div></li>)}</ul></div>
+            <div className="advanced-field-checks"><h3>現地で確認すること <span>{target.checks.length}件・未確認</span></h3><ul>{target.checks.map(([id, title, reason]) => <li key={id} data-check-id={id} data-status="unconfirmed"><span aria-hidden="true">○</span><div><strong>{title}</strong><small>{reason}</small></div></li>)}</ul></div>
             <button type="button" className="advanced-clear-target" onClick={() => onSelectionChange(area)}>選択を解除</button>
+            <details className="advanced-object-identity"><summary>対象IDと出典</summary><code>{object.id}</code><p>{context?.source.dataset} / {context?.source.version}</p></details>
           </> : <>
-            <p>建物の高さ・道路・地形を同じ場所で見比べ、具体的な確認対象へ絞り込みます。</p>
+            <p>3Dの建物をクリックすると、用途・高さ・階数と現地確認項目を表示します。</p>
             {selectedUnmatched && context && <p className="advanced-unmatched" role="status">この地物は選択地域の対象データと一致しません。対象の特定はせず、地域単位で確認します。</p>}
-            <ol className="advanced-read-steps"><li><b>1</b><div><strong>立体で位置関係を読む</strong><span>地形と建物の高さを見比べる</span></div></li><li><b>2</b><div><strong>A–B断面で横から見る</strong><span>地図の線と同じ場所の高低差</span></div></li><li><b>3</b><div><strong>建物を選んで深掘り</strong><span>公式属性と現地確認項目へ</span></div></li></ol>
-            <button type="button" className="advanced-section-invite" onClick={() => setSectionOpen(true)}>同じ場所の断面を見る</button>
+            <p>A–B断面では、地図上の線に沿った地形と建物の高さを見比べられます。</p>
           </>}
+        </section>
+        <section className="advanced-area-context"><h2>この地域の集計</h2><p className="advanced-area-code">500mメッシュ {area.id}</p>
+          <dl className="advanced-area-stats"><div><dt>65歳以上</dt><dd>{advancedNumber(areaProperties.elderly_population, "人", true)}</dd></div><div><dt>駅・バス停まで</dt><dd>{advancedNumber(areaProperties.nearest_public_transport_distance_m, "m", true)}</dd></div></dl>
+          <p className="advanced-source-note">人口は国勢調査2020の地域集計で、選択した建物の居住者数ではありません。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。</p>
         </section>
         <p className="advanced-model-boundary">モデルが示すのは収録時点の形と属性。入口、現在の利用、歩きやすさは現地での確認が必要です。</p>
       </aside>

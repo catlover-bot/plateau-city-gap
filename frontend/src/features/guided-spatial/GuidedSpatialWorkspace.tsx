@@ -103,6 +103,7 @@ export function GuidedSpatialWorkspace({
   const [selectedTargetKey, setSelectedTargetKey] = useState<string | null>(null);
   const [selectedObject, setSelectedObject] = useState<SpatialSelection | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const initialFocusComplete = useRef(false);
 
   const selection = useGuidedSelection({ data, state, onSelectionChange, onViewportChange });
   const areaContext = useGuidedAreaContext(data, state.guidedStory, selection.selectedAreaId);
@@ -115,7 +116,8 @@ export function GuidedSpatialWorkspace({
   }, [selection.selectedAreaId]);
 
   useEffect(() => {
-    titleRef.current?.focus();
+    titleRef.current?.focus({ preventScroll: !initialFocusComplete.current });
+    initialFocusComplete.current = true;
   }, [state.guidedStory]);
 
   const selectedCatalogItem = areaContext.catalog?.items.find(
