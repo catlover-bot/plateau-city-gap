@@ -10,7 +10,6 @@ import "./features/inspector/inspector.css";
 import "./features/inspector/object-lens.css";
 import "./features/urban-section/urban-section.css";
 import "./app/workbench.css";
-import "./features/guided/guided.css";
 import "./features/investigation/investigation.css";
 import "./features/verification/verification.css";
 import "./features/guided-spatial/guided-spatial.css";

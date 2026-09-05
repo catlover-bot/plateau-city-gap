@@ -242,7 +242,6 @@ export interface RobustnessData extends JsonProperties {
 }
 
 export type DecisionMode = "overall" | "fairness" | "robust";
-export type DecisionMapPhase = "before" | "after";
 
 export interface InterventionSite {
   site_order: number;

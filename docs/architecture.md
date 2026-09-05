@@ -93,6 +93,20 @@ Object Lensは選択objectからsource、year、ID、属性、関係object、Fin
 
 両面は同じdata contractsとclaim boundaryを使う。UIは分析値を独自に再解釈しない。
 
+## Guided and Section module boundaries
+
+The Guided route keeps one persistent `AnalyticalMap` while scene-specific inspector content changes around it. Its frontend responsibilities are separated as follows:
+
+- `guidedContent.ts`: fixed user-facing story copy and verification checks
+- `guidedTargets.ts`: exact road/building, facility, and Area-fallback target derivation
+- `useGuidedSelection.ts`: canonical Area selection and viewport synchronization
+- `useGuidedAreaContext.ts`: lazy catalog/context/Section loading, cache, abort, and stale-response rejection
+- `GuidedMapStage.tsx`: persistent map, caption, legend, responsive Section dock, and map/Section focus bridge
+- `GuidedInspector.tsx`: intro, Area selection, spatial understanding, and target-verification reading path
+- `guidedCartography.ts`: typed source/layer ordering for the Guided overlays
+
+Urban Section keeps its data schema in `sectionTypes.ts`, deterministic scales/terrain/focus geometry in `sectionLayout.ts`, label collision rules in `sectionAnnotations.ts`, and abortable fetch boundary in `useSectionData.ts`. `UrbanSection.tsx` owns React interaction and accessible rendering. This prevents display geometry, async transport, and annotation policy from becoming one indivisible component while preserving the same Section output.
+
 ## Visual Readiness Protocol
 
 正規画像は固定時間待ちではなく、scene requirementsで撮影可否を決める。

@@ -17,10 +17,3 @@ export interface MapEngineAdapter {
   clearHighlight(): void;
   exportView(): Promise<Blob | null>;
 }
-
-export interface MapEngineEvents {
-  onViewportChange(viewport: SpatialViewport): void;
-  onSelectionChange(selection: SpatialSelection | null): void;
-  onReady?(): void;
-  onError?(message: string): void;
-}

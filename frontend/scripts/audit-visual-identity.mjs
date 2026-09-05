@@ -2,6 +2,7 @@ import { gzipSync } from "node:zlib";
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { performance } from "node:perf_hooks";
 import { chromium } from "playwright-core";
 
 const args = new Map();
@@ -149,7 +150,7 @@ function observe(page, viewport) {
 for (const viewport of viewports) {
   const page = await browser.newPage({ viewport, deviceScaleFactor: 1 });
   observe(page, viewport);
-  const started = Date.now();
+  const started = performance.now();
   await page.goto(`${baseUrl}?experience=advanced&city=maizuru&scene=gap_discovery`, {
     waitUntil: "domcontentloaded",
     timeout: 90_000,
@@ -158,9 +159,11 @@ for (const viewport of viewports) {
   await page.waitForSelector(".analytical-map-canvas canvas", { timeout: 90_000 });
   await page.waitForFunction(() => document.fonts.status === "loaded", { timeout: 30_000 });
   await page.waitForFunction(() => {
+    const shell = document.querySelector(".analytical-map-shell");
     const map = document.querySelector(".analytical-map-canvas")?.__cityGapMap;
-    return Boolean(map?.loaded() && map?.isStyleLoaded());
-  }, { timeout: 30_000 });
+    return shell?.getAttribute("data-public-cartography-ready") === "true"
+      && Boolean(map?.isStyleLoaded());
+  }, null, { timeout: 90_000 });
 
   const metrics = await page.evaluate(() => {
     const visible = (element) => {
@@ -243,7 +246,7 @@ for (const viewport of viewports) {
 
   report.viewports.push({
     ...viewport,
-    productReadyMs: Date.now() - started,
+    productReadyMs: Math.round(performance.now() - started),
     ...metrics,
   });
   if (screenshotDirectory) {

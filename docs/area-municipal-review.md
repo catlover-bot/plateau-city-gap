@@ -8,11 +8,10 @@ Purpose: review whether CITY GAP's upstream reasoning chain can enter a real mun
 
 Use the same West Maizuru 500m/800m sources and `citygap-investigation-area@1.0.0` rule.
 
-1. [800m Known/Unknown screenshot](assets/area-checkpoint/02-area-known-unknown-800m.png)
-2. [800m PLATEAU target and unverified-task screenshot](assets/area-checkpoint/03-area-unverified-tasks-800m.png)
-3. [500m Known/Unknown screenshot](assets/area-checkpoint/04-area-known-unknown-500m.png)
-4. [390×844 task screenshot](assets/area-checkpoint/05-area-mobile-tasks-800m.png)
-5. [Browser evidence manifest](assets/area-checkpoint/manifest.json)
+Use the current production Guided slide set and its manifest listed in
+[presentation-assets.md](presentation-assets.md). The earlier Area-specific
+screenshots remain recoverable from Git history, but they no longer represent
+the current reading path.
 6. [500m/800m machine-readable comparison](../analysis/outputs/real/maizuru_area_500_800_comparison.json)
 7. [Methodology and claim boundaries](area-methodology.md)
 

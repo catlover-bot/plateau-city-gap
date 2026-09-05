@@ -27,14 +27,3 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry: () 
     </main>
   );
 }
-
-export function EmptyState({ onMethodology }: { onMethodology: () => void }) {
-  return (
-    <main className="state-screen">
-      <span className="state-icon empty" aria-hidden="true">◇</span>
-      <h1>表示できるメッシュがありません</h1>
-      <p>分析結果は読み込めましたが、地図に表示できるgeometryが0件でした。</p>
-      <button type="button" onClick={onMethodology}>データについて確認</button>
-    </main>
-  );
-}

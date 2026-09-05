@@ -4,7 +4,9 @@ Goal: `public-product-language-and-section-v1`
 
 Observed at: 2026-09-02 JST  
 Capture viewport: 1440 × 900 CSS px  
-Capture manifest: [`docs/assets/public-product-audit/manifest.json`](assets/public-product-audit/manifest.json)
+The original broad capture package is recoverable from Git history. The
+current retained visual references and their provenance are indexed in
+[presentation-assets.md](presentation-assets.md).
 
 This benchmark records only public pages that were opened in a real Chromium browser. `PARTIALLY_OBSERVED` means that official documentation was visible but the authenticated product was not. `TEXT_ONLY` means that only a public marketing page was available. No authenticated interface is inferred. The screenshots are research evidence only; CITY GAP does not copy third-party wording, branding, icons, CSS, screenshots, or source code.
 
@@ -56,4 +58,3 @@ Every entry below has a timestamp, requested/final URL, viewport, HTTP/access st
 - My City Report public reporting;
 - StoryMaps authoring blocks;
 - any signed-in Felt, CARTO, or Mapbox behavior that was not observed.
-

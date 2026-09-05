@@ -75,9 +75,3 @@ export interface GuidedMapPresentation {
   sectionFocus: GeoJsonFeatureCollection;
   shortlistIds: string[];
 }
-
-export interface GuidedSectionReference {
-  status: "available";
-  pack_id: string;
-  path: string;
-}

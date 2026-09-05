@@ -43,8 +43,7 @@
 .detail-layer-list > div span { display: flex; flex-direction: column; }
 .detail-layer-list strong { font-size: 10px; }
 .detail-layer-list small { color: var(--cg-ink-soft); font-size: 8px; }
-.plateau-data-badge, .source-data-badge { display: inline-flex; width: fit-content; padding: 3px 4px; background: var(--cg-teal-dark); color: #fff; font-size: 7px; letter-spacing: .07em; }
-.source-data-badge { background: #76817d; }
+.plateau-data-badge { display: inline-flex; width: fit-content; padding: 3px 4px; background: var(--cg-teal-dark); color: var(--cg-bg-elevated); font-size: 7px; letter-spacing: .07em; }
 .primary-action { min-height: 38px; padding: 0 12px; border: 1px solid var(--cg-teal-dark) !important; background: var(--cg-teal-dark) !important; color: #fff; cursor: pointer; font-size: 10px; font-weight: 800; }
 .segmented-control { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin: 12px 0; padding: 2px; border: 1px solid var(--cg-line-strong); }
 .segmented-control button { min-height: 32px; border: 0; background: transparent; cursor: pointer; font-size: 9px; }

@@ -6,7 +6,6 @@ import type {
 export const CANDIDATE_SELECTION_RULE_VERSION = "maizuru-field-candidate-1.0.0";
 export const FIELD_CHECK_RULE_VERSION = "maizuru-field-check-1.0.0";
 export const MUNICIPAL_REVIEW_STATUS = "AWAITING_MUNICIPAL_REVIEW" as const;
-export const HUMAN_TEST_STATUS = "AWAITING_HUMAN_TEST" as const;
 export const BASELINE_STATUS = "BASELINE_NOT_COLLECTED" as const;
 
 export const HUMAN_TRIAGE_LABELS: Record<HumanTriageStatus, string> = {

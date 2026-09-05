@@ -26,10 +26,10 @@ The starting branch, HEAD, upstream, main comparison, status, and 12-commit hist
 - [Supplemental capture manifest](assets/harbor-atlas-v2/before/supplement-manifest.json): Scene 1 hover, registered facility, Public 1920 x 1080, Advanced loading, and Advanced ready; five captures, zero diagnostics.
 - [Performance profile](assets/harbor-atlas-v2/before/performance.json): five fresh browser contexts under one production-preview protocol.
 - [Visual inventory](assets/harbor-atlas-v2/before/inventory.json): five responsive Advanced viewports plus source and build asset measurements.
-- [Palette study](assets/harbor-atlas-v2/palette-study/manifest.json): three capture-only candidates across Public, Scene 1, Scene 2, Scene 3, Section, and mobile Section, plus grayscale, protanopia, and deuteranopia simulations.
+- Palette study: three capture-only candidates were evaluated across Public, Guided, Section, mobile, grayscale, protanopia, and deuteranopia states. Harbor Atlas was selected; the superseded exploration rasters remain recoverable from Git history rather than the current checkout.
 - [Evidence index](assets/harbor-atlas-v2/manifest.json): paths, counts, source hashes, and the selected palette.
 
-The baseline contains 22 product screenshots and 21 palette-study screenshots. Required desktop widths 1280, 1440, and 1920, mobile 390 x 844, and DPR 2 are represented. The existing demo video package is preserved unchanged; its source predates this visual pass and remains a reference rather than new Harbor Atlas evidence.
+The retained baseline contains the product screenshots required for direct before/after comparison. Desktop widths 1280, 1440, and 1920, mobile 390 x 844, and DPR 2 are represented across the Harbor checkpoint package. The existing demo video package is preserved unchanged; its source predates this visual pass and remains a reference rather than new Harbor Atlas evidence.
 
 ## Visual inventory
 

@@ -64,4 +64,4 @@ motionは状態変化の説明に限る。Service Pulseはprecomputed route位�
 
 ## Screenshot acceptance
 
-Public comprehensionの正規画像は `docs/assets/current/` の8枚だけをcanonicalとする。Landingから同じGuided Investigationを完走し、各画像で現在の問い、実データ値、主操作、固定viewportを検証する。Step 3・4は実PLATEAU都市断面が非空であることを必須とし、3D準備中なら未完了を明示した静的断面として記録する。8枚すべてとmanifestをstageで検証できた場合だけcurrentを入れ替え、console errorまたはcritical request failure時は既存currentを保持する。完全なterrain/building/camera readinessが必要な高度分析captureは `capture:advanced` で別に検証する。
+正規画像は、CIを通過した同一commitをproductionへdeployした後に取得する。Public、Guidedの3シーン、別Area、fallback、exact target、Urban Section、mobile、DPR2を固定viewportで検証し、commit、URL、Pages run、state、readiness、診断、SHA-256をmanifestへ記録する。新しいstageが全gateを通過するまで既存canonical mediaを置き換えない。保持範囲と生成手順は [presentation-assets.md](presentation-assets.md) を参照する。

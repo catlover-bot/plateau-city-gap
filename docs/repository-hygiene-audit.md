@@ -338,5 +338,52 @@ documentation. Canonical data, migrations, active tests, current Guided and
 Harbor evidence, privacy/security documentation, and canonical video paths are
 retained. Git history is not rewritten.
 
-Final before/after counts will be appended after the refactor and presentation
-asset package are complete.
+## Consolidation outcome before production-media recapture
+
+The code/document/asset consolidation is complete. Presentation media is still
+excluded from the after figures below because it is added only from a verified
+production deployment.
+
+| Measurement | Baseline | After consolidation | Change |
+| --- | ---: | ---: | ---: |
+| tracked files | 1,596 | 1,352 | -244 |
+| tracked bytes | 310,102,475 | 206,854,961 | -103,247,514 (-33.3%) |
+| tracked presentation/evidence assets | 328 | 95 | -233 |
+| tracked asset bytes | 155,570,590 | 52,642,589 | -102,928,001 |
+| exact duplicate groups | 44 | 6 | -38 |
+| exact redundant files | 53 | 8 | -45 |
+| exact redundant bytes | 20,578,314 | 397,243 | -20,181,071 |
+| duplicate PNG groups | 38 | 0 | -38 |
+| Markdown files checked | 100 | 92 | -8 |
+| frontend scripts | 29 | 20 | -9 |
+| CSS files | 15 | 14 | -1 |
+| CSS bundle bytes | 242,200 | 227,414 | -14,786 (-6.1%) |
+| app runtime JS bytes | 526,150 | 529,347 | +3,197 (+0.6%) |
+| Vitest | 30 / 130 | 31 / 133 | +1 file / +3 tests |
+
+The eight remaining duplicate files are intentional analysis-to-runtime
+mirrors or small shared text records; no duplicate PNG remains. Git history was
+not rewritten, so the checkout and future clone tip are leaner while all
+removed evidence remains recoverable by commit.
+
+Implementation structure also changed materially without changing product
+output:
+
+- `GuidedSpatialWorkspace.tsx` fell from 631 to 244 lines. Content, targets,
+  canonical selection, lazy/stale-safe Area context, map stage, inspector, and
+  typed cartography now have separate modules.
+- `UrbanSection.tsx` fell from 532 to 337 lines. Its data schema, pure plot and
+  focus layout, collision policy, and abortable loading are independently
+  testable.
+- all five confirmed dead components, nine confirmed unused exports/functions,
+  one unreachable map-state module, and the legacy Guided stylesheet were
+  removed. No test was deleted.
+- legacy cascade values that were part of the approved screenshot were first
+  promoted to explicit Harbor Atlas tokens. Desktop Section output remained
+  byte-identical; mobile and DPR2 comparison exceeded SSIM 0.99995.
+- nine one-off capture scripts and 12 superseded checkpoint documents were
+  removed. `docs/README.md` now routes current documentation, and stable data,
+  claim, and presentation-retention boundaries have dedicated documents.
+
+Final tracked counts will be recorded in the refactor checkpoint after the
+verified production slide and video packages are installed.

@@ -33,3 +33,10 @@ node_modules/
 frontend/dist/
 frontend/public/cesium/
 .DS_Store
+
+# Local capture/video staging. Versioned evidence belongs under docs/assets/.
+/tmp/
+/temp/
+/*-frames/
+/*.webm
+/*.y4m

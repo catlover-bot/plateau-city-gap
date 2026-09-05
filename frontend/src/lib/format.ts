@@ -46,10 +46,6 @@ export function percentileValue(value: unknown): number | null {
   return Math.min(1, Math.max(0, percentile > 1 ? percentile / 100 : percentile));
 }
 
-export function textValue(value: unknown): string | null {
-  return typeof value === "string" && value.trim() ? value.trim() : null;
-}
-
 export function isTop10Rank(value: unknown): boolean {
   const rank = finiteNumber(value);
   return rank !== null && rank >= 1 && rank <= 10;

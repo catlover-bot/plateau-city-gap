@@ -38,7 +38,7 @@ The core is the selected Area's PLATEAU building, road, terrain and planning con
 | Field/review | Large form and internal review states in Guide 5/6 | Moved out of the Guided core; legacy links map to Advanced |
 | Cards / process chrome | Repeated bordered cards and numbered progress | Spatial stage 72%, restrained context panel 28%, no numbered progress |
 
-Before references: `assets/public-product-audit/production-guided-section.png` and `assets/public-product-audit/production-guided-task.png`. After evidence and hashes are in `assets/guided-spatial-checkpoint/manifest.json`.
+The superseded production before-images remain recoverable from Git history. The retained after evidence and hashes are in `assets/guided-spatial-checkpoint/manifest.json`.
 
 ## Data and provenance gates
 

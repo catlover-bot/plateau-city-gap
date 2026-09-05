@@ -49,7 +49,7 @@ The prior tracked checkpoint remains a second reference: Guided FMR 851.3ms, Are
 
 ## Browser benchmark
 
-The benchmark evidence was opened in Chromium at 1440 x 900 before implementation. URL, response state, final URL, title, capture time, and screenshot hashes are preserved in the existing [global product manifest](assets/public-product-audit/manifest.json) and [PLATEAU reference manifest](assets/cartographic-benchmark/manifest.json). Third-party screenshots are research evidence only and are not reused in the product or demo video.
+The benchmark evidence was opened in Chromium at 1440 x 900 before implementation. The retained [PLATEAU/cartographic reference manifest](assets/cartographic-benchmark/manifest.json) records the current comparison provenance. The larger superseded product-audit capture package remains recoverable from Git history. Third-party screenshots are research evidence only and are not reused in the product or demo video.
 
 | Reference | Browser evidence | Useful principle | Explicit non-copy boundary |
 |---|---|---|---|

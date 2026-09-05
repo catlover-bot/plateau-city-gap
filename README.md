@@ -1,83 +1,42 @@
 # CITY GAP
 
-**地域交通・医療の現地調査候補をつくるツール**
+**地域の「まだ分からない」を、地図から現地確認へつなぐ空間調査プロダクト。**
 
-500mの課題候補を、PLATEAUで現地調査対象まで具体化します。
+[公開デモ](https://catlover-bot.github.io/plateau-city-gap/) · [現在のドキュメント](docs/README.md) · [プロダクト境界](docs/data-and-claim-boundaries.md) · [構成](docs/architecture.md)
 
-[現地調査フロー](https://catlover-bot.github.io/plateau-city-gap/) · [Product positioning](docs/product-positioning.md) · [Municipal need validation](docs/municipal-need-validation.md) · [Architecture](docs/architecture.md)
+CITY GAPは、舞鶴市の公開データとPLATEAUを使い、地域の候補を見つけ、街の形を理解し、現地で確かめる対象を具体化します。公開面は地図を中心にした3シーンのGuided体験です。Advanced面では、同じ選択と表示状態を保ったまま詳細分析へ移れます。
 
-CITY GAPは、地域公共交通計画、デマンド交通、交通空白地域等を検討する自治体職員が、最初に現地確認すべき3〜5地域を絞るための意思決定前処理ツールです。人口・交通・医療の500m分析を「分析上の候補」「詳細調査例」「データ確認候補」に分け、PLATEAU収録範囲がある候補は建物・道路・地形へ具体化します。公開データにない運行頻度、歩行可否、施設利用条件、地域内サービスは、理由付きの現地確認項目へ変換します。
+![CITY GAP Guided Scene 2](docs/assets/harbor-atlas-v2/after/05-scene2-combined-desktop.png)
 
-最終成果物は、候補一覧、編集可能な現地調査票、庁内共有用調査サマリーです。候補は危険度、政策推奨、施策優先順位、実施効果予測、居住者個人の実数を示しません。自治体レビューを受けるまで `AWAITING_MUNICIPAL_REVIEW` を維持します。
-
-![CITY GAP 現地調査候補](docs/assets/current/01-value-landing.png)
-
-## What it does
-
-- 舞鶴市実データから異なる目的の現地調査候補3件を作成
-- 市境交差495件、percentile比較286件、Primary順位218件、候補順位を明確に分離
-- データ不足と分析上の仮定から、理由・生成元付きの現地確認項目を決定論的に生成
-- 状態・優先度・担当・期限・メモ・GPSを編集できる内部調査票
-- 通信なし端末保存、印刷、public/internal分離
-- 未確認を自動で確認済みにしない自治体レビュー境界
-- 舞鶴市495メッシュと藤沢市327メッシュを同じ決定論的pipelineで分析
-- 都市 → 地区 → 500m → 建物群 → 建物 → 道路 → 施策のResolution Lift
-- PLATEAU建物・道路LOD1面・実DEMを同じ調査sceneで表示
-- 296棟・道路135・実TINを固定するcontent-addressed Spatial Evidence Pack
-- 同じ選択を3Dと実DEM断面で同期するPLATEAU Urban Section
-- 既存のCITY GAP計算値だけを使うUrban X-Ray
-- 実network距離だけを表示するService Pulse
-- Baseline / Scenario / Stressのchanged-only Counterfactual Twin
-- 公開済み実sampleだけを表示するTemporal PLATEAU Ghost
-- Finding → PLATEAU objectと、object → Findingの双方向Object Lens
-- Source、year、計算、限界を辿れるEvidence Chain
-- 認証済みMunicipal Service、PostGIS / pgRouting、API、worker、field offline sync
-
-## Why PLATEAU
-
-Open Dataは課題候補を発見し、PLATEAUは候補を実際の都市構造まで詳細化します。PLATEAUは背景レイヤーではなく、CITY GAPのUrban Object Modelです。
+## Product flow
 
 ```text
-Open Data Finding
-  └─ 500m mesh
-      ├─ contains → PLATEAU building group / building
-      ├─ intersects → PLATEAU road surface
-      ├─ explained by → PLATEAU DEM
-      └─ context → land use / planning / hazard
-           └─ CITY GAP analysis / scenario / evidence
+地域を選ぶ
+  → PLATEAUの建物・道路・地形を同じ場所で読む
+  → 実在する対象、登録地点、または正直な範囲fallbackを選ぶ
+  → データだけでは決められない3–5項目を現地で確かめる
 ```
 
-舞鶴市2025 PLATEAUでは全市配信44,640建物を確認し、常団地前Deep Diveには検証済み856棟subset、対象メッシュ内296棟、道路LOD1面、実TIN DEMを収録しています。Top 10メッシュの公式建物coverageは0棟であり、欠損を補間せず表示します。
+- 市内495の500m Areaから、地図と一覧で調査範囲を選べます。
+- 詳細な建物・道路・都市計画・Urban Sectionは、選択したAreaだけ遅延読込します。
+- PLATEAU対象を解決できる場合は実在する建物または道路面を示します。
+- 個別対象を解決できない場合はArea fallbackとして表示し、正確な地点を装いません。
+- Urban Sectionは地図上のA–B線と同じ位置を、実DEM・建物・道路の断面として示します。
+- GuidedからAdvancedへの移行は単一のbounded loadで、失敗時のretryと選択状態の保持を備えます。
 
-建物人口はモデル推計配分であり、実居住者数ではありません。公開画面では建物別人口を表示せず、秘匿・抑制対象メッシュを建物へ分解しません。道路graphは `experimental PLATEAU LOD1 road-surface adjacency` であり、歩行者network、歩行距離、歩行時間ではありません。DEMから歩行負荷・危険度・斜度を推定しません。
+分析結果は候補探索と確認準備のためのものです。危険度、政策推奨、施策優先順位、歩行時間、実居住者数、現地確認結果を自動決定しません。詳しくは[データと主張の境界](docs/data-and-claim-boundaries.md)を参照してください。
 
-## Architecture
+## Repository
 
-```text
-Official data / versioned manifests
-  └─ Python analysis + independent verification
-      └─ analysis/outputs/real (analysis SSOT)
-          ├─ privacy-reviewed static web assets
-          │   └─ React + MapLibre + Cesium
-          └─ PostGIS / pgRouting
-              └─ FastAPI + worker + audit log
-```
+- `analysis/`: 公式入力の設定、決定論的分析、検証、公開asset生成
+- `frontend/`: React、MapLibre、Cesium、Guided / Advanced / Municipal surfaces
+- `backend/`: FastAPI、adapter、worker、audit log
+- `infra/`: PostGIS schema、deployment、operations
+- `docs/`: 現在の設計、データ境界、検証、運用、プレゼンテーションasset
 
-主要ディレクトリ:
+`analysis/outputs/real/` が分析結果のSSOTです。ブラウザは公開可能な静的assetを読み、人口・距離・スコアを再計算しません。大容量raw CityGMLと再生成可能な中間成果物はGit管理外です。
 
-- `analysis/config/`: 都市別の公式入力、CRS、閾値
-- `analysis/src/`: 都市共通の分析engine
-- `analysis/outputs/real/`: 確定した実分析結果
-- `analysis/scripts/`: download、asset build、独立検証、benchmark
-- `frontend/src/map/`: 2D / 3D / scene / layer / readiness
-- `frontend/src/state/spatial/`: URL共有可能な空間state
-- `frontend/src/service/`: Municipal Service
-- `backend/citygap_platform/`: API、adapter、worker
-- `infra/migrations/`: versioned PostGIS schema
-
-詳細は [architecture](docs/architecture.md)、[3D rendering](docs/3d-rendering.md)、[API contract](docs/api-contract.md) を参照してください。
-
-## Run
+## Run the frontend
 
 Node.js 20以降:
 
@@ -87,78 +46,56 @@ npm ci
 npm run dev
 ```
 
-production相当:
+Production相当:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Municipal Service surface:
+Municipal surface:
 
 ```bash
 VITE_CITYGAP_SURFACE=municipal npm run build
-npm run preview
 ```
 
-PostGIS / pgRouting、API、workerを含む構成:
+## Validate
 
 ```bash
-cp .env.example .env
-# 共有環境ではCITYGAP_POSTGRES_PASSWORDを変更
-docker compose up --build
+npm --prefix frontend run lint
+npm --prefix frontend run typecheck
+npm --prefix frontend run test -- --run
+npm --prefix frontend run build
+npm --prefix frontend run check:docs
 ```
-
-## Reproduce and validate
 
 Python 3.10以降:
 
 ```bash
 python -m pip install -e '.[dev]'
-python -m analysis.src.run_city_analysis --config analysis/config/maizuru.yaml
-python -m analysis.src.run_city_analysis --config analysis/config/fujisawa.yaml
 python -m analysis.scripts.run_final_audit
-python -m analysis.scripts.verify_decision_studio
-python -m analysis.scripts.verify_network_scenarios
-python -m analysis.scripts.build_spatial_evidence_pack
 pytest -q
 ```
 
-Frontend:
+ブラウザのGuided回帰、Guided → Advanced移行、PLATEAU-native、visual identity、accessibility、capture手順は[QA](docs/qa.md)と[プレゼンテーションasset](docs/presentation-assets.md)にまとめています。
 
-```bash
-npm --prefix frontend run lint
-npm --prefix frontend run typecheck
-npm --prefix frontend test -- --run
-npm --prefix frontend run build
-```
+## Documentation
 
-正規スクリーンショットはproduction buildの現地調査フローを実際に完走して生成します。ランディング、候補一覧、候補brief、PLATEAU現地文脈、確認項目、調査票、自治体レビュー、390×844モバイルの8枚がすべて揃ったstageだけを公開します。
+まず[docs/README.md](docs/README.md)を参照してください。主要SSOTは次のとおりです。
 
-```bash
-npm --prefix frontend run capture:current -- \
-  --url http://127.0.0.1:4173/plateau-city-gap/
-```
-
-出力は `docs/assets/current/` の正規8枚と `manifest.json` だけです。生成はclean worktreeを要求し、失敗時は既存currentを保持します。従来の高度分析captureは `capture:advanced` として分離しています。
-
-## Current documentation
-
-- [Product vision](docs/product-vision.md)
-- [Product positioning](docs/product-positioning.md)
-- [Municipal need validation](docs/municipal-need-validation.md)
 - [Architecture](docs/architecture.md)
-- [Visual system](docs/visual-system.md)
-- [3D rendering](docs/3d-rendering.md)
-- [Methodology](docs/methodology.md)
+- [Product domain](docs/product-domain.md)
 - [Data sources](docs/data-sources.md)
-- [Validation evidence](docs/validation-evidence.md)
-- [First-run comprehension test](docs/first-run-comprehension-test.md)
-- [Operations](docs/operations.md)
+- [Methodology](docs/methodology.md)
+- [Evidence chain](docs/evidence-chain.md)
+- [Urban Section](docs/urban-section.md)
 - [Security](docs/tenant-security.md)
+- [Deployment](docs/deployment.md)
 
-データの出典、checksum、年次、加工、licenseは [data sources](docs/data-sources.md) に記録しています。大容量raw CityGMLはGit管理外です。
+## Deployment boundary
+
+Vite base pathは `/plateau-city-gap/` です。このfeature branchは`main`へ未統合です。mainへのmerge、force push、またはmainをこのbranchへ取り込む操作は、明示的な承認なしに行いません。
 
 ## License
 
-コードと各データのlicenseは [LICENSE](LICENSE) と [data sources](docs/data-sources.md) を参照してください。自治体の最終判断には現地確認、関係部署レビュー、最新原典の確認が必要です。
+コードと各データのlicenseは[LICENSE](LICENSE)と[データ出典](docs/data-sources.md)を参照してください。自治体の最終判断には現地確認、関係部署レビュー、最新原典の確認が必要です。

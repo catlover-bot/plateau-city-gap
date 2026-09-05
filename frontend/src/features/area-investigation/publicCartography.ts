@@ -11,7 +11,6 @@ export type PublicStoryArtifactKind = "buildings" | "planning";
 
 export type TargetResolution = "exact" | "reference_position" | "area_fallback";
 export type PublicTargetKind = "building" | "road" | "facility" | "mesh";
-export type PublicMapRenderState = "loading" | "ready" | "degraded";
 
 interface DerivativeArtifact {
   artifact_kind?: string;
