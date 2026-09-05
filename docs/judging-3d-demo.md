@@ -75,3 +75,24 @@ UI source `5d59de0852066d96d9a228c205812fe97f006dab` passed all nine jobs in [CI
 The full targeted browser path also passed on production: Public→3D actual pick/official attributes, A–B/focus, building-three/road-four matching checks, 2D retention, Area/stale/unsupported rejection, Advanced single-flight success, and 390px finite failure/retry. Production used one persistent MapLibre initialization with zero unexpected page/request/local-HTTP diagnostics. Observed hardware-browser 3D entry was 2.364 seconds; injected mobile failure settled in 45.649 seconds then recovered. These are test observations, not a claim of universal or cold-load performance.
 
 The four production images, successful native trial, single clean master, captioned derivative, VTT, and seven-payload-hash manifest are complete. Both MP4s pass full decode and format checks; image and master capture diagnostics contain no unexpected errors. The live index and all ten JS/CSS assets, including lazy Cesium chunks, matched the declared production build before capture. Final asset-commit CI must be nine of nine green before closing the goal; the final hand-off identifies that exact commit/run. No additional Pages deployment is needed for these docs/media/capture-tooling-only changes. Main remains untouched, and the two pre-existing image-name worktree changes remain unstaged.
+
+## 追加素材：Guidedから詳細分析へ
+
+追加作業の起点はfeature branchの `4d724f32e7c286ae8e8335d7c1b3d54ab5682ef2`。上記3D本編・既存画像・manifestを変更せず、別セット `docs/assets/judging-advanced/` を追加します。アプリ本体や分析値の変更はありません。この追加依頼では、素材commitのCI 9/9成功後に同じfeature branchからPagesを再deployし、公開runtimeと素材hashを確認します。最終commit/runは納品時の確認結果を参照してください。
+
+| 追加ファイル | 発表で伝える内容 |
+| --- | --- |
+| [01-advanced-area-analysis.png](assets/judging-advanced/01-advanced-area-analysis.png) | 同じ常団地前周辺の500mメッシュについて、高齢者人口・公共交通距離・医療距離を詳細分析画面で確認 |
+| [02-advanced-object-lens.png](assets/judging-advanced/02-advanced-object-lens.png) | 同じメッシュの出典・年度・人口・探索指標と、Finding / PLATEAU建物群・道路・DEMの関係を確認 |
+| [city-gap-guided-to-advanced.mp4](assets/judging-advanced/city-gap-guided-to-advanced.mp4) | Guided 3D → 実際の「詳細分析」クリック → 同じ地域の指標 → Object Lensへのスクロールを13秒で示す |
+| [manifest.json](assets/judging-advanced/manifest.json) | 個別SHA-256、production / UI / Pagesの撮影元、同一地域・実データとの対応、readinessと取得品質 |
+
+確認入口：[Guided 3Dから詳細分析へ](https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&mapMode=plateau3d)。常団地前周辺が表示されたことを確認し、右上の「詳細分析」を押します。詳細分析の右側Inspectorを下へスクロールすると、同じ地域のObject Lensに出典と関係情報が表示されます。撮影で実際に生成されたAdvanced URLもmanifestへ記録しています。
+
+表示値は公開 `mesh_metrics.geojson` の実レコード `533513314` と照合しました。人口471、65歳以上人口200、公共交通563m、医療1,451m、探索指標 `0.2796852274821857`。距離の未丸め値は562.5974946252306m / 1450.5478993305774mです。国勢調査2020の500m集計と既存CITY GAP分析であり、PLATEAU建物別の実居住者数ではありません。距離はメッシュ中心からの直線距離で、歩行距離・所要時間ではありません。探索指標は危険度や政策順位を断定するものではありません。
+
+公開データSHA-256は `1de17511f925dcb1e633096fc5ad417e61a4b5b1fc8daf0d6e1e4c7b782dc044` でローカルと一致。UIのentryと全10 JS/CSSも撮影前に公開版と照合しました。別地域 `533512753` を参照する既存の一般「根拠を見る」ダイアログや、市全体の仮想施策値は、この地域の分析として素材に使用していません。
+
+動画は1回収録、native 1920×1080、13.000秒、H.264 / yuv420p / 音声なし。実取得160フレームを静止holdの複製等で出力390フレーム・30fpsに正規化しています。拡大、AI補間、値の注入、loading画面の削除、別録画のつなぎ合わせはありません。1.800秒で実際に「詳細分析」をクリックし、2.598秒でfull-data / map-style準備が完了しました。静止画には別途strict / visual readinessを確認しています。動画1秒・6秒・11秒のデコード画像と全体のデコード完了を確認済みです。
+
+残る制約：素材はInspectorの実指標・出典・関係情報が中心で、地図上の選択メッシュ境界や分析色面は表示されていません。既存のズーム操作による静止画1枚の構図確認でも色面は現れず、その試行は保全し、元の画像を採用しました。架空の境界や色面は追加していません。HTTP cacheをprewarmし、既存の初期Area選択で実属性を取得してから撮影したため、cold-load速度の証拠ではありません。IDだけを指定したAdvanced直リンクでは、既存仕様により上部の指標が未入力になる場合があります。その場合はこのGuided入口経由、または実際の同じ地域の再選択を使ってください。Object Lensは元データから地域を照合します。文字は実UIのままで、閲覧時の縮小率に依存します。利用者の理解度、自治体での業務効果・受入れは未検証です。撮影時の一時ファイルと以前の素材は保全しています。

@@ -1,8 +1,16 @@
 # Current goal
 
-Active goal: `plateau-3d-value-fast-delivery-v1`
+Active goal: `advanced-analysis-media-supplement-v1` (supplemental presentation media only).
 
-Status: Guided verified-local 3D is published from UI `5d59de0852066d96d9a228c205812fe97f006dab`, with nine-job CI `33939420182`, Pages `33939684419`, matching live entry and lazy-chunk bytes, and all required production browser paths passing. The separate four-image package, native 1080p clean master, captioned derivative, and provenance manifest are delivered in `docs/assets/judging-3d/`. Exact final asset-commit nine-job CI is the last hand-off gate; its immutable commit/run are reported in the final hand-off rather than embedded self-referentially here. See the single [3D judging implementation and delivery note](judging-3d-demo.md).
+Starting audit: local HEAD, upstream and remote feature are `4d724f32e7c286ae8e8335d7c1b3d54ab5682ef2` on `feat/guided-spatial-storytelling-v1`; remote main remains `2f28cd1089eda576c3002ebb2fb3e0f2b62123ff`. The only initial worktree changes are the two existing presentation-image deletions and their untracked, byte-identical `copy.png` counterparts. Preserve these without staging, and preserve all prior media and temporary evidence.
+
+Scope: reuse the published Guided/Advanced interaction and native capture helpers; add two useful Advanced stills and one 10–15 second Guided→Advanced video for the same Area `533513314`, with no fabricated values or application redesign. Deliver a separate `docs/assets/judging-advanced/` package and extend the existing [judging delivery note](judging-3d-demo.md). Exact delivery-commit CI must be nine of nine green, followed by the requested feature-branch Pages deployment and live/raw-asset verification. Main merge and history rewriting remain prohibited.
+
+Status: two production stills, one 13-second native-1080p Guided→Advanced video, and a source/hash manifest are delivered in `docs/assets/judging-advanced/`. Real source values and same-Area identity are verified; the visuals are Inspector-focused, without a visible map analysis color surface. No application source changed. Exact delivery-commit nine-job CI, requested Pages deployment, and post-deploy live verification are the final hand-off gates; their immutable SHA/runs are reported in the hand-off.
+
+## Previous completed 3D delivery
+
+Guided verified-local 3D was published from UI `5d59de0852066d96d9a228c205812fe97f006dab`, with nine-job CI `33939420182`, Pages `33939684419`, matching live entry and lazy-chunk bytes, and all required production browser paths passing. The four-image package, native 1080p clean master, captioned derivative, and provenance manifest were delivered in `docs/assets/judging-3d/` by `4d724f32e7c286ae8e8335d7c1b3d54ab5682ef2`; final CI `33941032712` passed all nine jobs. This package remains unchanged by the supplemental media task.
 
 Current starting HEAD and remote feature: `704a9b237a96aee4b71b01e9f0cd0090100764dc`. Existing image-name changes, prior media, and all backups are preserved. Recursive deletion and automatic cleanup are prohibited. The historical 2D-only Guided policy is superseded only for the verified `533513314` example; other Areas retain their own 2D context. The sections below retain the previous completed checkpoint for provenance, not the current goal's completion state.
 
