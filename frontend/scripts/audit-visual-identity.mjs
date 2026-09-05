@@ -11,6 +11,7 @@ for (let index = 2; index < process.argv.length; index += 2) {
 
 const baseUrl = args.get("--url") ?? "http://127.0.0.1:4173/plateau-city-gap/";
 const label = args.get("--label") ?? "current";
+const baselineRef = args.get("--baseline-ref") ?? null;
 const output = path.resolve(
   process.cwd(),
   args.get("--output") ?? `../analysis/outputs/real/visual-identity/${label}.json`,
@@ -58,12 +59,51 @@ async function fileInventory() {
   const css = await Promise.all(cssSources.map(describe));
   const assets = await Promise.all(buildAssets.map(describe));
   const screenshotSizes = await Promise.all(screenshots.map((file) => stat(file).then((item) => item.size)));
+  const analyzeStyleSource = (entries) => {
+    const rawColorPattern = /#[\da-f]{3,8}\b|(?:rgb|hsl)a?\([^)]*\)/gi;
+    const tokenDefinitionPattern = /--cg-[a-z\d-]+\s*:/gi;
+    const tokenReferencePattern = /var\(\s*(--cg-[a-z\d-]+)/gi;
+    const rawColors = entries.flatMap(({ content }) => content.match(rawColorPattern) ?? []);
+    const localRawColors = entries
+      .filter(({ path: sourcePath }) => !sourcePath.endsWith("design-system/tokens.css"))
+      .flatMap(({ content }) => content.match(rawColorPattern) ?? []);
+    const definitions = new Set(entries.flatMap(({ content }) => (
+      [...content.matchAll(tokenDefinitionPattern)].map((match) => match[0].replace(/\s*:\s*$/, "").toLowerCase())
+    )));
+    const references = entries.flatMap(({ content }) => (
+      [...content.matchAll(tokenReferencePattern)].map((match) => match[1].toLowerCase())
+    ));
+    return {
+      files: entries.length,
+      raw_color_literal_count: rawColors.length,
+      unique_raw_color_literal_count: new Set(rawColors.map((value) => value.toLowerCase())).size,
+      raw_color_literal_count_outside_tokens: localRawColors.length,
+      semantic_token_definition_count: definitions.size,
+      semantic_token_reference_count: references.length,
+      unique_semantic_token_reference_count: new Set(references).size,
+    };
+  };
+  const currentStyleEntries = await Promise.all(cssSources.map(async (file) => ({
+    path: path.relative(repositoryRoot, file).replaceAll(path.sep, "/"),
+    content: await readFile(file, "utf8"),
+  })));
+  const baselineStyleEntries = baselineRef
+    ? execFileSync("git", ["ls-tree", "-r", "--name-only", baselineRef, "frontend/src"], { cwd: repositoryRoot, encoding: "utf8" })
+      .split("\n")
+      .filter((sourcePath) => sourcePath.endsWith(".css"))
+      .map((sourcePath) => ({
+        path: sourcePath,
+        content: execFileSync("git", ["show", `${baselineRef}:${sourcePath}`], { cwd: repositoryRoot, encoding: "utf8" }),
+      }))
+    : [];
   return {
     sourceCss: css.sort((left, right) => left.path.localeCompare(right.path)),
     sourceCssBytes: css.reduce((sum, item) => sum + item.bytes, 0),
     buildAssets: assets.sort((left, right) => left.path.localeCompare(right.path)),
     screenshotCount: screenshots.length,
     screenshotBytes: screenshotSizes.reduce((sum, size) => sum + size, 0),
+    styleSourceCurrent: analyzeStyleSource(currentStyleEntries),
+    styleSourceBaseline: baselineRef ? { ref: baselineRef, ...analyzeStyleSource(baselineStyleEntries) } : null,
   };
 }
 

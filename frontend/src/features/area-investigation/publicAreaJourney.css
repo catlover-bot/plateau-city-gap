@@ -287,10 +287,10 @@
   padding: 0 19px;
   border-color: var(--cg-target-strong);
   background: var(--cg-target-strong);
-  color: white;
+  color: var(--cg-bg-elevated);
 }
 
-.public-primary:hover { border-color: #8f392d; background: #8f392d; }
+.public-primary:hover { border-color: var(--cg-target-hover); background: var(--cg-target-hover); }
 
 .public-secondary,
 .public-back {

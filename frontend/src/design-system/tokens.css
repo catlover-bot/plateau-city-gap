@@ -36,6 +36,7 @@
 
   /* Harbor Atlas: exact target, decisive action, and system states */
   --cg-target-strong: #a94736;
+  --cg-target-hover: #8f392d;
   --cg-target: #d9664d;
   --cg-target-soft: #f1a085;
   --cg-target-pale: #f7e4de;
@@ -101,5 +102,5 @@
 * { box-sizing: border-box; }
 button, select, input { font: inherit; }
 button { color: inherit; }
-:focus-visible { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; box-shadow: 0 0 0 7px var(--cg-text-primary) !important; }
 ::selection { background: var(--cg-area-selected-fill); color: var(--cg-text-primary); }

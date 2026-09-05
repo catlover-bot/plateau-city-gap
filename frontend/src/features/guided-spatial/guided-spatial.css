@@ -314,14 +314,14 @@
   border: 1px solid var(--cg-target-strong);
   border-radius: var(--cg-radius);
   background: var(--cg-target-strong);
-  color: #fff;
+  color: var(--cg-bg-elevated);
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
   transition: background var(--cg-duration-fast) var(--cg-ease), border-color var(--cg-duration-fast) var(--cg-ease), transform var(--cg-duration-fast) var(--cg-ease);
 }
 
-.guided-primary:hover { border-color: #8f392d; background: #8f392d; }
+.guided-primary:hover { border-color: var(--cg-target-hover); background: var(--cg-target-hover); }
 .guided-primary:active { transform: translateY(1px); }
 
 .guided-secondary-action {
@@ -404,7 +404,7 @@
   background: var(--cg-bg-muted);
 }
 
-.guided-unknown-bridge span { color: var(--cg-transect-terrain); font-size: 13px; font-weight: 800; }
+.guided-unknown-bridge span { color: var(--cg-brand-strong); font-size: 13px; font-weight: 800; }
 .guided-unknown-bridge strong { display: block; margin-top: 5px; color: var(--cg-text-primary); font-size: 16px; line-height: 1.5; }
 .guided-unknown-bridge p { margin: 7px 12px 0 0; color: var(--cg-text-secondary); font-size: 13px; line-height: 1.6; }
 

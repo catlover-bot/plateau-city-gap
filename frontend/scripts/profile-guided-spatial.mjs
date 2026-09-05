@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { chromium } from "playwright-core";
 
@@ -18,6 +18,7 @@ const outputPath = resolve(
   process.cwd(),
   parameters.get("--output") ?? "../analysis/outputs/real/guided-spatial-performance.json",
 );
+const baselinePath = parameters.has("--baseline") ? resolve(process.cwd(), parameters.get("--baseline")) : null;
 const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? chromium.executablePath();
 
 const browser = await chromium.launch({
@@ -131,10 +132,30 @@ const medians = {
 };
 const gates = {
   first_meaningful_render: { target_ms: 2000, pass: medians.first_meaningful_render_ms <= 2000 },
-  exact_road_warm: { target_ms: 1800, pass: medians.exact_road_warm_ms <= 1800 },
-  exact_building_warm: { target_ms: 2500, pass: medians.exact_building_warm_ms <= 2500 },
-  building_story_warm: { target_ms: 2000, pass: medians.building_story_warm_ms <= 2000 },
+  area_context_cold: { target_ms: 1500, pass: medians.area_context_cold_ms <= 1500 },
+  exact_road_warm: { target_ms: 1200, pass: medians.exact_road_warm_ms <= 1200 },
+  exact_building_warm: { target_ms: 1200, pass: medians.exact_building_warm_ms <= 1200 },
+  building_story_warm: { target_ms: 1200, pass: medians.building_story_warm_ms <= 1200 },
 };
+const baseline = baselinePath ? JSON.parse(readFileSync(baselinePath, "utf8")) : null;
+const baselineComparison = baseline ? Object.fromEntries(Object.keys(medians).map((key) => {
+  const baselineMs = baseline.medians[key];
+  const afterMs = medians[key];
+  const regressionPercent = Number(((afterMs / baselineMs - 1) * 100).toFixed(1));
+  return [key, {
+    baseline_ms: baselineMs,
+    after_ms: afterMs,
+    regression_percent: regressionPercent,
+    maximum_regression_percent: 20,
+    pass: afterMs <= baselineMs * 1.2,
+  }];
+})) : null;
+if (baselineComparison) {
+  gates.baseline_non_regression = {
+    target_percent: 20,
+    pass: Object.values(baselineComparison).every((comparison) => comparison.pass),
+  };
+}
 const report = {
   schema_version: "citygap.guided-spatial-performance@1",
   generated_at: new Date().toISOString(),
@@ -145,6 +166,8 @@ const report = {
   samples,
   medians,
   gates,
+  baseline: baselinePath ? { path: baselinePath, commit: baseline.commit ?? null, medians: baseline.medians } : null,
+  baseline_comparison: baselineComparison,
 };
 
 mkdirSync(dirname(outputPath), { recursive: true });
