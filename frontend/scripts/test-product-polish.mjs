@@ -55,11 +55,42 @@ async function layout(page, label) {
       return [{ a, b, pixels: overlap(rect(left), rect(right)) }];
     });
     const section = document.querySelector(".urban-section");
-    const texts = [...(section?.querySelectorAll("svg text") ?? [])].filter(visible).map((node) => {
+    const svg = section?.querySelector("svg");
+    const svgRect = svg ? rect(svg) : null;
+    const allTextNodes = [...(section?.querySelectorAll("svg text") ?? [])];
+    const texts = allTextNodes.filter(visible).map((node) => {
       const matrix = node.getScreenCTM();
-      return { text: node.textContent, rect: rect(node), rendered_font_px: parseFloat(getComputedStyle(node).fontSize) * Math.min(Math.hypot(matrix.a, matrix.b), Math.hypot(matrix.c, matrix.d)) };
+      const textRect = rect(node);
+      return { text: node.textContent, rect: textRect,
+        containment_margins_css_px: { left: textRect.x - svgRect.x, right: svgRect.right - textRect.right, top: textRect.y - svgRect.y, bottom: svgRect.bottom - textRect.bottom },
+        rendered_font_px: parseFloat(getComputedStyle(node).fontSize) * Math.min(Math.hypot(matrix.a, matrix.b), Math.hypot(matrix.c, matrix.d)) };
     });
     const textOverlaps = texts.flatMap((a, index) => texts.slice(index + 1).filter((b) => overlap(a.rect, b.rect) > 1).map((b) => [a.text, b.text]));
+    const clippedTexts = texts.filter((item) => Object.values(item.containment_margins_css_px).some((margin) => margin < 0));
+    let publicHeadingWord = null;
+    if (root.matches(".public-area")) {
+      const heading = root.querySelector("h1");
+      const text = heading?.textContent ?? "";
+      const wordStart = text.indexOf("地図");
+      const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      const glyphs = wordStart < 0 ? [] : [0, 1].map((offset) => {
+        let remaining = wordStart + offset;
+        const node = nodes.find((candidate) => {
+          if (remaining < candidate.textContent.length) return true;
+          remaining -= candidate.textContent.length;
+          return false;
+        });
+        const range = document.createRange();
+        range.setStart(node, remaining);
+        range.setEnd(node, remaining + 1);
+        const box = range.getBoundingClientRect();
+        return { character: text[wordStart + offset], x: box.x, y: box.y, width: box.width, height: box.height, bottom: box.bottom };
+      });
+      publicHeadingWord = { text, glyphs, same_rendered_line: glyphs.length === 2 && glyphs.every((glyph) => glyph.width > 0 && glyph.height > 0)
+        && Math.abs(glyphs[0].y - glyphs[1].y) < 0.5 && Math.abs(glyphs[0].bottom - glyphs[1].bottom) < 0.5 };
+    }
     const controls = [...root.querySelectorAll("button, select, summary")].filter(visible).filter((node) => !node.closest(".cesium-widget, .maplibregl-control-container"));
     const smallControls = controls.filter((node) => { const r = rect(node); return r.width < 44 || r.height < 44; }).map((node) => ({ name: node.textContent?.trim(), rect: rect(node) }));
     const activeMotion = root.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running" && Number(animation.effect?.getComputedTiming().duration) > 1).map((animation) => ({ type: animation.constructor.name, duration: animation.effect?.getComputedTiming().duration }));
@@ -67,8 +98,12 @@ async function layout(page, label) {
     return { inner_width: innerWidth, inner_height: innerHeight, dpr: devicePixelRatio,
       overflow_px: Math.max(0, document.documentElement.scrollWidth - innerWidth),
       reduced_motion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      public_heading_word: publicHeadingWord,
       active_motion: activeMotion, small_controls: smallControls, panel_overlaps: panelOverlaps,
-      section: section && visible(section) ? { pack: section.dataset.packId, declared_overlap_count: Number(section.dataset.annotationOverlapCount), texts, text_overlaps: textOverlaps } : null,
+      section: section && visible(section) ? { pack: section.dataset.packId, declared_overlap_count: Number(section.dataset.annotationOverlapCount), svg_rect: svgRect, texts, text_overlaps: textOverlaps, clipped_texts: clippedTexts,
+        hidden_texts: allTextNodes.filter((node) => !visible(node)).map((node) => node.textContent),
+        required_labels: { endpoint_a: [...section.querySelectorAll('[data-section-endpoint="A"]')].some(visible), endpoint_b: [...section.querySelectorAll('[data-section-endpoint="B"]')].some(visible),
+          elevation_axis: [...section.querySelectorAll("svg text.axis-title")].some((node) => visible(node) && node.textContent.includes("標高")), distance_axis: [...section.querySelectorAll("svg text.axis-title")].some((node) => visible(node) && node.textContent.includes("距離")) } } : null,
       axe_serious_critical: axe.violations.filter((item) => ["critical", "serious"].includes(item.impact)).map((item) => ({ id: item.id, nodes: item.nodes.map((node) => node.target) })), axe_incomplete: axe.incomplete.length };
   });
   report.records.push({ label, layout: evidence });
@@ -77,10 +112,26 @@ async function layout(page, label) {
   check(evidence.small_controls.length === 0, `${label}: 44px non-map controls`, evidence.small_controls);
   check(evidence.panel_overlaps.every((item) => item.pixels <= 1), `${label}: panel overlap`, evidence.panel_overlaps);
   check(evidence.axe_serious_critical.length === 0, `${label}: automated accessibility`, evidence.axe_serious_critical);
+  if (evidence.public_heading_word) check(evidence.public_heading_word.same_rendered_line, `${label}: Public 地図 remains on one rendered line`, evidence.public_heading_word);
   if (evidence.section) {
     check(evidence.section.declared_overlap_count === 0 && evidence.section.text_overlaps.length === 0, `${label}: Section annotation overlap`, evidence.section);
     check(evidence.section.texts.every((item) => item.rendered_font_px >= 11.95), `${label}: actual rendered Section font minimum 12px`, evidence.section.texts);
+    check(evidence.section.clipped_texts.length === 0, `${label}: all Section text bounds are contained by its SVG`, evidence.section.clipped_texts);
+    check(evidence.section.hidden_texts.length === 0, `${label}: Section text is not hidden to satisfy containment`, evidence.section.hidden_texts);
+    check(Object.values(evidence.section.required_labels).every(Boolean), `${label}: visible Section A/B and both axis labels retained`, evidence.section.required_labels);
   }
+}
+
+async function programmaticHeadingFocus(page, label, experience) {
+  if (experience !== "public" && experience !== "guided") return;
+  const evidence = await page.locator(experience === "public" ? ".public-area-panel h1" : ".guided-story-panel h1").evaluate((heading) => {
+    const style = getComputedStyle(heading);
+    return { text: heading.textContent, active: document.activeElement === heading, tab_index: heading.tabIndex,
+      outline_style: style.outlineStyle, outline_width_px: parseFloat(style.outlineWidth), box_shadow: style.boxShadow };
+  });
+  report.records.push({ label, programmatic_heading_focus: evidence });
+  check(evidence.active && evidence.tab_index === -1, `${label}: programmatic H1 focus is preserved`, evidence);
+  check((evidence.outline_style === "none" || evidence.outline_width_px === 0) && evidence.box_shadow === "none", `${label}: programmatic H1 has no outline or box shadow`, evidence);
 }
 
 async function keyboard(page, label) {
@@ -133,6 +184,47 @@ async function keyboard(page, label) {
   check(records.every((item) => item.visible_focus && item.in_view && item.focus_not_obscured), `${label}: visible unobscured keyboard focus`, records);
 }
 
+async function desktopSectionLayoutReady(page, label) {
+  const evidence = () => page.evaluate(() => {
+    const stage = document.querySelector(".guided-map-stage");
+    const view = stage?.querySelector(".guided-3d-view");
+    const dock = stage?.querySelector(".guided-section-dock");
+    const rect = (node) => {
+      const box = node?.getBoundingClientRect();
+      return box ? { x: box.x, y: box.y, width: box.width, height: box.height, bottom: box.bottom } : null;
+    };
+    return { stage_expanded: stage?.dataset.sectionExpanded, map_mode: stage?.dataset.guidedMapMode,
+      view: rect(view), dock: rect(dock),
+      credit_rects: [...(view?.querySelectorAll('a[href="https://cesium.com/"]') ?? [])].map(rect) };
+  });
+  const immediate = await evidence();
+  const started = performance.now();
+  const readiness = { immediate, settled: null, ready_wait_ms: null };
+  report.records.push({ label, desktop_section_layout: readiness });
+  // A mounted Section can be ready before the desktop split-layout update.
+  // Require its actual non-overlapping current layout, without exempting any
+  // credit/control from the subsequent visible keyboard-focus assertions.
+  await page.waitForFunction(() => {
+    const stage = document.querySelector(".guided-map-stage");
+    const view = stage?.querySelector(".guided-3d-view");
+    const dock = stage?.querySelector(".guided-section-dock");
+    const viewBox = view?.getBoundingClientRect();
+    const dockBox = dock?.getBoundingClientRect();
+    return stage?.dataset.sectionExpanded === "true" && stage.dataset.guidedMapMode === "plateau3d"
+      && view?.checkVisibility({ checkVisibilityCSS: true }) && dock?.checkVisibility({ checkVisibilityCSS: true })
+      && viewBox.width > 0 && viewBox.height > 0 && dockBox.width > 0 && dockBox.height > 0
+      && viewBox.bottom <= dockBox.y;
+  }, null, { timeout: 5_000 });
+  await waitForReal3D(page, 60_000);
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  const settled = await evidence();
+  readiness.settled = settled;
+  readiness.ready_wait_ms = Math.round(performance.now() - started);
+  check(settled.stage_expanded === "true" && settled.map_mode === "plateau3d"
+    && settled.view?.height > 0 && settled.dock?.height > 0 && settled.view.bottom <= settled.dock.y,
+  `${label}: desktop Section and ready 3D occupy separate visible regions`, settled);
+}
+
 async function audit(experience, width) {
   const label = `${experience}-${width}${realZoom ? "-actual200pct" : ""}`;
   const viewport = { width, height: width >= 1000 ? (width === 1280 ? 720 : width === 1920 ? 1080 : 900) : 844 };
@@ -183,6 +275,7 @@ async function audit(experience, width) {
       if (experience !== "public") await waitForReal3D(page, 60_000);
     }
     phase = "ready-closed";
+    await programmaticHeadingFocus(page, label, experience);
     await layout(page, `${label}-closed`);
     await keyboard(page, `${label}-closed`);
     if (experience !== "public") {
@@ -214,6 +307,9 @@ async function audit(experience, width) {
         check(selectedUrl.searchParams.get("parentMesh") === "533513314" && selectedUrl.searchParams.get("selection") === id, `${label}: exact object URL parent`, selectedUrl.href);
       }
       phase = "ready-section";
+      if (experience === "guided" && await page.evaluate(() => !matchMedia("(max-width: 900px)").matches)) {
+        await desktopSectionLayoutReady(page, `${label}-section`);
+      }
       await layout(page, `${label}-section`);
       await keyboard(page, `${label}-section`);
       if (experience === "guided") {

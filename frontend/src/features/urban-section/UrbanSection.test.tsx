@@ -142,6 +142,20 @@ describe("readable Advanced Urban Section", () => {
     expect(render().find((item) => item.type === "svg")?.props.viewBox).toBe("0 0 1000 220");
   });
 
+  it.each([320, 390, 720, 919, 1050.2])("places the readable elevation label inside the %ipx plot without moving axes", (width) => {
+    hooks.values[2] = width;
+    for (const options of [{ mode: "guided" as const }, { readable: true }]) {
+      const view = render(options);
+      const title = view.find((item) => item.type === "text" && item.props.children === "標高（m）");
+      expect(title?.props).toMatchObject({ x: 16, y: "113", transform: "rotate(-90 16 113)", textAnchor: "middle" });
+      expect(view.find((item) => item.props["data-section-endpoint"] === "A")?.props.x).toBe(54);
+      expect(view.find((item) => item.props["data-section-endpoint"] === "B")?.props.x).toBe(width - 20);
+      for (const tick of view.filter((item) => item.props["data-section-axis-tick"] === "elevation")) expect(tick.props.x).toBe(50);
+      expect(view[0].props["data-annotation-overlap-count"]).toBe(0);
+    }
+    expect(render().find((item) => item.type === "text" && item.props.children === "標高（m）")?.props).toMatchObject({ x: 10, y: "113", transform: "rotate(-90 10 113)" });
+  });
+
   it.each([320, 390, 720, 900])("keeps the mobile annotation cap at viewport %ipx before a hidden SVG is measured", (width) => {
     vi.stubGlobal("window", { innerWidth: width });
     const initial = render({ mode: "guided" });

@@ -4,6 +4,7 @@ import { PublicHeader } from "../navigation/PublicHeader";
 import { AreaSummaryPanel, TargetTasks } from "./AreaInvestigationJourney";
 import {
   PUBLIC_LANDING_COPY,
+  PUBLIC_LANDING_HEADING_PHRASES,
   PUBLIC_RADIUS_OPTIONS,
   PUBLIC_URBAN_SECTION_DECISION,
   contextual3dEligibility,
@@ -76,6 +77,11 @@ const summary: InvestigationAreaSummary = {
 };
 
 describe("Public first-run presentation contract", () => {
+  it("keeps the full heading in two readable phrases without splitting 地図", () => {
+    expect(PUBLIC_LANDING_HEADING_PHRASES).toEqual(["舞鶴を、", "地図で調べる。"]);
+    expect(PUBLIC_LANDING_HEADING_PHRASES.join("")).toBe(PUBLIC_LANDING_COPY.heading);
+  });
+
   it("uses the approved landing and short radius labels", () => {
     expect(PUBLIC_LANDING_COPY).toEqual({
       heading: "舞鶴を、地図で調べる。",

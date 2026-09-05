@@ -14,6 +14,7 @@ import {
 import type { AreaUnknown, InvestigationAreaFixture, InvestigationAreaSummary } from "./areaTypes";
 import {
   PUBLIC_LANDING_COPY,
+  PUBLIC_LANDING_HEADING_PHRASES,
   PUBLIC_RADIUS_OPTIONS,
   PUBLIC_URBAN_SECTION_DECISION,
   contextual3dEligibility,
@@ -364,7 +365,7 @@ export function PublicAreaJourney({
           <div className="public-area-content">
             {step === "intro" && (
               <section className="public-intro">
-                <h1 ref={headingRef} tabIndex={-1}>{PUBLIC_LANDING_COPY.heading}</h1>
+                <h1 ref={headingRef} tabIndex={-1} aria-label={PUBLIC_LANDING_COPY.heading}>{PUBLIC_LANDING_HEADING_PHRASES.map((phrase) => <span className="public-intro-phrase" key={phrase}>{phrase}</span>)}</h1>
                 <p className="public-intro-copy">{PUBLIC_LANDING_COPY.subcopy}</p>
                 <button type="button" className="public-primary" onClick={() => setStep("place")}>{PUBLIC_LANDING_COPY.primaryCta}</button>
                 <a className="public-3d-example" href={`${import.meta.env.BASE_URL}${GUIDED_3D_EXAMPLE_QUERY}`}>PLATEAUで街を3Dで見る<small>常団地前周辺の実例</small></a>

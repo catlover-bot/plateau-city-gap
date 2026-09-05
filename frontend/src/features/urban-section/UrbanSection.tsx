@@ -275,7 +275,7 @@ export function UrbanSection({ open, mode = "advanced", readable = false, select
             <text className="endpoint" data-section-endpoint="B" x={plot.viewWidth - 20} y="16">B</text>
             {yTickValues.map((value) => <text key={value} data-section-axis-tick="elevation" x={plot.plotLeft - 4} y={plot.y(value) + 4} textAnchor="end">{value.toFixed(1)}</text>)}
             {xTickFractions.map((fraction) => <text key={fraction} data-section-axis-tick="distance" x={plot.x(plot.maxDistance * fraction)} y="215" textAnchor="middle">{Math.round(plot.maxDistance * fraction)}</text>)}
-            <text className="axis-title" x="10" y="113" transform="rotate(-90 10 113)" textAnchor="middle">標高（m）</text>
+            <text className="axis-title" x={readableSection ? 16 : 10} y="113" transform={`rotate(-90 ${readableSection ? 16 : 10} 113)`} textAnchor="middle">標高（m）</text>
             <text className="axis-title" x={plot.viewWidth / 2} y={readableSection ? 198 : 204} textAnchor="middle">Aからの距離（m）</text>
           </g>
           <g className="section-terrain-area" aria-hidden="true">

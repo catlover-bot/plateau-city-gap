@@ -1,7 +1,9 @@
 import type { AreaTarget, InvestigationAreaSummary } from "./areaTypes";
 
+export const PUBLIC_LANDING_HEADING_PHRASES = ["舞鶴を、", "地図で調べる。"] as const;
+
 export const PUBLIC_LANDING_COPY = {
-  heading: "舞鶴を、地図で調べる。",
+  heading: PUBLIC_LANDING_HEADING_PHRASES.join(""),
   subcopy: "場所と範囲を選び、人口・建物・交通などを確認します。",
   primaryCta: "地図で場所を調べる",
 } as const;

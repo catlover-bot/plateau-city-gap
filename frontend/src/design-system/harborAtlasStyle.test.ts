@@ -97,6 +97,14 @@ describe("Harbor Atlas style contract", () => {
     expect(tokens).toMatch(/:focus-visible[\s\S]*?outline: 3px solid var\(--cg-focus-ring\)[\s\S]*?box-shadow: 0 0 0 7px var\(--cg-text-primary\)/);
   });
 
+  it("excludes only programmatically focused headings from both global focus rules", () => {
+    for (const stylesheet of [tokens, foundation]) {
+      expect(stylesheet).toContain(':focus-visible:not(h1[tabindex="-1"]) { outline: 3px solid var(--cg-focus-ring) !important;');
+      expect(stylesheet).not.toMatch(/:focus(?:-visible)?\s*\{[^}]*outline:\s*(?:none|0)/);
+    }
+    expect(publicJourney).toContain('.public-intro-phrase { display: inline-block; white-space: nowrap; }');
+  });
+
   it("gives map labels a readable halo", () => {
     expect(contrast(tokenHex("--cg-brand-strong"), tokenHex("--cg-bg-elevated"))).toBeGreaterThanOrEqual(4.5);
     expect(contrast(tokenHex("--cg-target-strong"), tokenHex("--cg-bg-elevated"))).toBeGreaterThanOrEqual(4.5);

@@ -12,7 +12,7 @@ body { background: var(--cg-bg-page); }
 body { color: var(--cg-text-primary); font-size: var(--cg-text-body); line-height: 1.6; }
 button, input, select, textarea { font: inherit; }
 button { color: inherit; }
-:focus-visible { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; }
+:focus-visible:not(h1[tabindex="-1"]) { outline: 3px solid var(--cg-focus-ring) !important; outline-offset: 2px; }
 ::selection { background: var(--cg-area-selected-fill); color: var(--cg-text-primary); }
 
 .state-screen {
