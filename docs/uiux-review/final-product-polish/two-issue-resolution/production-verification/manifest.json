@@ -1,0 +1,155 @@
+{
+  "schema": "citygap.production-verification-stop@1",
+  "goal": "final-product-uiux-polish-v1",
+  "status": "NOT_COMPLETE_UNRESOLVED_FRESH_ENTRY_READINESS",
+  "app_source_commit": "8060f3f0c6205cc1b7f6ce75a2b9607cae72519a",
+  "deployed_head": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+  "url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "ci": {
+    "run": 33972698431,
+    "head": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+    "passed": 9,
+    "total": 9,
+    "attempt": 1
+  },
+  "pages": {
+    "run": 33972976919,
+    "head": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+    "passed": true,
+    "attempt": 1
+  },
+  "asset_verification": "Live entry SHA256 cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7 and all10 JS/CSS hashes match frozen source build. Actual browser resource URLs also match final chunks.",
+  "passes": [
+    "All local four-width/zoom/native tests documented in parent package",
+    "Native production Guided1440 final detail checks:2CSSpx positive gap,alltext/background/axes/credits/keyboard assertions",
+    "Native Public→Guided3D seven-phase flow",
+    "Primary Guided→Advanced3D actual building pick,Section,exacttarget",
+    "Bounded normal navigation with Section,2D/3D return,Guided return; identity/parentmesh retained"
+  ],
+  "failures": [
+    {
+      "case": "software production Guided1440 initial navigation",
+      "renderer": "Chromium149 SwiftShader",
+      "observed": "Actual application render-error UI after45s; strict test timeout60s before Section opened.",
+      "png": "production-software-guided1440-failure.png",
+      "root_cause": "Unresolved. Final bundle loaded, recorded page/console/HTTP/request errors empty; error unmounted viewer before detailed unmet conditions could be captured."
+    },
+    {
+      "case": "native Advanced first fresh child-page entry at selected URL",
+      "renderer": "Chrome152 AMD780M",
+      "observed": "Strict readiness timeout45s before the test's reload/mobile steps.",
+      "evidence_limitation": "Existing test did not save failed child's snapshot/diagnostics before closing. Primary page success must not be attributed to failed child.",
+      "root_cause": "Unresolved."
+    }
+  ],
+  "diagnostic": {
+    "file": "production-readiness-timecourse.json",
+    "single_changed_instrumented_navigation": true,
+    "strict_ready_at_ms": 23019,
+    "all_required_content": true,
+    "timeout_reproduced": false,
+    "does_not_replace_failed_regression": true
+  },
+  "additional_observation": "Native handoff records same-ID serialized coordinate variance. No causal claim, data change or out-of-scope fix.",
+  "preservation": {
+    "new_failure_images": 1,
+    "prior_images_unchanged": true,
+    "normal_pass_new_images": 0,
+    "app_or_test_changes_after_deployment": 0,
+    "additional_deployments": 0,
+    "rollback_or_main_operations": 0,
+    "timeout_or_assertion_weakening": false,
+    "blind_failure_reruns": false,
+    "owned_test_contexts_closed": true,
+    "preexisting_native_browser_retained": true,
+    "prior_media_and_user_changes": "unchanged; verified again after preservation commit"
+  },
+  "path_mapping": {
+    "production-advanced-native/advanced3d-capture.json": "production-advanced-native.json",
+    "production-advanced-native/failure-handoff.json": "production-advanced-native-failure.json",
+    "production-advanced-native/process-output.txt": "production-advanced-native-stderr.txt",
+    "production-normal-return/normal-return.json": "production-normal-return.json"
+  },
+  "next_boundary": "Stop without claiming goal completion. Investigate missing pre-unmount strict-readiness conditions for fresh-entry failures. Do not rerun blindly, relax deadlines/assertions, expand design scope or redeploy unresolved work.",
+  "files": [
+    {
+      "file": "ci-33972698431-final.json",
+      "bytes": 20320,
+      "sha256": "88a8395ce94fb6db596556a8e01460562639d8b37da8c9fa767734691996428f"
+    },
+    {
+      "file": "live-verification.json",
+      "bytes": 4581,
+      "sha256": "6a22c2c7617707ac582bbaa832beb47364a3d1dd6b5b5fb4296436663912815e"
+    },
+    {
+      "file": "native-production-final-handoff.json",
+      "bytes": 5896,
+      "sha256": "87a441ce991452272d25ce08b767245ad24ce7bf30281f0eccc9226606fe3036"
+    },
+    {
+      "file": "pages-33972976919-final.json",
+      "bytes": 2928,
+      "sha256": "15e690378ef90a070a5b6306ba8552c382147bc9b5b26eb1e5ba4de6da4c6e6a"
+    },
+    {
+      "file": "production-advanced-native.json",
+      "bytes": 64454,
+      "sha256": "0cee3b124e72d2f2ee0b06bc9d887cc30ec0e1be3d8808e0ab2ebfd836e3b464"
+    },
+    {
+      "file": "production-advanced-native-failure.json",
+      "bytes": 3465,
+      "sha256": "dd1bd67a154b396f0aaa29764ceec00cabc1b776aff6fe682fe758da418e950e"
+    },
+    {
+      "file": "production-advanced-native-stderr.txt",
+      "bytes": 1667,
+      "sha256": "c84bd3f3e70673c2a81818eb7e2ad32d708ba42184f7a5016d1f2074fc3dcd4e"
+    },
+    {
+      "file": "production-guided1440-final.json",
+      "bytes": 51266,
+      "sha256": "650133a67cfdcada1b26d81703b65436c936d8ba810d68b14edd0156732cdb75"
+    },
+    {
+      "file": "production-guided3d.json",
+      "bytes": 17823,
+      "sha256": "d327e3ddc4cf743305a5e0a89e94f9dcb91de95d0d692ceef79c7b835184762c"
+    },
+    {
+      "file": "production-normal-return.json",
+      "bytes": 24659,
+      "sha256": "6d9c0d407d3b3c7056e44f70fc8cda6f555a50237a770070d53157796f57ace2"
+    },
+    {
+      "file": "production-readiness-timecourse.json",
+      "bytes": 518891,
+      "sha256": "d01ddd49b1b4349069bdfbbbdd15b971682e51f0a691a138058367f5093e18cc"
+    },
+    {
+      "file": "production-software-guided1440.json",
+      "bytes": 26856,
+      "sha256": "1026c9f41b190cd72d40b6b8eba3e72dee4fa8ac0aaa47301075c2bec35659d6"
+    },
+    {
+      "file": "production-software-guided1440-failure.png",
+      "bytes": 97419,
+      "sha256": "307939426f57d80d8561b72bf3587c1d2f43bec8b7086df0c449805d6608ead0"
+    },
+    {
+      "file": "production-software-summary.json",
+      "bytes": 4877,
+      "sha256": "a976bdf8b352a797a4c8c50720c47525472df12b19f07777d13a671f0cc017e1"
+    },
+    {
+      "file": "release-waits.json",
+      "bytes": 1665,
+      "sha256": "8cf30871e7c9aef5064d2300156f7b0f0f3c7452f7e5df7567dc4dbe7139ef00"
+    }
+  ],
+  "packaging_note": {
+    "stderr_original_sha256": "7b86fe5615fb80fc4606c1337928dcfb0ef58b6a136121687a9d24b9c09234f4",
+    "stderr_copy": "Only one trailing blank line removed from this new text copy for git diff --check. Original process-output.txt remains unchanged at its recorded temporary path. All error text is retained."
+  }
+}

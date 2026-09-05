@@ -1,0 +1,107 @@
+{
+  "checked_utc": "2026-09-05T14:52:43.629Z",
+  "head": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+  "base_url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "records": [
+    {
+      "filename": "index.html",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/index.html",
+      "status": 200,
+      "bytes": 1072,
+      "sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+      "expected_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+      "matches": true
+    },
+    {
+      "filename": "assets/CesiumMap-CDFI89w_.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js",
+      "status": 200,
+      "bytes": 3601576,
+      "sha256": "1040fa05d612dbc9492d9b49b422d37a1507dfe0c583ef3318f6ffbb76c16361",
+      "expected_sha256": "1040fa05d612dbc9492d9b49b422d37a1507dfe0c583ef3318f6ffbb76c16361",
+      "matches": true
+    },
+    {
+      "filename": "assets/Guided3DView-BOm5kVR9.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+      "status": 200,
+      "bytes": 2871,
+      "sha256": "aef661b83c0c648a15d35dea01444242d9b0ab61b67d31b2033b9a5a79e998e4",
+      "expected_sha256": "aef661b83c0c648a15d35dea01444242d9b0ab61b67d31b2033b9a5a79e998e4",
+      "matches": true
+    },
+    {
+      "filename": "assets/ProductApp-0K_vR_8n.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+      "status": 200,
+      "bytes": 283601,
+      "sha256": "e9033ebaaaad837e67192f94d84ce6b05894fcb27af9cf444961a0059cb76644",
+      "expected_sha256": "e9033ebaaaad837e67192f94d84ce6b05894fcb27af9cf444961a0059cb76644",
+      "matches": true
+    },
+    {
+      "filename": "assets/ProductApp-BkKZ72-c.css",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+      "status": 200,
+      "bytes": 29013,
+      "sha256": "52335e1627857084e81b06a8498e9ed48e1ba74efa0211247462291675e7b54c",
+      "expected_sha256": "52335e1627857084e81b06a8498e9ed48e1ba74efa0211247462291675e7b54c",
+      "matches": true
+    },
+    {
+      "filename": "assets/ServiceApp-xzwZUFSG.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/ServiceApp-xzwZUFSG.js",
+      "status": 200,
+      "bytes": 107133,
+      "sha256": "5d982c3c7b5f793b431e9ca29c166382a43b0e4166f085dc7813a384c5c61eaa",
+      "expected_sha256": "5d982c3c7b5f793b431e9ca29c166382a43b0e4166f085dc7813a384c5c61eaa",
+      "matches": true
+    },
+    {
+      "filename": "assets/index-C2EBUqlj.css",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+      "status": 200,
+      "bytes": 213016,
+      "sha256": "3cf5a610d864c266ae764887ce06138ddf18e3428c5fee563a19700d009d8c87",
+      "expected_sha256": "3cf5a610d864c266ae764887ce06138ddf18e3428c5fee563a19700d009d8c87",
+      "matches": true
+    },
+    {
+      "filename": "assets/index-Dka2mR5T.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+      "status": 200,
+      "bytes": 18562,
+      "sha256": "054c232c02e90fd539edd8169c8495ce330f689acb53358f718e60e7c146d543",
+      "expected_sha256": "054c232c02e90fd539edd8169c8495ce330f689acb53358f718e60e7c146d543",
+      "matches": true
+    },
+    {
+      "filename": "assets/maplibre-gl-worker-BVxYvUIi.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+      "status": 200,
+      "bytes": 478869,
+      "sha256": "64787374f57f4b5107ba7f519b379785bddf556926f041692f5208a1428b5b87",
+      "expected_sha256": "64787374f57f4b5107ba7f519b379785bddf556926f041692f5208a1428b5b87",
+      "matches": true
+    },
+    {
+      "filename": "assets/maplibre-gl-worker-D5L3QY-B.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+      "status": 200,
+      "bytes": 970972,
+      "sha256": "cc083cef9bac466add8bdd9a2fa1f1e041dab18defc854326aae980658bcbc81",
+      "expected_sha256": "cc083cef9bac466add8bdd9a2fa1f1e041dab18defc854326aae980658bcbc81",
+      "matches": true
+    },
+    {
+      "filename": "assets/react-hRsyaU4r.js",
+      "url": "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+      "status": 200,
+      "bytes": 143062,
+      "sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+      "expected_sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+      "matches": true
+    }
+  ],
+  "passed": true
+}

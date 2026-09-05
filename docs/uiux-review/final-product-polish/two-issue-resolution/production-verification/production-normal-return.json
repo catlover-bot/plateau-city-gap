@@ -1,0 +1,537 @@
+{
+  "schema": "citygap.production-normal-return@1",
+  "source_commit": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+  "pages_run": "33972976919",
+  "started_utc": "2026-09-05T15:01:10.174Z",
+  "checks": {
+    "public_to_guided": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "root": {},
+      "guided": {
+        "guidedStory": "understand",
+        "areaId": "533513314",
+        "areaLabel": "常団地前周辺",
+        "hoveredAreaId": "none",
+        "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+        "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+        "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+        "contextStatus": "ready",
+        "contextBuildings": "303",
+        "contextRoads": "135",
+        "contextPlanning": "8",
+        "sectionPack": "maizuru-533513314-plateau-2025-v1",
+        "targetResolution": "exact",
+        "targetKind": "road",
+        "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "objectKind": "none",
+        "objectId": "none"
+      },
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "advanced_ready": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=mesh&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "",
+        "targetResolution": "area_fallback",
+        "contextStatus": "ready"
+      },
+      "guided": {},
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "actual_pick": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "guided": {},
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "section_open": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "guided": {},
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "section_closed": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "guided": {},
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "map_return": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+      "root": {},
+      "guided": {},
+      "readiness": {
+        "interactionReady": "false",
+        "visualComplete": "false",
+        "captureStrictReady": "false",
+        "visualReady": "false",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "advanced_return": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39688&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.4475710&selectionLat=35.5255541",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "guided": {},
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    },
+    "guided_return": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=mesh&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "root": {},
+      "guided": {
+        "guidedStory": "understand",
+        "areaId": "533513314",
+        "areaLabel": "常団地前周辺",
+        "hoveredAreaId": "none",
+        "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+        "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+        "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+        "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+        "contextStatus": "ready",
+        "contextBuildings": "303",
+        "contextRoads": "135",
+        "contextPlanning": "8",
+        "sectionPack": "maizuru-533513314-plateau-2025-v1",
+        "targetResolution": "exact",
+        "targetKind": "road",
+        "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+        "objectKind": "none",
+        "objectId": "none"
+      },
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "220",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "3073",
+        "perfPackInteractionMs": "16302",
+        "perfVisualCompleteMs": "16332",
+        "perfCaptureStrictMs": "16377"
+      },
+      "resources": [
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+        "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+      ]
+    }
+  },
+  "console_errors": [],
+  "request_failures": [
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1615.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1616.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3588/1615.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3588/1616.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1615.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1614.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1616.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3588/1614.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3232.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3232.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3231.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3231.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3233.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3233.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3232.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3231.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6464.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6464.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6465.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6465.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6463.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14354/6463.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14355/6464.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12929.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12929.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12930.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28708/12928.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12928.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12929.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12929.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57416/25859.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57415/25859.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57416/25858.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57415/25858.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57416/25860.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57417/25859.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57415/25860.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57417/25858.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51718.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51718.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51719.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51719.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51717.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51717.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51720.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51720.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51716.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51716.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114827/51721.png",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/17/114837/51721.png",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "screenshots": 0,
+  "recordings": 0,
+  "cold_entry_failure_retested": false,
+  "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+  "picked": {
+    "x": 806.8713565498713,
+    "y": 683.7320939287048,
+    "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "lod": 1,
+    "usage": "住宅",
+    "measured_height_m": 8.5,
+    "storeys_above_ground": 2,
+    "sampled_surface_elevation_m": 79.17296804166159
+  },
+  "passed": true,
+  "finished_utc": "2026-09-05T15:01:38.154Z",
+  "elapsed_ms": 27980.8011,
+  "diagnostics": []
+}

@@ -1,0 +1,691 @@
+{
+  "schema_version": "citygap.advanced3d-capture@1",
+  "production_url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "guided_entry_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=find&mapMode=map2d&selectionType=mesh&selection=533512753&mesh=533512753",
+  "ui_source_commit": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+  "pages_run": "33972976919",
+  "local_preview": false,
+  "selected_area": "533513314",
+  "initial_area": "533512753",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "live_build": {
+    "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+    "assets": [
+      {
+        "path": "assets/index-Dka2mR5T.js",
+        "bytes": 18562,
+        "sha256": "054c232c02e90fd539edd8169c8495ce330f689acb53358f718e60e7c146d543",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/CesiumMap-CDFI89w_.js",
+        "bytes": 3601576,
+        "sha256": "1040fa05d612dbc9492d9b49b422d37a1507dfe0c583ef3318f6ffbb76c16361",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ServiceApp-xzwZUFSG.js",
+        "bytes": 107133,
+        "sha256": "5d982c3c7b5f793b431e9ca29c166382a43b0e4166f085dc7813a384c5c61eaa",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ProductApp-BkKZ72-c.css",
+        "bytes": 29013,
+        "sha256": "52335e1627857084e81b06a8498e9ed48e1ba74efa0211247462291675e7b54c",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/index-C2EBUqlj.css",
+        "bytes": 213016,
+        "sha256": "3cf5a610d864c266ae764887ce06138ddf18e3428c5fee563a19700d009d8c87",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/Guided3DView-BOm5kVR9.js",
+        "bytes": 2871,
+        "sha256": "aef661b83c0c648a15d35dea01444242d9b0ab61b67d31b2033b9a5a79e998e4",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/maplibre-gl-worker-BVxYvUIi.js",
+        "bytes": 478869,
+        "sha256": "64787374f57f4b5107ba7f519b379785bddf556926f041692f5208a1428b5b87",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/maplibre-gl-worker-D5L3QY-B.js",
+        "bytes": 970972,
+        "sha256": "cc083cef9bac466add8bdd9a2fa1f1e041dab18defc854326aae980658bcbc81",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ProductApp-0K_vR_8n.js",
+        "bytes": 283601,
+        "sha256": "e9033ebaaaad837e67192f94d84ce6b05894fcb27af9cf444961a0059cb76644",
+        "matches_local_build": true
+      }
+    ]
+  },
+  "metadata_featured_building": {
+    "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "longitude": 135.39794216934305,
+    "latitude": 35.44696746239316,
+    "usage": "住宅",
+    "measured_height_m": 8.5,
+    "storeys_above_ground": 2,
+    "storeys_below_ground": 0,
+    "building_footprint_area_m2": 61.73,
+    "total_floor_area_m2": 125.54,
+    "lod": 1
+  },
+  "dataset": {
+    "title": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+    "url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+    "verified_subset_buildings": 296,
+    "geometry_lod": {
+      "1": 296
+    }
+  },
+  "capture_code": {
+    "driver_sha256": "6b99b997f448264c60ee43c8603fa158ef172a62aaa2652d5b5ea625bb8554fc",
+    "native_helper_sha256": "4d839f296c9b99f7411cbb8aab513ef69d82ffe21848f2a16d3aee35b8a5ccab"
+  },
+  "plateau_metadata": {
+    "url": "https://catlover-bot.github.io/plateau-city-gap/data/plateau/metadata.json",
+    "sha256": "a38858c4d933cd40d55319eb8585697359a67ce6de3cb504748376df4adac82e",
+    "bytes": 5319
+  },
+  "prewarmed": true,
+  "prewarming": "Existing Guided, Advanced full-data loader, actual local 3D content and Section are visited before the recording. Browser cache is warm; no cold-start performance claim.",
+  "scenes": [],
+  "files": [],
+  "tests": {
+    "actual_pick": {
+      "picked": {
+        "x": 806.8716087433111,
+        "y": 683.7246600261933,
+        "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "lod": 1,
+        "usage": "住宅",
+        "measured_height_m": 8.5,
+        "storeys_above_ground": 2,
+        "sampled_surface_elevation_m": 79.1777355419677
+      },
+      "evidence": {
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+        "root": {
+          "experience": "advanced",
+          "areaId": "533513314",
+          "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "targetResolution": "exact",
+          "contextStatus": "ready"
+        },
+        "root_text": "CITY GAPGuided→詳細分析Guidedへ戻る分析ツールURLを共有常団地前バス停周辺PLATEAU 3D · 舞鶴市 2025地図に戻るA–B断面Data provided by:×地理院タイルData attribution公式の建物形状選んだ対象ドラッグで視点移動 · 建物をクリックして属性を確認PLATEAU 舞鶴市 2025 · LOD1 / 地理院地図・標高データ対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_opこの地域の集計500mメッシュ 53351331465歳以上200人駅・バス停まで563m人口は国勢調査2020の地域集計で、選択した建物の居住者数ではありません。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。モデルが示すのは収録時点の形と属性。入口、現在の利用、歩きやすさは現地での確認が必要です。",
+        "target": {
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "unconfirmed": "3"
+        },
+        "target_text": "対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_op",
+        "target_checks": [
+          "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+          "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+          "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+        ],
+        "target_check_states": [
+          {
+            "id": "building-entrance",
+            "status": "unconfirmed"
+          },
+          {
+            "id": "building-current-use",
+            "status": "unconfirmed"
+          },
+          {
+            "id": "building-access-barrier",
+            "status": "unconfirmed"
+          }
+        ],
+        "section": {},
+        "upgrade": {
+          "mode": "full",
+          "requestGeneration": 1,
+          "fullLoadStartCount": 1,
+          "settleResult": "success",
+          "timeoutMs": 30000
+        },
+        "overflow_pixels": 0,
+        "alerts": [],
+        "engine": {
+          "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+          "root": {},
+          "readiness": {
+            "basemap": "ready",
+            "analysis": "ready",
+            "buildingTilesLoaded": "pack-296",
+            "localDem": "ready",
+            "broadTerrain": "not-requested-local-dem",
+            "analysisLens": "none",
+            "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "selectedRoadId": "",
+            "overlay": "ready",
+            "futuresMap": "idle",
+            "futuresVisible": "0",
+            "pulseMarkers": "0",
+            "canvasCssSize": "1500x1015",
+            "drawingBufferSize": "1500x1015",
+            "optionalGlobeRequests": "54",
+            "optionalBuildingRequests": "0",
+            "visualReady": "true",
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualUnmet": "",
+            "cameraSettled": "true",
+            "canvasSizeReady": "true",
+            "buildingFeatureCount": "856",
+            "buildingContentReady": "true",
+            "renderedBuildingFeatureCount": "856",
+            "targetBuildingCount": "296",
+            "loadedTargetBuildingCount": "296",
+            "visibleTargetBuildingCount": "296",
+            "targetCoverageRatio": "1.000000",
+            "packArtifactsReady": "true",
+            "packArtifactBytes": "4777932",
+            "terrainTileCount": "53",
+            "terrainReady": "true",
+            "localDemReady": "true",
+            "roadsReady": "true",
+            "stableFrames": "12",
+            "criticalRequests": "0",
+            "terrainSource": "plateau-local-dem",
+            "buildingSource": "spatial-evidence-pack",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "sectionPlaneReady": "false",
+            "sectionFocusReady": "false",
+            "packSourceTileCount": "3",
+            "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section"
+          },
+          "canvas": {
+            "width": 1500,
+            "height": 1015
+          },
+          "globe_visible": true,
+          "camera": {
+            "height": 494.4953415662877,
+            "heading": 0.4188526582923542,
+            "pitch": -0.6284098948802979
+          },
+          "tilesets": [
+            {
+              "url": "/plateau-city-gap/data/plateau/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 3,
+              "selected_features": 856,
+              "loaded_features": 856,
+              "selected_tiles": 3,
+              "pending": 0,
+              "processing": 0
+            },
+            {
+              "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 1,
+              "selected_features": 0,
+              "loaded_features": 0,
+              "selected_tiles": 1,
+              "pending": 0,
+              "processing": 0
+            }
+          ],
+          "inspector_text": null,
+          "checks": []
+        }
+      }
+    },
+    "section": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "root_text": "CITY GAPGuided→詳細分析Guidedへ戻る分析ツールURLを共有常団地前バス停周辺PLATEAU 3D · 舞鶴市 2025地図に戻るA–B断面Data provided by:×地理院タイルData attribution街の断面実際の地形・建物・道路断面付近の建物63棟交差する道路14本閉じるAからBまで約462m。標高は65.5mから98.3m。直接交差する建物は17棟、道路は14本です。 選択中の建物は住宅。Aから約126m、断面から約10mです。データに建物高さがない場合は、推測で補っていません。常団地前バス停周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距離（m）第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域bldg_6cb4a1d7-48f5-435e-98f6-dd4cb2a735ae · 不明 · 高さ不明（補完なし）bldg_53517f17-6952-47cc-8d0e-91cba6077916 · 住宅 · 8.26mbldg_498378e8-8073-4725-83da-00a0f833b297 · 住宅 · 7.9mbldg_e4082d94-2086-41bb-a046-0dc172159960 · 住宅 · 7.7mbldg_87248422-97e7-4917-91fe-70029f56cb71 · 住宅 · 8.44mbldg_931e332b-3b78-413c-9a8d-bd4f3d1eb0fb · 住宅 · 7.86mbldg_a490fb5b-d668-441e-b9af-5b35c4629006 · 住宅 · 8.5mbldg_1dd0ae20-a1ae-42aa-88b2-cf2027502ec4 · 住宅 · 8.4mbldg_cacc51c1-e87d-45a1-8fc7-3fa00cf7346e · 店舗等併用住宅 · 11.1mbldg_4970ac2f-acb1-41df-b6bf-59af3dde3b62 · 不明 · 高さ不明（補完なし）bldg_54a34c01-1f75-4258-a59f-a44c785341be · 不明 · 高さ不明（補完なし）bldg_92bf03a2-8ac5-4c93-aa4d-81cf015b1a54 · 住宅 · 8.69mbldg_ef3a04e4-20f7-4f75-bb92-c36aacb94df4 · 不明 · 高さ不明（補完なし）bldg_db2450a3-3020-4a8e-bdcd-2c5af489804f · 住宅 · 9.14mbldg_882a90fa-6115-4faf-a2ac-bd0d60076b6d · 住宅 · 9.28mbldg_8b97faf3-db9a-40cc-a02b-7241703bc6c0 · 住宅 · 9.09mbldg_b9e3028c-eb28-4c20-8cbd-7270fec827b6 · 住宅 · 3.34mbldg_5b72340e-7569-4147-b93b-bd7e10e07f2c · 住宅 · 5.16mbldg_0570d3b6-a377-4228-aed3-a7c73d2a829c · 住宅 · 7.94mbldg_a98dea22-9064-4f8f-9ed2-c010809443ba · 住宅 · 5.94mbldg_722bc8cd-b0c1-47c9-9d99-b2ff2e5a2f23 · 住宅 · 7.9mbldg_513f744e-21f2-4bb6-bdfc-211ccb1e0f0f · 住宅 · 7.85mbldg_ecd1e542-cde2-4c2b-bff0-93628b8d723d · 住宅 · 8.46mbldg_def79d11-d087-4b27-a490-6082820a04b8 · 住宅 · 8.83mbldg_4fd1aff4-bf8f-4d36-a0c3-cb929bc4c857 · 住宅 · 8.9mbldg_986f7d9d-9c14-4fd5-a81d-65c0b21efee5 · 住宅 · 8.23mbldg_88100bc2-11cf-4d86-9a3a-048f554c4420 · 住宅 · 8.24mbldg_7c05f915-0b8e-43a1-842f-7c2f99ac3664 · 住宅 · 8.15mbldg_d221a5d9-6a6a-4df9-ab99-e8b485ebe383 · 不明 · 高さ不明（補完なし）bldg_71bf0ce2-eb1e-47f8-9d24-01734b9391f7 · 住宅 · 8.51mbldg_a67b6254-6975-454a-8c9e-e642df821c85 · 住宅 · 7.44mbldg_faaff192-2e22-4f07-a460-1d3873036a33 · 不明 · 高さ不明（補完なし）bldg_4039dd8b-bc28-4514-b094-d59773bad9be · 不明 · 高さ不明（補完なし）bldg_1d727ed7-afcf-474c-916f-75ae2fbe2684 · 住宅 · 8.3mbldg_b1208a05-d51e-41a0-9878-819de8931983 · 不明 · 高さ不明（補完なし）bldg_07f5dad3-3f91-4f7b-a427-1a0bdd3a4c2e · 不明 · 高さ不明（補完なし）bldg_67f0f2cc-fe19-4ec8-aabc-69682aef351b · 住宅 · 9.94mbldg_8a18cff6-210b-4a08-96c8-ee0e1650ca92 · 住宅 · 8.2mbldg_68c70038-3ccc-4523-b889-e48fe5f7ff31 · 住宅 · 13.38mbldg_eb36834d-9026-4cb2-a44d-ac50ffccd455 · 住宅 · 8.18mbldg_16cc123b-1feb-4677-b5dd-d2d5b7fcdeec · 住宅 · 5.47mbldg_f5bac837-12e6-4b98-ab5d-1d1f5ed184c6 · 住宅 · 7.78mbldg_a6478f07-d2c9-4ed7-b915-77fbf89f7161 · 住宅 · 9.24mbldg_d322a33e-bd45-4e01-b35a-ffe3797326c8 · 住宅 · 7.83mbldg_9f7a0f79-630d-48c6-8681-401071d5369a · 住宅 · 7.76mbldg_e7feca7c-60d1-412d-83db-19c77b81417a · 住宅 · 10.93mbldg_cd00375b-20f0-48cd-9302-f8283f527c89 · 住宅 · 3.5300000000000002mbldg_83246158-bc82-4af3-83ec-e642c65a4b46 · 住宅 · 8.28mbldg_177dbabb-d6d5-4f29-ba5d-8337f990535e · 住宅 · 7.86mbldg_08e80b63-34a1-4cf8-8548-ffadea5af1c1 · 住宅 · 8.4mbldg_6a18f3c0-72e8-424f-9938-1622d80d531f · 住宅 · 6.76mbldg_a1910ccf-c251-4c69-a7d0-0b93aba4329e · 住宅 · 8.07mbldg_1ba48619-a3c1-469d-8da4-5aac045b2a12 · 住宅 · 9.37mbldg_33cc137f-1eee-4817-bc94-f38069549630 · 住宅 · 高さ不明（補完なし）bldg_fad4acd5-cbb4-4b9b-923f-71ce2fbb7cd7 · 住宅 · 8.04mbldg_8f146c47-6f86-416b-9666-1faa17f07cf4 · 住宅 · 7.83mbldg_275497fc-7320-4b4e-8a2d-5cd9bc5b4722 · 住宅 · 7.91mbldg_5bf8fc80-45f6-4806-8725-d341cdc4bb6c · 住宅 · 8.83mbldg_0914b790-ed16-43c8-915e-51471395d0ad · 住宅 · 10.17mbldg_682fb3b2-dacd-4854-81cc-09378c5a9d11 · 住宅 · 8.75mbldg_b1a9196a-d770-42ec-8f25-9df469e78884 · 不明 · 高さ不明（補完なし）bldg_46dbc46e-e56f-4ea6-9a54-84c2961b831b · 住宅 · 8.63mbldg_eb8777b0-5599-47ae-bfab-9de17a21fb29 · 住宅 · 9.38m東椿線tran_7f0900be-9dfc-41af-be8c-0d0f94f4db4b-0椿２号線椿１号線椿川通線椿川通線椿川通線青山二号通線青山一号通線京月西通線京月西通線京月二号線京月一号線京月通線上地橋 · offset 463m丸山口 · offset 1405m大森神社前 · offset 1313m常 · offset 862m常口 · offset 475m常団地前 · offset 331m東椿線椿川通線青山一号通線京月一号線選択中 · 住宅建物 · 126m · 標高73.2m断面から約10m左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。建物にはTabキーで移動し、Enterまたはスペースキーで選択できます。地形建物道路PLATEAU 舞鶴市2025 · 高さのない建物は補完なしPLATEAU 舞鶴市 2025 · LOD1 / 地理院地図・標高データ対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_opこの地域の集計500mメッシュ 53351331465歳以上200人駅・バス停まで563m人口は国勢調査2020の地域集計で、選択した建物の居住者数ではありません。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。モデルが示すのは収録時点の形と属性。入口、現在の利用、歩きやすさは現地での確認が必要です。",
+      "target": {
+        "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "unconfirmed": "3"
+      },
+      "target_text": "対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_op",
+      "target_checks": [
+        "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+        "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+        "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+      ],
+      "target_check_states": [
+        {
+          "id": "building-entrance",
+          "status": "unconfirmed"
+        },
+        {
+          "id": "building-current-use",
+          "status": "unconfirmed"
+        },
+        {
+          "id": "building-access-barrier",
+          "status": "unconfirmed"
+        }
+      ],
+      "section": {
+        "uiMode": "advanced",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "6",
+        "roadAnnotationCount": "4",
+        "hiddenLowPriorityAnnotations": "6",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.2",
+        "selectedAnnotationVisible": "true",
+        "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "1500"
+      },
+      "section_text": "街の断面実際の地形・建物・道路断面付近の建物63棟交差する道路14本閉じるAからBまで約462m。標高は65.5mから98.3m。直接交差する建物は17棟、道路は14本です。 選択中の建物は住宅。Aから約126m、断面から約10mです。データに建物高さがない場合は、推測で補っていません。常団地前バス停周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距離（m）第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域bldg_6cb4a1d7-48f5-435e-98f6-dd4cb2a735ae · 不明 · 高さ不明（補完なし）bldg_53517f17-6952-47cc-8d0e-91cba6077916 · 住宅 · 8.26mbldg_498378e8-8073-4725-83da-00a0f833b297 · 住宅 · 7.9mbldg_e4082d94-2086-41bb-a046-0dc172159960 · 住宅 · 7.7mbldg_87248422-97e7-4917-91fe-70029f56cb71 · 住宅 · 8.44mbldg_931e332b-3b78-413c-9a8d-bd4f3d1eb0fb · 住宅 · 7.86mbldg_a490fb5b-d668-441e-b9af-5b35c4629006 · 住宅 · 8.5mbldg_1dd0ae20-a1ae-42aa-88b2-cf2027502ec4 · 住宅 · 8.4mbldg_cacc51c1-e87d-45a1-8fc7-3fa00cf7346e · 店舗等併用住宅 · 11.1mbldg_4970ac2f-acb1-41df-b6bf-59af3dde3b62 · 不明 · 高さ不明（補完なし）bldg_54a34c01-1f75-4258-a59f-a44c785341be · 不明 · 高さ不明（補完なし）bldg_92bf03a2-8ac5-4c93-aa4d-81cf015b1a54 · 住宅 · 8.69mbldg_ef3a04e4-20f7-4f75-bb92-c36aacb94df4 · 不明 · 高さ不明（補完なし）bldg_db2450a3-3020-4a8e-bdcd-2c5af489804f · 住宅 · 9.14mbldg_882a90fa-6115-4faf-a2ac-bd0d60076b6d · 住宅 · 9.28mbldg_8b97faf3-db9a-40cc-a02b-7241703bc6c0 · 住宅 · 9.09mbldg_b9e3028c-eb28-4c20-8cbd-7270fec827b6 · 住宅 · 3.34mbldg_5b72340e-7569-4147-b93b-bd7e10e07f2c · 住宅 · 5.16mbldg_0570d3b6-a377-4228-aed3-a7c73d2a829c · 住宅 · 7.94mbldg_a98dea22-9064-4f8f-9ed2-c010809443ba · 住宅 · 5.94mbldg_722bc8cd-b0c1-47c9-9d99-b2ff2e5a2f23 · 住宅 · 7.9mbldg_513f744e-21f2-4bb6-bdfc-211ccb1e0f0f · 住宅 · 7.85mbldg_ecd1e542-cde2-4c2b-bff0-93628b8d723d · 住宅 · 8.46mbldg_def79d11-d087-4b27-a490-6082820a04b8 · 住宅 · 8.83mbldg_4fd1aff4-bf8f-4d36-a0c3-cb929bc4c857 · 住宅 · 8.9mbldg_986f7d9d-9c14-4fd5-a81d-65c0b21efee5 · 住宅 · 8.23mbldg_88100bc2-11cf-4d86-9a3a-048f554c4420 · 住宅 · 8.24mbldg_7c05f915-0b8e-43a1-842f-7c2f99ac3664 · 住宅 · 8.15mbldg_d221a5d9-6a6a-4df9-ab99-e8b485ebe383 · 不明 · 高さ不明（補完なし）bldg_71bf0ce2-eb1e-47f8-9d24-01734b9391f7 · 住宅 · 8.51mbldg_a67b6254-6975-454a-8c9e-e642df821c85 · 住宅 · 7.44mbldg_faaff192-2e22-4f07-a460-1d3873036a33 · 不明 · 高さ不明（補完なし）bldg_4039dd8b-bc28-4514-b094-d59773bad9be · 不明 · 高さ不明（補完なし）bldg_1d727ed7-afcf-474c-916f-75ae2fbe2684 · 住宅 · 8.3mbldg_b1208a05-d51e-41a0-9878-819de8931983 · 不明 · 高さ不明（補完なし）bldg_07f5dad3-3f91-4f7b-a427-1a0bdd3a4c2e · 不明 · 高さ不明（補完なし）bldg_67f0f2cc-fe19-4ec8-aabc-69682aef351b · 住宅 · 9.94mbldg_8a18cff6-210b-4a08-96c8-ee0e1650ca92 · 住宅 · 8.2mbldg_68c70038-3ccc-4523-b889-e48fe5f7ff31 · 住宅 · 13.38mbldg_eb36834d-9026-4cb2-a44d-ac50ffccd455 · 住宅 · 8.18mbldg_16cc123b-1feb-4677-b5dd-d2d5b7fcdeec · 住宅 · 5.47mbldg_f5bac837-12e6-4b98-ab5d-1d1f5ed184c6 · 住宅 · 7.78mbldg_a6478f07-d2c9-4ed7-b915-77fbf89f7161 · 住宅 · 9.24mbldg_d322a33e-bd45-4e01-b35a-ffe3797326c8 · 住宅 · 7.83mbldg_9f7a0f79-630d-48c6-8681-401071d5369a · 住宅 · 7.76mbldg_e7feca7c-60d1-412d-83db-19c77b81417a · 住宅 · 10.93mbldg_cd00375b-20f0-48cd-9302-f8283f527c89 · 住宅 · 3.5300000000000002mbldg_83246158-bc82-4af3-83ec-e642c65a4b46 · 住宅 · 8.28mbldg_177dbabb-d6d5-4f29-ba5d-8337f990535e · 住宅 · 7.86mbldg_08e80b63-34a1-4cf8-8548-ffadea5af1c1 · 住宅 · 8.4mbldg_6a18f3c0-72e8-424f-9938-1622d80d531f · 住宅 · 6.76mbldg_a1910ccf-c251-4c69-a7d0-0b93aba4329e · 住宅 · 8.07mbldg_1ba48619-a3c1-469d-8da4-5aac045b2a12 · 住宅 · 9.37mbldg_33cc137f-1eee-4817-bc94-f38069549630 · 住宅 · 高さ不明（補完なし）bldg_fad4acd5-cbb4-4b9b-923f-71ce2fbb7cd7 · 住宅 · 8.04mbldg_8f146c47-6f86-416b-9666-1faa17f07cf4 · 住宅 · 7.83mbldg_275497fc-7320-4b4e-8a2d-5cd9bc5b4722 · 住宅 · 7.91mbldg_5bf8fc80-45f6-4806-8725-d341cdc4bb6c · 住宅 · 8.83mbldg_0914b790-ed16-43c8-915e-51471395d0ad · 住宅 · 10.17mbldg_682fb3b2-dacd-4854-81cc-09378c5a9d11 · 住宅 · 8.75mbldg_b1a9196a-d770-42ec-8f25-9df469e78884 · 不明 · 高さ不明（補完なし）bldg_46dbc46e-e56f-4ea6-9a54-84c2961b831b · 住宅 · 8.63mbldg_eb8777b0-5599-47ae-bfab-9de17a21fb29 · 住宅 · 9.38m東椿線tran_7f0900be-9dfc-41af-be8c-0d0f94f4db4b-0椿２号線椿１号線椿川通線椿川通線椿川通線青山二号通線青山一号通線京月西通線京月西通線京月二号線京月一号線京月通線上地橋 · offset 463m丸山口 · offset 1405m大森神社前 · offset 1313m常 · offset 862m常口 · offset 475m常団地前 · offset 331m東椿線椿川通線青山一号通線京月一号線選択中 · 住宅建物 · 126m · 標高73.2m断面から約10m左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。建物にはTabキーで移動し、Enterまたはスペースキーで選択できます。地形建物道路PLATEAU 舞鶴市2025 · 高さのない建物は補完なし",
+      "upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "overflow_pixels": 0,
+      "alerts": [],
+      "engine": {
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+        "root": {},
+        "readiness": {
+          "basemap": "ready",
+          "analysis": "ready",
+          "buildingTilesLoaded": "pack-296",
+          "localDem": "ready",
+          "broadTerrain": "not-requested-local-dem",
+          "analysisLens": "none",
+          "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "selectedRoadId": "",
+          "overlay": "ready",
+          "futuresMap": "idle",
+          "futuresVisible": "0",
+          "pulseMarkers": "0",
+          "canvasCssSize": "1500x650",
+          "drawingBufferSize": "1500x650",
+          "optionalGlobeRequests": "36",
+          "optionalBuildingRequests": "0",
+          "visualReady": "true",
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualUnmet": "",
+          "cameraSettled": "true",
+          "canvasSizeReady": "true",
+          "buildingFeatureCount": "856",
+          "buildingContentReady": "true",
+          "renderedBuildingFeatureCount": "856",
+          "targetBuildingCount": "296",
+          "loadedTargetBuildingCount": "296",
+          "visibleTargetBuildingCount": "296",
+          "targetCoverageRatio": "1.000000",
+          "packArtifactsReady": "true",
+          "packArtifactBytes": "4777932",
+          "terrainTileCount": "38",
+          "terrainReady": "true",
+          "localDemReady": "true",
+          "roadsReady": "true",
+          "stableFrames": "9",
+          "criticalRequests": "0",
+          "terrainSource": "plateau-local-dem",
+          "buildingSource": "spatial-evidence-pack",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "sectionPlaneReady": "true",
+          "sectionFocusReady": "false",
+          "packSourceTileCount": "3",
+          "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section"
+        },
+        "canvas": {
+          "width": 1500,
+          "height": 650
+        },
+        "globe_visible": true,
+        "camera": {
+          "height": 494.4953415662877,
+          "heading": 0.4188526582923542,
+          "pitch": -0.6284098948802979
+        },
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "inspector_text": null,
+        "checks": []
+      }
+    },
+    "exact_target": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+      "root": {
+        "experience": "advanced",
+        "areaId": "533513314",
+        "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "targetResolution": "exact",
+        "contextStatus": "ready"
+      },
+      "root_text": "CITY GAPGuided→詳細分析Guidedへ戻る分析ツールURLを共有常団地前バス停周辺PLATEAU 3D · 舞鶴市 2025地図に戻るA–B断面Data provided by:×地理院タイルData attribution街の断面実際の地形・建物・道路断面付近の建物63棟交差する道路14本閉じるAからBまで約462m。標高は65.5mから98.3m。直接交差する建物は17棟、道路は14本です。 選択中の建物は住宅。Aから約126m、断面から約10mです。データに建物高さがない場合は、推測で補っていません。常団地前バス停周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距離（m）第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域bldg_6cb4a1d7-48f5-435e-98f6-dd4cb2a735ae · 不明 · 高さ不明（補完なし）bldg_53517f17-6952-47cc-8d0e-91cba6077916 · 住宅 · 8.26mbldg_498378e8-8073-4725-83da-00a0f833b297 · 住宅 · 7.9mbldg_e4082d94-2086-41bb-a046-0dc172159960 · 住宅 · 7.7mbldg_87248422-97e7-4917-91fe-70029f56cb71 · 住宅 · 8.44mbldg_931e332b-3b78-413c-9a8d-bd4f3d1eb0fb · 住宅 · 7.86mbldg_a490fb5b-d668-441e-b9af-5b35c4629006 · 住宅 · 8.5mbldg_1dd0ae20-a1ae-42aa-88b2-cf2027502ec4 · 住宅 · 8.4mbldg_cacc51c1-e87d-45a1-8fc7-3fa00cf7346e · 店舗等併用住宅 · 11.1mbldg_4970ac2f-acb1-41df-b6bf-59af3dde3b62 · 不明 · 高さ不明（補完なし）bldg_54a34c01-1f75-4258-a59f-a44c785341be · 不明 · 高さ不明（補完なし）bldg_92bf03a2-8ac5-4c93-aa4d-81cf015b1a54 · 住宅 · 8.69mbldg_ef3a04e4-20f7-4f75-bb92-c36aacb94df4 · 不明 · 高さ不明（補完なし）bldg_db2450a3-3020-4a8e-bdcd-2c5af489804f · 住宅 · 9.14mbldg_882a90fa-6115-4faf-a2ac-bd0d60076b6d · 住宅 · 9.28mbldg_8b97faf3-db9a-40cc-a02b-7241703bc6c0 · 住宅 · 9.09mbldg_b9e3028c-eb28-4c20-8cbd-7270fec827b6 · 住宅 · 3.34mbldg_5b72340e-7569-4147-b93b-bd7e10e07f2c · 住宅 · 5.16mbldg_0570d3b6-a377-4228-aed3-a7c73d2a829c · 住宅 · 7.94mbldg_a98dea22-9064-4f8f-9ed2-c010809443ba · 住宅 · 5.94mbldg_722bc8cd-b0c1-47c9-9d99-b2ff2e5a2f23 · 住宅 · 7.9mbldg_513f744e-21f2-4bb6-bdfc-211ccb1e0f0f · 住宅 · 7.85mbldg_ecd1e542-cde2-4c2b-bff0-93628b8d723d · 住宅 · 8.46mbldg_def79d11-d087-4b27-a490-6082820a04b8 · 住宅 · 8.83mbldg_4fd1aff4-bf8f-4d36-a0c3-cb929bc4c857 · 住宅 · 8.9mbldg_986f7d9d-9c14-4fd5-a81d-65c0b21efee5 · 住宅 · 8.23mbldg_88100bc2-11cf-4d86-9a3a-048f554c4420 · 住宅 · 8.24mbldg_7c05f915-0b8e-43a1-842f-7c2f99ac3664 · 住宅 · 8.15mbldg_d221a5d9-6a6a-4df9-ab99-e8b485ebe383 · 不明 · 高さ不明（補完なし）bldg_71bf0ce2-eb1e-47f8-9d24-01734b9391f7 · 住宅 · 8.51mbldg_a67b6254-6975-454a-8c9e-e642df821c85 · 住宅 · 7.44mbldg_faaff192-2e22-4f07-a460-1d3873036a33 · 不明 · 高さ不明（補完なし）bldg_4039dd8b-bc28-4514-b094-d59773bad9be · 不明 · 高さ不明（補完なし）bldg_1d727ed7-afcf-474c-916f-75ae2fbe2684 · 住宅 · 8.3mbldg_b1208a05-d51e-41a0-9878-819de8931983 · 不明 · 高さ不明（補完なし）bldg_07f5dad3-3f91-4f7b-a427-1a0bdd3a4c2e · 不明 · 高さ不明（補完なし）bldg_67f0f2cc-fe19-4ec8-aabc-69682aef351b · 住宅 · 9.94mbldg_8a18cff6-210b-4a08-96c8-ee0e1650ca92 · 住宅 · 8.2mbldg_68c70038-3ccc-4523-b889-e48fe5f7ff31 · 住宅 · 13.38mbldg_eb36834d-9026-4cb2-a44d-ac50ffccd455 · 住宅 · 8.18mbldg_16cc123b-1feb-4677-b5dd-d2d5b7fcdeec · 住宅 · 5.47mbldg_f5bac837-12e6-4b98-ab5d-1d1f5ed184c6 · 住宅 · 7.78mbldg_a6478f07-d2c9-4ed7-b915-77fbf89f7161 · 住宅 · 9.24mbldg_d322a33e-bd45-4e01-b35a-ffe3797326c8 · 住宅 · 7.83mbldg_9f7a0f79-630d-48c6-8681-401071d5369a · 住宅 · 7.76mbldg_e7feca7c-60d1-412d-83db-19c77b81417a · 住宅 · 10.93mbldg_cd00375b-20f0-48cd-9302-f8283f527c89 · 住宅 · 3.5300000000000002mbldg_83246158-bc82-4af3-83ec-e642c65a4b46 · 住宅 · 8.28mbldg_177dbabb-d6d5-4f29-ba5d-8337f990535e · 住宅 · 7.86mbldg_08e80b63-34a1-4cf8-8548-ffadea5af1c1 · 住宅 · 8.4mbldg_6a18f3c0-72e8-424f-9938-1622d80d531f · 住宅 · 6.76mbldg_a1910ccf-c251-4c69-a7d0-0b93aba4329e · 住宅 · 8.07mbldg_1ba48619-a3c1-469d-8da4-5aac045b2a12 · 住宅 · 9.37mbldg_33cc137f-1eee-4817-bc94-f38069549630 · 住宅 · 高さ不明（補完なし）bldg_fad4acd5-cbb4-4b9b-923f-71ce2fbb7cd7 · 住宅 · 8.04mbldg_8f146c47-6f86-416b-9666-1faa17f07cf4 · 住宅 · 7.83mbldg_275497fc-7320-4b4e-8a2d-5cd9bc5b4722 · 住宅 · 7.91mbldg_5bf8fc80-45f6-4806-8725-d341cdc4bb6c · 住宅 · 8.83mbldg_0914b790-ed16-43c8-915e-51471395d0ad · 住宅 · 10.17mbldg_682fb3b2-dacd-4854-81cc-09378c5a9d11 · 住宅 · 8.75mbldg_b1a9196a-d770-42ec-8f25-9df469e78884 · 不明 · 高さ不明（補完なし）bldg_46dbc46e-e56f-4ea6-9a54-84c2961b831b · 住宅 · 8.63mbldg_eb8777b0-5599-47ae-bfab-9de17a21fb29 · 住宅 · 9.38m東椿線tran_7f0900be-9dfc-41af-be8c-0d0f94f4db4b-0椿２号線椿１号線椿川通線椿川通線椿川通線青山二号通線青山一号通線京月西通線京月西通線京月二号線京月一号線京月通線上地橋 · offset 463m丸山口 · offset 1405m大森神社前 · offset 1313m常 · offset 862m常口 · offset 475m常団地前 · offset 331m東椿線椿川通線青山一号通線京月一号線選択中 · 住宅建物 · 126m · 標高73.2m断面から約10m左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。建物にはTabキーで移動し、Enterまたはスペースキーで選択できます。地形建物道路PLATEAU 舞鶴市2025 · 高さのない建物は補完なしPLATEAU 舞鶴市 2025 · LOD1 / 地理院地図・標高データ対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_opこの地域の集計500mメッシュ 53351331465歳以上200人駅・バス停まで563m人口は国勢調査2020の地域集計で、選択した建物の居住者数ではありません。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。モデルが示すのは収録時点の形と属性。入口、現在の利用、歩きやすさは現地での確認が必要です。",
+      "target": {
+        "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "unconfirmed": "3"
+      },
+      "target_text": "対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_op",
+      "target_checks": [
+        "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+        "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+        "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+      ],
+      "target_check_states": [
+        {
+          "id": "building-entrance",
+          "status": "unconfirmed"
+        },
+        {
+          "id": "building-current-use",
+          "status": "unconfirmed"
+        },
+        {
+          "id": "building-access-barrier",
+          "status": "unconfirmed"
+        }
+      ],
+      "section": {
+        "uiMode": "advanced",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "6",
+        "roadAnnotationCount": "4",
+        "hiddenLowPriorityAnnotations": "6",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.2",
+        "selectedAnnotationVisible": "true",
+        "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "1500"
+      },
+      "section_text": "街の断面実際の地形・建物・道路断面付近の建物63棟交差する道路14本閉じるAからBまで約462m。標高は65.5mから98.3m。直接交差する建物は17棟、道路は14本です。 選択中の建物は住宅。Aから約126m、断面から約10mです。データに建物高さがない場合は、推測で補っていません。常団地前バス停周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距離（m）第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域第1種低層住居専用地域bldg_6cb4a1d7-48f5-435e-98f6-dd4cb2a735ae · 不明 · 高さ不明（補完なし）bldg_53517f17-6952-47cc-8d0e-91cba6077916 · 住宅 · 8.26mbldg_498378e8-8073-4725-83da-00a0f833b297 · 住宅 · 7.9mbldg_e4082d94-2086-41bb-a046-0dc172159960 · 住宅 · 7.7mbldg_87248422-97e7-4917-91fe-70029f56cb71 · 住宅 · 8.44mbldg_931e332b-3b78-413c-9a8d-bd4f3d1eb0fb · 住宅 · 7.86mbldg_a490fb5b-d668-441e-b9af-5b35c4629006 · 住宅 · 8.5mbldg_1dd0ae20-a1ae-42aa-88b2-cf2027502ec4 · 住宅 · 8.4mbldg_cacc51c1-e87d-45a1-8fc7-3fa00cf7346e · 店舗等併用住宅 · 11.1mbldg_4970ac2f-acb1-41df-b6bf-59af3dde3b62 · 不明 · 高さ不明（補完なし）bldg_54a34c01-1f75-4258-a59f-a44c785341be · 不明 · 高さ不明（補完なし）bldg_92bf03a2-8ac5-4c93-aa4d-81cf015b1a54 · 住宅 · 8.69mbldg_ef3a04e4-20f7-4f75-bb92-c36aacb94df4 · 不明 · 高さ不明（補完なし）bldg_db2450a3-3020-4a8e-bdcd-2c5af489804f · 住宅 · 9.14mbldg_882a90fa-6115-4faf-a2ac-bd0d60076b6d · 住宅 · 9.28mbldg_8b97faf3-db9a-40cc-a02b-7241703bc6c0 · 住宅 · 9.09mbldg_b9e3028c-eb28-4c20-8cbd-7270fec827b6 · 住宅 · 3.34mbldg_5b72340e-7569-4147-b93b-bd7e10e07f2c · 住宅 · 5.16mbldg_0570d3b6-a377-4228-aed3-a7c73d2a829c · 住宅 · 7.94mbldg_a98dea22-9064-4f8f-9ed2-c010809443ba · 住宅 · 5.94mbldg_722bc8cd-b0c1-47c9-9d99-b2ff2e5a2f23 · 住宅 · 7.9mbldg_513f744e-21f2-4bb6-bdfc-211ccb1e0f0f · 住宅 · 7.85mbldg_ecd1e542-cde2-4c2b-bff0-93628b8d723d · 住宅 · 8.46mbldg_def79d11-d087-4b27-a490-6082820a04b8 · 住宅 · 8.83mbldg_4fd1aff4-bf8f-4d36-a0c3-cb929bc4c857 · 住宅 · 8.9mbldg_986f7d9d-9c14-4fd5-a81d-65c0b21efee5 · 住宅 · 8.23mbldg_88100bc2-11cf-4d86-9a3a-048f554c4420 · 住宅 · 8.24mbldg_7c05f915-0b8e-43a1-842f-7c2f99ac3664 · 住宅 · 8.15mbldg_d221a5d9-6a6a-4df9-ab99-e8b485ebe383 · 不明 · 高さ不明（補完なし）bldg_71bf0ce2-eb1e-47f8-9d24-01734b9391f7 · 住宅 · 8.51mbldg_a67b6254-6975-454a-8c9e-e642df821c85 · 住宅 · 7.44mbldg_faaff192-2e22-4f07-a460-1d3873036a33 · 不明 · 高さ不明（補完なし）bldg_4039dd8b-bc28-4514-b094-d59773bad9be · 不明 · 高さ不明（補完なし）bldg_1d727ed7-afcf-474c-916f-75ae2fbe2684 · 住宅 · 8.3mbldg_b1208a05-d51e-41a0-9878-819de8931983 · 不明 · 高さ不明（補完なし）bldg_07f5dad3-3f91-4f7b-a427-1a0bdd3a4c2e · 不明 · 高さ不明（補完なし）bldg_67f0f2cc-fe19-4ec8-aabc-69682aef351b · 住宅 · 9.94mbldg_8a18cff6-210b-4a08-96c8-ee0e1650ca92 · 住宅 · 8.2mbldg_68c70038-3ccc-4523-b889-e48fe5f7ff31 · 住宅 · 13.38mbldg_eb36834d-9026-4cb2-a44d-ac50ffccd455 · 住宅 · 8.18mbldg_16cc123b-1feb-4677-b5dd-d2d5b7fcdeec · 住宅 · 5.47mbldg_f5bac837-12e6-4b98-ab5d-1d1f5ed184c6 · 住宅 · 7.78mbldg_a6478f07-d2c9-4ed7-b915-77fbf89f7161 · 住宅 · 9.24mbldg_d322a33e-bd45-4e01-b35a-ffe3797326c8 · 住宅 · 7.83mbldg_9f7a0f79-630d-48c6-8681-401071d5369a · 住宅 · 7.76mbldg_e7feca7c-60d1-412d-83db-19c77b81417a · 住宅 · 10.93mbldg_cd00375b-20f0-48cd-9302-f8283f527c89 · 住宅 · 3.5300000000000002mbldg_83246158-bc82-4af3-83ec-e642c65a4b46 · 住宅 · 8.28mbldg_177dbabb-d6d5-4f29-ba5d-8337f990535e · 住宅 · 7.86mbldg_08e80b63-34a1-4cf8-8548-ffadea5af1c1 · 住宅 · 8.4mbldg_6a18f3c0-72e8-424f-9938-1622d80d531f · 住宅 · 6.76mbldg_a1910ccf-c251-4c69-a7d0-0b93aba4329e · 住宅 · 8.07mbldg_1ba48619-a3c1-469d-8da4-5aac045b2a12 · 住宅 · 9.37mbldg_33cc137f-1eee-4817-bc94-f38069549630 · 住宅 · 高さ不明（補完なし）bldg_fad4acd5-cbb4-4b9b-923f-71ce2fbb7cd7 · 住宅 · 8.04mbldg_8f146c47-6f86-416b-9666-1faa17f07cf4 · 住宅 · 7.83mbldg_275497fc-7320-4b4e-8a2d-5cd9bc5b4722 · 住宅 · 7.91mbldg_5bf8fc80-45f6-4806-8725-d341cdc4bb6c · 住宅 · 8.83mbldg_0914b790-ed16-43c8-915e-51471395d0ad · 住宅 · 10.17mbldg_682fb3b2-dacd-4854-81cc-09378c5a9d11 · 住宅 · 8.75mbldg_b1a9196a-d770-42ec-8f25-9df469e78884 · 不明 · 高さ不明（補完なし）bldg_46dbc46e-e56f-4ea6-9a54-84c2961b831b · 住宅 · 8.63mbldg_eb8777b0-5599-47ae-bfab-9de17a21fb29 · 住宅 · 9.38m東椿線tran_7f0900be-9dfc-41af-be8c-0d0f94f4db4b-0椿２号線椿１号線椿川通線椿川通線椿川通線青山二号通線青山一号通線京月西通線京月西通線京月二号線京月一号線京月通線上地橋 · offset 463m丸山口 · offset 1405m大森神社前 · offset 1313m常 · offset 862m常口 · offset 475m常団地前 · offset 331m東椿線椿川通線青山一号通線京月一号線選択中 · 住宅建物 · 126m · 標高73.2m断面から約10m左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。建物にはTabキーで移動し、Enterまたはスペースキーで選択できます。地形建物道路PLATEAU 舞鶴市2025 · 高さのない建物は補完なし",
+      "upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "overflow_pixels": 0,
+      "alerts": [],
+      "engine": {
+        "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.3984055&selectionLat=35.4477019",
+        "root": {},
+        "readiness": {
+          "basemap": "ready",
+          "analysis": "ready",
+          "buildingTilesLoaded": "pack-296",
+          "localDem": "ready",
+          "broadTerrain": "not-requested-local-dem",
+          "analysisLens": "none",
+          "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "selectedRoadId": "",
+          "overlay": "ready",
+          "futuresMap": "idle",
+          "futuresVisible": "0",
+          "pulseMarkers": "0",
+          "canvasCssSize": "1500x650",
+          "drawingBufferSize": "1500x650",
+          "optionalGlobeRequests": "36",
+          "optionalBuildingRequests": "0",
+          "visualReady": "true",
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualUnmet": "",
+          "cameraSettled": "true",
+          "canvasSizeReady": "true",
+          "buildingFeatureCount": "856",
+          "buildingContentReady": "true",
+          "renderedBuildingFeatureCount": "856",
+          "targetBuildingCount": "296",
+          "loadedTargetBuildingCount": "296",
+          "visibleTargetBuildingCount": "296",
+          "targetCoverageRatio": "1.000000",
+          "packArtifactsReady": "true",
+          "packArtifactBytes": "4777932",
+          "terrainTileCount": "38",
+          "terrainReady": "true",
+          "localDemReady": "true",
+          "roadsReady": "true",
+          "stableFrames": "23",
+          "criticalRequests": "0",
+          "terrainSource": "plateau-local-dem",
+          "buildingSource": "spatial-evidence-pack",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "sectionPlaneReady": "true",
+          "sectionFocusReady": "false",
+          "packSourceTileCount": "3",
+          "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section"
+        },
+        "canvas": {
+          "width": 1500,
+          "height": 650
+        },
+        "globe_visible": true,
+        "camera": {
+          "height": 494.4953415662877,
+          "heading": 0.4188526582923542,
+          "pitch": -0.6284098948802979
+        },
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "inspector_text": null,
+        "checks": []
+      }
+    }
+  },
+  "console_errors": [],
+  "prewarm_ready": {
+    "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=mesh&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+    "root": {
+      "experience": "advanced",
+      "areaId": "533513314",
+      "selectedObject": "",
+      "targetResolution": "area_fallback",
+      "contextStatus": "ready"
+    },
+    "root_text": "CITY GAPGuided→詳細分析Guidedへ戻る分析ツールURLを共有常団地前バス停周辺PLATEAU 3D · 舞鶴市 2025地図に戻るA–B断面Data provided by:×地理院タイルData attribution公式の建物形状選んだ対象ドラッグで視点移動 · 建物をクリックして属性を確認PLATEAU 舞鶴市 2025 · LOD1 / 地理院地図・標高データ建物を選ぶ3Dの建物をクリックすると、用途・高さ・階数と現地確認項目を表示します。A–B断面では、地図上の線に沿った地形と建物の高さを見比べられます。この地域の集計500mメッシュ 53351331465歳以上200人駅・バス停まで563m人口は国勢調査2020の地域集計で、選択した建物の居住者数ではありません。距離はメッシュ中心から収録地点への直線距離で、歩行距離ではありません。モデルが示すのは収録時点の形と属性。入口、現在の利用、歩きやすさは現地での確認が必要です。",
+    "target": {
+      "targetKey": "area:533513314",
+      "objectId": "",
+      "unconfirmed": "0"
+    },
+    "target_text": "建物を選ぶ3Dの建物をクリックすると、用途・高さ・階数と現地確認項目を表示します。A–B断面では、地図上の線に沿った地形と建物の高さを見比べられます。",
+    "target_checks": [],
+    "target_check_states": [],
+    "section": {},
+    "upgrade": {
+      "mode": "full",
+      "requestGeneration": 1,
+      "fullLoadStartCount": 1,
+      "settleResult": "success",
+      "timeoutMs": 30000
+    },
+    "overflow_pixels": 0,
+    "alerts": [],
+    "engine": {
+      "url": "https://catlover-bot.github.io/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=mesh&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44576&z=15.70&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "root": {},
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1500x1015",
+        "drawingBufferSize": "1500x1015",
+        "optionalGlobeRequests": "69",
+        "optionalBuildingRequests": "0",
+        "visualReady": "true",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualUnmet": "",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "53",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "12",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "false",
+        "sectionFocusReady": "false",
+        "packSourceTileCount": "3",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section"
+      },
+      "canvas": {
+        "width": 1500,
+        "height": 1015
+      },
+      "globe_visible": true,
+      "camera": {
+        "height": 494.4953415662877,
+        "heading": 0.4188526582923542,
+        "pitch": -0.6284098948802979
+      },
+      "tilesets": [
+        {
+          "url": "/plateau-city-gap/data/plateau/tileset.json",
+          "show": true,
+          "tiles_loaded": true,
+          "content_ready": 3,
+          "selected_features": 856,
+          "loaded_features": 856,
+          "selected_tiles": 3,
+          "pending": 0,
+          "processing": 0
+        },
+        {
+          "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+          "show": true,
+          "tiles_loaded": true,
+          "content_ready": 1,
+          "selected_features": 0,
+          "loaded_features": 0,
+          "selected_tiles": 1,
+          "pending": 0,
+          "processing": 0
+        }
+      ],
+      "inspector_text": null,
+      "checks": []
+    }
+  },
+  "diagnostics": []
+}

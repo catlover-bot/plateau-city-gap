@@ -1,0 +1,130 @@
+{
+  "schema": "citygap.native-production-mixed-result@1",
+  "source_commit": "76b1f0c40e23ee73f0f3b64e5319e30b87af89da",
+  "ui_source_commit": "8060f3f0c6205cc1b7f6ce75a2b9607cae72519a",
+  "pages_run": "33972976919",
+  "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+  "overall_unconditional_acceptance": false,
+  "reason": "Native normal navigation/return and final1440 Section gates pass, but earlier fresh Advanced deep entry timed out and remains unresolved. Root has separate software cold-entry failure evidence.",
+  "passed_checks": {
+    "existing_guided3d_full_flow": true,
+    "public_actual3d_building_pick_and_section": true,
+    "in_memory_mode_selection_retention": true,
+    "object_specific_building_and_road_checks": true,
+    "advanced_full_loader_settled": true,
+    "native_guided1440_final_section_rows_focus_axes": true,
+    "native_guided1440_metadata_gap_css_px": 2,
+    "normal_advanced_mouse_pick_and_section": true,
+    "normal_advanced_map_return_and_same_id_restoration": true,
+    "normal_advanced_to_guided_same_area": true
+  },
+  "failed_checks": {
+    "native_fresh_advanced_entry": {
+      "status": "FAIL",
+      "timeout_ms": 45000,
+      "step": "First fresh parent_mesh_reload test-page goto->strictready, before actual reload/mobile",
+      "failed_child_predicates_not_retained": true,
+      "not_retried": true
+    }
+  },
+  "not_run": {
+    "performance": true,
+    "production_screenshots": true,
+    "production_video": true
+  },
+  "diagnostics": {
+    "normal_return": [],
+    "normal_console": [],
+    "normal_failed_requests": 52,
+    "normal_failed_requests_all_optional_gsi_aborts": true,
+    "final1440": [
+      {
+        "page": [],
+        "console": [],
+        "http": [],
+        "requests": [],
+        "cancellations": []
+      }
+    ],
+    "existing_guided_script_scope": "As recorded by original script; no global console/all-origin error claim",
+    "failed_advanced_child": "Not persisted by old test on failure; do not infer zero from primary context report"
+  },
+  "source_evidence": {
+    "all10_live_js_css_matched_dist_in_advanced_test": true,
+    "actual1440_resource_urls": [
+      "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+    ],
+    "normal_route_resource_urls": [
+      "https://catlover-bot.github.io/plateau-city-gap/assets/index-Dka2mR5T.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/react-hRsyaU4r.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/index-C2EBUqlj.css",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-0K_vR_8n.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-D5L3QY-B.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/ProductApp-BkKZ72-c.css",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/maplibre-gl-worker-BVxYvUIi.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/Guided3DView-BOm5kVR9.js",
+      "https://catlover-bot.github.io/plateau-city-gap/assets/CesiumMap-CDFI89w_.js"
+    ]
+  },
+  "url_state_observation": {
+    "same_selected_building": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "earlier_primary": {
+      "selectionLng": "135.3984055",
+      "selectionLat": "35.4477019"
+    },
+    "normal_return_primary": {
+      "selectionLng": "135.4475710",
+      "selectionLat": "35.5255541"
+    },
+    "causal_attribution": "Unverified; coordinate variance is not asserted to cause the cold-entry timeout. No additional investigation performed."
+  },
+  "artifacts": [
+    {
+      "path": "production-guided3d.json",
+      "sha256": "d327e3ddc4cf743305a5e0a89e94f9dcb91de95d0d692ceef79c7b835184762c"
+    },
+    {
+      "path": "production-guided1440-final.json",
+      "sha256": "650133a67cfdcada1b26d81703b65436c936d8ba810d68b14edd0156732cdb75"
+    },
+    {
+      "path": "production-normal-return/normal-return.json",
+      "sha256": "6d9c0d407d3b3c7056e44f70fc8cda6f555a50237a770070d53157796f57ace2"
+    },
+    {
+      "path": "production-advanced-native/advanced3d-capture.json",
+      "sha256": "0cee3b124e72d2f2ee0b06bc9d887cc30ec0e1be3d8808e0ab2ebfd836e3b464"
+    },
+    {
+      "path": "production-advanced-native/failure-handoff.json",
+      "sha256": "dd1bd67a154b396f0aaa29764ceec00cabc1b776aff6fe682fe758da418e950e"
+    },
+    {
+      "path": "production-normal-return.mjs",
+      "sha256": "a2f41acb1ed949e2f2c177db75c646f936eb5836427c66ce8bc0d18efa6866cc"
+    }
+  ],
+  "test_code": {
+    "original_final_verifier_sha256": "e6a2fecd8a34dc40aca61304013f11fc566c8481a7d47f27cffa2c60dab531e5",
+    "outside_repo_failure_and_resource_hook_copy_sha256": "15c33bf0b6938cd1abbb52c20411499286de446ae7f91372ce34fbdb41572a6d",
+    "assertions_and_readiness_unchanged": true,
+    "failure_hook_emitted_images": 0
+  },
+  "hardware": {
+    "chrome_version": "152.0.7977.83",
+    "owned_pid": 18752,
+    "renderer": "ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "same_retained_profile": true,
+    "owned_contexts_closed": true,
+    "remaining_page": "about:blank",
+    "browser_not_stopped_without_root_instruction": true
+  }
+}

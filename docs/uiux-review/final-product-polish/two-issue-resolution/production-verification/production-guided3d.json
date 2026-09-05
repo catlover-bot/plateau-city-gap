@@ -1,0 +1,618 @@
+{
+  "base_url": "https://catlover-bot.github.io/plateau-city-gap/",
+  "direct_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&mapMode=plateau3d&selectionType=mesh&selection=533513314",
+  "flows": {
+    "public_to_3d": {
+      "passed": true,
+      "readiness": {
+        "attributes": {
+          "data-basemap": "ready",
+          "data-analysis": "ready",
+          "data-building-tiles-loaded": "pack-296",
+          "data-local-dem": "ready",
+          "data-broad-terrain": "not-requested-local-dem",
+          "data-analysis-lens": "none",
+          "data-selected-building-id": "",
+          "data-selected-road-id": "",
+          "data-overlay": "ready",
+          "data-futures-map": "idle",
+          "data-futures-visible": "0",
+          "data-pulse-markers": "0",
+          "data-canvas-css-size": "1050x840",
+          "data-drawing-buffer-size": "1050x840",
+          "data-optional-globe-requests": "36",
+          "data-optional-building-requests": "0",
+          "data-visual-ready": "true",
+          "data-interaction-ready": "true",
+          "data-visual-complete": "true",
+          "data-capture-strict-ready": "true",
+          "data-visual-unmet": "",
+          "data-camera-settled": "true",
+          "data-canvas-size-ready": "true",
+          "data-building-feature-count": "856",
+          "data-building-content-ready": "true",
+          "data-rendered-building-feature-count": "856",
+          "data-target-building-count": "296",
+          "data-loaded-target-building-count": "296",
+          "data-visible-target-building-count": "296",
+          "data-target-coverage-ratio": "1.000000",
+          "data-pack-artifacts-ready": "true",
+          "data-pack-artifact-bytes": "4777932",
+          "data-terrain-tile-count": "35",
+          "data-terrain-ready": "true",
+          "data-local-dem-ready": "true",
+          "data-roads-ready": "true",
+          "data-stable-frames": "4",
+          "data-critical-requests": "0",
+          "data-terrain-source": "plateau-local-dem",
+          "data-building-source": "spatial-evidence-pack",
+          "data-pack-id": "maizuru-533513314-plateau-2025-v1",
+          "data-section-plane-ready": "true",
+          "data-section-focus-ready": "false",
+          "data-section-transect-id": "maizuru-533513314-plateau-2025-v1-default-section",
+          "data-pack-source-tile-count": "3"
+        },
+        "canvas": {
+          "width": 1050,
+          "height": 840
+        },
+        "camera_pitch_degrees": -36.005234780900786,
+        "visible_road_sources": 1,
+        "map_init_count": 1
+      },
+      "ready_ms": 43975,
+      "building": {
+        "x": 525.1015625,
+        "y": 438,
+        "id": "bldg_a67b6254-6975-454a-8c9e-e642df821c85",
+        "usage": "住宅",
+        "height": 7.44,
+        "storeys": 1,
+        "lod": 1,
+        "color_before": "rgb(227,231,224)"
+      }
+    },
+    "mode_selection_retained": {
+      "passed": true,
+      "building_id": "bldg_a67b6254-6975-454a-8c9e-e642df821c85"
+    },
+    "section": {
+      "passed": true,
+      "geometry": {
+        "coordinates": [
+          [
+            135.398125,
+            35.44583333333334
+          ],
+          [
+            135.398125,
+            35.45
+          ]
+        ],
+        "type": "LineString"
+      },
+      "focus": {
+        "map": [
+          135.39812500001693,
+          35.44587840203029
+        ],
+        "entities": [
+          {
+            "id": "urban-section-plane:maizuru-533513314-plateau-2025-v1-default-section",
+            "position": null
+          },
+          {
+            "id": "urban-section-transect:maizuru-533513314-plateau-2025-v1-default-section",
+            "position": null,
+            "line": [
+              [
+                135.398125,
+                35.44583333333333
+              ],
+              [
+                135.39812500001693,
+                35.445878402030274
+              ],
+              [
+                135.39812500003353,
+                35.4459234707269
+              ],
+              [
+                135.39812500004973,
+                35.44596853942319
+              ],
+              [
+                135.3981250000656,
+                35.44601360811914
+              ],
+              [
+                135.39812500008105,
+                35.44605867681475
+              ],
+              [
+                135.39812500009614,
+                35.44610374551001
+              ],
+              [
+                135.39812500011087,
+                35.44614881420497
+              ],
+              [
+                135.39812500012525,
+                35.44619388289957
+              ],
+              [
+                135.39812500013923,
+                35.446238951593834
+              ],
+              [
+                135.39812500015282,
+                35.446284020287756
+              ],
+              [
+                135.39812500016606,
+                35.44632908898137
+              ],
+              [
+                135.39812500017894,
+                35.446374157674626
+              ],
+              [
+                135.39812500019147,
+                35.446419226367546
+              ],
+              [
+                135.3981250002036,
+                35.446464295060146
+              ],
+              [
+                135.39812500021534,
+                35.44650936375242
+              ],
+              [
+                135.39812500022674,
+                35.44655443244432
+              ],
+              [
+                135.39812500023777,
+                35.44659950113591
+              ],
+              [
+                135.3981250002484,
+                35.44664456982715
+              ],
+              [
+                135.3981250002587,
+                35.44668963851808
+              ],
+              [
+                135.3981250002686,
+                35.44673470720866
+              ],
+              [
+                135.39812500027813,
+                35.446779775898904
+              ],
+              [
+                135.3981250002873,
+                35.446824844588825
+              ],
+              [
+                135.3981250002961,
+                35.446869913278384
+              ],
+              [
+                135.39812500030453,
+                35.44691498196764
+              ],
+              [
+                135.39812500031258,
+                35.446960050656536
+              ],
+              [
+                135.39812500032025,
+                35.44700511934509
+              ],
+              [
+                135.39812500032755,
+                35.447050188033344
+              ],
+              [
+                135.39812500033452,
+                35.44709525672124
+              ],
+              [
+                135.39812500034114,
+                35.44714032540881
+              ],
+              [
+                135.39812500034728,
+                35.44718539409602
+              ],
+              [
+                135.3981250003531,
+                35.44723046278293
+              ],
+              [
+                135.39812500035862,
+                35.447275531469494
+              ],
+              [
+                135.39812500036365,
+                35.447320600155706
+              ],
+              [
+                135.3981250003684,
+                35.44736566884159
+              ],
+              [
+                135.39812500037272,
+                35.44741073752714
+              ],
+              [
+                135.39812500037672,
+                35.44745580621236
+              ],
+              [
+                135.3981250003803,
+                35.44750087489724
+              ],
+              [
+                135.39812500038354,
+                35.44754594358178
+              ],
+              [
+                135.39812500038641,
+                35.44759101226602
+              ],
+              [
+                135.39812500038892,
+                35.447636080949884
+              ],
+              [
+                135.39812500039102,
+                35.447681149633404
+              ],
+              [
+                135.39812500039278,
+                35.44772621831664
+              ],
+              [
+                135.39812500039417,
+                35.44777128699949
+              ],
+              [
+                135.39812500039517,
+                35.44781635568203
+              ],
+              [
+                135.39812500039582,
+                35.447861424364206
+              ],
+              [
+                135.39812500039608,
+                35.44790649304608
+              ],
+              [
+                135.39812500039602,
+                35.447951561727606
+              ],
+              [
+                135.39812500039557,
+                35.44799663040881
+              ],
+              [
+                135.39812500039466,
+                35.44804169908967
+              ],
+              [
+                135.39812500039346,
+                35.448086767770185
+              ],
+              [
+                135.39812500039187,
+                35.44813183645037
+              ],
+              [
+                135.39812500038994,
+                35.44817690513024
+              ],
+              [
+                135.39812500038758,
+                35.44822197380976
+              ],
+              [
+                135.39812500038488,
+                35.44826704248893
+              ],
+              [
+                135.39812500038184,
+                35.44831211116777
+              ],
+              [
+                135.39812500037837,
+                35.44835717984628
+              ],
+              [
+                135.3981250003746,
+                35.448402248524474
+              ],
+              [
+                135.3981250003704,
+                35.4484473172023
+              ],
+              [
+                135.39812500036584,
+                35.44849238587981
+              ],
+              [
+                135.39812500036092,
+                35.44853745455698
+              ],
+              [
+                135.39812500035563,
+                35.44858252323383
+              ],
+              [
+                135.39812500034998,
+                35.44862759191032
+              ],
+              [
+                135.39812500034395,
+                35.448672660586475
+              ],
+              [
+                135.39812500033753,
+                35.448717729262306
+              ],
+              [
+                135.39812500033077,
+                35.4487627979378
+              ],
+              [
+                135.39812500032363,
+                35.44880786661296
+              ],
+              [
+                135.3981250003161,
+                35.4488529352878
+              ],
+              [
+                135.3981250003082,
+                35.448898003962285
+              ],
+              [
+                135.39812500029996,
+                35.44894307263643
+              ],
+              [
+                135.39812500029134,
+                35.44898814131024
+              ],
+              [
+                135.39812500028233,
+                35.449033209983725
+              ],
+              [
+                135.39812500027296,
+                35.449078278656856
+              ],
+              [
+                135.3981250002632,
+                35.44912334732967
+              ],
+              [
+                135.39812500025312,
+                35.44916841600216
+              ],
+              [
+                135.39812500024263,
+                35.44921348467428
+              ],
+              [
+                135.39812500023174,
+                35.449258553346105
+              ],
+              [
+                135.39812500022055,
+                35.44930362201757
+              ],
+              [
+                135.39812500020895,
+                35.44934869068872
+              ],
+              [
+                135.39812500019698,
+                35.44939375935951
+              ],
+              [
+                135.39812500018465,
+                35.44943882802997
+              ],
+              [
+                135.39812500017194,
+                35.4494838967001
+              ],
+              [
+                135.39812500015887,
+                35.449528965369915
+              ],
+              [
+                135.3981250001454,
+                35.449574034039365
+              ],
+              [
+                135.39812500013159,
+                35.449619102708475
+              ],
+              [
+                135.39812500011743,
+                35.44966417137727
+              ],
+              [
+                135.39812500010282,
+                35.44970924004572
+              ],
+              [
+                135.3981250000879,
+                35.449754308713835
+              ],
+              [
+                135.3981250000726,
+                35.44979937738162
+              ],
+              [
+                135.39812500005692,
+                35.44984444604907
+              ],
+              [
+                135.3981250000409,
+                35.44988951471619
+              ],
+              [
+                135.39812500002446,
+                35.449934583382955
+              ],
+              [
+                135.3981250000077,
+                35.449979652049414
+              ],
+              [
+                135.398125,
+                35.44999999999999
+              ]
+            ]
+          },
+          {
+            "id": "urban-section-endpoint:A",
+            "position": {
+              "longitude": 2.363143082276847,
+              "latitude": 0.6186464977798233,
+              "height": 98.27089999744376
+            }
+          },
+          {
+            "id": "urban-section-endpoint:B",
+            "position": {
+              "longitude": 2.363143082276847,
+              "latitude": 0.6187192198319896,
+              "height": 65.77178455234966
+            }
+          },
+          {
+            "id": "urban-section-focus",
+            "position": {
+              "longitude": 2.363143082277143,
+              "latitude": 0.6186472843769746,
+              "height": 96.39276856029787
+            }
+          }
+        ]
+      }
+    },
+    "target_checks": {
+      "passed": true,
+      "building": "bldg_a67b6254-6975-454a-8c9e-e642df821c85",
+      "building_checks": [
+        "建物の入口と道路のつながり",
+        "建物が現在使われているか",
+        "入口までに段差や通行制限があるか"
+      ],
+      "road": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "road_checks": [
+        "道路を実際に歩いて通行できるか",
+        "歩道の有無と有効幅員",
+        "横断箇所と横断時の見通し",
+        "建物から道路までの接続"
+      ]
+    },
+    "unsupported_area": {
+      "passed": true,
+      "area": "533512753",
+      "direct_link_rejected": true
+    },
+    "guided_advanced": {
+      "passed": true,
+      "upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      }
+    },
+    "mobile_failure_retry": {
+      "passed": true,
+      "error_ms": 56698,
+      "readiness": {
+        "attributes": {
+          "data-basemap": "ready",
+          "data-analysis": "ready",
+          "data-building-tiles-loaded": "pack-296",
+          "data-local-dem": "ready",
+          "data-broad-terrain": "not-requested-local-dem",
+          "data-analysis-lens": "none",
+          "data-selected-building-id": "",
+          "data-selected-road-id": "",
+          "data-overlay": "ready",
+          "data-futures-map": "idle",
+          "data-futures-visible": "0",
+          "data-pulse-markers": "0",
+          "data-canvas-css-size": "390x383",
+          "data-drawing-buffer-size": "390x383",
+          "data-optional-globe-requests": "1",
+          "data-optional-building-requests": "0",
+          "data-visual-ready": "true",
+          "data-interaction-ready": "true",
+          "data-visual-complete": "true",
+          "data-capture-strict-ready": "true",
+          "data-visual-unmet": "",
+          "data-camera-settled": "true",
+          "data-canvas-size-ready": "true",
+          "data-building-feature-count": "856",
+          "data-building-content-ready": "true",
+          "data-rendered-building-feature-count": "856",
+          "data-target-building-count": "296",
+          "data-loaded-target-building-count": "296",
+          "data-visible-target-building-count": "296",
+          "data-target-coverage-ratio": "1.000000",
+          "data-pack-artifacts-ready": "true",
+          "data-pack-artifact-bytes": "4777932",
+          "data-terrain-tile-count": "19",
+          "data-terrain-ready": "true",
+          "data-local-dem-ready": "true",
+          "data-roads-ready": "true",
+          "data-stable-frames": "4",
+          "data-critical-requests": "0",
+          "data-terrain-source": "plateau-local-dem",
+          "data-building-source": "spatial-evidence-pack",
+          "data-pack-id": "maizuru-533513314-plateau-2025-v1",
+          "data-section-plane-ready": "true",
+          "data-section-focus-ready": "false",
+          "data-section-transect-id": "maizuru-533513314-plateau-2025-v1-default-section",
+          "data-pack-source-tile-count": "3"
+        },
+        "canvas": {
+          "width": 390,
+          "height": 383
+        },
+        "camera_pitch_degrees": -36.00617987584843,
+        "visible_road_sources": 1,
+        "map_init_count": 1
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "page_errors": [],
+      "local_request_errors": [],
+      "local_http_errors": []
+    },
+    {
+      "page_errors": [],
+      "local_request_errors": [],
+      "local_http_errors": []
+    }
+  ],
+  "passed": true
+}

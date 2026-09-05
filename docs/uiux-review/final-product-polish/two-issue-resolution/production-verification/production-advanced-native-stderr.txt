@@ -1,0 +1,30 @@
+{
+  "directory": "\\\\wsl.localhost\\Ubuntu-24.04\\tmp\\citygap-uiux-two-issue.53U3AyzX\\production-advanced-native",
+  "renderer": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "device_pixel_ratio": 1,
+    "renderer": "ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "vendor": "Google Inc. (AMD)"
+  }
+}
+node:internal/modules/run_main:122
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 45000ms exceeded.
+    at Object.waitForReal3D (wsl.localhost\Ubuntu-24.04\home\mhirotaka\workspace\plateau-city-gap\frontend\scripts\capture-judging-3d.mjs:120:14)
+    at waitAdvanced3D (wsl.localhost\Ubuntu-24.04\home\mhirotaka\workspace\plateau-city-gap\frontend\scripts\capture-advanced-3d.mjs:45:17)
+    at async testRestorationAndMobile (wsl.localhost\Ubuntu-24.04\home\mhirotaka\workspace\plateau-city-gap\frontend\scripts\capture-advanced-3d.mjs:207:24)
+    at async Module.run (wsl.localhost\Ubuntu-24.04\home\mhirotaka\workspace\plateau-city-gap\frontend\scripts\capture-advanced-3d.mjs:247:7)
+    at async Module.run (wsl.localhost\Ubuntu-24.04\tmp\citygap-uiux-two-issue.53U3AyzX\production-return-wrapper.mjs:13:3)
+    at async main (wsl.localhost\Ubuntu-24.04\home\mhirotaka\workspace\plateau-city-gap\frontend\scripts\capture-judging-3d.mjs:426:7)
+    at async file://wsl.localhost/Ubuntu-24.04/home/mhirotaka/workspace/plateau-city-gap/frontend/scripts/capture-judging-3d.mjs:436:3 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v24.18.1
