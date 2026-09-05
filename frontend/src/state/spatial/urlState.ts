@@ -52,6 +52,10 @@ function finite(value: string | null, fallback: number): number {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function isParentMeshCode(value: unknown): value is string {
+  return typeof value === "string" && /^[0-9]{9}$/.test(value);
+}
+
 function selectionFromParams(params: URLSearchParams, city: CityId, urbanState: UrbanStateId): SpatialSelection | null {
   const rawSelectionLongitude = params.get("selectionLng") ?? params.get("lng");
   const rawSelectionLatitude = params.get("selectionLat") ?? params.get("lat");
@@ -76,11 +80,14 @@ function selectionFromParams(params: URLSearchParams, city: CityId, urbanState: 
   ];
   const explicitType = params.get("selectionType") as SelectionType | null;
   const explicitId = params.get("selection");
-  if (explicitType && explicitId && SELECTION_TYPES.has(explicitType)) {
-    return { type: explicitType, id: explicitId, city, urbanState, ...position };
-  }
   const match = ordered.find(([key]) => params.has(key));
-  return match ? { type: match[1], id: params.get(match[0]) ?? "", city, urbanState, ...position } : null;
+  const selection: SpatialSelection | null = explicitType && explicitId && SELECTION_TYPES.has(explicitType)
+    ? { type: explicitType, id: explicitId, city, urbanState, ...position }
+    : match ? { type: match[1], id: params.get(match[0]) ?? "", city, urbanState, ...position } : null;
+  const parentMesh = params.get("parentMesh");
+  return selection && selection.type !== "mesh" && isParentMeshCode(parentMesh)
+    ? { ...selection, properties: { parent_mesh_code: parentMesh } }
+    : selection;
 }
 
 export function parseSpatialUrl(search: string): SpatialState {
@@ -211,6 +218,10 @@ export function spatialStateToSearch(state: SpatialState, passthrough?: URLSearc
       : state.selection.type === "temporal_change" ? "temporalChange"
       : state.selection.type;
     params.set(key, state.selection.id);
+    const parentMesh = state.selection.properties?.parent_mesh_code;
+    if (state.selection.type !== "mesh" && isParentMeshCode(parentMesh)) {
+      params.set("parentMesh", parentMesh);
+    }
     if (state.selection.longitude !== undefined && state.selection.latitude !== undefined) {
       params.set("selectionLng", state.selection.longitude.toFixed(7));
       params.set("selectionLat", state.selection.latitude.toFixed(7));

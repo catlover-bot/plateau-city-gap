@@ -18,17 +18,17 @@
 .urban-section > header dt { color: var(--cg-text-secondary); font: 6px var(--cg-mono); }
 .urban-section > header dd { margin: 2px 0 0; font: 8px var(--cg-mono); }
 .urban-section > header button { height: 100%; padding: 0 12px; border: 0; border-left: 1px solid var(--cg-border); background: transparent; font-size: 9px; }
-.urban-section.guided > header { grid-template-columns: 250px 1fr; background: var(--cg-bg-panel); }
-.urban-section.guided > header > div:first-child { padding: 0 16px; }
-.urban-section.guided > header span { color: var(--cg-brand-strong); font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: .01em; }
-.urban-section.guided > header strong { font-size: 13px; }
-.urban-section.guided > header .guided-section-facts { justify-self: end; }
-.urban-section.guided > header .guided-section-facts dt,
-.urban-section.guided > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
-.urban-section.guided svg { height: 162px; cursor: crosshair; }
-.urban-section.guided svg:focus-visible { outline: 3px solid var(--cg-focus-ring); outline-offset: -4px; }
-.urban-section.guided footer { font-family: inherit; font-size: 8px; }
-.urban-section.guided .guided-section-footer {
+.urban-section:is(.guided, .readable) > header { grid-template-columns: 250px 1fr; background: var(--cg-bg-panel); }
+.urban-section:is(.guided, .readable) > header > div:first-child { padding: 0 16px; }
+.urban-section:is(.guided, .readable) > header span { color: var(--cg-brand-strong); font-family: inherit; font-size: 12px; font-weight: 800; letter-spacing: .01em; }
+.urban-section:is(.guided, .readable) > header strong { font-size: 13px; }
+.urban-section:is(.guided, .readable) > header .guided-section-facts { justify-self: end; }
+.urban-section:is(.guided, .readable) > header .guided-section-facts dt,
+.urban-section:is(.guided, .readable) > header .guided-section-facts dd { font-family: inherit; font-size: 11px; }
+.urban-section:is(.guided, .readable) svg { height: 162px; cursor: crosshair; }
+.urban-section:is(.guided, .readable) svg:focus-visible { outline: 3px solid var(--cg-focus-ring); outline-offset: -4px; }
+.urban-section:is(.guided, .readable) footer { font-family: inherit; font-size: 8px; }
+.urban-section:is(.guided, .readable) .guided-section-footer {
   justify-content: space-between;
   padding: 0 14px;
   font-size: 11px;
@@ -45,10 +45,10 @@
 .section-load-message { margin: 16px; font-size: 10px; line-height: 1.7; }
 .section-load-message.error { color: var(--cg-error); }
 .section-grid line { stroke: var(--cg-border); stroke-width: .8; }
-.urban-section.guided .section-axis text { fill: var(--cg-text-secondary); font-family: var(--cg-font); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.urban-section.guided .section-axis text.axis-title { fill: var(--cg-text-primary); font-size: 12px; font-weight: 750; }
-.urban-section.guided .section-axis text.endpoint { fill: var(--cg-transect-endpoint); font-size: 16px; font-weight: 900; }
-.urban-section.guided .section-axis .endpoint-dot { fill: var(--cg-transect-endpoint); stroke: var(--cg-transect-halo); stroke-width: 2; }
+.urban-section:is(.guided, .readable) .section-axis text { fill: var(--cg-text-secondary); font-family: var(--cg-font); font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.urban-section:is(.guided, .readable) .section-axis text.axis-title { fill: var(--cg-text-primary); font-size: 12px; font-weight: 750; }
+.urban-section:is(.guided, .readable) .section-axis text.endpoint { fill: var(--cg-transect-endpoint); font-size: 16px; font-weight: 900; }
+.urban-section:is(.guided, .readable) .section-axis .endpoint-dot { fill: var(--cg-transect-endpoint); stroke: var(--cg-transect-halo); stroke-width: 2; }
 .section-terrain-area path { fill: color-mix(in srgb, var(--cg-transect-terrain) 10%, transparent); }
 .section-terrain path { fill: none; stroke: var(--cg-transect-terrain); stroke-width: 2.2; }
 .section-buildings rect { fill: var(--cg-transect-building); stroke: var(--cg-transect-building-outline); stroke-width: 1; }
@@ -57,12 +57,16 @@
 .section-buildings rect.selected { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2; }
 .section-buildings rect:focus { outline: none; stroke: var(--cg-focus-ring); stroke-width: 2; }
 .section-roads path { fill: var(--cg-transect-road); stroke: var(--cg-transect-road-outline); stroke-width: 1.5; }
-.urban-section.guided .section-buildings rect { fill: var(--cg-transect-building); stroke: var(--cg-transect-building-outline); stroke-width: 1; }
-.urban-section.guided .section-buildings rect.nearby { fill: color-mix(in srgb, var(--cg-transect-building) 18%, transparent); stroke: var(--cg-transect-building-outline); stroke-dasharray: 3 2; }
-.urban-section.guided .section-buildings rect.selected,
-.urban-section.guided .section-buildings rect.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2; }
-.urban-section.guided .section-roads path { fill: var(--cg-transect-road); stroke: var(--cg-transect-road-outline); stroke-width: 1.8; }
-.urban-section.guided .section-roads path.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2.2; }
+.urban-section:is(.guided, .readable) .section-buildings rect { fill: var(--cg-transect-building); stroke: var(--cg-transect-building-outline); stroke-width: 1; }
+.urban-section:is(.guided, .readable) .section-buildings rect.nearby { fill: color-mix(in srgb, var(--cg-transect-building) 18%, transparent); stroke: var(--cg-transect-building-outline); stroke-dasharray: 3 2; }
+.urban-section:is(.guided, .readable) .section-buildings rect.selected,
+.urban-section:is(.guided, .readable) .section-buildings rect.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2; }
+.urban-section:is(.guided, .readable) .section-roads path { fill: var(--cg-transect-road); stroke: var(--cg-transect-road-outline); stroke-width: 1.8; }
+.urban-section:is(.guided, .readable) .section-roads path.focused { fill: var(--cg-target); stroke: var(--cg-target-strong); stroke-width: 2.2; }
+.urban-section.readable > header { min-height: 48px; height: auto; grid-template-columns: minmax(180px, 250px) 1fr auto; }
+.urban-section.readable > header button { min-width: 64px; min-height: 44px; font-size: 12px; font-weight: 700; }
+.urban-section.readable .section-buildings rect:focus-visible { stroke: var(--cg-focus-ring); stroke-width: 3; }
+.urban-section.readable .guided-section-keyboard-help { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .section-road-annotations line { stroke: var(--cg-brand-soft); stroke-width: 1; stroke-dasharray: 2 2; }
 .section-road-annotations text {
   fill: var(--cg-brand-strong);
@@ -111,7 +115,9 @@
   .urban-section svg { height: 122px; }
   .urban-section:not(.guided) footer > span:nth-child(n+2) { display: none; }
   .product-app:has(.urban-section) .analysis-lens-rail { display: none; }
-  .urban-section.guided .guided-section-footer { padding: 0 8px; }
+  .urban-section:is(.guided, .readable) .guided-section-footer { padding: 0 8px; }
+  .urban-section.readable > header { grid-template-columns: 1fr auto; }
+  .urban-section.readable > header .guided-section-facts { display: none; }
   .section-visual-legend { width: 100%; justify-content: space-around; gap: 8px; }
   .guided-section-source { display: none; }
 }

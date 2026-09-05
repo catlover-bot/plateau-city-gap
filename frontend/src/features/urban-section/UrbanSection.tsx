@@ -19,6 +19,7 @@ export type { SectionData } from "./sectionTypes";
 interface Props {
   open: boolean;
   mode?: "advanced" | "guided";
+  readable?: boolean;
   selection: SpatialSelection | null;
   counterfactualState: CounterfactualState;
   analysisLens: AnalysisLens;
@@ -41,28 +42,29 @@ function moveSectionFocus(event: ReactKeyboardEvent<SVGRectElement>) {
   objects[(index + direction + objects.length) % objects.length]?.focus();
 }
 
-export function UrbanSection({ open, mode = "advanced", selection, counterfactualState, analysisLens, onSelectBuilding, onClose, dataOverride, sourcePath, expectedPackId, areaLabel = "常団地前周辺", onFocusPosition }: Props) {
+export function UrbanSection({ open, mode = "advanced", readable = false, selection, counterfactualState, analysisLens, onSelectBuilding, onClose, dataOverride, sourcePath, expectedPackId, areaLabel = "常団地前周辺", onFocusPosition }: Props) {
   const [guidedSampleIndex, setGuidedSampleIndex] = useState(0);
   const [guidedFocusActive, setGuidedFocusActive] = useState(false);
   const [compactSection, setCompactSection] = useState(false);
+  const guided = mode === "guided";
+  const readableSection = guided || readable;
   const { data, error } = useSectionData({ dataOverride, sourcePath, expectedPackId });
   useEffect(() => {
-    if (mode !== "guided") return;
+    if (!readableSection) return;
     const media = window.matchMedia("(max-width: 900px)");
     const update = () => setCompactSection(media.matches);
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
-  }, [mode]);
-  const guided = mode === "guided";
+  }, [readableSection]);
 
   const plot = useMemo(
-    () => data ? buildSectionPlot(data, guided && compactSection) : null,
-    [compactSection, data, guided],
+    () => data ? buildSectionPlot(data, readableSection && compactSection) : null,
+    [compactSection, data, readableSection],
   );
 
   const roadAnnotations = useMemo<SectionAnnotationLayout & { calculationMs: number }>(() => {
-    if (!guided || !data || !plot) return { placed: [], hiddenCount: 0, overlapCount: 0, calculationMs: 0 };
+    if (!readableSection || !data || !plot) return { placed: [], hiddenCount: 0, overlapCount: 0, calculationMs: 0 };
     const measureText = browserSectionTextMeasurer("750 12px system-ui, sans-serif");
     const started = performance.now();
     const layout = layoutSectionAnnotations({
@@ -83,13 +85,13 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
       measureText,
     });
     return { ...layout, calculationMs: Number((performance.now() - started).toFixed(3)) };
-  }, [compactSection, data, guided, plot]);
+  }, [compactSection, data, readableSection, plot]);
 
   const focusedDetail = useMemo(() => {
-    if (!guided || !guidedFocusActive || !data) return null;
+    if (!readableSection || !guidedFocusActive || !data) return null;
     const sample = data.terrain_samples[guidedSampleIndex];
     return sample ? nearestSectionObject(data, sample.distance_m, sample.elevation_m) : null;
-  }, [data, guided, guidedFocusActive, guidedSampleIndex]);
+  }, [data, readableSection, guidedFocusActive, guidedSampleIndex]);
 
   const xTickFractions = compactSection ? [0, 1 / 3, 2 / 3, 1] : [0, .25, .5, .75, 1];
   const yTickValues = plot ? [plot.minimumElevation, (plot.minimumElevation + plot.maximumElevation) / 2, plot.maximumElevation] : [];
@@ -101,7 +103,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
   }, [compactSection, focusedDetail, plot]);
 
   useEffect(() => {
-    if (!guided) return;
+    if (!readableSection) return;
     const debugWindow = window as Window & {
       __cityGapSectionAnnotationMetrics?: { hiddenCount: number; calculationMs: number; overlapCount: number };
     };
@@ -114,7 +116,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
     return () => {
       if (debugWindow.__cityGapSectionAnnotationMetrics === metrics) delete debugWindow.__cityGapSectionAnnotationMetrics;
     };
-  }, [guided, roadAnnotations]);
+  }, [readableSection, roadAnnotations]);
 
   const focusSection = (event: ReactPointerEvent<SVGSVGElement>) => {
     if (!data || !plot || !onFocusPosition) return;
@@ -127,7 +129,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
     onFocusPosition({ longitude: sample.longitude, latitude: sample.latitude });
   };
   const focusSectionByKeyboard = (event: ReactKeyboardEvent<SVGSVGElement>) => {
-    if (!guided || !data?.terrain_samples.length || !onFocusPosition) return;
+    if (!readableSection || event.target !== event.currentTarget || !data?.terrain_samples.length || !onFocusPosition) return;
     const direction = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
     if (!direction && event.key !== "Home" && event.key !== "End") return;
     event.preventDefault();
@@ -145,9 +147,10 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
   if (!open && !guided) return <button type="button" className="urban-section-open" onClick={onClose}>都市断面を開く</button>;
   return (
     <section
-      className={`urban-section ${guided ? "guided" : ""}`.trim()}
-      aria-label={guided ? `${areaLabel}の街の断面` : "PLATEAU Urban Section"}
+      className={`urban-section ${guided ? "guided" : readable ? "readable" : ""}`.trim()}
+      aria-label={readableSection ? `${areaLabel}の街の断面` : "PLATEAU Urban Section"}
       data-ui-mode={mode}
+      data-readable={readableSection}
       data-transect-ready={Boolean(data)}
       data-building-count={data?.buildings.length ?? 0}
       data-direct-building-count={data?.buildings.filter((item) => item.relation === "direct").length ?? 0}
@@ -156,11 +159,11 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
       data-terrain-samples={data?.terrain_samples.length ?? 0}
       data-terrain-covered={data?.terrain_samples.filter((sample) => sample.elevation_m !== null).length ?? 0}
       data-pack-id={data?.pack_id ?? "none"}
-      data-static-annotation-count={guided && data ? roadAnnotations.placed.length + 2 : 0}
-      data-road-annotation-count={guided ? roadAnnotations.placed.length : 0}
-      data-hidden-low-priority-annotations={guided ? roadAnnotations.hiddenCount : 0}
-      data-annotation-overlap-count={guided ? roadAnnotations.overlapCount : 0}
-      data-annotation-calculation-ms={guided ? roadAnnotations.calculationMs : 0}
+      data-static-annotation-count={readableSection && data ? roadAnnotations.placed.length + 2 : 0}
+      data-road-annotation-count={readableSection ? roadAnnotations.placed.length : 0}
+      data-hidden-low-priority-annotations={readableSection ? roadAnnotations.hiddenCount : 0}
+      data-annotation-overlap-count={readableSection ? roadAnnotations.overlapCount : 0}
+      data-annotation-calculation-ms={readableSection ? roadAnnotations.calculationMs : 0}
       data-selected-annotation-visible={guidedFocusActive && Boolean(focusedDetail)}
       data-focused-object-kind={focusedDetail?.kind ?? "none"}
       data-focused-object-id={focusedDetail?.id ?? "none"}
@@ -168,14 +171,14 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
       data-service-section-ready={analysisLens !== "service-pulse" || Boolean(data?.service_locations.length)}
     >
       <header>
-        <div><span>{guided ? "街の断面" : "PLATEAU URBAN SECTION"}</span><strong>{guided ? "実際の地形・建物・道路" : "実DEM × 建物 × 道路"}</strong></div>
-        {data && (guided ? <dl className="guided-section-facts"><div><dt>断面付近の建物</dt><dd>{data.buildings.length}棟</dd></div><div><dt>交差する道路</dt><dd>{data.roads.length}本</dd></div></dl> : <dl><div><dt>PACK</dt><dd>{data.pack_id}</dd></div><div><dt>TIN sample</dt><dd>{data.terrain_samples.filter((sample) => sample.elevation_m !== null).length}/{data.terrain_samples.length}</dd></div><div><dt>建物</dt><dd>{data.buildings.length}</dd></div><div><dt>道路</dt><dd>{data.roads.length}</dd></div></dl>)}
+        <div><span>{readableSection ? "街の断面" : "PLATEAU URBAN SECTION"}</span><strong>{readableSection ? "実際の地形・建物・道路" : "実DEM × 建物 × 道路"}</strong></div>
+        {data && (readableSection ? <dl className="guided-section-facts"><div><dt>断面付近の建物</dt><dd>{data.buildings.length}棟</dd></div><div><dt>交差する道路</dt><dd>{data.roads.length}本</dd></div></dl> : <dl><div><dt>PACK</dt><dd>{data.pack_id}</dd></div><div><dt>TIN sample</dt><dd>{data.terrain_samples.filter((sample) => sample.elevation_m !== null).length}/{data.terrain_samples.length}</dd></div><div><dt>建物</dt><dd>{data.buildings.length}</dd></div><div><dt>道路</dt><dd>{data.roads.length}</dd></div></dl>)}
         {!guided && <button type="button" onClick={onClose} aria-label="都市断面を閉じる">閉じる</button>}
       </header>
       {error && <p className="section-load-message error" role="alert">{guided ? "街の断面データを読み込めませんでした。地図と確認済みの集計値は引き続き確認できます。" : `Urban Section: ${error}`}</p>}
       {!data || !plot ? (!error || !guided) && <p className="section-load-message" role="status">{guided ? "PLATEAUの地形・建物・道路を読み込んでいます。読み込み中も次の手順へ進めます。" : "実PLATEAU断面を読み込み中"}</p> : <>
-        <p id="section-accessible-summary" className="section-text-summary" aria-live={guided ? "polite" : undefined}>
-          {guided ? <>
+        <p id="section-accessible-summary" className="section-text-summary" aria-live={readableSection ? "polite" : undefined}>
+          {readableSection ? <>
             AからBまで約{Math.round(plot.maxDistance)}m。標高は{plot.minimumElevation.toFixed(1)}mから{plot.maximumElevation.toFixed(1)}m。直接交差する建物は{data.buildings.filter((item) => item.relation === "direct").length}棟、道路は{data.roads.filter((item) => item.relation === "direct").length}本です。
             {focusedDetail && ` 選択位置に最も近い${focusedDetail.kindLabel}は${focusedDetail.label}。Aから約${Math.round(focusedDetail.distanceM)}m、標高${focusedDetail.elevationM === null ? "データなし" : `${focusedDetail.elevationM.toFixed(1)}m`}、${focusedDetail.relation === "direct" ? "断面と直接交差" : `断面から約${Math.round(focusedDetail.offsetDistanceM)}m`}です。`}
             {counterfactualState === "scenario" && ` 仮想地点を加えた条件では、500m集計の直線距離が${data.counterfactual.baseline.distance_m}mから${data.counterfactual.scenario.distance_m}mへ変わります。建物と道路の形は変えていません。`}
@@ -189,31 +192,31 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
         <svg
           viewBox={`0 0 ${plot.viewWidth} 220`}
           role="img"
-          tabIndex={guided ? 0 : undefined}
+          tabIndex={readableSection ? 0 : undefined}
           aria-labelledby="section-title"
-          aria-describedby={guided ? "section-description section-accessible-summary guided-section-keyboard-help" : "section-description"}
+          aria-describedby={readableSection ? "section-description section-accessible-summary guided-section-keyboard-help" : "section-description"}
           onPointerMove={focusSection}
           onPointerLeave={() => {
             setGuidedFocusActive(false);
             onFocusPosition?.(null);
           }}
-          onFocus={() => {
+          onFocus={(event) => {
             const sample = data.terrain_samples[guidedSampleIndex];
-            if (guided && sample) {
+            if (readableSection && event.target === event.currentTarget && sample) {
               setGuidedFocusActive(true);
               onFocusPosition?.({ longitude: sample.longitude, latitude: sample.latitude });
             }
           }}
           onBlur={() => {
-            if (guided) {
+            if (readableSection) {
               setGuidedFocusActive(false);
               onFocusPosition?.(null);
             }
           }}
           onKeyDown={focusSectionByKeyboard}
         >
-          <title id="section-title">{guided ? `${areaLabel}の街の断面` : "常団地前500mメッシュのPLATEAU都市断面"}</title>
-          <desc id="section-description">{guided ? "PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。" : `${data.terrain_source}を三角形内で補間した地形、直接交差と近傍を区別した建物、PLATEAU道路、計画・災害帯を表示。人口や建物高さの補完は行っていません。`}</desc>
+          <title id="section-title">{readableSection ? `${areaLabel}の街の断面` : "常団地前500mメッシュのPLATEAU都市断面"}</title>
+          <desc id="section-description">{readableSection ? "PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。" : `${data.terrain_source}を三角形内で補間した地形、直接交差と近傍を区別した建物、PLATEAU道路、計画・災害帯を表示。人口や建物高さの補完は行っていません。`}</desc>
           <g className="section-grid" aria-hidden="true">
             {xTickFractions.map((fraction) => <line key={`x-${fraction}`} x1={plot.x(plot.maxDistance * fraction)} x2={plot.x(plot.maxDistance * fraction)} y1="54" y2="198" />)}
             {yTickValues.map((value) => <line key={`y-${value}`} x1="38" x2={plot.viewWidth - 20} y1={plot.y(value)} y2={plot.y(value)} />)}
@@ -258,7 +261,10 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
                 aria-label={`${String(building.properties.usage ?? "用途不明")} ${height === null ? "高さ不明" : `高さ${height}m`} ${building.relation === "direct" ? "断面交差" : `断面から${building.offset_distance_m}m`}`}
                 onClick={guided ? undefined : () => onSelectBuilding(building.source_object_id, building.properties)}
                 onKeyDown={guided ? undefined : (event) => {
-                  if (event.key === "Enter" || event.key === " ") onSelectBuilding(building.source_object_id, building.properties);
+                  if (event.key === "Enter" || event.key === " ") {
+                    if (readableSection) event.preventDefault();
+                    onSelectBuilding(building.source_object_id, building.properties);
+                  }
                   moveSectionFocus(event);
                 }}
               ><title>{guided ? `${String(building.properties.usage ?? "用途不明")} · ${height === null ? "高さはデータなし" : `高さ${height}m`}` : `${building.source_object_id} · ${String(building.properties.usage ?? "用途不明")} · ${height === null ? "高さ不明（補完なし）" : `${height}m`}`}</title></rect>;
@@ -273,12 +279,12 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
             ><title>{String(road.properties.road_name ?? (guided ? "名称不明の道路" : road.source_object_id))}</title></path>)}
           </g>
           {!guided && <g className="section-services" aria-label="施設位置">
-            {data.service_locations.slice(0, 6).map((facility, index) => <g key={facility.source_object_id} transform={`translate(${plot.x(facility.start_distance_m)},${24 + index * 8})`}><circle r="2.5" /><text x="5" y="2">{`${String(facility.properties.name ?? facility.source_object_id)} · offset ${Math.round(facility.offset_distance_m)}m`}</text></g>)}
+            {data.service_locations.slice(0, 6).map((facility, index) => <g key={facility.source_object_id} transform={`translate(${plot.x(facility.start_distance_m)},${24 + index * 8})`}><circle r="2.5" />{readableSection ? <title>{`${String(facility.properties.name ?? facility.source_object_id)} · offset ${Math.round(facility.offset_distance_m)}m`}</title> : <text x="5" y="2">{`${String(facility.properties.name ?? facility.source_object_id)} · offset ${Math.round(facility.offset_distance_m)}m`}</text>}</g>)}
           </g>}
           <g className="section-terrain" aria-label={guided ? undefined : "PLATEAU DEM TIN地形"} aria-hidden={guided ? true : undefined}>
             {plot.terrainSegments.map((segment, index) => <path key={index} d={segment.line} />)}
           </g>
-          {guided && <g className="section-road-annotations" aria-hidden="true">
+          {readableSection && <g className="section-road-annotations" aria-hidden="true">
             {roadAnnotations.placed.map((annotation) => <g key={annotation.id}>
               <line x1={annotation.anchorX} x2={annotation.labelX + annotation.labelWidth / 2} y1="171" y2={annotation.railY + 3} />
               <text
@@ -293,7 +299,7 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
               >{annotation.label}</text>
             </g>)}
           </g>}
-          {guided && focusedDetail && focusedCallout && <g className="section-focus-callout" aria-hidden="true" data-section-focus-annotation="true" data-section-annotation-selected="true">
+          {readableSection && focusedDetail && focusedCallout && <g className="section-focus-callout" aria-hidden="true" data-section-focus-annotation="true" data-section-annotation-selected="true">
             <line x1={focusedCallout.anchorX} x2={focusedCallout.labelX + focusedCallout.labelWidth / 2} y1={focusedCallout.anchorY} y2="59" />
             <circle cx={focusedCallout.anchorX} cy={focusedCallout.anchorY} r="4" />
             <rect x={focusedCallout.labelX} y="55" width={focusedCallout.labelWidth} height="51" rx="3" />
@@ -316,9 +322,9 @@ export function UrbanSection({ open, mode = "advanced", selection, counterfactua
           </g>}
           {counterfactualState === "stress" && <text className="section-counterfactual-note" x="660" y="18">{guided ? "この断面には災害条件による形の変化を加えていません" : "STRESS · このpackに断面固有stress relationなし · geometry不変"}</text>}
         </svg>
-        {guided && <span id="guided-section-keyboard-help" className="guided-section-keyboard-help">左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。</span>}
-        <footer className={guided ? "guided-section-footer" : undefined}>
-          {guided ? <>
+        {readableSection && <span id="guided-section-keyboard-help" className="guided-section-keyboard-help">左右矢印キーで断面上の地形位置を移動すると、地図上の同じ位置が示されます。{!guided && "建物にはTabキーで移動し、Enterまたはスペースキーで選択できます。"}</span>}
+        <footer className={readableSection ? "guided-section-footer" : undefined}>
+          {readableSection ? <>
             <div className="section-visual-legend" aria-label="断面の凡例">
               <span><i className="terrain" aria-hidden="true" />地形</span>
               <span><i className="building" aria-hidden="true" />建物</span>

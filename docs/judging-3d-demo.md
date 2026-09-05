@@ -1,5 +1,23 @@
 # CITY GAP: PLATEAUを現地確認につなぐ3Dデモ
 
+## Advanced 3Dの追加改善（進行中）
+
+拡張依頼の起点は `fcbd45151dbba65d0bc2682ddf096d39472deaa5`。以下の既存納品記録・素材は保全し、Advanced用の画像4枚と20〜45秒の新しいclean/captioned動画を別セットで追加します。最終の公開元SHA、CI、Pages、hashは新セットのmanifestと納品報告で特定します。
+
+Advancedの常団地前周辺では、地域の集計 → 3D → 同じA–B断面 → 選んだ対象の公式属性・未確認項目を一画面で対応させます。「分析ツール」から従来の操作へ戻れ、明示的なSpatial Pack/X-Ray直リンクや別地域・別sceneは従来の表示を保ちます。Guided→Advancedのfull-data single-flight loaderは変更していません。新画面の地域・断面の取得と3D readinessにも有限の待ち時間、再試行、地図への戻り口があります。
+
+ここでPLATEAUを使う理由は、500mの人口・距離集計にはない、公式の建物立体形状・高さ・用途と道路・地形の位置関係を読むためです。色付きの集計図だけでは建物の高さや断面の高低差を示せません。ただし、PLATEAUだけが唯一の方法という主張や、LOD1で入口・通行可否が分かるという主張はしません。
+
+| 審査軸 | 新しいAdvancedで提示する事実 | 未検証・主張しないこと |
+| --- | --- | --- |
+| 3D都市モデルの活用度 | 実3D Tilesの選択IDと公式属性、実DEM・道路、同一packのA–B断面を対応させる | LOD2表示、未収録属性の補完、歩行可能性の判定 |
+| アイデア・独創性 | Guidedの同じ地域からAdvancedへ進み、集計・立体・個別対象・未確認項目をつなぐ実装 | 世界初、独創性の外部評価、利用者理解度の検証 |
+| 地域課題への貢献度 | 地域を探す材料と、入口・利用状況・通行条件を現地で確認する具体的対象を提示する | 自治体採用、時間削減、課題解決効果、人間テスト結果 |
+
+exact targetは、選択地物IDが同じ地域のhash照合済みgeometryに一致した場合だけ表示します。道路面の配布表記差（末尾 `-0` / `:0`）は実ID対応として扱い、描画側IDと対象IDを分けて保持します。共有URLは既存の親メッシュを明示的に保持し、未登録・別地域のIDをexactと推定しません。URLだけで復元した建物は、Area contextに高さ・階数がない場合「データなし」と表示し、モデルを再選択すると実属性を読みます。
+
+以下は変更せず保持する、以前のGuided 3Dと13秒補足素材の納品記録です。
+
 Goal: `plateau-3d-value-fast-delivery-v1`
 
 Status: the 3D service is deployed, its required production interaction paths pass, and the additional four-image / single-master-video package is complete. Final delivery-commit CI is reported with its exact SHA/run in the hand-off. Visual review here is agent review, not user acceptance or municipal validation.

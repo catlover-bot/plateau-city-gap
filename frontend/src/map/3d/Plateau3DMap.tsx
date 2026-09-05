@@ -8,6 +8,7 @@ import { SCENE_PRESETS } from "../core/scenePresets";
 import type { VisualReadinessResult, VisualReadinessSnapshot } from "./readiness/visualReadiness";
 import type { SectionData } from "../../features/urban-section/sectionTypes";
 import { recordReadinessMetric } from "./readiness/performanceMetrics";
+import { supportsVerifiedLocalView, VERIFIED_LOCAL_READINESS_TIMEOUT_MS } from "./verifiedLocalView";
 
 const CesiumMap = lazy(async () => {
   const module = await import("../../components/CesiumMap");
@@ -27,6 +28,7 @@ interface Props {
   sectionFocus?: { longitude: number; latitude: number } | null;
   uiMode?: "advanced" | "guided";
   preferredBuildingSource?: "spatial-pack" | "verified-local";
+  verifiedLocalPresentation?: boolean;
   workspaceMap?: WorkspaceMapData | null;
   workspaceBuildingPoints?: WorkspaceBuildingPoints | null;
   workspacePhase?: WorkspacePhase;
@@ -39,6 +41,7 @@ interface Props {
   onReady?(): void;
   onVisualReadinessChange?(snapshot: VisualReadinessSnapshot, result: VisualReadinessResult): void;
   onError?(message: string | null): void;
+  onReturnTo2D?(): void;
 }
 
 const EMPTY_WORKSPACE_LAYERS = {
@@ -53,7 +56,7 @@ const EMPTY_WORKSPACE_LAYERS = {
 };
 
 function meshFromSelection(data: AppData, selection: SpatialSelection | null): MeshMetrics | null {
-  const meshCode = selection?.type === "mesh" ? selection.id : selection?.properties?.parent_mesh_code;
+  const meshCode = selection?.type === "mesh" || selection?.type === "building_group" ? selection.id : selection?.properties?.parent_mesh_code;
   if (typeof meshCode !== "string") return null;
   const ranked = data.top10.find((mesh) => mesh.mesh_code === meshCode);
   if (ranked) return ranked;
@@ -167,6 +170,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   sectionFocus,
   uiMode = "advanced",
   preferredBuildingSource,
+  verifiedLocalPresentation = false,
   workspaceMap = null,
   workspaceBuildingPoints = null,
   workspacePhase = "baseline",
@@ -179,6 +183,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   onReady,
   onVisualReadinessChange,
   onError,
+  onReturnTo2D,
 }, ref) {
   const cesiumRef = useRef<CesiumMapHandle>(null);
   const [ready, setReady] = useState(false);
@@ -186,6 +191,10 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const [readiness, setReadiness] = useState<VisualReadinessResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  const [verifiedLoadComplete, setVerifiedLoadComplete] = useState(false);
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
   const readinessEventsRef = useRef({ interaction: false, visual: false, strict: false });
   const mesh = useMemo(() => meshFromSelection(data, selection), [data, selection]);
   const decisionTwinContext = scenePreset === "scenario_compare" || scenePreset === "hazard_stress";
@@ -195,9 +204,32 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const deepDiveCode = data.plateauMetadata?.reference_layer?.deep_dive_mesh_code;
   const scene = SCENE_PRESETS[scenePreset];
   const guidedLocal = uiMode === "guided" && preferredBuildingSource === "verified-local";
-  const sceneReadiness = useMemo(() => guidedLocal
+  const advancedLocal = uiMode === "advanced" && supportsVerifiedLocalView({
+    requested: verifiedLocalPresentation,
+    city: data.city.id,
+    scenePreset,
+    selection,
+    metadataMeshCode: deepDiveCode,
+    sectionPackId: sectionData?.pack_id,
+  });
+  const localPresentation = guidedLocal || advancedLocal;
+  const sceneReadiness = useMemo(() => localPresentation
     ? { ...scene.readiness, requiresVerifiedPack: true }
-    : scene.readiness, [guidedLocal, scene.readiness]);
+    : scene.readiness, [localPresentation, scene.readiness]);
+
+  useEffect(() => {
+    setVerifiedLoadComplete(false);
+  }, [advancedLocal, attempt, deepDiveCode]);
+
+  useEffect(() => {
+    if (!advancedLocal || verifiedLoadComplete || error) return;
+    const timer = window.setTimeout(() => {
+      const message = "建物・道路・実DEMの描画を完了できませんでした。再試行するか、2D地図へ戻れます。";
+      setError(message);
+      onErrorRef.current?.(message);
+    }, VERIFIED_LOCAL_READINESS_TIMEOUT_MS);
+    return () => window.clearTimeout(timer);
+  }, [advancedLocal, attempt, error, verifiedLoadComplete]);
 
   useEffect(() => {
     setReady(false);
@@ -207,12 +239,13 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
     document.documentElement.dataset.visualComplete = "false";
     document.documentElement.dataset.captureStrictReady = "false";
     document.documentElement.dataset.visualReady = "false";
-  }, [analysisLens, counterfactualState, scenePreset]);
+  }, [analysisLens, attempt, counterfactualState, localPresentation, scenePreset]);
 
   const updateVisualReadiness = (snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => {
     onVisualReadinessChange?.(snapshot, result);
     setReadiness(result);
     setReady(result.interactionReady);
+    if (result.captureStrictReady) setVerifiedLoadComplete(true);
     document.documentElement.dataset.interactionReady = String(result.interactionReady);
     document.documentElement.dataset.visualComplete = String(result.visualComplete);
     document.documentElement.dataset.captureStrictReady = String(result.captureStrictReady);
@@ -256,9 +289,9 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
 
   useEffect(() => {
     if (!progressiveReady) return;
-    // The bounded Guided camera starts at the local city model. Object/Section
+    // The bounded local camera starts at the city model. Object/Section
     // selections update highlights without moving away from the same A–B scene.
-    if (guidedLocal) return;
+    if (localPresentation) return;
     const cameraIntent = scene.camera === "route" || scene.camera === "scenario" || scene.camera === "hazard" ? scene.camera : null;
     const workspaceTarget = cameraIntent ? workspaceCamera(workspaceMap, workspacePhase, cameraIntent) : null;
     const deepDiveLongitude = data.plateauMetadata?.reference_layer?.viewpoint?.longitude;
@@ -274,26 +307,27 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
     }
     else if (selection?.type === "building") cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
     else cesiumRef.current?.resetView();
-  }, [data.plateauMetadata, deepDiveCode, guidedLocal, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
+  }, [data.plateauMetadata, deepDiveCode, localPresentation, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
 
   return (
-    <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready} data-ui-mode={uiMode}>
+    <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready} data-ui-mode={uiMode} data-local-presentation={localPresentation} data-load-state={error ? "error" : verifiedLoadComplete ? "ready" : "loading"}>
       <Suspense fallback={<div className="map-engine-loading" role="status"><span />{uiMode === "guided" ? "建物・道路・地形を準備しています" : "PLATEAU 3Dを読み込み中"}</div>}>
         <CesiumMap
+          key={attempt}
           ref={cesiumRef}
           data={data}
           metricMode="gap"
           selectedMeshCode={mesh?.mesh_code ?? null}
           selectedBuildingId={selection?.type === "building" ? selection.id : null}
-          selectedRoadId={selection?.type === "road" ? selection.id : null}
+          selectedRoadId={selection?.type === "road" ? typeof selection.properties?.renderer_road_id === "string" ? selection.properties.renderer_road_id : selection.id : null}
           analysisLens={analysisLens}
           counterfactualState={counterfactualState}
           readinessRequirements={sceneReadiness}
           showUrbanSection={showUrbanSection}
           sectionData={sectionData}
           sectionFocus={sectionFocus}
-          preferredBuildingSource={preferredBuildingSource}
-          guidedPresentation={guidedLocal}
+          preferredBuildingSource={advancedLocal ? "verified-local" : preferredBuildingSource}
+          guidedPresentation={localPresentation}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
           plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
@@ -336,7 +370,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
         {uiMode === "guided" ? "建物・道路・地形を確認しています" : "操作用の建物・道路・DEMを確認中"}
         {uiMode === "advanced" && <small>{readiness?.interactionUnmet.join(" · ")}</small>}
       </div>}
-      {uiMode === "advanced" && <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>}
+      {uiMode === "advanced" && !advancedLocal && <div className="plateau-3d-context"><strong>PLATEAU都市構造調査 · {scene.label}</strong><span>{scene.description}</span><small>全市建物はcamera配信 · 実DEM面は常団地前Deep Diveのみ · {scene.intent === "resilience" ? "災害予測ではなく仮定比較" : "公式地物とモデル結果を分離"}</small></div>}
       {warning && <div className="map-inline-warning" role="status">
         {uiMode === "guided" ? "一部の3D表示を読み込めません。街の断面で確認を続けられます。" : warning}
       </div>}
@@ -344,6 +378,10 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
         <strong>3Dを表示できません</strong>
         {uiMode === "advanced" && <p>{error}</p>}
         <span>{uiMode === "guided" ? "検証済みの建物・道路・地形データと街の断面で確認を続けられます。" : "2D地図と候補一覧は引き続き利用できます。"}</span>
+        {advancedLocal && <div className="map-engine-fallback-actions">
+          <button type="button" onClick={() => { setError(null); setWarning(null); setProgressiveReady(false); setAttempt((value) => value + 1); }}>3Dを再試行</button>
+          {onReturnTo2D && <button type="button" onClick={onReturnTo2D}>2D地図に戻る</button>}
+        </div>}
       </div>}
     </div>
   );

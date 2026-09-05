@@ -3,6 +3,9 @@ import { ProductHeader } from "../features/navigation/ProductHeader";
 import { TaskNavigation } from "../features/navigation/TaskNavigation";
 import { DiscoveryWorkspace } from "../features/discovery/DiscoveryWorkspace";
 import { DetailWorkspace } from "../features/detail/DetailWorkspace";
+import { Advanced3DWorkspace } from "../features/detail/Advanced3DWorkspace";
+import { advancedAreaSelection } from "../features/detail/advanced3dModel";
+import { VERIFIED_LOCAL_MESH } from "../map/3d/verifiedLocalView";
 import { ScenarioWorkspace } from "../features/scenario/ScenarioWorkspace";
 import { ValidationInspector, type ValidationView } from "../features/validation/ValidationInspector";
 import { OperationsWorkspace } from "../features/field/OperationsWorkspace";
@@ -80,6 +83,10 @@ export function ProductApp() {
   const [evidenceOpen, setEvidenceOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Explicit Spatial Pack/X-Ray links retain the existing analysis workspace.
+  const [advancedToolsOpen, setAdvancedToolsOpen] = useState(
+    () => new URLSearchParams(window.location.search).get("buildingSource") === "spatial-pack",
+  );
   const [activeLayers, setActiveLayers] = useState<string[]>(sceneLayerIds(state.scenePreset));
   const [siteCount, setSiteCount] = useState<1 | 2 | 3>(2);
   const [scenarioMode, setScenarioMode] = useState<"compare" | "stress">("compare");
@@ -561,6 +568,16 @@ export function ProductApp() {
   if (error && !data) return <ErrorState message={error} onRetry={() => setRetry((value) => value + 1)} />;
   if (!data) return <LoadingState />;
 
+  const advancedArea = advancedAreaSelection(data, state.selection);
+  const readableAdvanced3D = state.mapMode === "plateau3d" && state.scenePreset === "plateau_detail"
+    && state.city === "maizuru" && advancedArea?.id === VERIFIED_LOCAL_MESH && state.task !== "try" && state.task !== "validate";
+  if (readableAdvanced3D && !advancedToolsOpen && advancedArea) return <Advanced3DWorkspace
+    key={advancedArea.id} data={data} area={advancedArea} selection={state.selection} viewport={state.viewport}
+    onSelectionChange={select} onReturnTo2D={() => dispatch({ type: "set-map-mode", mapMode: "map2d" })}
+    onGuided={() => { select(advancedArea); dispatch({ type: "set-guided-story", story: "understand" }); dispatch({ type: "set-experience", experience: "guided" }); }}
+    onTools={() => setAdvancedToolsOpen(true)} onShare={share}
+  />;
+
   const inspectorContent = state.task === "discover" ? <DiscoveryWorkspace data={data} selection={state.selection} onSelect={selectMesh} />
     : state.task === "detail" ? <DetailWorkspace selection={state.selection} onOpen3D={openPlateau3D} />
       : state.task === "try" ? <ScenarioWorkspace plan={plan} mode={scenarioMode} siteCount={siteCount} futures={futures} city={state.city} stress={stress} onModeChange={(value) => { setScenarioMode(value); dispatch({ type: "set-scene-preset", scenePreset: value === "stress" ? "hazard_stress" : "scenario_compare" }); }} onSiteCountChange={setSiteCount} onStressChange={setStress} />
@@ -580,6 +597,7 @@ export function ProductApp() {
             else openPlateau3D();
           }} />
           <button type="button" className="share-map-button" onClick={share}>URLを共有</button>
+          {readableAdvanced3D && advancedToolsOpen && <button type="button" className="share-map-button" onClick={() => setAdvancedToolsOpen(false)}>3Dを読みやすく表示</button>}
           <button type="button" className={`saved-investigation-trigger ${state.savedInvestigationOpen ? "active" : ""}`} aria-pressed={state.savedInvestigationOpen} onClick={() => dispatch({ type: "set-saved-investigation-open", open: !state.savedInvestigationOpen })}>保存済み調査</button>
         </div>
         <ResolutionRail value={state.resolution} onChange={changeResolution} />

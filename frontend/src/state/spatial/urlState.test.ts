@@ -97,4 +97,64 @@ describe("spatial URL state", () => {
     expect(area).toContain("copy=B");
     expect(serialized).not.toContain("unknown");
   });
+
+  it.each(["building", "road"] as const)("round-trips an explicit %s parent mesh without serializing other attributes", (type) => {
+    const state = parseSpatialUrl("?experience=advanced&city=maizuru&mapMode=plateau3d");
+    const selected = {
+      type,
+      id: `${type}-exact-source-id`,
+      city: state.city,
+      urbanState: state.urbanState,
+      longitude: 135.396875,
+      latitude: 35.4479167,
+      properties: { parent_mesh_code: "533513314", usage: "住宅", measured_height_m: 7.44 },
+    };
+    const serialized = spatialStateToSearch({ ...state, selection: selected });
+    const params = new URLSearchParams(serialized);
+    expect(params.get("parentMesh")).toBe("533513314");
+    expect(params.has("usage")).toBe(false);
+    expect(params.has("measured_height_m")).toBe(false);
+    expect(parseSpatialUrl(serialized).selection).toEqual({
+      ...selected,
+      properties: { parent_mesh_code: "533513314" },
+    });
+  });
+
+  it("restores explicit parent context on legacy object URLs without inferring missing parents", () => {
+    expect(parseSpatialUrl("?road=road-exact-id&parentMesh=533513314").selection).toMatchObject({
+      type: "road",
+      id: "road-exact-id",
+      properties: { parent_mesh_code: "533513314" },
+    });
+    const existingUrl = "?selectionType=building&selection=building-exact-id&mesh=533513314";
+    const state = parseSpatialUrl(existingUrl);
+    expect(state.selection).toEqual({ type: "building", id: "building-exact-id", city: "maizuru", urbanState: "2025" });
+    expect(new URLSearchParams(spatialStateToSearch(state, new URLSearchParams("parentMesh=533513314"))).has("parentMesh")).toBe(false);
+  });
+
+  it("rejects malformed parent meshes and ignores parent context for mesh or absent selections", () => {
+    for (const parentMesh of ["", "53351331", "5335133140", "53351331x", " 533513314", "533513314 ", "５３３５１３３１４", "533513314.0"]) {
+      const state = parseSpatialUrl(`?building=building-exact-id&parentMesh=${encodeURIComponent(parentMesh)}`);
+      expect(state.selection?.properties).toBeUndefined();
+      expect(new URLSearchParams(spatialStateToSearch(state)).has("parentMesh")).toBe(false);
+    }
+    const mesh = parseSpatialUrl("?mesh=533513314&parentMesh=533513315");
+    expect(mesh.selection?.properties).toBeUndefined();
+    expect(parseSpatialUrl("?parentMesh=533513314").selection).toBeNull();
+    expect(new URLSearchParams(spatialStateToSearch({
+      ...mesh,
+      selection: { ...mesh.selection!, properties: { parent_mesh_code: "533513315" } },
+    })).has("parentMesh")).toBe(false);
+  });
+
+  it("does not serialize malformed or non-string parent attributes", () => {
+    const state = parseSpatialUrl("?building=building-exact-id");
+    for (const parentMesh of [undefined, null, 533513314, "53351331x", { mesh_code: "533513314" }]) {
+      const serialized = spatialStateToSearch({
+        ...state,
+        selection: { ...state.selection!, properties: { parent_mesh_code: parentMesh } },
+      });
+      expect(new URLSearchParams(serialized).has("parentMesh")).toBe(false);
+    }
+  });
 });
