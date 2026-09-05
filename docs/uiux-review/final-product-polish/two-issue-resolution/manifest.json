@@ -1,0 +1,205 @@
+{
+  "schema": "citygap.two-issue-resolution@1",
+  "goal": "final-product-uiux-polish-v1",
+  "status": "local_checks_and_agent_visual_review_passed_pending_exact_final_head_CI_Pages_live_verification",
+  "scope": "Only Section detail row separation and Guided 1440 render-aware readiness; no new feature/design/media delivery.",
+  "resume_head": "035f295e21e3b5f47e4e9e363b7d4d969861f476",
+  "source_commit": "8060f3f0c6205cc1b7f6ce75a2b9607cae72519a",
+  "build": {
+    "url": "http://127.0.0.1:4190/plateau-city-gap/",
+    "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+    "verifier_sha256": "e6a2fecd8a34dc40aca61304013f11fc566c8481a7d47f27cffa2c60dab531e5",
+    "boundary": "All final reports use this same frozen app, later committed as source_commit. Earlier original-order diagnostic probes explicitly use resume_head; do not confuse report Git metadata with bundle identity."
+  },
+  "changes": {
+    "section": "Relation baseline 100→103; callout height 51→54. Fonts/content/data/A–B unchanged.",
+    "readiness": "Strict 3D and actual split/canvas geometry before keyboard, recheck afterward, fonts/frames/animation completion before measurement. One shared finite 60s deadline; no relaxed assertion or CSS/layout change."
+  },
+  "results": {
+    "native_gap_css_px": 2,
+    "software_gap_css_px": 3,
+    "actual_200_percent_gap_css_px": 4,
+    "all_text_overlap_pairs": 0,
+    "clipped_texts": 0,
+    "all_callout_rows_contained": true,
+    "old_1440_timeout_reproduced": false,
+    "proven_measurement_race": "390px SVG DOM x=54 while transition computed x=38; settled to54 after451ms without identity/data change.",
+    "lint": "pass",
+    "typecheck": "pass",
+    "frontend_tests": {
+      "files": 37,
+      "tests": 225,
+      "status": "pass"
+    },
+    "production_build": "pass",
+    "diff_check": "pass",
+    "four_widths": [
+      1440,
+      1280,
+      390,
+      320
+    ],
+    "experiences": [
+      "Public",
+      "Guided",
+      "Advanced"
+    ],
+    "actual_browser_200_percent": "pass",
+    "related_regressions": "Public nine states, Guided spatial/3D/Section/mobile/keyboard, Guided→Advanced loading/retry, native2D19/19, identity five viewports"
+  },
+  "review": {
+    "images": [
+      "01-guided-focused-section-1440.png",
+      "02-guided-focused-section-390.png"
+    ],
+    "count": 2,
+    "capture_sets": 1,
+    "source": "source_commit",
+    "agent_visual_review": "Both exact PNGs viewed by primary and capture agents. Road metadata/relation separated; full axes/A–B visible; desktop map/Section split and Cesium credits visible; mobile explicit 3D return visible.",
+    "human_acceptance": false,
+    "presentation_assets": false,
+    "diagnostics": "No unexpected errors. Existing classification retains 56 optional external GSI tile ERR_ABORTED requests in image set; true200 audit separately retains15."
+  },
+  "evidence_mapping": {
+    "local_validation": "local-validation.json",
+    "capture_provenance": "provenance.json",
+    "capture_raw": "review.json",
+    "capture_diagnostics": "native-review-diagnostics.json",
+    "renderer": "renderer.json",
+    "public_raw": "public-final.json",
+    "original_probes": {
+      "diagnose.json": "guided1440-diagnose.json",
+      "exact-original.json": "guided1440-exact-original.json",
+      "exact-ordered.json": "guided1440-exact-ordered.json"
+    },
+    "historical_1440_failure": "../correction-pass/polish-final-four-widths.json",
+    "failed_new_390_matrix": "polish-four-widths.json",
+    "failed_and_settled_390_diagnosis": "diagnose390-run.json",
+    "path_note": "Raw diagnostics retain original temporary paths. Copied reports are byte-identical; this package flattens names as mapped here. Only the new capture provenance's two relative native-report links were adjusted for this directory."
+  },
+  "preservation": {
+    "existing_before_after_and_correction_files": "unchanged",
+    "existing_assets_video_images_and_provenance": "read-only",
+    "existing_two_deletions_and_two_untracked_copy_files": "retained and excluded from staging",
+    "main": "not merged or pushed",
+    "backup_root": "/tmp/citygap-uiux-two-issue.53U3AyzX/preservation",
+    "final_check": "Run after the final local commit, then verify exact remote HEAD/CI/Pages and live entry/chunk hashes. These commit-dependent gates are not preclaimed."
+  },
+  "files": [
+    {
+      "file": "01-guided-focused-section-1440.png",
+      "bytes": 384281,
+      "sha256": "01a6318c2e791dc3a03d0e24d8b660d8355df07c29d131538ea565775e7ced3d"
+    },
+    {
+      "file": "02-guided-focused-section-390.png",
+      "bytes": 77028,
+      "sha256": "c8afacbd5c196bd830a9e0b7fa3bd19af357c85bcf76f7d03cc7f159d28fcb10"
+    },
+    {
+      "file": "diagnose390-run.json",
+      "bytes": 45347,
+      "sha256": "9e0e41159b734723862f91288c4a0035a71637d2e1bac88633696f15865a2534"
+    },
+    {
+      "file": "guided1440-diagnose.json",
+      "bytes": 50918,
+      "sha256": "917baa2cf8516d0c93bb091414ed26cb03a387e7c020f8de3fee7df59977a3f3"
+    },
+    {
+      "file": "guided1440-exact-ordered.json",
+      "bytes": 36129,
+      "sha256": "6c44d684d753eb630e9994bb787d6fa5150673d39fe77953776250f3319a4ef5"
+    },
+    {
+      "file": "guided1440-exact-original.json",
+      "bytes": 34651,
+      "sha256": "b2fdf11816f6e0e12bb64f1b8679340c3591c35a3de5d4c03184558fd02d6291"
+    },
+    {
+      "file": "guided-spatial.json",
+      "bytes": 48131,
+      "sha256": "343e2188d4a5202bdfccc9cec2e381a81a41697a7de4307830b718e3fcfb1b74"
+    },
+    {
+      "file": "identity.json",
+      "bytes": 10275,
+      "sha256": "438dbb80a001a979ba751a81ad348186188311f3c7aee8ff97d280d748b4a017"
+    },
+    {
+      "file": "local-validation.json",
+      "bytes": 8958,
+      "sha256": "1e5141025071408e8e32f91617db69d1ba089f11760be669e4e4615adfafc0ae"
+    },
+    {
+      "file": "native-2d.json",
+      "bytes": 1249,
+      "sha256": "df95392164f7d5e38bff5aaeecae57a93a2dd2d58af4be899f041462678f8971"
+    },
+    {
+      "file": "native-advanced1920-final.json",
+      "bytes": 37333,
+      "sha256": "24d7f33143bb0ba0fe23d78e85924a096af9a80a46df17daf5cf02eeb7967021"
+    },
+    {
+      "file": "native-before-summary.json",
+      "bytes": 2525,
+      "sha256": "0a43b248b1f41135ef493e7bdff3fa46af0ce3b1e8ef16b95431818393b31a06"
+    },
+    {
+      "file": "native-comparison-provenance.json",
+      "bytes": 1587,
+      "sha256": "6ff9b3f602beed38520e6e1622ea4edd4dc4071e709ecc9a0beaa28b20889ade"
+    },
+    {
+      "file": "native-guided1440-final.json",
+      "bytes": 49811,
+      "sha256": "e4c54c6c211e2eadb675e0fd868c9a0c37a362a8b88a7ab8118a9186a3280ceb"
+    },
+    {
+      "file": "native-review-diagnostics.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "polish-actual200.json",
+      "bytes": 86515,
+      "sha256": "218ede1a63cc3c179018732b3d6c3dde88ad3d061e2afd26a2cf1fcd02acadd9"
+    },
+    {
+      "file": "polish-final-four-widths.json",
+      "bytes": 357304,
+      "sha256": "796ba9bc03cd468427e5215735fe1c46fed64d1f7a0a17d17f6da0126a048b63"
+    },
+    {
+      "file": "polish-four-widths.json",
+      "bytes": 351063,
+      "sha256": "8b9645eecb9a3f6e28a73447ac16614391331c19490750891813b9def71c43c9"
+    },
+    {
+      "file": "provenance.json",
+      "bytes": 3582,
+      "sha256": "c3a5f292cb5af15b6f387f0a7bc81e9eed9652b0c68884d30c6f47869d7ba26b"
+    },
+    {
+      "file": "public-final.json",
+      "bytes": 13772,
+      "sha256": "d20090835bc703dd5031bc4c9494a1927527f3a15d9d5c75c6038aa6fff10029"
+    },
+    {
+      "file": "renderer.json",
+      "bytes": 360,
+      "sha256": "2e82849f4efbbd5642327ebfe644a76fa9344c140b9a2175878a077dc3a0a503"
+    },
+    {
+      "file": "review.json",
+      "bytes": 50513,
+      "sha256": "0bcbe4f6ec225cc59cbdb0f061f8d75cc2cc07ca22d87cf382e4068bd14b1acc"
+    },
+    {
+      "file": "transition.json",
+      "bytes": 3809,
+      "sha256": "4ff882f6353857d3a0db2e0c6e9434ed0e95da2e28b0c959d8ae05a37e4abd8b"
+    }
+  ]
+}

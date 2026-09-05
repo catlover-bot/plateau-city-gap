@@ -1,0 +1,143 @@
+{
+  "schema_version": "citygap.guided-advanced-transition@1",
+  "base_url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "flows": {
+    "direct_advanced": {
+      "pass": true,
+      "upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "full_data_requests": 12
+    },
+    "guided_upgrade": {
+      "pass": true,
+      "loading_state_seen": true,
+      "first_upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "cached_upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "full_marker_starts": 1,
+      "ancillary_requests_aborted_without_blocking": 13,
+      "back_forward": true
+    },
+    "long_url_and_reload": {
+      "pass": true,
+      "upgrade": {
+        "mode": "full",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "selection": "533513314"
+    },
+    "legacy_routes": [
+      {
+        "guide": "5",
+        "pass": true,
+        "final_url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&view=field-sheet",
+        "upgrade": {
+          "mode": "full",
+          "requestGeneration": 1,
+          "fullLoadStartCount": 1,
+          "settleResult": "success",
+          "timeoutMs": 30000
+        }
+      },
+      {
+        "guide": "6",
+        "pass": true,
+        "final_url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&view=municipal-review",
+        "upgrade": {
+          "mode": "full",
+          "requestGeneration": 1,
+          "fullLoadStartCount": 1,
+          "settleResult": "success",
+          "timeoutMs": 30000
+        }
+      }
+    ],
+    "failure_retry": {
+      "pass": true,
+      "failed_upgrade": {
+        "mode": "full-error",
+        "requestGeneration": 1,
+        "fullLoadStartCount": 1,
+        "settleResult": "error",
+        "timeoutMs": 30000
+      },
+      "retried_upgrade": {
+        "mode": "full",
+        "requestGeneration": 2,
+        "fullLoadStartCount": 2,
+        "settleResult": "success",
+        "timeoutMs": 30000
+      },
+      "robustness_attempts": 2
+    }
+  },
+  "diagnostics": [
+    {
+      "label": "direct-advanced",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    },
+    {
+      "label": "guided-upgrade",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    },
+    {
+      "label": "long-url",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    },
+    {
+      "label": "legacy-guide-5",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    },
+    {
+      "label": "legacy-guide-6",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    },
+    {
+      "label": "failure-retry",
+      "console": [],
+      "page": [],
+      "request": [],
+      "response": [],
+      "unhandled": []
+    }
+  ]
+}

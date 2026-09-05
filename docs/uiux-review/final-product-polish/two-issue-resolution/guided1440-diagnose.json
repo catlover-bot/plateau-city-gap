@@ -1,0 +1,1715 @@
+{
+  "source": "035f295e21e3b5f47e4e9e363b7d4d969861f476",
+  "browser": "149.0.7827.55",
+  "url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "diagnostics": {
+    "page": [],
+    "console": [],
+    "http": [],
+    "requests": []
+  },
+  "samples": [
+    {
+      "label": "before-open",
+      "now": 4643.4000000059605,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visual_scale": 1
+      },
+      "fonts_status": "loaded",
+      "predicates": {
+        "expanded": false,
+        "map3d": true,
+        "view_visible": true,
+        "dock_visible": false,
+        "view_width": true,
+        "view_height": true,
+        "dock_width": false,
+        "dock_height": false,
+        "separated": false
+      },
+      "stage": {
+        "tag": "SECTION",
+        "class": "guided-map-stage",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1051.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1051.203125
+        },
+        "style": {
+          "position": "relative",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "hidden"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "view": {
+        "tag": "DIV",
+        "class": "guided-3d-view",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "dock": null,
+      "section": null,
+      "widget": {
+        "tag": "DIV",
+        "class": "cesium-widget",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "canvas": {
+        "tag": "CANVAS",
+        "class": null,
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "static",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "auto",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "clip"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "credit_containers": [
+        {
+          "tag": "DIV",
+          "class": "cesium-widget-credits",
+          "rect": {
+            "x": 804.875,
+            "y": 870,
+            "width": 239.328125,
+            "height": 28,
+            "bottom": 898,
+            "right": 1044.203125
+          },
+          "style": {
+            "position": "absolute",
+            "display": "block",
+            "visibility": "visible",
+            "bottom": "2px",
+            "height": "28px",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null
+        }
+      ],
+      "credits": [
+        {
+          "tag": "A",
+          "class": null,
+          "rect": {
+            "x": 804.875,
+            "y": 882,
+            "width": 138,
+            "height": 11,
+            "bottom": 893,
+            "right": 942.875
+          },
+          "style": {
+            "position": "static",
+            "display": "inline",
+            "visibility": "visible",
+            "bottom": "auto",
+            "height": "auto",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null,
+          "active": false,
+          "center_unobscured": true,
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "rect": {
+              "x": 804.875,
+              "y": 870,
+              "width": 138,
+              "height": 28,
+              "bottom": 898,
+              "right": 942.875
+            },
+            "style": {
+              "position": "static",
+              "display": "inline",
+              "visibility": "visible",
+              "bottom": "auto",
+              "height": "28px",
+              "transition": "1e-05s",
+              "content_visibility": "visible",
+              "overflow": "clip"
+            },
+            "visible": true,
+            "inert": false,
+            "aria_hidden": null
+          }
+        }
+      ],
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1050x840",
+        "drawingBufferSize": "1050x840",
+        "optionalGlobeRequests": "37",
+        "optionalBuildingRequests": "0",
+        "visualReady": "true",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualUnmet": "",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "1",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "21",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "true",
+        "sectionFocusReady": "false",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+        "packSourceTileCount": "3"
+      },
+      "inline_view_style": null,
+      "matches_split_rule": false
+    },
+    {
+      "label": "before-original-5s-gate",
+      "now": 11899.40000000596,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visual_scale": 1
+      },
+      "fonts_status": "loaded",
+      "predicates": {
+        "expanded": true,
+        "map3d": true,
+        "view_visible": true,
+        "dock_visible": true,
+        "view_width": true,
+        "view_height": true,
+        "dock_width": true,
+        "dock_height": true,
+        "separated": true
+      },
+      "stage": {
+        "tag": "SECTION",
+        "class": "guided-map-stage",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1051.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1051.203125
+        },
+        "style": {
+          "position": "relative",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "hidden"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "view": {
+        "tag": "DIV",
+        "class": "guided-3d-view",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "369.594px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "dock": {
+        "tag": "DIV",
+        "class": "guided-section-dock mobile-visible",
+        "rect": {
+          "x": 0,
+          "y": 530.40625,
+          "width": 1050.203125,
+          "height": 369.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "369.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "section": {
+        "tag": "SECTION",
+        "class": "urban-section guided",
+        "rect": {
+          "x": 0,
+          "y": 531.40625,
+          "width": 1050.203125,
+          "height": 368.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "368.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "widget": {
+        "tag": "DIV",
+        "class": "cesium-widget",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "canvas": {
+        "tag": "CANVAS",
+        "class": null,
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "static",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "auto",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "clip"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "credit_containers": [
+        {
+          "tag": "DIV",
+          "class": "cesium-widget-credits",
+          "rect": {
+            "x": 804.875,
+            "y": 500.40625,
+            "width": 239.328125,
+            "height": 28,
+            "bottom": 528.40625,
+            "right": 1044.203125
+          },
+          "style": {
+            "position": "absolute",
+            "display": "block",
+            "visibility": "visible",
+            "bottom": "2px",
+            "height": "28px",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null
+        }
+      ],
+      "credits": [
+        {
+          "tag": "A",
+          "class": null,
+          "rect": {
+            "x": 804.875,
+            "y": 512.40625,
+            "width": 138,
+            "height": 11,
+            "bottom": 523.40625,
+            "right": 942.875
+          },
+          "style": {
+            "position": "static",
+            "display": "inline",
+            "visibility": "visible",
+            "bottom": "auto",
+            "height": "auto",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null,
+          "active": false,
+          "center_unobscured": true,
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "rect": {
+              "x": 804.875,
+              "y": 500.40625,
+              "width": 138,
+              "height": 28,
+              "bottom": 528.40625,
+              "right": 942.875
+            },
+            "style": {
+              "position": "static",
+              "display": "inline",
+              "visibility": "visible",
+              "bottom": "auto",
+              "height": "28px",
+              "transition": "1e-05s",
+              "content_visibility": "visible",
+              "overflow": "clip"
+            },
+            "visible": true,
+            "inert": false,
+            "aria_hidden": null
+          }
+        }
+      ],
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1050x470",
+        "drawingBufferSize": "1050x470",
+        "optionalGlobeRequests": "48",
+        "optionalBuildingRequests": "0",
+        "visualReady": "false",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "false",
+        "visualUnmet": "stable_frames",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "1",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "0",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "true",
+        "sectionFocusReady": "true",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+        "packSourceTileCount": "3",
+        "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+      },
+      "inline_view_style": null,
+      "matches_split_rule": true
+    },
+    {
+      "label": "strict-ready-and-split-settled",
+      "now": 20040.60000000894,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visual_scale": 1
+      },
+      "fonts_status": "loaded",
+      "predicates": {
+        "expanded": true,
+        "map3d": true,
+        "view_visible": true,
+        "dock_visible": true,
+        "view_width": true,
+        "view_height": true,
+        "dock_width": true,
+        "dock_height": true,
+        "separated": true
+      },
+      "stage": {
+        "tag": "SECTION",
+        "class": "guided-map-stage",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1051.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1051.203125
+        },
+        "style": {
+          "position": "relative",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "hidden"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "view": {
+        "tag": "DIV",
+        "class": "guided-3d-view",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "369.594px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "dock": {
+        "tag": "DIV",
+        "class": "guided-section-dock mobile-visible",
+        "rect": {
+          "x": 0,
+          "y": 530.40625,
+          "width": 1050.203125,
+          "height": 369.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "369.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "section": {
+        "tag": "SECTION",
+        "class": "urban-section guided",
+        "rect": {
+          "x": 0,
+          "y": 531.40625,
+          "width": 1050.203125,
+          "height": 368.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "368.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "widget": {
+        "tag": "DIV",
+        "class": "cesium-widget",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "canvas": {
+        "tag": "CANVAS",
+        "class": null,
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "static",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "auto",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "clip"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "credit_containers": [
+        {
+          "tag": "DIV",
+          "class": "cesium-widget-credits",
+          "rect": {
+            "x": 804.875,
+            "y": 500.40625,
+            "width": 239.328125,
+            "height": 28,
+            "bottom": 528.40625,
+            "right": 1044.203125
+          },
+          "style": {
+            "position": "absolute",
+            "display": "block",
+            "visibility": "visible",
+            "bottom": "2px",
+            "height": "28px",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null
+        }
+      ],
+      "credits": [
+        {
+          "tag": "A",
+          "class": null,
+          "rect": {
+            "x": 804.875,
+            "y": 512.40625,
+            "width": 138,
+            "height": 11,
+            "bottom": 523.40625,
+            "right": 942.875
+          },
+          "style": {
+            "position": "static",
+            "display": "inline",
+            "visibility": "visible",
+            "bottom": "auto",
+            "height": "auto",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null,
+          "active": false,
+          "center_unobscured": true,
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "rect": {
+              "x": 804.875,
+              "y": 500.40625,
+              "width": 138,
+              "height": 28,
+              "bottom": 528.40625,
+              "right": 942.875
+            },
+            "style": {
+              "position": "static",
+              "display": "inline",
+              "visibility": "visible",
+              "bottom": "auto",
+              "height": "28px",
+              "transition": "1e-05s",
+              "content_visibility": "visible",
+              "overflow": "clip"
+            },
+            "visible": true,
+            "inert": false,
+            "aria_hidden": null
+          }
+        }
+      ],
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1050x470",
+        "drawingBufferSize": "1050x470",
+        "optionalGlobeRequests": "24",
+        "optionalBuildingRequests": "0",
+        "visualReady": "true",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualUnmet": "",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "20",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "8",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "true",
+        "sectionFocusReady": "true",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+        "packSourceTileCount": "3",
+        "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+      },
+      "inline_view_style": null,
+      "matches_split_rule": true
+    },
+    {
+      "label": "actual-focused-credit-tab-5",
+      "now": 20075.79999999702,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visual_scale": 1
+      },
+      "fonts_status": "loaded",
+      "predicates": {
+        "expanded": true,
+        "map3d": true,
+        "view_visible": true,
+        "dock_visible": true,
+        "view_width": true,
+        "view_height": true,
+        "dock_width": true,
+        "dock_height": true,
+        "separated": true
+      },
+      "stage": {
+        "tag": "SECTION",
+        "class": "guided-map-stage",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1051.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1051.203125
+        },
+        "style": {
+          "position": "relative",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "hidden"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "view": {
+        "tag": "DIV",
+        "class": "guided-3d-view",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "369.594px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "dock": {
+        "tag": "DIV",
+        "class": "guided-section-dock mobile-visible",
+        "rect": {
+          "x": 0,
+          "y": 530.40625,
+          "width": 1050.203125,
+          "height": 369.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "369.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "section": {
+        "tag": "SECTION",
+        "class": "urban-section guided",
+        "rect": {
+          "x": 0,
+          "y": 531.40625,
+          "width": 1050.203125,
+          "height": 368.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "368.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "widget": {
+        "tag": "DIV",
+        "class": "cesium-widget",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "canvas": {
+        "tag": "CANVAS",
+        "class": null,
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "static",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "auto",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "clip"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "credit_containers": [
+        {
+          "tag": "DIV",
+          "class": "cesium-widget-credits",
+          "rect": {
+            "x": 804.875,
+            "y": 500.40625,
+            "width": 239.328125,
+            "height": 28,
+            "bottom": 528.40625,
+            "right": 1044.203125
+          },
+          "style": {
+            "position": "absolute",
+            "display": "block",
+            "visibility": "visible",
+            "bottom": "2px",
+            "height": "28px",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null
+        }
+      ],
+      "credits": [
+        {
+          "tag": "A",
+          "class": null,
+          "rect": {
+            "x": 804.875,
+            "y": 512.40625,
+            "width": 138,
+            "height": 11,
+            "bottom": 523.40625,
+            "right": 942.875
+          },
+          "style": {
+            "position": "static",
+            "display": "inline",
+            "visibility": "visible",
+            "bottom": "auto",
+            "height": "auto",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null,
+          "active": true,
+          "center_unobscured": true,
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "rect": {
+              "x": 804.875,
+              "y": 500.40625,
+              "width": 138,
+              "height": 28,
+              "bottom": 528.40625,
+              "right": 942.875
+            },
+            "style": {
+              "position": "static",
+              "display": "inline",
+              "visibility": "visible",
+              "bottom": "auto",
+              "height": "28px",
+              "transition": "1e-05s",
+              "content_visibility": "visible",
+              "overflow": "clip"
+            },
+            "visible": true,
+            "inert": false,
+            "aria_hidden": null
+          }
+        }
+      ],
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1050x470",
+        "drawingBufferSize": "1050x470",
+        "optionalGlobeRequests": "24",
+        "optionalBuildingRequests": "0",
+        "visualReady": "true",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualUnmet": "",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "20",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "8",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "true",
+        "sectionFocusReady": "false",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+        "packSourceTileCount": "3",
+        "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+      },
+      "inline_view_style": null,
+      "matches_split_rule": true
+    },
+    {
+      "label": "actual-focused-credit-tab-15",
+      "now": 20151.10000000894,
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visual_scale": 1
+      },
+      "fonts_status": "loaded",
+      "predicates": {
+        "expanded": true,
+        "map3d": true,
+        "view_visible": true,
+        "dock_visible": true,
+        "view_width": true,
+        "view_height": true,
+        "dock_width": true,
+        "dock_height": true,
+        "separated": true
+      },
+      "stage": {
+        "tag": "SECTION",
+        "class": "guided-map-stage",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1051.203125,
+          "height": 840,
+          "bottom": 900,
+          "right": 1051.203125
+        },
+        "style": {
+          "position": "relative",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "840px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "hidden"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "view": {
+        "tag": "DIV",
+        "class": "guided-3d-view",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "369.594px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "dock": {
+        "tag": "DIV",
+        "class": "guided-section-dock mobile-visible",
+        "rect": {
+          "x": 0,
+          "y": 530.40625,
+          "width": 1050.203125,
+          "height": 369.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "369.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "section": {
+        "tag": "SECTION",
+        "class": "urban-section guided",
+        "rect": {
+          "x": 0,
+          "y": 531.40625,
+          "width": 1050.203125,
+          "height": 368.59375,
+          "bottom": 900,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "368.594px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "widget": {
+        "tag": "DIV",
+        "class": "cesium-widget",
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "absolute",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "0px",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "visible"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "canvas": {
+        "tag": "CANVAS",
+        "class": null,
+        "rect": {
+          "x": 0,
+          "y": 60,
+          "width": 1050.203125,
+          "height": 470.40625,
+          "bottom": 530.40625,
+          "right": 1050.203125
+        },
+        "style": {
+          "position": "static",
+          "display": "block",
+          "visibility": "visible",
+          "bottom": "auto",
+          "height": "470.406px",
+          "transition": "1e-05s",
+          "content_visibility": "visible",
+          "overflow": "clip"
+        },
+        "visible": true,
+        "inert": false,
+        "aria_hidden": null
+      },
+      "credit_containers": [
+        {
+          "tag": "DIV",
+          "class": "cesium-widget-credits",
+          "rect": {
+            "x": 804.875,
+            "y": 500.40625,
+            "width": 239.328125,
+            "height": 28,
+            "bottom": 528.40625,
+            "right": 1044.203125
+          },
+          "style": {
+            "position": "absolute",
+            "display": "block",
+            "visibility": "visible",
+            "bottom": "2px",
+            "height": "28px",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null
+        }
+      ],
+      "credits": [
+        {
+          "tag": "A",
+          "class": null,
+          "rect": {
+            "x": 804.875,
+            "y": 512.40625,
+            "width": 138,
+            "height": 11,
+            "bottom": 523.40625,
+            "right": 942.875
+          },
+          "style": {
+            "position": "static",
+            "display": "inline",
+            "visibility": "visible",
+            "bottom": "auto",
+            "height": "auto",
+            "transition": "1e-05s",
+            "content_visibility": "visible",
+            "overflow": "visible"
+          },
+          "visible": true,
+          "inert": false,
+          "aria_hidden": null,
+          "active": true,
+          "center_unobscured": true,
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "rect": {
+              "x": 804.875,
+              "y": 500.40625,
+              "width": 138,
+              "height": 28,
+              "bottom": 528.40625,
+              "right": 942.875
+            },
+            "style": {
+              "position": "static",
+              "display": "inline",
+              "visibility": "visible",
+              "bottom": "auto",
+              "height": "28px",
+              "transition": "1e-05s",
+              "content_visibility": "visible",
+              "overflow": "clip"
+            },
+            "visible": true,
+            "inert": false,
+            "aria_hidden": null
+          }
+        }
+      ],
+      "readiness": {
+        "basemap": "ready",
+        "analysis": "ready",
+        "buildingTilesLoaded": "pack-296",
+        "localDem": "ready",
+        "broadTerrain": "not-requested-local-dem",
+        "analysisLens": "none",
+        "selectedBuildingId": "",
+        "selectedRoadId": "",
+        "overlay": "ready",
+        "futuresMap": "idle",
+        "futuresVisible": "0",
+        "pulseMarkers": "0",
+        "canvasCssSize": "1050x470",
+        "drawingBufferSize": "1050x470",
+        "optionalGlobeRequests": "24",
+        "optionalBuildingRequests": "0",
+        "visualReady": "true",
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualUnmet": "",
+        "cameraSettled": "true",
+        "canvasSizeReady": "true",
+        "buildingFeatureCount": "856",
+        "buildingContentReady": "true",
+        "renderedBuildingFeatureCount": "856",
+        "targetBuildingCount": "296",
+        "loadedTargetBuildingCount": "296",
+        "visibleTargetBuildingCount": "296",
+        "targetCoverageRatio": "1.000000",
+        "packArtifactsReady": "true",
+        "packArtifactBytes": "4777932",
+        "terrainTileCount": "20",
+        "terrainReady": "true",
+        "localDemReady": "true",
+        "roadsReady": "true",
+        "stableFrames": "8",
+        "criticalRequests": "0",
+        "terrainSource": "plateau-local-dem",
+        "buildingSource": "spatial-evidence-pack",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "sectionPlaneReady": "true",
+        "sectionFocusReady": "false",
+        "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+        "packSourceTileCount": "3",
+        "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+      },
+      "inline_view_style": null,
+      "matches_split_rule": true
+    }
+  ],
+  "failure_png": null,
+  "renderer": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/149.0.7827.55 Safari/537.36",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "device_pixel_ratio": 1,
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)"
+  },
+  "closed_axe": {
+    "violations": [],
+    "incomplete": [
+      "aria-prohibited-attr",
+      "color-contrast"
+    ]
+  },
+  "open_started": 4654.29999999702,
+  "original_gate_passed": true,
+  "strict_before": {
+    "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+    "root": {
+      "guidedStory": "understand",
+      "areaId": "533513314",
+      "areaLabel": "常団地前周辺",
+      "hoveredAreaId": "none",
+      "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+      "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+      "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+      "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+      "contextStatus": "ready",
+      "contextBuildings": "303",
+      "contextRoads": "135",
+      "contextPlanning": "8",
+      "sectionPack": "maizuru-533513314-plateau-2025-v1",
+      "targetResolution": "exact",
+      "targetKind": "road",
+      "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "objectKind": "none",
+      "objectId": "none"
+    },
+    "readiness": {
+      "basemap": "ready",
+      "analysis": "ready",
+      "buildingTilesLoaded": "pack-296",
+      "localDem": "ready",
+      "broadTerrain": "not-requested-local-dem",
+      "analysisLens": "none",
+      "selectedBuildingId": "",
+      "selectedRoadId": "",
+      "overlay": "ready",
+      "futuresMap": "idle",
+      "futuresVisible": "0",
+      "pulseMarkers": "0",
+      "canvasCssSize": "1050x470",
+      "drawingBufferSize": "1050x470",
+      "optionalGlobeRequests": "48",
+      "optionalBuildingRequests": "0",
+      "visualReady": "false",
+      "interactionReady": "true",
+      "visualComplete": "true",
+      "captureStrictReady": "false",
+      "visualUnmet": "stable_frames",
+      "cameraSettled": "true",
+      "canvasSizeReady": "true",
+      "buildingFeatureCount": "856",
+      "buildingContentReady": "true",
+      "renderedBuildingFeatureCount": "856",
+      "targetBuildingCount": "296",
+      "loadedTargetBuildingCount": "296",
+      "visibleTargetBuildingCount": "296",
+      "targetCoverageRatio": "1.000000",
+      "packArtifactsReady": "true",
+      "packArtifactBytes": "4777932",
+      "terrainTileCount": "1",
+      "terrainReady": "true",
+      "localDemReady": "true",
+      "roadsReady": "true",
+      "stableFrames": "0",
+      "criticalRequests": "0",
+      "terrainSource": "plateau-local-dem",
+      "buildingSource": "spatial-evidence-pack",
+      "packId": "maizuru-533513314-plateau-2025-v1",
+      "sectionPlaneReady": "true",
+      "sectionFocusReady": "true",
+      "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+      "packSourceTileCount": "3",
+      "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+    },
+    "canvas": {
+      "width": 1050,
+      "height": 470
+    },
+    "globe_visible": true,
+    "camera": {
+      "height": 494.4953415662877,
+      "heading": 0.4188526582923542,
+      "pitch": -0.6284098948802983
+    },
+    "tilesets": [
+      {
+        "url": "/plateau-city-gap/data/plateau/tileset.json",
+        "show": true,
+        "tiles_loaded": true,
+        "content_ready": 3,
+        "selected_features": 856,
+        "loaded_features": 856,
+        "selected_tiles": 3,
+        "pending": 0,
+        "processing": 0
+      },
+      {
+        "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+        "show": true,
+        "tiles_loaded": true,
+        "content_ready": 1,
+        "selected_features": 0,
+        "loaded_features": 0,
+        "selected_tiles": 1,
+        "pending": 0,
+        "processing": 0
+      }
+    ],
+    "inspector_text": "範囲選択へ戻る常団地前周辺3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+    "checks": []
+  },
+  "open_to_observed_settled_ms": 15386.300000011921,
+  "observe_wall_ms": 8083.639319,
+  "strict_after": {
+    "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39688&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314",
+    "root": {
+      "guidedStory": "understand",
+      "areaId": "533513314",
+      "areaLabel": "常団地前周辺",
+      "hoveredAreaId": "none",
+      "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+      "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+      "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+      "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+      "contextStatus": "ready",
+      "contextBuildings": "303",
+      "contextRoads": "135",
+      "contextPlanning": "8",
+      "sectionPack": "maizuru-533513314-plateau-2025-v1",
+      "targetResolution": "exact",
+      "targetKind": "road",
+      "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+      "objectKind": "none",
+      "objectId": "none"
+    },
+    "readiness": {
+      "basemap": "ready",
+      "analysis": "ready",
+      "buildingTilesLoaded": "pack-296",
+      "localDem": "ready",
+      "broadTerrain": "not-requested-local-dem",
+      "analysisLens": "none",
+      "selectedBuildingId": "",
+      "selectedRoadId": "",
+      "overlay": "ready",
+      "futuresMap": "idle",
+      "futuresVisible": "0",
+      "pulseMarkers": "0",
+      "canvasCssSize": "1050x470",
+      "drawingBufferSize": "1050x470",
+      "optionalGlobeRequests": "24",
+      "optionalBuildingRequests": "0",
+      "visualReady": "true",
+      "interactionReady": "true",
+      "visualComplete": "true",
+      "captureStrictReady": "true",
+      "visualUnmet": "",
+      "cameraSettled": "true",
+      "canvasSizeReady": "true",
+      "buildingFeatureCount": "856",
+      "buildingContentReady": "true",
+      "renderedBuildingFeatureCount": "856",
+      "targetBuildingCount": "296",
+      "loadedTargetBuildingCount": "296",
+      "visibleTargetBuildingCount": "296",
+      "targetCoverageRatio": "1.000000",
+      "packArtifactsReady": "true",
+      "packArtifactBytes": "4777932",
+      "terrainTileCount": "20",
+      "terrainReady": "true",
+      "localDemReady": "true",
+      "roadsReady": "true",
+      "stableFrames": "8",
+      "criticalRequests": "0",
+      "terrainSource": "plateau-local-dem",
+      "buildingSource": "spatial-evidence-pack",
+      "packId": "maizuru-533513314-plateau-2025-v1",
+      "sectionPlaneReady": "true",
+      "sectionFocusReady": "true",
+      "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+      "packSourceTileCount": "3",
+      "sectionFocusCoordinate": "135.39812500001693,35.44587840203029"
+    },
+    "canvas": {
+      "width": 1050,
+      "height": 470
+    },
+    "globe_visible": true,
+    "camera": {
+      "height": 494.4953415662877,
+      "heading": 0.4188526582923542,
+      "pitch": -0.6284098948802983
+    },
+    "tilesets": [
+      {
+        "url": "/plateau-city-gap/data/plateau/tileset.json",
+        "show": true,
+        "tiles_loaded": true,
+        "content_ready": 3,
+        "selected_features": 856,
+        "loaded_features": 856,
+        "selected_tiles": 3,
+        "pending": 0,
+        "processing": 0
+      },
+      {
+        "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+        "show": true,
+        "tiles_loaded": true,
+        "content_ready": 1,
+        "selected_features": 0,
+        "loaded_features": 0,
+        "selected_tiles": 1,
+        "pending": 0,
+        "processing": 0
+      }
+    ],
+    "inspector_text": "範囲選択へ戻る常団地前周辺3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+    "checks": []
+  }
+}

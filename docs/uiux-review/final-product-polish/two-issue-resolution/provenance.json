@@ -1,0 +1,96 @@
+{
+  "schema": "citygap.native-two-issue-final-provenance@1",
+  "source_commit": "8060f3f0c6205cc1b7f6ce75a2b9607cae72519a",
+  "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+  "test_script_sha256": "e6a2fecd8a34dc40aca61304013f11fc566c8481a7d47f27cffa2c60dab531e5",
+  "native_test_reports": [
+    {
+        "file": "native-guided1440-final.json",
+      "sha256": "e4c54c6c211e2eadb675e0fd868c9a0c37a362a8b88a7ab8118a9186a3280ceb",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "passed": true
+    },
+    {
+        "file": "native-advanced1920-final.json",
+      "sha256": "24d7f33143bb0ba0fe23d78e85924a096af9a80a46df17daf5cf02eeb7967021",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "passed": true
+    }
+  ],
+  "review": {
+    "files": [
+      {
+        "filename": "01-guided-focused-section-1440.png",
+        "width": 1440,
+        "height": 900,
+        "bytes": 384281,
+        "sha256": "01a6318c2e791dc3a03d0e24d8b660d8355df07c29d131538ea565775e7ced3d",
+        "captured_utc": "2026-09-05T14:40:10.839Z",
+        "record_index": 0
+      },
+      {
+        "filename": "02-guided-focused-section-390.png",
+        "width": 390,
+        "height": 844,
+        "bytes": 77028,
+        "sha256": "c8afacbd5c196bd830a9e0b7fa3bd19af357c85bcf76f7d03cc7f159d28fcb10",
+        "captured_utc": "2026-09-05T14:40:12.574Z",
+        "record_index": 1
+      }
+    ],
+    "all_text_and_own_callout_bounds_pass": true,
+    "metadata_gap_css_px": {
+      "desktop1440": 2,
+      "mobile390": 2
+    },
+    "native_dimensions_no_crop_or_resize": true,
+    "normal_motion": true,
+    "only_measured_after_fonts_frames_and_animations_settled": true,
+    "agent_visual_review": "Both native files reviewed; transient road metadata separated, full axes visible, desktop attribution visible, mobile explicit3Dreturn visible. Not user acceptance.",
+    "errors": 0,
+    "console_errors": 0,
+    "optional_gsi_aborted_requests": 56
+  },
+  "hardware": {
+    "browser": "152.0.7977.83",
+    "owned_process_id": 18752,
+    "retained_profile_verified": true,
+    "renderer": "ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "vendor": "Google Inc. (AMD)",
+    "device_pixel_ratio": 1,
+    "fresh_renderer_proof": "renderer.json",
+    "baseline_renderer_proof": "C:/Users/m.hirotaka/AppData/Local/Temp/citygap-judging-3d-uiux-baseline-31924-1788604522372/renderer.json"
+  },
+  "scope": {
+    "screenshots": 2,
+    "recordings": 0,
+    "performance_samples": 0,
+    "production": false,
+    "owned_contexts_closed": true,
+    "prior_media_and_evidence_preserved": true
+  },
+  "files": [
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-24.04\\tmp\\citygap-uiux-two-issue.53U3AyzX\\native-review-driver.mjs",
+      "sha256": "ce12b4305cf8167e5ab84feebd7d9038e7ee624bb431d9521840c9ab5e5742e7"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-24.04\\tmp\\citygap-uiux-two-issue.53U3AyzX\\native-review-final\\review.json",
+      "sha256": "0bcbe4f6ec225cc59cbdb0f061f8d75cc2cc07ca22d87cf382e4068bd14b1acc"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-24.04\\tmp\\citygap-uiux-two-issue.53U3AyzX\\native-review-final\\renderer.json",
+      "sha256": "2e82849f4efbbd5642327ebfe644a76fa9344c140b9a2175878a077dc3a0a503"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Ubuntu-24.04\\tmp\\citygap-uiux-two-issue.53U3AyzX\\native-review-final\\diagnostics.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  ]
+}

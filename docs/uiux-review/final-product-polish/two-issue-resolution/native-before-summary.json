@@ -1,0 +1,103 @@
+{
+  "scope": "One JSON-only native Guided1440 comparison on prior frozen source; compact factual extract from test stdout, no rerun/no PNG/no performance sample.",
+  "source_commit": "035f295e21e3b5f47e4e9e363b7d4d969861f476",
+  "url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "browser": "152.0.7977.83",
+  "owned_chrome_pid": 18752,
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "device_pixel_ratio": 1
+  },
+  "command": "test-product-polish.mjs --url http://127.0.0.1:4190/plateau-city-gap/ --cdp http://127.0.0.1:9336 --experiences guided --widths 1440",
+  "exit_code": 1,
+  "passed": false,
+  "failures": [
+    "guided-1440-section: Section annotation overlap"
+  ],
+  "desktop_section_layout": {
+    "immediate_and_settled_identical": true,
+    "stage_expanded": "true",
+    "map_mode": "plateau3d",
+    "view": {
+      "x": 0,
+      "y": 60,
+      "width": 1050.203125,
+      "height": 470.40625,
+      "bottom": 530.40625
+    },
+    "dock": {
+      "x": 0,
+      "y": 530.40625,
+      "width": 1050.203125,
+      "height": 369.59375,
+      "bottom": 900
+    },
+    "credit_rect": {
+      "x": 813.234375,
+      "y": 512.40625,
+      "width": 138,
+      "height": 12,
+      "bottom": 524.40625
+    },
+    "ready_wait_ms": 402
+  },
+  "callout": {
+    "metadata": {
+      "text": "道路 · 47m · 標高96.4m",
+      "x": 82.63874816894531,
+      "y": 687.703125,
+      "width": 125.1640625,
+      "height": 16,
+      "bottom": 703.703125
+    },
+    "relation": {
+      "text": "直接交差",
+      "x": 82.63874816894531,
+      "y": 702.703125,
+      "width": 48,
+      "height": 16,
+      "bottom": 718.703125
+    },
+    "signed_gap_css_px": -1
+  },
+  "section": {
+    "svg_rect": {
+      "x": 0,
+      "y": 579.40625,
+      "width": 1050.203125,
+      "height": 292.59375,
+      "bottom": 872
+    },
+    "clipped_texts": [],
+    "hidden_texts": [],
+    "required_labels": {
+      "endpoint_a": true,
+      "endpoint_b": true,
+      "elevation_axis": true,
+      "distance_axis": true
+    },
+    "minimum_rendered_font_css_px": 12
+  },
+  "keyboard_credits": {
+    "href": "https://cesium.com/",
+    "visible_focus": true,
+    "in_view": true,
+    "focus_not_obscured": true,
+    "visible_focus_samples": 4
+  },
+  "return_to_3d": {
+    "immediate_and_settled_visible": true,
+    "inert": false,
+    "aria_hidden": null,
+    "stage_expanded": "false",
+    "visible_wait_ms": 117
+  },
+  "diagnostics": {
+    "page": [],
+    "console": [],
+    "http": [],
+    "requests": [],
+    "cancellations": []
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "schema": "citygap.two-issue-local-validation@1",
+  "status": "all_required_local_checks_passed",
+  "source": {
+    "commit": "8060f3f0c6205cc1b7f6ce75a2b9607cae72519a",
+    "url": "http://127.0.0.1:4190/plateau-city-gap/",
+    "index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+    "chunks": ["index-Dka2mR5T.js", "ProductApp-0K_vR_8n.js", "Guided3DView-BOm5kVR9.js", "CesiumMap-CDFI89w_.js"],
+    "verifier_sha256": "e6a2fecd8a34dc40aca61304013f11fc566c8481a7d47f27cffa2c60dab531e5",
+    "boundary": "Final checks ran on the frozen working-tree build later committed as8060f3f. Raw legacy Git metadata may show prior HEAD035f295; it is not the tested bundle identity. All final reports below use the samecc76 build. Old diagnostic probes explicitly use035f295."
+  },
+  "environments": {
+    "software": {"browser": "Chromium149.0.7827.55", "renderer_observed_in_original_probe": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)", "final_launch": "same Chromium executable with --enable-unsafe-swiftshader --use-gl=angle --use-angle=swiftshader", "viewports": [[1440,900],[1280,720],[390,844],[320,844]], "dpr": 1},
+    "native": {"browser": "Chrome152.0.7977.83", "renderer_prior_proof": "ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)", "renderer_proof_path": "C:/Users/m.hirotaka/AppData/Local/Temp/citygap-judging-3d-uiux-baseline-31924-1788604522372/renderer.json", "ownership": "Capture agent verified same isolated ChromePID18752/profile, no restart; final tests report browser version. Renderer proof predates final tests, not presented as a new performance sample.", "viewports": [[1440,900],[1920,1080]], "dpr": 1},
+    "actual200": {"mechanism": "chrome.tabs.setZoom automatic/per-tab", "getZoom": 2, "viewport_before": [1440,900], "viewport_after": [720,450], "dpr_before": 1, "dpr_after": 2, "visualViewport_scale": 1, "not_emulated_pinch_or_DPR_only": true}
+  },
+  "diagnosis": {
+    "original1440": {
+      "old_timeout_reproduced": false,
+      "persistent_UI_layout_bug_established": false,
+      "old_failure_preserved": "/tmp/citygap-uiux-resume.JW6Icv90/polish-final-four-widths.json",
+      "old_failure_sha256": "6632e53b24b79b00565be1b789ed62038b9a5fbb27ae48102338fe0f792a8157",
+      "observed": "Original-order035f295 probe and exact original verifier both passed; immediate view.bottom900/dock.top530.406 was stale before subsequent render completion. Detailed probe observed split at7245ms while captureStrictReady=false/stableFrames0, and strict ready at15386ms. Exact original verifier settled in6198ms total. Ordered comparison waited9425ms before keyboard and1267ms afterward. Native baseline immediate split was correct, with402ms readiness wait.",
+      "failure_png": null,
+      "failure_png_reason": "Current1440 timeout did not reproduce; no failed image was fabricated.",
+      "interpretation": "A test-stage synchronization weakness under software rendering was observed. These diagnostic timings are not performance benchmarks. No permanent UI failure is claimed."
+    },
+    "mobile390": {
+      "failure_reproduced": true,
+      "focused_object_id": "tran_c50eb93b-69a0-4bdb-ace4-b6a9108d3e63-0",
+      "ctm": {"a": 1,"d": 1,"e": 0,"f": 155},
+      "failed": {"rect_DOM_x": 54,"rect_computed_CSS_x": 38,"rect_bbox_x": 38,"text_x": 62,"metadata_right_margin_css_px": -8.0133056640625},
+      "settled_after_fonts_and_two_frames_ms": 451,
+      "settled": {"rect_DOM_x": 54,"rect_computed_CSS_x": 54,"rect_bbox_x": 54,"text_x": 62,"metadata_right_margin_css_px": 7.9866943359375},
+      "focused_identity_and_CTM_unchanged": true,
+      "cause": "Existing reduced-motion0.01ms geometry transition had not completed a presented frame: rectangle still used previous CSSx while text used the new coordinates. No box-width change was needed."
+    },
+    "fix_contract": "Wait for current renderer and split geometry before desktop Section keyboard interaction; recheck renderer afterward. All Section modes wait for loaded fonts, actual frames and completed animations before synchronous geometry measurement. All phases share one absolute60s deadline. This does not wait for containment to become true, relax margins, skip credits, weaken content readiness, or change CSS.",
+    "minimum_remaining_shared_budget_final_ms": 47672
+  },
+  "final_results": {
+    "software_four_width_matrix": {
+      "passed": true,
+      "layout_states": 20,
+      "per_width": [
+        {"width":1440,"public":"pass","guided":"pass","advanced":"pass","both_Section_metadata_gaps_css_px":3},
+        {"width":1280,"public":"pass","guided":"pass","advanced":"pass","both_Section_metadata_gaps_css_px":3},
+        {"width":390,"public":"pass","guided":"pass","advanced":"pass","both_Section_metadata_gaps_css_px":3},
+        {"width":320,"public":"pass","guided":"pass","advanced":"pass","both_Section_metadata_gaps_css_px":3}
+      ]
+    },
+    "actual200_matrix": {"passed":true,"layout_states":5,"public":"pass","guided":"pass","advanced":"pass","both_Section_metadata_gaps_css_px":4},
+    "native": [{"experience":"guided","width":1440,"passed":true,"metadata_gap_css_px":2},{"experience":"advanced","width":1920,"passed":true,"metadata_gap_css_px":2}],
+    "all_Section_views": {"minimum_rendered_font_css_px":12,"text_overlap_pairs":0,"clipped_or_hidden_texts":0,"all_three_callout_text_rows_inside_own_background":true,"endpoint_A_B_and_both_axes_present":true,"keyboard_focus_visible_unobscured":true},
+    "Public_and_Guided_headings": "Programmatic focus retained without outline/shadow; Public地図 glyphs remain on one rendered line at all widths and actual200%.",
+    "horizontal_overflow_css_px": 0,
+    "automated_accessibility": {"serious_critical_violations":0,"incomplete_checks_per_state":"1–2; not a complete accessibility certification"},
+    "diagnostics": {"page_errors":0,"console_errors":0,"HTTP_errors":0,"non_cancellation_request_failures":0,"same_origin_unexpected_cancellations":0,"retained_optional_external_GSI_ERR_ABORTED":15,"disclosure":"All15 are Guided actual200 initial-navigation external GSI pale-tile cancellations; existing classification retained. Do not claim every diagnostic array is empty. All other matrix/native cancellation arrays are empty."},
+    "same_build_unchanged_regressions": {"Public_first_run":{"layouts":9,"critical_diagnostics":0,"serious_critical":0},"Guided_spatial":{"areas":6,"snapshots":29,"accessibility_states":13,"Section_audits":4,"routes":7,"errors":0},"Guided_Advanced_transition":{"named_flow_groups":5,"single_flight_and_failure_retry_passed":true},"plateau_native_2D":{"checks_passed":19,"checks_total":19},"visual_identity":{"viewports":5,"console_errors":0,"local_HTTP_failures":0}}
+  },
+  "reports_root": "/tmp/citygap-uiux-two-issue.53U3AyzX",
+  "reports_sha256": {
+    "polish-final-four-widths.json":"796ba9bc03cd468427e5215735fe1c46fed64d1f7a0a17d17f6da0126a048b63",
+    "polish-actual200.json":"218ede1a63cc3c179018732b3d6c3dde88ad3d061e2afd26a2cf1fcd02acadd9",
+    "public-final/manifest.json":"d20090835bc703dd5031bc4c9494a1927527f3a15d9d5c75c6038aa6fff10029",
+    "guided-spatial.json":"343e2188d4a5202bdfccc9cec2e381a81a41697a7de4307830b718e3fcfb1b74",
+    "transition.json":"4ff882f6353857d3a0db2e0c6e9434ed0e95da2e28b0c959d8ae05a37e4abd8b",
+    "native-2d.json":"df95392164f7d5e38bff5aaeecae57a93a2dd2d58af4be899f041462678f8971",
+    "identity.json":"438dbb80a001a979ba751a81ad348186188311f3c7aee8ff97d280d748b4a017",
+    "native-guided1440-final.json":"e4c54c6c211e2eadb675e0fd868c9a0c37a362a8b88a7ab8118a9186a3280ceb",
+    "native-advanced1920-final.json":"24d7f33143bb0ba0fe23d78e85924a096af9a80a46df17daf5cf02eeb7967021",
+    "polish-four-widths.json":"8b9645eecb9a3f6e28a73447ac16614391331c19490750891813b9def71c43c9",
+    "diagnose390-run.json":"9e0e41159b734723862f91288c4a0035a71637d2e1bac88633696f15865a2534",
+    "native-before-summary.json":"0a43b248b1f41135ef493e7bdff3fa46af0ce3b1e8ef16b95431818393b31a06"
+  },
+  "original_probe_reports_sha256": {
+    "/tmp/citygap-guided1440-diagnosis.UY211Jsb/diagnose.json":"917baa2cf8516d0c93bb091414ed26cb03a387e7c020f8de3fee7df59977a3f3",
+    "/tmp/citygap-guided1440-diagnosis.UY211Jsb/exact-original.json":"b2fdf11816f6e0e12bb64f1b8679340c3591c35a3de5d4c03184558fd02d6291",
+    "/tmp/citygap-guided1440-diagnosis.UY211Jsb/exact-ordered.json":"6c44d684d753eb630e9994bb787d6fa5150673d39fe77953776250f3319a4ef5"
+  },
+  "preservation": "All original failures, initial failed matrix and390diagnosis remain unchanged. A temporary diagnostic wrapper syntax error occurred before browser launch; its log remains outside the review evidence and is not a product failure.",
+  "generated_images_by_test_agent": 0,
+  "all_owned_browser_sessions_closed": true,
+  "CI_and_Pages": "Not yet dispatched for this source by this agent; await final review commit/push and root release gate."
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "citygap.native-two-issue-comparison@1",
+  "before_source_head": "035f295e21e3b5f47e4e9e363b7d4d969861f476",
+  "before_index_sha256": "dd00c8f7bc1ef1f0df25654914f62b2f3aeefb0512d99f637868eb7903600a0c",
+  "after_source": "Root-released frozen candidate build before source commit, not claimed to be old035 HEAD",
+  "after_index_sha256": "cc76c12ada17251866b087352385fa92bb9efe753fb2b28f4f6e8ec23e2acfa7",
+  "test_script_sha256": "7fbcd659644509da352fda273536605f2dd99fe21a2f689dbc9debc7e1f7e19e",
+  "browser_version": "152.0.7977.83",
+  "owned_browser_pid": 18752,
+  "device_pixel_ratio": 1,
+  "context_closure_confirmed": true,
+  "images": 0,
+  "performance_sample": false,
+  "results": {
+    "before_passed": false,
+    "before_only_failure": "Metadata signed gap−1CSSpx; credits/layout pass natively",
+    "after_guided1440_passed": true,
+    "after_advanced1920_passed": true,
+    "both_after_metadata_gap_css_px": 2,
+    "both_after_diagnostic_arrays_empty": true
+  },
+  "files": [
+    {
+      "filename": "native-before-summary.json",
+      "sha256": "0a43b248b1f41135ef493e7bdff3fa46af0ce3b1e8ef16b95431818393b31a06"
+    },
+    {
+      "filename": "native-guided1440-after.json",
+      "sha256": "87891cc94b4391e570813b78db8db65381d671e853dee0425ccb5337aeb94fc6"
+    },
+    {
+      "filename": "native-advanced1920-after.json",
+      "sha256": "9cd6a94a882028df71d624b7a8bf0437b846e14dbbd3f3839eb4238e69f0c193"
+    },
+    {
+      "filename": "native-review-driver.mjs",
+      "sha256": "0d67363771f27fe66284907b1b81425a98f6749088ef9fd08b61c18985f1b64d"
+    }
+  ]
+}

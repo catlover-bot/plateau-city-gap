@@ -1,0 +1,401 @@
+{
+  "schemaVersion": "citygap.visual-identity-audit@1",
+  "label": "current",
+  "commit": "035f295e21e3b5f47e4e9e363b7d4d969861f476",
+  "baseUrl": "http://127.0.0.1:4190/plateau-city-gap/",
+  "generatedAt": "2026-09-05T14:31:06.217Z",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900,
+      "productReadyMs": 2995,
+      "visibleElementCount": 266,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1440,
+          "height": 848
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1440,
+          "height": 848
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 300,
+          "height": 848
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(168, 108, 33)",
+        "rgb(22, 79, 99)",
+        "rgb(38, 117, 138)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1440,
+      "mapHeightPx": 848,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 94.2,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1280,
+      "height": 800,
+      "productReadyMs": 2630,
+      "visibleElementCount": 266,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1280,
+          "height": 748
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1280,
+          "height": 748
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 300,
+          "height": 748
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(168, 108, 33)",
+        "rgb(22, 79, 99)",
+        "rgb(38, 117, 138)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1280,
+      "mapHeightPx": 748,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 93.5,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "productReadyMs": 2438,
+      "visibleElementCount": 259,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 1024,
+          "height": 716
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 1024,
+          "height": 716
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 288,
+          "height": 716
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
+      "maximumRadiusPx": 50,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(168, 108, 33)",
+        "rgb(22, 79, 99)",
+        "rgb(38, 117, 138)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 1024,
+      "mapHeightPx": 716,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 93.2,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "productReadyMs": 5456,
+      "visibleElementCount": 253,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 0,
+      "pillCount": 0,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 3,
+      "floatingPanels": [
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 768,
+          "height": 976
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 768,
+          "height": 976
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 726,
+          "height": 390
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 18,
+      "maximumRadiusPx": 5,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(168, 108, 33)",
+        "rgb(22, 79, 99)",
+        "rgb(38, 117, 138)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 768,
+      "mapHeightPx": 976,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 95.3,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "productReadyMs": 1734,
+      "visibleElementCount": 221,
+      "classCardCount": 0,
+      "roundedSurfaceCount": 1,
+      "pillCount": 1,
+      "gradientCount": 0,
+      "shadowCount": 2,
+      "floatingPanelCount": 4,
+      "floatingPanels": [
+        {
+          "tag": "nav",
+          "className": "task-navigation",
+          "width": 390,
+          "height": 44
+        },
+        {
+          "tag": "section",
+          "className": "map-stage ",
+          "width": 390,
+          "height": 752
+        },
+        {
+          "tag": "div",
+          "className": "maplibregl-cooperative-gesture-screen",
+          "width": 390,
+          "height": 752
+        },
+        {
+          "tag": "aside",
+          "className": "context-inspector open",
+          "width": 390,
+          "height": 350
+        }
+      ],
+      "persistentMajorSurfaceCount": 2,
+      "borderedSurfaceCount": 14,
+      "maximumRadiusPx": 5,
+      "accentColorCount": 3,
+      "accentColors": [
+        "rgb(168, 108, 33)",
+        "rgb(22, 79, 99)",
+        "rgb(38, 117, 138)"
+      ],
+      "horizontalOverflow": false,
+      "mapWidthPx": 390,
+      "mapHeightPx": 752,
+      "mapWidthPercent": 100,
+      "mapAreaPercent": 89.1,
+      "marketingWordCount": 0,
+      "navigationLandmarks": 2,
+      "mainLandmarks": 1,
+      "unnamedButtons": 0
+    }
+  ],
+  "consoleErrors": [],
+  "localHttpFailures": [],
+  "files": {
+    "sourceCss": [
+      {
+        "path": "frontend/src/app/product-shell.css",
+        "bytes": 10898,
+        "gzipBytes": 2443
+      },
+      {
+        "path": "frontend/src/app/workbench.css",
+        "bytes": 9295,
+        "gzipBytes": 2349
+      },
+      {
+        "path": "frontend/src/design-system/foundation.css",
+        "bytes": 4275,
+        "gzipBytes": 1410
+      },
+      {
+        "path": "frontend/src/design-system/tokens.css",
+        "bytes": 3836,
+        "gzipBytes": 1440
+      },
+      {
+        "path": "frontend/src/features/area-investigation/areaInvestigation.css",
+        "bytes": 8772,
+        "gzipBytes": 2184
+      },
+      {
+        "path": "frontend/src/features/area-investigation/publicAreaJourney.css",
+        "bytes": 16951,
+        "gzipBytes": 3605
+      },
+      {
+        "path": "frontend/src/features/detail/advanced-3d.css",
+        "bytes": 8882,
+        "gzipBytes": 1987
+      },
+      {
+        "path": "frontend/src/features/guided-spatial/guided-spatial.css",
+        "bytes": 23332,
+        "gzipBytes": 4430
+      },
+      {
+        "path": "frontend/src/features/inspector/inspector.css",
+        "bytes": 10018,
+        "gzipBytes": 2239
+      },
+      {
+        "path": "frontend/src/features/inspector/object-lens.css",
+        "bytes": 3126,
+        "gzipBytes": 815
+      },
+      {
+        "path": "frontend/src/features/investigation/investigation.css",
+        "bytes": 24342,
+        "gzipBytes": 5324
+      },
+      {
+        "path": "frontend/src/features/urban-section/urban-section.css",
+        "bytes": 10997,
+        "gzipBytes": 2159
+      },
+      {
+        "path": "frontend/src/features/verification/verification.css",
+        "bytes": 6553,
+        "gzipBytes": 1432
+      },
+      {
+        "path": "frontend/src/map/map.css",
+        "bytes": 13275,
+        "gzipBytes": 2875
+      },
+      {
+        "path": "frontend/src/service/service.css",
+        "bytes": 31298,
+        "gzipBytes": 5546
+      }
+    ],
+    "sourceCssBytes": 185850,
+    "buildAssets": [
+      {
+        "path": "frontend/dist/assets/CesiumMap-CDFI89w_.js",
+        "bytes": 3601576,
+        "gzipBytes": 939913
+      },
+      {
+        "path": "frontend/dist/assets/Guided3DView-BOm5kVR9.js",
+        "bytes": 2871,
+        "gzipBytes": 1561
+      },
+      {
+        "path": "frontend/dist/assets/index-C2EBUqlj.css",
+        "bytes": 213016,
+        "gzipBytes": 34453
+      },
+      {
+        "path": "frontend/dist/assets/index-Dka2mR5T.js",
+        "bytes": 18562,
+        "gzipBytes": 6178
+      },
+      {
+        "path": "frontend/dist/assets/ProductApp-0K_vR_8n.js",
+        "bytes": 283601,
+        "gzipBytes": 81816
+      },
+      {
+        "path": "frontend/dist/assets/ProductApp-BkKZ72-c.css",
+        "bytes": 29013,
+        "gzipBytes": 6170
+      },
+      {
+        "path": "frontend/dist/assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "gzipBytes": 45831
+      },
+      {
+        "path": "frontend/dist/assets/ServiceApp-xzwZUFSG.js",
+        "bytes": 107133,
+        "gzipBytes": 29153
+      }
+    ],
+    "screenshotCount": 96,
+    "screenshotBytes": 57358203,
+    "styleSourceCurrent": {
+      "files": 15,
+      "raw_color_literal_count": 562,
+      "unique_raw_color_literal_count": 381,
+      "raw_color_literal_count_outside_tokens": 518,
+      "semantic_token_definition_count": 88,
+      "semantic_token_reference_count": 793,
+      "unique_semantic_token_reference_count": 66
+    },
+    "styleSourceBaseline": null
+  }
+}
