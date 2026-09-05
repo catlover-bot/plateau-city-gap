@@ -1,0 +1,658 @@
+{
+  "schema_version": "citygap.judging-3d@1",
+  "generated_at": "2026-09-05T03:06:57.113Z",
+  "production_url": "https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&mapMode=plateau3d&selectionType=mesh&selection=533513314",
+  "ui_source_commit": "5d59de0852066d96d9a228c205812fe97f006dab",
+  "pages_run": "33939684419",
+  "source_branch": "feat/guided-spatial-storytelling-v1",
+  "selected_area": "533513314",
+  "dataset": {
+    "title": "3D都市モデル（Project PLATEAU）舞鶴市（2025年度）",
+    "url": "https://www.geospatial.jp/ckan/dataset/plateau-26202-maizuru-shi-2025",
+    "year": 2025,
+    "lod": {
+      "1": 296
+    }
+  },
+  "selected_building": {
+    "x": 895.0822941134818,
+    "y": 669.0696189678127,
+    "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "lod": 1,
+    "usage": "住宅",
+    "measured_height_m": 8.5,
+    "storeys_above_ground": 2,
+    "sampled_surface_elevation_m": 79.17716124651157
+  },
+  "scope": {
+    "verified_3d_subset_buildings": 296,
+    "selected_source_tile_catalog_features": 856,
+    "source_building_tiles": 3,
+    "area_context_building_intersections": 303,
+    "area_context_road_intersections": 135,
+    "note": "The verified 3D subset catalog, loaded content across source tiles, and separate 2D Area-intersection scope differ. None is a claim that every record is simultaneously visible. Per-scene selected tile/feature statistics are recorded separately.",
+    "population": "2020 Census 500m mesh aggregate; not PLATEAU data or a count of inhabitants of the selected building"
+  },
+  "capture": {
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "actual_acquired_pixels": {
+      "width": 1920,
+      "height": 1080
+    },
+    "output_pixels": {
+      "width": 1920,
+      "height": 1080
+    },
+    "device_pixel_ratio": 1,
+    "native_1080p": true,
+    "spatial_upscale": false,
+    "method": "Chromium DevTools Page.screencastFrame, JPEG quality 95, everyNthFrame 1",
+    "raw_frame_cadence": "Event-driven variable compositor frames; receipt times use process.hrtime.bigint()",
+    "prewarmed": true,
+    "cold_load_performance_evidence": false,
+    "output_fps": 30,
+    "temporal_normalization": "Input timestamps retain variable acquired intervals with millisecond demuxer timebase; fps=30 duplicates held frames and may drop surplus frames. No motion interpolation.",
+    "static_hold_frame_duplication": true,
+    "acquired_intervals_longer_than_two_output_frames": 30,
+    "browser_chrome": false,
+    "audio": false,
+    "renderer": {
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "device_pixel_ratio": 1,
+      "renderer": "ANGLE (AMD, AMD Radeon 780M Graphics (0x00001900) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "vendor": "Google Inc. (AMD)"
+    },
+    "master": {
+      "acquired_frames": 1769,
+      "monotonic_duration_seconds": 42.032314699999986,
+      "motion_frames": 165,
+      "motion_observation_seconds": 3.6996721999943256,
+      "motion_mean_acquired_fps": 44.5985457847463,
+      "motion_maximum_gap_seconds": 0.058536399997770605,
+      "sampled_real_3d_fraction": 0.998588255240679,
+      "sampled_real_3d_seconds": 41.97297580000013,
+      "sample_count": 167,
+      "sampling_method": "250ms observations of visible Cesium viewport, selected building features, selected real DEM tile, ready roads and no error; last observation held until next. This is sampled renderer evidence, not continuous pixel classification."
+    },
+    "trial": {
+      "acquired_frames": 389,
+      "monotonic_duration_seconds": 9.03192310000211,
+      "motion_frames": 156,
+      "motion_observation_seconds": 3.443784400001168,
+      "motion_mean_acquired_fps": 45.29900303861852,
+      "motion_maximum_gap_seconds": 0.1204268999993805,
+      "sampled_real_3d_fraction": 0.9922913316213188,
+      "sampled_real_3d_seconds": 8.962299000002444,
+      "sample_count": 36,
+      "sampling_method": "250ms observations of visible Cesium viewport, selected building features, selected real DEM tile, ready roads and no error; last observation held until next. This is sampled renderer evidence, not continuous pixel classification.",
+      "encoded_proof": {
+        "filename": "trial-native-1080p.mp4",
+        "sha256": "42951852f6b1432623ec527f06000e09fc5896d2a68cd7c154b2bb91a3cbf0bf",
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 9.033333,
+        "output_frames": 271,
+        "output_fps": "30/1",
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "decode": "PASS",
+        "decode_method": "Full FFmpeg decode to null completed successfully before encode.json was written",
+        "included_in_delivery_payload": false
+      }
+    },
+    "clocks": {
+      "choreography": "process.hrtime.bigint() monotonic clock",
+      "wall_clock": "Windows Date.now(); elapsed wall value includes stop/final-frame work",
+      "master_wall_elapsed_seconds": 42.158,
+      "settings_modified": false
+    }
+  },
+  "production_build_verification": {
+    "index_sha256": "41431989c51c1002cad91a73416afe0a36a1ab1233d16fe469a0e2ca9829fc31",
+    "assets": [
+      {
+        "path": "assets/index-Bjq5erhu.js",
+        "bytes": 18295,
+        "sha256": "03a48c1dcc83cab3219279a7bf67ac4c1070d00a621eafcca9ee72a6330e8551",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/index-DFilpyEl.css",
+        "bytes": 211016,
+        "sha256": "be0b1ea934d1b09424fde4623a136a5f80ca38e8a80008c4abc5ef8393d98428",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ServiceApp-xzwZUFSG.js",
+        "bytes": 107133,
+        "sha256": "5d982c3c7b5f793b431e9ca29c166382a43b0e4166f085dc7813a384c5c61eaa",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ProductApp-Bnarqnm4.js",
+        "bytes": 268366,
+        "sha256": "7cc594f0875e99e3b5b12ae895677cb4a99b4c7752ea40e7b6822fb085dac0b9",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/Guided3DView-BHOFOv0G.js",
+        "bytes": 2809,
+        "sha256": "6eff4c7ca6d24a1d4d083ccd204a33305103695912aef55ed9fd1f34b8442120",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/CesiumMap-BgPIUMJi.js",
+        "bytes": 3601576,
+        "sha256": "6dc617d5aca0f9f3b397136b995a7378e49f848dd12521f63a60cc9900c2516c",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/react-hRsyaU4r.js",
+        "bytes": 143062,
+        "sha256": "433325bab116f4ab21ec39e7fac99dc29fa796d60366cd036a0d7f32a26ff9b1",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/maplibre-gl-worker-BVxYvUIi.js",
+        "bytes": 478869,
+        "sha256": "64787374f57f4b5107ba7f519b379785bddf556926f041692f5208a1428b5b87",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/maplibre-gl-worker-D5L3QY-B.js",
+        "bytes": 970972,
+        "sha256": "cc083cef9bac466add8bdd9a2fa1f1e041dab18defc854326aae980658bcbc81",
+        "matches_local_build": true
+      },
+      {
+        "path": "assets/ProductApp-BUVrV1QE.css",
+        "bytes": 20810,
+        "sha256": "45f2cdbf7135b120e4b4d0d102cfd97efc7ea5170fb15fe67fe944b8ceae28c4",
+        "matches_local_build": true
+      }
+    ]
+  },
+  "image_composition": {
+    "images_composited": false,
+    "images_cropped": false,
+    "browser_chrome": false
+  },
+  "readiness": {
+    "images": [
+      {
+        "label": "Same Area statistics and real city model",
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "none",
+          "id": "none"
+        },
+        "selected_target": {
+          "kind": "road",
+          "key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Real selected building with source attributes",
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Same A–B in 3D and Section",
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Same selected building and its unconfirmed field checks",
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": [
+          "建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+          "建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+          "入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+        ]
+      }
+    ],
+    "master": [
+      {
+        "label": "production 3D ready before choreography",
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "none",
+          "id": "none"
+        },
+        "selected_target": {
+          "kind": "road",
+          "key": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Real building selected during recording",
+        "start_seconds": 10.515988400004805,
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": true,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Same A–B and focused Section",
+        "start_seconds": 24.059060699999332,
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": false,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": []
+      },
+      {
+        "label": "Same selected building with its unconfirmed checks",
+        "start_seconds": 31.36698830000311,
+        "selected_area": "533513314",
+        "selected_object": {
+          "kind": "building",
+          "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "selected_target": {
+          "kind": "building",
+          "key": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "resolution": "exact"
+        },
+        "strict_ready": false,
+        "required_building_content_ready": true,
+        "local_dem_ready": true,
+        "roads_ready": true,
+        "globe_visible": true,
+        "section_transect": "maizuru-533513314-plateau-2025-v1-default-section",
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "checks": [
+          "建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+          "建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+          "入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+        ]
+      }
+    ],
+    "area_image_optional_background": {
+      "selected_globe_tiles": 54,
+      "tiles_with_ready_imagery": 0,
+      "wait_scope": "Only current-camera selected globe tiles",
+      "timeout_ms": 12000,
+      "stable_hold_ms": 1200,
+      "all_selected_gsi_tiles_ready_at_final_snapshot": false,
+      "observation": "A bounded current-camera imagery wait passed at an earlier LOD. After the stable hold, refinement selected 54 globe tiles with zero direct-ready imagery records in the final snapshot. GSI fallback contours and streets were visibly drawn. This does not claim full optional GSI readiness."
+    }
+  },
+  "caption_derivation": {
+    "clean_master_sha256": "ac144f66df32b965cda15beb1745305048c1b8d67a8a63eaf50e290a16163d0e",
+    "timing": "Observed master scene transition times",
+    "placement": "Top-center in unused application header space",
+    "separately_recorded": false
+  },
+  "diagnostics": {
+    "image_records": [],
+    "area_image_records": [],
+    "master_records": [],
+    "tooling_history": [
+      "One pre-capture dynamic-import deadlock; zero frames produced, preserved, fixed once before the successful same-route trial.",
+      "Windows-to-WSL path escaping failed before encoding; existing acquired frames were encoded through WSL without re-recording.",
+      "Caption contrast corrected once offline into a new directory from the unchanged clean master; previous caption output retained.",
+      "Only image 02 was retaken once after a bounded current-camera background wait and stable hold; its original screenshot remains preserved. The one clean master was not re-recorded."
+    ],
+    "recording_routes_used": 1,
+    "successful_trial_recordings": 1,
+    "clean_master_recordings": 1
+  },
+  "files": [
+    {
+      "filename": "02-area-to-3d.png",
+      "bytes": 1088394,
+      "sha256": "cf425c69cf885c240cb5d74dfe0467665b58a9477f424801ab8a6a749c3d6131",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "filename": "01-plateau-3d-hero.png",
+      "bytes": 970532,
+      "sha256": "dd2c1b9b19547affba5f4dd082a3db69f5e885189ea45f0cb8cc4a5bb06145c1",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "filename": "03-3d-and-section.png",
+      "bytes": 811503,
+      "sha256": "48f398baec0ed18f5e55ce99b2b90b3c71239d81e4a64ec559718584312ce527",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "filename": "04-3d-field-target.png",
+      "bytes": 974897,
+      "sha256": "3aa626aef048255027067d36ace335bb0f81b4a28ca456695ad891ab302ec0bd",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "filename": "city-gap-3d-demo-clean.mp4",
+      "bytes": 5386205,
+      "sha256": "ac144f66df32b965cda15beb1745305048c1b8d67a8a63eaf50e290a16163d0e",
+      "width": 1920,
+      "height": 1080,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "output_fps": "30/1",
+      "output_frames": 1261,
+      "duration_seconds": 42.033333,
+      "audio_streams": 0
+    },
+    {
+      "filename": "city-gap-3d-demo-captioned.mp4",
+      "bytes": 5237281,
+      "sha256": "4e9bb610d4adb3d348ef6a5bb282ec79e42f31a6d7b56c0209f00b4b3da8c3b1",
+      "width": 1920,
+      "height": 1080,
+      "codec": "h264",
+      "pixel_format": "yuv420p",
+      "output_fps": "30/1",
+      "output_frames": 1261,
+      "duration_seconds": 42.033333,
+      "audio_streams": 0
+    },
+    {
+      "filename": "captions.vtt",
+      "bytes": 307,
+      "sha256": "5405926a46e209a5a9bbad55ce491697c712ad94dbdd8145c8b341549eb322b2",
+      "cues": 4
+    }
+  ],
+  "review": {
+    "self_visual_review": "REVIEWED_BY_AGENTS",
+    "reviewed_artifacts": "All four native images, trial motion frames, decoded clean master scenes at 12s and 36s, and final captioned Section frame at 26s",
+    "user_approval": "AWAITING_USER_REVIEW",
+    "municipal_workflow_effectiveness": "UNVERIFIED"
+  },
+  "limitations": [
+    "LOD1 shapes and attributes do not verify entrances, steps, current use or passability; three selected-building checks remain unconfirmed.",
+    "Real local PLATEAU DEM and the flat GSI background are distinct. Local capture readiness does not wait for all global background tiles.",
+    "Rendered content readiness, acquired frame cadence, output frame rate, and human approval are separate claims."
+  ]
+}

@@ -2,7 +2,7 @@
 
 Goal: `plateau-3d-value-fast-delivery-v1`
 
-Status: implementation, local production build, and required local browser regressions pass. Production verification and the new media package are not yet complete.
+Status: the 3D service is deployed, its required production interaction paths pass, and the additional four-image / single-master-video package is complete. Final delivery-commit CI is reported with its exact SHA/run in the hand-off. Visual review here is agent review, not user acceptance or municipal validation.
 
 ## 実装メモ
 
@@ -30,16 +30,28 @@ Readiness distinguishes SHA-256 verification, complete building tile content, an
 
 Public rootの「PLATEAUで街を3Dで見る」から「常団地前周辺の実例」を開きます。3Dの建物をクリックして属性を確認し、「街の断面」で同じA–Bを展開します。「確認場所を見る」で、その対象に合う既存の確認項目へ進みます。「2D地図」に戻っても対象を保持し、「範囲選択へ戻る」で別地域を選べます。
 
-Direct-route candidate (production operation verification pending): `https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&mapMode=plateau3d&selectionType=mesh&selection=533513314`.
+動作確認済みの公開3D直リンク: [常団地前周辺のPLATEAU 3D](https://catlover-bot.github.io/plateau-city-gap/?experience=guided&story=understand&mapMode=plateau3d&selectionType=mesh&selection=533513314)。入口は [Public root](https://catlover-bot.github.io/plateau-city-gap/) です。
 
-The four additional images will be stored in `docs/assets/judging-3d/`; existing eight presentation images will not be replaced.
+今回の4枚は `docs/assets/judging-3d/` の追加セットです。既存8画像と旧動画は変更していません。全画像は公開サービスの1920×1080実画面で、合成・crop・拡大はありません。
 
 | File | 推奨用途 |
 | --- | --- |
-| `01-plateau-3d-hero.png` | 冒頭。実建物の立体形状、選択属性、出典・年度を示す |
-| `02-area-to-3d.png` | 国勢調査の500m集計と、同じ地域の実都市モデルの役割を分ける |
-| `03-3d-and-section.png` | 同一A–Bの3Dと断面で位置・標高と建物高さの関係を示す |
-| `04-3d-field-target.png` | 実対象、既存3〜5項目、未確認という到達点を示す |
+| [01: 3D hero](assets/judging-3d/01-plateau-3d-hero.png) | 冒頭。実建物の立体形状、選択属性、出典・年度を示す |
+| [02: Area → 3D](assets/judging-3d/02-area-to-3d.png) | 国勢調査の500m集計と、同じ地域の実都市モデルの役割を分ける |
+| [03: 3Dと断面](assets/judging-3d/03-3d-and-section.png) | 同一A–Bの3Dと断面で位置・標高と建物高さの関係を示す |
+| [04: 現地確認対象](assets/judging-3d/04-3d-field-target.png) | 同じ実建物、既存3項目、未確認という到達点を示す |
+
+## 動画と取得品質
+
+[字幕なし原本](assets/judging-3d/city-gap-3d-demo-clean.mp4) / [同じ原本から生成した字幕付き版](assets/judging-3d/city-gap-3d-demo-captioned.mp4) / [字幕VTT](assets/judging-3d/captions.vtt) / [出典・hash・描画証拠のmanifest](assets/judging-3d/manifest.json)
+
+原本は公開UIを1回だけ収録した42.033秒。全取得フレームを検査したnative 1920×1080で、出力も同じ寸法、H.264 / yuv420p / 30fps / 音声なしです。字幕付き版はこの原本への後処理であり、別収録ではありません。試し録画は9.033秒、389取得フレームから271出力フレームで、カメラ移動・実建物選択・文字・エンコード完了を本編前に確認しました。
+
+本編はDevToolsの可変間隔1,769フレームを1,261出力フレームへ正規化しています。静止holdの複製と余剰フレームのdropがあり、取得30fpsやAI補間を意味しません。実カメラ移動の観測区間3.700秒で165フレームを取得（平均44.60fps、最大間隔0.0586秒）。prewarm済みで、cold-load性能の証拠にはしません。単調増加時計で収録・holdを管理し、OS/WSL時刻設定は変更していません。
+
+250ms間隔の描画観測では、実建物・局所DEM・道路を伴う3D表示が41.973秒、全体の99.86%でした。これは連続した全画素判定ではなく、表示canvasと実レンダラーのサンプリングです。収録中の実建物選択は10.516秒、同じA–Bとfocus付き断面は24.059秒、同じ建物の未確認3項目は31.367秒からで、字幕もこの実測遷移に合わせています。
+
+選択した実モデルは `bldg_a490fb5b-d668-441e-b9af-5b35c4629006`、住宅・高さ8.5m・地上2階・LOD1。実scene picking、metadata、Inspectorの一致を確認しました。この値をアプリへ固定転記していません。画像02だけ、任意の背景図が薄い最初の撮影から1回追加取得しました。実PLATEAUの必須contentは準備済みで、GSI背景は表示された既存の低い詳細度の画像を含み、最終詳細度の全背景タイル完了とは主張しません。最初の画像、試し録画、raw frames、旧字幕版、失敗時の一時出力は削除せず保持しています。
 
 ## データ・coverage・未検証事項
 
@@ -50,7 +62,7 @@ The four additional images will be stored in `docs/assets/judging-3d/`; existing
 - 人口・年齢は国勢調査2020の500m集計。PLATEAU属性や個別建物居住者数ではありません。用途・高さ・階数の未収録値は「データなし」とします。
 - 入口、歩道、段差、現在の利用や通行条件、現地回答、自治体業務適合性は未検証。LOD1表示から推定しません。
 - 3Dはこの検証済みAreaのみ。495のArea選択は維持し、非対応Areaには別地域のモデルを流用しません。
-- 撮影は最終公開版の準備完了後に行います。prewarm、実取得画素、可変フレーム間隔、複製、出力寸法と30fps化はmanifestで開示し、cold-load性能や取得30fpsの証拠とはしません。
+- 撮影は最終公開版の準備完了後に実施しました。prewarm、実取得画素、可変フレーム間隔、複製、出力寸法と30fps化はmanifestで開示し、cold-load性能や取得30fpsの証拠とはしません。
 
 ## 検証・納品状況
 
@@ -58,4 +70,8 @@ Local validation: ESLint, TypeScript/production build, 33 frontend test files / 
 
 The local docs checker reports only two pre-existing missing image paths (`01-city-gap-overview-16x9.png`, `02-area-selection-16x9.png`); their untracked `copy.png` counterparts are byte-identical by SHA-256 and are preserved without staging. The committed tree retains the original paths, so exact-commit CI will validate the deliverable independently of these user worktree changes.
 
-Pending: exact-commit nine-job CI, Pages deployment, live asset and interaction verification, four production images, 8–10 second recording trial, one 35–45 second clean master and its captioned derivative, media manifest, final asset-commit CI. No final media or live-operation success is claimed yet.
+UI source `5d59de0852066d96d9a228c205812fe97f006dab` passed all nine jobs in [CI 33939420182](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33939420182), then build and deploy in [Pages 33939684419](https://github.com/catlover-bot/plateau-city-gap/actions/runs/33939684419). Live entry SHA-256 `41431989c51c1002cad91a73416afe0a36a1ab1233d16fe469a0e2ca9829fc31` equals the local production build.
+
+The full targeted browser path also passed on production: Public→3D actual pick/official attributes, A–B/focus, building-three/road-four matching checks, 2D retention, Area/stale/unsupported rejection, Advanced single-flight success, and 390px finite failure/retry. Production used one persistent MapLibre initialization with zero unexpected page/request/local-HTTP diagnostics. Observed hardware-browser 3D entry was 2.364 seconds; injected mobile failure settled in 45.649 seconds then recovered. These are test observations, not a claim of universal or cold-load performance.
+
+The four production images, successful native trial, single clean master, captioned derivative, VTT, and seven-payload-hash manifest are complete. Both MP4s pass full decode and format checks; image and master capture diagnostics contain no unexpected errors. The live index and all ten JS/CSS assets, including lazy Cesium chunks, matched the declared production build before capture. Final asset-commit CI must be nine of nine green before closing the goal; the final hand-off identifies that exact commit/run. No additional Pages deployment is needed for these docs/media/capture-tooling-only changes. Main remains untouched, and the two pre-existing image-name worktree changes remain unstaged.

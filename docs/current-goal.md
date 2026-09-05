@@ -2,7 +2,7 @@
 
 Active goal: `plateau-3d-value-fast-delivery-v1`
 
-Status: Guided verified-local 3D integration is implemented and its first targeted hardware-browser path passes. Final production build, exact-commit CI, Pages, live verification, and the separate four-image / single-master-video package remain pending. See the single [3D judging implementation and delivery note](judging-3d-demo.md).
+Status: Guided verified-local 3D is published from UI `5d59de0852066d96d9a228c205812fe97f006dab`, with nine-job CI `33939420182`, Pages `33939684419`, matching live entry and lazy-chunk bytes, and all required production browser paths passing. The separate four-image package, native 1080p clean master, captioned derivative, and provenance manifest are delivered in `docs/assets/judging-3d/`. Exact final asset-commit nine-job CI is the last hand-off gate; its immutable commit/run are reported in the final hand-off rather than embedded self-referentially here. See the single [3D judging implementation and delivery note](judging-3d-demo.md).
 
 Current starting HEAD and remote feature: `704a9b237a96aee4b71b01e9f0cd0090100764dc`. Existing image-name changes, prior media, and all backups are preserved. Recursive deletion and automatic cleanup are prohibited. The historical 2D-only Guided policy is superseded only for the verified `533513314` example; other Areas retain their own 2D context. The sections below retain the previous completed checkpoint for provenance, not the current goal's completion state.
 
