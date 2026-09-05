@@ -1,0 +1,31 @@
+{
+  "schema": "citygap.final-uiux-correction-review@1",
+  "goal": "final-product-uiux-polish-v1",
+  "status": "THREE_SCOPED_FIXES_REVIEWED_REQUIRED_CHECKS_FAILED_PAGES_WITHHELD",
+  "resume_remote_head": "685f518b5d012a83c2acd56d535dfce148fd6487",
+  "app_source_commit": "cfb66e9a13f79400c3f4d1e31e1859577ed1be9f",
+  "review_purpose": "One user-authorized affected-screen correction set; UI review only, not adopted presentation media or full acceptance.",
+  "capture_sets": 1,
+  "new_png_count": 6,
+  "all_six_images_visually_inspected": true,
+  "raw_capture_manifest": "uiux-review.json",
+  "raw_capture_manifest_sha256": "9026d006472a7ba185068f5fa1082e2e740529fad07143749a3935d4b4e52b2a",
+  "local_validation": "local-validation.json",
+  "local_validation_sha256": "fbe84899ff6e654f205054cfdf0a0a837759c30235d4193fe4615d39f29be92b",
+  "recoverable_failure_evidence": ["local-current-summary.json", "polish-final-four-widths.json", "native-guided1440.json"],
+  "source_gates": {"lint": "passed", "typecheck": "passed", "unit_test_files": 37, "unit_tests_passed": 219, "production_build": "passed", "diff_check": "passed", "local_docs_check": "Only the two pre-existing user-deleted presentation PNG paths fail; these changes remain unstaged. No new missing links."},
+  "frozen_index_sha256": "dd00c8f7bc1ef1f0df25654914f62b2f3aeefb0512d99f637868eb7903600a0c",
+  "reviewed_fixes": [
+    "Public full heading has natural phrase wrapping; 地図 remains together without reducing font size. Original exact accessible heading name is retained.",
+    "Automatic Public/Guided non-interactive H1 outline is absent; programmatic focus remains. Actual interactive keyboard indicators are not disabled.",
+    "Readable Section elevation-axis text now has positive native left margin (+3 CSS px), without hiding text, reducing font size, or moving ticks/A/B."
+  ],
+  "required_unresolved_checks": [
+    "Native Guided 1440 transient Section detail metadata/relation text boxes overlap by 1 CSS px. Existing baselines y85/y100 are 15px apart but native boxes are 16px tall. No criterion was relaxed.",
+    "Final software-rendered Guided 1440 split-layout readiness did not satisfy non-overlapping 3D/Section geometry within 5 seconds. Guided1280 and native credit checks passed; the1440 failure remains unresolved."
+  ],
+  "diagnostics": {"unexpected": 0, "optional_gsi_pale_ERR_ABORTED": 57, "non_gsi_request_failures": 0},
+  "preserved_unchanged": ["../before/", "../after/", "../manifest.json", "../local-validation.json", "all existing docs/assets files", "both existing backup directories", "two user image deletions and two untracked copy.png files"],
+  "publication": {"new_pages_dispatch": false, "new_production_verification": false, "existing_pages_run": "33947973445", "existing_production_commit": "bb41d3c1aff385953b65d61c20f040d9c007d952"},
+  "human_acceptance": "Not claimed. Remaining scope decision concerns the failed transient-detail spacing and split-layout checks; no new design goal or media work is started."
+}

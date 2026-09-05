@@ -1,0 +1,3298 @@
+{
+  "schema": "citygap.uiux-six-screen-review@1",
+  "mode": "uiux-onepass-review-only",
+  "source_commit": "cfb66e9a13f79400c3f4d1e31e1859577ed1be9f",
+  "pages_run": "not-deployed-review-only",
+  "base_url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "started_utc": "2026-09-05T13:11:56.624Z",
+  "files": [
+    {
+      "filename": "01-public-1440.png",
+      "sha256": "6db9028b761684817e292cf54a774906961ea5f837f79d3cec3dc04e320b5618",
+      "bytes": 647887,
+      "issue": "Public1440 headline phrase wrapping and automatic-entry focus presentation",
+      "captured_utc": "2026-09-05T13:11:59.722Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "roots": {
+          "public": {
+            "experience": "public-first-run",
+            "publicStep": "intro",
+            "mapMode": "map2d",
+            "activeStory": "none",
+            "cartographyState": "loading",
+            "storyCartographyLoading": "none",
+            "targetCartographyState": "idle",
+            "presentationTargetKind": "none",
+            "presentationTargetResolution": "none",
+            "publicUrbanSection": "advanced_only"
+          },
+          "guided": {},
+          "advanced": {}
+        },
+        "readiness": {
+          "interactionReady": "false",
+          "visualComplete": "false",
+          "captureStrictReady": "false",
+          "visualReady": "false",
+          "visualScene": "gap_discovery",
+          "perfAppShellMs": "1076"
+        },
+        "inspector_text": "舞鶴を、地図で調べる。場所と範囲を選び、人口・建物・交通などを確認します。地図で場所を調べるPLATEAUで街を3Dで見る常団地前周辺の実例",
+        "object_attributes": {},
+        "target": {},
+        "checks": [],
+        "section": {},
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "H1",
+          "text": "舞鶴を、地図で調べる。",
+          "focus_visible": true,
+          "outline": "rgb(22, 79, 99) none 3px"
+        },
+        "heading_layout": [
+          {
+            "text": "舞鶴を、地図で調べる。",
+            "rect": {
+              "x": 1094.203125,
+              "y": 101,
+              "width": 303.796875,
+              "height": 86.375,
+              "top": 101,
+              "right": 1398,
+              "bottom": 187.375,
+              "left": 1094.203125
+            },
+            "font_size": "28.8px",
+            "line_height": "43.2px",
+            "outline": "rgb(22, 79, 99) none 3px",
+            "child_rects": [
+              {
+                "text": "舞鶴を、",
+                "rect": {
+                  "x": 1094.203125,
+                  "y": 101,
+                  "width": 112.90625,
+                  "height": 43.1875,
+                  "top": 101,
+                  "right": 1207.109375,
+                  "bottom": 144.1875,
+                  "left": 1094.203125
+                }
+              },
+              {
+                "text": "地図で調べる。",
+                "rect": {
+                  "x": 1094.203125,
+                  "y": 144.1875,
+                  "width": 197.578125,
+                  "height": 43.1875,
+                  "top": 144.1875,
+                  "right": 1291.78125,
+                  "bottom": 187.375,
+                  "left": 1094.203125
+                }
+              }
+            ]
+          }
+        ],
+        "section_axis_bounds": [],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+          "root": {},
+          "readiness": {},
+          "canvas": null,
+          "globe_visible": null,
+          "camera": null,
+          "tilesets": [],
+          "inspector_text": null,
+          "checks": []
+        }
+      }
+    },
+    {
+      "filename": "02-guided-area-1280.png",
+      "sha256": "3400def5807d631da4a68a49072493653fff2894def87ba963686cec18b23335",
+      "bytes": 445059,
+      "issue": "Guided1280 entry focus presentation with actual area selection controls retained",
+      "captured_utc": "2026-09-05T13:12:00.687Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "roots": {
+          "public": {},
+          "guided": {
+            "guidedStory": "find",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "none",
+            "contextStatus": "idle",
+            "contextBuildings": "0",
+            "contextRoads": "0",
+            "contextPlanning": "0",
+            "sectionPack": "none",
+            "targetResolution": "area_fallback",
+            "targetKind": "area",
+            "targetKey": "area:533513314",
+            "objectKind": "none",
+            "objectId": "none"
+          },
+          "advanced": {}
+        },
+        "readiness": {
+          "interactionReady": "false",
+          "visualComplete": "false",
+          "captureStrictReady": "false",
+          "visualReady": "false",
+          "visualScene": "gap_discovery",
+          "perfAppShellMs": "134"
+        },
+        "inspector_text": "地域を選ぶ地図または一覧から、調べる地域を選べます。選んだ地域薬師口バス停周辺由良川橋バス停周辺薬師口バス停周辺地頭バス停周辺地頭バス停周辺由良川橋バス停周辺薬師口バス停周辺由良川橋バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉駅前バス停周辺真倉駅前バス停周辺真倉駅周辺真倉駅周辺真倉駅周辺真倉駅周辺真倉駅周辺加佐分室前バス停周辺加佐分室前バス停周辺真倉駅前バス停周辺真倉駅周辺京田バス停周辺真倉駅周辺京田バス停周辺真倉駅周辺京田バス停周辺京田バス停周辺京田バス停周辺常口バス停周辺常口バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺由良川橋バス停周辺地頭バス停周辺由良川橋バス停周辺岡田由里バス停周辺薬師口バス停周辺薬師口バス停周辺薬師口バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺由良川橋バス停周辺岡田由里バス停周辺岡田由里バス停周辺岡田由里バス停周辺薬師口バス停周辺加佐分室前バス停周辺薬師口バス停周辺加佐分室前バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺岡田由里バス停周辺間口バス停周辺間口バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺志高下境バス停周辺志高下境バス停周辺小津田バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺地頭下バス停周辺岡田由里バス停周辺岡田由里バス停周辺地頭下バス停周辺地頭下バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺加佐分室前バス停周辺志高バス停周辺加佐分室前バス停周辺志高バス停周辺真倉駅周辺上福井バス停周辺京田バス停周辺城南中学校前バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺福来西バス停周辺志高バス停周辺志高バス停周辺志高バス停周辺上福井バス停周辺上福井バス停周辺城南中学校前バス停周辺上福井バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺城南中学校前バス停周辺中筋小学校口バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺城南中学校前バス停周辺中筋小学校口バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺京田バス停周辺中筋小学校口バス停周辺倉谷バス停周辺間口バス停周辺志高下境バス停周辺志高下境バス停周辺志高下境バス停周辺小津田バス停周辺小津田バス停周辺ふじつ温泉前バス停周辺上福井バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西舞鶴駅周辺倉谷西バス停周辺倉谷西バス停周辺福来西バス停周辺小津田バス停周辺小津田バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺藤津バス停周辺ふじつ温泉前バス停周辺一盃水バス停周辺四所駅周辺上福井バス停周辺四所バス停周辺上福井バス停周辺福井小学校口バス停周辺福井小学校口バス停周辺千日前バス停周辺舞鶴港とれとれセンター前バス停周辺西町バス停周辺千日前バス停周辺東田辺バス停周辺本町バス停周辺東田辺バス停周辺倉谷西バス停周辺福来西バス停周辺倉谷西バス停周辺福来西バス停周辺福来東バス停周辺福来東バス停周辺昭和台バス停周辺清道バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺藤津バス停周辺八田・由良川学園前バス停周辺藤津バス停周辺ふじつ温泉前バス停周辺ふじつ温泉前バス停周辺一盃水バス停周辺四所バス停周辺福井小学校口バス停周辺下福井バス停周辺福井小学校口バス停周辺下福井バス停周辺西町バス停周辺吉原小学校前バス停周辺平野屋バス停周辺税務署前バス停周辺吉原小学校前バス停周辺東吉原バス停周辺倉谷口バス停周辺上安バス停周辺倉谷口バス停周辺五老トンネル西口バス停周辺昭和台バス停周辺天台バス停周辺五老トンネル西口バス停周辺清道バス停周辺清道バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺ふじつ温泉前バス停周辺ふじつ温泉前バス停周辺東雲駅周辺東雲駅周辺一盃水バス停周辺東雲駅周辺下福井バス停周辺合同庁舎前バス停周辺二尾バス停周辺東吉原バス停周辺二尾バス停周辺二尾バス停周辺五老トンネル西口バス停周辺五老ヶ岳公園口バス停周辺五老ヶ岳公園口バス停周辺道芝口バス停周辺舞鶴市リサイクルプラザ前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺藤の森バス停周辺藤の森バス停周辺道芝口バス停周辺和田バス停周辺上四丁目バス停周辺道芝口バス停周辺上四丁目バス停周辺上四丁目バス停周辺造船所前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺和田バス停周辺加津良バス停周辺和田バス停周辺下四丁目バス停周辺加津良上バス停周辺長浜口バス停周辺中舞鶴バス停周辺安全祈願碑前バス停周辺長浜バス停周辺本館前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺丹後神崎駅周辺藤の森バス停周辺高倉神社前バス停周辺海上保安学校前バス停周辺高倉神社前バス停周辺高倉神社前バス停周辺飛行場前バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺福来東バス停周辺常団地前バス停周辺常口バス停周辺常バス停周辺常団地前バス停周辺常団地前バス停周辺常団地前周辺常口バス停周辺常バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺白鳥団地前バス停周辺上地橋バス停周辺上地橋バス停周辺丸山口バス停周辺上地橋バス停周辺常口バス停周辺常バス停周辺常団地前バス停周辺堂の奥バス停周辺舞鶴市リサイクルプラザ前バス停周辺白鳥団地前バス停周辺白鳥団地前バス停周辺丸山口バス停周辺行永バス停周辺森町バス停周辺行永郵便局前バス停周辺舞鶴医療センター前バス停周辺溝尻バス停周辺舞鶴医療センター前バス停周辺溝尻バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺鹿原バス停周辺鹿原バス停周辺鹿原バス停周辺三宅団地前バス停周辺市役所前バス停周辺三宅団地前バス停周辺市役所前バス停周辺共済病院前バス停周辺東舞鶴駅周辺大門通三条バス停周辺七条バス停周辺中町バス停周辺梅ヶ谷口バス停周辺西町三丁目バス停周辺中町バス停周辺溝尻バス停周辺堂の奥バス停周辺東高口バス停周辺自衛隊桟橋前バス停周辺三宅団地前バス停周辺大門通三条バス停周辺七条バス停周辺大門通三条バス停周辺市場バス停周辺市場バス停周辺市場バス停周辺東高口バス停周辺東高口バス停周辺東高口バス停周辺田中橋バス停周辺小倉バス停周辺田園町口バス停周辺小倉バス停周辺田園町口バス停周辺鹿原バス停周辺庵の谷バス停周辺鹿原バス停周辺庵の谷バス停周辺教育隊前バス停周辺さくらどおりマンション前バス停周辺教育隊前バス停周辺東高口バス停周辺東高口バス停周辺田中橋バス停周辺安岡バス停周辺安岡バス停周辺中山バス停周辺鹿原バス停周辺松尾寺駅周辺中山バス停周辺松尾寺駅前バス停周辺吉坂バス停周辺吉坂バス停周辺さくらどおりマンション前バス停周辺滝ケ浦バス停周辺板硝子工場前バス停周辺中宮バス停周辺中山バス停周辺中宮バス停周辺朝来中バス停周辺国立高専前バス停周辺国立高専前バス停周辺松尾寺口バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺平バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺おおしあま展望の里バス停周辺若浦中学校前バス停周辺若浦中学校前バス停周辺大波下バス停周辺久原口バス停周辺若浦中学校前バス停周辺大波上バス停周辺大波上バス停周辺大波上バス停周辺大波上バス停周辺中宮バス停周辺朝来中バス停周辺国立高専前バス停周辺朝来中バス停周辺国立高専前バス停周辺国立高専前バス停周辺吉坂バス停周辺松尾寺口バス停周辺平バス停周辺平バス停周辺平バス停周辺大浦小学校前バス停周辺平口バス停周辺朝来中バス停周辺国立高専前バス停周辺平バス停周辺平バス停周辺大浦小学校前バス停周辺赤野バス停周辺大浦小学校前バス停周辺河辺中バス停周辺河辺中バス停周辺西屋バス停周辺室牛バス停周辺河辺由里バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺西屋バス停周辺室牛バス停周辺河辺由里バス停周辺河辺由里バス停周辺原バス停周辺原バス停周辺原バス停周辺栃尾バス停周辺栃尾バス停周辺舞鶴自然文化園バス停周辺原バス停周辺野原口バス停周辺野原口バス停周辺三浜バス停周辺三浜バス停周辺小橋車庫バス停周辺田井バス停周辺田井バス停周辺田井バス停周辺野原バス停周辺野原バス停周辺田井バス停周辺田井バス停周辺田井バス停周辺常団地前周辺65歳以上 200人 · 交通 563m · 医療 1.45km二尾バス停周辺65歳以上 56人 · 交通 2.32km · 医療 3.32km赤野バス停周辺65歳以上 27人 · 交通 3.90km · 医療 3.88km人口は国勢調査2020の500m集計。交通・医療はメッシュ中心からの直線距離で、徒歩時間ではありません。街の形を見る",
+        "object_attributes": {},
+        "target": {},
+        "checks": [],
+        "section": {},
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "H1",
+          "text": "地域を選ぶ",
+          "focus_visible": true,
+          "outline": "rgb(22, 79, 99) none 3px"
+        },
+        "heading_layout": [
+          {
+            "text": "地域を選ぶ",
+            "rect": {
+              "x": 942,
+              "y": 79,
+              "width": 301,
+              "height": 30.71875,
+              "top": 79,
+              "right": 1243,
+              "bottom": 109.71875,
+              "left": 942
+            },
+            "font_size": "24px",
+            "line_height": "30.72px",
+            "outline": "rgb(22, 79, 99) none 3px",
+            "child_rects": []
+          }
+        ],
+        "section_axis_bounds": [],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=find&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+          "root": {
+            "guidedStory": "find",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "none",
+            "contextStatus": "idle",
+            "contextBuildings": "0",
+            "contextRoads": "0",
+            "contextPlanning": "0",
+            "sectionPack": "none",
+            "targetResolution": "area_fallback",
+            "targetKind": "area",
+            "targetKey": "area:533513314",
+            "objectKind": "none",
+            "objectId": "none"
+          },
+          "readiness": {},
+          "canvas": null,
+          "globe_visible": null,
+          "camera": null,
+          "tilesets": [],
+          "inspector_text": "地域を選ぶ地図または一覧から、調べる地域を選べます。選んだ地域薬師口バス停周辺由良川橋バス停周辺薬師口バス停周辺地頭バス停周辺地頭バス停周辺由良川橋バス停周辺薬師口バス停周辺由良川橋バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉バス停周辺真倉駅前バス停周辺真倉駅前バス停周辺真倉駅周辺真倉駅周辺真倉駅周辺真倉駅周辺真倉駅周辺加佐分室前バス停周辺加佐分室前バス停周辺真倉駅前バス停周辺真倉駅周辺京田バス停周辺真倉駅周辺京田バス停周辺真倉駅周辺京田バス停周辺京田バス停周辺京田バス停周辺常口バス停周辺常口バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺由良川橋バス停周辺地頭バス停周辺由良川橋バス停周辺岡田由里バス停周辺薬師口バス停周辺薬師口バス停周辺薬師口バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺由良川橋バス停周辺岡田由里バス停周辺岡田由里バス停周辺岡田由里バス停周辺薬師口バス停周辺加佐分室前バス停周辺薬師口バス停周辺加佐分室前バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺岡田由里バス停周辺間口バス停周辺間口バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺志高下境バス停周辺志高下境バス停周辺小津田バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭バス停周辺地頭下バス停周辺地頭下バス停周辺岡田由里バス停周辺地頭下バス停周辺岡田由里バス停周辺岡田由里バス停周辺地頭下バス停周辺地頭下バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺加佐分室前バス停周辺志高バス停周辺加佐分室前バス停周辺志高バス停周辺真倉駅周辺上福井バス停周辺京田バス停周辺城南中学校前バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺京田バス停周辺福来西バス停周辺志高バス停周辺志高バス停周辺志高バス停周辺上福井バス停周辺上福井バス停周辺城南中学校前バス停周辺上福井バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺城南中学校前バス停周辺中筋小学校口バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺城南中学校前バス停周辺中筋小学校口バス停周辺中筋小学校口バス停周辺城南中学校前バス停周辺京田バス停周辺中筋小学校口バス停周辺倉谷バス停周辺間口バス停周辺志高下境バス停周辺志高下境バス停周辺志高下境バス停周辺小津田バス停周辺小津田バス停周辺ふじつ温泉前バス停周辺上福井バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西高前バス停周辺西舞鶴駅周辺倉谷西バス停周辺倉谷西バス停周辺福来西バス停周辺小津田バス停周辺小津田バス停周辺大川バス停周辺大川バス停周辺大川バス停周辺藤津バス停周辺ふじつ温泉前バス停周辺一盃水バス停周辺四所駅周辺上福井バス停周辺四所バス停周辺上福井バス停周辺福井小学校口バス停周辺福井小学校口バス停周辺千日前バス停周辺舞鶴港とれとれセンター前バス停周辺西町バス停周辺千日前バス停周辺東田辺バス停周辺本町バス停周辺東田辺バス停周辺倉谷西バス停周辺福来西バス停周辺倉谷西バス停周辺福来西バス停周辺福来東バス停周辺福来東バス停周辺昭和台バス停周辺清道バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺藤津バス停周辺八田・由良川学園前バス停周辺藤津バス停周辺ふじつ温泉前バス停周辺ふじつ温泉前バス停周辺一盃水バス停周辺四所バス停周辺福井小学校口バス停周辺下福井バス停周辺福井小学校口バス停周辺下福井バス停周辺西町バス停周辺吉原小学校前バス停周辺平野屋バス停周辺税務署前バス停周辺吉原小学校前バス停周辺東吉原バス停周辺倉谷口バス停周辺上安バス停周辺倉谷口バス停周辺五老トンネル西口バス停周辺昭和台バス停周辺天台バス停周辺五老トンネル西口バス停周辺清道バス停周辺清道バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺八田・由良川学園前バス停周辺ふじつ温泉前バス停周辺ふじつ温泉前バス停周辺東雲駅周辺東雲駅周辺一盃水バス停周辺東雲駅周辺下福井バス停周辺合同庁舎前バス停周辺二尾バス停周辺東吉原バス停周辺二尾バス停周辺二尾バス停周辺五老トンネル西口バス停周辺五老ヶ岳公園口バス停周辺五老ヶ岳公園口バス停周辺道芝口バス停周辺舞鶴市リサイクルプラザ前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺二尾バス停周辺藤の森バス停周辺藤の森バス停周辺道芝口バス停周辺和田バス停周辺上四丁目バス停周辺道芝口バス停周辺上四丁目バス停周辺上四丁目バス停周辺造船所前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺和田バス停周辺加津良バス停周辺和田バス停周辺下四丁目バス停周辺加津良上バス停周辺長浜口バス停周辺中舞鶴バス停周辺安全祈願碑前バス停周辺長浜バス停周辺本館前バス停周辺東雲駅周辺東雲駅周辺東雲駅周辺二尾バス停周辺丹後神崎駅周辺藤の森バス停周辺高倉神社前バス停周辺海上保安学校前バス停周辺高倉神社前バス停周辺高倉神社前バス停周辺飛行場前バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺福来東バス停周辺常団地前バス停周辺常口バス停周辺常バス停周辺常団地前バス停周辺常団地前バス停周辺常団地前周辺常口バス停周辺常バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺与保呂小学校前バス停周辺白鳥団地前バス停周辺上地橋バス停周辺上地橋バス停周辺丸山口バス停周辺上地橋バス停周辺常口バス停周辺常バス停周辺常団地前バス停周辺堂の奥バス停周辺舞鶴市リサイクルプラザ前バス停周辺白鳥団地前バス停周辺白鳥団地前バス停周辺丸山口バス停周辺行永バス停周辺森町バス停周辺行永郵便局前バス停周辺舞鶴医療センター前バス停周辺溝尻バス停周辺舞鶴医療センター前バス停周辺溝尻バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺堂の奥バス停周辺鹿原バス停周辺鹿原バス停周辺鹿原バス停周辺三宅団地前バス停周辺市役所前バス停周辺三宅団地前バス停周辺市役所前バス停周辺共済病院前バス停周辺東舞鶴駅周辺大門通三条バス停周辺七条バス停周辺中町バス停周辺梅ヶ谷口バス停周辺西町三丁目バス停周辺中町バス停周辺溝尻バス停周辺堂の奥バス停周辺東高口バス停周辺自衛隊桟橋前バス停周辺三宅団地前バス停周辺大門通三条バス停周辺七条バス停周辺大門通三条バス停周辺市場バス停周辺市場バス停周辺市場バス停周辺東高口バス停周辺東高口バス停周辺東高口バス停周辺田中橋バス停周辺小倉バス停周辺田園町口バス停周辺小倉バス停周辺田園町口バス停周辺鹿原バス停周辺庵の谷バス停周辺鹿原バス停周辺庵の谷バス停周辺教育隊前バス停周辺さくらどおりマンション前バス停周辺教育隊前バス停周辺東高口バス停周辺東高口バス停周辺田中橋バス停周辺安岡バス停周辺安岡バス停周辺中山バス停周辺鹿原バス停周辺松尾寺駅周辺中山バス停周辺松尾寺駅前バス停周辺吉坂バス停周辺吉坂バス停周辺さくらどおりマンション前バス停周辺滝ケ浦バス停周辺板硝子工場前バス停周辺中宮バス停周辺中山バス停周辺中宮バス停周辺朝来中バス停周辺国立高専前バス停周辺国立高専前バス停周辺松尾寺口バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺平バス停周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺丹後神崎駅周辺海上保安学校前バス停周辺海上保安学校前バス停周辺海上保安学校前バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺おおしあま展望の里バス停周辺若浦中学校前バス停周辺若浦中学校前バス停周辺大波下バス停周辺久原口バス停周辺若浦中学校前バス停周辺大波上バス停周辺大波上バス停周辺大波上バス停周辺大波上バス停周辺中宮バス停周辺朝来中バス停周辺国立高専前バス停周辺朝来中バス停周辺国立高専前バス停周辺国立高専前バス停周辺吉坂バス停周辺松尾寺口バス停周辺平バス停周辺平バス停周辺平バス停周辺大浦小学校前バス停周辺平口バス停周辺朝来中バス停周辺国立高専前バス停周辺平バス停周辺平バス停周辺大浦小学校前バス停周辺赤野バス停周辺大浦小学校前バス停周辺河辺中バス停周辺河辺中バス停周辺西屋バス停周辺室牛バス停周辺河辺由里バス停周辺赤野バス停周辺赤野バス停周辺赤野バス停周辺西屋バス停周辺室牛バス停周辺河辺由里バス停周辺河辺由里バス停周辺原バス停周辺原バス停周辺原バス停周辺栃尾バス停周辺栃尾バス停周辺舞鶴自然文化園バス停周辺原バス停周辺野原口バス停周辺野原口バス停周辺三浜バス停周辺三浜バス停周辺小橋車庫バス停周辺田井バス停周辺田井バス停周辺田井バス停周辺野原バス停周辺野原バス停周辺田井バス停周辺田井バス停周辺田井バス停周辺常団地前周辺65歳以上 200人 · 交通 563m · 医療 1.45km二尾バス停周辺65歳以上 56人 · 交通 2.32km · 医療 3.32km赤野バス停周辺65歳以上 27人 · 交通 3.90km · 医療 3.88km人口は国勢調査2020の500m集計。交通・医療はメッシュ中心からの直線距離で、徒歩時間ではありません。街の形を見る",
+          "checks": []
+        }
+      }
+    },
+    {
+      "filename": "03-guided-section-1440.png",
+      "sha256": "91334aba7596ff0fa4f2eca750f2c9c1305b7352d2c439eb175659cb096bfad3",
+      "bytes": 542021,
+      "issue": "Guided1440 sameA–B axis labels fully inside viewport with actual selectedbuilding annotation",
+      "captured_utc": "2026-09-05T13:12:08.928Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "roots": {
+          "public": {},
+          "guided": {
+            "guidedStory": "understand",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+            "contextStatus": "ready",
+            "contextBuildings": "303",
+            "contextRoads": "135",
+            "contextPlanning": "8",
+            "sectionPack": "maizuru-533513314-plateau-2025-v1",
+            "targetResolution": "exact",
+            "targetKind": "building",
+            "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building",
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+          },
+          "advanced": {}
+        },
+        "readiness": {
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualReady": "true",
+          "visualScene": "plateau_detail",
+          "perfAppShellMs": "147",
+          "visualUnmet": "",
+          "perfThreeDFirstMeaningfulMs": "1242",
+          "perfPackInteractionMs": "2225",
+          "perfVisualCompleteMs": "2247",
+          "perfCaptureStrictMs": "2306"
+        },
+        "inspector_text": "範囲選択へ戻る常団地前周辺選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階PLATEAU 舞鶴市 2025 · LOD1選択対象の出典IDbldg_a490fb5b-d668-441e-b9af-5b35c4629006この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+        "object_attributes": {
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectKind": "building"
+        },
+        "target": {},
+        "checks": [],
+        "section": {
+          "uiMode": "guided",
+          "readable": "true",
+          "transectReady": "true",
+          "buildingCount": "63",
+          "directBuildingCount": "17",
+          "roadCount": "14",
+          "directRoadCount": "14",
+          "terrainSamples": "94",
+          "terrainCovered": "94",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "staticAnnotationCount": "6",
+          "roadAnnotationCount": "4",
+          "hiddenLowPriorityAnnotations": "6",
+          "annotationOverlapCount": "0",
+          "annotationCalculationMs": "0.2",
+          "selectedAnnotationVisible": "true",
+          "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "focusedObjectKind": "none",
+          "focusedObjectId": "none",
+          "counterfactualReady": "true",
+          "serviceSectionReady": "true",
+          "sectionContainerWidth": "1050.203125"
+        },
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "BUTTON",
+          "text": "街の断面",
+          "focus_visible": false,
+          "outline": "rgb(252, 252, 249) none 3px"
+        },
+        "heading_layout": [
+          {
+            "text": "常団地前周辺",
+            "rect": {
+              "x": 1085.75,
+              "y": 140.546875,
+              "width": 304.703125,
+              "height": 36.71875,
+              "top": 140.546875,
+              "right": 1390.453125,
+              "bottom": 177.265625,
+              "left": 1085.75
+            },
+            "font_size": "24.48px",
+            "line_height": "36.72px",
+            "outline": "rgb(22, 79, 99) none 3px",
+            "child_rects": []
+          }
+        ],
+        "section_axis_bounds": [
+          {
+            "text": "A",
+            "rect": {
+              "x": 53,
+              "y": 614.703125,
+              "width": 14,
+              "height": 21,
+              "top": 614.703125,
+              "right": 67,
+              "bottom": 635.703125,
+              "left": 53
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 579.40625,
+              "width": 1050.203125,
+              "height": 292.59375,
+              "top": 579.40625,
+              "right": 1050.203125,
+              "bottom": 872,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "B",
+            "rect": {
+              "x": 1030.203125,
+              "y": 614.703125,
+              "width": 11.0625,
+              "height": 21,
+              "top": 614.703125,
+              "right": 1041.265625,
+              "bottom": 635.703125,
+              "left": 1030.203125
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 579.40625,
+              "width": 1050.203125,
+              "height": 292.59375,
+              "top": 579.40625,
+              "right": 1050.203125,
+              "bottom": 872,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "標高（m）",
+            "rect": {
+              "x": 3,
+              "y": 699.203125,
+              "width": 16,
+              "height": 60,
+              "top": 699.203125,
+              "right": 19,
+              "bottom": 759.203125,
+              "left": 3
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 579.40625,
+              "width": 1050.203125,
+              "height": 292.59375,
+              "top": 579.40625,
+              "right": 1050.203125,
+              "bottom": 872,
+              "left": 0
+            },
+            "font_size": "12px"
+          },
+          {
+            "text": "Aからの距離（m）",
+            "rect": {
+              "x": 472.3828125,
+              "y": 800.703125,
+              "width": 104.4375,
+              "height": 16,
+              "top": 800.703125,
+              "right": 576.8203125,
+              "bottom": 816.703125,
+              "left": 472.3828125
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 579.40625,
+              "width": 1050.203125,
+              "height": 292.59375,
+              "top": 579.40625,
+              "right": 1050.203125,
+              "bottom": 872,
+              "left": 0
+            },
+            "font_size": "12px"
+          },
+          {
+            "text": "建物 · 126m · 標高73.2m",
+            "rect": {
+              "x": 249.71304321289062,
+              "y": 687.703125,
+              "width": 129.453125,
+              "height": 16,
+              "top": 687.703125,
+              "right": 379.1661682128906,
+              "bottom": 703.703125,
+              "left": 249.71304321289062
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 579.40625,
+              "width": 1050.203125,
+              "height": 292.59375,
+              "top": 579.40625,
+              "right": 1050.203125,
+              "bottom": 872,
+              "left": 0
+            },
+            "font_size": "12px"
+          }
+        ],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+          "root": {
+            "guidedStory": "understand",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+            "contextStatus": "ready",
+            "contextBuildings": "303",
+            "contextRoads": "135",
+            "contextPlanning": "8",
+            "sectionPack": "maizuru-533513314-plateau-2025-v1",
+            "targetResolution": "exact",
+            "targetKind": "building",
+            "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "objectKind": "building",
+            "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+          },
+          "readiness": {
+            "basemap": "ready",
+            "analysis": "ready",
+            "buildingTilesLoaded": "pack-296",
+            "localDem": "ready",
+            "broadTerrain": "not-requested-local-dem",
+            "analysisLens": "none",
+            "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "selectedRoadId": "",
+            "overlay": "ready",
+            "futuresMap": "idle",
+            "futuresVisible": "0",
+            "pulseMarkers": "0",
+            "canvasCssSize": "1050x470",
+            "drawingBufferSize": "1050x470",
+            "optionalGlobeRequests": "21",
+            "optionalBuildingRequests": "0",
+            "visualReady": "true",
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualUnmet": "",
+            "cameraSettled": "true",
+            "canvasSizeReady": "true",
+            "buildingFeatureCount": "856",
+            "buildingContentReady": "true",
+            "renderedBuildingFeatureCount": "856",
+            "targetBuildingCount": "296",
+            "loadedTargetBuildingCount": "296",
+            "visibleTargetBuildingCount": "296",
+            "targetCoverageRatio": "1.000000",
+            "packArtifactsReady": "true",
+            "packArtifactBytes": "4777932",
+            "terrainTileCount": "20",
+            "terrainReady": "true",
+            "localDemReady": "true",
+            "roadsReady": "true",
+            "stableFrames": "13",
+            "criticalRequests": "0",
+            "terrainSource": "plateau-local-dem",
+            "buildingSource": "spatial-evidence-pack",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "sectionPlaneReady": "true",
+            "sectionFocusReady": "false",
+            "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+            "packSourceTileCount": "3"
+          },
+          "canvas": {
+            "width": 1050,
+            "height": 470
+          },
+          "globe_visible": true,
+          "camera": {
+            "height": 494.4953415662877,
+            "heading": 0.4188526582923542,
+            "pitch": -0.6284098948802979
+          },
+          "tilesets": [
+            {
+              "url": "/plateau-city-gap/data/plateau/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 3,
+              "selected_features": 856,
+              "loaded_features": 856,
+              "selected_tiles": 3,
+              "pending": 0,
+              "processing": 0
+            },
+            {
+              "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 1,
+              "selected_features": 0,
+              "loaded_features": 0,
+              "selected_tiles": 1,
+              "pending": 0,
+              "processing": 0
+            }
+          ],
+          "inspector_text": "範囲選択へ戻る常団地前周辺選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階PLATEAU 舞鶴市 2025 · LOD1選択対象の出典IDbldg_a490fb5b-d668-441e-b9af-5b35c4629006この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+          "checks": []
+        }
+      }
+    },
+    {
+      "filename": "04-advanced-section-1920.png",
+      "sha256": "07e34e794e60027ce827848bc21e8682d1c2bcf88b785634020ed2083ab0cb53",
+      "bytes": 803978,
+      "issue": "Advanced1920 Section axis positions, actualobject attributes and fieldchecks",
+      "captured_utc": "2026-09-05T13:12:14.328Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.7228471&selectionLat=35.9583076",
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "roots": {
+          "public": {},
+          "guided": {},
+          "advanced": {
+            "experience": "advanced",
+            "areaId": "533513314",
+            "selectedObject": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "targetResolution": "exact",
+            "contextStatus": "ready"
+          }
+        },
+        "readiness": {
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualReady": "true",
+          "visualScene": "plateau_detail",
+          "perfAppShellMs": "147",
+          "visualUnmet": "",
+          "perfThreeDFirstMeaningfulMs": "1242",
+          "perfPackInteractionMs": "2225",
+          "perfVisualCompleteMs": "2247",
+          "perfCaptureStrictMs": "2306"
+        },
+        "object_attributes": {},
+        "target": {
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "unconfirmed": "3"
+        },
+        "target_text": "対象を特定選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階公式PLATEAU属性 · 舞鶴市 2025 · LOD1現地で確認すること 3件・未確認○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。選択を解除対象IDと出典bldg_a490fb5b-d668-441e-b9af-5b35c4629006Project PLATEAU Maizuru 2025 CityGML / 26202_maizuru-shi_city_2025_citygml_1_op",
+        "checks": [
+          "○建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+          "○建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+          "○入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+        ],
+        "section": {
+          "uiMode": "advanced",
+          "readable": "true",
+          "transectReady": "true",
+          "buildingCount": "63",
+          "directBuildingCount": "17",
+          "roadCount": "14",
+          "directRoadCount": "14",
+          "terrainSamples": "94",
+          "terrainCovered": "94",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "staticAnnotationCount": "6",
+          "roadAnnotationCount": "4",
+          "hiddenLowPriorityAnnotations": "6",
+          "annotationOverlapCount": "0",
+          "annotationCalculationMs": "1.6",
+          "selectedAnnotationVisible": "true",
+          "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "focusedObjectKind": "none",
+          "focusedObjectId": "none",
+          "counterfactualReady": "true",
+          "serviceSectionReady": "true",
+          "sectionContainerWidth": "1500"
+        },
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "BUTTON",
+          "text": "A–B断面",
+          "focus_visible": false,
+          "outline": "rgb(255, 255, 255) none 3px"
+        },
+        "heading_layout": [],
+        "section_axis_bounds": [
+          {
+            "text": "A",
+            "rect": {
+              "x": 53,
+              "y": 782,
+              "width": 14,
+              "height": 21,
+              "top": 782,
+              "right": 67,
+              "bottom": 803,
+              "left": 53
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 764,
+              "width": 1500,
+              "height": 258,
+              "top": 764,
+              "right": 1500,
+              "bottom": 1022,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "B",
+            "rect": {
+              "x": 1480,
+              "y": 782,
+              "width": 11.0625,
+              "height": 21,
+              "top": 782,
+              "right": 1491.0625,
+              "bottom": 803,
+              "left": 1480
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 764,
+              "width": 1500,
+              "height": 258,
+              "top": 764,
+              "right": 1500,
+              "bottom": 1022,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "標高（m）",
+            "rect": {
+              "x": 3,
+              "y": 866.5,
+              "width": 16,
+              "height": 60,
+              "top": 866.5,
+              "right": 19,
+              "bottom": 926.5,
+              "left": 3
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 764,
+              "width": 1500,
+              "height": 258,
+              "top": 764,
+              "right": 1500,
+              "bottom": 1022,
+              "left": 0
+            },
+            "font_size": "12px"
+          },
+          {
+            "text": "Aからの距離（m）",
+            "rect": {
+              "x": 697.28125,
+              "y": 968,
+              "width": 104.4375,
+              "height": 16,
+              "top": 968,
+              "right": 801.71875,
+              "bottom": 984,
+              "left": 697.28125
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 764,
+              "width": 1500,
+              "height": 258,
+              "top": 764,
+              "right": 1500,
+              "bottom": 1022,
+              "left": 0
+            },
+            "font_size": "12px"
+          },
+          {
+            "text": "建物 · 126m · 標高73.2m",
+            "rect": {
+              "x": 372.1434020996094,
+              "y": 855,
+              "width": 129.453125,
+              "height": 16,
+              "top": 855,
+              "right": 501.5965270996094,
+              "bottom": 871,
+              "left": 372.1434020996094
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 764,
+              "width": 1500,
+              "height": 258,
+              "top": 764,
+              "right": 1500,
+              "bottom": 1022,
+              "left": 0
+            },
+            "font_size": "12px"
+          }
+        ],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.7228471&selectionLat=35.9583076",
+          "root": {},
+          "readiness": {
+            "basemap": "ready",
+            "analysis": "ready",
+            "buildingTilesLoaded": "pack-296",
+            "localDem": "ready",
+            "broadTerrain": "not-requested-local-dem",
+            "analysisLens": "none",
+            "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+            "selectedRoadId": "",
+            "overlay": "ready",
+            "futuresMap": "idle",
+            "futuresVisible": "0",
+            "pulseMarkers": "0",
+            "canvasCssSize": "1500x650",
+            "drawingBufferSize": "1500x650",
+            "optionalGlobeRequests": "37",
+            "optionalBuildingRequests": "0",
+            "visualReady": "true",
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualUnmet": "",
+            "cameraSettled": "true",
+            "canvasSizeReady": "true",
+            "buildingFeatureCount": "856",
+            "buildingContentReady": "true",
+            "renderedBuildingFeatureCount": "856",
+            "targetBuildingCount": "296",
+            "loadedTargetBuildingCount": "296",
+            "visibleTargetBuildingCount": "296",
+            "targetCoverageRatio": "1.000000",
+            "packArtifactsReady": "true",
+            "packArtifactBytes": "4777932",
+            "terrainTileCount": "38",
+            "terrainReady": "true",
+            "localDemReady": "true",
+            "roadsReady": "true",
+            "stableFrames": "15",
+            "criticalRequests": "0",
+            "terrainSource": "plateau-local-dem",
+            "buildingSource": "spatial-evidence-pack",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "sectionPlaneReady": "true",
+            "sectionFocusReady": "false",
+            "packSourceTileCount": "3",
+            "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section"
+          },
+          "canvas": {
+            "width": 1500,
+            "height": 650
+          },
+          "globe_visible": true,
+          "camera": {
+            "height": 494.4953415662877,
+            "heading": 0.4188526582923542,
+            "pitch": -0.6284098948802979
+          },
+          "tilesets": [
+            {
+              "url": "/plateau-city-gap/data/plateau/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 3,
+              "selected_features": 856,
+              "loaded_features": 856,
+              "selected_tiles": 3,
+              "pending": 0,
+              "processing": 0
+            },
+            {
+              "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 1,
+              "selected_features": 0,
+              "loaded_features": 0,
+              "selected_tiles": 1,
+              "pending": 0,
+              "processing": 0
+            }
+          ],
+          "inspector_text": null,
+          "checks": []
+        }
+      }
+    },
+    {
+      "filename": "05-mobile-section-390.png",
+      "sha256": "175e3b61f3bea09f29cb8bc599c0369b08c7eab2f70f1c09055db5e6d9f190aa",
+      "bytes": 71144,
+      "issue": "Mobile390 Section axis containment/readable typography with explicit3D return control",
+      "captured_utc": "2026-09-05T13:12:16.919Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "roots": {
+          "public": {},
+          "guided": {
+            "guidedStory": "understand",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+            "contextStatus": "ready",
+            "contextBuildings": "303",
+            "contextRoads": "135",
+            "contextPlanning": "8",
+            "sectionPack": "maizuru-533513314-plateau-2025-v1",
+            "targetResolution": "exact",
+            "targetKind": "road",
+            "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+            "objectKind": "none",
+            "objectId": "none"
+          },
+          "advanced": {}
+        },
+        "readiness": {
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualReady": "true",
+          "visualScene": "plateau_detail",
+          "perfAppShellMs": "265",
+          "visualUnmet": "",
+          "perfThreeDFirstMeaningfulMs": "637",
+          "perfPackInteractionMs": "1496",
+          "perfVisualCompleteMs": "1532",
+          "perfCaptureStrictMs": "1567"
+        },
+        "inspector_text": "範囲選択へ戻る常団地前周辺3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+        "object_attributes": {},
+        "target": {},
+        "checks": [],
+        "section": {
+          "uiMode": "guided",
+          "readable": "true",
+          "transectReady": "true",
+          "buildingCount": "63",
+          "directBuildingCount": "17",
+          "roadCount": "14",
+          "directRoadCount": "14",
+          "terrainSamples": "94",
+          "terrainCovered": "94",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "staticAnnotationCount": "4",
+          "roadAnnotationCount": "2",
+          "hiddenLowPriorityAnnotations": "8",
+          "annotationOverlapCount": "0",
+          "annotationCalculationMs": "0.1",
+          "selectedAnnotationVisible": "false",
+          "selectionAnnotationId": "none",
+          "focusedObjectKind": "none",
+          "focusedObjectId": "none",
+          "counterfactualReady": "true",
+          "serviceSectionReady": "true",
+          "sectionContainerWidth": "390"
+        },
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "BUTTON",
+          "text": "街の断面",
+          "focus_visible": false,
+          "outline": "rgb(252, 252, 249) none 3px"
+        },
+        "heading_layout": [
+          {
+            "text": "常団地前周辺",
+            "rect": {
+              "x": 18,
+              "y": 557,
+              "width": 354,
+              "height": 33,
+              "top": 557,
+              "right": 372,
+              "bottom": 590,
+              "left": 18
+            },
+            "font_size": "22px",
+            "line_height": "33px",
+            "outline": "rgb(22, 79, 99) none 3px",
+            "child_rects": []
+          }
+        ],
+        "section_axis_bounds": [
+          {
+            "text": "A",
+            "rect": {
+              "x": 53,
+              "y": 154,
+              "width": 14,
+              "height": 21,
+              "top": 154,
+              "right": 67,
+              "bottom": 175,
+              "left": 53
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 115,
+              "width": 390,
+              "height": 300,
+              "top": 115,
+              "right": 390,
+              "bottom": 415,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "B",
+            "rect": {
+              "x": 370,
+              "y": 154,
+              "width": 11.0625,
+              "height": 21,
+              "top": 154,
+              "right": 381.0625,
+              "bottom": 175,
+              "left": 370
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 115,
+              "width": 390,
+              "height": 300,
+              "top": 115,
+              "right": 390,
+              "bottom": 415,
+              "left": 0
+            },
+            "font_size": "16px"
+          },
+          {
+            "text": "標高（m）",
+            "rect": {
+              "x": 3,
+              "y": 238.5,
+              "width": 16,
+              "height": 60,
+              "top": 238.5,
+              "right": 19,
+              "bottom": 298.5,
+              "left": 3
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 115,
+              "width": 390,
+              "height": 300,
+              "top": 115,
+              "right": 390,
+              "bottom": 415,
+              "left": 0
+            },
+            "font_size": "12px"
+          },
+          {
+            "text": "Aからの距離（m）",
+            "rect": {
+              "x": 142.28125,
+              "y": 340,
+              "width": 104.4375,
+              "height": 16,
+              "top": 340,
+              "right": 246.71875,
+              "bottom": 356,
+              "left": 142.28125
+            },
+            "svg_rect": {
+              "x": 0,
+              "y": 115,
+              "width": 390,
+              "height": 300,
+              "top": 115,
+              "right": 390,
+              "bottom": 415,
+              "left": 0
+            },
+            "font_size": "12px"
+          }
+        ],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44792&z=15.05&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+          "root": {
+            "guidedStory": "understand",
+            "areaId": "533513314",
+            "areaLabel": "常団地前周辺",
+            "hoveredAreaId": "none",
+            "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+            "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+            "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+            "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+            "contextStatus": "ready",
+            "contextBuildings": "303",
+            "contextRoads": "135",
+            "contextPlanning": "8",
+            "sectionPack": "maizuru-533513314-plateau-2025-v1",
+            "targetResolution": "exact",
+            "targetKind": "road",
+            "targetKey": "road:tran_05dbefba-6a77-40ea-88ac-a568a63a2f05:0",
+            "objectKind": "none",
+            "objectId": "none"
+          },
+          "readiness": {
+            "basemap": "ready",
+            "analysis": "ready",
+            "buildingTilesLoaded": "pack-296",
+            "localDem": "ready",
+            "broadTerrain": "not-requested-local-dem",
+            "analysisLens": "none",
+            "selectedBuildingId": "",
+            "selectedRoadId": "",
+            "overlay": "ready",
+            "futuresMap": "idle",
+            "futuresVisible": "0",
+            "pulseMarkers": "0",
+            "canvasCssSize": "390x383",
+            "drawingBufferSize": "390x383",
+            "optionalGlobeRequests": "21",
+            "optionalBuildingRequests": "0",
+            "visualReady": "true",
+            "interactionReady": "true",
+            "visualComplete": "true",
+            "captureStrictReady": "true",
+            "visualUnmet": "",
+            "cameraSettled": "true",
+            "canvasSizeReady": "true",
+            "buildingFeatureCount": "856",
+            "buildingContentReady": "true",
+            "renderedBuildingFeatureCount": "856",
+            "targetBuildingCount": "296",
+            "loadedTargetBuildingCount": "296",
+            "visibleTargetBuildingCount": "296",
+            "targetCoverageRatio": "1.000000",
+            "packArtifactsReady": "true",
+            "packArtifactBytes": "4777932",
+            "terrainTileCount": "19",
+            "terrainReady": "true",
+            "localDemReady": "true",
+            "roadsReady": "true",
+            "stableFrames": "40",
+            "criticalRequests": "0",
+            "terrainSource": "plateau-local-dem",
+            "buildingSource": "spatial-evidence-pack",
+            "packId": "maizuru-533513314-plateau-2025-v1",
+            "sectionPlaneReady": "true",
+            "sectionFocusReady": "false",
+            "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+            "packSourceTileCount": "3"
+          },
+          "canvas": {
+            "width": 390,
+            "height": 383
+          },
+          "globe_visible": true,
+          "camera": {
+            "height": 570.9179258848687,
+            "heading": 0.41884789949089285,
+            "pitch": -0.6284263898988782
+          },
+          "tilesets": [
+            {
+              "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 1,
+              "selected_features": 0,
+              "loaded_features": 0,
+              "selected_tiles": 1,
+              "pending": 0,
+              "processing": 0
+            },
+            {
+              "url": "/plateau-city-gap/data/plateau/tileset.json",
+              "show": true,
+              "tiles_loaded": true,
+              "content_ready": 3,
+              "selected_features": 856,
+              "loaded_features": 856,
+              "selected_tiles": 3,
+              "pending": 0,
+              "processing": 0
+            }
+          ],
+          "inspector_text": "範囲選択へ戻る常団地前周辺3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+          "checks": []
+        }
+      }
+    },
+    {
+      "filename": "06-public-320.png",
+      "sha256": "b19ab2b4ce1e42ab70ba576064194af91acfc77c45570d05c239793af0a571b4",
+      "bytes": 124960,
+      "issue": "Public320 headline natural phrase wrapping, automatic-entry focus and reachableprimary/3D entry",
+      "captured_utc": "2026-09-05T13:12:18.048Z",
+      "evidence": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+        "viewport": {
+          "width": 320,
+          "height": 844
+        },
+        "roots": {
+          "public": {
+            "experience": "public-first-run",
+            "publicStep": "intro",
+            "mapMode": "map2d",
+            "activeStory": "none",
+            "cartographyState": "loading",
+            "storyCartographyLoading": "none",
+            "targetCartographyState": "idle",
+            "presentationTargetKind": "none",
+            "presentationTargetResolution": "none",
+            "publicUrbanSection": "advanced_only"
+          },
+          "guided": {},
+          "advanced": {}
+        },
+        "readiness": {
+          "interactionReady": "false",
+          "visualComplete": "false",
+          "captureStrictReady": "false",
+          "visualReady": "false",
+          "visualScene": "gap_discovery",
+          "perfAppShellMs": "146"
+        },
+        "inspector_text": "舞鶴を、地図で調べる。場所と範囲を選び、人口・建物・交通などを確認します。地図で場所を調べるPLATEAUで街を3Dで見る常団地前周辺の実例",
+        "object_attributes": {},
+        "target": {},
+        "checks": [],
+        "section": {},
+        "overflow_pixels": 0,
+        "focus": {
+          "tag": "H1",
+          "text": "舞鶴を、地図で調べる。",
+          "focus_visible": true,
+          "outline": "rgb(22, 79, 99) none 3px"
+        },
+        "heading_layout": [
+          {
+            "text": "舞鶴を、地図で調べる。",
+            "rect": {
+              "x": 15,
+              "y": 428.46875,
+              "width": 290,
+              "height": 37.1875,
+              "top": 428.46875,
+              "right": 305,
+              "bottom": 465.65625,
+              "left": 15
+            },
+            "font_size": "24.8px",
+            "line_height": "37.2px",
+            "outline": "rgb(22, 79, 99) none 3px",
+            "child_rects": [
+              {
+                "text": "舞鶴を、",
+                "rect": {
+                  "x": 15,
+                  "y": 428.46875,
+                  "width": 97.21875,
+                  "height": 37.1875,
+                  "top": 428.46875,
+                  "right": 112.21875,
+                  "bottom": 465.65625,
+                  "left": 15
+                }
+              },
+              {
+                "text": "地図で調べる。",
+                "rect": {
+                  "x": 112.21875,
+                  "y": 428.46875,
+                  "width": 170.140625,
+                  "height": 37.1875,
+                  "top": 428.46875,
+                  "right": 282.359375,
+                  "bottom": 465.65625,
+                  "left": 112.21875
+                }
+              }
+            ]
+          }
+        ],
+        "section_axis_bounds": [],
+        "engine": {
+          "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=landing&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=map2d&intent=discover&resolution=city&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.33000&lat=35.47000&z=10.45",
+          "root": {},
+          "readiness": {},
+          "canvas": null,
+          "globe_visible": null,
+          "camera": null,
+          "tilesets": [],
+          "inspector_text": null,
+          "checks": []
+        }
+      }
+    }
+  ],
+  "timings": {
+    "comparison_sample_taken": false,
+    "reason": "Local UI review only. The single matched after performance sample runs on production after deployment."
+  },
+  "inspections": {
+    "guided_actual_attributes_no_png": {
+      "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "roots": {
+        "public": {},
+        "guided": {
+          "guidedStory": "understand",
+          "areaId": "533513314",
+          "areaLabel": "常団地前周辺",
+          "hoveredAreaId": "none",
+          "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+          "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+          "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+          "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+          "contextStatus": "ready",
+          "contextBuildings": "303",
+          "contextRoads": "135",
+          "contextPlanning": "8",
+          "sectionPack": "maizuru-533513314-plateau-2025-v1",
+          "targetResolution": "exact",
+          "targetKind": "building",
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectKind": "building",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "advanced": {}
+      },
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "147",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "1242",
+        "perfPackInteractionMs": "2225",
+        "perfVisualCompleteMs": "2247",
+        "perfCaptureStrictMs": "2306"
+      },
+      "inspector_text": "範囲選択へ戻る常団地前周辺選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階PLATEAU 舞鶴市 2025 · LOD1選択対象の出典IDbldg_a490fb5b-d668-441e-b9af-5b35c4629006この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+      "object_attributes": {
+        "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "objectKind": "building"
+      },
+      "target": {},
+      "checks": [],
+      "section": {},
+      "overflow_pixels": 0,
+      "focus": {
+        "tag": "BODY",
+        "text": "\n    CITY GAP舞鶴市詳細分析Use Ctrl + scroll to zoom the mapUse two fingers to move the map100 mCITY GAP | 地理院タイル表示密度詳細：建物・経路N ↑Data provided by:×地理院タイルData attributio",
+        "focus_visible": false,
+        "outline": "rgb(21, 36, 43) none 3px"
+      },
+      "heading_layout": [
+        {
+          "text": "常団地前周辺",
+          "rect": {
+            "x": 1085.75,
+            "y": 140.546875,
+            "width": 304.703125,
+            "height": 36.71875,
+            "top": 140.546875,
+            "right": 1390.453125,
+            "bottom": 177.265625,
+            "left": 1085.75
+          },
+          "font_size": "24.48px",
+          "line_height": "36.72px",
+          "outline": "rgb(22, 79, 99) none 3px",
+          "child_rects": []
+        }
+      ],
+      "section_axis_bounds": [],
+      "engine": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "root": {
+          "guidedStory": "understand",
+          "areaId": "533513314",
+          "areaLabel": "常団地前周辺",
+          "hoveredAreaId": "none",
+          "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+          "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+          "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+          "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+          "contextStatus": "ready",
+          "contextBuildings": "303",
+          "contextRoads": "135",
+          "contextPlanning": "8",
+          "sectionPack": "maizuru-533513314-plateau-2025-v1",
+          "targetResolution": "exact",
+          "targetKind": "building",
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectKind": "building",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "readiness": {
+          "basemap": "ready",
+          "analysis": "ready",
+          "buildingTilesLoaded": "pack-296",
+          "localDem": "ready",
+          "broadTerrain": "not-requested-local-dem",
+          "analysisLens": "none",
+          "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "selectedRoadId": "",
+          "overlay": "ready",
+          "futuresMap": "idle",
+          "futuresVisible": "0",
+          "pulseMarkers": "0",
+          "canvasCssSize": "1050x840",
+          "drawingBufferSize": "1050x840",
+          "optionalGlobeRequests": "28",
+          "optionalBuildingRequests": "0",
+          "visualReady": "true",
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualUnmet": "",
+          "cameraSettled": "true",
+          "canvasSizeReady": "true",
+          "buildingFeatureCount": "856",
+          "buildingContentReady": "true",
+          "renderedBuildingFeatureCount": "856",
+          "targetBuildingCount": "296",
+          "loadedTargetBuildingCount": "296",
+          "visibleTargetBuildingCount": "296",
+          "targetCoverageRatio": "1.000000",
+          "packArtifactsReady": "true",
+          "packArtifactBytes": "4777932",
+          "terrainTileCount": "1",
+          "terrainReady": "true",
+          "localDemReady": "true",
+          "roadsReady": "true",
+          "stableFrames": "13",
+          "criticalRequests": "0",
+          "terrainSource": "plateau-local-dem",
+          "buildingSource": "spatial-evidence-pack",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "sectionPlaneReady": "true",
+          "sectionFocusReady": "false",
+          "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+          "packSourceTileCount": "3"
+        },
+        "canvas": {
+          "width": 1050,
+          "height": 840
+        },
+        "globe_visible": true,
+        "camera": {
+          "height": 494.4953415662877,
+          "heading": 0.4188526582923542,
+          "pitch": -0.6284098948802979
+        },
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "inspector_text": "範囲選択へ戻る常団地前周辺選択した建物用途住宅建物高さ8.5m地上階数2階地下階数0階PLATEAU 舞鶴市 2025 · LOD1選択対象の出典IDbldg_a490fb5b-d668-441e-b9af-5b35c4629006この地域の人口 471人うち65歳以上 200人（国勢調査2020・500m集計）この範囲の建物・道路PLATEAU建物 303棟・道路面 135件範囲と交差する2D地物の集計。3D画面内の描画数ではありません。出入口や通行条件は、現地で確認LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。確認場所を見る",
+        "checks": []
+      }
+    },
+    "section_typography_1440": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "section": {
+        "uiMode": "guided",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "6",
+        "roadAnnotationCount": "4",
+        "hiddenLowPriorityAnnotations": "6",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.2",
+        "selectedAnnotationVisible": "true",
+        "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "1050.203125"
+      },
+      "svg": [
+        {
+          "rect": {
+            "x": 0,
+            "y": 579.40625,
+            "width": 1050.203125,
+            "height": 292.59375,
+            "top": 579.40625,
+            "right": 1050.203125,
+            "bottom": 872,
+            "left": 0
+          },
+          "viewBox": "0 0 1050.203125 220",
+          "texts": [
+            {
+              "text": "A",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 53,
+                "y": 614.703125,
+                "width": 14,
+                "height": 21,
+                "top": 614.703125,
+                "right": 67,
+                "bottom": 635.703125,
+                "left": 53
+              }
+            },
+            {
+              "text": "B",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 1030.203125,
+                "y": 614.703125,
+                "width": 11.0625,
+                "height": 21,
+                "top": 614.703125,
+                "right": 1041.265625,
+                "bottom": 635.703125,
+                "left": 1030.203125
+              }
+            },
+            {
+              "text": "65.5",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 780.703125,
+                "width": 23.21875,
+                "height": 16,
+                "top": 780.703125,
+                "right": 50.328125,
+                "bottom": 796.703125,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "81.9",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 709.703125,
+                "width": 23.21875,
+                "height": 16,
+                "top": 709.703125,
+                "right": 50.328125,
+                "bottom": 725.703125,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "98.3",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 638.703125,
+                "width": 23.21875,
+                "height": 16,
+                "top": 638.703125,
+                "right": 50.328125,
+                "bottom": 654.703125,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "0",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 50.6640625,
+                "y": 817.703125,
+                "width": 7,
+                "height": 16,
+                "top": 817.703125,
+                "right": 57.6640625,
+                "bottom": 833.703125,
+                "left": 50.6640625
+              }
+            },
+            {
+              "text": "116",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 288.05078125,
+                "y": 817.703125,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 817.703125,
+                "right": 308.375,
+                "bottom": 833.703125,
+                "left": 288.05078125
+              }
+            },
+            {
+              "text": "231",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 532.1015625,
+                "y": 817.703125,
+                "width": 20,
+                "height": 16,
+                "top": 817.703125,
+                "right": 552.1015625,
+                "bottom": 833.703125,
+                "left": 532.1015625
+              }
+            },
+            {
+              "text": "347",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 776.26953125,
+                "y": 817.703125,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 817.703125,
+                "right": 796.59375,
+                "bottom": 833.703125,
+                "left": 776.26953125
+              }
+            },
+            {
+              "text": "462",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 1019.203125,
+                "y": 817.703125,
+                "width": 21.32421875,
+                "height": 16,
+                "top": 817.703125,
+                "right": 1040.52734375,
+                "bottom": 833.703125,
+                "left": 1019.203125
+              }
+            },
+            {
+              "text": "標高（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 3,
+                "y": 699.203125,
+                "width": 16,
+                "height": 60,
+                "top": 699.203125,
+                "right": 19,
+                "bottom": 759.203125,
+                "left": 3
+              }
+            },
+            {
+              "text": "Aからの距離（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 472.3828125,
+                "y": 800.703125,
+                "width": 104.4375,
+                "height": 16,
+                "top": 800.703125,
+                "right": 576.8203125,
+                "bottom": 816.703125,
+                "left": 472.3828125
+              }
+            },
+            {
+              "text": "東椿線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 134.6387481689453,
+                "y": 634.703125,
+                "width": 37,
+                "height": 16,
+                "top": 634.703125,
+                "right": 171.6387481689453,
+                "bottom": 650.703125,
+                "left": 134.6387481689453
+              }
+            },
+            {
+              "text": "椿川通線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 384.5054016113281,
+                "y": 634.703125,
+                "width": 50,
+                "height": 16,
+                "top": 634.703125,
+                "right": 434.5054016113281,
+                "bottom": 650.703125,
+                "left": 384.5054016113281
+              }
+            },
+            {
+              "text": "青山一号通線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 609.98876953125,
+                "y": 634.703125,
+                "width": 73,
+                "height": 16,
+                "top": 634.703125,
+                "right": 682.98876953125,
+                "bottom": 650.703125,
+                "left": 609.98876953125
+              }
+            },
+            {
+              "text": "京月一号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 855.6884765625,
+                "y": 634.703125,
+                "width": 61,
+                "height": 16,
+                "top": 634.703125,
+                "right": 916.6884765625,
+                "bottom": 650.703125,
+                "left": 855.6884765625
+              }
+            },
+            {
+              "text": "選択中 · 住宅",
+              "font_size": 13,
+              "transform_scale": 1,
+              "approximate_css_font_px": 13,
+              "rect": {
+                "x": 248.71304321289062,
+                "y": 670.703125,
+                "width": 77.390625,
+                "height": 17,
+                "top": 670.703125,
+                "right": 326.1036682128906,
+                "bottom": 687.703125,
+                "left": 248.71304321289062
+              }
+            },
+            {
+              "text": "建物 · 126m · 標高73.2m",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 249.71304321289062,
+                "y": 687.703125,
+                "width": 129.453125,
+                "height": 16,
+                "top": 687.703125,
+                "right": 379.1661682128906,
+                "bottom": 703.703125,
+                "left": 249.71304321289062
+              }
+            },
+            {
+              "text": "断面から約10m",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 249.71304321289062,
+                "y": 702.703125,
+                "width": 82.490234375,
+                "height": 16,
+                "top": 702.703125,
+                "right": 332.2032775878906,
+                "bottom": 718.703125,
+                "left": 249.71304321289062
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "section_typography_1280": {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "section": {
+        "uiMode": "guided",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "6",
+        "roadAnnotationCount": "4",
+        "hiddenLowPriorityAnnotations": "6",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.2",
+        "selectedAnnotationVisible": "true",
+        "selectionAnnotationId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "919"
+      },
+      "svg": [
+        {
+          "rect": {
+            "x": 0,
+            "y": 465,
+            "width": 919,
+            "height": 229,
+            "top": 465,
+            "right": 919,
+            "bottom": 694,
+            "left": 0
+          },
+          "viewBox": "0 0 919 220",
+          "texts": [
+            {
+              "text": "A",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 53,
+                "y": 468.5,
+                "width": 14,
+                "height": 21,
+                "top": 468.5,
+                "right": 67,
+                "bottom": 489.5,
+                "left": 53
+              }
+            },
+            {
+              "text": "B",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 899,
+                "y": 468.5,
+                "width": 11.0625,
+                "height": 21,
+                "top": 468.5,
+                "right": 910.0625,
+                "bottom": 489.5,
+                "left": 899
+              }
+            },
+            {
+              "text": "65.5",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 634.5,
+                "width": 23.21875,
+                "height": 16,
+                "top": 634.5,
+                "right": 50.328125,
+                "bottom": 650.5,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "81.9",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 563.5,
+                "width": 23.21875,
+                "height": 16,
+                "top": 563.5,
+                "right": 50.328125,
+                "bottom": 579.5,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "98.3",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 492.5,
+                "width": 23.21875,
+                "height": 16,
+                "top": 492.5,
+                "right": 50.328125,
+                "bottom": 508.5,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "0",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 50.6640625,
+                "y": 671.5,
+                "width": 7,
+                "height": 16,
+                "top": 671.5,
+                "right": 57.6640625,
+                "bottom": 687.5,
+                "left": 50.6640625
+              }
+            },
+            {
+              "text": "116",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 255.25,
+                "y": 671.5,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 671.5,
+                "right": 275.57421875,
+                "bottom": 687.5,
+                "left": 255.25
+              }
+            },
+            {
+              "text": "231",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 466.5,
+                "y": 671.5,
+                "width": 20,
+                "height": 16,
+                "top": 671.5,
+                "right": 486.5,
+                "bottom": 687.5,
+                "left": 466.5
+              }
+            },
+            {
+              "text": "347",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 677.8671875,
+                "y": 671.5,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 671.5,
+                "right": 698.19140625,
+                "bottom": 687.5,
+                "left": 677.8671875
+              }
+            },
+            {
+              "text": "462",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 888,
+                "y": 671.5,
+                "width": 21.32421875,
+                "height": 16,
+                "top": 671.5,
+                "right": 909.32421875,
+                "bottom": 687.5,
+                "left": 888
+              }
+            },
+            {
+              "text": "標高（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 3,
+                "y": 553,
+                "width": 16,
+                "height": 60,
+                "top": 553,
+                "right": 19,
+                "bottom": 613,
+                "left": 3
+              }
+            },
+            {
+              "text": "Aからの距離（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 406.78125,
+                "y": 654.5,
+                "width": 104.4375,
+                "height": 16,
+                "top": 654.5,
+                "right": 511.21875,
+                "bottom": 670.5,
+                "left": 406.78125
+              }
+            },
+            {
+              "text": "東椿線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 121.38156127929688,
+                "y": 488.5,
+                "width": 37,
+                "height": 16,
+                "top": 488.5,
+                "right": 158.38156127929688,
+                "bottom": 504.5,
+                "left": 121.38156127929688
+              }
+            },
+            {
+              "text": "椿川通線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 336.7249450683594,
+                "y": 488.5,
+                "width": 50,
+                "height": 16,
+                "top": 488.5,
+                "right": 386.7249450683594,
+                "bottom": 504.5,
+                "left": 336.7249450683594
+              }
+            },
+            {
+              "text": "青山一号通線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 530.4246215820312,
+                "y": 488.5,
+                "width": 73,
+                "height": 16,
+                "top": 488.5,
+                "right": 603.4246215820312,
+                "bottom": 504.5,
+                "left": 530.4246215820312
+              }
+            },
+            {
+              "text": "京月一号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 743.9083251953125,
+                "y": 488.5,
+                "width": 61,
+                "height": 16,
+                "top": 488.5,
+                "right": 804.9083251953125,
+                "bottom": 504.5,
+                "left": 743.9083251953125
+              }
+            },
+            {
+              "text": "選択中 · 住宅",
+              "font_size": 13,
+              "transform_scale": 1,
+              "approximate_css_font_px": 13,
+              "rect": {
+                "x": 213.00082397460938,
+                "y": 524.5,
+                "width": 77.390625,
+                "height": 17,
+                "top": 524.5,
+                "right": 290.3914489746094,
+                "bottom": 541.5,
+                "left": 213.00082397460938
+              }
+            },
+            {
+              "text": "建物 · 126m · 標高73.2m",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 214.00082397460938,
+                "y": 541.5,
+                "width": 129.453125,
+                "height": 16,
+                "top": 541.5,
+                "right": 343.4539489746094,
+                "bottom": 557.5,
+                "left": 214.00082397460938
+              }
+            },
+            {
+              "text": "断面から約10m",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 214.00082397460938,
+                "y": 556.5,
+                "width": 82.490234375,
+                "height": 16,
+                "top": 556.5,
+                "right": 296.4910583496094,
+                "bottom": 572.5,
+                "left": 214.00082397460938
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "field_checks_no_screenshot": {
+      "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "roots": {
+        "public": {},
+        "guided": {
+          "guidedStory": "verify",
+          "areaId": "533513314",
+          "areaLabel": "常団地前周辺",
+          "hoveredAreaId": "none",
+          "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+          "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+          "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+          "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+          "contextStatus": "ready",
+          "contextBuildings": "303",
+          "contextRoads": "135",
+          "contextPlanning": "8",
+          "sectionPack": "maizuru-533513314-plateau-2025-v1",
+          "targetResolution": "exact",
+          "targetKind": "building",
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectKind": "building",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "advanced": {}
+      },
+      "readiness": {
+        "interactionReady": "true",
+        "visualComplete": "true",
+        "captureStrictReady": "true",
+        "visualReady": "true",
+        "visualScene": "plateau_detail",
+        "perfAppShellMs": "147",
+        "visualUnmet": "",
+        "perfThreeDFirstMeaningfulMs": "1242",
+        "perfPackInteractionMs": "2225",
+        "perfVisualCompleteMs": "2247",
+        "perfCaptureStrictMs": "2306"
+      },
+      "inspector_text": "街の形へ戻る現地で確認すること確認対象京月中央通線の道路面範囲内のPLATEAU建物常団地前周辺の500m範囲選択したPLATEAU建物PLATEAU建物選択したPLATEAU建物建物の形が分かっても、入口と現在の利用状況はデータだけでは判断できません。確認項目 3件・未確認建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。回答や確認結果はまだありません。詳細分析を開く",
+      "object_attributes": {},
+      "target": {},
+      "target_text": "PLATEAU建物選択したPLATEAU建物建物の形が分かっても、入口と現在の利用状況はデータだけでは判断できません。",
+      "checks": [
+        "建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+        "建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+        "入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+      ],
+      "section": {},
+      "overflow_pixels": 0,
+      "focus": {
+        "tag": "H1",
+        "text": "現地で確認すること",
+        "focus_visible": false,
+        "outline": "rgb(22, 79, 99) none 3px"
+      },
+      "heading_layout": [
+        {
+          "text": "現地で確認すること",
+          "rect": {
+            "x": 1085.75,
+            "y": 140.546875,
+            "width": 304.703125,
+            "height": 36.71875,
+            "top": 140.546875,
+            "right": 1390.453125,
+            "bottom": 177.265625,
+            "left": 1085.75
+          },
+          "font_size": "24.48px",
+          "line_height": "36.72px",
+          "outline": "rgb(22, 79, 99) none 3px",
+          "child_rects": []
+        }
+      ],
+      "section_axis_bounds": [],
+      "engine": {
+        "url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=verify&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+        "root": {
+          "guidedStory": "verify",
+          "areaId": "533513314",
+          "areaLabel": "常団地前周辺",
+          "hoveredAreaId": "none",
+          "areaGeometryHash": "6035cf7c47e97c3fd39ffa478332d1bcee4895fd6d1e600066e531f99928439e",
+          "contextHash": "2f129a4c28e0aafeb268a9abd655997b0046793bebda722acb874624c9b055ca",
+          "sourceHash": "13f4020ade066dc7139b7653c47a55a09af0093dee743f6b9cca5d3177a71cff",
+          "sectionHash": "b594014ec02fe82254ab7d4f5f86b3e15ab9df88c3f061a01281830d99755e9c",
+          "contextStatus": "ready",
+          "contextBuildings": "303",
+          "contextRoads": "135",
+          "contextPlanning": "8",
+          "sectionPack": "maizuru-533513314-plateau-2025-v1",
+          "targetResolution": "exact",
+          "targetKind": "building",
+          "targetKey": "building:bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "objectKind": "building",
+          "objectId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006"
+        },
+        "readiness": {
+          "basemap": "ready",
+          "analysis": "ready",
+          "buildingTilesLoaded": "pack-296",
+          "localDem": "ready",
+          "broadTerrain": "not-requested-local-dem",
+          "analysisLens": "none",
+          "selectedBuildingId": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+          "selectedRoadId": "",
+          "overlay": "ready",
+          "futuresMap": "idle",
+          "futuresVisible": "0",
+          "pulseMarkers": "0",
+          "canvasCssSize": "1050x840",
+          "drawingBufferSize": "1050x840",
+          "optionalGlobeRequests": "9",
+          "optionalBuildingRequests": "0",
+          "visualReady": "true",
+          "interactionReady": "true",
+          "visualComplete": "true",
+          "captureStrictReady": "true",
+          "visualUnmet": "",
+          "cameraSettled": "true",
+          "canvasSizeReady": "true",
+          "buildingFeatureCount": "856",
+          "buildingContentReady": "true",
+          "renderedBuildingFeatureCount": "856",
+          "targetBuildingCount": "296",
+          "loadedTargetBuildingCount": "296",
+          "visibleTargetBuildingCount": "296",
+          "targetCoverageRatio": "1.000000",
+          "packArtifactsReady": "true",
+          "packArtifactBytes": "4777932",
+          "terrainTileCount": "35",
+          "terrainReady": "true",
+          "localDemReady": "true",
+          "roadsReady": "true",
+          "stableFrames": "8",
+          "criticalRequests": "0",
+          "terrainSource": "plateau-local-dem",
+          "buildingSource": "spatial-evidence-pack",
+          "packId": "maizuru-533513314-plateau-2025-v1",
+          "sectionPlaneReady": "true",
+          "sectionFocusReady": "false",
+          "sectionTransectId": "maizuru-533513314-plateau-2025-v1-default-section",
+          "packSourceTileCount": "3"
+        },
+        "canvas": {
+          "width": 1050,
+          "height": 840
+        },
+        "globe_visible": true,
+        "camera": {
+          "height": 494.4953415662877,
+          "heading": 0.4188526582923542,
+          "pitch": -0.6284098948802979
+        },
+        "tilesets": [
+          {
+            "url": "/plateau-city-gap/data/plateau/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 3,
+            "selected_features": 856,
+            "loaded_features": 856,
+            "selected_tiles": 3,
+            "pending": 0,
+            "processing": 0
+          },
+          {
+            "url": "/plateau-city-gap/data/plateau-terrain/tileset.json",
+            "show": true,
+            "tiles_loaded": true,
+            "content_ready": 1,
+            "selected_features": 0,
+            "loaded_features": 0,
+            "selected_tiles": 1,
+            "pending": 0,
+            "processing": 0
+          }
+        ],
+        "inspector_text": "街の形へ戻る現地で確認すること確認対象京月中央通線の道路面範囲内のPLATEAU建物常団地前周辺の500m範囲選択したPLATEAU建物PLATEAU建物選択したPLATEAU建物建物の形が分かっても、入口と現在の利用状況はデータだけでは判断できません。確認項目 3件・未確認建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。回答や確認結果はまだありません。詳細分析を開く",
+        "checks": [
+          "建物の入口と道路のつながり建物形状からは実際の入口を特定できないため。",
+          "建物が現在使われているかPLATEAUの用途・形状は現在の利用状況を保証しないため。",
+          "入口までに段差や通行制限があるか公開データだけでは現地の障害を判断できないため。"
+        ]
+      }
+    },
+    "section_typography_390": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "section": {
+        "uiMode": "guided",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "4",
+        "roadAnnotationCount": "2",
+        "hiddenLowPriorityAnnotations": "8",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.1",
+        "selectedAnnotationVisible": "false",
+        "selectionAnnotationId": "none",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "390"
+      },
+      "svg": [
+        {
+          "rect": {
+            "x": 0,
+            "y": 115,
+            "width": 390,
+            "height": 300,
+            "top": 115,
+            "right": 390,
+            "bottom": 415,
+            "left": 0
+          },
+          "viewBox": "0 0 390 220",
+          "texts": [
+            {
+              "text": "A",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 53,
+                "y": 154,
+                "width": 14,
+                "height": 21,
+                "top": 154,
+                "right": 67,
+                "bottom": 175,
+                "left": 53
+              }
+            },
+            {
+              "text": "B",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 370,
+                "y": 154,
+                "width": 11.0625,
+                "height": 21,
+                "top": 154,
+                "right": 381.0625,
+                "bottom": 175,
+                "left": 370
+              }
+            },
+            {
+              "text": "65.5",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 320,
+                "width": 23.21875,
+                "height": 16,
+                "top": 320,
+                "right": 50.328125,
+                "bottom": 336,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "81.9",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 249,
+                "width": 23.21875,
+                "height": 16,
+                "top": 249,
+                "right": 50.328125,
+                "bottom": 265,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "98.3",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 178,
+                "width": 23.21875,
+                "height": 16,
+                "top": 178,
+                "right": 50.328125,
+                "bottom": 194,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "0",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 50.6640625,
+                "y": 357,
+                "width": 7,
+                "height": 16,
+                "top": 357,
+                "right": 57.6640625,
+                "bottom": 373,
+                "left": 50.6640625
+              }
+            },
+            {
+              "text": "154",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 149.3333282470703,
+                "y": 357,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 169.6575469970703,
+                "bottom": 373,
+                "left": 149.3333282470703
+              }
+            },
+            {
+              "text": "308",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 254.66665649414062,
+                "y": 357,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 274.9908752441406,
+                "bottom": 373,
+                "left": 254.66665649414062
+              }
+            },
+            {
+              "text": "462",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 359,
+                "y": 357,
+                "width": 21.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 380.32421875,
+                "bottom": 373,
+                "left": 359
+              }
+            },
+            {
+              "text": "標高（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 3,
+                "y": 238.5,
+                "width": 16,
+                "height": 60,
+                "top": 238.5,
+                "right": 19,
+                "bottom": 298.5,
+                "left": 3
+              }
+            },
+            {
+              "text": "Aからの距離（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 142.28125,
+                "y": 340,
+                "width": 104.4375,
+                "height": 16,
+                "top": 340,
+                "right": 246.71875,
+                "bottom": 356,
+                "left": 142.28125
+              }
+            },
+            {
+              "text": "椿２号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 122.10723876953125,
+                "y": 174,
+                "width": 50,
+                "height": 16,
+                "top": 174,
+                "right": 172.10723876953125,
+                "bottom": 190,
+                "left": 122.10723876953125
+              }
+            },
+            {
+              "text": "京月二号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 267.74676513671875,
+                "y": 174,
+                "width": 61,
+                "height": 16,
+                "top": 174,
+                "right": 328.74676513671875,
+                "bottom": 190,
+                "left": 267.74676513671875
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "section_typography_320_no_screenshot": {
+      "viewport": {
+        "width": 320,
+        "height": 844
+      },
+      "section": {
+        "uiMode": "guided",
+        "readable": "true",
+        "transectReady": "true",
+        "buildingCount": "63",
+        "directBuildingCount": "17",
+        "roadCount": "14",
+        "directRoadCount": "14",
+        "terrainSamples": "94",
+        "terrainCovered": "94",
+        "packId": "maizuru-533513314-plateau-2025-v1",
+        "staticAnnotationCount": "4",
+        "roadAnnotationCount": "2",
+        "hiddenLowPriorityAnnotations": "8",
+        "annotationOverlapCount": "0",
+        "annotationCalculationMs": "0.1",
+        "selectedAnnotationVisible": "false",
+        "selectionAnnotationId": "none",
+        "focusedObjectKind": "none",
+        "focusedObjectId": "none",
+        "counterfactualReady": "true",
+        "serviceSectionReady": "true",
+        "sectionContainerWidth": "320"
+      },
+      "svg": [
+        {
+          "rect": {
+            "x": 0,
+            "y": 115,
+            "width": 320,
+            "height": 300,
+            "top": 115,
+            "right": 320,
+            "bottom": 415,
+            "left": 0
+          },
+          "viewBox": "0 0 320 220",
+          "texts": [
+            {
+              "text": "A",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 53,
+                "y": 154,
+                "width": 14,
+                "height": 21,
+                "top": 154,
+                "right": 67,
+                "bottom": 175,
+                "left": 53
+              }
+            },
+            {
+              "text": "B",
+              "font_size": 16,
+              "transform_scale": 1,
+              "approximate_css_font_px": 16,
+              "rect": {
+                "x": 300,
+                "y": 154,
+                "width": 11.0625,
+                "height": 21,
+                "top": 154,
+                "right": 311.0625,
+                "bottom": 175,
+                "left": 300
+              }
+            },
+            {
+              "text": "65.5",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 320,
+                "width": 23.21875,
+                "height": 16,
+                "top": 320,
+                "right": 50.328125,
+                "bottom": 336,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "81.9",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 249,
+                "width": 23.21875,
+                "height": 16,
+                "top": 249,
+                "right": 50.328125,
+                "bottom": 265,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "98.3",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 27.109375,
+                "y": 178,
+                "width": 23.21875,
+                "height": 16,
+                "top": 178,
+                "right": 50.328125,
+                "bottom": 194,
+                "left": 27.109375
+              }
+            },
+            {
+              "text": "0",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 50.6640625,
+                "y": 357,
+                "width": 7,
+                "height": 16,
+                "top": 357,
+                "right": 57.6640625,
+                "bottom": 373,
+                "left": 50.6640625
+              }
+            },
+            {
+              "text": "154",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 126,
+                "y": 357,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 146.32421875,
+                "bottom": 373,
+                "left": 126
+              }
+            },
+            {
+              "text": "308",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 208,
+                "y": 357,
+                "width": 20.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 228.32421875,
+                "bottom": 373,
+                "left": 208
+              }
+            },
+            {
+              "text": "462",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 289,
+                "y": 357,
+                "width": 21.32421875,
+                "height": 16,
+                "top": 357,
+                "right": 310.32421875,
+                "bottom": 373,
+                "left": 289
+              }
+            },
+            {
+              "text": "標高（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 3,
+                "y": 238.5,
+                "width": 16,
+                "height": 60,
+                "top": 238.5,
+                "right": 19,
+                "bottom": 298.5,
+                "left": 3
+              }
+            },
+            {
+              "text": "Aからの距離（m）",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 107.28125,
+                "y": 340,
+                "width": 104.4375,
+                "height": 16,
+                "top": 340,
+                "right": 211.71875,
+                "bottom": 356,
+                "left": 107.28125
+              }
+            },
+            {
+              "text": "椿２号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 101.48222351074219,
+                "y": 174,
+                "width": 50,
+                "height": 16,
+                "top": 174,
+                "right": 151.4822235107422,
+                "bottom": 190,
+                "left": 101.48222351074219
+              }
+            },
+            {
+              "text": "京月二号線",
+              "font_size": 12,
+              "transform_scale": 1,
+              "approximate_css_font_px": 12,
+              "rect": {
+                "x": 213.75222778320312,
+                "y": 174,
+                "width": 61,
+                "height": 16,
+                "top": 174,
+                "right": 274.7522277832031,
+                "bottom": 190,
+                "left": 213.75222778320312
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "requests_failed": [
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:00.954Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1615.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:00.954Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1616.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:00.954Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1615.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:00.954Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1614.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:00.961Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1616.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.010Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3232.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.011Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3232.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.011Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3231.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.011Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3231.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.011Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3233.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.012Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3232.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.012Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3233.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.012Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3231.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.087Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6464.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.087Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14353/6465.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.087Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.110Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12929.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.110Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.110Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12929.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.110Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.120Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.121Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12928.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.121Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12928.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.160Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57416/25861.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.160Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57415/25861.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25859.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57417/25857.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25858.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25860.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57414/25857.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warmup",
+      "at": "2026-09-05T13:12:01.177Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25857.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3587/1617.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1615.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3588/1617.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1616.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1614.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3586/1617.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1614.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.163Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/12/3589/1617.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.205Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3232.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.205Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3231.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.205Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3232.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.206Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7176/3233.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.208Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7175/3231.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.208Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/13/7177/3233.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.235Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/14/14352/6464.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.286Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28707/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.286Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.286Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12930.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.286Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28709/12928.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.286Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/15/28706/12928.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.336Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57416/25861.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.336Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57415/25861.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.336Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57417/25861.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.355Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57418/25860.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "warm_after_review_not_timed",
+      "at": "2026-09-05T13:12:05.355Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57414/25857.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "advanced_3d",
+      "at": "2026-09-05T13:12:11.056Z",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/pale/16/57413/25857.png",
+      "resource_type": "fetch",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "console_errors": [],
+  "local_preview": true,
+  "review_scope": "user-approved-onepass-public-headline-focus-and-section-axis-clipping",
+  "overall_release_status": "NOT_ACCEPTED_PAGES_WITHHELD",
+  "known_unresolved_gate": {
+    "issue": "Native Windows Section focused-detail text lines overlap1CSSpx (15px baselines with16px text bounding boxes). Preserved outside the three requested fixes; screenshots are review evidence only.",
+    "evidence": "C:/Users/m.hirotaka/AppData/Local/Temp/citygap-onepass-native-guided1440-credit.json",
+    "fixed": false,
+    "original_assertions_retained": true
+  },
+  "live_index_sha256": "dd00c8f7bc1ef1f0df25654914f62b2f3aeefb0512d99f637868eb7903600a0c",
+  "source_gate": {
+    "expected_ui_commit": "cfb66e9a13f79400c3f4d1e31e1859577ed1be9f",
+    "expected_index_sha256": "dd00c8f7bc1ef1f0df25654914f62b2f3aeefb0512d99f637868eb7903600a0c",
+    "index_matches_verified_build": true,
+    "preview_origin": "http://127.0.0.1:4190",
+    "production_capture": false
+  },
+  "picked": {
+    "x": 564.8099495849099,
+    "y": 557.8624657500934,
+    "id": "bldg_a490fb5b-d668-441e-b9af-5b35c4629006",
+    "lod": 1,
+    "usage": "住宅",
+    "measured_height_m": 8.5,
+    "storeys_above_ground": 2,
+    "sampled_surface_elevation_m": 79.17296804166159
+  },
+  "guided_selected_url": "http://127.0.0.1:4190/plateau-city-gap/?experience=guided&story=understand&city=maizuru&task=discover&workspace=demo&urbanState=2025&mapMode=plateau3d&intent=discover&resolution=mesh&scene=gap_discovery&preset=discovery&layer=analysis-city-gap&lens=none&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=mesh&selection=533513314&mesh=533513314&selectionLng=135.3968750&selectionLat=35.4479167",
+  "advanced_selected_url": "http://127.0.0.1:4190/plateau-city-gap/?experience=advanced&city=maizuru&task=operate&workspace=workspace&urbanState=2025&mapMode=plateau3d&intent=inspect&resolution=building&scene=plateau_detail&preset=plateau-detail&layer=plateau-buildings&lens=urban-xray&twin=baseline&lng=135.39687&lat=35.44539&z=15.47&selectionType=building&selection=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&building=bldg_a490fb5b-d668-441e-b9af-5b35c4629006&parentMesh=533513314&selectionLng=135.7228471&selectionLat=35.9583076",
+  "finished_utc": "2026-09-05T13:12:18.048Z",
+  "unexpected_diagnostics": [],
+  "cancellation_note": "Every failed request including ERR_ABORTED is recorded with current interaction phase. Navigation cancellations are not silently removed; strict real3D/local content gates still apply."
+}

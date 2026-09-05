@@ -1,0 +1,61 @@
+{
+  "schema": "citygap.three-fix-resume-validation@1",
+  "overall_status": "not_accepted_pending_required_failures",
+  "tested_url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "tested_source": {
+    "base_commit": "685f518b5d012a83c2acd56d535dfce148fd6487",
+    "scope": "Frozen uncommitted three-fix candidate; raw legacy reports record base Git HEAD, not candidate source identity.",
+    "chunks": ["index-Cqe6a1P0.js", "ProductApp-hVq_U4GM.js", "ProductApp-BkKZ72-c.css", "index-C2EBUqlj.css", "Guided3DView-B4ZVF_p4.js", "CesiumMap-BbcQZFTL.js"],
+    "test_product_polish_sha256": "58c060eeba0c683391724b5917ec68435b6ddfeee3baf976cf653f446abd179f"
+  },
+  "generated_images": 0,
+  "approved_three_fix_assertions": {
+    "widths_css_px": [1440, 1280, 390, 320],
+    "true_browser_zoom": "chrome.tabs.setZoom automatic/per-tab=2; getZoom=2; 1440x900 to 720x450; DPR1 to2; visualViewport.scale remains1",
+    "public_glyph_same_rendered_line": "passed all requested widths and actual200%",
+    "programmatic_public_guided_h1_active_without_outline_or_shadow": "passed all requested widths and actual200%; real Tab checks retained",
+    "all_visible_section_text_contained": "passed all requested widths and actual200%; no hidden texts, A/B and both axis labels retained",
+    "section_minimum_rendered_font_css_px": 12,
+    "horizontal_overflow_css_px": 0,
+    "axe_serious_critical_count": 0,
+    "axe_incomplete_per_state": "1 to2; automated audit is not complete accessibility certification"
+  },
+  "passed_regressions": {
+    "guided_spatial": {"areas": 6, "snapshots": 29, "accessibility_states": 13, "section_audits": 4, "route_regressions": 7, "errors": 0},
+    "guided_advanced_transition": {"named_flow_groups": 5, "all_passed": true, "single_flight_full_loads": 1, "failure_retry_verified": true},
+    "plateau_native": {"checks_passed": 19, "checks_total": 19, "console_errors": 0, "critical_request_failures": 0},
+    "visual_identity": {"viewports": 5, "console_errors": 0, "local_http_failures": 0},
+    "actual_200_percent_polish": {"experiences": ["public", "guided", "advanced"], "failures": 0}
+  },
+  "preserved_failures_and_diagnosis": [
+    {
+      "report": "polish-four-widths.json",
+      "failures": ["guided-1440-section: visible unobscured keyboard focus", "guided-1280-section: visible unobscured keyboard focus"],
+      "observed": "Cesium credit focused beneath Section footer before layout settled. No skip or relaxed focus assertion was applied.",
+      "bounded_diagnostic": "Exactly one widget/link. At1440 immediate view/widget height840 and credit y882; after existing strict readiness plus2 animation frames (~3614ms) view/widget height470.406 and credit y512.406, visible through two Tab visits and another1.5s. Guided layout source unchanged versus base."
+    },
+    {
+      "report": "public.stderr",
+      "failure": "Exact accessible heading selector timed out at audit-public-first-run.mjs:282 before completing audit.",
+      "diagnosis": "Approved inline-block phrases retain textContent 舞鶴を、地図で調べる。 but browser accessible name is 舞鶴を、 地図で調べる。. Public regression is incomplete, not passed."
+    },
+    {
+      "report": "C:\\Users\\m.hirotaka\\AppData\\Local\\Temp\\citygap-onepass-native-guided1440-credit.json",
+      "failure": "Native Guided1440 Section annotation overlap",
+      "observed": "道路 · 47m · 標高96.4m bbox y687.703125..703.703125 intersects 直接交差 bbox y702.703125..718.703125 by1CSSpx vertically and48px horizontally. Both actual rendered fonts12px. Native Cesium credit focus is visible at y512.406. No tolerance or assertion was relaxed."
+    }
+  ],
+  "reports_root": "/tmp/citygap-uiux-resume.JW6Icv90",
+  "reports": [
+    {"path": "polish-four-widths.json", "sha256": "4aec551831989c0babf6378084af8b49bf4bf25204c0b9c94f8b28c06b19e156"},
+    {"path": "polish-actual200.json", "sha256": "456c2cf33da330be5adc924cc205f1cfb275a609ff1db47e52346681f6b989ad"},
+    {"path": "guided-spatial.json", "sha256": "61fe7a30493162a8a9a9db0db066a3de9b37b1504f3b3e2810aa45e49320b41c"},
+    {"path": "transition.stdout", "sha256": "4ff882f6353857d3a0db2e0c6e9434ed0e95da2e28b0c959d8ae05a37e4abd8b"},
+    {"path": "native.json", "sha256": "422e777756bf0db31a607b648ef0f686c03e6602088f6a5f26b69d95d6be8b85"},
+    {"path": "identity.json", "sha256": "7dde6bdb87238282eb295dfabeb701b471ca8e4e63d4cb1e90ff4f0f58e48c30"},
+    {"path": "public.stderr", "sha256": "a325c3863d86cc5971755fb6756c1c7b6b79c264cc130bd2e89afaf34c51421c"},
+    {"path": "diagnose-credit.json", "sha256": "ca84ddcf4883a9facb37ccb31485a0c7dee90202ed20161ede66a8acda447ea6"},
+    {"path": "C:\\Users\\m.hirotaka\\AppData\\Local\\Temp\\citygap-onepass-native-guided1440-credit.json", "sha256": "9b1cb2cee5e8eaa3fc8006de6d3815b038181f12012b846be7cac7f0645a8ee3"}
+  ],
+  "publication": {"ci_dispatched": false, "pages_dispatched": false, "reason": "Required verification has not fully passed; root gate remains closed."}
+}

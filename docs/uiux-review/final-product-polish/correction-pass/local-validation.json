@@ -1,0 +1,77 @@
+{
+  "schema": "citygap.three-fix-resume-validation@1",
+  "overall_status": "not_accepted_required_verification_failures",
+  "source_commit": "cfb66e9a13f79400c3f4d1e31e1859577ed1be9f",
+  "tested_url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "final_source_identity": {
+    "index_chunk": "index-CK9uaU-F.js",
+    "product_chunk": "ProductApp-BXBoMiDB.js",
+    "product_css": "ProductApp-BkKZ72-c.css",
+    "root_verified_index_sha256": "dd00c8f7bc1ef1f0df25654914f62b2f3aeefb0512d99f637868eb7903600a0c",
+    "test_product_polish_sha256": "7b26ea20e9c2637196a1c5559669b1cff62f8cb49d46e4f0235b85333936cfe6"
+  },
+  "source_boundaries": {
+    "final_runs": "Public and four-width product polish ran on the frozen final source identified above.",
+    "earlier_same_pass_runs": "True200%, Guided spatial/transition, native2D and identity ran on the preceding frozen three-fix candidate index-Cqe6a1P0.js / ProductApp-hVq_U4GM.js. Final change restored Public accessible name via aria-label; CSS/Guided/Section source unchanged. Earlier reports are not relabeled as final-source executions.",
+    "native_failure": "Native Guided1440 on preceding candidate demonstrated the unchanged hardcoded15px callout baseline spacing versus16px Windows text bounds; only the approved axis position changed in Section. No new callout fix or overlap waiver was authorized."
+  },
+  "final_public": {
+    "exit_code": 0,
+    "exact_accessible_heading_unchanged": "舞鶴を、地図で調べる。",
+    "layout_states": 9,
+    "serious_critical_violations": 0,
+    "critical_diagnostics": 0,
+    "horizontal_overflow_css_px": 0,
+    "generated_images": 0,
+    "audit_caveat": "Existing raw keyboard audit records BODY when the tab cycle leaves the page, without a focus ring. No control-focus assertion was altered; dedicated product-polish control checks remain."
+  },
+  "final_four_width_product_polish": {
+    "exit_code": 1,
+    "widths_css_px": [1440, 1280, 390, 320],
+    "failure_count": 1,
+    "failure": "Guided1440 at ready-section: current desktop split-layout gate timed out after5000ms.",
+    "failed_immediate_geometry": {"stage_expanded": "true", "map_mode": "plateau3d", "view_bottom": 900, "dock_top": 530.40625, "cesium_credit_y": 879},
+    "failed_settled_geometry": null,
+    "guided1280_settled_geometry": {"view_bottom": 416, "dock_top": 416, "cesium_credit_y": 395, "total_layout_and_strict_ready_wait_ms": 7849},
+    "scope_caveat": "Guided1440 Section layout/keyboard assertions were not reached after readiness failed; do not report those as final-source passes. All remaining recorded checks passed.",
+    "assertions_preserved": "All original focus/overlap/font/readiness/diagnostic assertions remain; added current split-layout gate requires expanded3D plus visible positive view/dock bounds and view.bottom<=dock.top, then existing strict3D and2frames. No timeout increase, retry, skip, or tolerance change was applied."
+  },
+  "approved_visual_fix_evidence": {
+    "public_glyph_same_rendered_line": "Passed1440/1280/390/320 on final source and actual200% on preceding same-pass candidate.",
+    "programmatic_h1_focus_without_ring": "Public/Guided active H1 tabindex-1 retained without outline/box shadow at all widths; real Tab-control checks retained.",
+    "section_containment": "Every reached Section state has zero clipped/hidden text, endpointA/B and both axis labels present, actual font minimum12px. Initial same-pass four-width and true200 runs covered all Section states; final Guided1440 stopped at readiness.",
+    "horizontal_overflow_css_px": 0,
+    "serious_critical_axe_violations": 0,
+    "axe_incomplete_per_state": "1 to2; not a complete accessibility certification"
+  },
+  "other_same_pass_regressions": {
+    "guided_spatial": {"passed": true, "areas": 6, "snapshots": 29, "accessibility_states": 13, "section_audits": 4, "routes": 7, "errors": 0},
+    "guided_advanced_transition": {"passed": true, "named_flow_groups": 5, "single_flight_and_error_retry": true},
+    "plateau_native_2d": {"passed": true, "checks": 19, "console_errors": 0, "critical_requests": 0},
+    "visual_identity": {"passed": true, "viewports": 5, "console_errors": 0, "local_http_failures": 0},
+    "actual_browser_200_percent": {"passed": true, "experiences": ["public", "guided", "advanced"], "mechanism": "chrome.tabs.setZoom automatic/per-tab; getZoom=2", "viewport_before": [1440, 900], "viewport_after": [720, 450], "dpr_before": 1, "dpr_after": 2, "visual_viewport_scale": 1}
+  },
+  "native_release_blocker": {
+    "failure": "Guided1440 Section annotation text bounding boxes overlap.",
+    "first_text": "道路 · 47m · 標高96.4m",
+    "first_y_range": [687.703125, 703.703125],
+    "second_text": "直接交差",
+    "second_y_range": [702.703125, 718.703125],
+    "vertical_overlap_css_px": 1,
+    "horizontal_overlap_css_px": 48,
+    "rendered_font_css_px": 12,
+    "status": "Preserved and not waived; outside the three approved fixes. Native credit itself is unobscured at y512.406."
+  },
+  "prior_failures_preserved": "The original two desktop focus failures, Public accessible-name timeout, native overlap and bounded credit diagnosis remain in the prior compact summary and raw reports. Public exact-name timeout was resolved by restoring app semantics, not changing its test expectation.",
+  "reports_root": "/tmp/citygap-uiux-resume.JW6Icv90",
+  "reports": [
+    {"path": "polish-final-four-widths.json", "sha256": "6632e53b24b79b00565be1b789ed62038b9a5fbb27ae48102338fe0f792a8157"},
+    {"path": "public-final.stdout", "sha256": "6f4d0ebf5a36ef97dbad75fc2c39ebf011a4b334e75518344df14ec71efd5110"},
+    {"path": "public-final/manifest.json", "sha256": "bcbd068e39eac429f7f7d397a29f4c5d15226b36394ed7c667ae0c6927f4ffba"},
+    {"path": "local-current-summary.json", "sha256": "3c55b0ec57d98243c97bc5ad88382d0ff7bc65db7d812b0d5c0be7410deb2d22", "contains": "Nine exact earlier raw-report paths and hashes, measured source boundary, and initial failures."},
+    {"path": "C:\\Users\\m.hirotaka\\AppData\\Local\\Temp\\citygap-onepass-native-guided1440-credit.json", "sha256": "9b1cb2cee5e8eaa3fc8006de6d3815b038181f12012b846be7cac7f0645a8ee3"}
+  ],
+  "generated_images_by_this_agent": 0,
+  "owned_browser_sessions": "all closed",
+  "publication": {"ci_dispatched_by_this_agent": false, "pages_dispatched": false, "release_gate": "closed"}
+}

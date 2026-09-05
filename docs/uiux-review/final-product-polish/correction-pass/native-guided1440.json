@@ -1,0 +1,1541 @@
+{
+  "url": "http://127.0.0.1:4190/plateau-city-gap/",
+  "protocol": "DPR1 CSS reflow, not browser zoom; reduced motion; no images",
+  "records": [
+    {
+      "label": "guided-1440",
+      "programmatic_heading_focus": {
+        "text": "常団地前周辺",
+        "active": true,
+        "tab_index": -1,
+        "outline_style": "none",
+        "outline_width_px": 3,
+        "box_shadow": "none"
+      }
+    },
+    {
+      "label": "guided-1440-closed",
+      "layout": {
+        "inner_width": 1440,
+        "inner_height": 900,
+        "dpr": 1,
+        "overflow_px": 0,
+        "reduced_motion": true,
+        "public_heading_word": null,
+        "active_motion": [],
+        "small_controls": [],
+        "panel_overlaps": [
+          {
+            "a": ".guided-map-stage",
+            "b": ".guided-story-panel",
+            "pixels": 0
+          }
+        ],
+        "section": null,
+        "axe_serious_critical": [],
+        "axe_incomplete": 2
+      }
+    },
+    {
+      "label": "guided-1440-closed",
+      "keyboard": [
+        {
+          "name": "確認場所を見る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 549.921875,
+            "width": 304.703125,
+            "height": 48
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-primary",
+            "text": "確認場所を見る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "CITY GAP",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 24,
+            "y": 7.5,
+            "width": 77.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-brand",
+            "text": "CITY GAP"
+          },
+          "map_control": false
+        },
+        {
+          "name": "詳細分析",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1364,
+            "y": 7.5,
+            "width": 52,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-advanced-link",
+            "text": "詳細分析"
+          },
+          "map_control": false
+        },
+        {
+          "name": "",
+          "tag": "A",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 813.234375,
+            "y": 882,
+            "width": 138,
+            "height": 12
+          },
+          "href": "https://cesium.com/",
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "text": ""
+          },
+          "map_control": false
+        },
+        {
+          "name": "2D地図",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 767.96875,
+            "y": 80,
+            "width": 73.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "2D地図"
+          },
+          "map_control": false
+        },
+        {
+          "name": "PLATEAU 3D",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 841.34375,
+            "y": 80,
+            "width": 104.859375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "PLATEAU 3D"
+          },
+          "map_control": false
+        },
+        {
+          "name": "街の断面",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 946.203125,
+            "y": 80,
+            "width": 84,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "街の断面"
+          },
+          "map_control": false
+        },
+        {
+          "name": "範囲選択へ戻る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 88.546875,
+            "width": 91,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-back",
+            "text": "範囲選択へ戻る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "確認場所を見る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 549.921875,
+            "width": 304.703125,
+            "height": 48
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-primary",
+            "text": "確認場所を見る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "CITY GAP",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 24,
+            "y": 7.5,
+            "width": 77.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-brand",
+            "text": "CITY GAP"
+          },
+          "map_control": false
+        },
+        {
+          "name": "詳細分析",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1364,
+            "y": 7.5,
+            "width": 52,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-advanced-link",
+            "text": "詳細分析"
+          },
+          "map_control": false
+        },
+        {
+          "name": "",
+          "tag": "A",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 813.234375,
+            "y": 882,
+            "width": 138,
+            "height": 12
+          },
+          "href": "https://cesium.com/",
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "text": ""
+          },
+          "map_control": false
+        },
+        {
+          "name": "2D地図",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 767.96875,
+            "y": 80,
+            "width": 73.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "2D地図"
+          },
+          "map_control": false
+        },
+        {
+          "name": "PLATEAU 3D",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 841.34375,
+            "y": 80,
+            "width": 104.859375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "PLATEAU 3D"
+          },
+          "map_control": false
+        }
+      ]
+    },
+    {
+      "label": "guided-1440-section",
+      "layout": {
+        "inner_width": 1440,
+        "inner_height": 900,
+        "dpr": 1,
+        "overflow_px": 0,
+        "reduced_motion": true,
+        "public_heading_word": null,
+        "active_motion": [],
+        "small_controls": [],
+        "panel_overlaps": [
+          {
+            "a": ".guided-map-stage",
+            "b": ".guided-story-panel",
+            "pixels": 0
+          }
+        ],
+        "section": {
+          "pack": "maizuru-533513314-plateau-2025-v1",
+          "declared_overlap_count": 0,
+          "svg_rect": {
+            "x": 0,
+            "y": 579.40625,
+            "width": 1050.203125,
+            "height": 292.59375,
+            "right": 1050.203125,
+            "bottom": 872
+          },
+          "texts": [
+            {
+              "text": "A",
+              "rect": {
+                "x": 53,
+                "y": 614.703125,
+                "width": 14,
+                "height": 21,
+                "right": 67,
+                "bottom": 635.703125
+              },
+              "containment_margins_css_px": {
+                "left": 53,
+                "right": 983.203125,
+                "top": 35.296875,
+                "bottom": 236.296875
+              },
+              "rendered_font_px": 16
+            },
+            {
+              "text": "B",
+              "rect": {
+                "x": 1030.203125,
+                "y": 614.703125,
+                "width": 11.0625,
+                "height": 21,
+                "right": 1041.265625,
+                "bottom": 635.703125
+              },
+              "containment_margins_css_px": {
+                "left": 1030.203125,
+                "right": 8.9375,
+                "top": 35.296875,
+                "bottom": 236.296875
+              },
+              "rendered_font_px": 16
+            },
+            {
+              "text": "65.5",
+              "rect": {
+                "x": 27.109375,
+                "y": 780.703125,
+                "width": 23.21875,
+                "height": 16,
+                "right": 50.328125,
+                "bottom": 796.703125
+              },
+              "containment_margins_css_px": {
+                "left": 27.109375,
+                "right": 999.875,
+                "top": 201.296875,
+                "bottom": 75.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "81.9",
+              "rect": {
+                "x": 27.109375,
+                "y": 709.703125,
+                "width": 23.21875,
+                "height": 16,
+                "right": 50.328125,
+                "bottom": 725.703125
+              },
+              "containment_margins_css_px": {
+                "left": 27.109375,
+                "right": 999.875,
+                "top": 130.296875,
+                "bottom": 146.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "98.3",
+              "rect": {
+                "x": 27.109375,
+                "y": 638.703125,
+                "width": 23.21875,
+                "height": 16,
+                "right": 50.328125,
+                "bottom": 654.703125
+              },
+              "containment_margins_css_px": {
+                "left": 27.109375,
+                "right": 999.875,
+                "top": 59.296875,
+                "bottom": 217.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "0",
+              "rect": {
+                "x": 50.6640625,
+                "y": 817.703125,
+                "width": 7,
+                "height": 16,
+                "right": 57.6640625,
+                "bottom": 833.703125
+              },
+              "containment_margins_css_px": {
+                "left": 50.6640625,
+                "right": 992.5390625,
+                "top": 238.296875,
+                "bottom": 38.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "116",
+              "rect": {
+                "x": 288.05078125,
+                "y": 817.703125,
+                "width": 20.32421875,
+                "height": 16,
+                "right": 308.375,
+                "bottom": 833.703125
+              },
+              "containment_margins_css_px": {
+                "left": 288.05078125,
+                "right": 741.828125,
+                "top": 238.296875,
+                "bottom": 38.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "231",
+              "rect": {
+                "x": 532.1015625,
+                "y": 817.703125,
+                "width": 20,
+                "height": 16,
+                "right": 552.1015625,
+                "bottom": 833.703125
+              },
+              "containment_margins_css_px": {
+                "left": 532.1015625,
+                "right": 498.1015625,
+                "top": 238.296875,
+                "bottom": 38.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "347",
+              "rect": {
+                "x": 776.26953125,
+                "y": 817.703125,
+                "width": 20.32421875,
+                "height": 16,
+                "right": 796.59375,
+                "bottom": 833.703125
+              },
+              "containment_margins_css_px": {
+                "left": 776.26953125,
+                "right": 253.609375,
+                "top": 238.296875,
+                "bottom": 38.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "462",
+              "rect": {
+                "x": 1019.203125,
+                "y": 817.703125,
+                "width": 21.32421875,
+                "height": 16,
+                "right": 1040.52734375,
+                "bottom": 833.703125
+              },
+              "containment_margins_css_px": {
+                "left": 1019.203125,
+                "right": 9.67578125,
+                "top": 238.296875,
+                "bottom": 38.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "標高（m）",
+              "rect": {
+                "x": 3,
+                "y": 699.203125,
+                "width": 16,
+                "height": 60,
+                "right": 19,
+                "bottom": 759.203125
+              },
+              "containment_margins_css_px": {
+                "left": 3,
+                "right": 1031.203125,
+                "top": 119.796875,
+                "bottom": 112.796875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "Aからの距離（m）",
+              "rect": {
+                "x": 472.3828125,
+                "y": 800.703125,
+                "width": 104.4375,
+                "height": 16,
+                "right": 576.8203125,
+                "bottom": 816.703125
+              },
+              "containment_margins_css_px": {
+                "left": 472.3828125,
+                "right": 473.3828125,
+                "top": 221.296875,
+                "bottom": 55.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "東椿線",
+              "rect": {
+                "x": 134.6387481689453,
+                "y": 634.703125,
+                "width": 37,
+                "height": 16,
+                "right": 171.6387481689453,
+                "bottom": 650.703125
+              },
+              "containment_margins_css_px": {
+                "left": 134.6387481689453,
+                "right": 878.5643768310547,
+                "top": 55.296875,
+                "bottom": 221.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "椿川通線",
+              "rect": {
+                "x": 384.5054016113281,
+                "y": 634.703125,
+                "width": 50,
+                "height": 16,
+                "right": 434.5054016113281,
+                "bottom": 650.703125
+              },
+              "containment_margins_css_px": {
+                "left": 384.5054016113281,
+                "right": 615.6977233886719,
+                "top": 55.296875,
+                "bottom": 221.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "青山一号通線",
+              "rect": {
+                "x": 609.98876953125,
+                "y": 634.703125,
+                "width": 73,
+                "height": 16,
+                "right": 682.98876953125,
+                "bottom": 650.703125
+              },
+              "containment_margins_css_px": {
+                "left": 609.98876953125,
+                "right": 367.21435546875,
+                "top": 55.296875,
+                "bottom": 221.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "京月一号線",
+              "rect": {
+                "x": 855.6884765625,
+                "y": 634.703125,
+                "width": 61,
+                "height": 16,
+                "right": 916.6884765625,
+                "bottom": 650.703125
+              },
+              "containment_margins_css_px": {
+                "left": 855.6884765625,
+                "right": 133.5146484375,
+                "top": 55.296875,
+                "bottom": 221.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "東椿線",
+              "rect": {
+                "x": 82.63874816894531,
+                "y": 670.703125,
+                "width": 40,
+                "height": 17,
+                "right": 122.63874816894531,
+                "bottom": 687.703125
+              },
+              "containment_margins_css_px": {
+                "left": 82.63874816894531,
+                "right": 927.5643768310547,
+                "top": 91.296875,
+                "bottom": 184.296875
+              },
+              "rendered_font_px": 13
+            },
+            {
+              "text": "道路 · 47m · 標高96.4m",
+              "rect": {
+                "x": 82.63874816894531,
+                "y": 687.703125,
+                "width": 125.1640625,
+                "height": 16,
+                "right": 207.8028106689453,
+                "bottom": 703.703125
+              },
+              "containment_margins_css_px": {
+                "left": 82.63874816894531,
+                "right": 842.4003143310547,
+                "top": 108.296875,
+                "bottom": 168.296875
+              },
+              "rendered_font_px": 12
+            },
+            {
+              "text": "直接交差",
+              "rect": {
+                "x": 82.63874816894531,
+                "y": 702.703125,
+                "width": 48,
+                "height": 16,
+                "right": 130.6387481689453,
+                "bottom": 718.703125
+              },
+              "containment_margins_css_px": {
+                "left": 82.63874816894531,
+                "right": 919.5643768310547,
+                "top": 123.296875,
+                "bottom": 153.296875
+              },
+              "rendered_font_px": 12
+            }
+          ],
+          "text_overlaps": [
+            [
+              "道路 · 47m · 標高96.4m",
+              "直接交差"
+            ]
+          ],
+          "clipped_texts": [],
+          "hidden_texts": [],
+          "required_labels": {
+            "endpoint_a": true,
+            "endpoint_b": true,
+            "elevation_axis": true,
+            "distance_axis": true
+          }
+        },
+        "axe_serious_critical": [],
+        "axe_incomplete": 2
+      }
+    },
+    {
+      "label": "guided-1440-section",
+      "keyboard": [
+        {
+          "name": "範囲選択へ戻る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 88.546875,
+            "width": 91,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-back",
+            "text": "範囲選択へ戻る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "確認場所を見る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 549.921875,
+            "width": 304.703125,
+            "height": 48
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-primary",
+            "text": "確認場所を見る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "CITY GAP",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 24,
+            "y": 7.5,
+            "width": 77.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-brand",
+            "text": "CITY GAP"
+          },
+          "map_control": false
+        },
+        {
+          "name": "詳細分析",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1364,
+            "y": 7.5,
+            "width": 52,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-advanced-link",
+            "text": "詳細分析"
+          },
+          "map_control": false
+        },
+        {
+          "name": "",
+          "tag": "A",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 813.234375,
+            "y": 512.40625,
+            "width": 138,
+            "height": 12
+          },
+          "href": "https://cesium.com/",
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "text": ""
+          },
+          "map_control": false
+        },
+        {
+          "name": "2D地図",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 767.96875,
+            "y": 80,
+            "width": 73.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "2D地図"
+          },
+          "map_control": false
+        },
+        {
+          "name": "PLATEAU 3D",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 841.34375,
+            "y": 80,
+            "width": 104.859375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "PLATEAU 3D"
+          },
+          "map_control": false
+        },
+        {
+          "name": "街の断面",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 946.203125,
+            "y": 80,
+            "width": 84,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": null,
+            "text": "街の断面"
+          },
+          "map_control": false
+        },
+        {
+          "name": "常団地前周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距離（m）不明 · 高さはデータなし住宅 ",
+          "tag": "svg",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": "常団地前周辺の街の断面",
+          "rect": {
+            "x": 0,
+            "y": 579.40625,
+            "width": 1050.203125,
+            "height": 292.59375
+          },
+          "href": null,
+          "hit": {
+            "tag": "svg",
+            "class": null,
+            "text": "常団地前周辺の街の断面PLATEAUの地形、建物、道路を同じ断面で表示しています。データにない人口や建物高さは補っていません。AB65.581.998.30116231347462標高（m）Aからの距"
+          },
+          "map_control": false
+        },
+        {
+          "name": "範囲選択へ戻る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 88.546875,
+            "width": 91,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-back",
+            "text": "範囲選択へ戻る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "確認場所を見る",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1085.75,
+            "y": 549.921875,
+            "width": 304.703125,
+            "height": 48
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-primary",
+            "text": "確認場所を見る"
+          },
+          "map_control": false
+        },
+        {
+          "name": "CITY GAP",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 24,
+            "y": 7.5,
+            "width": 77.375,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-brand",
+            "text": "CITY GAP"
+          },
+          "map_control": false
+        },
+        {
+          "name": "詳細分析",
+          "tag": "BUTTON",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 5,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 1364,
+            "y": 7.5,
+            "width": 52,
+            "height": 44
+          },
+          "href": null,
+          "hit": {
+            "tag": "BUTTON",
+            "class": "guided-advanced-link",
+            "text": "詳細分析"
+          },
+          "map_control": false
+        },
+        {
+          "name": "",
+          "tag": "A",
+          "visible_focus": true,
+          "in_view": true,
+          "unobscured_center": true,
+          "visible_focus_samples": 4,
+          "focus_not_obscured": true,
+          "exact_focused_overlay": false,
+          "focused_source_id": null,
+          "rect": {
+            "x": 813.234375,
+            "y": 512.40625,
+            "width": 138,
+            "height": 12
+          },
+          "href": "https://cesium.com/",
+          "hit": {
+            "tag": "IMG",
+            "class": null,
+            "text": ""
+          },
+          "map_control": false
+        }
+      ]
+    },
+    {
+      "label": "guided-1440",
+      "return_to_3d": {
+        "immediate": {
+          "inert": false,
+          "aria_hidden": null,
+          "visible": true,
+          "stage_expanded": "false",
+          "mobile_viewport": false,
+          "computed_visibility": "visible",
+          "computed_display": "block",
+          "client_rects": [
+            {
+              "x": 0,
+              "y": 60,
+              "width": 1050.203125,
+              "height": 840
+            }
+          ]
+        },
+        "settled": {
+          "inert": false,
+          "aria_hidden": null,
+          "visible": true,
+          "stage_expanded": "false",
+          "mobile_viewport": false,
+          "computed_visibility": "visible",
+          "computed_display": "block",
+          "client_rects": [
+            {
+              "x": 0,
+              "y": 60,
+              "width": 1050.203125,
+              "height": 840
+            }
+          ]
+        },
+        "visible_wait_ms": 71
+      }
+    },
+    {
+      "label": "guided-1440",
+      "diagnostics": {
+        "page": [],
+        "console": [],
+        "http": [],
+        "requests": [],
+        "cancellations": []
+      }
+    }
+  ],
+  "failures": [
+    {
+      "label": "guided-1440-section: Section annotation overlap",
+      "evidence": {
+        "pack": "maizuru-533513314-plateau-2025-v1",
+        "declared_overlap_count": 0,
+        "svg_rect": {
+          "x": 0,
+          "y": 579.40625,
+          "width": 1050.203125,
+          "height": 292.59375,
+          "right": 1050.203125,
+          "bottom": 872
+        },
+        "texts": [
+          {
+            "text": "A",
+            "rect": {
+              "x": 53,
+              "y": 614.703125,
+              "width": 14,
+              "height": 21,
+              "right": 67,
+              "bottom": 635.703125
+            },
+            "containment_margins_css_px": {
+              "left": 53,
+              "right": 983.203125,
+              "top": 35.296875,
+              "bottom": 236.296875
+            },
+            "rendered_font_px": 16
+          },
+          {
+            "text": "B",
+            "rect": {
+              "x": 1030.203125,
+              "y": 614.703125,
+              "width": 11.0625,
+              "height": 21,
+              "right": 1041.265625,
+              "bottom": 635.703125
+            },
+            "containment_margins_css_px": {
+              "left": 1030.203125,
+              "right": 8.9375,
+              "top": 35.296875,
+              "bottom": 236.296875
+            },
+            "rendered_font_px": 16
+          },
+          {
+            "text": "65.5",
+            "rect": {
+              "x": 27.109375,
+              "y": 780.703125,
+              "width": 23.21875,
+              "height": 16,
+              "right": 50.328125,
+              "bottom": 796.703125
+            },
+            "containment_margins_css_px": {
+              "left": 27.109375,
+              "right": 999.875,
+              "top": 201.296875,
+              "bottom": 75.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "81.9",
+            "rect": {
+              "x": 27.109375,
+              "y": 709.703125,
+              "width": 23.21875,
+              "height": 16,
+              "right": 50.328125,
+              "bottom": 725.703125
+            },
+            "containment_margins_css_px": {
+              "left": 27.109375,
+              "right": 999.875,
+              "top": 130.296875,
+              "bottom": 146.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "98.3",
+            "rect": {
+              "x": 27.109375,
+              "y": 638.703125,
+              "width": 23.21875,
+              "height": 16,
+              "right": 50.328125,
+              "bottom": 654.703125
+            },
+            "containment_margins_css_px": {
+              "left": 27.109375,
+              "right": 999.875,
+              "top": 59.296875,
+              "bottom": 217.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "0",
+            "rect": {
+              "x": 50.6640625,
+              "y": 817.703125,
+              "width": 7,
+              "height": 16,
+              "right": 57.6640625,
+              "bottom": 833.703125
+            },
+            "containment_margins_css_px": {
+              "left": 50.6640625,
+              "right": 992.5390625,
+              "top": 238.296875,
+              "bottom": 38.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "116",
+            "rect": {
+              "x": 288.05078125,
+              "y": 817.703125,
+              "width": 20.32421875,
+              "height": 16,
+              "right": 308.375,
+              "bottom": 833.703125
+            },
+            "containment_margins_css_px": {
+              "left": 288.05078125,
+              "right": 741.828125,
+              "top": 238.296875,
+              "bottom": 38.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "231",
+            "rect": {
+              "x": 532.1015625,
+              "y": 817.703125,
+              "width": 20,
+              "height": 16,
+              "right": 552.1015625,
+              "bottom": 833.703125
+            },
+            "containment_margins_css_px": {
+              "left": 532.1015625,
+              "right": 498.1015625,
+              "top": 238.296875,
+              "bottom": 38.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "347",
+            "rect": {
+              "x": 776.26953125,
+              "y": 817.703125,
+              "width": 20.32421875,
+              "height": 16,
+              "right": 796.59375,
+              "bottom": 833.703125
+            },
+            "containment_margins_css_px": {
+              "left": 776.26953125,
+              "right": 253.609375,
+              "top": 238.296875,
+              "bottom": 38.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "462",
+            "rect": {
+              "x": 1019.203125,
+              "y": 817.703125,
+              "width": 21.32421875,
+              "height": 16,
+              "right": 1040.52734375,
+              "bottom": 833.703125
+            },
+            "containment_margins_css_px": {
+              "left": 1019.203125,
+              "right": 9.67578125,
+              "top": 238.296875,
+              "bottom": 38.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "標高（m）",
+            "rect": {
+              "x": 3,
+              "y": 699.203125,
+              "width": 16,
+              "height": 60,
+              "right": 19,
+              "bottom": 759.203125
+            },
+            "containment_margins_css_px": {
+              "left": 3,
+              "right": 1031.203125,
+              "top": 119.796875,
+              "bottom": 112.796875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "Aからの距離（m）",
+            "rect": {
+              "x": 472.3828125,
+              "y": 800.703125,
+              "width": 104.4375,
+              "height": 16,
+              "right": 576.8203125,
+              "bottom": 816.703125
+            },
+            "containment_margins_css_px": {
+              "left": 472.3828125,
+              "right": 473.3828125,
+              "top": 221.296875,
+              "bottom": 55.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "東椿線",
+            "rect": {
+              "x": 134.6387481689453,
+              "y": 634.703125,
+              "width": 37,
+              "height": 16,
+              "right": 171.6387481689453,
+              "bottom": 650.703125
+            },
+            "containment_margins_css_px": {
+              "left": 134.6387481689453,
+              "right": 878.5643768310547,
+              "top": 55.296875,
+              "bottom": 221.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "椿川通線",
+            "rect": {
+              "x": 384.5054016113281,
+              "y": 634.703125,
+              "width": 50,
+              "height": 16,
+              "right": 434.5054016113281,
+              "bottom": 650.703125
+            },
+            "containment_margins_css_px": {
+              "left": 384.5054016113281,
+              "right": 615.6977233886719,
+              "top": 55.296875,
+              "bottom": 221.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "青山一号通線",
+            "rect": {
+              "x": 609.98876953125,
+              "y": 634.703125,
+              "width": 73,
+              "height": 16,
+              "right": 682.98876953125,
+              "bottom": 650.703125
+            },
+            "containment_margins_css_px": {
+              "left": 609.98876953125,
+              "right": 367.21435546875,
+              "top": 55.296875,
+              "bottom": 221.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "京月一号線",
+            "rect": {
+              "x": 855.6884765625,
+              "y": 634.703125,
+              "width": 61,
+              "height": 16,
+              "right": 916.6884765625,
+              "bottom": 650.703125
+            },
+            "containment_margins_css_px": {
+              "left": 855.6884765625,
+              "right": 133.5146484375,
+              "top": 55.296875,
+              "bottom": 221.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "東椿線",
+            "rect": {
+              "x": 82.63874816894531,
+              "y": 670.703125,
+              "width": 40,
+              "height": 17,
+              "right": 122.63874816894531,
+              "bottom": 687.703125
+            },
+            "containment_margins_css_px": {
+              "left": 82.63874816894531,
+              "right": 927.5643768310547,
+              "top": 91.296875,
+              "bottom": 184.296875
+            },
+            "rendered_font_px": 13
+          },
+          {
+            "text": "道路 · 47m · 標高96.4m",
+            "rect": {
+              "x": 82.63874816894531,
+              "y": 687.703125,
+              "width": 125.1640625,
+              "height": 16,
+              "right": 207.8028106689453,
+              "bottom": 703.703125
+            },
+            "containment_margins_css_px": {
+              "left": 82.63874816894531,
+              "right": 842.4003143310547,
+              "top": 108.296875,
+              "bottom": 168.296875
+            },
+            "rendered_font_px": 12
+          },
+          {
+            "text": "直接交差",
+            "rect": {
+              "x": 82.63874816894531,
+              "y": 702.703125,
+              "width": 48,
+              "height": 16,
+              "right": 130.6387481689453,
+              "bottom": 718.703125
+            },
+            "containment_margins_css_px": {
+              "left": 82.63874816894531,
+              "right": 919.5643768310547,
+              "top": 123.296875,
+              "bottom": 153.296875
+            },
+            "rendered_font_px": 12
+          }
+        ],
+        "text_overlaps": [
+          [
+            "道路 · 47m · 標高96.4m",
+            "直接交差"
+          ]
+        ],
+        "clipped_texts": [],
+        "hidden_texts": [],
+        "required_labels": {
+          "endpoint_a": true,
+          "endpoint_b": true,
+          "elevation_axis": true,
+          "distance_axis": true
+        }
+      }
+    }
+  ],
+  "browser": "152.0.7977.83",
+  "passed": false
+}
