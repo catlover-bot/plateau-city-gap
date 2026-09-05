@@ -759,7 +759,7 @@ export const AnalyticalMap = forwardRef<MapEngineAdapter, Props>(function Analyt
     const isVerify = presentation.story === "verify";
     const contextVisible = (isUnderstand || isVerify) && presentation.contextStatus === "ready";
     const sectionVisible = isUnderstand && presentation.sectionLine.features.length > 0;
-    const targetVisible = isVerify && presentation.target.features.length > 0;
+    const targetVisible = (isVerify || presentation.showObjectSelection === true) && presentation.target.features.length > 0;
     const exactTargetVisible = targetVisible && presentation.targetResolution === "exact";
 
     if (isIntro || isFind || isVerify) map.setPadding({ top: 0, right: 0, bottom: 0, left: 0 });

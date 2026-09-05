@@ -262,9 +262,9 @@ export function ProductApp() {
     void loadUrbanFuturesData().then(setFutures).catch(() => undefined);
   }, [futures, state.task]);
   useEffect(() => {
-    if ((state.task !== "try" && state.task !== "operate" && state.task !== "detail" && state.mapMode !== "plateau3d") || municipal) return;
+    if (state.experience === "guided" || (state.task !== "try" && state.task !== "operate" && state.task !== "detail" && state.mapMode !== "plateau3d") || municipal) return;
     void loadMunicipalWorkspaceData().then(setMunicipal).catch(() => undefined);
-  }, [municipal, state.mapMode, state.task]);
+  }, [municipal, state.experience, state.mapMode, state.task]);
 
   useEffect(() => { setActiveLayers(sceneLayerIds(state.scenePreset)); }, [state.scenePreset]);
   useEffect(() => {
@@ -328,6 +328,7 @@ export function ProductApp() {
   }, [dispatch]);
   const openGuidedAdvanced = useCallback(() => {
     setEvidenceOpen(false);
+    dispatch({ type: "set-map-mode", mapMode: "map2d" });
     dispatch({ type: "set-task", task: "operate" });
     dispatch({ type: "set-experience", experience: "advanced" });
   }, [dispatch]);
@@ -547,6 +548,7 @@ export function ProductApp() {
         data={guidedData}
         state={state}
         onStoryChange={(story) => dispatch({ type: "set-guided-story", story })}
+        onMapModeChange={(mapMode) => dispatch({ type: "set-map-mode", mapMode })}
         onRestart={restartGuided}
         onOpenAdvanced={openGuidedAdvanced}
         onSelectionChange={select}

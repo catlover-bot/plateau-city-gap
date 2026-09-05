@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import type { AppData } from "../../types";
 import type { SpatialSelection, SpatialState, SpatialViewport } from "../../state/spatial/types";
 import { AnalyticalMap } from "../../map/2d/AnalyticalMap";
@@ -8,6 +8,7 @@ import type { GuidedMapPresentation } from "./guidedTypes";
 import type { GuidedTargetChoice } from "./guidedTargets";
 
 const MAP_LAYERS = ["reference-gsi-pale", "analysis-city-gap"];
+const Guided3DView = lazy(() => import("./Guided3DView").then((module) => ({ default: module.Guided3DView })));
 
 interface GuidedLegendItem {
   label: string;
@@ -39,6 +40,11 @@ interface Props {
   onAreaHover(meshCode: string | null): void;
   onGuidedObjectSelect(kind: "building" | "road", objectId: string): void;
   onSectionFocus(position: { longitude: number; latitude: number } | null): void;
+  sectionFocus: { longitude: number; latitude: number } | null;
+  selectedObject: SpatialSelection | null;
+  threeDSupported: boolean;
+  onMapModeChange(mode: "map2d" | "plateau3d"): void;
+  onObjectSelect(selection: SpatialSelection | null): void;
 }
 
 export function GuidedMapStage({
@@ -57,7 +63,16 @@ export function GuidedMapStage({
   onAreaHover,
   onGuidedObjectSelect,
   onSectionFocus,
+  sectionFocus,
+  selectedObject,
+  threeDSupported,
+  onMapModeChange,
+  onObjectSelect,
 }: Props) {
+  const [sectionExpanded, setSectionExpanded] = useState(false);
+  const detailScene = state.guidedStory === "understand" || state.guidedStory === "verify";
+  const threeDActive = detailScene && state.mapMode === "plateau3d" && threeDSupported;
+  const showSection = state.guidedStory === "understand" && activeSectionData && (!threeDActive || sectionExpanded);
   const mapLegend = useMemo<{ title: string; items: GuidedLegendItem[] } | null>(() => {
     if (state.guidedStory === "find") return {
       title: "地図の見方",
@@ -102,7 +117,8 @@ export function GuidedMapStage({
           ? `実在する${target.kind === "road" ? "PLATEAU道路面" : target.kind === "building" ? "PLATEAU建物" : "登録地点"}`
           : "個別対象は未解決・選んだ範囲で確認";
 
-  return <section className="guided-map-stage" aria-label="舞鶴市の調査範囲とPLATEAU表示">
+  return <section className="guided-map-stage" data-guided-map-mode={threeDActive ? "plateau3d" : "map2d"} data-section-expanded={Boolean(showSection)} aria-label="舞鶴市の調査範囲とPLATEAU表示">
+    <div className="guided-2d-layer" style={{ visibility: threeDActive ? "hidden" : "visible" }} aria-hidden={threeDActive}>
     <AnalyticalMap
       data={data}
       validation={null}
@@ -120,13 +136,32 @@ export function GuidedMapStage({
       onAreaHover={onAreaHover}
       onGuidedObjectSelect={onGuidedObjectSelect}
     />
+    </div>
+    {threeDActive && selectedArea && <Suspense fallback={<div className="guided-3d-message" role="status">3D表示を準備しています</div>}>
+      <Guided3DView
+        key={selectedArea.id}
+        data={data}
+        selection={selectedObject ?? (state.guidedStory === "verify" && target?.kind === "road" ? { ...selectedArea, type: "road", id: String(target.geometry.features[0]?.id), properties: { ...target.geometry.features[0]?.properties, parent_mesh_code: selectedArea.id } } : selectedArea)}
+        viewport={state.viewport}
+        sectionData={activeSectionData}
+        sectionFocus={sectionFocus}
+        onSelectionChange={onObjectSelect}
+        onReturnTo2D={() => onMapModeChange("map2d")}
+      />
+    </Suspense>}
+    {detailScene && <div className="guided-view-switch" role="group" aria-label="街の表示">
+      <button type="button" aria-pressed={!threeDActive} onClick={() => onMapModeChange("map2d")}>2D地図</button>
+      <button type="button" aria-pressed={threeDActive} disabled={!threeDSupported} onClick={() => { onMobileSurfaceChange("map"); onMapModeChange("plateau3d"); }}>PLATEAU 3D</button>
+      {threeDActive && activeSectionData && state.guidedStory === "understand" && <button type="button" aria-pressed={sectionExpanded} onClick={() => { setSectionExpanded((value) => !value); onMobileSurfaceChange(sectionExpanded ? "map" : "section"); }}>街の断面</button>}
+    </div>}
+    {detailScene && !threeDSupported && presentation.contextStatus === "ready" && <p className="guided-3d-unavailable">この地域の検証済み3Dは未収録です。2D地図で確認できます。</p>}
     <div className="guided-map-caption" aria-live="polite">
       <span>{captionLabel}</span>
       <strong>{state.guidedStory === "intro" ? "地域を地図からたどる" : state.guidedStory === "verify" ? target?.label ?? areaLabel : areaLabel}</strong>
       <small>{captionDetail}</small>
     </div>
-    {mapLegend && <GuidedContextLegend {...mapLegend} />}
-    {state.guidedStory === "understand" && activeSectionData && <div className={`guided-section-dock ${mobileSurface === "section" ? "mobile-visible" : ""}`}>
+    {!threeDActive && mapLegend && <GuidedContextLegend {...mapLegend} />}
+    {showSection && <div className={`guided-section-dock ${mobileSurface === "section" ? "mobile-visible" : ""}`}>
       <UrbanSection
         open
         mode="guided"
@@ -138,10 +173,10 @@ export function GuidedMapStage({
         areaLabel={areaLabel}
         onFocusPosition={onSectionFocus}
         onClose={() => undefined}
-        onSelectBuilding={() => undefined}
+        onSelectBuilding={(id) => onGuidedObjectSelect("building", id)}
       />
     </div>}
-    {state.guidedStory === "understand" && activeSectionData && <div className="guided-mobile-surface-switch" role="group" aria-label="地図と断面の表示">
+    {!threeDActive && state.guidedStory === "understand" && activeSectionData && <div className="guided-mobile-surface-switch" role="group" aria-label="地図と断面の表示">
       <button type="button" aria-pressed={mobileSurface === "map"} onClick={() => onMobileSurfaceChange("map")}>地図</button>
       <button type="button" aria-pressed={mobileSurface === "section"} onClick={() => onMobileSurfaceChange("section")}>街の断面</button>
     </div>}

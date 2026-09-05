@@ -9,6 +9,7 @@ import type { GuidedContextStatus } from "./useGuidedAreaContext";
 import type { GuidedTargetChoice } from "./guidedTargets";
 
 function numberValue(value: unknown): number | null {
+  if (value === null || value === undefined || value === "") return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 }
@@ -103,6 +104,27 @@ interface AreaUnderstandingProps extends SharedProps {
   context: GuidedAreaContext | null;
   activeSectionData: SectionData | null;
   sectionError: string | null;
+  selectedObject: SpatialSelection | null;
+  threeDActive: boolean;
+}
+
+function SelectedPlateauObject({ object }: { object: SpatialSelection }) {
+  const properties = object.properties ?? {};
+  const attributeNumber = (value: unknown, unit: string) => {
+    const number = numberValue(value);
+    return number === null ? "データなし" : `${number.toLocaleString("ja-JP")}${unit}`;
+  };
+  return <section className="guided-object-attributes" data-object-id={object.id} data-object-kind={object.type} aria-label="選択したPLATEAU地物の属性">
+    <h2>{object.type === "building" ? "選択した建物" : "選択した道路面"}</h2>
+    {object.type === "building" ? <dl>
+      <div><dt>用途</dt><dd>{String(properties.usage ?? properties.usage_label ?? "データなし")}</dd></div>
+      <div><dt>建物高さ</dt><dd>{attributeNumber(properties.measured_height_m, "m")}</dd></div>
+      <div><dt>地上階数</dt><dd>{attributeNumber(properties.storeys_above_ground, "階")}</dd></div>
+      <div><dt>地下階数</dt><dd>{attributeNumber(properties.storeys_below_ground, "階")}</dd></div>
+    </dl> : <p>{String(properties.road_name ?? object.label ?? "PLATEAU道路面")}</p>}
+    <p className="guided-object-source">PLATEAU 舞鶴市 {String(properties.source_version ?? object.urbanState)}{properties.lod ? ` · ${String(properties.lod)}` : ""}</p>
+    <details><summary>選択対象の出典ID</summary><code>{object.id}</code></details>
+  </section>;
 }
 
 function AreaUnderstandingInspector({
@@ -114,19 +136,23 @@ function AreaUnderstandingInspector({
   context,
   activeSectionData,
   sectionError,
+  selectedObject,
+  threeDActive,
   titleRef,
   onStoryChange,
 }: AreaUnderstandingProps) {
-  return <div className="guided-scene-content">
+  return <div className={`guided-scene-content ${threeDActive ? "guided-3d-inspector" : ""}`}>
     <div className="guided-panel-kicker">
       <button type="button" className="guided-back" onClick={() => onStoryChange("find")}>{GUIDED_CONTENT.understand.back}</button>
       <span className="guided-eyebrow">{GUIDED_CONTENT.understand.eyebrow}</span>
     </div>
     <h1 id="guided-story-title" ref={titleRef} tabIndex={-1}>{areaLabel}の地形と建物</h1>
+    {selectedObject && <SelectedPlateauObject object={selectedObject} />}
+    {threeDActive && !selectedObject && <p className="guided-section-note">3Dの建物を選ぶと、収録された用途・高さ・階数を確認できます。</p>}
     <dl className="guided-known-summary">
-      <div><dt>人口 {Math.round(numberValue(properties.population) ?? 0).toLocaleString("ja-JP")}人</dt><dd>うち65歳以上 {Math.round(numberValue(properties.elderly_population) ?? 0).toLocaleString("ja-JP")}人（国勢調査2020）</dd></div>
-      <div><dt>街の形</dt><dd>範囲と交差するPLATEAU建物 {catalogItem?.counts.buildings.toLocaleString("ja-JP") ?? "—"}棟・道路面 {catalogItem?.counts.roads.toLocaleString("ja-JP") ?? "—"}件</dd></div>
-      <div><dt>都市計画・交通</dt><dd>範囲と交差する公式の都市計画形状 {catalogItem?.counts.planning.toLocaleString("ja-JP") ?? "—"}件・収録駅/バス停まで直線 {formatDistance(properties.nearest_public_transport_distance_m)}</dd></div>
+      <div><dt>人口 {Math.round(numberValue(properties.population) ?? 0).toLocaleString("ja-JP")}人</dt><dd>うち65歳以上 {Math.round(numberValue(properties.elderly_population) ?? 0).toLocaleString("ja-JP")}人（国勢調査2020・500m集計）</dd></div>
+      <div><dt>{threeDActive ? "2D地物の範囲交差集計" : "街の形"}</dt><dd>範囲と交差するPLATEAU建物 {catalogItem?.counts.buildings.toLocaleString("ja-JP") ?? "—"}棟・道路面 {catalogItem?.counts.roads.toLocaleString("ja-JP") ?? "—"}件</dd></div>
+      {!threeDActive && <div><dt>都市計画・交通</dt><dd>範囲と交差する公式の都市計画形状 {catalogItem?.counts.planning.toLocaleString("ja-JP") ?? "—"}件・収録駅/バス停まで直線 {formatDistance(properties.nearest_public_transport_distance_m)}</dd></div>}
     </dl>
     {contextStatus === "loading" && <p role="status" className="guided-loading">{GUIDED_CONTENT.loading.context}</p>}
     {contextError && <p role="alert" className="guided-error">{contextError}</p>}
@@ -137,8 +163,8 @@ function AreaUnderstandingInspector({
         : <p className="guided-boundary">{context?.section.reason?.replaceAll("Area", "範囲") ?? "この範囲では検証済みの街の断面を表示していません。"}</p>}
     <div className="guided-unknown-bridge">
       <span>{GUIDED_CONTENT.understand.unknownLabel}</span>
-      <strong>{GUIDED_CONTENT.understand.unknownTitle}</strong>
-      <p>{GUIDED_CONTENT.understand.unknownReason}</p>
+      <strong>{threeDActive ? "出入口や通行条件は、現地で確認" : GUIDED_CONTENT.understand.unknownTitle}</strong>
+      <p>{threeDActive ? "LOD1の形状や道路面は、入口・歩道・段差や通行可能性を確認した記録ではありません。" : GUIDED_CONTENT.understand.unknownReason}</p>
     </div>
     <button type="button" className="guided-primary" onClick={() => onStoryChange("verify")}>
       {GUIDED_CONTENT.understand.action}
@@ -203,6 +229,8 @@ interface Props extends SharedProps {
   context: GuidedAreaContext | null;
   activeSectionData: SectionData | null;
   sectionError: string | null;
+  selectedObject: SpatialSelection | null;
+  threeDActive: boolean;
   targetChoices: GuidedTargetChoice[];
   target: GuidedTargetChoice | undefined;
   onSelectArea(meshCode: string): void;

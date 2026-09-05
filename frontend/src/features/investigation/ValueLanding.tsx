@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import type { InvestigationCandidate, InvestigationWorkspace } from "./investigationTypes";
+import { GUIDED_3D_EXAMPLE_QUERY } from "../guided-spatial/guided3d";
 
 export function InvestigationHeader({ onRestart }: { onRestart(): void }) {
   return (
@@ -91,6 +92,7 @@ export function InvestigationLanding({
           <div>
             <ValueStatement />
             <div className="value-actions">
+              <a className="public-3d-example" href={`${import.meta.env.BASE_URL}${GUIDED_3D_EXAMPLE_QUERY}`}>PLATEAUで街を3Dで見る<small>常団地前周辺の実例</small></a>
               <button type="button" className="investigation-primary" onClick={onStart}>
                 地図から確認候補を選ぶ
               </button>

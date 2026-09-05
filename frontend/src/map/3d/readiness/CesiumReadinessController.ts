@@ -23,6 +23,7 @@ export interface CesiumReadinessSources {
     targetPositions?: Array<[number, number, number]>;
     targetArtifactsReady?: boolean;
     targetArtifactBytes?: number;
+    targetContentCount?: number;
     packId?: string;
   }>;
   terrainTileset?: Cesium3DTileset;
@@ -74,6 +75,8 @@ function setDataset(container: HTMLElement, snapshot: VisualReadinessSnapshot, r
   container.dataset.cameraSettled = String(snapshot.cameraSettled);
   container.dataset.canvasSizeReady = String(snapshot.canvasSizeReady);
   container.dataset.buildingFeatureCount = String(snapshot.buildingFeatureCount);
+  container.dataset.buildingContentReady = String(snapshot.buildingContentReady ?? false);
+  container.dataset.renderedBuildingFeatureCount = String(snapshot.renderedBuildingFeatureCount ?? 0);
   container.dataset.targetBuildingCount = String(snapshot.targetBuildingCount);
   container.dataset.loadedTargetBuildingCount = String(snapshot.loadedTargetBuildingCount);
   container.dataset.visibleTargetBuildingCount = String(snapshot.visibleTargetBuildingCount);
@@ -160,6 +163,10 @@ export function startCesiumReadinessController(input: {
       ? Math.max(activeBuilding.stats.numberOfFeaturesSelected ?? 0, activeBuilding.stats.numberOfFeaturesLoaded ?? 0)
       : 0;
     const buildingTilesReady = Boolean(activeBuilding && hasRequiredBuildingContent(activeBuilding));
+    const renderedBuildingFeatureCount = activeBuilding?.stats.numberOfFeaturesSelected ?? 0;
+    const buildingContentReady = Boolean(activeBuilding?.tileset?.tilesLoaded
+      && (activeBuilding.stats.numberOfTilesWithContentReady ?? 0) >= (activeBuilding.targetContentCount ?? 1)
+      && (activeBuilding.stats.numberOfCommands ?? 0) > 0);
     const expectedTargetBuildings = requirements.expectedTargetBuildingCount ?? requirements.minimumBuildingFeatures;
     const targetBuildingCount = expectedTargetBuildings > 0 ? expectedTargetBuildings : 0;
     const loadedTargetBuildingCount = activeBuilding?.targetArtifactsReady
@@ -180,7 +187,7 @@ export function startCesiumReadinessController(input: {
     // actually rendered targets; projected catalog centroids alone are not.
     const visibleTargetBuildingCount = Math.min(
       projectedTargetBuildingCount,
-      buildingFeatureCount,
+      renderedBuildingFeatureCount,
       activeBuilding?.targetFeatureCount ?? 0,
     );
     const targetCoverageRatio = targetBuildingCount > 0
@@ -189,7 +196,7 @@ export function startCesiumReadinessController(input: {
     const terrainStats = statistics(sources.terrainTileset);
     const localTerrainTiles = terrainStats.numberOfTilesWithContentReady ?? 0;
     const terrainTileCount = Math.max(localTerrainTiles, globeTiles);
-    const localDemReady = Boolean(flags.localDemLoaded && sources.terrainTileset?.tilesLoaded && localTerrainTiles > 0);
+    const localDemReady = Boolean(flags.localDemLoaded && sources.terrainTileset?.show && sources.terrainTileset.tilesLoaded && localTerrainTiles > 0 && (terrainStats.numberOfCommands ?? 0) > 0);
     const activeBuildingRequests = activeBuilding
       ? (activeBuilding.stats.numberOfPendingRequests ?? 0) + (activeBuilding.stats.numberOfTilesProcessing ?? 0)
       : 0;
@@ -197,7 +204,7 @@ export function startCesiumReadinessController(input: {
       .filter((item) => item !== activeBuilding)
       .reduce((total, item) => total + (item.stats.numberOfPendingRequests ?? 0) + (item.stats.numberOfTilesProcessing ?? 0), 0)
       + (buildingTilesReady ? activeBuildingRequests : 0);
-    const outstandingCriticalRequests = (buildingTilesReady ? 0 : activeBuildingRequests)
+    const outstandingCriticalRequests = (buildingContentReady ? 0 : activeBuildingRequests)
       + (terrainStats.numberOfPendingRequests ?? 0)
       + (terrainStats.numberOfTilesProcessing ?? 0)
       + (requirements.requiresBasemap && globeTiles === 0 ? globePendingRequests : 0);
@@ -207,6 +214,8 @@ export function startCesiumReadinessController(input: {
       cameraSignature(viewer),
       activeBuilding?.source ?? "none",
       buildingTilesReady,
+      buildingContentReady,
+      renderedBuildingFeatureCount,
       localDemReady,
       globeTiles > 0,
       outstandingCriticalRequests,
@@ -226,6 +235,8 @@ export function startCesiumReadinessController(input: {
       cesiumSceneReady: !viewer.scene.isDestroyed(),
       canvasSizeReady,
       buildingTilesReady,
+      buildingContentReady,
+      renderedBuildingFeatureCount,
       buildingFeatureCount,
       targetBuildingCount,
       loadedTargetBuildingCount,

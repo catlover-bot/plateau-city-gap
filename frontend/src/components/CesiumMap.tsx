@@ -1,6 +1,7 @@
 import {
   Cartesian3,
   Cartesian2,
+  BoundingSphere,
   Cartographic,
   Cesium3DTileset,
   ClassificationType,
@@ -10,8 +11,10 @@ import {
   Entity,
   GeoJsonDataSource,
   HeightReference,
+  HeadingPitchRange,
   LabelGraphics,
   Math as CesiumMath,
+  Matrix4,
   PointGraphics,
   PointPrimitive,
   PointPrimitiveCollection,
@@ -37,6 +40,7 @@ import type {
   WorkspacePhase
 } from "../types";
 import { finiteNumber, isTop10Rank } from "../lib/format";
+import type { SectionData } from "../features/urban-section/sectionTypes";
 import type { VirtualPoint } from "../lib/scenario";
 import { CameraController } from "../map/3d/CameraController";
 import type { AnalysisLens, CounterfactualState } from "../state/spatial/types";
@@ -75,7 +79,10 @@ interface CesiumMapProps {
   counterfactualState?: CounterfactualState;
   readinessRequirements: SceneReadinessRequirements;
   showUrbanSection?: boolean;
+  sectionData?: SectionData | null;
+  sectionFocus?: { longitude: number; latitude: number } | null;
   preferredBuildingSource?: "spatial-pack" | "verified-local";
+  guidedPresentation?: boolean;
   visibility: LayerVisibility;
   plateauVisibility?: { buildings: boolean; roads: boolean; terrain?: boolean };
   meshPresentation?: "analysis" | "outline";
@@ -116,6 +123,7 @@ interface DataSourceRefs {
   futures?: GeoJsonDataSource;
   workspacePoints?: WorkspacePointRef[];
   urbanSectionPlane?: Entity;
+  urbanSectionAnnotations?: Entity[];
   spatialPackVerification?: SpatialPackVerification;
 }
 
@@ -370,8 +378,8 @@ function styleRoads(source: GeoJsonDataSource | undefined, selectedRoadId: strin
     if (!entity.polygon) continue;
     const values = entityValues(entity);
     const selected = String(values.road_id ?? "") === selectedRoadId;
-    const alpha = selected ? 0.9 : analysisLens === "service-pulse" ? 0.44 : analysisLens === "urban-xray" ? 0.26 : 0.56;
-    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString(selected ? "#b85134" : "#9d7a42").withAlpha(alpha));
+    const alpha = selected ? 0.94 : analysisLens === "service-pulse" ? 0.44 : analysisLens === "urban-xray" ? 0.26 : 0.88;
+    entity.polygon.material = new ColorMaterialProperty(Color.fromCssColorString(selected ? "#b85134" : "#8b9994").withAlpha(alpha));
     entity.polygon.heightReference = new ConstantProperty(HeightReference.CLAMP_TO_GROUND);
     entity.polygon.classificationType = new ConstantProperty(ClassificationType.BOTH);
     entity.polygon.outline = new ConstantProperty(true);
@@ -596,7 +604,10 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     counterfactualState = "baseline",
     readinessRequirements,
     showUrbanSection = false,
+    sectionData,
+    sectionFocus,
     preferredBuildingSource,
+    guidedPresentation = false,
     visibility,
     plateauVisibility,
     meshPresentation = "analysis",
@@ -624,6 +635,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [viewerReady, setViewerReady] = useState(false);
+  const [renderedSection, setRenderedSection] = useState<SectionData | null>(null);
   const viewerRef = useRef<Viewer | null>(null);
   const cameraControllerRef = useRef<CameraController | null>(null);
   const sourcesRef = useRef<DataSourceRefs>({});
@@ -693,6 +705,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   workspaceMapRef.current = workspaceMap;
   futuresMapRef.current = futuresMap;
   futuresStressModeRef.current = futuresStressMode;
+  const localPackOnly = preferredBuildingSource === "spatial-pack" || preferredBuildingSource === "verified-local";
 
   const loadPlateauTileset = useCallback(() => {
     if (sourcesRef.current.plateauTileset || sourcesRef.current.plateauFallbackTileset || sourcesRef.current.plateauFastTileset || plateauLoadRef.current) {
@@ -720,6 +733,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
             const tileset = await loadOfficialBuildingTileset(data);
             if (!tileset || viewer.isDestroyed()) return;
             applyBuildingStyle(tileset, selectedBuildingIdRef.current, {
+              guidedPresentation,
               analysisLens: analysisLensRef.current,
               selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
             });
@@ -772,6 +786,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
             return;
           }
           applyBuildingStyle(fallback, selectedBuildingIdRef.current, {
+            guidedPresentation,
             analysisLens: analysisLensRef.current,
             selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
           });
@@ -790,12 +805,17 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           if (!localPackOnly) window.setTimeout(() => void startOfficialStream(), 4_000);
         };
 
+        if (localPackOnly) {
+          await startBundledFallback();
+          return;
+        }
         const fast = await loadFastStartBuildingTileset(data);
         if (!fast || viewer.isDestroyed()) {
           await startBundledFallback();
           return;
         }
         applyBuildingStyle(fast, selectedBuildingIdRef.current, {
+          guidedPresentation,
           analysisLens: analysisLensRef.current,
           selectedMeshBounds: meshBounds(data.meshes, selectedMeshCodeRef.current),
         });
@@ -820,7 +840,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       }
     })();
     return plateauLoadRef.current;
-  }, [data, preferredBuildingSource, workspaceMap]);
+  }, [data, guidedPresentation, preferredBuildingSource, workspaceMap]);
 
   const loadPlateauTerrain = useCallback(() => {
     if (sourcesRef.current.plateauTerrainTileset || plateauTerrainLoadRef.current) {
@@ -845,7 +865,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       } catch (error) {
         console.warn("Local PLATEAU DEM terrain loading failed", error);
         containerRef.current?.setAttribute("data-local-dem", "fallback");
-        onWarningRef.current("局所PLATEAU DEM面を読み込めませんでした。広域PLATEAU-Terrainで表示しています。");
+        onWarningRef.current("局所PLATEAU DEM面を読み込めませんでした。実地形の確認はできません。");
       } finally {
         plateauTerrainLoadRef.current = null;
       }
@@ -924,21 +944,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     };
     captureWindow.__cityGapCesiumViewer = viewer;
     captureWindow.__cityGapStabilizeCapture = async () => {
-      // Capture automation calls this only after strict pack/hash readiness has
-      // been recorded. It stops optional globe traffic and SwiftShader work on
-      // a still-processing fallback tile; normal interactive rendering is not
-      // changed. The conservative visible-target count remains in the manifest.
-      readinessControllerRef.current?.destroy();
-      readinessControllerRef.current = null;
-      viewer.scene.globe.show = false;
-      const incompleteFallbackHidden = Boolean(
-        sourcesRef.current.plateauFallbackTileset
-        && !sourcesRef.current.plateauFallbackTileset.tilesLoaded,
-      );
-      if (incompleteFallbackHidden && sourcesRef.current.plateauFallbackTileset) {
-        sourcesRef.current.plateauFallbackTileset.show = false;
-        if (sourcesRef.current.plateauFastTileset) sourcesRef.current.plateauFastTileset.show = true;
-      }
+      // Request a settled frame without changing the visible model, terrain,
+      // or live readiness checks. Capture cannot hide incomplete content.
       await new Promise<void>((resolve) => {
         let timeout = 0;
         const remove = viewer.scene.postRender.addEventListener(() => {
@@ -953,8 +960,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         viewer.scene.requestRender();
       });
       return {
-        globeHidden: true,
-        incompleteFallbackHidden,
+        globeHidden: !viewer.scene.globe.show,
+        incompleteFallbackHidden: false,
         fastStartVisible: Boolean(sourcesRef.current.plateauFastTileset?.show),
       };
     };
@@ -986,6 +993,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
             targetPositions: sourcesRef.current.spatialPackVerification?.targetPositions,
             targetArtifactsReady: sourcesRef.current.spatialPackVerification?.artifactsReady ?? false,
             targetArtifactBytes: sourcesRef.current.spatialPackVerification?.artifactBytes,
+            targetContentCount: sourcesRef.current.spatialPackVerification?.sourceTileCount,
             packId: sourcesRef.current.spatialPackVerification?.packId ?? "maizuru-533513314-plateau-2025-v1",
           },
           {
@@ -1001,7 +1009,25 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       flags: () => readinessFlagsRef.current,
       onChange: (snapshot, result) => onVisualReadinessChangeRef.current?.(snapshot, result),
     });
-    if (selectedMeshCodeRef.current === data.plateauMetadata?.reference_layer?.deep_dive_mesh_code) {
+    if (localPackOnly) {
+      const viewpoint = data.plateauMetadata?.reference_layer?.viewpoint;
+      if (typeof viewpoint?.longitude === "number" && typeof viewpoint.latitude === "number") {
+        // Aim at the existing transect and its recorded ellipsoidal elevation;
+        // only the camera target changes, never the model/terrain placement.
+        const endpoints = guidedPresentation ? sectionData?.geometry.coordinates : undefined;
+        const first = endpoints?.[0];
+        const last = endpoints?.[endpoints.length - 1];
+        const samples = guidedPresentation ? sectionData?.terrain_samples.filter((sample) => typeof sample.elevation_m === "number") ?? [] : [];
+        const targetLongitude = first && last ? (first[0] + last[0]) / 2 : viewpoint.longitude;
+        const targetLatitude = first && last ? (first[1] + last[1]) / 2 : viewpoint.latitude;
+        const targetElevation = samples.length ? samples.reduce((total, sample) => total + sample.elevation_m!, 0) / samples.length : 0;
+        viewer.camera.viewBoundingSphere(
+          new BoundingSphere(Cartesian3.fromDegrees(targetLongitude, targetLatitude, targetElevation), 120),
+          new HeadingPitchRange(CesiumMath.toRadians(24), CesiumMath.toRadians(-36), guidedPresentation && window.innerWidth >= 768 ? 720 : 850),
+        );
+        viewer.camera.lookAtTransform(Matrix4.IDENTITY);
+      }
+    } else if (selectedMeshCodeRef.current === data.plateauMetadata?.reference_layer?.deep_dive_mesh_code) {
       cameraControllerRef.current.plateau("building");
     } else {
       cameraControllerRef.current.city();
@@ -1011,7 +1037,8 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
     container.setAttribute("data-building-tiles-loaded", "false");
     container.setAttribute("data-local-dem", "loading");
 
-    void createBroadTerrain(data).then((provider) => {
+    if (localPackOnly) container.setAttribute("data-broad-terrain", "not-requested-local-dem");
+    else void createBroadTerrain(data).then((provider) => {
       if (!provider || cancelled || viewer.isDestroyed()) return;
       viewer.terrainProvider = provider;
       readinessFlagsRef.current.broadTerrainReady = true;
@@ -1030,13 +1057,20 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           maximumLevel: 18,
           credit: "地理院タイル"
         });
-        viewer.imageryLayers.addImageryProvider(paleImagery);
+        const imagery = viewer.imageryLayers.addImageryProvider(paleImagery);
+        if (guidedPresentation) {
+          imagery.alpha = 0.25;
+          imagery.saturation = 0;
+        }
         readinessFlagsRef.current.basemapReady = true;
         containerRef.current?.setAttribute("data-basemap", "ready");
         const boundary = await addGeoJson(viewer, data.boundary);
         const plateauGeoJson = await addGeoJson(viewer, data.plateauBuildings);
         const plateauRoads = await addGeoJson(viewer, data.plateauRoads);
-        const meshes = await addGeoJson(viewer, data.meshes);
+        const meshes = await addGeoJson(viewer, localPackOnly ? {
+          ...data.meshes,
+          features: data.meshes.features.filter((feature) => String(feature.properties?.mesh_code) === selectedMeshCodeRef.current),
+        } : data.meshes);
         const stations = await addGeoJson(viewer, data.stations);
         const busStops = await addGeoJson(viewer, data.busStops);
         const medical = await addGeoJson(viewer, data.medicalFacilities);
@@ -1095,20 +1129,24 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
         return;
       }
       const drilled = viewer.scene.drillPick(movement.position, 20) as Array<({ id?: Entity } & Partial<TileFeatureLike>)>;
-      const building = drilled.find(isTileFeature);
+      const building = drilled.find((feature) => isTileFeature(feature) && typeof feature.getProperty("gml_id") === "string" && String(feature.getProperty("gml_id")).startsWith("bldg_"));
       if (building) {
-        onBuildingSelectRef.current(buildingFromFeature(building, pickedCoordinate(viewer, movement.position)));
+        onBuildingSelectRef.current(buildingFromFeature(building as TileFeatureLike, pickedCoordinate(viewer, movement.position)));
         return;
       }
-      const picked = drilled[0] ?? viewer.scene.pick(movement.position) as ({ id?: Entity } & Partial<TileFeatureLike>) | undefined;
-      if (!picked?.id) return;
-      const road = roadFromEntity(picked.id, pickedCoordinate(viewer, movement.position));
-      if (road) {
-        onRoadSelectRef.current?.(road);
-        return;
+      for (const picked of drilled) {
+        if (!(picked.id instanceof Entity)) continue;
+        const road = roadFromEntity(picked.id, pickedCoordinate(viewer, movement.position));
+        if (road) {
+          onRoadSelectRef.current?.(road);
+          return;
+        }
       }
-      const mesh = entityMesh(picked.id);
-      if (mesh) onMeshSelectRef.current(mesh);
+      for (const picked of drilled) {
+        if (!(picked.id instanceof Entity)) continue;
+        const mesh = entityMesh(picked.id);
+        if (mesh) { onMeshSelectRef.current(mesh); return; }
+      }
     }, ScreenSpaceEventType.LEFT_CLICK);
 
     return () => {
@@ -1127,7 +1165,7 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       delete (window as Window & { __cityGapStabilizeCapture?: unknown }).__cityGapStabilizeCapture;
       if (!viewer.isDestroyed()) viewer.destroy();
     };
-  }, [data, loadPlateauTerrain, loadPlateauTileset]);
+  }, [data, guidedPresentation, loadPlateauTerrain, loadPlateauTileset, localPackOnly, sectionData]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -1230,16 +1268,18 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
   useEffect(() => {
     if (sourcesRef.current.meshes) styleMeshes(sourcesRef.current.meshes, metricMode, selectedMeshCode, afterScores, meshPresentation, analysisLens);
     styleRoads(sourcesRef.current.plateauRoads, selectedRoadId, analysisLens);
-    const styleContext = { analysisLens, selectedMeshBounds: meshBounds(data.meshes, selectedMeshCode) };
+    const styleContext = { analysisLens, selectedMeshBounds: meshBounds(data.meshes, selectedMeshCode), guidedPresentation };
     if (sourcesRef.current.plateauTileset) applyBuildingStyle(sourcesRef.current.plateauTileset, selectedBuildingId, styleContext);
     if (sourcesRef.current.plateauFastTileset) applyBuildingStyle(sourcesRef.current.plateauFastTileset, selectedBuildingId, styleContext);
     if (sourcesRef.current.plateauFallbackTileset) applyBuildingStyle(sourcesRef.current.plateauFallbackTileset, selectedBuildingId, styleContext);
     containerRef.current?.setAttribute("data-analysis-lens", analysisLens);
+    containerRef.current?.setAttribute("data-selected-building-id", selectedBuildingId ?? "");
+    containerRef.current?.setAttribute("data-selected-road-id", selectedRoadId ?? "");
     readinessFlagsRef.current.overlayReady = analysisLens !== "service-pulse";
     containerRef.current?.setAttribute("data-overlay", analysisLens === "service-pulse" ? "loading" : "ready");
     readinessControllerRef.current?.refresh();
     viewerRef.current?.scene.requestRender();
-  }, [afterScores, analysisLens, data.meshes, meshPresentation, metricMode, selectedBuildingId, selectedMeshCode, selectedRoadId]);
+  }, [afterScores, analysisLens, data.meshes, guidedPresentation, meshPresentation, metricMode, selectedBuildingId, selectedMeshCode, selectedRoadId]);
 
   useEffect(() => {
     const sources = sourcesRef.current;
@@ -1275,23 +1315,22 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
       viewer.entities.remove(sourcesRef.current.urbanSectionPlane);
       sourcesRef.current.urbanSectionPlane = undefined;
     }
+    for (const annotation of sourcesRef.current.urbanSectionAnnotations ?? []) viewer.entities.remove(annotation);
+    sourcesRef.current.urbanSectionAnnotations = [];
+    setRenderedSection(null);
     containerRef.current?.setAttribute("data-section-plane-ready", "false");
-    if (!showUrbanSection) {
+    if (!showUrbanSection || sectionData === null) {
       viewer.scene.requestRender();
       return;
     }
     let cancelled = false;
     const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
-    void fetch(`${base}data/spatial-packs/maizuru-533513314-plateau-2025-v1/sections.json`)
+    const sectionPromise = sectionData ? Promise.resolve(sectionData) : fetch(`${base}data/spatial-packs/maizuru-533513314-plateau-2025-v1/sections.json`)
       .then(async (response) => {
         if (!response.ok) throw new Error(`Urban Section HTTP ${response.status}`);
-        return response.json() as Promise<{
-          geometry: { coordinates: Array<[number, number]> };
-          terrain_samples: Array<{ elevation_m: number | null }>;
-          buildings: Array<{ properties: { measured_height_m?: number | null } }>;
-          transect_id: string;
-        }>;
-      })
+        return response.json() as Promise<SectionData>;
+      });
+    void sectionPromise
       .then((section) => {
         if (cancelled || viewer.isDestroyed()) return;
         const elevations = section.terrain_samples
@@ -1320,23 +1359,85 @@ export const CesiumMap = forwardRef<CesiumMapHandle, CesiumMapProps>(function Ce
           polygon: {
             hierarchy: new PolygonHierarchy(positions),
             perPositionHeight: true,
-            material: Color.fromCssColorString("#b47a21").withAlpha(0.18),
+            material: Color.fromCssColorString("#176f73").withAlpha(0.10),
             outline: true,
-            outlineColor: Color.fromCssColorString("#8f5c18").withAlpha(0.85),
+            outlineColor: Color.fromCssColorString("#176f73").withAlpha(0.9),
           },
           properties: {
             source: "PLATEAU Maizuru 2025 dem:TINRelief + actual building measuredHeight",
             elevationExaggeration: 1,
           },
         });
+        const annotations: Entity[] = [];
+        const coveredSamples = section.terrain_samples.filter((sample) => typeof sample.elevation_m === "number");
+        // These heights are the existing EPSG:4979 samples, already transformed
+        // from the source DEM. Never construct terrain across a coverage gap.
+        if (coveredSamples.length === section.terrain_samples.length && coveredSamples.length > 1) {
+          annotations.push(viewer.entities.add({
+            id: `urban-section-transect:${section.transect_id}`,
+            name: "A–B 実DEM断面",
+            polyline: {
+              positions: Cartesian3.fromDegreesArrayHeights(coveredSamples.flatMap((sample) => [sample.longitude, sample.latitude, sample.elevation_m!])),
+              width: 4,
+              material: Color.fromCssColorString("#176f73"),
+              depthFailMaterial: Color.fromCssColorString("#176f73").withAlpha(0.5),
+              clampToGround: false,
+            },
+          }));
+        }
+        [section.terrain_samples[0], section.terrain_samples[section.terrain_samples.length - 1]].forEach((sample, index) => {
+          if (!sample || typeof sample.elevation_m !== "number") return;
+          annotations.push(viewer.entities.add({
+            id: `urban-section-endpoint:${index === 0 ? "A" : "B"}`,
+            position: Cartesian3.fromDegrees(sample.longitude, sample.latitude, sample.elevation_m),
+            label: {
+              text: index === 0 ? "A" : "B",
+              font: "700 17px sans-serif",
+              fillColor: Color.fromCssColorString("#176f73"),
+              showBackground: true,
+              backgroundColor: Color.fromCssColorString("#fffdf7").withAlpha(0.95),
+              pixelOffset: new Cartesian2(0, -16),
+              disableDepthTestDistance: Number.POSITIVE_INFINITY,
+            },
+          }));
+        });
+        sourcesRef.current.urbanSectionAnnotations = annotations;
+        setRenderedSection(section);
         containerRef.current?.setAttribute("data-section-plane-ready", "true");
+        containerRef.current?.setAttribute("data-section-transect-id", section.transect_id);
         viewer.scene.requestRender();
       })
       .catch((reason: unknown) => {
         if (!cancelled) onWarningRef.current(reason instanceof Error ? reason.message : "Urban Section plane unavailable");
       });
     return () => { cancelled = true; };
-  }, [showUrbanSection, viewerReady]);
+  }, [sectionData, showUrbanSection, viewerReady]);
+
+  useEffect(() => {
+    const viewer = viewerRef.current;
+    if (!viewerReady || !viewer || viewer.isDestroyed()) return;
+    viewer.entities.removeById("urban-section-focus");
+    containerRef.current?.setAttribute("data-section-focus-ready", "false");
+    if (showUrbanSection && sectionFocus && renderedSection) {
+      const closest = renderedSection.terrain_samples.reduce<typeof renderedSection.terrain_samples[number] | null>((best, sample) => {
+        if (typeof sample.elevation_m !== "number") return best;
+        const distance = (sample.longitude - sectionFocus.longitude) ** 2 + (sample.latitude - sectionFocus.latitude) ** 2;
+        const bestDistance = best ? (best.longitude - sectionFocus.longitude) ** 2 + (best.latitude - sectionFocus.latitude) ** 2 : Infinity;
+        return distance < bestDistance ? sample : best;
+      }, null);
+      if (closest && typeof closest.elevation_m === "number") {
+        viewer.entities.add({
+          id: "urban-section-focus",
+          name: "断面で確認中の同じDEM標本点",
+          position: Cartesian3.fromDegrees(closest.longitude, closest.latitude, closest.elevation_m),
+          point: { pixelSize: 12, color: Color.fromCssColorString("#176f73"), outlineColor: Color.WHITE, outlineWidth: 3, disableDepthTestDistance: Number.POSITIVE_INFINITY },
+        });
+        containerRef.current?.setAttribute("data-section-focus-ready", "true");
+        containerRef.current?.setAttribute("data-section-focus-coordinate", `${closest.longitude},${closest.latitude}`);
+      }
+    }
+    viewer.scene.requestRender();
+  }, [renderedSection, sectionFocus, showUrbanSection, viewerReady]);
 
   useEffect(() => {
     setWorkspaceVisibility(sourcesRef.current.workspace, workspacePhase, workspaceVisibility, counterfactualState, analysisLens);

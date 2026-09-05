@@ -32,6 +32,7 @@ import {
   type PublicTargetData,
 } from "./publicCartography";
 import "./publicAreaJourney.css";
+import { GUIDED_3D_EXAMPLE_QUERY } from "../guided-spatial/guided3d";
 
 export type PublicAreaStep = "intro" | "place" | "radius" | "result" | "target";
 
@@ -361,6 +362,7 @@ export function PublicAreaJourney({
                 <h1 ref={headingRef} tabIndex={-1}>気になる場所を、<br />地図とデータで確かめる。</h1>
                 <p className="public-intro-copy">{PUBLIC_LANDING_COPY.subcopy}</p>
                 <button type="button" className="public-primary" onClick={() => setStep("place")}>{PUBLIC_LANDING_COPY.primaryCta}</button>
+                <a className="public-3d-example" href={`${import.meta.env.BASE_URL}${GUIDED_3D_EXAMPLE_QUERY}`}>PLATEAUで街を3Dで見る<small>常団地前周辺の実例</small></a>
               </section>
             )}
 

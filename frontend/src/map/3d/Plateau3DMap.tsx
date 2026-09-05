@@ -6,6 +6,7 @@ import type { MapEngineAdapter } from "../core/MapEngineAdapter";
 import type { CesiumMapHandle } from "../../components/CesiumMap";
 import { SCENE_PRESETS } from "../core/scenePresets";
 import type { VisualReadinessResult, VisualReadinessSnapshot } from "./readiness/visualReadiness";
+import type { SectionData } from "../../features/urban-section/sectionTypes";
 import { recordReadinessMetric } from "./readiness/performanceMetrics";
 
 const CesiumMap = lazy(async () => {
@@ -22,6 +23,8 @@ interface Props {
   analysisLens: AnalysisLens;
   counterfactualState: CounterfactualState;
   showUrbanSection?: boolean;
+  sectionData?: SectionData | null;
+  sectionFocus?: { longitude: number; latitude: number } | null;
   uiMode?: "advanced" | "guided";
   preferredBuildingSource?: "spatial-pack" | "verified-local";
   workspaceMap?: WorkspaceMapData | null;
@@ -34,6 +37,8 @@ interface Props {
   decisionFlow?: { meshLongitude: number; meshLatitude: number; siteLongitude: number; siteLatitude: number } | null;
   onSelectionChange(selection: SpatialSelection | null): void;
   onReady?(): void;
+  onVisualReadinessChange?(snapshot: VisualReadinessSnapshot, result: VisualReadinessResult): void;
+  onError?(message: string | null): void;
 }
 
 const EMPTY_WORKSPACE_LAYERS = {
@@ -48,11 +53,12 @@ const EMPTY_WORKSPACE_LAYERS = {
 };
 
 function meshFromSelection(data: AppData, selection: SpatialSelection | null): MeshMetrics | null {
-  if (selection?.type !== "mesh") return null;
-  const ranked = data.top10.find((mesh) => mesh.mesh_code === selection.id);
+  const meshCode = selection?.type === "mesh" ? selection.id : selection?.properties?.parent_mesh_code;
+  if (typeof meshCode !== "string") return null;
+  const ranked = data.top10.find((mesh) => mesh.mesh_code === meshCode);
   if (ranked) return ranked;
-  const feature = data.meshes.features.find((candidate) => String(candidate.properties?.mesh_code) === selection.id);
-  return feature?.properties ? { ...feature.properties, mesh_code: selection.id } as MeshMetrics : null;
+  const feature = data.meshes.features.find((candidate) => String(candidate.properties?.mesh_code) === meshCode);
+  return feature?.properties ? { ...feature.properties, mesh_code: meshCode } as MeshMetrics : null;
 }
 
 function buildingSelection(data: AppData, building: BuildingInfo, current: SpatialSelection | null): SpatialSelection {
@@ -157,6 +163,8 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   analysisLens,
   counterfactualState,
   showUrbanSection = false,
+  sectionData,
+  sectionFocus,
   uiMode = "advanced",
   preferredBuildingSource,
   workspaceMap = null,
@@ -168,7 +176,9 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   afterScores = null,
   decisionFlow = null,
   onSelectionChange,
-  onReady
+  onReady,
+  onVisualReadinessChange,
+  onError,
 }, ref) {
   const cesiumRef = useRef<CesiumMapHandle>(null);
   const [ready, setReady] = useState(false);
@@ -184,6 +194,10 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   const terrain = activeLayerIds.includes("plateau-terrain") || decisionTwinContext;
   const deepDiveCode = data.plateauMetadata?.reference_layer?.deep_dive_mesh_code;
   const scene = SCENE_PRESETS[scenePreset];
+  const guidedLocal = uiMode === "guided" && preferredBuildingSource === "verified-local";
+  const sceneReadiness = useMemo(() => guidedLocal
+    ? { ...scene.readiness, requiresVerifiedPack: true }
+    : scene.readiness, [guidedLocal, scene.readiness]);
 
   useEffect(() => {
     setReady(false);
@@ -196,6 +210,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
   }, [analysisLens, counterfactualState, scenePreset]);
 
   const updateVisualReadiness = (snapshot: VisualReadinessSnapshot, result: VisualReadinessResult) => {
+    onVisualReadinessChange?.(snapshot, result);
     setReadiness(result);
     setReady(result.interactionReady);
     document.documentElement.dataset.interactionReady = String(result.interactionReady);
@@ -241,6 +256,9 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
 
   useEffect(() => {
     if (!progressiveReady) return;
+    // The bounded Guided camera starts at the local city model. Object/Section
+    // selections update highlights without moving away from the same A–B scene.
+    if (guidedLocal) return;
     const cameraIntent = scene.camera === "route" || scene.camera === "scenario" || scene.camera === "hazard" ? scene.camera : null;
     const workspaceTarget = cameraIntent ? workspaceCamera(workspaceMap, workspacePhase, cameraIntent) : null;
     const deepDiveLongitude = data.plateauMetadata?.reference_layer?.viewpoint?.longitude;
@@ -256,7 +274,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
     }
     else if (selection?.type === "building") cesiumRef.current?.flyToPlateau(scene.camera === "city" || scene.camera === "mesh" ? "building" : scene.camera);
     else cesiumRef.current?.resetView();
-  }, [data.plateauMetadata, deepDiveCode, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
+  }, [data.plateauMetadata, deepDiveCode, guidedLocal, mesh, progressiveReady, scene.camera, selection, workspaceMap, workspacePhase]);
 
   return (
     <div className="plateau-3d-shell" data-map-engine="cesium" data-ready={ready} data-ui-mode={uiMode}>
@@ -270,9 +288,12 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
           selectedRoadId={selection?.type === "road" ? selection.id : null}
           analysisLens={analysisLens}
           counterfactualState={counterfactualState}
-          readinessRequirements={scene.readiness}
+          readinessRequirements={sceneReadiness}
           showUrbanSection={showUrbanSection}
+          sectionData={sectionData}
+          sectionFocus={sectionFocus}
           preferredBuildingSource={preferredBuildingSource}
+          guidedPresentation={guidedLocal}
           visibility={{ meshes: true, stations: false, busStops: false, medical: false, boundary: true, plateau: buildings || roads }}
           plateauVisibility={{ buildings, roads, terrain }}
           meshPresentation="outline"
@@ -305,7 +326,7 @@ export const Plateau3DMap = forwardRef<MapEngineAdapter, Props>(function Plateau
             setProgressiveReady(true);
             recordReadinessMetric("three_d_first_meaningful", scenePreset);
           }}
-          onError={setError}
+          onError={(message) => { setError(message); onError?.(message); }}
           onWarning={setWarning}
         />
       </Suspense>

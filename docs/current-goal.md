@@ -1,8 +1,10 @@
 # Current goal
 
-Active goal: `repository-refinement-and-presentation-assets-v1`
+Active goal: `plateau-3d-value-fast-delivery-v1`
 
-Status: refactor, remote validation, deployment, production audits, and presentation media commits are complete; finalization is limited to preservation, capture-disclosure and cleanup-safety updates, one exact-HEAD remote CI run, and handoff.
+Status: Guided verified-local 3D integration is implemented and its first targeted hardware-browser path passes. Final production build, exact-commit CI, Pages, live verification, and the separate four-image / single-master-video package remain pending. See the single [3D judging implementation and delivery note](judging-3d-demo.md).
+
+Current starting HEAD and remote feature: `704a9b237a96aee4b71b01e9f0cd0090100764dc`. Existing image-name changes, prior media, and all backups are preserved. Recursive deletion and automatic cleanup are prohibited. The historical 2D-only Guided policy is superseded only for the verified `533513314` example; other Areas retain their own 2D context. The sections below retain the previous completed checkpoint for provenance, not the current goal's completion state.
 
 ## Execution lock
 

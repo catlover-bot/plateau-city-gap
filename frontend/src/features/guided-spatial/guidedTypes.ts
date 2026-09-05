@@ -71,6 +71,7 @@ export interface GuidedMapPresentation {
   target: GeoJsonFeatureCollection;
   targetKind: "road" | "building" | "facility" | "area";
   targetResolution: "exact" | "area_fallback";
+  showObjectSelection?: boolean;
   sectionLine: GeoJsonFeatureCollection;
   sectionFocus: GeoJsonFeatureCollection;
   shortlistIds: string[];

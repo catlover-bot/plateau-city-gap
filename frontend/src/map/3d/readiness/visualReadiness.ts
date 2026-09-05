@@ -5,6 +5,7 @@ export interface SceneReadinessRequirements {
   requiresRoads: boolean;
   requiresAnalysis: boolean;
   requiresBasemap?: boolean;
+  requiresVerifiedPack?: boolean;
   minimumBuildingFeatures: number;
   interactionMinimumBuildingFeatures?: number;
   expectedTargetBuildingCount?: number;
@@ -21,6 +22,8 @@ export interface VisualReadinessSnapshot {
   cesiumSceneReady: boolean;
   canvasSizeReady: boolean;
   buildingTilesReady: boolean;
+  buildingContentReady?: boolean;
+  renderedBuildingFeatureCount?: number;
   buildingFeatureCount: number;
   targetBuildingCount: number;
   loadedTargetBuildingCount: number;
@@ -119,6 +122,11 @@ export function evaluateVisualReadiness(
     || snapshot.loadedTargetBuildingCount < expectedTarget
   )) visualCompleteUnmet.push("target_buildings_complete");
 
+  if (requirements.requiresVerifiedPack) {
+    if (!snapshot.packArtifactsReady) visualCompleteUnmet.push("pack_artifacts");
+    if (!snapshot.buildingContentReady) visualCompleteUnmet.push("building_content_complete");
+    if ((snapshot.renderedBuildingFeatureCount ?? 0) < requirements.minimumBuildingFeatures) visualCompleteUnmet.push("rendered_buildings");
+  }
   const strictUnmet = [...visualCompleteUnmet];
   if (snapshot.outstandingCriticalRequests > 0) strictUnmet.push("critical_requests");
   if (snapshot.stableFrameCount < requirements.stableFrames) strictUnmet.push("stable_frames");

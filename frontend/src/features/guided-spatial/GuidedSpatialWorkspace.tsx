@@ -10,6 +10,7 @@ import { buildGuidedTargetChoices, labeledGuidedTarget } from "./guidedTargets";
 import type { GuidedMapPresentation } from "./guidedTypes";
 import { useGuidedAreaContext } from "./useGuidedAreaContext";
 import { useGuidedSelection } from "./useGuidedSelection";
+import { guidedObjectFeature, guidedObjectTarget, selectionFromGuidedTarget, supportsGuided3D } from "./guided3d";
 
 function sectionCollections(
   data: SectionData | null,
@@ -55,6 +56,7 @@ interface Props {
   onStoryChange(story: GuidedStory): void;
   onSelectionChange(selection: SpatialSelection | null): void;
   onViewportChange(viewport: SpatialViewport): void;
+  onMapModeChange(mode: "map2d" | "plateau3d"): void;
   onRestart(): void;
   onOpenAdvanced(): void;
 }
@@ -93,11 +95,13 @@ export function GuidedSpatialWorkspace({
   onViewportChange,
   onRestart,
   onOpenAdvanced,
+  onMapModeChange,
 }: Props) {
   const [hoveredAreaId, setHoveredAreaId] = useState<string | null>(null);
   const [sectionFocus, setSectionFocus] = useState<{ longitude: number; latitude: number } | null>(null);
   const [mobileSurface, setMobileSurface] = useState<"map" | "section">("map");
   const [selectedTargetKey, setSelectedTargetKey] = useState<string | null>(null);
+  const [selectedObject, setSelectedObject] = useState<SpatialSelection | null>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   const selection = useGuidedSelection({ data, state, onSelectionChange, onViewportChange });
@@ -107,6 +111,7 @@ export function GuidedSpatialWorkspace({
     setSectionFocus(null);
     setMobileSurface("map");
     setSelectedTargetKey(null);
+    setSelectedObject(null);
   }, [selection.selectedAreaId]);
 
   useEffect(() => {
@@ -116,14 +121,21 @@ export function GuidedSpatialWorkspace({
   const selectedCatalogItem = areaContext.catalog?.items.find(
     (candidate) => candidate.mesh_code === selection.selectedAreaId,
   ) ?? null;
-  const targetChoices = useMemo(() => buildGuidedTargetChoices({
+  const activeObject = selectedObject?.properties?.parent_mesh_code === selection.selectedAreaId ? selectedObject : null;
+  const targetChoices = useMemo(() => {
+    const choices = buildGuidedTargetChoices({
     activeContext: areaContext.activeContext,
     area: selection.selectedAreaFeature,
     areaId: selection.selectedAreaId,
     areaLabel: selection.areaLabel,
     data,
     referenceData: areaContext.referenceData,
-  }), [
+    });
+    const pickedTarget = guidedObjectTarget(activeObject, areaContext.activeContext);
+    if (pickedTarget && !choices.some((choice) => choice.key === pickedTarget.key)) choices.push(pickedTarget);
+    return choices;
+  }, [
+    activeObject,
     areaContext.activeContext,
     areaContext.referenceData,
     data,
@@ -150,6 +162,7 @@ export function GuidedSpatialWorkspace({
     target: mapTarget,
     targetKind: target?.kind ?? "area",
     targetResolution: target?.resolution ?? "area_fallback",
+    showObjectSelection: Boolean(activeObject),
     sectionLine: section.line,
     sectionFocus: section.point,
     shortlistIds: [...GUIDED_SHORTLIST],
@@ -165,13 +178,33 @@ export function GuidedSpatialWorkspace({
     state.guidedStory,
     target?.kind,
     target?.resolution,
+    activeObject,
   ]);
 
+  const selectObject = useCallback((object: SpatialSelection | null) => {
+    if (!object || (object.type !== "building" && object.type !== "road")) return;
+    if (!guidedObjectFeature(areaContext.activeContext, object.type, object.id)) return;
+    const ownedObject = { ...object, properties: { ...object.properties, parent_mesh_code: selection.selectedAreaId } };
+    setSelectedObject(ownedObject);
+    const picked = guidedObjectTarget(ownedObject, areaContext.activeContext);
+    if (picked) setSelectedTargetKey(picked.key);
+  }, [areaContext.activeContext, selection.selectedAreaId]);
+  const selectTarget = useCallback((key: string) => {
+    setSelectedTargetKey(key);
+    const choice = targetChoices.find((item) => item.key === key);
+    setSelectedObject(choice && selection.selectedArea ? selectionFromGuidedTarget(choice, selection.selectedArea) : null);
+  }, [selection.selectedArea, targetChoices]);
   const handleGuidedObjectSelect = useCallback((kind: "building" | "road", objectId: string) => {
-    if (state.guidedStory !== "verify") return;
+    if (state.guidedStory !== "verify" && state.guidedStory !== "understand") return;
+    const feature = guidedObjectFeature(areaContext.activeContext, kind, objectId);
+    if (feature && selection.selectedArea) {
+      selectObject({ ...selection.selectedArea, type: kind, id: String(feature.id ?? objectId), properties: { ...feature.properties, parent_mesh_code: selection.selectedAreaId } });
+      return;
+    }
     const choice = targetChoices.find((candidate) => candidate.kind === kind && candidate.key.includes(objectId));
     if (choice) setSelectedTargetKey(choice.key);
-  }, [state.guidedStory, targetChoices]);
+  }, [state.guidedStory, targetChoices, areaContext.activeContext, selection.selectedArea, selection.selectedAreaId, selectObject]);
+  const threeDSupported = supportsGuided3D(selection.selectedAreaId, areaContext.activeContext);
 
   return <div
     className="guided-spatial-app"
@@ -191,6 +224,8 @@ export function GuidedSpatialWorkspace({
     data-target-resolution={target?.resolution ?? "area_fallback"}
     data-target-kind={target?.kind ?? "area"}
     data-target-key={target?.key ?? "none"}
+    data-object-kind={activeObject?.type ?? "none"}
+    data-object-id={activeObject?.id ?? "none"}
   >
     <header className="guided-spatial-header">
       <button type="button" className="guided-brand" onClick={onRestart}>CITY GAP</button>
@@ -214,6 +249,11 @@ export function GuidedSpatialWorkspace({
         onAreaHover={setHoveredAreaId}
         onGuidedObjectSelect={handleGuidedObjectSelect}
         onSectionFocus={setSectionFocus}
+        sectionFocus={sectionFocus}
+        selectedObject={activeObject}
+        threeDSupported={threeDSupported}
+        onMapModeChange={onMapModeChange}
+        onObjectSelect={selectObject}
       />
       <GuidedInspector
         story={state.guidedStory}
@@ -236,8 +276,10 @@ export function GuidedSpatialWorkspace({
         onStoryChange={onStoryChange}
         onSelectArea={selection.selectArea}
         onAreaHover={setHoveredAreaId}
-        onTargetChange={setSelectedTargetKey}
+        onTargetChange={selectTarget}
         onOpenAdvanced={onOpenAdvanced}
+        selectedObject={activeObject}
+        threeDActive={state.mapMode === "plateau3d" && threeDSupported}
       />
     </main>
   </div>;

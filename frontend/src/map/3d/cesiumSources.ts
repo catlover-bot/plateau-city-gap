@@ -196,6 +196,7 @@ export async function loadLocalDemTileset(data: AppData): Promise<Cesium3DTilese
 export interface BuildingStyleContext {
   analysisLens?: AnalysisLens;
   selectedMeshBounds?: [number, number, number, number] | null;
+  guidedPresentation?: boolean;
 }
 
 export function applyBuildingStyle(tileset: Cesium3DTileset, selectedBuildingId: string | null, context: BuildingStyleContext = {}) {
@@ -214,7 +215,7 @@ export function applyBuildingStyle(tileset: Cesium3DTileset, selectedBuildingId:
   } else if (context.analysisLens === "service-pulse") {
     conditions.push(["true", "color('#ced6d2', 0.72)"]);
   } else {
-    conditions.push(["true", "color('#d7e0dc', 0.98)"]);
+    conditions.push(["true", context.guidedPresentation ? "color('#e3e7e0', 1.0)" : "color('#d7e0dc', 0.98)"]);
   }
   tileset.style = new Cesium3DTileStyle({
     color: { conditions },

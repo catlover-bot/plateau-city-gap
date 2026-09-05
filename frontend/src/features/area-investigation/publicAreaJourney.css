@@ -857,3 +857,20 @@
     display: none;
   }
 }
+.public-3d-example {
+  display: grid;
+  min-height: 60px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--cg-brand-strong);
+  border-radius: var(--cg-radius);
+  background: var(--cg-brand-pale);
+  color: var(--cg-brand-strong);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.5;
+  text-decoration: none;
+  gap: 3px;
+}
+.public-3d-example:hover { text-decoration: underline; text-underline-offset: 3px; }
+.public-3d-example small { color: var(--cg-text-secondary); font-size: 13px; font-weight: 500; }
